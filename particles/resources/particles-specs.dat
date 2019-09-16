@@ -1,0 +1,13 @@
+Type      Name      Mass        Charge (deprotonated)   Radius   pKa
+atom      H          1.00080     0.0                    0.12
+atom      C         12.00960     0.0                    0.17
+atom      O         15.99903     0.0                    0.152
+atom      N         14.00700     0.0                    0.155 
+bead      H2O       72.00000     0.0                    0.14
+prot_bead NH4       18.01020     0.0                    0.0      9.24
+bead      NH3       17.00940     0.0                    0.0
+prot_bead COOH      45.01600    -1.0                    0.0      3.77
+prot_bead mH2O      18.01471     0.0                    0.0      7.00
+bead      CW        60.07700    -0.57500                0.0
+prot_bead PCW       60.07700    -0.57500                0.0      7.00
+bead      DP        30.00000     0.57500                0.0

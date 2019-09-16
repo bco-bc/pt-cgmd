@@ -1,0 +1,358 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configurationDescriptor version="100">
+  <logicalFolder name="root" displayName="root" projectFiles="true" kind="ROOT">
+    <logicalFolder name="HeaderFiles"
+                   displayName="Header Files"
+                   projectFiles="true">
+      <itemPath>include/simploce/particle/atom.hpp</itemPath>
+      <itemPath>include/simploce/particle/atomistic.hpp</itemPath>
+      <itemPath>include/simploce/particle/bead.hpp</itemPath>
+      <itemPath>include/simploce/particle/bond.hpp</itemPath>
+      <itemPath>include/simploce/particle/coarse-grained.hpp</itemPath>
+      <itemPath>include/simploce/particle/pall.hpp</itemPath>
+      <itemPath>include/simploce/particle/particle-group.hpp</itemPath>
+      <itemPath>include/simploce/particle/particle-model.hpp</itemPath>
+      <itemPath>include/simploce/particle/particle-spec-catalog.hpp</itemPath>
+      <itemPath>include/simploce/particle/particle-spec.hpp</itemPath>
+      <itemPath>include/simploce/particle/particle.hpp</itemPath>
+      <itemPath>include/simploce/particle/pconf.hpp</itemPath>
+      <itemPath>include/simploce/particle/pfactory.hpp</itemPath>
+      <itemPath>include/simploce/particle/pproperties.hpp</itemPath>
+      <itemPath>include/simploce/particle/protonatable-bead.hpp</itemPath>
+      <itemPath>include/simploce/particle/protonatable.hpp</itemPath>
+      <itemPath>include/simploce/particle/protonation-site-catalog.hpp</itemPath>
+      <itemPath>include/simploce/particle/protonation-site.hpp</itemPath>
+      <itemPath>include/simploce/particle/ptypes.hpp</itemPath>
+    </logicalFolder>
+    <logicalFolder name="ResourceFiles"
+                   displayName="Resource Files"
+                   projectFiles="true">
+      <itemPath>resources/coarse-grained-system.dat</itemPath>
+      <itemPath>resources/particles-specs.dat</itemPath>
+      <itemPath>resources/protonation-sites.dat</itemPath>
+    </logicalFolder>
+    <logicalFolder name="SourceFiles"
+                   displayName="Source Files"
+                   projectFiles="true">
+      <itemPath>src/atomistic.cpp</itemPath>
+      <itemPath>src/bead.cpp</itemPath>
+      <itemPath>src/coarse-grained.cpp</itemPath>
+      <itemPath>src/particle-spec-catalog.cpp</itemPath>
+      <itemPath>src/particle-spec.cpp</itemPath>
+      <itemPath>src/particle.cpp</itemPath>
+      <itemPath>src/pfactory.cpp</itemPath>
+      <itemPath>src/protonatable-bead.cpp</itemPath>
+      <itemPath>src/protonation-site-catalog.cpp</itemPath>
+    </logicalFolder>
+    <logicalFolder name="TestFiles"
+                   displayName="Test Files"
+                   projectFiles="false"
+                   kind="TEST_LOGICAL_FOLDER">
+    </logicalFolder>
+    <logicalFolder name="ExternalFiles"
+                   displayName="Important Files"
+                   projectFiles="false"
+                   kind="IMPORTANT_FILES_FOLDER">
+      <itemPath>Makefile</itemPath>
+    </logicalFolder>
+  </logicalFolder>
+  <projectmakefile>Makefile</projectmakefile>
+  <confs>
+    <conf name="Debug" type="2">
+      <toolsSet>
+        <compilerSet>default</compilerSet>
+        <dependencyChecking>true</dependencyChecking>
+        <rebuildPropChanged>false</rebuildPropChanged>
+      </toolsSet>
+      <compileType>
+        <ccTool>
+          <standard>11</standard>
+          <incDir>
+            <pElem>include</pElem>
+            <pElem>../cpputil/include</pElem>
+          </incDir>
+          <warningLevel>2</warningLevel>
+        </ccTool>
+        <linkerTool>
+          <linkerLibItems>
+            <linkerLibProjectItem>
+              <makeArtifact PL="../cpputil"
+                            CT="2"
+                            CN="Debug"
+                            AC="true"
+                            BL="true"
+                            WD="../cpputil"
+                            BC="${MAKE}  -f Makefile CONF=Debug"
+                            CC="${MAKE}  -f Makefile CONF=Debug clean"
+                            OP="${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/libcpputil.${CND_DLIB_EXT}">
+              </makeArtifact>
+            </linkerLibProjectItem>
+          </linkerLibItems>
+        </linkerTool>
+      </compileType>
+      <item path="include/simploce/particle/atom.hpp" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="include/simploce/particle/atomistic.hpp"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="include/simploce/particle/bead.hpp" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="include/simploce/particle/bond.hpp" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="include/simploce/particle/coarse-grained.hpp"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="include/simploce/particle/pall.hpp" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="include/simploce/particle/particle-group.hpp"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="include/simploce/particle/particle-model.hpp"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="include/simploce/particle/particle-spec-catalog.hpp"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="include/simploce/particle/particle-spec.hpp"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="include/simploce/particle/particle.hpp"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="include/simploce/particle/pconf.hpp"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="include/simploce/particle/pfactory.hpp"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="include/simploce/particle/pproperties.hpp"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="include/simploce/particle/protonatable-bead.hpp"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="include/simploce/particle/protonatable.hpp"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="include/simploce/particle/protonation-site-catalog.hpp"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="include/simploce/particle/protonation-site.hpp"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="include/simploce/particle/ptypes.hpp"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="resources/coarse-grained-system.dat"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="resources/particles-specs.dat" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="resources/protonation-sites.dat" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="src/atomistic.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="src/bead.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="src/coarse-grained.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="src/particle-spec-catalog.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="src/particle-spec.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="src/particle.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="src/pfactory.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="src/protonatable-bead.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="src/protonation-site-catalog.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+    </conf>
+    <conf name="Release" type="2">
+      <toolsSet>
+        <compilerSet>default</compilerSet>
+        <dependencyChecking>true</dependencyChecking>
+        <rebuildPropChanged>false</rebuildPropChanged>
+      </toolsSet>
+      <compileType>
+        <cTool>
+          <developmentMode>5</developmentMode>
+        </cTool>
+        <ccTool>
+          <developmentMode>5</developmentMode>
+          <standard>11</standard>
+          <incDir>
+            <pElem>include</pElem>
+            <pElem>../cpputil/include</pElem>
+          </incDir>
+          <warningLevel>2</warningLevel>
+        </ccTool>
+        <fortranCompilerTool>
+          <developmentMode>5</developmentMode>
+        </fortranCompilerTool>
+        <asmTool>
+          <developmentMode>5</developmentMode>
+        </asmTool>
+        <linkerTool>
+          <linkerLibItems>
+            <linkerLibProjectItem>
+              <makeArtifact PL="../cpputil"
+                            CT="2"
+                            CN="Release"
+                            AC="false"
+                            BL="true"
+                            WD="../cpputil"
+                            BC="${MAKE}  -f Makefile CONF=Release"
+                            CC="${MAKE}  -f Makefile CONF=Release clean"
+                            OP="${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/libcpputil.${CND_DLIB_EXT}">
+              </makeArtifact>
+            </linkerLibProjectItem>
+          </linkerLibItems>
+        </linkerTool>
+      </compileType>
+      <item path="include/simploce/particle/atom.hpp" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="include/simploce/particle/atomistic.hpp"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="include/simploce/particle/bead.hpp" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="include/simploce/particle/bond.hpp" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="include/simploce/particle/coarse-grained.hpp"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="include/simploce/particle/pall.hpp" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="include/simploce/particle/particle-group.hpp"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="include/simploce/particle/particle-model.hpp"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="include/simploce/particle/particle-spec-catalog.hpp"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="include/simploce/particle/particle-spec.hpp"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="include/simploce/particle/particle.hpp"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="include/simploce/particle/pconf.hpp"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="include/simploce/particle/pfactory.hpp"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="include/simploce/particle/pproperties.hpp"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="include/simploce/particle/protonatable-bead.hpp"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="include/simploce/particle/protonatable.hpp"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="include/simploce/particle/protonation-site-catalog.hpp"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="include/simploce/particle/protonation-site.hpp"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="include/simploce/particle/ptypes.hpp"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="resources/coarse-grained-system.dat"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="resources/particles-specs.dat" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="resources/protonation-sites.dat" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="src/atomistic.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="src/bead.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="src/coarse-grained.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="src/particle-spec-catalog.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="src/particle-spec.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="src/particle.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="src/pfactory.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="src/protonatable-bead.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="src/protonation-site-catalog.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+    </conf>
+  </confs>
+</configurationDescriptor>
