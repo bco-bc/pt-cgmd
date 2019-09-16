@@ -1,11 +1,5 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
 /* 
- * File:   s-md.cpp
+ * File:   s-cgmd.cpp
  * Author: ajuffer
  *
  * Created on September 10, 2019, 2:58 PM
@@ -23,7 +17,7 @@ namespace po = boost::program_options;
 using namespace simploce;
 
 /*
- * 
+ * Coarse grained molecular dynamics.
  */
 int main(int argc, char* argv[]) 
 {

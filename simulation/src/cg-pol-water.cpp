@@ -30,7 +30,9 @@
  */
 
 #include "simploce/simulation/cg-pol-water.hpp"
+#include "simploce/particle/particle-group.hpp"
 #include "simploce/simulation/sconf.hpp"
+#include <utility>
 
 namespace simploce {
     
@@ -43,6 +45,55 @@ namespace simploce {
     static const real_t C12_CW_CW = 1.298e-03;    // kJ/(mol nm^12)
     static const real_t C6_CW_CW = 0.088;         // kJ/(mol nm^6)
     
+    static std::pair<energy_t, std::vector<force_t>> 
+    bonded_(std::size_t nparticles, const std::vector<bead_group_ptr_t>& groups)
+    {
+        using bond_cont_t = typename ParticleGroup<Bead>::bond_cont_t;
+        
+        static real_t fc2 = 2.0 * FC;
+        static real_t halve_fc = 0.5 * FC;
+        static force_t fi;
+        static force_t fj;
+        
+        // Potential energy and forces.
+        energy_t epot{0.0};
+        std::vector<force_t> forces(nparticles, force_t{});
+        
+        for (auto g : groups) {
+            ParticleGroup<Bead>& group = *g;
+            const bond_cont_t& bonds = group.bonds();
+            const Bond<Bead>& bond = bonds[0];                    // There is 1 bond only.
+            const bead_ptr_t pi = bond.getParticleOne();
+            std::size_t index_i = pi->id() - 1;                   // Particle id starts at 1.
+            const bead_ptr_t pj = bond.getParticleTwo();
+            std::size_t index_j = pj->id() - 1;                   // Particle id starts at 1.
+      
+            position_t ri = pi->position();
+            position_t rj = pj->position();
+            dist_vect_t rij = ri - rj;            // Distance vector (nm), no boundary conditions.
+            length_t R = norm<length_t>(rij);     // Distance (nm)
+
+            // Unit distance vector.
+            dist_vect_t uv = rij / R;
+
+            length_t dis = R - R_CW_DP;
+            if ( dis() > 0.0 ) {
+                real_t dis3 = dis() * dis() * dis();
+                real_t dis4 = dis() * dis3; 
+                epot += halve_fc * dis4;
+                real_t f = -fc2 * dis3;
+                for (std::size_t k = 0; k != 3; ++k) {
+                    real_t fv = f * uv[k];
+                    fi[k] = fv;
+                    fj[k] = -fv;
+                }
+                forces[index_i] += fi;
+                forces[index_j] += fj;
+            }
+        }
+        return std::make_pair(epot, forces);
+    }
+    
     CoarseGrainedPolarizableWater::CoarseGrainedPolarizableWater(const bc_ptr_t& bc) :
         CoarseGrainedForceField{}, bc_{bc}
     {        
@@ -53,7 +104,18 @@ namespace simploce {
                                                      const std::vector<bead_group_ptr_t>& groups,
                                                      const std::vector<bead_pair_list_t>& pairLists)
     {
-        return 0.0;
+        std::pair<energy_t, std::vector<force_t>> bonded = bonded_(all.size(), groups);
+        energy_t epot = bonded.first;
+        
+        std::vector<force_t>& forces = bonded.second;
+        for (std::size_t index = 0; index != all.size(); ++index) {
+            Bead& bead = *all[index];
+            force_t force = bead.force();
+            force += forces[index];
+            bead.force(force);
+        }
+        
+        return epot;
     }
     
     std::string CoarseGrainedPolarizableWater::id() const

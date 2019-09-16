@@ -35,6 +35,7 @@
 #include "simploce/particle/ptypes.hpp"
 #include "simploce/util/cube.hpp"
 #include <boost/property_tree/ptree.hpp>
+#include <tuple>
 
 namespace simploce {
     
@@ -133,6 +134,16 @@ namespace simploce {
      * and the requested number of steps.
      */
     using sim_param_t = boost::property_tree::ptree;
+    
+    /**
+     * Defines a range of something in a given indexed collection to forms pairs between 
+     * elements of the collection.
+     * tuple_t t;
+     * t.get<0> is the begin index of an indexed collection.
+     * t.get<1> is the end index.
+     * t.get<2> is the number of pairs.
+     */
+    using range_t = std::tuple<std::size_t, std::size_t, std::size_t>;
     
 }
 

@@ -32,7 +32,10 @@
 #include "simploce/simulation/simulation.hpp"
 #include "simploce/simulation/sim-model.hpp"
 #include "simploce/simulation/sim-data.hpp"
+#include "simploce/simulation/sconf.hpp"
 #include <stdexcept>
+#include <iostream>
+#include <iomanip>
 
 namespace simploce {
     
@@ -44,6 +47,9 @@ namespace simploce {
                                    std::ofstream& trajStream,
                                    std::ofstream& dataStream)
     {
+        const auto width = conf::WIDTH;
+        const auto space = conf::SPACE;
+        
         if ( sm_->size() == 0 ) {
             throw std::domain_error(
                 "No particles! Nothing to simulate."
@@ -56,13 +62,12 @@ namespace simploce {
         for (std::size_t counter = 0; counter != nsteps; ++counter) {
             SimulationData data = sm_->displace(param);
             if ( counter % nwrite == 0 ) {
-                dataStream << data << std::endl;
+                dataStream << std::setw(width) << counter << space << data << std::endl;
                 dataStream.flush();
                 sm_->saveState(trajStream);
             }
         }
-        
-        
+                
     }
     
 }
