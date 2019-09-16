@@ -8,6 +8,7 @@
       <itemPath>include/simploce/util/cube.hpp</itemPath>
       <itemPath>include/simploce/util/cvector_t.hpp</itemPath>
       <itemPath>include/simploce/util/file.hpp</itemPath>
+      <itemPath>include/simploce/util/map2.hpp</itemPath>
       <itemPath>include/simploce/util/math-constants.hpp</itemPath>
       <itemPath>include/simploce/util/mu-units.hpp</itemPath>
       <itemPath>include/simploce/util/si-units.hpp</itemPath>
@@ -39,6 +40,12 @@
                      projectFiles="true"
                      kind="TEST">
         <itemPath>tests/cvector-test.cpp</itemPath>
+      </logicalFolder>
+      <logicalFolder name="f6"
+                     displayName="MatrixMap Test"
+                     projectFiles="true"
+                     kind="TEST">
+        <itemPath>tests/matrix-map-test.cpp</itemPath>
       </logicalFolder>
       <logicalFolder name="f4"
                      displayName="Seed ValueTest"
@@ -158,6 +165,21 @@
           <output>${TESTDIR}/TestFiles/f5</output>
         </linkerTool>
       </folder>
+      <folder path="TestFiles/f6">
+        <cTool>
+          <incDir>
+            <pElem>.</pElem>
+          </incDir>
+        </cTool>
+        <ccTool>
+          <incDir>
+            <pElem>.</pElem>
+          </incDir>
+        </ccTool>
+        <linkerTool>
+          <output>${TESTDIR}/TestFiles/f6</output>
+        </linkerTool>
+      </folder>
       <item path="include/simploce/util/box.hpp" ex="false" tool="3" flavor2="0">
       </item>
       <item path="include/simploce/util/cube.hpp" ex="false" tool="3" flavor2="0">
@@ -168,6 +190,8 @@
             flavor2="0">
       </item>
       <item path="include/simploce/util/file.hpp" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="include/simploce/util/map2.hpp" ex="false" tool="3" flavor2="0">
       </item>
       <item path="include/simploce/util/math-constants.hpp"
             ex="false"
@@ -189,6 +213,8 @@
       <item path="tests/box-cube-test.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="tests/cvector-test.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="tests/matrix-map-test.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="tests/seed-value-test.cpp" ex="false" tool="1" flavor2="0">
       </item>
@@ -296,6 +322,21 @@
           <output>${TESTDIR}/TestFiles/f5</output>
         </linkerTool>
       </folder>
+      <folder path="TestFiles/f6">
+        <cTool>
+          <incDir>
+            <pElem>.</pElem>
+          </incDir>
+        </cTool>
+        <ccTool>
+          <incDir>
+            <pElem>.</pElem>
+          </incDir>
+        </ccTool>
+        <linkerTool>
+          <output>${TESTDIR}/TestFiles/f6</output>
+        </linkerTool>
+      </folder>
       <item path="include/simploce/util/box.hpp" ex="false" tool="3" flavor2="0">
       </item>
       <item path="include/simploce/util/cube.hpp" ex="false" tool="3" flavor2="0">
@@ -306,6 +347,8 @@
             flavor2="0">
       </item>
       <item path="include/simploce/util/file.hpp" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="include/simploce/util/map2.hpp" ex="false" tool="3" flavor2="0">
       </item>
       <item path="include/simploce/util/math-constants.hpp"
             ex="false"
@@ -327,6 +370,8 @@
       <item path="tests/box-cube-test.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="tests/cvector-test.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="tests/matrix-map-test.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="tests/seed-value-test.cpp" ex="false" tool="1" flavor2="0">
       </item>

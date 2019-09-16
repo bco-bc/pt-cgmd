@@ -6,6 +6,10 @@
     </data>
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
-        <group/>
+        <group>
+            <file>file:/home/juffer/simploce/pt-cgmd/cpputil/tests/matrix-map-test.cpp</file>
+            <file>file:/home/juffer/simploce/pt-cgmd/cpputil/include/simploce/util/value_t.hpp</file>
+            <file>file:/home/juffer/simploce/pt-cgmd/cpputil/include/simploce/util/map2.hpp</file>
+        </group>
     </open-files>
 </project-private>

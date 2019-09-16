@@ -35,6 +35,7 @@ OBJECTDIR=${CND_BUILDDIR}/${CND_CONF}/${CND_PLATFORM}
 
 # Object Files
 OBJECTFILES= \
+	${OBJECTDIR}/src/atom.o \
 	${OBJECTDIR}/src/atomistic.o \
 	${OBJECTDIR}/src/bead.o \
 	${OBJECTDIR}/src/coarse-grained.o \
@@ -71,6 +72,11 @@ ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/libparticles.${CND_DLIB_EXT}: ../cppu
 ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/libparticles.${CND_DLIB_EXT}: ${OBJECTFILES}
 	${MKDIR} -p ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}
 	${LINK.cc} -o ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/libparticles.${CND_DLIB_EXT} ${OBJECTFILES} ${LDLIBSOPTIONS} -shared -fPIC
+
+${OBJECTDIR}/src/atom.o: src/atom.cpp
+	${MKDIR} -p ${OBJECTDIR}/src
+	${RM} "$@.d"
+	$(COMPILE.cc) -O2 -Wall -Iinclude -I../cpputil/include -std=c++14 -fPIC  -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/atom.o src/atom.cpp
 
 ${OBJECTDIR}/src/atomistic.o: src/atomistic.cpp
 	${MKDIR} -p ${OBJECTDIR}/src

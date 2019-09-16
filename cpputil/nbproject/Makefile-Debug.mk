@@ -44,6 +44,7 @@ TESTDIR=${CND_BUILDDIR}/${CND_CONF}/${CND_PLATFORM}/tests
 TESTFILES= \
 	${TESTDIR}/TestFiles/f5 \
 	${TESTDIR}/TestFiles/f1 \
+	${TESTDIR}/TestFiles/f6 \
 	${TESTDIR}/TestFiles/f4 \
 	${TESTDIR}/TestFiles/f3 \
 	${TESTDIR}/TestFiles/f2
@@ -52,6 +53,7 @@ TESTFILES= \
 TESTOBJECTFILES= \
 	${TESTDIR}/tests/box-cube-test.o \
 	${TESTDIR}/tests/cvector-test.o \
+	${TESTDIR}/tests/matrix-map-test.o \
 	${TESTDIR}/tests/seed-value-test.o \
 	${TESTDIR}/tests/value-cvector-test.o \
 	${TESTDIR}/tests/value_type_test.o
@@ -100,6 +102,10 @@ ${TESTDIR}/TestFiles/f1: ${TESTDIR}/tests/cvector-test.o ${OBJECTFILES:%.o=%_nom
 	${MKDIR} -p ${TESTDIR}/TestFiles
 	${LINK.cc} -o ${TESTDIR}/TestFiles/f1 $^ ${LDLIBSOPTIONS}   
 
+${TESTDIR}/TestFiles/f6: ${TESTDIR}/tests/matrix-map-test.o ${OBJECTFILES:%.o=%_nomain.o}
+	${MKDIR} -p ${TESTDIR}/TestFiles
+	${LINK.cc} -o ${TESTDIR}/TestFiles/f6 $^ ${LDLIBSOPTIONS}   
+
 ${TESTDIR}/TestFiles/f4: ${TESTDIR}/tests/seed-value-test.o ${OBJECTFILES:%.o=%_nomain.o}
 	${MKDIR} -p ${TESTDIR}/TestFiles
 	${LINK.cc} -o ${TESTDIR}/TestFiles/f4 $^ ${LDLIBSOPTIONS}   
@@ -123,6 +129,12 @@ ${TESTDIR}/tests/cvector-test.o: tests/cvector-test.cpp
 	${MKDIR} -p ${TESTDIR}/tests
 	${RM} "$@.d"
 	$(COMPILE.cc) -g -Wall -Iinclude -I. -std=c++14 -MMD -MP -MF "$@.d" -o ${TESTDIR}/tests/cvector-test.o tests/cvector-test.cpp
+
+
+${TESTDIR}/tests/matrix-map-test.o: tests/matrix-map-test.cpp 
+	${MKDIR} -p ${TESTDIR}/tests
+	${RM} "$@.d"
+	$(COMPILE.cc) -g -Wall -Iinclude -I. -std=c++14 -MMD -MP -MF "$@.d" -o ${TESTDIR}/tests/matrix-map-test.o tests/matrix-map-test.cpp
 
 
 ${TESTDIR}/tests/seed-value-test.o: tests/seed-value-test.cpp 
@@ -162,6 +174,7 @@ ${OBJECTDIR}/src/file_nomain.o: ${OBJECTDIR}/src/file.o src/file.cpp
 	then  \
 	    ${TESTDIR}/TestFiles/f5 || true; \
 	    ${TESTDIR}/TestFiles/f1 || true; \
+	    ${TESTDIR}/TestFiles/f6 || true; \
 	    ${TESTDIR}/TestFiles/f4 || true; \
 	    ${TESTDIR}/TestFiles/f3 || true; \
 	    ${TESTDIR}/TestFiles/f2 || true; \

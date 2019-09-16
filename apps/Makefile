@@ -1,9 +1,9 @@
 PREFIX = /home/ajuffer
 
 # Relative to apps/build folder.
-CPPUTIL = $(PREFIX)/simploce/cpputil
-PARTICLES = $(PREFIX)/simploce/particles
-SIMULATION = $(PREFIX)/simploce/simulation
+CPPUTIL = $(PREFIX)/simploce/pt-cgmd/cpputil
+PARTICLES = $(PREFIX)/simploce/pt-cgmd/particles
+SIMULATION = $(PREFIX)/simploce/pt-cgmd/simulation
 
 VPATH = ../src
 
@@ -22,7 +22,8 @@ OLIBS = -lcpputil -lparticles -lsimulation
 
 CFLAGS = $(INCLPATH) $(OPT) -Wall -std=$(STD) -pthread
 LDFLAGS =  $(INCLPATH) $(OPT) -Wall -std=$(STD) -L. -L$(PREFIX)/lib -pthread
-LIBS = -lm -lpthread $(OLIBS) -lboost_program_options -lboost_iostreams -lbz2 -lz
+LIBS = -lm -lpthread $(OLIBS) -lboost_program_options -lboost_iostreams
+# -lbz2 -lz
 #-lz for zlib
 
 # All object files. Default.
