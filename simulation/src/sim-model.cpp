@@ -125,7 +125,9 @@ namespace simploce {
         // Interactor.
         std::getline(stream, stringBuffer);
         if ( stringBuffer.find(conf::POLARIZABLE_WATER, 0) != std::string::npos ) {
-            interactor_ = factory::interactorCoarseGrainedPolarizableWater(box_, bc_);
+            interactor_ = factory::interactorCoarseGrainedPolarizableWater(catalog, 
+                                                                           box_, 
+                                                                           bc_);
         } else {
             throw std::domain_error("Cannot identify force field.");
         }

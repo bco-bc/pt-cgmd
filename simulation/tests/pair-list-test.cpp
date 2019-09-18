@@ -65,7 +65,7 @@ void test1() {
     sim_model_factory_ptr_t mf = factory::modelFactory(catalog);
     
     box_ptr_t box = std::make_shared<box_t>(5.0);
-    cg_sim_model_ptr_t polWater = mf->createPolarizableWater(box);
+    cg_sim_model_ptr_t polWater = mf->createPolarizableWater(catalog, box);
 
     std::cout << "Number of polarizable waters: " << polWater->size() << std::endl;
     

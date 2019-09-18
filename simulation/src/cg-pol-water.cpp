@@ -30,9 +30,13 @@
  */
 
 #include "simploce/simulation/cg-pol-water.hpp"
+#include "simploce/simulation/lj-coulomb-forces.hpp"
 #include "simploce/particle/particle-group.hpp"
+#include "simploce/particle/particle-spec-catalog.hpp"
+#include "simploce/particle/particle-spec.hpp"
 #include "simploce/simulation/sconf.hpp"
 #include <utility>
+#include <memory>
 
 namespace simploce {
     
@@ -44,6 +48,35 @@ namespace simploce {
     static const real_t FC = 2.0e+06;             // Force constant in kJ/(mol nm^4)
     static const real_t C12_CW_CW = 1.298e-03;    // kJ/(mol nm^12)
     static const real_t C6_CW_CW = 0.088;         // kJ/(mol nm^6)
+    
+    static std::unique_ptr<LJCoulombForces<Bead>> LJ_COULOMB_F{};
+    
+    static void setup_(const spec_catalog_ptr_t& catalog,
+                       const bc_ptr_t& bc)
+    {
+        CW = catalog->lookup("CW");
+        DP = catalog->lookup("DP");
+    
+        // Electrostatics.
+        LJCoulombForces<Bead>::el_params_t elParams;
+        auto eps_r = std::make_pair("eps_r", EPS_R);
+        elParams.insert(eps_r);
+
+        // LJ
+        LJCoulombForces<Bead>::lj_params_t ljParams;
+        auto CW_CW = std::make_pair(C12_CW_CW, C6_CW_CW);    
+        ljParams.add(CW->name(), CW->name(), CW_CW);
+        auto zero = std::make_pair(0.0, 0.0);    
+        ljParams.add(CW->name(), DP->name(), zero);
+        ljParams.add(DP->name(), CW->name(), zero);
+        ljParams.add(DP->name(), DP->name(), zero);
+
+        std::clog << "LJ Interaction parameters" << std::endl;
+        std::clog << ljParams << std::endl;
+    
+        LJ_COULOMB_F = std::make_unique<LJCoulombForces<Bead>>(ljParams, elParams, bc);
+  }
+
     
     static std::pair<energy_t, std::vector<force_t>> 
     bonded_(std::size_t nparticles, const std::vector<bead_group_ptr_t>& groups)
@@ -94,9 +127,11 @@ namespace simploce {
         return std::make_pair(epot, forces);
     }
     
-    CoarseGrainedPolarizableWater::CoarseGrainedPolarizableWater(const bc_ptr_t& bc) :
-        CoarseGrainedForceField{}, bc_{bc}
-    {        
+    CoarseGrainedPolarizableWater::CoarseGrainedPolarizableWater(const spec_catalog_ptr_t& catalog,
+                                                                 const bc_ptr_t& bc) :
+        CoarseGrainedForceField{}, catalog_{catalog}, bc_{bc}
+    {      
+            setup_(catalog, bc);
     }
     
     energy_t CoarseGrainedPolarizableWater::interact(const std::vector<bead_ptr_t>& all,
@@ -105,7 +140,8 @@ namespace simploce {
                                                      const std::vector<bead_pair_list_t>& pairLists)
     {
         std::pair<energy_t, std::vector<force_t>> bonded = bonded_(all.size(), groups);
-        energy_t epot = bonded.first;
+        energy_t epot = LJ_COULOMB_F->interact(all, free, groups, pairLists);
+        epot += bonded.first;
         
         std::vector<force_t>& forces = bonded.second;
         for (std::size_t index = 0; index != all.size(); ++index) {

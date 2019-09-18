@@ -56,7 +56,8 @@ namespace simploce {
          * @return Coarse grained model.
          * @see <a href="https://en.wikipedia.org/wiki/Density#Water">Water Density</a>
          */
-        cg_sim_model_ptr_t createPolarizableWater(const box_ptr_t& box,
+        cg_sim_model_ptr_t createPolarizableWater(const spec_catalog_ptr_t& catalog,
+                                                  const box_ptr_t& box,
                                                   const density_t atDensitySI = 997.0479,
                                                   const temperature_t temperature = 298.15);
         

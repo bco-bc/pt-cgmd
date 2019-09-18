@@ -80,7 +80,8 @@ namespace simploce {
     }
     
     
-    cg_sim_model_ptr_t ModelFactory::createPolarizableWater(const box_ptr_t& box,
+    cg_sim_model_ptr_t ModelFactory::createPolarizableWater(const spec_catalog_ptr_t& catalog,
+                                                            const box_ptr_t& box,
                                                             const density_t atDensitySI,
                                                             const temperature_t temperature)
     {
@@ -205,7 +206,7 @@ namespace simploce {
 
         // Interactor.
         cg_interactor_ptr_t interactor = 
-                factory::interactorCoarseGrainedPolarizableWater(box, bc);
+                factory::interactorCoarseGrainedPolarizableWater(catalog, box, bc);
         
         // Displacer.
         std::shared_ptr<CoarseGrainedDisplacer> displacer = 

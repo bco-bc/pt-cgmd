@@ -29,10 +29,6 @@
  * Created on August 16, 2019, 1:00 PM
  */
 
-#include <cstdlib>
-#include <iostream>
-
-
 #include "simploce/simulation/leap-frog.hpp"
 #include "simploce/simulation/velocity-verlet.hpp"
 #include "simploce/simulation/langevin-velocity-verlet.hpp"
@@ -41,9 +37,13 @@
 #include "simploce/simulation/stypes.hpp"
 #include "simploce/particle/bead.hpp"
 #include "simploce/particle/coarse-grained.hpp"
+#include "simploce/particle/particle-spec-catalog.hpp"
+#include "simploce/util/file.hpp"
+#include <fstream>
+#include <cstdlib>
+#include <iostream>
 
 using namespace simploce;
-
 
 /*
  * Simple C++ Test Suite
@@ -52,6 +52,11 @@ using namespace simploce;
 void test1() {
     std::cout << "displacer-test test 1" << std::endl;
     
+    std::string fileName = "/home/ajuffer/simploce/particles/resources/particles-specs.dat";
+    std::ifstream stream;
+    file::open_input(stream, fileName);
+    spec_catalog_ptr_t catalog = ParticleSpecCatalog::create(stream);
+
     sim_param_t param{};
     param.add<std::size_t>("nsteps", 1000);
     param.add<real_t>("timestep", 0.001);
@@ -61,7 +66,7 @@ void test1() {
     box_ptr_t box = factory::cube(length_t{5.0});
     bc_ptr_t bc = factory::pbc(box);
     cg_interactor_ptr_t interactor = 
-        factory::interactorCoarseGrainedPolarizableWater(box, bc);
+        factory::interactorCoarseGrainedPolarizableWater(catalog, box, bc);
     
     cg_displacer_ptr_t leapFrog = factory::leapFrog(interactor);
     SimulationData data = leapFrog->displace(param, cg);

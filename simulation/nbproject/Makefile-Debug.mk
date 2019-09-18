@@ -39,6 +39,7 @@ OBJECTFILES= \
 	${OBJECTDIR}/src/interactor.o \
 	${OBJECTDIR}/src/langevin-velocity-verlet.o \
 	${OBJECTDIR}/src/leap-frog.o \
+	${OBJECTDIR}/src/lj-coulomb-forces.o \
 	${OBJECTDIR}/src/model-factory.o \
 	${OBJECTDIR}/src/no-bc.o \
 	${OBJECTDIR}/src/pbc.o \
@@ -112,6 +113,11 @@ ${OBJECTDIR}/src/leap-frog.o: src/leap-frog.cpp
 	${MKDIR} -p ${OBJECTDIR}/src
 	${RM} "$@.d"
 	$(COMPILE.cc) -g -Wall -I../../cpputil/include -I../../particles/include -Iinclude -std=c++14 -fPIC  -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/leap-frog.o src/leap-frog.cpp
+
+${OBJECTDIR}/src/lj-coulomb-forces.o: src/lj-coulomb-forces.cpp
+	${MKDIR} -p ${OBJECTDIR}/src
+	${RM} "$@.d"
+	$(COMPILE.cc) -g -Wall -I../../cpputil/include -I../../particles/include -Iinclude -std=c++14 -fPIC  -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/lj-coulomb-forces.o src/lj-coulomb-forces.cpp
 
 ${OBJECTDIR}/src/model-factory.o: src/model-factory.cpp
 	${MKDIR} -p ${OBJECTDIR}/src
@@ -253,6 +259,19 @@ ${OBJECTDIR}/src/leap-frog_nomain.o: ${OBJECTDIR}/src/leap-frog.o src/leap-frog.
 	    $(COMPILE.cc) -g -Wall -I../../cpputil/include -I../../particles/include -Iinclude -std=c++14 -fPIC  -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/leap-frog_nomain.o src/leap-frog.cpp;\
 	else  \
 	    ${CP} ${OBJECTDIR}/src/leap-frog.o ${OBJECTDIR}/src/leap-frog_nomain.o;\
+	fi
+
+${OBJECTDIR}/src/lj-coulomb-forces_nomain.o: ${OBJECTDIR}/src/lj-coulomb-forces.o src/lj-coulomb-forces.cpp 
+	${MKDIR} -p ${OBJECTDIR}/src
+	@NMOUTPUT=`${NM} ${OBJECTDIR}/src/lj-coulomb-forces.o`; \
+	if (echo "$$NMOUTPUT" | ${GREP} '|main$$') || \
+	   (echo "$$NMOUTPUT" | ${GREP} 'T main$$') || \
+	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
+	then  \
+	    ${RM} "$@.d";\
+	    $(COMPILE.cc) -g -Wall -I../../cpputil/include -I../../particles/include -Iinclude -std=c++14 -fPIC  -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/lj-coulomb-forces_nomain.o src/lj-coulomb-forces.cpp;\
+	else  \
+	    ${CP} ${OBJECTDIR}/src/lj-coulomb-forces.o ${OBJECTDIR}/src/lj-coulomb-forces_nomain.o;\
 	fi
 
 ${OBJECTDIR}/src/model-factory_nomain.o: ${OBJECTDIR}/src/model-factory.o src/model-factory.cpp 

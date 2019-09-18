@@ -43,6 +43,7 @@
 #include "simploce/particle/atom.hpp"
 #include "simploce/particle/atomistic.hpp"
 #include "simploce/particle/coarse-grained.hpp"
+#include "simploce/particle/pfactory.hpp"
 #include <memory>
 
 namespace simploce {
@@ -82,10 +83,13 @@ namespace simploce {
         // Interactor for coarse grained polarizable water.
         static std::shared_ptr<Interactor<Bead>> cgPolWaterInteractor_{};
                 
-        static cg_ff_ptr_t coarseGrainedPolarizableWaterForceField(const bc_ptr_t& bc)
+        static cg_ff_ptr_t 
+        coarseGrainedPolarizableWaterForceField(const spec_catalog_ptr_t& catalog,
+                                                const bc_ptr_t& bc)
         {
             if ( !cgPolWaterFF_ ) {
-                cgPolWaterFF_ = std::make_shared<CoarseGrainedPolarizableWater>(bc);
+                cgPolWaterFF_ = 
+                    std::make_shared<CoarseGrainedPolarizableWater>(catalog, bc);
             }
             return cgPolWaterFF_;
         }
@@ -117,12 +121,14 @@ namespace simploce {
         }
         
         cg_interactor_ptr_t 
-        interactorCoarseGrainedPolarizableWater(const box_ptr_t& box, const bc_ptr_t& bc)        
+        interactorCoarseGrainedPolarizableWater(const spec_catalog_ptr_t& catalog,
+                                                const box_ptr_t& box, 
+                                                const bc_ptr_t& bc)        
         {
             cg_ppair_list_gen_ptr_t generator = 
                     factory::coarseGrainedPairListGenerator(box, bc);
             if ( !cgPolWaterInteractor_ ) {
-                cg_ff_ptr_t forcefield = coarseGrainedPolarizableWaterForceField(bc);
+                cg_ff_ptr_t forcefield = coarseGrainedPolarizableWaterForceField(catalog, bc);
                 cgPolWaterInteractor_ = std::make_shared<Interactor<Bead>>(forcefield, generator);
             }
             return cgPolWaterInteractor_;

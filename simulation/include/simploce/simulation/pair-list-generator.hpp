@@ -44,7 +44,6 @@ namespace simploce {
     
     /**
      * @param P Particle type.
-     * @param BC Boundary condition type.
      */
     template <typename P>
     class ParticlePairListGenerator {

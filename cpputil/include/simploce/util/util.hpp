@@ -21,6 +21,8 @@
 #include <ctime>
 #include <cmath>
 #include <cfenv>
+#include <future>
+#include <vector>
 
 namespace simploce {
     namespace util {
@@ -71,6 +73,21 @@ namespace simploce {
             V v = V(n) / RAND_MAX;
             return v;
         }
+        
+        /**
+         * Waits for all future results before returning. T is result type stored 
+         * in the future.
+         * @param futures Futures.
+         * @return Results of futures.
+         */
+        template<typename T>
+        std::vector<T> waitForAll(std::vector<std::future<T> >& futures)
+        {
+            std::vector<T> results;
+            for (auto& f : futures)
+                results.push_back(f.get());
+            return results;
+        }            
             
     }
 }

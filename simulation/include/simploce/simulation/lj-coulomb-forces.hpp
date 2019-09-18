@@ -23,39 +23,53 @@
  */
 
 /* 
- * File:   pol-water-force-field.hpp
+ * File:   lj-coulomb.hpp
  * Author: André H. Juffer, Biocenter Oulu.
  *
- * Created on August 30, 2019, 2:02 PM
+ * Created on September 17, 2019, 3:06 PM
  */
 
-#ifndef CG_POL_WATER_HPP
-#define CG_POL_WATER_HPP
+#ifndef LJ_COULOMB_HPP
+#define LJ_COULOMB_HPP
 
 #include "cg-forcefield.hpp"
-#include "sim-data.hpp"
 #include "stypes.hpp"
+#include "simploce/util/map2.hpp"
+#include <string>
+#include <map>
 #include <vector>
 
 namespace simploce {
     
-  /**
-   * Force field for the polarizable coarse grained model according to 
-   * Riniker and van Gunsteren, J. Chem. Phys. 134, 084119, 2011.
-   */
-    class CoarseGrainedPolarizableWater : public CoarseGrainedForceField {
+    /**
+     * Calculates LJ and Coulomb interaction.
+     * @param P Particle type.
+     */
+    template <typename P>
+    class LJCoulombForces;
+    
+    /**
+     * Specialization for beads.
+     */
+    template <>
+    class LJCoulombForces<Bead> : public CoarseGrainedForceField {
     public:
         
-        CoarseGrainedPolarizableWater(const spec_catalog_ptr_t& catalog,
-                                      const bc_ptr_t& bc);
+        /**
+         * Type for holding pairs (C12, C6) of LJ interaction parameters 
+         * for pairs of particle specs, each identified by a specification name. 
+         */
+        using lj_params_t = MatrixMap<std::string, std::pair<real_t, real_t>>;
         
         /**
-         * Computes forces on all particles.
-         * @param all All beads, including free beads and those part of groups.
-         * @param free All free beads, not in any groups.
-         * @param groups Polarizable groups, each group consists of two beads.
-         * @return Data, total potential energy.
+         * Type for holding parameters for electrostatic interactions.
          */
+        using el_params_t = std::map<std::string, real_t>;
+        
+        LJCoulombForces(const lj_params_t& ljParams, 
+                        const el_params_t& elParams,
+                        const bc_ptr_t& bc);
+        
         energy_t interact(const std::vector<bead_ptr_t>& all,
                           const std::vector<bead_ptr_t>& free,
                           const std::vector<bead_group_ptr_t>& groups,
@@ -63,19 +77,13 @@ namespace simploce {
         
         std::string id() const override;
         
-        /**
-         * Ideal distance between CW and DP.
-         * @return Distance, in nm.
-         */
-        static length_t idealDistanceCWDP();
-        
     private:
         
-        spec_catalog_ptr_t catalog_;
+        lj_params_t ljParams_;
+        el_params_t elParams_;
         bc_ptr_t bc_;
-        
     };
 }
 
-#endif /* POL_WATER_FORCE_FIELD_HPP */
+#endif /* LJ_COULOMB_HPP */
 

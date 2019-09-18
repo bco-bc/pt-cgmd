@@ -71,7 +71,9 @@ namespace simploce {
          * @return Interactor.
          */
         cg_interactor_ptr_t 
-        interactorCoarseGrainedPolarizableWater(const box_ptr_t& box, const bc_ptr_t& bc);
+        interactorCoarseGrainedPolarizableWater(const spec_catalog_ptr_t& catalog,
+                                                const box_ptr_t& box, 
+                                                const bc_ptr_t& bc);
         
         /**
          * Leap frog algorithm for atomistic particle models.

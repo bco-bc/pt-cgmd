@@ -57,6 +57,8 @@ struct SimpleForceField : public CoarseGrainedForceField{
         std::clog << "Computing forces for simulation for all, free, and groups...Done" << std::endl;
         return 0.0;        
     }
+    
+    std::string id() const { return "cg-simple-ff"; }
 };
 
 

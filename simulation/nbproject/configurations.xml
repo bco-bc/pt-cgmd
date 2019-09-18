@@ -15,6 +15,7 @@
       <itemPath>include/simploce/simulation/interactor.hpp</itemPath>
       <itemPath>include/simploce/simulation/langevin-velocity-verlet.hpp</itemPath>
       <itemPath>include/simploce/simulation/leap-frog.hpp</itemPath>
+      <itemPath>include/simploce/simulation/lj-coulomb-forces.hpp</itemPath>
       <itemPath>include/simploce/simulation/model-factory.hpp</itemPath>
       <itemPath>include/simploce/simulation/no-bc.hpp</itemPath>
       <itemPath>include/simploce/simulation/pair-list-generator.hpp</itemPath>
@@ -40,6 +41,7 @@
       <itemPath>src/interactor.cpp</itemPath>
       <itemPath>src/langevin-velocity-verlet.cpp</itemPath>
       <itemPath>src/leap-frog.cpp</itemPath>
+      <itemPath>src/lj-coulomb-forces.cpp</itemPath>
       <itemPath>src/model-factory.cpp</itemPath>
       <itemPath>src/no-bc.cpp</itemPath>
       <itemPath>src/pbc.cpp</itemPath>
@@ -254,6 +256,11 @@
             tool="3"
             flavor2="0">
       </item>
+      <item path="include/simploce/simulation/lj-coulomb-forces.hpp"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
       <item path="include/simploce/simulation/model-factory.hpp"
             ex="false"
             tool="3"
@@ -327,6 +334,8 @@
       </item>
       <item path="src/leap-frog.cpp" ex="false" tool="1" flavor2="0">
       </item>
+      <item path="src/lj-coulomb-forces.cpp" ex="false" tool="1" flavor2="0">
+      </item>
       <item path="src/model-factory.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="src/no-bc.cpp" ex="false" tool="1" flavor2="0">
@@ -365,11 +374,13 @@
         <ccTool>
           <developmentMode>5</developmentMode>
           <standard>11</standard>
+          <commandlineTool>g++</commandlineTool>
           <incDir>
             <pElem>include</pElem>
             <pElem>../cpputil/include</pElem>
             <pElem>../particles/include</pElem>
           </incDir>
+          <commandLine>-pthread</commandLine>
           <warningLevel>2</warningLevel>
         </ccTool>
         <fortranCompilerTool>
@@ -405,6 +416,7 @@
               </makeArtifact>
             </linkerLibProjectItem>
           </linkerLibItems>
+          <commandLine>-lpthread -pthread</commandLine>
         </linkerTool>
       </compileType>
       <folder path="TestFiles/f1">
@@ -519,6 +531,11 @@
             tool="3"
             flavor2="0">
       </item>
+      <item path="include/simploce/simulation/lj-coulomb-forces.hpp"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
       <item path="include/simploce/simulation/model-factory.hpp"
             ex="false"
             tool="3"
@@ -591,6 +608,8 @@
       <item path="src/langevin-velocity-verlet.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="src/leap-frog.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="src/lj-coulomb-forces.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="src/model-factory.cpp" ex="false" tool="1" flavor2="0">
       </item>

@@ -40,6 +40,8 @@
 #include "cg-displacer.hpp"
 #include "cg-forcefield.hpp"
 #include "cg-pol-water.hpp"
+#include "displacer.hpp"
+#include "forcefield.hpp"
 #include "interactor.hpp"
 #include "langevin-velocity-verlet.hpp"
 #include "leap-frog.hpp"
@@ -52,6 +54,7 @@
 #include "sim-data.hpp"
 #include "sim-model.hpp"
 #include "simulation.hpp"
+#include "sproperties.hpp"
 #include "velocity-verlet.hpp"
 
 #endif /* SALL_HPP */
