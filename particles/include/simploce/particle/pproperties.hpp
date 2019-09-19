@@ -50,7 +50,7 @@ namespace simploce {
         std::shared_ptr<P> find(int id, const CONT<std::shared_ptr<P>>& particles)
         {
             for (auto p : particles) {
-                if ( p->id() == id ) {
+                if ( p->index() == id ) {
                     return p;
                 }
             }

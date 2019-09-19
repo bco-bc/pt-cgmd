@@ -55,11 +55,11 @@ namespace simploce {
                
     protected:
         
-        Bead(int id, 
+        Bead(std::size_t index, 
              const std::string& name,
              const bead_spec_ptr_t& spec);
 
-        Bead(int id, 
+        Bead(std::size_t index, 
              const std::string& name,
              const bead_spec_ptr_t& spec,
              const std::vector<atom_ptr_t>& atoms);
@@ -70,11 +70,11 @@ namespace simploce {
         
         /**
          * Creates a new bead.
-         * @param id Unique bead identifier.
+         * @param id Unique bead index.
          * @param name Bead name.
          * @param spec Bead specification.
          */
-        static bead_ptr_t create(int id, 
+        static bead_ptr_t create(std::size_t index, 
                                  const std::string& name,
                                  const bead_spec_ptr_t& spec);
         

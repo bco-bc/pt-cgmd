@@ -30,12 +30,12 @@
 
 namespace simploce {        
     
-    Particle::Particle(int id, const std::string& name, const particle_spec_ptr_t& spec) :
-        id_{id}, name_{name}, spec_{spec}, r_{}, p_{}, f_{}
+    Particle::Particle(int index, const std::string& name, const particle_spec_ptr_t& spec) :
+        index_{index}, name_{name}, spec_{spec}, r_{}, p_{}, f_{}
     {
-        if ( id_ < 0 ) {
+        if ( index_ < 0 ) {
             throw std::domain_error(
-                boost::lexical_cast<std::string, int>(id_) + ": Illegal particle identifier."
+                boost::lexical_cast<std::string, int>(index_) + ": Illegal particle index."
             );
         }
         if ( name_.empty() ) {
@@ -50,9 +50,9 @@ namespace simploce {
     {        
     }
     
-    int Particle::id() const
+    int Particle::index() const
     {
-        return id_;
+        return index_;
     }
     
     std::string Particle::name() const
@@ -110,6 +110,25 @@ namespace simploce {
         f_ = force_t{}; 
     }
     
+    void Particle::write(std::ostream& stream) const
+    {
+        const auto space = conf::SPACE;
+        
+        stream << std::setw(10) << this->index();
+        stream << space << std::setw(10) << this->name();
+        stream << space << std::setw(10) << this->spec()->name();
+        stream << space << this->position();
+        stream << space << this->momentum();
+    }
+    
+    void Particle::writeState(std::ostream& stream) const
+    {
+        const auto space = conf::SPACE;
+        
+        stream << space << this->position();
+        stream << space << this->momentum();
+    }
+    
     void Particle::reset_(const particle_spec_ptr_t &spec)
     {
         if ( !spec ) {
@@ -130,11 +149,7 @@ namespace simploce {
     
     std::ostream& operator << (std::ostream& stream, const Particle& particle)
     {
-        const char space = ' ';
-        stream << std::setw(10) << particle.id();
-        stream << space << std::setw(10) << particle.name();
-        stream << space << std::setw(10) << particle.spec()->name();
-        stream << space << particle.position();
+        particle.write(stream);
         return stream;
     }
     

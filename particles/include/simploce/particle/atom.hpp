@@ -50,23 +50,16 @@ namespace simploce {
         Atom& operator = (const Atom&) = delete;
         
         ~Atom();
-        
-        
+                
     private:
         
         friend class Atomistic;
         
-        /**
-         * Creates new atom.
-         * @param id Unique particle identifier.
-         * @param name Atom name.
-         * @param spec Atom specification.
-         */
-        static atom_ptr_t create(int id, 
+        static atom_ptr_t create(std::size_t index, 
                                  const std::string &name, 
                                  const atom_spec_ptr_t &spec);
         
-        Atom(int id, 
+        Atom(std::size_t index, 
              const std::string &name,
              const atom_spec_ptr_t &spec);        
         

@@ -33,11 +33,12 @@
 #include "simploce/particle/ptypes.hpp"
 #include "simploce/particle/particle-spec.hpp"
 #include "simploce/particle/bead.hpp"
+#include "simploce/particle/pconf.hpp"
 #include <stdexcept>
 
 namespace simploce {
     
-    prot_bead_ptr_t ProtonatableBead::create(int id, 
+    prot_bead_ptr_t ProtonatableBead::create(std::size_t index, 
                                              const std::string& name,
                                              int protonationState,
                                              const bead_spec_ptr_t& spec)
@@ -48,7 +49,7 @@ namespace simploce {
                 ": this specification does not allow for (de)protonation."
             );
         }
-        return prot_bead_ptr_t(new ProtonatableBead(id, name, protonationState, spec));
+        return prot_bead_ptr_t(new ProtonatableBead(index, name, protonationState, spec));
     }
     
     void ProtonatableBead::protonate()
@@ -76,16 +77,32 @@ namespace simploce {
         return numberOfBoundProtons_;
     }
     
-    ProtonatableBead::ProtonatableBead(int id, 
+    ProtonatableBead::ProtonatableBead(std::size_t index, 
                                        const std::string& name,
                                        int protonationState,
                                        const bead_spec_ptr_t& spec) :
-        Bead(id, name, spec), numberOfBoundProtons_(protonationState)
+        Bead(index, name, spec), numberOfBoundProtons_(protonationState)
     {        
     }
     
     ProtonatableBead::~ProtonatableBead()
     {        
+    }
+    
+    void ProtonatableBead::write(std::ostream& stream) const
+    {
+        const auto space = conf::SPACE;
+        
+        Bead::write(stream);
+        stream << space << this->protonationState();
+    }
+    
+    void ProtonatableBead::writeState(std::ostream& stream) const
+    {
+        const auto space = conf::SPACE;
+        
+        Bead::writeState(stream);
+        stream << space << this->protonationState();
     }
     
     bool ProtonatableBead::isProtonatable_() const
@@ -96,6 +113,12 @@ namespace simploce {
     std::size_t ProtonatableBead::protonationState_() const
     {
         return this->protonationState();
+    }
+    
+    std::ostream& operator << (std::ostream& stream, const ProtonatableBead& pbead)
+    {
+        pbead.write(stream);
+        return stream;
     }
     
 }

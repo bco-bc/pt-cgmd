@@ -52,10 +52,10 @@ namespace simploce {
         virtual ~Particle();
         
         /**
-         * Returns unique particle identifier.
-         * @return Identifier.
+         * Returns unique particle index. The index also serves also as identifier.
+         * @return Index, always >= 1.
          */
-        int id() const;
+        int index() const;
         
         /**
          * Returns name. May not be unique.
@@ -122,16 +122,27 @@ namespace simploce {
          */
         void resetForce();
         
+        /**
+         * Writes this particle to an output stream.
+         * @param stream Output stream.
+         */
+        virtual void write(std::ostream& stream) const;
+        
+        /**
+         * Writes state to an output stream.
+         * @param stream Output stream.
+         */
+        virtual void writeState(std::ostream& stream) const;
         
     protected:
         
         /**
          * Constructor
-         * @param id Unique particle identifier.
+         * @param id Unique particle index.
          * @param name Particle name. Does not need to be unique.
          * @param spec Particle specification.
          */
-        Particle(int id, 
+        Particle(int index, 
                  const std::string& name, 
                  const particle_spec_ptr_t& spec);        
                         
@@ -149,7 +160,7 @@ namespace simploce {
         
         virtual std::size_t protonationState_() const;
         
-        int id_;
+        int index_;
         std::string name_;
         particle_spec_ptr_t spec_;
         position_t r_;

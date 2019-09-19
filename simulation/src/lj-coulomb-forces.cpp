@@ -106,14 +106,14 @@ namespace simploce {
             position_t ri = pi->position();
             std::string name_i = pi->spec()->name();
             charge_t qi = pi->charge();
-            std::size_t index_i = pi->id() - 1; // particle id starts at 1!
+            std::size_t index_i = pi->index() - 1; // particle id starts at 1!
       
             // Second particle.
             bead_ptr_t pj = pp.second;
             position_t rj = pj->position();
             std::string name_j = pj->spec()->name();
             charge_t qj = pj->charge();
-            std::size_t index_j = pj->id() - 1; // particle id starts at 1!
+            std::size_t index_j = pj->index() - 1; // particle id starts at 1!
 
             // LJ parameters.
             auto ljParam = ljParams.at(name_i, name_j);

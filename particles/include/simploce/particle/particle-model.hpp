@@ -174,7 +174,7 @@ namespace simploce {
          * Writes this particle model to an output stream.
          * @param stream Output stream.
          */
-        void writeTo(std::ostream& stream) const;
+        void write(std::ostream& stream) const;
         
     protected:
         
@@ -246,30 +246,18 @@ namespace simploce {
     }
     
     template <typename P, typename PG>
-    void ParticleModel<P,PG>::writeTo(std::ostream& stream) const
+    void ParticleModel<P,PG>::write(std::ostream& stream) const
     {
-        const std::size_t width = conf::WIDTH;
-        const std::size_t nameWidth = conf::NAME_WIDTH;
         const char space = conf::SPACE;
         
         stream << all_.size() << std::endl;
         for (auto p: all_) {
-            const P& particle = *p;
-            stream << std::setw(nameWidth) << particle.name();
-            stream << space << std::setw(width) << particle.id();
-            stream << space << particle.position();
-            stream << space << particle.momentum();
-            if ( particle.isProtonatable_() ) {
-                stream << space << 1 << space << particle.protonationState_();
-            } else {
-                stream << space << 0;
-            }
+            p->write(stream);
             stream << std::endl;            
         }
         stream << free_.size() << std::endl;        
         for (auto p : free_) {
-            const P& particle = *p;
-            stream << space << particle.id();
+            stream << space << p->index();
         }
         if ( !free_.empty() ) {
             stream << std::endl;        
@@ -287,7 +275,7 @@ namespace simploce {
     template <typename P, typename PG>
     void ParticleModel<P,PG>::add(const p_ptr_t& p)
     {
-        if ( this->contains(p->id()) ) {
+        if ( this->contains(p->index()) ) {
             throw std::domain_error("Particle is already in particle model.");
         }
         all_.push_back(p);
@@ -296,7 +284,7 @@ namespace simploce {
     template <typename P, typename PG>
     void ParticleModel<P,PG>::addFree(const p_ptr_t& fp) 
     {
-        if ( this->contains(fp->id()) ) {
+        if ( this->contains(fp->index()) ) {
             throw std::domain_error("Particle is already in particle model.");
         }
         all_.push_back(fp);
@@ -307,7 +295,7 @@ namespace simploce {
     void ParticleModel<P,PG>::addGroup(const pg_ptr_t& pg)
     {
         for (auto p : pg->particles() ) {
-            if ( !this->contains(p->id()) ) {
+            if ( !this->contains(p->index()) ) {
                 throw std::domain_error(
                     "Particle in particle group is not in physical system."
                 );

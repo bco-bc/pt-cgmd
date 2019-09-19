@@ -34,6 +34,7 @@
 
 #include "bead.hpp"
 #include "protonatable.hpp"
+#include <iostream>
 
 namespace simploce {
     
@@ -54,6 +55,10 @@ namespace simploce {
         
         std::size_t protonationState() const override;
         
+        virtual void write(std::ostream& stream) const override;
+        
+        virtual void writeState(std::ostream& stream) const override;
+        
     private:
         
         friend class CoarseGrained;
@@ -62,25 +67,26 @@ namespace simploce {
         
         std::size_t protonationState_() const override;
         
-        /**
-         * Creates a protonatable bead.
-         * @param id Unique bead identifier.
-         * @param name bead name.
-         * @param protonationState Number of bound protons. Must be >= 0.
-         * @param spec bead specification.
-         */
-        static prot_bead_ptr_t create(int id, 
+        static prot_bead_ptr_t create(std::size_t index, 
                                       const std::string& name,
                                       int protonationState,
                                       const bead_spec_ptr_t& spec);
                 
-        ProtonatableBead(int id, 
+        ProtonatableBead(std::size_t index, 
                          const std::string &name,
                          int protonationState,
                          const bead_spec_ptr_t &spec);
                
-        int numberOfBoundProtons_;        
+        std::size_t numberOfBoundProtons_;        
     };
+    
+    /**
+     * Writes a protonatable bead to an output stream.
+     * @param stream Output stream.
+     * @param pbead Protonatable bead.
+     * @return Output stream.
+     */
+    std::ostream& operator << (std::ostream& stream, const ProtonatableBead& pbeab);
 }
 
 #endif /* PROTONATABLE_BEAD_HPP */

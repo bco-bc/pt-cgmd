@@ -188,7 +188,7 @@ namespace simploce {
                     assignMomentum<Bead>(dpBead, temperature);
                     beads.push_back(dpBead);
                     
-                    auto pair = std::make_pair<int, int>(cwBead->id(), dpBead->id());
+                    auto pair = std::make_pair<int, int>(cwBead->index(), dpBead->index());
                     bbonds.push_back(pair);
                     
                     cg->addBeadGroup(beads, bbonds);

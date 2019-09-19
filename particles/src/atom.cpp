@@ -35,8 +35,8 @@
 
 namespace simploce {
     
-    Atom::Atom(int id, const std::string& name, const atom_spec_ptr_t& spec) :
-        Particle(id, name, spec)
+    Atom::Atom(std::size_t index, const std::string& name, const atom_spec_ptr_t& spec) :
+        Particle(index, name, spec)
     {        
     }
     
@@ -44,10 +44,10 @@ namespace simploce {
     {        
     }
     
-    atom_ptr_t Atom::create(int id, 
+    atom_ptr_t Atom::create(std::size_t index, 
                             const std::string &name, 
                             const atom_spec_ptr_t &spec)
     {
-        return atom_ptr_t(new Atom(id, name, spec));
+        return atom_ptr_t(new Atom(index, name, spec));
     }
 }

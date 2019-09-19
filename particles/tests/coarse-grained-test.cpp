@@ -56,14 +56,14 @@ void test1()
     cg.doWithAll<void>([](const std::vector<bead_ptr_t> &particles) {
         std::cout << "Size: " << particles.size() << std::endl;
         for (auto p : particles) {
-            std::cout << " " << p->id() << std::endl;
+            std::cout << " " << p->index() << std::endl;
         }
     });
     
-    if ( cg.contains(bead1->id()) ) {
-        std::cout << "Particle found: " << *(cg.find(bead1->id())) << std::endl;
+    if ( cg.contains(bead1->index()) ) {
+        std::cout << "Particle found: " << *(cg.find(bead1->index())) << std::endl;
     } else {
-        std::cout << bead1->id() << ": Not in particle model." << std::endl;
+        std::cout << bead1->index() << ": Not in particle model." << std::endl;
     }
     
     Bond<Bead> bond1 = Bond<Bead>::makeBond(bead1, bead2);
@@ -85,7 +85,7 @@ void test1()
     cg.doWithAll<void>([](const std::vector<bead_ptr_t> &particles) {
         std::cout << "Particle specification names:" << std::endl;
         for (auto p : particles) {            
-            std::cout << p->id() << " " << p->spec()->name() << std::endl;
+            std::cout << p->index() << " " << p->spec()->name() << std::endl;
         }
 
     });
@@ -101,7 +101,7 @@ void test1()
     cg.doWithAll<void>([] (const std::vector<bead_ptr_t> &particles) {
         std::cout << "Particle positions: " << std::endl;
         for (auto p: particles) {
-            std::cout << p->id() << " " << p->position() << std::endl;
+            std::cout << p->index() << " " << p->position() << std::endl;
         }
     });
     

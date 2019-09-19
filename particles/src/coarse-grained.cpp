@@ -42,7 +42,7 @@
 
 namespace simploce {
     
-    static int id_(const CoarseGrained& cg)
+    static std::size_t indexGenerator_(const CoarseGrained& cg)
     {
         return cg.numberOfParticles() + 1;
     }
@@ -57,8 +57,8 @@ namespace simploce {
                                       const position_t& r, 
                                       const bead_spec_ptr_t& spec)
     {
-        int id = id_(*this);
-        bead_ptr_t bead = Bead::create(id, name, spec);
+        auto index = indexGenerator_(*this);
+        bead_ptr_t bead = Bead::create(index, name, spec);
         bead->position(r);
         this->add(bead);
         return bead;
@@ -69,9 +69,9 @@ namespace simploce {
                                                        int protonationState,
                                                        const bead_spec_ptr_t& spec)
     {  
-        int id = id_(*this);
+        auto index = indexGenerator_(*this);
         prot_bead_ptr_t bead = 
-            ProtonatableBead::create(id, name, protonationState, spec);
+            ProtonatableBead::create(index, name, protonationState, spec);
         bead->position(r);
         protonatableBeads_.push_back(bead);
         this->addFree(bead);
@@ -181,7 +181,7 @@ namespace simploce {
     
     std::ostream& operator << (std::ostream& stream, const CoarseGrained& cg)
     {
-        cg.writeTo(stream);
+        cg.write(stream);
         return stream;
     }
 }
