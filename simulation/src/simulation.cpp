@@ -59,7 +59,7 @@ namespace simploce {
         std::size_t nsteps = param.get<std::size_t>("nsteps", 10000);
         std::size_t nwrite = param.get<std::size_t>("nwrite", 10);
         
-        for (std::size_t counter = 0; counter != nsteps; ++counter) {
+        for (std::size_t counter = 1; counter <= nsteps; ++counter) {
             SimulationData data = sm_->displace(param);
             if ( counter % nwrite == 0 ) {
                 dataStream << std::setw(width) << counter << space << data << std::endl;

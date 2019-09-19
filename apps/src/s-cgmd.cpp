@@ -15,6 +15,7 @@
 
 namespace po = boost::program_options;
 using namespace simploce;
+using namespace simploce::param;
 
 /*
  * Coarse grained molecular dynamics.
@@ -42,7 +43,7 @@ int main(int argc, char* argv[])
       (
        "fn-particle-spec-catalog",
        po::value<std::string>(&fnParticleSpecCatalog),
-       "Input file name of particle specifications. Default is 'particle-spec-catalog.dat'."
+       "Input file name of particle specifications. Default 'particle-spec-catalog.dat'."
        )
       (
        "fn-input-model",  po::value<std::string>(&fnInputModel),
@@ -169,6 +170,8 @@ int main(int argc, char* argv[])
     param.add<real_t>("timestep", timestep);
     param.add<real_t>("gamma", gamma);
     param.add<std::size_t>("npairlists", 10);
+    std::cout << "Simulation parameters:" << std::endl;
+    std::cout << param << std::endl;
     
     // Read particle 
     spec_catalog_ptr_t catalog = factory::particleSpecCatalog(fnParticleSpecCatalog);
@@ -181,7 +184,7 @@ int main(int argc, char* argv[])
     if ( fnInputModel.empty() ) {
       box_ptr_t box = std::make_shared<box_t>(boxSize);      
       if ( modelType == conf::POLARIZABLE_WATER ) {
-	model = modelFactory->createPolarizableWater(box, density, temperature);
+	model = modelFactory->createPolarizableWater(catalog, box, density, temperature);
       } else {
 	throw std::domain_error(modelType + ": No such simulation model type available (yet).");
       }

@@ -82,7 +82,7 @@ void test1() {
     cg_ptr_t cg = factory::coarseGrained();
     cg->addBead("test1", position_t{}, spec1_dp);
     cg->addBead("test2", position_t{}, spec1_p);
-    std::cout << "Number of beads: " << cg->size() << std::endl;
+    std::cout << "Number of beads: " << cg->numberOfParticles() << std::endl;
     
     box_ptr_t box = factory::cube(length_t{5.0});
     bc_ptr_t bc = factory::pbc(box);

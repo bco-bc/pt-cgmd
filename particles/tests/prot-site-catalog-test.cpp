@@ -63,7 +63,7 @@ void test1() {
     atom_ptr_t H3 = atomistic.addAtom("H3", r, specH);
     atom_ptr_t H4 = atomistic.addAtom("H4", r, specH);
 
-    std::cout << "Number of atoms: " << atomistic.size() << std::endl;
+    std::cout << "Number of atoms: " << atomistic.numberOfParticles() << std::endl;
     
     std::cout << "Looking up protonation sites...";
     atomistic.protonationSites(catalog);

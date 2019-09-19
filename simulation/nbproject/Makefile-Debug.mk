@@ -70,8 +70,8 @@ TESTOBJECTFILES= \
 CFLAGS=
 
 # CC Compiler Flags
-CCFLAGS=
-CXXFLAGS=
+CCFLAGS=-pthread
+CXXFLAGS=-pthread
 
 # Fortran Compiler Flags
 FFLAGS=
@@ -80,89 +80,89 @@ FFLAGS=
 ASFLAGS=
 
 # Link Libraries and Options
-LDLIBSOPTIONS=-Wl,-rpath,'../../cpputil/dist/Debug/GNU-Linux' -L../../cpputil/dist/Debug/GNU-Linux -lcpputil -Wl,-rpath,'../../particles/dist/Debug/GNU-Linux' -L../../particles/dist/Debug/GNU-Linux -lparticles
+LDLIBSOPTIONS=-Wl,-rpath,'../cpputil/dist/Debug/GNU-Linux' -L../cpputil/dist/Debug/GNU-Linux -lcpputil -Wl,-rpath,'../particles/dist/Debug/GNU-Linux' -L../particles/dist/Debug/GNU-Linux -lparticles
 
 # Build Targets
 .build-conf: ${BUILD_SUBPROJECTS}
 	"${MAKE}"  -f nbproject/Makefile-${CND_CONF}.mk ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/libsimulation.${CND_DLIB_EXT}
 
-${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/libsimulation.${CND_DLIB_EXT}: ../../cpputil/dist/Debug/GNU-Linux/libcpputil.so
+${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/libsimulation.${CND_DLIB_EXT}: ../cpputil/dist/Debug/GNU-Linux/libcpputil.so
 
-${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/libsimulation.${CND_DLIB_EXT}: ../../particles/dist/Debug/GNU-Linux/libparticles.so
+${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/libsimulation.${CND_DLIB_EXT}: ../particles/dist/Debug/GNU-Linux/libparticles.so
 
 ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/libsimulation.${CND_DLIB_EXT}: ${OBJECTFILES}
 	${MKDIR} -p ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}
-	${LINK.cc} -o ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/libsimulation.${CND_DLIB_EXT} ${OBJECTFILES} ${LDLIBSOPTIONS} -shared -fPIC
+	${LINK.cc} -o ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/libsimulation.${CND_DLIB_EXT} ${OBJECTFILES} ${LDLIBSOPTIONS} -pthread -lpthread -shared -fPIC
 
 ${OBJECTDIR}/src/cg-pol-water.o: src/cg-pol-water.cpp
 	${MKDIR} -p ${OBJECTDIR}/src
 	${RM} "$@.d"
-	$(COMPILE.cc) -g -Wall -I../../cpputil/include -I../../particles/include -Iinclude -std=c++14 -fPIC  -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/cg-pol-water.o src/cg-pol-water.cpp
+	$(COMPILE.cc) -g -Wall -Iinclude -I../cpputil/include -I../particles/include -std=c++14 -fPIC  -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/cg-pol-water.o src/cg-pol-water.cpp
 
 ${OBJECTDIR}/src/interactor.o: src/interactor.cpp
 	${MKDIR} -p ${OBJECTDIR}/src
 	${RM} "$@.d"
-	$(COMPILE.cc) -g -Wall -I../../cpputil/include -I../../particles/include -Iinclude -std=c++14 -fPIC  -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/interactor.o src/interactor.cpp
+	$(COMPILE.cc) -g -Wall -Iinclude -I../cpputil/include -I../particles/include -std=c++14 -fPIC  -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/interactor.o src/interactor.cpp
 
 ${OBJECTDIR}/src/langevin-velocity-verlet.o: src/langevin-velocity-verlet.cpp
 	${MKDIR} -p ${OBJECTDIR}/src
 	${RM} "$@.d"
-	$(COMPILE.cc) -g -Wall -I../../cpputil/include -I../../particles/include -Iinclude -std=c++14 -fPIC  -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/langevin-velocity-verlet.o src/langevin-velocity-verlet.cpp
+	$(COMPILE.cc) -g -Wall -Iinclude -I../cpputil/include -I../particles/include -std=c++14 -fPIC  -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/langevin-velocity-verlet.o src/langevin-velocity-verlet.cpp
 
 ${OBJECTDIR}/src/leap-frog.o: src/leap-frog.cpp
 	${MKDIR} -p ${OBJECTDIR}/src
 	${RM} "$@.d"
-	$(COMPILE.cc) -g -Wall -I../../cpputil/include -I../../particles/include -Iinclude -std=c++14 -fPIC  -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/leap-frog.o src/leap-frog.cpp
+	$(COMPILE.cc) -g -Wall -Iinclude -I../cpputil/include -I../particles/include -std=c++14 -fPIC  -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/leap-frog.o src/leap-frog.cpp
 
 ${OBJECTDIR}/src/lj-coulomb-forces.o: src/lj-coulomb-forces.cpp
 	${MKDIR} -p ${OBJECTDIR}/src
 	${RM} "$@.d"
-	$(COMPILE.cc) -g -Wall -I../../cpputil/include -I../../particles/include -Iinclude -std=c++14 -fPIC  -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/lj-coulomb-forces.o src/lj-coulomb-forces.cpp
+	$(COMPILE.cc) -g -Wall -Iinclude -I../cpputil/include -I../particles/include -std=c++14 -fPIC  -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/lj-coulomb-forces.o src/lj-coulomb-forces.cpp
 
 ${OBJECTDIR}/src/model-factory.o: src/model-factory.cpp
 	${MKDIR} -p ${OBJECTDIR}/src
 	${RM} "$@.d"
-	$(COMPILE.cc) -g -Wall -I../../cpputil/include -I../../particles/include -Iinclude -std=c++14 -fPIC  -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/model-factory.o src/model-factory.cpp
+	$(COMPILE.cc) -g -Wall -Iinclude -I../cpputil/include -I../particles/include -std=c++14 -fPIC  -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/model-factory.o src/model-factory.cpp
 
 ${OBJECTDIR}/src/no-bc.o: src/no-bc.cpp
 	${MKDIR} -p ${OBJECTDIR}/src
 	${RM} "$@.d"
-	$(COMPILE.cc) -g -Wall -I../../cpputil/include -I../../particles/include -Iinclude -std=c++14 -fPIC  -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/no-bc.o src/no-bc.cpp
+	$(COMPILE.cc) -g -Wall -Iinclude -I../cpputil/include -I../particles/include -std=c++14 -fPIC  -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/no-bc.o src/no-bc.cpp
 
 ${OBJECTDIR}/src/pbc.o: src/pbc.cpp
 	${MKDIR} -p ${OBJECTDIR}/src
 	${RM} "$@.d"
-	$(COMPILE.cc) -g -Wall -I../../cpputil/include -I../../particles/include -Iinclude -std=c++14 -fPIC  -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/pbc.o src/pbc.cpp
+	$(COMPILE.cc) -g -Wall -Iinclude -I../cpputil/include -I../particles/include -std=c++14 -fPIC  -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/pbc.o src/pbc.cpp
 
 ${OBJECTDIR}/src/sfactory.o: src/sfactory.cpp
 	${MKDIR} -p ${OBJECTDIR}/src
 	${RM} "$@.d"
-	$(COMPILE.cc) -g -Wall -I../../cpputil/include -I../../particles/include -Iinclude -std=c++14 -fPIC  -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/sfactory.o src/sfactory.cpp
+	$(COMPILE.cc) -g -Wall -Iinclude -I../cpputil/include -I../particles/include -std=c++14 -fPIC  -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/sfactory.o src/sfactory.cpp
 
 ${OBJECTDIR}/src/sim-data.o: src/sim-data.cpp
 	${MKDIR} -p ${OBJECTDIR}/src
 	${RM} "$@.d"
-	$(COMPILE.cc) -g -Wall -I../../cpputil/include -I../../particles/include -Iinclude -std=c++14 -fPIC  -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/sim-data.o src/sim-data.cpp
+	$(COMPILE.cc) -g -Wall -Iinclude -I../cpputil/include -I../particles/include -std=c++14 -fPIC  -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/sim-data.o src/sim-data.cpp
 
 ${OBJECTDIR}/src/sim-model.o: src/sim-model.cpp
 	${MKDIR} -p ${OBJECTDIR}/src
 	${RM} "$@.d"
-	$(COMPILE.cc) -g -Wall -I../../cpputil/include -I../../particles/include -Iinclude -std=c++14 -fPIC  -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/sim-model.o src/sim-model.cpp
+	$(COMPILE.cc) -g -Wall -Iinclude -I../cpputil/include -I../particles/include -std=c++14 -fPIC  -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/sim-model.o src/sim-model.cpp
 
 ${OBJECTDIR}/src/simulation.o: src/simulation.cpp
 	${MKDIR} -p ${OBJECTDIR}/src
 	${RM} "$@.d"
-	$(COMPILE.cc) -g -Wall -I../../cpputil/include -I../../particles/include -Iinclude -std=c++14 -fPIC  -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/simulation.o src/simulation.cpp
+	$(COMPILE.cc) -g -Wall -Iinclude -I../cpputil/include -I../particles/include -std=c++14 -fPIC  -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/simulation.o src/simulation.cpp
 
 ${OBJECTDIR}/src/velocity-verlet.o: src/velocity-verlet.cpp
 	${MKDIR} -p ${OBJECTDIR}/src
 	${RM} "$@.d"
-	$(COMPILE.cc) -g -Wall -I../../cpputil/include -I../../particles/include -Iinclude -std=c++14 -fPIC  -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/velocity-verlet.o src/velocity-verlet.cpp
+	$(COMPILE.cc) -g -Wall -Iinclude -I../cpputil/include -I../particles/include -std=c++14 -fPIC  -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/velocity-verlet.o src/velocity-verlet.cpp
 
 # Subprojects
 .build-subprojects:
-	cd ../../cpputil && ${MAKE}  -f Makefile CONF=Debug
-	cd ../../particles && ${MAKE}  -f Makefile CONF=Debug
+	cd ../cpputil && ${MAKE}  -f Makefile CONF=Debug
+	cd ../particles && ${MAKE}  -f Makefile CONF=Debug
 
 # Build Test Targets
 .build-tests-conf: .build-tests-subprojects .build-conf ${TESTFILES}
@@ -188,25 +188,25 @@ ${TESTDIR}/TestFiles/f2: ${TESTDIR}/tests/simulation-test.o ${OBJECTFILES:%.o=%_
 ${TESTDIR}/tests/displacer-test.o: tests/displacer-test.cpp 
 	${MKDIR} -p ${TESTDIR}/tests
 	${RM} "$@.d"
-	$(COMPILE.cc) -g -Wall -I../../cpputil/include -I../../particles/include -Iinclude -Iinclude -I../../cpputil/include -I../../particles/include -I. -std=c++14 -MMD -MP -MF "$@.d" -o ${TESTDIR}/tests/displacer-test.o tests/displacer-test.cpp
+	$(COMPILE.cc) -g -Wall -Iinclude -I../cpputil/include -I../particles/include -Iinclude -I../../cpputil/include -I../../particles/include -I. -std=c++14 -MMD -MP -MF "$@.d" -o ${TESTDIR}/tests/displacer-test.o tests/displacer-test.cpp
 
 
 ${TESTDIR}/tests/model-factory-test.o: tests/model-factory-test.cpp 
 	${MKDIR} -p ${TESTDIR}/tests
 	${RM} "$@.d"
-	$(COMPILE.cc) -g -Wall -I../../cpputil/include -I../../particles/include -Iinclude -Iinclude -I../../cpputil/include -I../../particles/include -I. -std=c++14 -MMD -MP -MF "$@.d" -o ${TESTDIR}/tests/model-factory-test.o tests/model-factory-test.cpp
+	$(COMPILE.cc) -g -Wall -Iinclude -I../cpputil/include -I../particles/include -Iinclude -I../../cpputil/include -I../../particles/include -I. -std=c++14 -MMD -MP -MF "$@.d" -o ${TESTDIR}/tests/model-factory-test.o tests/model-factory-test.cpp
 
 
 ${TESTDIR}/tests/pair-list-test.o: tests/pair-list-test.cpp 
 	${MKDIR} -p ${TESTDIR}/tests
 	${RM} "$@.d"
-	$(COMPILE.cc) -g -Wall -I../../cpputil/include -I../../particles/include -Iinclude -Iinclude -I../../cpputil/include -I../../particles/include -I. -std=c++14 -MMD -MP -MF "$@.d" -o ${TESTDIR}/tests/pair-list-test.o tests/pair-list-test.cpp
+	$(COMPILE.cc) -g -Wall -Iinclude -I../cpputil/include -I../particles/include -Iinclude -I../../cpputil/include -I../../particles/include -I. -std=c++14 -MMD -MP -MF "$@.d" -o ${TESTDIR}/tests/pair-list-test.o tests/pair-list-test.cpp
 
 
 ${TESTDIR}/tests/simulation-test.o: tests/simulation-test.cpp 
 	${MKDIR} -p ${TESTDIR}/tests
 	${RM} "$@.d"
-	$(COMPILE.cc) -g -Wall -I../../cpputil/include -I../../particles/include -Iinclude -Iinclude -I../../cpputil/include -I../../particles/include -I. -std=c++14 -MMD -MP -MF "$@.d" -o ${TESTDIR}/tests/simulation-test.o tests/simulation-test.cpp
+	$(COMPILE.cc) -g -Wall -Iinclude -I../cpputil/include -I../particles/include -Iinclude -I../../cpputil/include -I../../particles/include -I. -std=c++14 -MMD -MP -MF "$@.d" -o ${TESTDIR}/tests/simulation-test.o tests/simulation-test.cpp
 
 
 ${OBJECTDIR}/src/cg-pol-water_nomain.o: ${OBJECTDIR}/src/cg-pol-water.o src/cg-pol-water.cpp 
@@ -217,7 +217,7 @@ ${OBJECTDIR}/src/cg-pol-water_nomain.o: ${OBJECTDIR}/src/cg-pol-water.o src/cg-p
 	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
 	then  \
 	    ${RM} "$@.d";\
-	    $(COMPILE.cc) -g -Wall -I../../cpputil/include -I../../particles/include -Iinclude -std=c++14 -fPIC  -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/cg-pol-water_nomain.o src/cg-pol-water.cpp;\
+	    $(COMPILE.cc) -g -Wall -Iinclude -I../cpputil/include -I../particles/include -std=c++14 -fPIC  -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/cg-pol-water_nomain.o src/cg-pol-water.cpp;\
 	else  \
 	    ${CP} ${OBJECTDIR}/src/cg-pol-water.o ${OBJECTDIR}/src/cg-pol-water_nomain.o;\
 	fi
@@ -230,7 +230,7 @@ ${OBJECTDIR}/src/interactor_nomain.o: ${OBJECTDIR}/src/interactor.o src/interact
 	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
 	then  \
 	    ${RM} "$@.d";\
-	    $(COMPILE.cc) -g -Wall -I../../cpputil/include -I../../particles/include -Iinclude -std=c++14 -fPIC  -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/interactor_nomain.o src/interactor.cpp;\
+	    $(COMPILE.cc) -g -Wall -Iinclude -I../cpputil/include -I../particles/include -std=c++14 -fPIC  -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/interactor_nomain.o src/interactor.cpp;\
 	else  \
 	    ${CP} ${OBJECTDIR}/src/interactor.o ${OBJECTDIR}/src/interactor_nomain.o;\
 	fi
@@ -243,7 +243,7 @@ ${OBJECTDIR}/src/langevin-velocity-verlet_nomain.o: ${OBJECTDIR}/src/langevin-ve
 	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
 	then  \
 	    ${RM} "$@.d";\
-	    $(COMPILE.cc) -g -Wall -I../../cpputil/include -I../../particles/include -Iinclude -std=c++14 -fPIC  -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/langevin-velocity-verlet_nomain.o src/langevin-velocity-verlet.cpp;\
+	    $(COMPILE.cc) -g -Wall -Iinclude -I../cpputil/include -I../particles/include -std=c++14 -fPIC  -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/langevin-velocity-verlet_nomain.o src/langevin-velocity-verlet.cpp;\
 	else  \
 	    ${CP} ${OBJECTDIR}/src/langevin-velocity-verlet.o ${OBJECTDIR}/src/langevin-velocity-verlet_nomain.o;\
 	fi
@@ -256,7 +256,7 @@ ${OBJECTDIR}/src/leap-frog_nomain.o: ${OBJECTDIR}/src/leap-frog.o src/leap-frog.
 	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
 	then  \
 	    ${RM} "$@.d";\
-	    $(COMPILE.cc) -g -Wall -I../../cpputil/include -I../../particles/include -Iinclude -std=c++14 -fPIC  -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/leap-frog_nomain.o src/leap-frog.cpp;\
+	    $(COMPILE.cc) -g -Wall -Iinclude -I../cpputil/include -I../particles/include -std=c++14 -fPIC  -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/leap-frog_nomain.o src/leap-frog.cpp;\
 	else  \
 	    ${CP} ${OBJECTDIR}/src/leap-frog.o ${OBJECTDIR}/src/leap-frog_nomain.o;\
 	fi
@@ -269,7 +269,7 @@ ${OBJECTDIR}/src/lj-coulomb-forces_nomain.o: ${OBJECTDIR}/src/lj-coulomb-forces.
 	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
 	then  \
 	    ${RM} "$@.d";\
-	    $(COMPILE.cc) -g -Wall -I../../cpputil/include -I../../particles/include -Iinclude -std=c++14 -fPIC  -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/lj-coulomb-forces_nomain.o src/lj-coulomb-forces.cpp;\
+	    $(COMPILE.cc) -g -Wall -Iinclude -I../cpputil/include -I../particles/include -std=c++14 -fPIC  -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/lj-coulomb-forces_nomain.o src/lj-coulomb-forces.cpp;\
 	else  \
 	    ${CP} ${OBJECTDIR}/src/lj-coulomb-forces.o ${OBJECTDIR}/src/lj-coulomb-forces_nomain.o;\
 	fi
@@ -282,7 +282,7 @@ ${OBJECTDIR}/src/model-factory_nomain.o: ${OBJECTDIR}/src/model-factory.o src/mo
 	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
 	then  \
 	    ${RM} "$@.d";\
-	    $(COMPILE.cc) -g -Wall -I../../cpputil/include -I../../particles/include -Iinclude -std=c++14 -fPIC  -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/model-factory_nomain.o src/model-factory.cpp;\
+	    $(COMPILE.cc) -g -Wall -Iinclude -I../cpputil/include -I../particles/include -std=c++14 -fPIC  -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/model-factory_nomain.o src/model-factory.cpp;\
 	else  \
 	    ${CP} ${OBJECTDIR}/src/model-factory.o ${OBJECTDIR}/src/model-factory_nomain.o;\
 	fi
@@ -295,7 +295,7 @@ ${OBJECTDIR}/src/no-bc_nomain.o: ${OBJECTDIR}/src/no-bc.o src/no-bc.cpp
 	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
 	then  \
 	    ${RM} "$@.d";\
-	    $(COMPILE.cc) -g -Wall -I../../cpputil/include -I../../particles/include -Iinclude -std=c++14 -fPIC  -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/no-bc_nomain.o src/no-bc.cpp;\
+	    $(COMPILE.cc) -g -Wall -Iinclude -I../cpputil/include -I../particles/include -std=c++14 -fPIC  -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/no-bc_nomain.o src/no-bc.cpp;\
 	else  \
 	    ${CP} ${OBJECTDIR}/src/no-bc.o ${OBJECTDIR}/src/no-bc_nomain.o;\
 	fi
@@ -308,7 +308,7 @@ ${OBJECTDIR}/src/pbc_nomain.o: ${OBJECTDIR}/src/pbc.o src/pbc.cpp
 	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
 	then  \
 	    ${RM} "$@.d";\
-	    $(COMPILE.cc) -g -Wall -I../../cpputil/include -I../../particles/include -Iinclude -std=c++14 -fPIC  -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/pbc_nomain.o src/pbc.cpp;\
+	    $(COMPILE.cc) -g -Wall -Iinclude -I../cpputil/include -I../particles/include -std=c++14 -fPIC  -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/pbc_nomain.o src/pbc.cpp;\
 	else  \
 	    ${CP} ${OBJECTDIR}/src/pbc.o ${OBJECTDIR}/src/pbc_nomain.o;\
 	fi
@@ -321,7 +321,7 @@ ${OBJECTDIR}/src/sfactory_nomain.o: ${OBJECTDIR}/src/sfactory.o src/sfactory.cpp
 	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
 	then  \
 	    ${RM} "$@.d";\
-	    $(COMPILE.cc) -g -Wall -I../../cpputil/include -I../../particles/include -Iinclude -std=c++14 -fPIC  -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/sfactory_nomain.o src/sfactory.cpp;\
+	    $(COMPILE.cc) -g -Wall -Iinclude -I../cpputil/include -I../particles/include -std=c++14 -fPIC  -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/sfactory_nomain.o src/sfactory.cpp;\
 	else  \
 	    ${CP} ${OBJECTDIR}/src/sfactory.o ${OBJECTDIR}/src/sfactory_nomain.o;\
 	fi
@@ -334,7 +334,7 @@ ${OBJECTDIR}/src/sim-data_nomain.o: ${OBJECTDIR}/src/sim-data.o src/sim-data.cpp
 	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
 	then  \
 	    ${RM} "$@.d";\
-	    $(COMPILE.cc) -g -Wall -I../../cpputil/include -I../../particles/include -Iinclude -std=c++14 -fPIC  -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/sim-data_nomain.o src/sim-data.cpp;\
+	    $(COMPILE.cc) -g -Wall -Iinclude -I../cpputil/include -I../particles/include -std=c++14 -fPIC  -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/sim-data_nomain.o src/sim-data.cpp;\
 	else  \
 	    ${CP} ${OBJECTDIR}/src/sim-data.o ${OBJECTDIR}/src/sim-data_nomain.o;\
 	fi
@@ -347,7 +347,7 @@ ${OBJECTDIR}/src/sim-model_nomain.o: ${OBJECTDIR}/src/sim-model.o src/sim-model.
 	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
 	then  \
 	    ${RM} "$@.d";\
-	    $(COMPILE.cc) -g -Wall -I../../cpputil/include -I../../particles/include -Iinclude -std=c++14 -fPIC  -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/sim-model_nomain.o src/sim-model.cpp;\
+	    $(COMPILE.cc) -g -Wall -Iinclude -I../cpputil/include -I../particles/include -std=c++14 -fPIC  -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/sim-model_nomain.o src/sim-model.cpp;\
 	else  \
 	    ${CP} ${OBJECTDIR}/src/sim-model.o ${OBJECTDIR}/src/sim-model_nomain.o;\
 	fi
@@ -360,7 +360,7 @@ ${OBJECTDIR}/src/simulation_nomain.o: ${OBJECTDIR}/src/simulation.o src/simulati
 	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
 	then  \
 	    ${RM} "$@.d";\
-	    $(COMPILE.cc) -g -Wall -I../../cpputil/include -I../../particles/include -Iinclude -std=c++14 -fPIC  -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/simulation_nomain.o src/simulation.cpp;\
+	    $(COMPILE.cc) -g -Wall -Iinclude -I../cpputil/include -I../particles/include -std=c++14 -fPIC  -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/simulation_nomain.o src/simulation.cpp;\
 	else  \
 	    ${CP} ${OBJECTDIR}/src/simulation.o ${OBJECTDIR}/src/simulation_nomain.o;\
 	fi
@@ -373,7 +373,7 @@ ${OBJECTDIR}/src/velocity-verlet_nomain.o: ${OBJECTDIR}/src/velocity-verlet.o sr
 	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
 	then  \
 	    ${RM} "$@.d";\
-	    $(COMPILE.cc) -g -Wall -I../../cpputil/include -I../../particles/include -Iinclude -std=c++14 -fPIC  -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/velocity-verlet_nomain.o src/velocity-verlet.cpp;\
+	    $(COMPILE.cc) -g -Wall -Iinclude -I../cpputil/include -I../particles/include -std=c++14 -fPIC  -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/velocity-verlet_nomain.o src/velocity-verlet.cpp;\
 	else  \
 	    ${CP} ${OBJECTDIR}/src/velocity-verlet.o ${OBJECTDIR}/src/velocity-verlet_nomain.o;\
 	fi
@@ -398,8 +398,8 @@ ${OBJECTDIR}/src/velocity-verlet_nomain.o: ${OBJECTDIR}/src/velocity-verlet.o sr
 
 # Subprojects
 .clean-subprojects:
-	cd ../../cpputil && ${MAKE}  -f Makefile CONF=Debug clean
-	cd ../../particles && ${MAKE}  -f Makefile CONF=Debug clean
+	cd ../cpputil && ${MAKE}  -f Makefile CONF=Debug clean
+	cd ../particles && ${MAKE}  -f Makefile CONF=Debug clean
 
 # Enable dependency checking
 .dep.inc: .depcheck-impl

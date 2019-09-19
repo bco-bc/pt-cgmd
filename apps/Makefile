@@ -31,7 +31,7 @@ LIBS = -lm -lpthread $(OLIBS) -lboost_program_options -lboost_iostreams
 	$(LT) --mode=compile $(CC) -c $(CFLAGS) $< -o $@
 
 # All executables.
-% : %.cpp $(INCLUDE) $(TEMPLATES)
+% : %.cpp $(INCLUDE)
 	$(LT) --mode=link $(CC) $(LDFLAGS) $(LIBS) $< -o $@ -rpath $(PREFIX)/bin
 
 apps: $(AEXE)

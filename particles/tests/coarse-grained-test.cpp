@@ -77,7 +77,7 @@ void test1()
     std::cout << "Bond1 contains bead2? " << bond1.contains(bead2) << std::endl;
     std::cout << "Bond2 contains bead1? " << bond2.contains(bead1) << std::endl;
     
-    std::cout << "Size: " << cg.size() << std::endl;
+    std::cout << "Size: " << cg.numberOfParticles() << std::endl;
     std::cout << "Charge: " << cg.charge() << std::endl;
     std::cout << "Protonation state: " << cg.protonationState() << std::endl;    
     
@@ -116,7 +116,7 @@ void test1()
                     "/home/ajuffer/simploce/particles/resources/coarse-grained-system.dat");
     cg_ptr_t cg2 = CoarseGrained::createFrom(stream, catalog);
     stream.close();
-    std::cout << "Number of beads: " << cg2->size() << std::endl;    
+    std::cout << "Number of beads: " << cg2->numberOfParticles() << std::endl;    
     
     cg2->doWithAll<void, Update<Bead>>(Update<Bead>{});
     

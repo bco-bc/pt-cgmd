@@ -63,7 +63,7 @@ namespace simploce {
        
     std::size_t SimulationModel<Bead>::size() const
     {
-        return cg_->size();
+        return cg_->numberOfParticles();
     }
        
     SimulationData SimulationModel<Bead>::interact(const sim_param_t& param)

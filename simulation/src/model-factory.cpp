@@ -114,7 +114,7 @@ namespace simploce {
         // 5 water molecules. Each CG water particles consists of two connected 
         // CG particles (CW and DP).
         bead_spec_ptr_t mh2o = catalog_->molecularWater();
-        bead_spec_ptr_t cw = catalog_->lookup("PCW");
+        bead_spec_ptr_t cw = catalog_->lookup("CW");
         bead_spec_ptr_t dp = catalog_->lookup("DP");
         const length_t R_cw_dp = CoarseGrainedPolarizableWater::idealDistanceCWDP();
         std::clog << "\"Ideal\" distance between CW and DP: " << R_cw_dp 
@@ -202,7 +202,8 @@ namespace simploce {
             j = 0;
             i += 1;
         }
-        std::clog << "Created " << cg->size() << " polarizable waters." << std::endl;
+        std::clog << "Created " << cg->numberOfParticles() << " beads." << std::endl;
+        std::clog << "Created " << cg->numberOfParticleGroups() << "polarizable waters" << std::endl;
 
         // Interactor.
         cg_interactor_ptr_t interactor = 

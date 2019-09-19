@@ -144,8 +144,8 @@ namespace simploce {
      * @param number Number.
      * @return Result.
      */
-    template <typename V, int D>
-    value_t<V,D> operator * (const V& number, const value_t<V,D>& v)
+    template <typename N, typename V, int D>
+    value_t<V,D> operator * (const N& number, const value_t<V,D>& v)
     {
         return value_t<V,D>{v() * number};
     }

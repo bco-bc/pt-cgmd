@@ -35,7 +35,8 @@ OBJECTDIR=${CND_BUILDDIR}/${CND_CONF}/${CND_PLATFORM}
 
 # Object Files
 OBJECTFILES= \
-	${OBJECTDIR}/src/file.o
+	${OBJECTDIR}/src/file.o \
+	${OBJECTDIR}/src/param.o
 
 # Test Directory
 TESTDIR=${CND_BUILDDIR}/${CND_CONF}/${CND_PLATFORM}/tests
@@ -86,6 +87,11 @@ ${OBJECTDIR}/src/file.o: src/file.cpp
 	${MKDIR} -p ${OBJECTDIR}/src
 	${RM} "$@.d"
 	$(COMPILE.cc) -g -Wall -Iinclude -std=c++14 -fPIC  -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/file.o src/file.cpp
+
+${OBJECTDIR}/src/param.o: src/param.cpp
+	${MKDIR} -p ${OBJECTDIR}/src
+	${RM} "$@.d"
+	$(COMPILE.cc) -g -Wall -Iinclude -std=c++14 -fPIC  -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/param.o src/param.cpp
 
 # Subprojects
 .build-subprojects:
@@ -166,6 +172,19 @@ ${OBJECTDIR}/src/file_nomain.o: ${OBJECTDIR}/src/file.o src/file.cpp
 	    $(COMPILE.cc) -g -Wall -Iinclude -std=c++14 -fPIC  -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/file_nomain.o src/file.cpp;\
 	else  \
 	    ${CP} ${OBJECTDIR}/src/file.o ${OBJECTDIR}/src/file_nomain.o;\
+	fi
+
+${OBJECTDIR}/src/param_nomain.o: ${OBJECTDIR}/src/param.o src/param.cpp 
+	${MKDIR} -p ${OBJECTDIR}/src
+	@NMOUTPUT=`${NM} ${OBJECTDIR}/src/param.o`; \
+	if (echo "$$NMOUTPUT" | ${GREP} '|main$$') || \
+	   (echo "$$NMOUTPUT" | ${GREP} 'T main$$') || \
+	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
+	then  \
+	    ${RM} "$@.d";\
+	    $(COMPILE.cc) -g -Wall -Iinclude -std=c++14 -fPIC  -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/param_nomain.o src/param.cpp;\
+	else  \
+	    ${CP} ${OBJECTDIR}/src/param.o ${OBJECTDIR}/src/param_nomain.o;\
 	fi
 
 # Run Test Targets

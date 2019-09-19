@@ -44,7 +44,7 @@ namespace simploce {
     
     static int id_(const CoarseGrained& cg)
     {
-        return cg.size() + 1;
+        return cg.numberOfParticles() + 1;
     }
     
     

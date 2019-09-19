@@ -9,9 +9,7 @@
             <header-extensions>hpp</header-extensions>
             <sourceEncoding>UTF-8</sourceEncoding>
             <make-dep-projects>
-                <make-dep-project>../../cpputil</make-dep-project>
                 <make-dep-project>../cpputil</make-dep-project>
-                <make-dep-project>../../particles</make-dep-project>
                 <make-dep-project>../particles</make-dep-project>
             </make-dep-projects>
             <sourceRootList/>

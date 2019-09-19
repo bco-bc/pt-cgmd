@@ -46,7 +46,7 @@ namespace simploce {
                                   const position_t& r, 
                                   const atom_spec_ptr_t& spec)
     {
-        int index = this->size();
+        int index = this->numberOfParticles();
         atom_ptr_t atom = Atom::create(index, name, spec);
         atom->position(r);
         this->addFree(atom);

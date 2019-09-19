@@ -11,6 +11,7 @@
       <itemPath>include/simploce/util/map2.hpp</itemPath>
       <itemPath>include/simploce/util/math-constants.hpp</itemPath>
       <itemPath>include/simploce/util/mu-units.hpp</itemPath>
+      <itemPath>include/simploce/util/param.hpp</itemPath>
       <itemPath>include/simploce/util/si-units.hpp</itemPath>
       <itemPath>include/simploce/util/uconf.hpp</itemPath>
       <itemPath>include/simploce/util/util.hpp</itemPath>
@@ -24,6 +25,7 @@
                    displayName="Source Files"
                    projectFiles="true">
       <itemPath>src/file.cpp</itemPath>
+      <itemPath>src/param.cpp</itemPath>
     </logicalFolder>
     <logicalFolder name="TestFiles"
                    displayName="Test Files"
@@ -200,6 +202,8 @@
       </item>
       <item path="include/simploce/util/mu-units.hpp" ex="false" tool="3" flavor2="0">
       </item>
+      <item path="include/simploce/util/param.hpp" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="include/simploce/util/si-units.hpp" ex="false" tool="3" flavor2="0">
       </item>
       <item path="include/simploce/util/uconf.hpp" ex="false" tool="3" flavor2="0">
@@ -209,6 +213,8 @@
       <item path="include/simploce/util/value_t.hpp" ex="false" tool="3" flavor2="0">
       </item>
       <item path="src/file.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="src/param.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="tests/box-cube-test.cpp" ex="false" tool="1" flavor2="0">
       </item>
@@ -357,6 +363,8 @@
       </item>
       <item path="include/simploce/util/mu-units.hpp" ex="false" tool="3" flavor2="0">
       </item>
+      <item path="include/simploce/util/param.hpp" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="include/simploce/util/si-units.hpp" ex="false" tool="3" flavor2="0">
       </item>
       <item path="include/simploce/util/uconf.hpp" ex="false" tool="3" flavor2="0">
@@ -366,6 +374,8 @@
       <item path="include/simploce/util/value_t.hpp" ex="false" tool="3" flavor2="0">
       </item>
       <item path="src/file.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="src/param.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="tests/box-cube-test.cpp" ex="false" tool="1" flavor2="0">
       </item>

@@ -1,9 +1,11 @@
 #ifndef MAP2_HPP
 #define MAP2_HPP
 
+#include <boost/lexical_cast.hpp>
 #include <map>
 #include <vector>
 #include <iostream>
+#include <string>
 
 namespace simploce {
 
@@ -122,12 +124,16 @@ namespace simploce {
   {
     auto iter1 = cont_.find(key1);
     if ( iter1 == cont_.end() ) {
-      throw std::out_of_range("No element associated with keys.");
+        std::string k1 = boost::lexical_cast<std::string, K>(key1);
+        std::string msg = k1 + ": No element associated with this key.";
+      throw std::out_of_range(msg);
     } else {
       const map_t& rmap = iter1->second;
       const auto& iter2 = rmap.find(key2);
       if ( iter2 == rmap.end() ) {
-	throw std::out_of_range("No element associated with keys.");
+        std::string k2 = boost::lexical_cast<std::string, K>(key2);
+        std::string msg = k2 + ": No element associated with this key.";
+	throw std::out_of_range(msg);
       }
       return iter2->second;
     }

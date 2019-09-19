@@ -78,7 +78,19 @@ namespace simploce {
          * Returns number of particles.
          * @return Number.
          */
-        int size() const { return all_.size(); }
+        std::size_t numberOfParticles() const { return all_.size(); }
+        
+        /**
+         * Returns of free particles.
+         * @return Number.
+         */
+        std::size_t numberOfFreeParticles() const { return free_.size(); }
+        
+        /**
+         * Returns number of particle groups.
+         * @return Number.
+         */
+        std::size_t numberOfParticleGroups() const { return groups_.size(); }
         
         /**
          * Returns total charge.
@@ -113,7 +125,7 @@ namespace simploce {
          * Are there any particles in this physical system?
          * @return Result.
          */
-        bool empty() const { return this->size() == 0; }
+        bool empty() const { return this->numberOfParticles() == 0; }
         
         /**
          * Finds particle with given identifier.

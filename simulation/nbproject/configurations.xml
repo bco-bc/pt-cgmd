@@ -100,39 +100,41 @@
           <standard>11</standard>
           <commandlineTool>g++</commandlineTool>
           <incDir>
-            <pElem>../../cpputil/include</pElem>
-            <pElem>../../particles/include</pElem>
             <pElem>include</pElem>
+            <pElem>../cpputil/include</pElem>
+            <pElem>../particles/include</pElem>
           </incDir>
+          <commandLine>-pthread</commandLine>
           <warningLevel>2</warningLevel>
         </ccTool>
         <linkerTool>
           <linkerLibItems>
             <linkerLibProjectItem>
-              <makeArtifact PL="../../cpputil"
+              <makeArtifact PL="../cpputil"
                             CT="2"
                             CN="Debug"
                             AC="true"
                             BL="true"
-                            WD="../../cpputil"
+                            WD="../cpputil"
                             BC="${MAKE}  -f Makefile CONF=Debug"
                             CC="${MAKE}  -f Makefile CONF=Debug clean"
                             OP="${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/libcpputil.${CND_DLIB_EXT}">
               </makeArtifact>
             </linkerLibProjectItem>
             <linkerLibProjectItem>
-              <makeArtifact PL="../../particles"
+              <makeArtifact PL="../particles"
                             CT="2"
                             CN="Debug"
                             AC="true"
                             BL="true"
-                            WD="../../particles"
+                            WD="../particles"
                             BC="${MAKE}  -f Makefile CONF=Debug"
                             CC="${MAKE}  -f Makefile CONF=Debug clean"
                             OP="${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/libparticles.${CND_DLIB_EXT}">
               </makeArtifact>
             </linkerLibProjectItem>
           </linkerLibItems>
+          <commandLine>-pthread -lpthread</commandLine>
         </linkerTool>
       </compileType>
       <folder path="TestFiles">

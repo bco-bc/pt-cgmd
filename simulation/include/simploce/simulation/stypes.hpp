@@ -34,7 +34,7 @@
 
 #include "simploce/particle/ptypes.hpp"
 #include "simploce/util/cube.hpp"
-#include <boost/property_tree/ptree.hpp>
+#include "simploce/util/param.hpp"
 #include <tuple>
 
 namespace simploce {
@@ -133,7 +133,7 @@ namespace simploce {
      * Type for holding simulation parameters, such as values for the time step 
      * and the requested number of steps.
      */
-    using sim_param_t = boost::property_tree::ptree;
+    using sim_param_t = param::param_t;
     
     /**
      * Defines a range of something in a given indexed collection to forms pairs between 

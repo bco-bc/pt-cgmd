@@ -232,6 +232,7 @@ namespace simploce {
         static stime_t dt{0.0};
         static temperature_t temperature{298.15};
         static real_t gamma{0.5};
+        static std::size_t counter = 0;
 
         if ( !setup ) {            
             dt = param.get<real_t>("timestep");
@@ -247,6 +248,8 @@ namespace simploce {
             setup = true;
         }
         
+        counter += 1;
+                
         // Displace atom positions.
         at->doWithAll<void>([] (const std::vector<atom_ptr_t>& atoms) {
             displacePosition_<Atom>(dt, atoms);
@@ -259,7 +262,9 @@ namespace simploce {
             return displaceMomentum_<Atom>(atoms);
         });
         data.epot = epot;
-
+        
+        data.t = counter * dt;
+        
         return data;
     }    
     
@@ -282,6 +287,9 @@ namespace simploce {
         static stime_t dt{0.0};
         static temperature_t temperature{0.0};
         static real_t gamma{0.0};
+        static std::size_t counter = 0.0;
+        
+        counter += 1;
         
         if ( !setup ) {
             dt = param.get<real_t>("timestep");
@@ -309,6 +317,8 @@ namespace simploce {
             return displaceMomentum_<Bead>(beads);
         });
         data.epot = epot;
+        
+        data.t = counter * dt;
 
         return data;
     }    
