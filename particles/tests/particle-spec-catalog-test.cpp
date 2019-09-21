@@ -27,7 +27,7 @@ using namespace simploce;
 
 void test1() {
     std::cout << "particle-spec-catalog-test test 1" << std::endl;
-    std::string fileName = "/home/ajuffer/simploce/particles/resources/particles-specs.dat";
+    std::string fileName = "/home/ajuffer/simploce/pt-cgmd/particles/resources/particles-specs.dat";
     std::ifstream stream;
     file::open_input(stream, fileName);
     spec_catalog_ptr_t catalog = ParticleSpecCatalog::create(stream);

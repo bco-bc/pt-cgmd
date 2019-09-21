@@ -42,6 +42,16 @@ namespace simploce {
     Bead::~Bead()
     {        
     }
+    
+    void Bead::write(std::ostream& stream) const
+    {
+        Particle::write(stream);
+    }
+    
+    void Bead::writeState(std::ostream& stream) const
+    {
+        Particle::writeState(stream);
+    }
         
     bead_ptr_t Bead::create(std::size_t index, 
                             const std::string& name,

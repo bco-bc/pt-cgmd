@@ -30,14 +30,9 @@
 
 namespace simploce {        
     
-    Particle::Particle(int index, const std::string& name, const particle_spec_ptr_t& spec) :
+    Particle::Particle(std::size_t index, const std::string& name, const particle_spec_ptr_t& spec) :
         index_{index}, name_{name}, spec_{spec}, r_{}, p_{}, f_{}
     {
-        if ( index_ < 0 ) {
-            throw std::domain_error(
-                boost::lexical_cast<std::string, int>(index_) + ": Illegal particle index."
-            );
-        }
         if ( name_.empty() ) {
             throw std::domain_error("A particle name must be provided.");
         }
@@ -50,7 +45,7 @@ namespace simploce {
     {        
     }
     
-    int Particle::index() const
+    std::size_t Particle::index() const
     {
         return index_;
     }
@@ -137,6 +132,7 @@ namespace simploce {
         spec_ = spec;
     }
     
+    /*
     bool Particle::isProtonatable_() const
     {
         return false;
@@ -146,6 +142,7 @@ namespace simploce {
     {
         return 0;
     }
+    */
     
     std::ostream& operator << (std::ostream& stream, const Particle& particle)
     {

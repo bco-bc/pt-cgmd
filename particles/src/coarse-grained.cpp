@@ -101,7 +101,7 @@ namespace simploce {
     }
     
     cg_ptr_t CoarseGrained::createFrom(std::istream& stream, 
-                                            const spec_catalog_ptr_t& catalog)
+                                       const spec_catalog_ptr_t& catalog)
     {
         cg_ptr_t cg = std::make_shared<CoarseGrained>();
         

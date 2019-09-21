@@ -38,20 +38,6 @@
 
 namespace simploce {
     
-    prot_bead_ptr_t ProtonatableBead::create(std::size_t index, 
-                                             const std::string& name,
-                                             int protonationState,
-                                             const bead_spec_ptr_t& spec)
-    {
-        if ( !spec->isProtonatable() ) {
-            throw std::domain_error(
-                spec->name() + 
-                ": this specification does not allow for (de)protonation."
-            );
-        }
-        return prot_bead_ptr_t(new ProtonatableBead(index, name, protonationState, spec));
-    }
-    
     void ProtonatableBead::protonate()
     {
         numberOfBoundProtons_ += 1;
@@ -77,14 +63,6 @@ namespace simploce {
         return numberOfBoundProtons_;
     }
     
-    ProtonatableBead::ProtonatableBead(std::size_t index, 
-                                       const std::string& name,
-                                       int protonationState,
-                                       const bead_spec_ptr_t& spec) :
-        Bead(index, name, spec), numberOfBoundProtons_(protonationState)
-    {        
-    }
-    
     ProtonatableBead::~ProtonatableBead()
     {        
     }
@@ -105,14 +83,29 @@ namespace simploce {
         stream << space << this->protonationState();
     }
     
-    bool ProtonatableBead::isProtonatable_() const
-    {
-        return true;
+    ProtonatableBead::ProtonatableBead(std::size_t index, 
+                                       const std::string& name,
+                                       std::size_t numberOfBoundProtons,
+                                       const bead_spec_ptr_t& spec) :
+        Bead(index, name, spec), numberOfBoundProtons_(numberOfBoundProtons)
+    {        
     }
     
-    std::size_t ProtonatableBead::protonationState_() const
+    prot_bead_ptr_t ProtonatableBead::create(std::size_t index, 
+                                             const std::string& name,
+                                             std::size_t numberOfBoundProtons,
+                                             const bead_spec_ptr_t& spec)
     {
-        return this->protonationState();
+        if ( !spec->isProtonatable() ) {
+            throw std::domain_error(
+                spec->name() + 
+                ": this specification does not allow for (de)protonation."
+            );
+        }
+        return prot_bead_ptr_t(new ProtonatableBead(index, 
+                                                    name, 
+                                                    numberOfBoundProtons, 
+                                                    spec));
     }
     
     std::ostream& operator << (std::ostream& stream, const ProtonatableBead& pbead)

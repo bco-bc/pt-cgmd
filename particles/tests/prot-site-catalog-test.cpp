@@ -34,12 +34,12 @@ void test1() {
     
     Atomistic atomistic;
 
-    file::open_input(stream, "/home/ajuffer/simploce/particles/resources/protonation-sites.dat");
+    file::open_input(stream, "/home/ajuffer/simploce//pt-cgmd/particles/resources/protonation-sites.dat");
     prot_site_catalog_ptr_t catalog = ProtonationSiteCatalog::create(stream);
     std::cout << *catalog << std::endl;
     stream.close();
     
-    file::open_input(stream, "/home/ajuffer/simploce/particles/resources/particles-specs.dat");
+    file::open_input(stream, "/home/ajuffer/simploce//pt-cgmd/particles/resources/particles-specs.dat");
     spec_catalog_ptr_t specs = ParticleSpecCatalog::create(stream);
     std::cout << *specs << std::endl;
     
@@ -74,7 +74,7 @@ void test1() {
     std::cout << "Charge state atomistic: " << atomistic.charge() << std::endl;
     
     std::cout << "Protonating atomistic..." << std::endl;
-    atomistic.operateOnProtonationSites<void>([] (const std::vector<atom_prot_site_ptr_t> &sites) {
+    atomistic.doWithProtonationSites<void>([] (const std::vector<atom_prot_site_ptr_t> &sites) {
         for (auto site : sites) {
             std::cout << "Site (before): " << site->name() 
                       << ", protonation state: " << site->protonationState()
@@ -92,7 +92,7 @@ void test1() {
     std::cout << "Charge state atomistic: " << atomistic.charge() << std::endl;
 
     std::cout << "Deprotonating atomistic..." << std::endl;
-    atomistic.operateOnProtonationSites<void>([] (const std::vector<atom_prot_site_ptr_t> &sites) {
+    atomistic.doWithProtonationSites<void>([] (const std::vector<atom_prot_site_ptr_t> &sites) {
         for (auto site : sites) {
             std::cout << "Site (before): " << site->name()
                       << ", protonation state: " << site->protonationState() 

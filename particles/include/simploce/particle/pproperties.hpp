@@ -47,7 +47,7 @@ namespace simploce {
          * @return Particle or nullptr if the particle cannot be identified.
          */
         template <typename P, template<typename, typename ...> class CONT = std::vector>
-        std::shared_ptr<P> find(int id, const CONT<std::shared_ptr<P>>& particles)
+        std::shared_ptr<P> find(std::size_t id, const CONT<std::shared_ptr<P>>& particles)
         {
             for (auto p : particles) {
                 if ( p->index() == id ) {

@@ -40,7 +40,9 @@ void test2() {
     CoarseGrained coarseGrained;
     std::cout << "particle-test test 2" << std::endl;
     bead_spec_ptr_t spec = ParticleSpec::createForBead("spec_456", 2.0, 3.0, 4.0);
-    coarseGrained.addBead("bead1", position_t{}, spec);
+    bead_ptr_t bead = coarseGrained.addBead("bead1", position_t{}, spec);
+    std::cout << *bead << std::endl;
+    
     coarseGrained.doWithAll<void>([] (const std::vector<bead_ptr_t>& beads) {
         for (auto bead : beads) {
             std::cout << *bead << std::endl;   
@@ -55,7 +57,7 @@ void test3()
     std::cout << "particle-test test 3" << std::endl;
     CoarseGrained coarseGrained;
     bead_spec_ptr_t spec = 
-            ParticleSpec::createForProtonatableBead("spec_764", -1.0, 5.0, 3.0, 7.9);
+            ParticleSpec::createForProtonatableBead("COOH", charge_t{-1.0}, 5.0, 3.0, 7.9);
     coarseGrained.addBead("COOH", position_t{}, spec);
     coarseGrained.doWithAll<void>([] (const std::vector<bead_ptr_t>& beads) {
         for (auto bead : beads) {

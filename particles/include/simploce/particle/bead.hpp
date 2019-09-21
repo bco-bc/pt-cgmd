@@ -51,7 +51,11 @@ namespace simploce {
         Bead(const Bead&) = delete;
         Bead& operator = (const Bead&) = delete;
         
-        virtual ~Bead();
+        virtual ~Bead();   
+        
+        virtual void write(std::ostream& stream) const;
+        
+        virtual void writeState(std::ostream& stream) const override;
                
     protected:
         

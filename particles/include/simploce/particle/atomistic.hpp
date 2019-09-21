@@ -75,7 +75,7 @@ namespace simploce {
          * @return Result.
          */
         template <typename R, typename T>
-        R operateOnProtonationSites(T task) const { return task(protonationSites_); }
+        R doWithProtonationSites(T task) const { return task(protonationSites_); }
         
     private:
         

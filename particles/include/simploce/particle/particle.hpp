@@ -55,7 +55,7 @@ namespace simploce {
          * Returns unique particle index. The index also serves also as identifier.
          * @return Index, always >= 1.
          */
-        int index() const;
+        std::size_t index() const;
         
         /**
          * Returns name. May not be unique.
@@ -142,7 +142,7 @@ namespace simploce {
          * @param name Particle name. Does not need to be unique.
          * @param spec Particle specification.
          */
-        Particle(int index, 
+        Particle(std::size_t index, 
                  const std::string& name, 
                  const particle_spec_ptr_t& spec);        
                         
@@ -156,11 +156,11 @@ namespace simploce {
         
         void reset_(const particle_spec_ptr_t& spec);
         
-        virtual bool isProtonatable_() const;
+        //virtual bool isProtonatable_() const;
         
-        virtual std::size_t protonationState_() const;
+        //virtual std::size_t protonationState_() const;
         
-        int index_;
+        std::size_t index_;
         std::string name_;
         particle_spec_ptr_t spec_;
         position_t r_;

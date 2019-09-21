@@ -126,7 +126,7 @@ namespace simploce {
                                                               pKa_t pKa);
         
         /**
-         * Creates an atom specification. Always not protonatable.
+         * Creates an atom specification. Not protonatable.
          * @param name Unique specification name.
          * @param charge Charge value.
          * @param mass Mass value.

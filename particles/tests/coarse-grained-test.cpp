@@ -107,16 +107,19 @@ void test1()
     
     std::ifstream stream;
     file::open_input(stream, 
-                    "/home/ajuffer/simploce/particles/resources/particles-specs.dat");
+                    "/home/ajuffer/simploce/pt-cgmd/particles/resources/particles-specs.dat");
     spec_catalog_ptr_t catalog = ParticleSpecCatalog::create(stream);
     stream.close();
     std::clog << *catalog << std::endl;
     
     file::open_input(stream,
-                    "/home/ajuffer/simploce/particles/resources/coarse-grained-system.dat");
+                    "/home/ajuffer/simploce/pt-cgmd/particles/resources/coarse-grained-system.dat");
     cg_ptr_t cg2 = CoarseGrained::createFrom(stream, catalog);
     stream.close();
-    std::cout << "Number of beads: " << cg2->numberOfParticles() << std::endl;    
+    std::cout << "Number of beads: " << cg2->numberOfParticles() << std::endl; 
+    std::cout << "State:" << std::endl;
+    cg2->writeState(std::cout);
+    std::cout << std::endl;
     
     cg2->doWithAll<void, Update<Bead>>(Update<Bead>{});
     
@@ -133,6 +136,10 @@ void test1()
             std::cout << "Group position: " << g->position() << std::endl;
         }
     });
+    
+    std::cout << "State:" << std::endl;
+    cg2->writeState(std::cout);
+    std::cout << std::endl;
 }
 
 void test2() {

@@ -132,14 +132,14 @@ namespace simploce {
          * @param id Identifier.
          * @return Particle, or nullptr if not found.
          */
-        p_ptr_t find(int id) const { return properties::find(id, all_); }
+        p_ptr_t find(std::size_t id) const { return properties::find(id, all_); }
         
         /**
          * Contains a particle with given identifier.
          * @param id Particle identifier.
          * @return Result.
          */
-        bool contains(int id) const;
+        bool contains(std::size_t id) const;
         
         /**
          * Performs a "task" with all particles. The given task must expose the 
@@ -175,6 +175,12 @@ namespace simploce {
          * @param stream Output stream.
          */
         void write(std::ostream& stream) const;
+        
+        /**
+         * Writes the current state to an output stream.
+         * @param stream Output stream.
+         */
+        virtual void writeState(std::ostream& stream) const;
         
     protected:
         
@@ -234,13 +240,13 @@ namespace simploce {
     template <typename P, typename PG>
     void ParticleModel<P,PG>::resetForces()
     {
-        for (auto p : all_) {
+        for (p_ptr_t& p : all_) {
             p->resetForce();
         }
     }
     
     template <typename P, typename PG>
-    bool ParticleModel<P,PG>::contains(int id) const
+    bool ParticleModel<P,PG>::contains(std::size_t id) const
     {
         return this->find(id) != nullptr;
     }
@@ -251,12 +257,12 @@ namespace simploce {
         const char space = conf::SPACE;
         
         stream << all_.size() << std::endl;
-        for (auto p: all_) {
+        for (const p_ptr_t& p: all_) {
             p->write(stream);
             stream << std::endl;            
         }
         stream << free_.size() << std::endl;        
-        for (auto p : free_) {
+        for (const p_ptr_t& p : free_) {
             stream << space << p->index();
         }
         if ( !free_.empty() ) {
@@ -269,6 +275,16 @@ namespace simploce {
             if ( iter != (groups_.end() - 1) ) {
                 stream << std::endl;
             }
+        }
+    }
+    
+    template <typename P, typename PG>
+    void ParticleModel<P,PG>::writeState(std::ostream& stream) const
+    {
+        const char space = conf::SPACE;
+        
+        for (const p_ptr_t& p: all_) {
+            p->writeState(stream);        
         }
     }
     
@@ -294,7 +310,7 @@ namespace simploce {
     template <typename P, typename PG>
     void ParticleModel<P,PG>::addGroup(const pg_ptr_t& pg)
     {
-        for (auto p : pg->particles() ) {
+        for (const p_ptr_t& p : pg->particles() ) {
             if ( !this->contains(p->index()) ) {
                 throw std::domain_error(
                     "Particle in particle group is not in physical system."

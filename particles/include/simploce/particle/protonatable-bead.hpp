@@ -63,18 +63,14 @@ namespace simploce {
         
         friend class CoarseGrained;
         
-        bool isProtonatable_() const override;
-        
-        std::size_t protonationState_() const override;
-        
         static prot_bead_ptr_t create(std::size_t index, 
                                       const std::string& name,
-                                      int protonationState,
+                                      std::size_t numberOfBoundProtons,
                                       const bead_spec_ptr_t& spec);
                 
         ProtonatableBead(std::size_t index, 
                          const std::string &name,
-                         int protonationState,
+                         std::size_t numberOfBoundProtons,
                          const bead_spec_ptr_t &spec);
                
         std::size_t numberOfBoundProtons_;        
