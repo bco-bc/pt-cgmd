@@ -149,7 +149,7 @@ namespace simploce {
         
     private:
         
-        p_ptr_t find_(int id) const { return properties::find<P>(id, particles_); }
+        p_ptr_t find_(std::size_t id) const { return properties::find<P>(id, particles_); }
         
         void validate_() const;
         

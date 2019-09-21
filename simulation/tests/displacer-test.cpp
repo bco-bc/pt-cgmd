@@ -39,11 +39,13 @@
 #include "simploce/particle/coarse-grained.hpp"
 #include "simploce/particle/particle-spec-catalog.hpp"
 #include "simploce/util/file.hpp"
+#include "simploce/util/param.hpp"
 #include <fstream>
 #include <cstdlib>
 #include <iostream>
 
 using namespace simploce;
+using namespace simploce::param;
 
 /*
  * Simple C++ Test Suite
@@ -52,7 +54,7 @@ using namespace simploce;
 void test1() {
     std::cout << "displacer-test test 1" << std::endl;
     
-    std::string fileName = "/home/ajuffer/simploce/particles/resources/particles-specs.dat";
+    std::string fileName = "/home/ajuffer/simploce/pt-cgmd/particles/resources/particles-specs.dat";
     std::ifstream stream;
     file::open_input(stream, fileName);
     spec_catalog_ptr_t catalog = ParticleSpecCatalog::create(stream);
@@ -60,6 +62,10 @@ void test1() {
     sim_param_t param{};
     param.add<std::size_t>("nsteps", 1000);
     param.add<real_t>("timestep", 0.001);
+    param.add<real_t>("npairlists", 10);
+    param.add<real_t>("temperature", 300);
+    param.add<real_t>("gamma", 0.5);
+    std::cout << param << std::endl;
     
     cg_ptr_t cg = factory::coarseGrained();
 

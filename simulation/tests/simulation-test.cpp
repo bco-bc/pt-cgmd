@@ -80,8 +80,8 @@ void test1() {
     bead_spec_ptr_t spec1_p = ParticleSpec::createForBead("dpspec1", 1.0, 1.0, 1.0);
     
     cg_ptr_t cg = factory::coarseGrained();
-    cg->addBead("test1", position_t{}, spec1_dp);
-    cg->addBead("test2", position_t{}, spec1_p);
+    cg->addBead(1, "test1", position_t{}, spec1_dp);
+    cg->addBead(2, "test2", position_t{}, spec1_p);
     std::cout << "Number of beads: " << cg->numberOfParticles() << std::endl;
     
     box_ptr_t box = factory::cube(length_t{5.0});

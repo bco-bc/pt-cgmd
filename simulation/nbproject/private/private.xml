@@ -6,6 +6,14 @@
     </data>
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
-        <group/>
+        <group>
+            <file>file:/home/juffer/simploce/pt-cgmd/simulation/tests/simulation-test.cpp</file>
+            <file>file:/home/juffer/simploce/pt-cgmd/simulation/tests/displacer-test.cpp</file>
+            <file>file:/home/juffer/simploce/pt-cgmd/simulation/src/interactor.cpp</file>
+            <file>file:/home/juffer/simploce/pt-cgmd/simulation/tests/model-factory-test.cpp</file>
+            <file>file:/home/juffer/simploce/pt-cgmd/simulation/src/model-factory.cpp</file>
+            <file>file:/home/juffer/simploce/pt-cgmd/simulation/src/leap-frog.cpp</file>
+            <file>file:/home/juffer/simploce/pt-cgmd/simulation/include/simploce/simulation/stypes.hpp</file>
+        </group>
     </open-files>
 </project-private>

@@ -114,8 +114,8 @@ namespace simploce {
         // 5 water molecules. Each CG water particles consists of two connected 
         // CG particles (CW and DP).
         bead_spec_ptr_t mh2o = catalog_->molecularWater();
-        bead_spec_ptr_t cw = catalog_->lookup("CW");
-        bead_spec_ptr_t dp = catalog_->lookup("DP");
+        bead_spec_ptr_t cwSpec = catalog_->lookup("CW");
+        bead_spec_ptr_t dpSpec = catalog_->lookup("DP");
         const length_t R_cw_dp = CoarseGrainedPolarizableWater::idealDistanceCWDP();
         std::clog << "\"Ideal\" distance between CW and DP: " << R_cw_dp 
                   << " nm" << std::endl;
@@ -124,7 +124,7 @@ namespace simploce {
         std::size_t natWaters = atNumberDensity * volume;
         std::size_t ncgWaters = util::nint(real_t(natWaters) / 5.0);
         number_density_t cgNumberDensity = real_t(ncgWaters) / volume();
-        density_t cgDensity = cgNumberDensity * (cw->mass() + dp->mass());
+        density_t cgDensity = cgNumberDensity * (cwSpec->mass() + dpSpec->mass());
         std::clog << "CG: Requested density (u/nm^3): " << cgDensity << std::endl;
         std::clog << "AT: Requested number density (1/nm^3): " << atNumberDensity << std::endl;
         std::clog << "AT: Requested number density (1/m^3): " << atNumberDensity*1.0e+27 << std::endl;
@@ -141,8 +141,9 @@ namespace simploce {
         std::clog << "Number of coordinates in x-direction: " << nx << std::endl;
         std::clog << "Number of coordinates in y-direction: " << ny << std::endl;
         std::clog << "Number of coordinates in z-direction: " << nz << std::endl;
-    
-        // Particle model.
+        std::clog.flush();
+        
+        // Start from an empty particle model.
         cg_ptr_t cg = std::make_shared<CoarseGrained>();
         
         // Add beads.
@@ -151,6 +152,8 @@ namespace simploce {
         while ( i < nx && counter < ncgWaters ) {
             while ( j < ny && counter < ncgWaters ) {
                 while ( k < nz && counter < ncgWaters ) {
+                    
+                    std::size_t id = 2 * counter + 1;
 
                     // Single water group.
                     std::vector<bead_ptr_t> beads{};
@@ -160,7 +163,7 @@ namespace simploce {
                     real_t y = (j + 0.5) * spacing();
                     real_t z = (k + 0.5) * spacing();
                     position_t r1{x,y,z};
-                    bead_ptr_t cwBead = cg->addBead("CW", r1, cw);
+                    bead_ptr_t cwBead = cg->addBead(id, "CW", r1, cwSpec);
                     assignMomentum(cwBead, temperature);
                     beads.push_back(cwBead);
           
@@ -183,12 +186,13 @@ namespace simploce {
                             r2 = position_t{x,y,coord};
                             break;
                         }
-                    } 
-                    bead_ptr_t dpBead = cg->addBead("DP", r2, dp);
+                    }
+                    id += 1;
+                    bead_ptr_t dpBead = cg->addBead(id, "DP", r2, dpSpec);
                     assignMomentum<Bead>(dpBead, temperature);
                     beads.push_back(dpBead);
                     
-                    auto pair = std::make_pair<int, int>(cwBead->index(), dpBead->index());
+                    auto pair = std::make_pair<int, int>(cwBead->id(), dpBead->id());
                     bbonds.push_back(pair);
                     
                     cg->addBeadGroup(beads, bbonds);

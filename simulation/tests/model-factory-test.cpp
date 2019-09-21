@@ -48,7 +48,7 @@ using namespace simploce;
 
 void test1() {
     std::cout << "model-factory-test test 1" << std::endl;
-    std::string fileName = "/home/ajuffer/simploce/particles/resources/particles-specs.dat";
+    std::string fileName = "/home/ajuffer/simploce/pt-cgmd/particles/resources/particles-specs.dat";
     std::ifstream stream;
     file::open_input(stream, fileName);
     spec_catalog_ptr_t catalog = factory::particleSpecCatalog(stream);
@@ -60,6 +60,7 @@ void test1() {
     cg_sim_model_ptr_t polWater = mf->createPolarizableWater(catalog, box);
 
     std::cout << "Number of polarizable waters: " << polWater->size() << std::endl;
+    std::cout << *polWater << std::endl;
     
 }
 
