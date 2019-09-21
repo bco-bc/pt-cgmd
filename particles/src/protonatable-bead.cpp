@@ -71,8 +71,8 @@ namespace simploce {
     {
         const auto space = conf::SPACE;
         
-        Bead::write(stream);
-        stream << space << this->protonationState();
+        Particle::write(stream);
+        stream << space << 1 << space << this->protonationState();
     }
     
     void ProtonatableBead::writeState(std::ostream& stream) const

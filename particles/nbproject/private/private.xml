@@ -7,26 +7,30 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/home/juffer/simploce/pt-cgmd/particles/src/protonatable-bead.cpp</file>
-            <file>file:/home/juffer/simploce/pt-cgmd/particles/include/simploce/particle/atom.hpp</file>
             <file>file:/home/juffer/simploce/pt-cgmd/particles/src/particle.cpp</file>
             <file>file:/home/juffer/simploce/pt-cgmd/particles/include/simploce/particle/pproperties.hpp</file>
             <file>file:/home/juffer/simploce/pt-cgmd/particles/tests/protonation-site-test.cpp</file>
-            <file>file:/home/juffer/simploce/pt-cgmd/particles/include/simploce/particle/protonatable-bead.hpp</file>
-            <file>file:/home/juffer/simploce/pt-cgmd/particles/tests/prot-site-catalog-test.cpp</file>
-            <file>file:/home/juffer/simploce/pt-cgmd/particles/src/atom.cpp</file>
             <file>file:/home/juffer/simploce/pt-cgmd/particles/tests/particle-test.cpp</file>
             <file>file:/home/juffer/simploce/pt-cgmd/particles/src/particle-spec.cpp</file>
-            <file>file:/home/juffer/simploce/pt-cgmd/particles/include/simploce/particle/particle.hpp</file>
             <file>file:/home/juffer/simploce/pt-cgmd/particles/src/coarse-grained.cpp</file>
             <file>file:/home/juffer/simploce/pt-cgmd/particles/include/simploce/particle/bead.hpp</file>
             <file>file:/home/juffer/simploce/pt-cgmd/particles/src/bead.cpp</file>
-            <file>file:/home/juffer/simploce/pt-cgmd/particles/include/simploce/particle/atomistic.hpp</file>
             <file>file:/home/juffer/simploce/pt-cgmd/particles/include/simploce/particle/particle-model.hpp</file>
+            <file>file:/home/juffer/simploce/pt-cgmd/particles/include/simploce/particle/pconf.hpp</file>
             <file>file:/home/juffer/simploce/pt-cgmd/particles/resources/coarse-grained-system.dat</file>
             <file>file:/home/juffer/simploce/pt-cgmd/particles/include/simploce/particle/protonatable.hpp</file>
             <file>file:/home/juffer/simploce/pt-cgmd/particles/tests/particle-spec-catalog-test.cpp</file>
+            <file>file:/home/juffer/simploce/pt-cgmd/particles/include/simploce/particle/particle-group.hpp</file>
+            <file>file:/home/juffer/simploce/pt-cgmd/particles/src/protonatable-bead.cpp</file>
+            <file>file:/home/juffer/simploce/pt-cgmd/particles/include/simploce/particle/atom.hpp</file>
+            <file>file:/home/juffer/simploce/pt-cgmd/particles/include/simploce/particle/protonatable-bead.hpp</file>
+            <file>file:/home/juffer/simploce/pt-cgmd/particles/tests/prot-site-catalog-test.cpp</file>
+            <file>file:/home/juffer/simploce/pt-cgmd/particles/src/atom.cpp</file>
+            <file>file:/home/juffer/simploce/pt-cgmd/particles/include/simploce/particle/particle.hpp</file>
+            <file>file:/home/juffer/simploce/pt-cgmd/particles/include/simploce/particle/atomistic.hpp</file>
+            <file>file:/home/juffer/simploce/pt-cgmd/particles/include/simploce/particle/coarse-grained.hpp</file>
             <file>file:/home/juffer/simploce/pt-cgmd/particles/include/simploce/particle/particle-spec.hpp</file>
+            <file>file:/home/juffer/simploce/pt-cgmd/particles/src/atomistic.cpp</file>
             <file>file:/home/juffer/simploce/pt-cgmd/particles/tests/coarse-grained-test.cpp</file>
         </group>
     </open-files>

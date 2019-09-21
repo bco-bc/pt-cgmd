@@ -52,7 +52,13 @@ namespace simploce {
         virtual ~Particle();
         
         /**
-         * Returns unique particle index. The index also serves also as identifier.
+         * Returns unique particle identifier.
+         * @return Index, always >= 1.
+         */
+        std::size_t id() const;
+        
+        /**
+         * Returns unique particle index.
          * @return Index, always >= 1.
          */
         std::size_t index() const;

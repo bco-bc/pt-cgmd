@@ -36,6 +36,7 @@
 #include "simploce/particle/particle-spec-catalog.hpp"
 #include "simploce/particle/particle-group.hpp"
 #include <boost/algorithm/string.hpp>
+#include <boost/lexical_cast.hpp>
 #include <vector>
 #include <utility>
 #include <memory>
@@ -115,13 +116,25 @@ namespace simploce {
         // Read particles.
         std::getline(stream, stringBuffer);  // Read EOL.
         for (std::size_t counter = 0; counter != nbeads; ++counter) {
+            std::size_t index = counter + 1;
             stream.read(charBuffer, bufferSize);
             std::string name = std::string(charBuffer, bufferSize);
             boost::trim(name);
-            bead_spec_ptr_t spec = catalog->lookup(name);
-            int id;
+            stream.read(charBuffer, bufferSize);
+            std::string specName = std::string(charBuffer, bufferSize);
+            boost::trim(specName);
+            bead_spec_ptr_t spec = catalog->lookup(specName);
+            std::size_t id;
+            stream >> id;
+            if ( id != index) {
+                std::string msg = 
+                    "Indexing in input particle model may be wrong. Expected " + 
+                    boost::lexical_cast<std::string, std::size_t>(index) + ", " +
+                    "got instead " + boost::lexical_cast<std::string, std::size_t>(id) + ".";
+                throw std::domain_error(msg);
+            }
             real_t x, y, z, px, py, pz;
-            stream >> id >> x >> y >> z >> px >> py >> pz;
+            stream >> x >> y >> z >> px >> py >> pz;
             position_t r{x, y, z};
             momentum_t p{px, py, pz};
             bool protonatable;
@@ -130,51 +143,17 @@ namespace simploce {
                 std::size_t protonationState;            
                 stream >> protonationState;
                 bead_ptr_t bead = 
-                    cg->addProtonatableBead(name, r, protonationState,spec);
+                    cg->addProtonatableBead(name, r, protonationState, spec);
                 bead->momentum(p);
             } else {
                 bead_ptr_t bead = cg->addBead(name, r, spec);
                 bead->momentum(p);
             }
-        }
-        
-        // Read particle groups.
-        std::size_t ngroups;
-        stream >> ngroups;
-        std::getline(stream, stringBuffer);  // Read EOL.
-        for ( std::size_t counter = 0; counter != ngroups; ++counter) {
-            
-            std::vector<bead_ptr_t> beads{};
-            std::vector<id_pair_t> bbonds{};
-            
-            // Read identifiers of constituting particle.
-            std::size_t nParticlesInGroup{0};
-            stream >> nParticlesInGroup;
-            std::getline(stream, stringBuffer);  // Read EOL.
-            std::size_t id;
-            for (std::size_t j = 0; j != nParticlesInGroup; ++j) {
-                stream >> id;
-                bead_ptr_t bead = cg->find(id);
-                beads.push_back(bead);
-            }                        
-            std::getline(stream, stringBuffer);  // Read EOL.
-            
-            // Read bonds.
-            std::size_t nbonds{0};
-            stream >> nbonds;
-            for (std::size_t j = 0; j != nbonds; ++j) {
-                int id1, id2;
-                stream >> id1 >> id2;
-                id_pair_t pair = ::std::make_pair(id1, id2);
-                bbonds.push_back(pair);
-                std::getline(stream, stringBuffer);  // Read EOL.
-            }
-            
-            // Create the group.
-            cg->addBeadGroup(beads, bbonds);
             
             std::getline(stream, stringBuffer);  // Read EOL.
         }
+                
+        cg->readFreeAndGroups(stream);
         
         return cg; 
     }

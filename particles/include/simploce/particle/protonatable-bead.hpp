@@ -55,9 +55,9 @@ namespace simploce {
         
         std::size_t protonationState() const override;
         
-        virtual void write(std::ostream& stream) const override;
+        void write(std::ostream& stream) const override;
         
-        virtual void writeState(std::ostream& stream) const override;
+        void writeState(std::ostream& stream) const override;
         
     private:
         

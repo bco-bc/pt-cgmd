@@ -45,6 +45,11 @@ namespace simploce {
     {        
     }
     
+    std::size_t Particle::id() const
+    {
+        return this->index();
+    }
+    
     std::size_t Particle::index() const
     {
         return index_;
@@ -109,9 +114,9 @@ namespace simploce {
     {
         const auto space = conf::SPACE;
         
-        stream << std::setw(10) << this->index();
-        stream << space << std::setw(10) << this->name();
+        stream << std::setw(10) << this->name();
         stream << space << std::setw(10) << this->spec()->name();
+        stream << space << std::setw(10) << this->index();
         stream << space << this->position();
         stream << space << this->momentum();
     }

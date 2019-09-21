@@ -32,7 +32,7 @@ template <typename P>
 struct Update {
     void operator () (const std::vector<std::shared_ptr<P>>& particles) const
     {
-        std::cout << "Updating..." << std::endl;
+        std::clog << "Updating..." << std::endl;
         return;
     }
 };
@@ -40,8 +40,8 @@ struct Update {
 
 void test1()
 {
-    std::cout << "coarse-grained-test test 1" << std::endl;
-    std::cout << "coarse-grained-test test 1" << std::endl;
+    std::clog << "coarse-grained-test test 1" << std::endl;
+    std::clog << "coarse-grained-test test 1" << std::endl;
     
     CoarseGrained cg;
     
@@ -54,16 +54,16 @@ void test1()
     bead_ptr_t bead1 = cg.addBead("test1", r, spec1_dp);
     bead_ptr_t bead2 = cg.addBead("test2", r, spec1_p);
     cg.doWithAll<void>([](const std::vector<bead_ptr_t> &particles) {
-        std::cout << "Size: " << particles.size() << std::endl;
+        std::clog << "Size: " << particles.size() << std::endl;
         for (auto p : particles) {
-            std::cout << " " << p->index() << std::endl;
+            std::clog << " " << p->index() << std::endl;
         }
     });
     
     if ( cg.contains(bead1->index()) ) {
-        std::cout << "Particle found: " << *(cg.find(bead1->index())) << std::endl;
+        std::clog << "Particle found: " << *(cg.find(bead1->index())) << std::endl;
     } else {
-        std::cout << bead1->index() << ": Not in particle model." << std::endl;
+        std::clog << bead1->index() << ": Not in particle model." << std::endl;
     }
     
     Bond<Bead> bond1 = Bond<Bead>::makeBond(bead1, bead2);
@@ -74,18 +74,18 @@ void test1()
     
     Bond<Bead> bond2 = Bond<Bead>::makeBond(bead2, pbead);
     
-    std::cout << "Bond1 contains bead2? " << bond1.contains(bead2) << std::endl;
-    std::cout << "Bond2 contains bead1? " << bond2.contains(bead1) << std::endl;
+    std::clog << "Bond1 contains bead2? " << bond1.contains(bead2) << std::endl;
+    std::clog << "Bond2 contains bead1? " << bond2.contains(bead1) << std::endl;
     
-    std::cout << "Size: " << cg.numberOfParticles() << std::endl;
-    std::cout << "Charge: " << cg.charge() << std::endl;
-    std::cout << "Protonation state: " << cg.protonationState() << std::endl;    
+    std::clog << "Size: " << cg.numberOfParticles() << std::endl;
+    std::clog << "Charge: " << cg.charge() << std::endl;
+    std::clog << "Protonation state: " << cg.protonationState() << std::endl;    
     
     // List specification names.
     cg.doWithAll<void>([](const std::vector<bead_ptr_t> &particles) {
-        std::cout << "Particle specification names:" << std::endl;
+        std::clog << "Particle specification names:" << std::endl;
         for (auto p : particles) {            
-            std::cout << p->index() << " " << p->spec()->name() << std::endl;
+            std::clog << p->index() << " " << p->spec()->name() << std::endl;
         }
 
     });
@@ -99,12 +99,15 @@ void test1()
     });
     
     cg.doWithAll<void>([] (const std::vector<bead_ptr_t> &particles) {
-        std::cout << "Particle positions: " << std::endl;
+        std::clog << "Particle positions: " << std::endl;
         for (auto p: particles) {
-            std::cout << p->index() << " " << p->position() << std::endl;
+            std::clog << p->index() << " " << p->position() << std::endl;
         }
     });
     
+    std::clog << std::endl;
+    std::clog << "Reading particle model from input file..." << std::endl;
+    std::clog << "Particle specifications:" << std::endl;
     std::ifstream stream;
     file::open_input(stream, 
                     "/home/ajuffer/simploce/pt-cgmd/particles/resources/particles-specs.dat");
@@ -112,55 +115,64 @@ void test1()
     stream.close();
     std::clog << *catalog << std::endl;
     
+    std::clog << "Particle model:" << std::endl;
     file::open_input(stream,
                     "/home/ajuffer/simploce/pt-cgmd/particles/resources/coarse-grained-system.dat");
     cg_ptr_t cg2 = CoarseGrained::createFrom(stream, catalog);
     stream.close();
-    std::cout << "Number of beads: " << cg2->numberOfParticles() << std::endl; 
-    std::cout << "State:" << std::endl;
-    cg2->writeState(std::cout);
-    std::cout << std::endl;
-    
+    std::clog << "Number of beads: " << cg2->numberOfParticles() << std::endl; 
+    std::clog << "State:" << std::endl;
+    cg2->writeState(std::clog);
+    std::clog << std::endl;
+    std::clog << "Particle model:" << std::endl;
+    cg2->write(std::clog);
+    std::clog << std::endl;
+
+    std::clog << std::endl;
+    std::clog << "Update all.." << std::endl;
     cg2->doWithAll<void, Update<Bead>>(Update<Bead>{});
+    std::clog << std::endl;
     
+    std::clog << std::endl;
+    std::clog << "Particle model 'pm':" << std::endl;
     ParticleModel<Bead, ParticleGroup<Bead>>& pm = *cg2;
     pm.doWithAll<void>([] (const std::vector<bead_ptr_t> &particles) {
-        std::cout << "Number of particles: " << particles.size() << std::endl;
+        std::clog << "Number of particles: " << particles.size() << std::endl;
     });
     
     pm.doWithAllFreeGroups<void>([] (const std::vector<bead_ptr_t>& all,
                                      const std::vector<bead_ptr_t>& free,
                                      const std::vector<bead_group_ptr_t>& groups) {
-        std::cout << "Number of particle groups: " << groups.size() << std::endl;
+        std::clog << "Number of particle groups: " << groups.size() << std::endl;
         for (auto g : groups) {
-            std::cout << "Group position: " << g->position() << std::endl;
+            std::clog << "Group position: " << g->position() << std::endl;
         }
     });
     
-    std::cout << "State:" << std::endl;
-    cg2->writeState(std::cout);
-    std::cout << std::endl;
+    std::clog << "State:" << std::endl;
+    cg2->writeState(std::clog);
+    std::clog << std::endl;
 }
 
 void test2() {
-    std::cout << "coarse-grained-test test 2" << std::endl;
-    std::cout << "%TEST_FAILED% time=0 testname=test2 (coarse-grained-test) message=error message sample" << std::endl;
+    std::clog << "coarse-grained-test test 2" << std::endl;
+    std::clog << "%TEST_FAILED% time=0 testname=test2 (coarse-grained-test) message=error message sample" << std::endl;
 }
 
 int main(int argc, char** argv) {
-    std::cout << "%SUITE_STARTING% coarse-grained-test" << std::endl;
-    std::cout << "%SUITE_STARTED%" << std::endl;
+    std::clog << "%SUITE_STARTING% coarse-grained-test" << std::endl;
+    std::clog << "%SUITE_STARTED%" << std::endl;
 
-    std::cout << "%TEST_STARTED% test1 (coarse-grained-test)" << std::endl;
+    std::clog << "%TEST_STARTED% test1 (coarse-grained-test)" << std::endl;
     test1();
-    std::cout << "%TEST_FINISHED% time=0 test1 (coarse-grained-test)" << std::endl;
+    std::clog << "%TEST_FINISHED% time=0 test1 (coarse-grained-test)" << std::endl;
 
     /*
-    std::cout << "%TEST_STARTED% test2 (coarse-grained-test)\n" << std::endl;
+    std::clog << "%TEST_STARTED% test2 (coarse-grained-test)\n" << std::endl;
     test2();
-    std::cout << "%TEST_FINISHED% time=0 test2 (coarse-grained-test)" << std::endl;
+    std::clog << "%TEST_FINISHED% time=0 test2 (coarse-grained-test)" << std::endl;
      */
-    std::cout << "%SUITE_FINISHED% time=0" << std::endl;
+    std::clog << "%SUITE_FINISHED% time=0" << std::endl;
 
     return (EXIT_SUCCESS);
 }

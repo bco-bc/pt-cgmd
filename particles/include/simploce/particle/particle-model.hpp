@@ -42,6 +42,7 @@
 #include <algorithm>
 #include <iostream>
 #include <iomanip>
+#include <boost/lexical_cast.hpp>
 
 namespace simploce {
     
@@ -206,6 +207,12 @@ namespace simploce {
          * @param g Particle group.
          */
         void addGroup(const pg_ptr_t& pg);
+        
+        /**
+         * Reads free particles and particle groups from input stream.
+         * @param stream Input stream.
+         */
+        void readFreeAndGroups(std::istream& stream);
                 
     private:
         
@@ -281,8 +288,6 @@ namespace simploce {
     template <typename P, typename PG>
     void ParticleModel<P,PG>::writeState(std::ostream& stream) const
     {
-        const char space = conf::SPACE;
-        
         for (const p_ptr_t& p: all_) {
             p->writeState(stream);        
         }
@@ -325,6 +330,72 @@ namespace simploce {
         groups_.push_back(pg);
     }
         
+    template <typename P, typename PG>
+    void ParticleModel<P,PG>::readFreeAndGroups(std::istream& stream)
+    {
+        std::string stringBuffer;
+        
+        // Read free particles.
+        std::size_t nfree;
+        stream >> nfree;
+        std::getline(stream, stringBuffer);  // Read EOL.
+        for (std::size_t counter = 0; counter != nfree; ++counter) {
+            std::size_t id;
+            stream >> id;
+            p_ptr_t particle = this->find(id);
+            if ( particle == nullptr ) {
+                std::string msg = 
+                    boost::lexical_cast<std::string, std::size_t>(id) +
+                    ": No such free particle.";
+                throw std::domain_error(msg);
+            }
+            free_.push_back(particle);
+        }
+        std::getline(stream, stringBuffer);  // Read EOL.
+        
+        // Read particle groups.
+        std::vector<p_ptr_t> particles{};
+        std::vector<id_pair_t> pairs{};
+
+        std::size_t ngroups;
+        stream >> ngroups;
+        std::getline(stream, stringBuffer);  // Read EOL.
+        for ( std::size_t counter = 0; counter != ngroups; ++counter) {
+            
+            particles.clear();
+            pairs.clear();
+            
+            // Read identifiers of constituting particle.
+            std::size_t nParticlesInGroup{0};
+            stream >> nParticlesInGroup;
+            std::getline(stream, stringBuffer);  // Read EOL.
+            std::size_t id;
+            for (std::size_t j = 0; j != nParticlesInGroup; ++j) {
+                stream >> id;
+                p_ptr_t bead = this->find(id);
+                particles.push_back(bead);
+            }                        
+            std::getline(stream, stringBuffer);  // Read EOL.
+            
+            // Read bonds.
+            std::size_t nbonds;
+            stream >> nbonds;
+            std::getline(stream, stringBuffer);  // Read EOL.
+            for (std::size_t j = 0; j != nbonds; ++j) {
+                int id1, id2;
+                stream >> id1 >> id2;
+                id_pair_t pair = std::make_pair(id1, id2);
+                pairs.push_back(pair);
+                std::getline(stream, stringBuffer);  // Read EOL.
+            }
+            
+            // Create the group.
+            pg_ptr_t group = PG::make(particles, pairs);
+            this->addGroup(group);
+            
+        }        
+    }
+      
 }
 
 #endif /* PARTICLE_MODEL_HPP */

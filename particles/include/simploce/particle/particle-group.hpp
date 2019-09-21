@@ -58,7 +58,12 @@ namespace simploce {
         /**
          * Particle pointer type.
          */
-        using p_ptr_t = std::shared_ptr<P>;        
+        using p_ptr_t = std::shared_ptr<P>;
+
+        /**
+         * Particle group pointer type.
+         */
+        using pg_ptr_t = std::shared_ptr<ParticleGroup<P>>;
         
         /**
          * Particle container type.
@@ -132,6 +137,16 @@ namespace simploce {
          */
         const bond_cont_t& bonds() const { return bonds_; }
         
+        /**
+         * Create particle group.
+         * @param particles Constituting particles.
+         * @param bonds Holds identifiers of particles forming bonds. The 
+         * particles must be constituting particles.
+         * @return Particle group.
+         */
+        static pg_ptr_t make(const std::vector<p_ptr_t>& particles, 
+                             const std::vector<id_pair_t>& bonds);
+        
     private:
         
         p_ptr_t find_(int id) const { return properties::find<P>(id, particles_); }
@@ -176,6 +191,14 @@ namespace simploce {
         }
         this->validate_();
     }
+    
+    template <typename P>    
+    typename ParticleGroup<P>::pg_ptr_t 
+    ParticleGroup<P>::make(const std::vector<p_ptr_t>& particles, 
+                           const std::vector<id_pair_t>& bonds)
+    {
+        return std::make_shared<ParticleGroup<P>>(particles, bonds);
+    }    
         
     template <typename P>
     void ParticleGroup<P>::validate_() const

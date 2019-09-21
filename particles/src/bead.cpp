@@ -31,6 +31,7 @@
 
 #include "simploce/particle/bead.hpp"
 #include "simploce/particle/particle.hpp"
+#include "simploce/particle/pconf.hpp"
 
 namespace simploce {
     
@@ -45,7 +46,10 @@ namespace simploce {
     
     void Bead::write(std::ostream& stream) const
     {
-        Particle::write(stream);
+       const auto space = conf::SPACE;
+        
+       Particle::write(stream);
+       stream << space << 0;
     }
     
     void Bead::writeState(std::ostream& stream) const
