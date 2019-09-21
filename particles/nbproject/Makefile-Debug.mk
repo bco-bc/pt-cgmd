@@ -55,7 +55,8 @@ TESTFILES= \
 	${TESTDIR}/TestFiles/f2 \
 	${TESTDIR}/TestFiles/f3 \
 	${TESTDIR}/TestFiles/f5 \
-	${TESTDIR}/TestFiles/f4
+	${TESTDIR}/TestFiles/f4 \
+	${TESTDIR}/TestFiles/f6
 
 # Test Object Files
 TESTOBJECTFILES= \
@@ -63,7 +64,8 @@ TESTOBJECTFILES= \
 	${TESTDIR}/tests/particle-spec-catalog-test.o \
 	${TESTDIR}/tests/particle-test.o \
 	${TESTDIR}/tests/prot-site-catalog-test.o \
-	${TESTDIR}/tests/protonation-site-test.o
+	${TESTDIR}/tests/protonation-site-test.o \
+	${TESTDIR}/tests/read-cg-test.o
 
 # C Compiler Flags
 CFLAGS=
@@ -169,6 +171,10 @@ ${TESTDIR}/TestFiles/f4: ${TESTDIR}/tests/protonation-site-test.o ${OBJECTFILES:
 	${MKDIR} -p ${TESTDIR}/TestFiles
 	${LINK.cc} -o ${TESTDIR}/TestFiles/f4 $^ ${LDLIBSOPTIONS}   
 
+${TESTDIR}/TestFiles/f6: ${TESTDIR}/tests/read-cg-test.o ${OBJECTFILES:%.o=%_nomain.o}
+	${MKDIR} -p ${TESTDIR}/TestFiles
+	${LINK.cc} -o ${TESTDIR}/TestFiles/f6 $^ ${LDLIBSOPTIONS}   
+
 
 ${TESTDIR}/tests/coarse-grained-test.o: tests/coarse-grained-test.cpp 
 	${MKDIR} -p ${TESTDIR}/tests
@@ -198,6 +204,12 @@ ${TESTDIR}/tests/protonation-site-test.o: tests/protonation-site-test.cpp
 	${MKDIR} -p ${TESTDIR}/tests
 	${RM} "$@.d"
 	$(COMPILE.cc) -g -Wall -Iinclude -I../cpputil/include -I. -std=c++14 -MMD -MP -MF "$@.d" -o ${TESTDIR}/tests/protonation-site-test.o tests/protonation-site-test.cpp
+
+
+${TESTDIR}/tests/read-cg-test.o: tests/read-cg-test.cpp 
+	${MKDIR} -p ${TESTDIR}/tests
+	${RM} "$@.d"
+	$(COMPILE.cc) -g -Wall -Iinclude -I../cpputil/include -I. -std=c++14 -MMD -MP -MF "$@.d" -o ${TESTDIR}/tests/read-cg-test.o tests/read-cg-test.cpp
 
 
 ${OBJECTDIR}/src/atom_nomain.o: ${OBJECTDIR}/src/atom.o src/atom.cpp 
@@ -339,6 +351,7 @@ ${OBJECTDIR}/src/protonation-site-catalog_nomain.o: ${OBJECTDIR}/src/protonation
 	    ${TESTDIR}/TestFiles/f3 || true; \
 	    ${TESTDIR}/TestFiles/f5 || true; \
 	    ${TESTDIR}/TestFiles/f4 || true; \
+	    ${TESTDIR}/TestFiles/f6 || true; \
 	else  \
 	    ./${TEST} || true; \
 	fi

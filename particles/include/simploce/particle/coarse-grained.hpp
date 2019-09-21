@@ -95,8 +95,8 @@ namespace simploce {
          * @param catalog Specifications catalog.
          * @return Coarse grained physical system.
          */
-        static cg_ptr_t createFrom(std::istream& stream, 
-                                   const spec_catalog_ptr_t& catalog);
+        static cg_ptr_t readFrom(std::istream& stream, 
+                                 const spec_catalog_ptr_t& catalog);
         
         /**
          * Perform a task with protonatable beads. The given task must expose the 

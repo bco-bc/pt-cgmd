@@ -42,6 +42,7 @@
 #include <algorithm>
 #include <iostream>
 #include <iomanip>
+#include <utility>
 #include <boost/lexical_cast.hpp>
 
 namespace simploce {
@@ -277,7 +278,7 @@ namespace simploce {
         }
         stream << groups_.size() << std::endl;
         for (auto iter = groups_.begin(); iter != groups_.end(); ++iter) {
-            const PG& group = **iter; 
+            const PG& group = **iter;
             stream << group;
             if ( iter != (groups_.end() - 1) ) {
                 stream << std::endl;
@@ -308,7 +309,7 @@ namespace simploce {
         if ( this->contains(fp->index()) ) {
             throw std::domain_error("Particle is already in particle model.");
         }
-        all_.push_back(fp);
+        this->add(fp);
         free_.push_back(fp); 
     }
     
@@ -354,45 +355,46 @@ namespace simploce {
         std::getline(stream, stringBuffer);  // Read EOL.
         
         // Read particle groups.
-        std::vector<p_ptr_t> particles{};
-        std::vector<id_pair_t> pairs{};
-
         std::size_t ngroups;
         stream >> ngroups;
         std::getline(stream, stringBuffer);  // Read EOL.
         for ( std::size_t counter = 0; counter != ngroups; ++counter) {
             
-            particles.clear();
-            pairs.clear();
-            
-            // Read identifiers of constituting particle.
-            std::size_t nParticlesInGroup{0};
-            stream >> nParticlesInGroup;
+            // Read constituting particles.
+            std::vector<p_ptr_t> particles;
+            std::size_t nparticles;
+            stream >> nparticles;
             std::getline(stream, stringBuffer);  // Read EOL.
-            std::size_t id;
-            for (std::size_t j = 0; j != nParticlesInGroup; ++j) {
+            for (std::size_t j = 0; j != nparticles; ++j) {
+                std::size_t id;
                 stream >> id;
-                p_ptr_t bead = this->find(id);
-                particles.push_back(bead);
+                p_ptr_t particle = this->find(id);
+                if ( particle == nullptr ) {
+                    std::string msg = 
+                        boost::lexical_cast<std::string, std::size_t>(id) +
+                        ": No such free particle.";
+                    throw std::domain_error(msg);
+                }
+                particles.push_back(particle);
             }                        
             std::getline(stream, stringBuffer);  // Read EOL.
             
             // Read bonds.
+            std::vector<id_pair_t> bonds;
             std::size_t nbonds;
             stream >> nbonds;
             std::getline(stream, stringBuffer);  // Read EOL.
             for (std::size_t j = 0; j != nbonds; ++j) {
-                int id1, id2;
+                std::size_t id1, id2;
                 stream >> id1 >> id2;
-                id_pair_t pair = std::make_pair(id1, id2);
-                pairs.push_back(pair);
+                id_pair_t bond = std::make_pair(id1, id2);
+                bonds.push_back(bond);
                 std::getline(stream, stringBuffer);  // Read EOL.
             }
             
             // Create the group.
-            pg_ptr_t group = PG::make(particles, pairs);
-            this->addGroup(group);
-            
+            pg_ptr_t group = PG::make(particles, bonds);
+            this->addGroup(group);            
         }        
     }
       

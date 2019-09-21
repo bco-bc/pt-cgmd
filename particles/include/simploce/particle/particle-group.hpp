@@ -208,6 +208,13 @@ namespace simploce {
                 "ParticleGroup: Must consist of at least two particles"
             );
         }
+        for (auto p : particles_) {
+            if ( p == nullptr ) {
+                throw std::domain_error(
+                    "ParticleGroup: Missing particle (\"nullptr\")."
+                );
+            }
+        }
         for (auto bond : bonds_) {
             if ( !this->contains(bond.getParticleOne()) ||
                  !this->contains(bond.getParticleTwo()) ) {
@@ -231,7 +238,7 @@ namespace simploce {
         stream << std::endl;
         stream << group.bonds().size() << std::endl;
         for (auto bond : group.bonds() ) {
-            stream << bond.getParticleOne()->index()
+            stream << space << bond.getParticleOne()->index()
                    << space << bond.getParticleTwo()->index();
         }
         

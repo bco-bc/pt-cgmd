@@ -104,7 +104,7 @@ namespace simploce {
         std::string stringBuffer;
         
         // Particles.
-        cg_ = CoarseGrained::createFrom(stream, catalog);
+        cg_ = CoarseGrained::readFrom(stream, catalog);
         
         // Simulation box.
         real_t boxSize;

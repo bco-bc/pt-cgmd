@@ -75,7 +75,7 @@ namespace simploce {
             ProtonatableBead::create(index, name, protonationState, spec);
         bead->position(r);
         protonatableBeads_.push_back(bead);
-        this->addFree(bead);
+        this->add(bead);
         return bead;
     }
     
@@ -101,20 +101,21 @@ namespace simploce {
         return numberOfProtons;
     }
     
-    cg_ptr_t CoarseGrained::createFrom(std::istream& stream, 
-                                       const spec_catalog_ptr_t& catalog)
+    cg_ptr_t CoarseGrained::readFrom(std::istream& stream, 
+                                     const spec_catalog_ptr_t& catalog)
     {
         cg_ptr_t cg = std::make_shared<CoarseGrained>();
         
+        std::string stringBuffer;
+        
         std::size_t nbeads;
         stream >> nbeads;
+        std::getline(stream, stringBuffer);  // Read EOL.
                 
         const size_t bufferSize = conf::NAME_WIDTH;
         char charBuffer[bufferSize];
-        std::string stringBuffer;
         
-        // Read particles.
-        std::getline(stream, stringBuffer);  // Read EOL.
+        // Read beads.
         for (std::size_t counter = 0; counter != nbeads; ++counter) {
             std::size_t index = counter + 1;
             stream.read(charBuffer, bufferSize);

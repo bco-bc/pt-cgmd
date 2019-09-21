@@ -224,7 +224,7 @@ namespace simploce {
     /**
      * Type for a pair of particle identifiers.
      */
-    using id_pair_t = std::pair<int, int>;
+    using id_pair_t = std::pair<std::size_t, std::size_t>;
     
 }
 
