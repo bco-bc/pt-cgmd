@@ -45,40 +45,39 @@ namespace simploce {
     public:
         
         /**
-         * Particle type.
-         */
-        using particle_t = Bead;
-        
-        /**
-         * Constructor. No beads.
+         * Constructor. Empty particle model.
          */
         CoarseGrained();
         
         /**
          * Adds a new bead to this physical system.
+         * @param id Unique identifier.
          * @param name Name.
          * @param r Position.
          * @param spec Specification.
          */
-        bead_ptr_t addBead(const std::string& name, 
+        bead_ptr_t addBead(std::size_t id,
+                           const std::string& name, 
                            const position_t& r, 
                            const bead_spec_ptr_t& spec);
         
         /**
-         * Adds new protonatable bead to this physical system.
+         * Adds new protonatable bead to this coarse grained particle model.
+         * @param id Unique identifier.
          * @param name Name.
          * @param r Position.
          * @param protonationState Number of bound protons. Must be >= 0.
          * @param spec Specification.
          */
-        prot_bead_ptr_t addProtonatableBead(const std::string& name, 
+        prot_bead_ptr_t addProtonatableBead(std::size_t id,
+                                            const std::string& name, 
                                             const position_t& r,
                                             int protonationState,
                                             const bead_spec_ptr_t& spec);
                         
         /**
-         * Adds an bead group with bonds to this physical system.
-         * @param beads Beads. Must be in this physical system.
+         * Adds a bead group with bonds to this physical system.
+         * @param beads Beads. Must be already in this particle model.
          * @param bbonds Bonds, given as pairs of bead identifiers.
          * @return Added bead group.
          */
@@ -90,10 +89,10 @@ namespace simploce {
         std::size_t protonationState() const override;
         
         /**
-         * Creates a coarse grained system.
-         * @param stream Takes physical system from this input stream.
-         * @param catalog Specifications catalog.
-         * @return Coarse grained physical system.
+         * Reads a coarse grained particle model from an input stream.
+         * @param stream Input stream.
+         * @param catalog Particle specifications catalog.
+         * @return Coarse grained particle model.
          */
         static cg_ptr_t readFrom(std::istream& stream, 
                                  const spec_catalog_ptr_t& catalog);
@@ -104,8 +103,8 @@ namespace simploce {
          * <code>
          *  R operator () (const std::vector<prot_bead_ptr_t>& protonatableBeads);
          * </code>
-         * @param task
-         * @return 
+         * @param task Task. Maybe a lambda expression.
+         * @return Result.
          */
         template <typename R, typename TASK>
         R doWithProtBeads(const TASK& task) { return task(protonatableBeads_); }
@@ -122,6 +121,7 @@ namespace simploce {
      * @return Output stream.
      */
     std::ostream& operator << (std::ostream& stream, const CoarseGrained& cg);
+    
 }
 
 #endif /* COARSE_GRAINED_HPP */

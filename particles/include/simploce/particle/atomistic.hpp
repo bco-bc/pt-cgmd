@@ -50,12 +50,14 @@ namespace simploce {
         
         /**
          * Adds new atom to this physical system.
+         * @param id Unique identifier.
          * @param name Name.
          * @param r Position.
          * @param spec Specification.
          * @return Newly created atom.
          */
-        atom_ptr_t addAtom(const std::string& name,
+        atom_ptr_t addAtom(std::size_t id,
+                           const std::string& name,
                            const position_t& r, 
                            const atom_spec_ptr_t& spec);
         
@@ -70,8 +72,14 @@ namespace simploce {
         std::size_t protonationState() const override;
         
         /**
+         * Returns number of atoms.
+         * @return Number.
+         */
+        std::size_t numberOfAtoms() const;
+        
+        /**
          * Carries out a task with protonation sites.
-         * @param task Task. Must accept protonation sites.
+         * @param task Task. Must accept protonation sites. May be a lambda expression.
          * @return Result.
          */
         template <typename R, typename T>

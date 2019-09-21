@@ -55,11 +55,13 @@ namespace simploce {
         
         friend class Atomistic;
         
-        static atom_ptr_t create(std::size_t index, 
+        static atom_ptr_t create(std::size_t id,
+                                 std::size_t index, 
                                  const std::string &name, 
                                  const atom_spec_ptr_t &spec);
         
-        Atom(std::size_t index, 
+        Atom(std::size_t id,
+             std::size_t index, 
              const std::string &name,
              const atom_spec_ptr_t &spec);        
         

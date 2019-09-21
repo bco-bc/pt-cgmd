@@ -38,16 +38,22 @@
 
 namespace simploce {
     
+    static std::size_t indexGenerator_(const Atomistic& at)
+    {
+        return at.numberOfAtoms();
+    }
+    
     Atomistic::Atomistic() : ParticleModel<Atom,atom_group_t>{}, protonationSites_{}
     {        
     }
     
-    atom_ptr_t Atomistic::addAtom(const std::string& name,
+    atom_ptr_t Atomistic::addAtom(std::size_t id,
+                                  const std::string& name,
                                   const position_t& r, 
                                   const atom_spec_ptr_t& spec)
     {
-        int index = this->numberOfParticles();
-        atom_ptr_t atom = Atom::create(index, name, spec);
+        int index = indexGenerator_(*this);
+        atom_ptr_t atom = Atom::create(id, index, name, spec);
         atom->position(r);
         this->addFree(atom);
         return atom;
@@ -71,7 +77,12 @@ namespace simploce {
             numberOfProtons += ps->protonationState();
         }
         return numberOfProtons;
-    }    
+    }  
+    
+    std::size_t Atomistic::numberOfAtoms() const
+    {
+        return this->numberOfParticles();
+    }
     
 }
 

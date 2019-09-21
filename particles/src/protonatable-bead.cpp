@@ -83,15 +83,17 @@ namespace simploce {
         stream << space << this->protonationState();
     }
     
-    ProtonatableBead::ProtonatableBead(std::size_t index, 
+    ProtonatableBead::ProtonatableBead(std::size_t id,
+                                       std::size_t index, 
                                        const std::string& name,
                                        std::size_t numberOfBoundProtons,
                                        const bead_spec_ptr_t& spec) :
-        Bead(index, name, spec), numberOfBoundProtons_(numberOfBoundProtons)
+        Bead(id, index, name, spec), numberOfBoundProtons_(numberOfBoundProtons)
     {        
     }
     
-    prot_bead_ptr_t ProtonatableBead::create(std::size_t index, 
+    prot_bead_ptr_t ProtonatableBead::create(std::size_t id,
+                                             std::size_t index, 
                                              const std::string& name,
                                              std::size_t numberOfBoundProtons,
                                              const bead_spec_ptr_t& spec)
@@ -102,7 +104,8 @@ namespace simploce {
                 ": this specification does not allow for (de)protonation."
             );
         }
-        return prot_bead_ptr_t(new ProtonatableBead(index, 
+        return prot_bead_ptr_t(new ProtonatableBead(id,
+                                                    index, 
                                                     name, 
                                                     numberOfBoundProtons, 
                                                     spec));

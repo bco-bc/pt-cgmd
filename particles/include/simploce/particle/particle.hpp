@@ -52,14 +52,15 @@ namespace simploce {
         virtual ~Particle();
         
         /**
-         * Returns unique particle identifier.
-         * @return Index, always >= 1.
+         * Returns unique particle identifier. This uniquely identifies a given 
+         * particle in some particle collection.
+         * @return Identifier, always >= 1.
          */
         std::size_t id() const;
         
         /**
-         * Returns unique particle index.
-         * @return Index, always >= 1.
+         * Returns particle sequential index.
+         * @return Index, always >= 0.
          */
         std::size_t index() const;
         
@@ -88,7 +89,7 @@ namespace simploce {
         virtual mass_t mass() const;
         
         /**
-         * Returns position.
+         * Returns current position.
          * @return Position.
          */
         const position_t position() const;
@@ -144,11 +145,13 @@ namespace simploce {
         
         /**
          * Constructor
-         * @param id Unique particle index.
+         * @param id Unique particle identifier.
+         * @param index Unique particle index.
          * @param name Particle name. Does not need to be unique.
          * @param spec Particle specification.
          */
-        Particle(std::size_t index, 
+        Particle(std::size_t id,
+                 std::size_t index, 
                  const std::string& name, 
                  const particle_spec_ptr_t& spec);        
                         
@@ -161,11 +164,8 @@ namespace simploce {
         friend class ProtonationSite;
         
         void reset_(const particle_spec_ptr_t& spec);
-        
-        //virtual bool isProtonatable_() const;
-        
-        //virtual std::size_t protonationState_() const;
-        
+
+        std::size_t id_;
         std::size_t index_;
         std::string name_;
         particle_spec_ptr_t spec_;

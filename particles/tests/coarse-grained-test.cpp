@@ -51,8 +51,8 @@ void test1()
             ParticleSpec::createForBead("pspec1", 1.0, 1.0, 1.0);
     bead_spec_ptr_t spec1_p = ParticleSpec::createForBead("dpspec1", 1.0, 1.0, 1.0);
     
-    bead_ptr_t bead1 = cg.addBead("test1", r, spec1_dp);
-    bead_ptr_t bead2 = cg.addBead("test2", r, spec1_p);
+    bead_ptr_t bead1 = cg.addBead(1, "test1", r, spec1_dp);
+    bead_ptr_t bead2 = cg.addBead(2, "test2", r, spec1_p);
     cg.doWithAll<void>([](const std::vector<bead_ptr_t> &particles) {
         std::clog << "Size: " << particles.size() << std::endl;
         for (auto p : particles) {
@@ -70,7 +70,7 @@ void test1()
     
     bead_spec_ptr_t pspec = 
             ParticleSpec::createForProtonatableBead("pspec", 2.0, 1.0, 1.0, 7.0);
-    prot_bead_ptr_t pbead = cg.addProtonatableBead("ptest", r, 0, pspec);
+    prot_bead_ptr_t pbead = cg.addProtonatableBead(3, "ptest", r, 0, pspec);
     
     Bond<Bead> bond2 = Bond<Bead>::makeBond(bead2, pbead);
     

@@ -45,34 +45,35 @@ namespace simploce {
     
     static std::size_t indexGenerator_(const CoarseGrained& cg)
     {
-        return cg.numberOfParticles() + 1;
+        return cg.numberOfParticles();
     }
-    
-    
+        
     CoarseGrained::CoarseGrained() :
         ParticleModel<Bead,bead_group_t>{}, protonatableBeads_{}
     {        
     }
     
-    bead_ptr_t CoarseGrained::addBead(const std::string& name, 
+    bead_ptr_t CoarseGrained::addBead(std::size_t id,
+                                      const std::string& name, 
                                       const position_t& r, 
                                       const bead_spec_ptr_t& spec)
     {
         auto index = indexGenerator_(*this);
-        bead_ptr_t bead = Bead::create(index, name, spec);
+        bead_ptr_t bead = Bead::create(id, index, name, spec);
         bead->position(r);
         this->add(bead);
         return bead;
     }
             
-    prot_bead_ptr_t CoarseGrained::addProtonatableBead(const std::string& name, 
+    prot_bead_ptr_t CoarseGrained::addProtonatableBead(std::size_t id,
+                                                       const std::string& name, 
                                                        const position_t& r,
                                                        int protonationState,
                                                        const bead_spec_ptr_t& spec)
     {  
         auto index = indexGenerator_(*this);
         prot_bead_ptr_t bead = 
-            ProtonatableBead::create(index, name, protonationState, spec);
+            ProtonatableBead::create(id, index, name, protonationState, spec);
         bead->position(r);
         protonatableBeads_.push_back(bead);
         this->add(bead);
@@ -117,7 +118,6 @@ namespace simploce {
         
         // Read beads.
         for (std::size_t counter = 0; counter != nbeads; ++counter) {
-            std::size_t index = counter + 1;
             stream.read(charBuffer, bufferSize);
             std::string name = std::string(charBuffer, bufferSize);
             boost::trim(name);
@@ -127,13 +127,6 @@ namespace simploce {
             bead_spec_ptr_t spec = catalog->lookup(specName);
             std::size_t id;
             stream >> id;
-            if ( id != index) {
-                std::string msg = 
-                    "Indexing in input particle model may be wrong. Expected " + 
-                    boost::lexical_cast<std::string, std::size_t>(index) + ", " +
-                    "got instead " + boost::lexical_cast<std::string, std::size_t>(id) + ".";
-                throw std::domain_error(msg);
-            }
             real_t x, y, z, px, py, pz;
             stream >> x >> y >> z >> px >> py >> pz;
             position_t r{x, y, z};
@@ -144,10 +137,10 @@ namespace simploce {
                 std::size_t protonationState;            
                 stream >> protonationState;
                 bead_ptr_t bead = 
-                    cg->addProtonatableBead(name, r, protonationState, spec);
+                    cg->addProtonatableBead(id, name, r, protonationState, spec);
                 bead->momentum(p);
             } else {
-                bead_ptr_t bead = cg->addBead(name, r, spec);
+                bead_ptr_t bead = cg->addBead(id, name, r, spec);
                 bead->momentum(p);
             }
             
@@ -164,5 +157,6 @@ namespace simploce {
         cg.write(stream);
         return stream;
     }
+    
 }
 

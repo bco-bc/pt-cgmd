@@ -31,7 +31,7 @@ void test1() {
     std::cout << "particle-test test 1" << std::endl;
     Atomistic atomistic;
     atom_spec_ptr_t spec = ParticleSpec::createForAtom("spec_123",1.0, 2.0, 3.0);
-    atom_ptr_t atom = atomistic.addAtom("C", position_t{}, spec);
+    atom_ptr_t atom = atomistic.addAtom(1, "C", position_t{}, spec);
     std::cout << *atom << std::endl;
 }
 
@@ -40,7 +40,7 @@ void test2() {
     CoarseGrained coarseGrained;
     std::cout << "particle-test test 2" << std::endl;
     bead_spec_ptr_t spec = ParticleSpec::createForBead("spec_456", 2.0, 3.0, 4.0);
-    bead_ptr_t bead = coarseGrained.addBead("bead1", position_t{}, spec);
+    bead_ptr_t bead = coarseGrained.addBead(1, "bead1", position_t{}, spec);
     std::cout << *bead << std::endl;
     
     coarseGrained.doWithAll<void>([] (const std::vector<bead_ptr_t>& beads) {
@@ -58,7 +58,7 @@ void test3()
     CoarseGrained coarseGrained;
     bead_spec_ptr_t spec = 
             ParticleSpec::createForProtonatableBead("COOH", charge_t{-1.0}, 5.0, 3.0, 7.9);
-    coarseGrained.addBead("COOH", position_t{}, spec);
+    coarseGrained.addBead(1, "COOH", position_t{}, spec);
     coarseGrained.doWithAll<void>([] (const std::vector<bead_ptr_t>& beads) {
         for (auto bead : beads) {
             std::cout << *bead << std::endl;   
@@ -72,7 +72,7 @@ void test4()
     CoarseGrained coarseGrained;
     bead_spec_ptr_t spec = 
             ParticleSpec::createForProtonatableBead("NH4", 0.0, 5.0, 2.0, 10.0);
-    coarseGrained.addProtonatableBead("NH4", position_t{}, 1, spec);
+    coarseGrained.addProtonatableBead(1111, "NH4", position_t{}, 1, spec);
     coarseGrained.doWithAll<void>([] (const std::vector<bead_ptr_t>& beads) {
         for (auto bead : beads) {
             std::cout << *bead << std::endl;   

@@ -63,12 +63,14 @@ namespace simploce {
         
         friend class CoarseGrained;
         
-        static prot_bead_ptr_t create(std::size_t index, 
+        static prot_bead_ptr_t create(std::size_t id,
+                                      std::size_t index, 
                                       const std::string& name,
                                       std::size_t numberOfBoundProtons,
                                       const bead_spec_ptr_t& spec);
                 
-        ProtonatableBead(std::size_t index, 
+        ProtonatableBead(std::size_t id,
+                         std::size_t index, 
                          const std::string &name,
                          std::size_t numberOfBoundProtons,
                          const bead_spec_ptr_t &spec);

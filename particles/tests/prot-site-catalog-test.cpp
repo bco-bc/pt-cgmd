@@ -51,17 +51,17 @@ void test1() {
     position_t r;
     
     // COOH
-    atom_ptr_t C = atomistic.addAtom("C", r, specC);
-    atom_ptr_t O1 = atomistic.addAtom("O1", r, specO);
-    atom_ptr_t O2 = atomistic.addAtom("O2", r, specO);
-    atom_ptr_t H = atomistic.addAtom("H", r, specH);
+    atom_ptr_t C = atomistic.addAtom(1, "C", r, specC);
+    atom_ptr_t O1 = atomistic.addAtom(2, "O1", r, specO);
+    atom_ptr_t O2 = atomistic.addAtom(3, "O2", r, specO);
+    atom_ptr_t H = atomistic.addAtom(4, "H", r, specH);
     
     // NH4
-    atom_ptr_t N = atomistic.addAtom("N", r, specN);
-    atom_ptr_t H1 = atomistic.addAtom("H1", r, specH);
-    atom_ptr_t H2 = atomistic.addAtom("H2", r, specH);
-    atom_ptr_t H3 = atomistic.addAtom("H3", r, specH);
-    atom_ptr_t H4 = atomistic.addAtom("H4", r, specH);
+    atom_ptr_t N = atomistic.addAtom(5, "N", r, specN);
+    atom_ptr_t H1 = atomistic.addAtom(6, "H1", r, specH);
+    atom_ptr_t H2 = atomistic.addAtom(1234, "H2", r, specH);
+    atom_ptr_t H3 = atomistic.addAtom(985, "H3", r, specH);
+    atom_ptr_t H4 = atomistic.addAtom(89, "H4", r, specH);
 
     std::cout << "Number of atoms: " << atomistic.numberOfParticles() << std::endl;
     

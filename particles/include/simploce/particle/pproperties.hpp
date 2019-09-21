@@ -50,7 +50,7 @@ namespace simploce {
         std::shared_ptr<P> find(std::size_t id, const CONT<std::shared_ptr<P>>& particles)
         {
             for (auto p : particles) {
-                if ( p->index() == id ) {
+                if ( p->id() == id ) {
                     return p;
                 }
             }
@@ -72,9 +72,7 @@ namespace simploce {
             }
             return total;
         }
-    
-
-        
+           
         /**
          * Returns total charge of a collection of particles.
          * @param P Particle type.

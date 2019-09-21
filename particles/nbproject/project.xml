@@ -27,8 +27,10 @@
             </formatting>
         </data>
         <spellchecker-wordlist xmlns="http://www.netbeans.org/ns/spellchecker-wordlist/1">
+            <word>catalog</word>
             <word>deprotonate</word>
             <word>Noncopyable</word>
+            <word>protonatable</word>
         </spellchecker-wordlist>
     </configuration>
 </project>

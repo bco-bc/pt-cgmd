@@ -141,7 +141,7 @@ namespace simploce {
          * @param id Particle identifier.
          * @return Result.
          */
-        bool contains(std::size_t id) const;
+        bool contains(std::size_t id) const { return this->find(id) != nullptr; }
         
         /**
          * Performs a "task" with all particles. The given task must expose the 
@@ -248,15 +248,7 @@ namespace simploce {
     template <typename P, typename PG>
     void ParticleModel<P,PG>::resetForces()
     {
-        for (p_ptr_t& p : all_) {
-            p->resetForce();
-        }
-    }
-    
-    template <typename P, typename PG>
-    bool ParticleModel<P,PG>::contains(std::size_t id) const
-    {
-        return this->find(id) != nullptr;
+        std::for_each(all_.begin(), all_.end(), [] (P& p) { p->resetForce(); });
     }
     
     template <typename P, typename PG>
@@ -297,8 +289,11 @@ namespace simploce {
     template <typename P, typename PG>
     void ParticleModel<P,PG>::add(const p_ptr_t& p)
     {
-        if ( this->contains(p->index()) ) {
-            throw std::domain_error("Particle is already in particle model.");
+        if ( this->contains(p->id()) ) {
+            std::string msg = 
+                boost::lexical_cast<std::string, std::size_t>(p->id()) +
+                ": Already added to particle model.";    
+            throw std::domain_error(msg);
         }
         all_.push_back(p);
     }
@@ -306,8 +301,11 @@ namespace simploce {
     template <typename P, typename PG>
     void ParticleModel<P,PG>::addFree(const p_ptr_t& fp) 
     {
-        if ( this->contains(fp->index()) ) {
-            throw std::domain_error("Particle is already in particle model.");
+        if ( this->contains(fp->id()) ) {
+            std::string msg = 
+                boost::lexical_cast<std::string, std::size_t>(fp->id()) +
+                ": Already added to particle model.";    
+            throw std::domain_error(msg);
         }
         this->add(fp);
         free_.push_back(fp); 
@@ -317,15 +315,17 @@ namespace simploce {
     void ParticleModel<P,PG>::addGroup(const pg_ptr_t& pg)
     {
         for (const p_ptr_t& p : pg->particles() ) {
-            if ( !this->contains(p->index()) ) {
-                throw std::domain_error(
-                    "Particle in particle group is not in physical system."
-                );
+            if ( !this->contains(p->id()) ) {
+                std::string msg =
+                    boost::lexical_cast<std::string, std::size_t>(p->id()) +
+                    ": Not yet added to particle model."; 
+                throw std::domain_error(msg);
             }
         }
         for (auto g : groups_ ) {
             if ( g == pg) {
-                throw std::domain_error("Particle group is already in physical system.");
+                throw std::domain_error(
+                    "Particle group already added to particle model.");
             }
         }
         groups_.push_back(pg);
@@ -372,7 +372,7 @@ namespace simploce {
                 if ( particle == nullptr ) {
                     std::string msg = 
                         boost::lexical_cast<std::string, std::size_t>(id) +
-                        ": No such free particle.";
+                        ": No such particle.";
                     throw std::domain_error(msg);
                 }
                 particles.push_back(particle);

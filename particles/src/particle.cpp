@@ -30,8 +30,11 @@
 
 namespace simploce {        
     
-    Particle::Particle(std::size_t index, const std::string& name, const particle_spec_ptr_t& spec) :
-        index_{index}, name_{name}, spec_{spec}, r_{}, p_{}, f_{}
+    Particle::Particle(std::size_t id,
+                       std::size_t index, 
+                       const std::string& name, 
+                       const particle_spec_ptr_t& spec) :
+        id_{id}, index_{index}, name_{name}, spec_{spec}, r_{}, p_{}, f_{}
     {
         if ( name_.empty() ) {
             throw std::domain_error("A particle name must be provided.");
@@ -47,7 +50,7 @@ namespace simploce {
     
     std::size_t Particle::id() const
     {
-        return this->index();
+        return id_;
     }
     
     std::size_t Particle::index() const
@@ -116,7 +119,7 @@ namespace simploce {
         
         stream << std::setw(10) << this->name();
         stream << space << std::setw(10) << this->spec()->name();
-        stream << space << std::setw(10) << this->index();
+        stream << space << std::setw(10) << this->id();
         stream << space << this->position();
         stream << space << this->momentum();
     }
@@ -136,18 +139,6 @@ namespace simploce {
         }
         spec_ = spec;
     }
-    
-    /*
-    bool Particle::isProtonatable_() const
-    {
-        return false;
-    }
-    
-    std::size_t Particle::protonationState_() const
-    {
-        return 0;
-    }
-    */
     
     std::ostream& operator << (std::ostream& stream, const Particle& particle)
     {
