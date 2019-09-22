@@ -49,7 +49,7 @@ namespace simploce {
     class LJCoulombForces;
     
     /**
-     * Specialization for beads.
+     * Specialisation for beads.
      */
     template <>
     class LJCoulombForces<Bead> : public CoarseGrainedForceField {

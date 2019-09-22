@@ -12,6 +12,7 @@
  */
 
 #include "simploce/util/map2.hpp"
+#include "simploce/util/map.hpp"
 #include <cstdlib>
 #include <iostream>
 
@@ -35,7 +36,10 @@ void test1()
     
     // Error.
     std::cout << "Following should result in an exception..." << std::endl;
-    std::cout << map2.at("a1", "a3") << std::endl;
+    std::cout << map2.at("a1", "a3") << std::endl;  
+    
+    std::map<std::string, double> mp;
+    std::cout << mp << std::endl;
 }
 
 int main(int argc, char** argv) {

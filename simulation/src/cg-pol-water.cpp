@@ -35,8 +35,11 @@
 #include "simploce/particle/particle-spec-catalog.hpp"
 #include "simploce/particle/particle-spec.hpp"
 #include "simploce/simulation/sconf.hpp"
+#include "simploce/util/map2.hpp"
+#include "simploce/util/map.hpp"
 #include <utility>
 #include <memory>
+#include <map>
 
 namespace simploce {
     
@@ -61,6 +64,8 @@ namespace simploce {
         LJCoulombForces<Bead>::el_params_t elParams;
         auto eps_r = std::make_pair("eps_r", EPS_R);
         elParams.insert(eps_r);
+        std::clog << "Electrostatic interaction parameters:" << std::endl;
+        std::clog << elParams << std::endl;
 
         // LJ
         LJCoulombForces<Bead>::lj_params_t ljParams;
@@ -97,9 +102,9 @@ namespace simploce {
             const bond_cont_t& bonds = group.bonds();
             const Bond<Bead>& bond = bonds[0];                    // There is 1 bond only.
             const bead_ptr_t pi = bond.getParticleOne();
-            std::size_t index_i = pi->index() - 1;                   // Particle id starts at 1.
+            std::size_t index_i = pi->index();                    // Particle id starts at 1.
             const bead_ptr_t pj = bond.getParticleTwo();
-            std::size_t index_j = pj->index() - 1;                   // Particle id starts at 1.
+            std::size_t index_j = pj->index();                    // Particle id starts at 1.
       
             position_t ri = pi->position();
             position_t rj = pj->position();
