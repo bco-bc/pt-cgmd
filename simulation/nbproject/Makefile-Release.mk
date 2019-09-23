@@ -56,6 +56,7 @@ TESTDIR=${CND_BUILDDIR}/${CND_CONF}/${CND_PLATFORM}/tests
 # Test Files
 TESTFILES= \
 	${TESTDIR}/TestFiles/f1 \
+	${TESTDIR}/TestFiles/f5 \
 	${TESTDIR}/TestFiles/f3 \
 	${TESTDIR}/TestFiles/f4 \
 	${TESTDIR}/TestFiles/f2
@@ -63,6 +64,7 @@ TESTFILES= \
 # Test Object Files
 TESTOBJECTFILES= \
 	${TESTDIR}/tests/displacer-test.o \
+	${TESTDIR}/tests/gr-test.o \
 	${TESTDIR}/tests/model-factory-test.o \
 	${TESTDIR}/tests/pair-list-test.o \
 	${TESTDIR}/tests/simulation-test.o
@@ -178,6 +180,10 @@ ${TESTDIR}/TestFiles/f1: ${TESTDIR}/tests/displacer-test.o ${OBJECTFILES:%.o=%_n
 	${MKDIR} -p ${TESTDIR}/TestFiles
 	${LINK.cc} -o ${TESTDIR}/TestFiles/f1 $^ ${LDLIBSOPTIONS}   
 
+${TESTDIR}/TestFiles/f5: ${TESTDIR}/tests/gr-test.o ${OBJECTFILES:%.o=%_nomain.o}
+	${MKDIR} -p ${TESTDIR}/TestFiles
+	${LINK.cc} -o ${TESTDIR}/TestFiles/f5 $^ ${LDLIBSOPTIONS}   
+
 ${TESTDIR}/TestFiles/f3: ${TESTDIR}/tests/model-factory-test.o ${OBJECTFILES:%.o=%_nomain.o}
 	${MKDIR} -p ${TESTDIR}/TestFiles
 	${LINK.cc} -o ${TESTDIR}/TestFiles/f3 $^ ${LDLIBSOPTIONS}   
@@ -195,6 +201,12 @@ ${TESTDIR}/tests/displacer-test.o: tests/displacer-test.cpp
 	${MKDIR} -p ${TESTDIR}/tests
 	${RM} "$@.d"
 	$(COMPILE.cc) -O2 -Wall -Iinclude -I../cpputil/include -I../particles/include -I. -std=c++14 -MMD -MP -MF "$@.d" -o ${TESTDIR}/tests/displacer-test.o tests/displacer-test.cpp
+
+
+${TESTDIR}/tests/gr-test.o: tests/gr-test.cpp 
+	${MKDIR} -p ${TESTDIR}/tests
+	${RM} "$@.d"
+	$(COMPILE.cc) -O2 -Wall -Iinclude -I../cpputil/include -I../particles/include -I. -std=c++14 -MMD -MP -MF "$@.d" -o ${TESTDIR}/tests/gr-test.o tests/gr-test.cpp
 
 
 ${TESTDIR}/tests/model-factory-test.o: tests/model-factory-test.cpp 
@@ -402,6 +414,7 @@ ${OBJECTDIR}/src/velocity-verlet_nomain.o: ${OBJECTDIR}/src/velocity-verlet.o sr
 	@if [ "${TEST}" = "" ]; \
 	then  \
 	    ${TESTDIR}/TestFiles/f1 || true; \
+	    ${TESTDIR}/TestFiles/f5 || true; \
 	    ${TESTDIR}/TestFiles/f3 || true; \
 	    ${TESTDIR}/TestFiles/f4 || true; \
 	    ${TESTDIR}/TestFiles/f2 || true; \

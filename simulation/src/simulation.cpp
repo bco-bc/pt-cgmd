@@ -63,11 +63,11 @@ namespace simploce {
             SimulationData data = sm_->displace(param);
             if ( counter % nwrite == 0 ) {
                 dataStream << std::setw(width) << counter << space << data << std::endl;
-                dataStream.flush();
                 sm_->saveState(trajStream);
+                trajStream.flush();
+                dataStream.flush();
             }
         }
-                
     }
     
 }

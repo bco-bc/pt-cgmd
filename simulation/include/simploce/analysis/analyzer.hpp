@@ -56,9 +56,7 @@ namespace simploce {
          * @param box Simulation box.
          * @param bc Boundary condition.
          */
-        virtual void perform(const std::vector<p_ptr_t> &particles,
-                             const box_ptr_t& box,
-                             const bc_ptr_t& bc) const = 0;
+        virtual void perform(const std::vector<p_ptr_t> &particles) = 0;
     };
 }
 

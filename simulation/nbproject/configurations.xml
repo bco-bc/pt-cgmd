@@ -66,6 +66,12 @@
                      kind="TEST">
         <itemPath>tests/displacer-test.cpp</itemPath>
       </logicalFolder>
+      <logicalFolder name="f5"
+                     displayName="G(r) Test"
+                     projectFiles="true"
+                     kind="TEST">
+        <itemPath>tests/gr-test.cpp</itemPath>
+      </logicalFolder>
       <logicalFolder name="f3"
                      displayName="Model Factory Test"
                      projectFiles="true"
@@ -211,6 +217,21 @@
           <output>${TESTDIR}/TestFiles/f4</output>
         </linkerTool>
       </folder>
+      <folder path="TestFiles/f5">
+        <cTool>
+          <incDir>
+            <pElem>.</pElem>
+          </incDir>
+        </cTool>
+        <ccTool>
+          <incDir>
+            <pElem>.</pElem>
+          </incDir>
+        </ccTool>
+        <linkerTool>
+          <output>${TESTDIR}/TestFiles/f5</output>
+        </linkerTool>
+      </folder>
       <item path="include/simploce/analysis/analysis.hpp"
             ex="false"
             tool="3"
@@ -379,6 +400,8 @@
       <item path="src/velocity-verlet.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="tests/displacer-test.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="tests/gr-test.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="tests/model-factory-test.cpp" ex="false" tool="1" flavor2="0">
       </item>
@@ -505,6 +528,21 @@
           <output>${TESTDIR}/TestFiles/f4</output>
         </linkerTool>
       </folder>
+      <folder path="TestFiles/f5">
+        <cTool>
+          <incDir>
+            <pElem>.</pElem>
+          </incDir>
+        </cTool>
+        <ccTool>
+          <incDir>
+            <pElem>.</pElem>
+          </incDir>
+        </ccTool>
+        <linkerTool>
+          <output>${TESTDIR}/TestFiles/f5</output>
+        </linkerTool>
+      </folder>
       <item path="include/simploce/analysis/analysis.hpp"
             ex="false"
             tool="3"
@@ -673,6 +711,8 @@
       <item path="src/velocity-verlet.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="tests/displacer-test.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="tests/gr-test.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="tests/model-factory-test.cpp" ex="false" tool="1" flavor2="0">
       </item>

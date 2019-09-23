@@ -41,7 +41,7 @@ namespace simploce {
     template <typename P>
     class Analyzer;
     
-    using cg_analyzer_ptr_t = std::shared_ptr<Bead>;
+    using cg_analyzer_ptr_t = std::shared_ptr<Analyzer<Bead>>;
 }
 
 #endif /* ATYPES_HPP */

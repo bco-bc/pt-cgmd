@@ -66,7 +66,7 @@ namespace simploce {
         
         cg_sim_model_ptr_t sm_;
         cg_analyzer_ptr_t analyzer_;
-    };
+    };    
     
 }
 

@@ -173,7 +173,7 @@ int main(int argc, char* argv[])
     std::cout << "Simulation parameters:" << std::endl;
     std::cout << param << std::endl;
     
-    // Read particle 
+    // Read particle specifications.
     spec_catalog_ptr_t catalog = factory::particleSpecCatalog(fnParticleSpecCatalog);
     std::clog << "Particle specifications: " << std::endl;
     std::clog << *catalog << std::endl;

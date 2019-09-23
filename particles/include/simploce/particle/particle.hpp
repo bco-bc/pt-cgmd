@@ -141,6 +141,12 @@ namespace simploce {
          */
         virtual void writeState(std::ostream& stream) const;
         
+        /**
+         * Reads state from an input stream.
+         * @param stream Input stream.
+         */
+        virtual void readState(std::istream& stream);
+        
     protected:
         
         /**

@@ -56,6 +56,8 @@ namespace simploce {
         virtual void write(std::ostream& stream) const;
         
         virtual void writeState(std::ostream& stream) const override;
+        
+        virtual void readState(std::istream& stream) override;
                
     protected:
         

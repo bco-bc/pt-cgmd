@@ -23,55 +23,51 @@
  */
 
 /* 
- * File:   bead.cpp
- * Author: André H. Juffer, Biocenter Oulu.
+ * File:   gr-test.cpp
+ * Author: ajuffer
  *
- * Created on August 5, 2019, 2:00 PM
+ * Created on September 23, 2019, 3:20 PM
  */
 
+#include "simploce/analysis/gr.hpp"
+#include "simploce/analysis/analysis.hpp"
 #include "simploce/particle/bead.hpp"
-#include "simploce/particle/particle.hpp"
-#include "simploce/particle/pconf.hpp"
+#include "simploce/simulation/sall.hpp"
+#include <cstdlib>
+#include <iostream>
+#include <memory>
 
-namespace simploce {
+using namespace simploce;
+
+/*
+ * Simple C++ Test Suite
+ */
+
+void test1() {
+    std::cout << "gr-test test 1" << std::endl;
     
-    Bead::Bead(std::size_t id, 
-               std::size_t index, 
-               const std::string& name, 
-               const bead_spec_ptr_t& spec) :
-        Particle(id, index, name, spec)
-    {        
-    }
-        
-    Bead::~Bead()
-    {        
-    }
+    using gr_t = Gr<Bead>;    
     
-    void Bead::write(std::ostream& stream) const
-    {
-       const auto space = conf::SPACE;
-        
-       Particle::write(stream);
-       stream << space << 0;
-    }
+    length_t dr{0.1};
+    std::string specName = "DW";
+    box_ptr_t box = std::make_shared<box_t>(7);
+    bc_ptr_t bc = factory::pbc(box);
     
-    void Bead::writeState(std::ostream& stream) const
-    {
-        Particle::writeState(stream);
-    }
+    gr_t gr(dr, specName, specName, box, bc);
     
-    void Bead::readState(std::istream& stream)
-    {
-        Particle::readState(stream);
-    }
-        
-    bead_ptr_t Bead::create(std::size_t id, 
-                            std::size_t index,
-                            const std::string& name,
-                            const bead_spec_ptr_t& spec)
-    {
-        return bead_ptr_t(new Bead(id, index, name, spec));
-    }
-        
+    cg_analyzer_ptr_t ptr = gr_t::create(dr, specName, specName, box, bc);    
+}
+
+int main(int argc, char** argv) {
+    std::cout << "%SUITE_STARTING% gr-test" << std::endl;
+    std::cout << "%SUITE_STARTED%" << std::endl;
+
+    std::cout << "%TEST_STARTED% test1 (gr-test)" << std::endl;
+    test1();
+    std::cout << "%TEST_FINISHED% time=0 test1 (gr-test)" << std::endl;
+
+    std::cout << "%SUITE_FINISHED% time=0" << std::endl;
+
+    return (EXIT_SUCCESS);
 }
 

@@ -59,6 +59,8 @@ namespace simploce {
         
         void writeState(std::ostream& stream) const override;
         
+        void readState(std::istream& stream) override;
+        
     private:
         
         friend class CoarseGrained;

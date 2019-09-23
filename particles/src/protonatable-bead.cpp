@@ -83,6 +83,12 @@ namespace simploce {
         stream << space << this->protonationState();
     }
     
+    void ProtonatableBead::readState(std::istream& stream)
+    {
+        Bead::readState(stream);
+        stream >> this->numberOfBoundProtons_;        
+    }
+    
     ProtonatableBead::ProtonatableBead(std::size_t id,
                                        std::size_t index, 
                                        const std::string& name,

@@ -32,6 +32,7 @@
 #ifndef SIM_MODEL_HPP
 #define SIM_MODEL_HPP
 
+#include "simploce/particle/coarse-grained.hpp"
 #include "sim-data.hpp"
 #include "stypes.hpp"
 #include <iostream>
@@ -109,6 +110,19 @@ namespace simploce {
          * @return Input stream.
          */
         void readFrom(std::istream& stream, const spec_catalog_ptr_t& catalog);
+        
+        /**
+         * Performs a 'task' with all particles. The given task must expose the 
+         * operator 
+         * <code>
+         * R operator () (const std::vector<bead_ptr_t>& all);
+         * </code>
+         * where 'all' represents all the particles in this model.
+         * @param task Taks of type TASK. May be a lambda expression.
+         * @return Result of type R.
+         */
+        template <typename R, typename TASK>
+        R doWithAll(const TASK task) { return cg_->doWithAll<R>(task); }
         
     private:
         

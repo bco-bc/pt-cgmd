@@ -43,6 +43,8 @@ namespace simploce {
     public:
         
         /**
+         * Constructor.
+         * @param catalog Particle specifications catalog.
          */
         ModelFactory(const spec_catalog_ptr_t& catalog);
     

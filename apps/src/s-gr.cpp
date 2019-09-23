@@ -5,8 +5,10 @@
  * Created on September 22, 2019, 3:15 PM
  */
 
-#include "simploce/simulation/stypes.hpp"
-#include "boost/program_options.hpp"
+#include "simploce/simulation/sall.hpp"
+#include "simploce/particle/particle-spec-catalog.hpp"
+#include "simploce/util/file.hpp"
+#include <boost/program_options.hpp>
 #include <string>
 #include <iostream>
 #include <fstream>
@@ -23,6 +25,7 @@ int main(int argc, char *argv[])
   std::string fnResults{"gr.dat"};
   std::string nameSpec1{"Na+"};
   std::string nameSpec2{"Cl-"};
+  real_t dr{0.1};  // Bin size.
 
   po::options_description usage("Usage");
   usage.add_options()
@@ -39,10 +42,16 @@ int main(int argc, char *argv[])
      "Input file name trajectory. Default is 'trajectory.dat'."
     )
     (
-     "name-spec-1", po::value<std::string>(&nameSpec1), "First of two particle specifications names"
+     "name-spec-1", po::value<std::string>(&nameSpec1),
+     "First of two particle specifications names"
     )
     (
-     "name-spec-2", po::value<std::string>(&nameSpec2), "Second of two particle specifications names"
+     "name-spec-2", po::value<std::string>(&nameSpec2),
+     "Second of two particle specifications names"
+    )
+    (
+     "bin-size", po::value<real_t>(&dr),
+     "Bin size of g(r). Default is 0.1 nm."
     )
     (
      "help", "Help message"
@@ -76,6 +85,19 @@ int main(int argc, char *argv[])
   if ( vm.count("name-spec-2") ) {
     nameSpec2 = vm["name-spec-2"].as<std::string>();
   }
+
+  // Read particle specifications.
+  spec_catalog_ptr_t catalog = factory::particleSpecCatalog(fnParticleSpecCatalog);
+  std::clog << "Particle specifications: " << std::endl;
+  std::clog << *catalog << std::endl;
+  
+  sim_model_factory_ptr_t modelFactory = factory::modelFactory(catalog);
+  std::ifstream stream;
+  file::open_input(stream, fnInputModel);
+  cg_sim_model_ptr_t sm = modelFactory->readCoarseGrainedFrom(stream);
+  stream.close();
+  std::clog << *sm << std::endl;
+  
 
   /*
   Factory& factory = Factory::create(fnParticleCatalog);

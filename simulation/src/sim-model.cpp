@@ -80,40 +80,28 @@ namespace simploce {
         
     void SimulationModel<Bead>::saveState(std::ostream& stream)
     {
-        const char space = conf::SPACE;
-        
         cg_->doWithAll<void>([&stream] (const std::vector<bead_ptr_t>& beads) {
             for (auto bead: beads) {
-                position_t r = bead->position();
-                momentum_t p = bead->momentum();
-                stream << r << space << p << std::endl;
+                bead->writeState(stream);
             }
         });
         cg_->doWithProtBeads<void>([&stream] (const std::vector<prot_bead_ptr_t>& pbeads) {
-            for (auto const p : pbeads) {
-                stream << space << p->protonationState() << space;
+            for (auto const pbead : pbeads) {
+                pbead->writeState(stream);
             }
         });
-        stream.flush();
     }
     
     void SimulationModel<Bead>::readState(std::istream& stream)
     {
          cg_->doWithAll<void>([&stream] (const std::vector<bead_ptr_t>& beads) {
             for (auto bead: beads) {
-                real_t x, y, z, px, py, pz;
-                stream >> x >> y >> z >> px >> py >> pz;
-                position_t r{x, y, z};
-                momentum_t p{px, py, pz};
-                bead->position(r);
-                bead->momentum(p);
+                bead->readState(stream);
             }
         });
         cg_->doWithProtBeads<void>([&stream] (const std::vector<prot_bead_ptr_t>& pbeads) {
-            for (auto const p : pbeads) {
-                std::size_t protonationState;
-                stream >> protonationState;
-                
+            for (auto pbead : pbeads) {
+                pbead->readState(stream);
             }
         });       
     }

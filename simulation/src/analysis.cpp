@@ -23,6 +23,8 @@
  */
 
 #include "simploce/analysis/analysis.hpp"
+#include "simploce/analysis/analyzer.hpp"
+#include "simploce/simulation/sim-model.hpp"
 
 namespace simploce {
     
@@ -34,9 +36,12 @@ namespace simploce {
         
     void Analysis<Bead>::perform(std::istream& trajectory)
     {
-        bool good = true;
-        while (good) {
-            
+        sm_->readState(trajectory);
+        while (trajectory.good() ) {
+            sm_->doWithAll<void>([this] (const std::vector<bead_ptr_t>& all) {
+                this->analyzer_->perform(all);
+            });
+            sm_->readState(trajectory);
         }
     }
     

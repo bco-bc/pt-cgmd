@@ -132,6 +132,16 @@ namespace simploce {
         stream << space << this->momentum();
     }
     
+    void Particle::readState(std::istream& stream)
+    {
+        real_t x, y, z, px, py, pz;
+        stream >> x >> y >> z >> px >> py >> pz;
+        position_t r{x, y, z};
+        momentum_t p{px, py, pz};
+        this->position(r);
+        this->momentum(p);
+    }
+    
     void Particle::reset_(const particle_spec_ptr_t &spec)
     {
         if ( !spec ) {
