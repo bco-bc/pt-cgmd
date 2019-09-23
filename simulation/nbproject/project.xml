@@ -28,6 +28,7 @@
             </formatting>
         </data>
         <spellchecker-wordlist xmlns="http://www.netbeans.org/ns/spellchecker-wordlist/1">
+            <word>Analyzer</word>
             <word>Interactor</word>
         </spellchecker-wordlist>
     </configuration>

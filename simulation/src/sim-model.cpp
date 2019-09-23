@@ -90,12 +90,32 @@ namespace simploce {
             }
         });
         cg_->doWithProtBeads<void>([&stream] (const std::vector<prot_bead_ptr_t>& pbeads) {
-            stream << pbeads.size() << std::endl;
             for (auto const p : pbeads) {
                 stream << space << p->protonationState() << space;
             }
         });
         stream.flush();
+    }
+    
+    void SimulationModel<Bead>::readState(std::istream& stream)
+    {
+         cg_->doWithAll<void>([&stream] (const std::vector<bead_ptr_t>& beads) {
+            for (auto bead: beads) {
+                real_t x, y, z, px, py, pz;
+                stream >> x >> y >> z >> px >> py >> pz;
+                position_t r{x, y, z};
+                momentum_t p{px, py, pz};
+                bead->position(r);
+                bead->momentum(p);
+            }
+        });
+        cg_->doWithProtBeads<void>([&stream] (const std::vector<prot_bead_ptr_t>& pbeads) {
+            for (auto const p : pbeads) {
+                std::size_t protonationState;
+                stream >> protonationState;
+                
+            }
+        });       
     }
     
     void SimulationModel<Bead>::readFrom(std::istream& stream,

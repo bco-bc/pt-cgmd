@@ -46,7 +46,7 @@ namespace simploce {
     class SimulationModel;
     
     /**
-     * Specialization for beads.
+     * specialisation for beads.
      */
     template <>
     class SimulationModel<Bead> {
@@ -95,6 +95,12 @@ namespace simploce {
          * @param stream Output stream into which state is saved.
          */
         void saveState(std::ostream& stream);
+        
+        /**
+         * Reads state.
+         * @param stream Input stream holding states.
+         */
+        void readState(std::istream& stream);
         
         /**
          * Reads simulation model from input stream.

@@ -4,14 +4,18 @@
     <logicalFolder name="HeaderFiles"
                    displayName="Header Files"
                    projectFiles="true">
+      <itemPath>include/simploce/analysis/analysis.hpp</itemPath>
+      <itemPath>include/simploce/analysis/analyzer.hpp</itemPath>
       <itemPath>include/simploce/simulation/at-displacer.hpp</itemPath>
       <itemPath>include/simploce/simulation/at-forcefield.hpp</itemPath>
+      <itemPath>include/simploce/analysis/atypes.hpp</itemPath>
       <itemPath>include/simploce/simulation/bc.hpp</itemPath>
       <itemPath>include/simploce/simulation/cg-displacer.hpp</itemPath>
       <itemPath>include/simploce/simulation/cg-forcefield.hpp</itemPath>
       <itemPath>include/simploce/simulation/cg-pol-water.hpp</itemPath>
       <itemPath>include/simploce/simulation/displacer.hpp</itemPath>
       <itemPath>include/simploce/simulation/forcefield.hpp</itemPath>
+      <itemPath>include/simploce/analysis/gr.hpp</itemPath>
       <itemPath>include/simploce/simulation/interactor.hpp</itemPath>
       <itemPath>include/simploce/simulation/langevin-velocity-verlet.hpp</itemPath>
       <itemPath>include/simploce/simulation/leap-frog.hpp</itemPath>
@@ -37,6 +41,7 @@
     <logicalFolder name="SourceFiles"
                    displayName="Source Files"
                    projectFiles="true">
+      <itemPath>src/analysis.cpp</itemPath>
       <itemPath>src/cg-pol-water.cpp</itemPath>
       <itemPath>src/interactor.cpp</itemPath>
       <itemPath>src/langevin-velocity-verlet.cpp</itemPath>
@@ -206,6 +211,23 @@
           <output>${TESTDIR}/TestFiles/f4</output>
         </linkerTool>
       </folder>
+      <item path="include/simploce/analysis/analysis.hpp"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="include/simploce/analysis/analyzer.hpp"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="include/simploce/analysis/atypes.hpp"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="include/simploce/analysis/gr.hpp" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="include/simploce/simulation/at-displacer.hpp"
             ex="false"
             tool="3"
@@ -327,6 +349,8 @@
             ex="false"
             tool="3"
             flavor2="0">
+      </item>
+      <item path="src/analysis.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="src/cg-pol-water.cpp" ex="false" tool="1" flavor2="0">
       </item>
@@ -481,6 +505,23 @@
           <output>${TESTDIR}/TestFiles/f4</output>
         </linkerTool>
       </folder>
+      <item path="include/simploce/analysis/analysis.hpp"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="include/simploce/analysis/analyzer.hpp"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="include/simploce/analysis/atypes.hpp"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="include/simploce/analysis/gr.hpp" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="include/simploce/simulation/at-displacer.hpp"
             ex="false"
             tool="3"
@@ -602,6 +643,8 @@
             ex="false"
             tool="3"
             flavor2="0">
+      </item>
+      <item path="src/analysis.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="src/cg-pol-water.cpp" ex="false" tool="1" flavor2="0">
       </item>

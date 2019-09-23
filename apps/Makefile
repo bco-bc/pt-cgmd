@@ -7,7 +7,7 @@ SIMULATION = $(PREFIX)/simploce/pt-cgmd/simulation
 
 VPATH = ../src
 
-APPS = s-cgmd.cpp
+APPS = s-cgmd.cpp s-gr.cpp
 
 AEXE = $(APPS:.cpp=)
 

@@ -35,6 +35,7 @@ OBJECTDIR=${CND_BUILDDIR}/${CND_CONF}/${CND_PLATFORM}
 
 # Object Files
 OBJECTFILES= \
+	${OBJECTDIR}/src/analysis.o \
 	${OBJECTDIR}/src/cg-pol-water.o \
 	${OBJECTDIR}/src/interactor.o \
 	${OBJECTDIR}/src/langevin-velocity-verlet.o \
@@ -93,6 +94,11 @@ ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/libsimulation.${CND_DLIB_EXT}: ../par
 ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/libsimulation.${CND_DLIB_EXT}: ${OBJECTFILES}
 	${MKDIR} -p ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}
 	${LINK.cc} -o ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/libsimulation.${CND_DLIB_EXT} ${OBJECTFILES} ${LDLIBSOPTIONS} -pthread -lpthread -shared -fPIC
+
+${OBJECTDIR}/src/analysis.o: src/analysis.cpp
+	${MKDIR} -p ${OBJECTDIR}/src
+	${RM} "$@.d"
+	$(COMPILE.cc) -g -Wall -Iinclude -I../cpputil/include -I../particles/include -std=c++14 -fPIC  -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/analysis.o src/analysis.cpp
 
 ${OBJECTDIR}/src/cg-pol-water.o: src/cg-pol-water.cpp
 	${MKDIR} -p ${OBJECTDIR}/src
@@ -208,6 +214,19 @@ ${TESTDIR}/tests/simulation-test.o: tests/simulation-test.cpp
 	${RM} "$@.d"
 	$(COMPILE.cc) -g -Wall -Iinclude -I../cpputil/include -I../particles/include -Iinclude -I../../cpputil/include -I../../particles/include -I. -std=c++14 -MMD -MP -MF "$@.d" -o ${TESTDIR}/tests/simulation-test.o tests/simulation-test.cpp
 
+
+${OBJECTDIR}/src/analysis_nomain.o: ${OBJECTDIR}/src/analysis.o src/analysis.cpp 
+	${MKDIR} -p ${OBJECTDIR}/src
+	@NMOUTPUT=`${NM} ${OBJECTDIR}/src/analysis.o`; \
+	if (echo "$$NMOUTPUT" | ${GREP} '|main$$') || \
+	   (echo "$$NMOUTPUT" | ${GREP} 'T main$$') || \
+	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
+	then  \
+	    ${RM} "$@.d";\
+	    $(COMPILE.cc) -g -Wall -Iinclude -I../cpputil/include -I../particles/include -std=c++14 -fPIC  -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/analysis_nomain.o src/analysis.cpp;\
+	else  \
+	    ${CP} ${OBJECTDIR}/src/analysis.o ${OBJECTDIR}/src/analysis_nomain.o;\
+	fi
 
 ${OBJECTDIR}/src/cg-pol-water_nomain.o: ${OBJECTDIR}/src/cg-pol-water.o src/cg-pol-water.cpp 
 	${MKDIR} -p ${OBJECTDIR}/src
