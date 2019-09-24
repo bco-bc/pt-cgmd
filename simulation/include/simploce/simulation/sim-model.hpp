@@ -112,6 +112,18 @@ namespace simploce {
         void readFrom(std::istream& stream, const spec_catalog_ptr_t& catalog);
         
         /**
+         * Returns simulation box.
+         * @return Box.
+         */
+        box_ptr_t box() const { return box_; }
+        
+        /**
+         * Returns boundary condition.
+         * @return Boundary condition.
+         */
+        bc_ptr_t boundaryCondition() const { return bc_; }
+        
+        /**
          * Performs a 'task' with all particles. The given task must expose the 
          * operator 
          * <code>

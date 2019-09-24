@@ -352,7 +352,9 @@ namespace simploce {
             }
             free_.push_back(particle);
         }
-        std::getline(stream, stringBuffer);  // Read EOL.
+        if ( nfree > 0 ) {
+            std::getline(stream, stringBuffer);  // Read EOL.
+        }
         
         // Read particle groups.
         std::size_t ngroups;

@@ -91,10 +91,10 @@ namespace simploce {
          * @return Analyzer.
          */
         static std::shared_ptr<Gr<P>> create(const length_t& dr,
-                                                   const std::string& specName1, 
-                                                   const std::string& specName2,
-                                                   const box_ptr_t& box,
-                                                   const bc_ptr_t& bc);
+                                             const std::string& specName1, 
+                                             const std::string& specName2,
+                                             const box_ptr_t& box,
+                                             const bc_ptr_t& bc);
     
     private:
         

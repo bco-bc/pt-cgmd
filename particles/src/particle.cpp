@@ -118,7 +118,7 @@ namespace simploce {
         const auto space = conf::SPACE;
         
         stream << std::setw(10) << this->name();
-        stream << space << std::setw(10) << this->spec()->name();
+        stream << std::setw(10) << this->spec()->name();
         stream << space << std::setw(10) << this->id();
         stream << space << this->position();
         stream << space << this->momentum();

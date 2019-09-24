@@ -233,13 +233,13 @@ namespace simploce {
         
         stream << group.particles().size() << std::endl;
         for (auto p : group.particles() ) {
-            stream << space << p->index();
+            stream << space << p->id();
         }
         stream << std::endl;
         stream << group.bonds().size() << std::endl;
         for (auto bond : group.bonds() ) {
-            stream << space << bond.getParticleOne()->index()
-                   << space << bond.getParticleTwo()->index();
+            stream << space << bond.getParticleOne()->id()
+                   << space << bond.getParticleTwo()->id();
         }
         
         return stream;

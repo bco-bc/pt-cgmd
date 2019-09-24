@@ -6,7 +6,11 @@
  */
 
 #include "simploce/simulation/sall.hpp"
+#include "simploce/simulation/sconf.hpp"
+#include "simploce/analysis/gr.hpp"
+#include "simploce/analysis/analysis.hpp"
 #include "simploce/particle/particle-spec-catalog.hpp"
+#include "simploce/particle/bead.hpp"
 #include "simploce/util/file.hpp"
 #include <boost/program_options.hpp>
 #include <string>
@@ -19,12 +23,16 @@ using namespace simploce;
 
 int main(int argc, char *argv[])
 {
+  using gr_t = Gr<Bead>;
+  using gr_ptr_t = std::shared_ptr<gr_t>;
+  using analysis_t = Analysis<Bead>;
+  
   std::string fnParticleSpecCatalog{"particle-spec-catalog.dat"};
   std::string fnTrajectory{"trajectory.dat"};
   std::string fnInputModel{"in.model"};
   std::string fnResults{"gr.dat"};
-  std::string nameSpec1{"Na+"};
-  std::string nameSpec2{"Cl-"};
+  std::string specName1{"Na+"};
+  std::string specName2{"Cl-"};
   real_t dr{0.1};  // Bin size.
 
   po::options_description usage("Usage");
@@ -42,11 +50,11 @@ int main(int argc, char *argv[])
      "Input file name trajectory. Default is 'trajectory.dat'."
     )
     (
-     "name-spec-1", po::value<std::string>(&nameSpec1),
+     "spec-name-1", po::value<std::string>(&specName1),
      "First of two particle specifications names"
     )
     (
-     "name-spec-2", po::value<std::string>(&nameSpec2),
+     "spec-name-2", po::value<std::string>(&specName2),
      "Second of two particle specifications names"
     )
     (
@@ -80,10 +88,10 @@ int main(int argc, char *argv[])
   }
 
   if ( vm.count("name-spec-1") ) {
-    nameSpec1 = vm["name-spec-1"].as<std::string>();
+    specName1 = vm["name-spec-1"].as<std::string>();
   }
   if ( vm.count("name-spec-2") ) {
-    nameSpec2 = vm["name-spec-2"].as<std::string>();
+    specName2 = vm["name-spec-2"].as<std::string>();
   }
 
   // Read particle specifications.
@@ -92,52 +100,36 @@ int main(int argc, char *argv[])
   std::clog << *catalog << std::endl;
   
   sim_model_factory_ptr_t modelFactory = factory::modelFactory(catalog);
-  std::ifstream stream;
-  file::open_input(stream, fnInputModel);
-  cg_sim_model_ptr_t sm = modelFactory->readCoarseGrainedFrom(stream);
-  stream.close();
-  std::clog << *sm << std::endl;
-  
-
-  /*
-  Factory& factory = Factory::create(fnParticleCatalog);
-  particle_catalog_ptr_t particleCatalog = factory.particleCatalog();
-  force_field_fact_ptr_t forceFieldFactory = factory.forceFieldFactory();
   std::ifstream istream;
-  openInputFile(istream, fnModel);
-  mol_model_ptr_t model = std::make_shared<MolecularModel>();
-  model->readFromStream(istream, particleCatalog, forceFieldFactory);
-  std::clog << "Read molecular system from '" << fnModel << "'." << std::endl;
-  std::clog << *model << std::endl;
+  file::open_input(istream, fnInputModel);
+  cg_sim_model_ptr_t sm = modelFactory->readCoarseGrainedFrom(istream);
+  istream.close();
+  std::clog << *sm << std::endl;
 
-  // Set up analysis.
-  particle_spec_ptr_t spec1 = particleCatalog->lookup(name1);
-  particle_spec_ptr_t spec2 = particleCatalog->lookup(name2);
-  store_ptr_t traj = FileStore::createForParsing(fnTrajectory);
-  //analyzer_ptr_t gr = GR::make(spec1, spec2, traj);
-  GR gr{spec1, spec2, traj};
-
-  // Do analysis.
-  std::clog << "Calculating g(r)..." << std::endl;
-  gr.execute(model);
-  std::clog << "Done." << std::endl;
+  box_ptr_t box = sm->box();
+  bc_ptr_t bc = sm->boundaryCondition();
+  gr_ptr_t gr = gr_t::create(dr, specName1, specName2, box, bc);
+  
+  analysis_t analysis(sm, gr);
+  file::open_input(istream, fnTrajectory);
+  analysis.perform(istream);
+  istream.close();
 
   // Write results.
-  auto result = gr.getResult();
+  auto results = gr->results();
   std::ofstream ostream;
-  openOutputFile(ostream, fnResults);
+  file::open_output(ostream, fnResults);
   ostream.setf(std::ios::scientific);
-  ostream.precision(PRECISION);
-  for ( auto pair : result) {
-    ostream << std::setw(WIDTH) << pair.first;
-    ostream << SPACE << std::setw(WIDTH) << pair.second << std::endl;
+  ostream.precision(conf::PRECISION);
+  for ( auto pair : results) {
+    ostream << std::setw(conf::WIDTH) << pair.first;
+    ostream << conf::SPACE << std::setw(conf::WIDTH) << pair.second << std::endl;
   }
   ostream.flush();
   ostream.close();
     
   std::clog << std::endl;
   std::clog << "g(r) written to '" << fnResults << "'." << std::endl;
-  */
   
   return 0;
 }
