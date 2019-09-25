@@ -124,6 +124,12 @@ namespace simploce {
                 "g(r): Two particle specification names must be provided."
             );
         }
+        if ( !box_ ) {
+            throw std::domain_error("g(r): Missing simulation box.");
+        }
+        if ( !bc_ ) {
+            throw std::domain_error("g(r): Missing boundary conditions.");
+        }
     }
         
     template <typename P>
