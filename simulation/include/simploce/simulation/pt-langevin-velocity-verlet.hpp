@@ -23,38 +23,34 @@
  */
 
 /* 
- * File:   conf.hpp
+ * File:   pt-langevin-velocity-verlet.hpp
  * Author: André H. Juffer, Biocenter Oulu.
  *
- * Created on August 12, 2019, 4:12 PM
+ * Created on September 25, 2019, 2:41 PM
  */
 
-#ifndef PCONF_HPP
-#define PCONF_HPP
+#ifndef PT_LANGEVIN_VELOCITY_VERLET_HPP
+#define PT_LANGEVIN_VELOCITY_VERLET_HPP
 
-#include "ptypes.hpp"
-#include "simploce/util/uconf.hpp"
+#include "cg-displacer.hpp"
 
 namespace simploce {
-    namespace conf {
     
-        /**
-         * Width of a (particle, spec) name output field in an output stream.
-         */
-        const int NAME_WIDTH = 10;
+    class ProtonTransferLangevinVelocityVerlet : public CoarseGrainedDisplacer {
+    public:
         
-        /**
-         * Mass of a proton (u)
-         */
-        static mass_t MASS_PROTON = 1.007276466879;
+        ProtonTransferLangevinVelocityVerlet(const cg_interactor_ptr_t& interactor,
+                                             const pt_pair_list_gen_ptr_t& generator);
         
-        /**
-         * Charge of a proton (e).
-         */
-        static charge_t CHARGE_PROTON = 1.0;
+        SimulationData displace(const sim_param_t& param, 
+                                const cg_ptr_t& cg) const override;
         
-    }
+    private:
+        
+        cg_interactor_ptr_t interactor_;
+        pt_pair_list_gen_ptr_t generator_;
+    };
 }
 
-#endif /* CONF_HPP */
+#endif /* PT_LANGEVIN_VELOCITY_VERLET_HPP */
 

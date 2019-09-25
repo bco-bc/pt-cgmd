@@ -34,7 +34,7 @@ namespace simploce {
                        std::size_t index, 
                        const std::string& name, 
                        const particle_spec_ptr_t& spec) :
-        id_{id}, index_{index}, name_{name}, spec_{spec}, r_{}, p_{}, f_{}
+        id_{id}, index_{index}, name_{name}, spec_{spec}, r_{}, p_{}, v_{}, f_{}
     {
         if ( name_.empty() ) {
             throw std::domain_error("A particle name must be provided.");
@@ -90,12 +90,26 @@ namespace simploce {
     
     const momentum_t Particle::momentum() const
     { 
-        return p_; 
+        real_t ma = this->mass()();
+        return momentum_t{ma * v_[0], ma * v_[1], ma * v_[2]};
     }
     
     void Particle::momentum(const momentum_t& p) 
     { 
-        p_ = p; 
+        real_t ma = this->mass()();
+        for (std::size_t k = 0; k != 3; ++k) {
+            v_[k] = p[k] / ma;
+        }
+    }
+    
+    velocity_t Particle::velocity() const
+    {
+        return v_;
+    }
+    
+    void Particle::velocity(const velocity_t& v)
+    {
+        v_ = v;
     }
     
     const force_t Particle::force() const 

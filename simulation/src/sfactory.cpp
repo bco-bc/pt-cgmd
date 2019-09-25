@@ -38,6 +38,7 @@
 #include "simploce/simulation/langevin-velocity-verlet.hpp"
 #include "simploce/simulation/interactor.hpp"
 #include "simploce/simulation/model-factory.hpp"
+#include "simploce/simulation/pt-pair-list-generator.hpp"
 #include "simploce/simulation/pbc.hpp"
 #include "simploce/particle/bead.hpp"
 #include "simploce/particle/atom.hpp"
@@ -82,6 +83,8 @@ namespace simploce {
         
         // Interactor for coarse grained polarizable water.
         static std::shared_ptr<Interactor<Bead>> cgPolWaterInteractor_{};
+        
+        static pt_pair_list_gen_ptr_t ptPairlisGen_{};
                 
         static cg_ff_ptr_t 
         coarseGrainedPolarizableWaterForceField(const spec_catalog_ptr_t& catalog,
@@ -207,6 +210,16 @@ namespace simploce {
         cg_ptr_t coarseGrained()
         {
             return std::make_shared<CoarseGrained>();
+        }
+        
+        pt_pair_list_gen_ptr_t protonTransferPairListGenerator(const length_t& rmax,
+                                                               const bc_ptr_t& bc)
+        {
+            if ( !ptPairlisGen_) {
+                ptPairlisGen_ = 
+                    std::make_shared<ProtonTransferPairListGenerator>(rmax, bc);
+            }
+            return ptPairlisGen_;
         }
         
     }

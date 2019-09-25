@@ -23,38 +23,44 @@
  */
 
 /* 
- * File:   conf.hpp
- * Author: André H. Juffer, Biocenter Oulu.
+ * File:   pt-pairlist-test.cpp
+ * Author: ajuffer
  *
- * Created on August 12, 2019, 4:12 PM
+ * Created on September 25, 2019, 3:54 PM
  */
 
-#ifndef PCONF_HPP
-#define PCONF_HPP
+#include "simploce/simulation/pt-pair-list-generator.hpp"
+#include "simploce/simulation/sfactory.hpp"
+#include <cstdlib>
+#include <iostream>
+#include <memory>
 
-#include "ptypes.hpp"
-#include "simploce/util/uconf.hpp"
+using namespace simploce;
 
-namespace simploce {
-    namespace conf {
+/*
+ * Simple C++ Test Suite
+ */
+
+void test1() {
+    std::cout << "pt-pairlist-test test 1" << std::endl;
     
-        /**
-         * Width of a (particle, spec) name output field in an output stream.
-         */
-        const int NAME_WIDTH = 10;
-        
-        /**
-         * Mass of a proton (u)
-         */
-        static mass_t MASS_PROTON = 1.007276466879;
-        
-        /**
-         * Charge of a proton (e).
-         */
-        static charge_t CHARGE_PROTON = 1.0;
-        
-    }
+    box_ptr_t box = std::make_shared<box_t>(7.0);
+    bc_ptr_t bc = factory::pbc(box);
+    ProtonTransferPairListGenerator(0.3, bc);
+    
+    pt_pair_list_gen_ptr_t generator = factory::protonTransferPairListGenerator(0.3, bc);
 }
 
-#endif /* CONF_HPP */
+int main(int argc, char** argv) {
+    std::cout << "%SUITE_STARTING% pt-pairlist-test" << std::endl;
+    std::cout << "%SUITE_STARTED%" << std::endl;
+
+    std::cout << "%TEST_STARTED% test1 (pt-pairlist-test)" << std::endl;
+    test1();
+    std::cout << "%TEST_FINISHED% time=0 test1 (pt-pairlist-test)" << std::endl;
+
+    std::cout << "%SUITE_FINISHED% time=0" << std::endl;
+
+    return (EXIT_SUCCESS);
+}
 

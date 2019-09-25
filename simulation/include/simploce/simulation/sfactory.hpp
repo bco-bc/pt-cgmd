@@ -142,6 +142,16 @@ namespace simploce {
          * @return Model.
          */
         cg_ptr_t coarseGrained();
+        
+        /**
+         * Returns generator of pairs of protonatable beads possibly involved in proton
+         * transfer.
+         * @param rmax Max distance between protonatable beads.
+         * @param bc Boundary condition.
+         * @return Generator.
+         */
+        pt_pair_list_gen_ptr_t protonTransferPairListGenerator(const length_t& rmax,
+                                                               const bc_ptr_t& bc);
     }
 }
 

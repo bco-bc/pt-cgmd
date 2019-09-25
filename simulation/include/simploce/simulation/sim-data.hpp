@@ -60,6 +60,11 @@ namespace simploce {
          * Temperature.
          */
         temperature_t temperature;
+        
+        /**
+         * Number of particle pairs possibly involved in proton transfer.
+         */
+        std::size_t numberOfProtonTransferPairs;
     };
     
     /**

@@ -44,6 +44,8 @@ OBJECTFILES= \
 	${OBJECTDIR}/src/model-factory.o \
 	${OBJECTDIR}/src/no-bc.o \
 	${OBJECTDIR}/src/pbc.o \
+	${OBJECTDIR}/src/pt-langevin-velocity-verlet.o \
+	${OBJECTDIR}/src/pt-pair-list-generator.o \
 	${OBJECTDIR}/src/sfactory.o \
 	${OBJECTDIR}/src/sim-data.o \
 	${OBJECTDIR}/src/sim-model.o \
@@ -59,6 +61,7 @@ TESTFILES= \
 	${TESTDIR}/TestFiles/f5 \
 	${TESTDIR}/TestFiles/f3 \
 	${TESTDIR}/TestFiles/f4 \
+	${TESTDIR}/TestFiles/f6 \
 	${TESTDIR}/TestFiles/f2
 
 # Test Object Files
@@ -67,6 +70,7 @@ TESTOBJECTFILES= \
 	${TESTDIR}/tests/gr-test.o \
 	${TESTDIR}/tests/model-factory-test.o \
 	${TESTDIR}/tests/pair-list-test.o \
+	${TESTDIR}/tests/pt-pairlist-test.o \
 	${TESTDIR}/tests/simulation-test.o
 
 # C Compiler Flags
@@ -142,6 +146,16 @@ ${OBJECTDIR}/src/pbc.o: src/pbc.cpp
 	${RM} "$@.d"
 	$(COMPILE.cc) -O2 -Wall -Iinclude -I../cpputil/include -I../particles/include -std=c++14 -fPIC  -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/pbc.o src/pbc.cpp
 
+${OBJECTDIR}/src/pt-langevin-velocity-verlet.o: src/pt-langevin-velocity-verlet.cpp
+	${MKDIR} -p ${OBJECTDIR}/src
+	${RM} "$@.d"
+	$(COMPILE.cc) -O2 -Wall -Iinclude -I../cpputil/include -I../particles/include -std=c++14 -fPIC  -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/pt-langevin-velocity-verlet.o src/pt-langevin-velocity-verlet.cpp
+
+${OBJECTDIR}/src/pt-pair-list-generator.o: src/pt-pair-list-generator.cpp
+	${MKDIR} -p ${OBJECTDIR}/src
+	${RM} "$@.d"
+	$(COMPILE.cc) -O2 -Wall -Iinclude -I../cpputil/include -I../particles/include -std=c++14 -fPIC  -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/pt-pair-list-generator.o src/pt-pair-list-generator.cpp
+
 ${OBJECTDIR}/src/sfactory.o: src/sfactory.cpp
 	${MKDIR} -p ${OBJECTDIR}/src
 	${RM} "$@.d"
@@ -192,6 +206,10 @@ ${TESTDIR}/TestFiles/f4: ${TESTDIR}/tests/pair-list-test.o ${OBJECTFILES:%.o=%_n
 	${MKDIR} -p ${TESTDIR}/TestFiles
 	${LINK.cc} -o ${TESTDIR}/TestFiles/f4 $^ ${LDLIBSOPTIONS}   
 
+${TESTDIR}/TestFiles/f6: ${TESTDIR}/tests/pt-pairlist-test.o ${OBJECTFILES:%.o=%_nomain.o}
+	${MKDIR} -p ${TESTDIR}/TestFiles
+	${LINK.cc} -o ${TESTDIR}/TestFiles/f6 $^ ${LDLIBSOPTIONS}   
+
 ${TESTDIR}/TestFiles/f2: ${TESTDIR}/tests/simulation-test.o ${OBJECTFILES:%.o=%_nomain.o}
 	${MKDIR} -p ${TESTDIR}/TestFiles
 	${LINK.cc} -o ${TESTDIR}/TestFiles/f2 $^ ${LDLIBSOPTIONS}   
@@ -219,6 +237,12 @@ ${TESTDIR}/tests/pair-list-test.o: tests/pair-list-test.cpp
 	${MKDIR} -p ${TESTDIR}/tests
 	${RM} "$@.d"
 	$(COMPILE.cc) -O2 -Wall -Iinclude -I../cpputil/include -I../particles/include -I. -std=c++14 -MMD -MP -MF "$@.d" -o ${TESTDIR}/tests/pair-list-test.o tests/pair-list-test.cpp
+
+
+${TESTDIR}/tests/pt-pairlist-test.o: tests/pt-pairlist-test.cpp 
+	${MKDIR} -p ${TESTDIR}/tests
+	${RM} "$@.d"
+	$(COMPILE.cc) -O2 -Wall -Iinclude -I../cpputil/include -I../particles/include -I. -std=c++14 -MMD -MP -MF "$@.d" -o ${TESTDIR}/tests/pt-pairlist-test.o tests/pt-pairlist-test.cpp
 
 
 ${TESTDIR}/tests/simulation-test.o: tests/simulation-test.cpp 
@@ -344,6 +368,32 @@ ${OBJECTDIR}/src/pbc_nomain.o: ${OBJECTDIR}/src/pbc.o src/pbc.cpp
 	    ${CP} ${OBJECTDIR}/src/pbc.o ${OBJECTDIR}/src/pbc_nomain.o;\
 	fi
 
+${OBJECTDIR}/src/pt-langevin-velocity-verlet_nomain.o: ${OBJECTDIR}/src/pt-langevin-velocity-verlet.o src/pt-langevin-velocity-verlet.cpp 
+	${MKDIR} -p ${OBJECTDIR}/src
+	@NMOUTPUT=`${NM} ${OBJECTDIR}/src/pt-langevin-velocity-verlet.o`; \
+	if (echo "$$NMOUTPUT" | ${GREP} '|main$$') || \
+	   (echo "$$NMOUTPUT" | ${GREP} 'T main$$') || \
+	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
+	then  \
+	    ${RM} "$@.d";\
+	    $(COMPILE.cc) -O2 -Wall -Iinclude -I../cpputil/include -I../particles/include -std=c++14 -fPIC  -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/pt-langevin-velocity-verlet_nomain.o src/pt-langevin-velocity-verlet.cpp;\
+	else  \
+	    ${CP} ${OBJECTDIR}/src/pt-langevin-velocity-verlet.o ${OBJECTDIR}/src/pt-langevin-velocity-verlet_nomain.o;\
+	fi
+
+${OBJECTDIR}/src/pt-pair-list-generator_nomain.o: ${OBJECTDIR}/src/pt-pair-list-generator.o src/pt-pair-list-generator.cpp 
+	${MKDIR} -p ${OBJECTDIR}/src
+	@NMOUTPUT=`${NM} ${OBJECTDIR}/src/pt-pair-list-generator.o`; \
+	if (echo "$$NMOUTPUT" | ${GREP} '|main$$') || \
+	   (echo "$$NMOUTPUT" | ${GREP} 'T main$$') || \
+	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
+	then  \
+	    ${RM} "$@.d";\
+	    $(COMPILE.cc) -O2 -Wall -Iinclude -I../cpputil/include -I../particles/include -std=c++14 -fPIC  -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/pt-pair-list-generator_nomain.o src/pt-pair-list-generator.cpp;\
+	else  \
+	    ${CP} ${OBJECTDIR}/src/pt-pair-list-generator.o ${OBJECTDIR}/src/pt-pair-list-generator_nomain.o;\
+	fi
+
 ${OBJECTDIR}/src/sfactory_nomain.o: ${OBJECTDIR}/src/sfactory.o src/sfactory.cpp 
 	${MKDIR} -p ${OBJECTDIR}/src
 	@NMOUTPUT=`${NM} ${OBJECTDIR}/src/sfactory.o`; \
@@ -417,6 +467,7 @@ ${OBJECTDIR}/src/velocity-verlet_nomain.o: ${OBJECTDIR}/src/velocity-verlet.o sr
 	    ${TESTDIR}/TestFiles/f5 || true; \
 	    ${TESTDIR}/TestFiles/f3 || true; \
 	    ${TESTDIR}/TestFiles/f4 || true; \
+	    ${TESTDIR}/TestFiles/f6 || true; \
 	    ${TESTDIR}/TestFiles/f2 || true; \
 	else  \
 	    ./${TEST} || true; \

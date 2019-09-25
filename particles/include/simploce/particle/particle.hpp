@@ -101,16 +101,29 @@ namespace simploce {
         void position(const position_t& r);
         
         /**
-         * Returns linear momentum.
+         * Returns linear momentum. Computes as mass * v where v is the particle's velocity.
          * @return Momentum.
          */
         const momentum_t momentum() const;
         
         /**
-         * Set momentum.
+         * Sets linear momentum. This actually sets the velocity as the particle is 
+         * assumed to have constant mass.
          * @param p Momentum.
          */
         void momentum(const momentum_t& p);
+        
+        /**
+         * Returns velocity.
+         * @return Velocity.
+         */
+        velocity_t velocity() const;
+        
+        /**
+         * Sets velocity.
+         * @param v Velocity.
+         */
+        void velocity(const velocity_t& v);
         
         /**
          * Returns force acting on this particle.
@@ -177,6 +190,7 @@ namespace simploce {
         particle_spec_ptr_t spec_;
         position_t r_;
         momentum_t p_;
+        velocity_t v_;
         force_t f_;
         
     };

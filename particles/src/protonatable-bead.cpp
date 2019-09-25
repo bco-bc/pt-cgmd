@@ -38,6 +38,31 @@
 
 namespace simploce {
     
+    ProtonatableBead::~ProtonatableBead()
+    {        
+    }
+    
+    charge_t ProtonatableBead::charge() const 
+    {
+        // Fully deprotonated state.
+        charge_t charge = Particle::charge();
+        
+        // Correct for bound proton.
+        charge += this->protonationState() * conf::CHARGE_PROTON;
+        return charge;
+    }
+    
+    mass_t ProtonatableBead::mass() const
+    {
+        // Fully deprotonated state.
+        mass_t mass = Particle::mass();
+        
+        // Correct for bound proton.
+        mass += this->protonationState() * conf::MASS_PROTON;
+        
+        return mass;
+    }
+    
     void ProtonatableBead::protonate()
     {
         numberOfBoundProtons_ += 1;
@@ -47,7 +72,7 @@ namespace simploce {
     {
         if ( !this->isProtonated() ) {
             throw std::domain_error(
-                "Illegal attempt to deprotonate an already deprotonated bead."
+                "Illegal attempt to deprotonate an already fully deprotonated bead."
             );
         }
         numberOfBoundProtons_ -= 1;              
@@ -61,10 +86,6 @@ namespace simploce {
     std::size_t ProtonatableBead::protonationState() const
     {
         return numberOfBoundProtons_;
-    }
-    
-    ProtonatableBead::~ProtonatableBead()
-    {        
     }
     
     void ProtonatableBead::write(std::ostream& stream) const
@@ -89,15 +110,6 @@ namespace simploce {
         stream >> this->numberOfBoundProtons_;        
     }
     
-    ProtonatableBead::ProtonatableBead(std::size_t id,
-                                       std::size_t index, 
-                                       const std::string& name,
-                                       std::size_t numberOfBoundProtons,
-                                       const bead_spec_ptr_t& spec) :
-        Bead(id, index, name, spec), numberOfBoundProtons_(numberOfBoundProtons)
-    {        
-    }
-    
     prot_bead_ptr_t ProtonatableBead::create(std::size_t id,
                                              std::size_t index, 
                                              const std::string& name,
@@ -115,6 +127,15 @@ namespace simploce {
                                                     name, 
                                                     numberOfBoundProtons, 
                                                     spec));
+    }
+    
+    ProtonatableBead::ProtonatableBead(std::size_t id,
+                                       std::size_t index, 
+                                       const std::string& name,
+                                       std::size_t numberOfBoundProtons,
+                                       const bead_spec_ptr_t& spec) :
+        Bead(id, index, name, spec), numberOfBoundProtons_(numberOfBoundProtons)
+    {        
     }
     
     std::ostream& operator << (std::ostream& stream, const ProtonatableBead& pbead)

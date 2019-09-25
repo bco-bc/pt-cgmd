@@ -27,7 +27,7 @@
  * Author: André H. Juffer, Biocenter Oulu.
  * Created on September 12, 2019, 11:53 AM
  * 
- * Include this to include all in applications employing this library.
+ * Include this to include all in client applications.
  */
 
 #ifndef SALL_HPP
@@ -56,6 +56,7 @@
 #include "simulation.hpp"
 #include "sproperties.hpp"
 #include "velocity-verlet.hpp"
+#include "pt-pair-list-generator.hpp"
 
 #endif /* SALL_HPP */
 

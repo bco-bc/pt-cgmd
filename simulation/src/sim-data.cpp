@@ -36,7 +36,7 @@
 namespace simploce {
     
     SimulationData::SimulationData() :
-        t{0.0}, ekin{0.0}, epot{0.0}, temperature{0.0}
+        t{0.0}, ekin{0.0}, epot{0.0}, temperature{0.0}, numberOfProtonTransferPairs{0}
     {            
     }
         

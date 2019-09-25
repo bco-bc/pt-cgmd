@@ -46,6 +46,7 @@ namespace simploce {
     class AtomisticDisplacer;
     class AtomisticForceField;
     class ModelFactory;
+    class ProtonTransferPairListGenerator;
     
     // P is particle type, e.g. Atom or Bead.
     template <typename P>
@@ -57,7 +58,7 @@ namespace simploce {
     
     // P is particle type, e.g. Atom or Bead.
     template <typename P>
-    class SimulationModel;
+    class SimulationModel;    
     
     using temperature_t = simploce::value_t<real_t, 100>;
     
@@ -70,8 +71,6 @@ namespace simploce {
     using number_density_t = simploce::value_t<real_t, 104>;
     
     using molarity_t = simploce::value_t<real_t, 105>;
-    
-    using velocity_t = simploce::cvector_t<real_t, 100>;
     
     using box_t = Cube<real_t>;
     
@@ -144,6 +143,11 @@ namespace simploce {
      * t.get<2> is the number of pairs.
      */
     using range_t = std::tuple<std::size_t, std::size_t, std::size_t>;
+    
+    /**
+     * Protonatable beads pair list generator pointer type.
+     */
+    using pt_pair_list_gen_ptr_t = std::shared_ptr<ProtonTransferPairListGenerator>;
     
 }
 

@@ -107,6 +107,11 @@ namespace simploce {
     using force_t = cvector_t<real_t, 3>;
     
     /**
+     * Velocity.
+     */
+    using velocity_t = cvector_t<real_t, 4>;
+    
+    /**
      * Distance (difference) type
      */
     using dist_vect_t = position_t;        

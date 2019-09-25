@@ -23,38 +23,60 @@
  */
 
 /* 
- * File:   conf.hpp
+ * File:   pt-pair-list-generator.hpp
  * Author: André H. Juffer, Biocenter Oulu.
  *
- * Created on August 12, 2019, 4:12 PM
+ * Created on September 25, 2019, 1:05 PM
  */
 
-#ifndef PCONF_HPP
-#define PCONF_HPP
+#ifndef PT_PAIR_LIST_GENERATOR_HPP
+#define PT_PAIR_LIST_GENERATOR_HPP
 
-#include "ptypes.hpp"
-#include "simploce/util/uconf.hpp"
+#include "stypes.hpp"
+#include <memory>
+#include <utility>
 
 namespace simploce {
-    namespace conf {
     
-        /**
-         * Width of a (particle, spec) name output field in an output stream.
-         */
-        const int NAME_WIDTH = 10;
+    /**
+     * Finds pairs of beads that may be involved in transferring protons.
+     */
+    class ProtonTransferPairListGenerator {
+    public:
         
         /**
-         * Mass of a proton (u)
+         * Particle pair type.
          */
-        static mass_t MASS_PROTON = 1.007276466879;
+        using prot_bead_pair_t = std::pair<prot_bead_ptr_t, prot_bead_ptr_t>;
         
         /**
-         * Charge of a proton (e).
+         * Particle pair lists type.
          */
-        static charge_t CHARGE_PROTON = 1.0;
+        using prot_bead_pair_list_t = std::vector<prot_bead_pair_t>;
         
-    }
+        /**
+         * Constructor 
+         * @param rmax Maximum distance for two protonatable beads to be involved
+         * in proton transfer.
+         * @param bc Boundary condition.
+         */
+        ProtonTransferPairListGenerator(const length_t& rmax,
+                                        const bc_ptr_t& bc);
+        
+        /**
+         * Generates protonatable bead pair list.
+         * @param cg Coarse grained particle model.
+         * @return List of pairs of beads possibly involved in proton transfer.
+         */
+        prot_bead_pair_list_t generate(const cg_ptr_t& cg) const;
+        
+    private:
+        
+        length_t rmax_;
+        bc_ptr_t bc_;
+        
+    };
 }
 
-#endif /* CONF_HPP */
+#endif /* PT_PAIR_LIST_GENERATOR_HPP */
 

@@ -28,7 +28,7 @@
  *
  * Created on September 12, 2019, 12:31 PM
  * 
- * Include this to include all in applications employing this library.
+ * Include this to include all in client applications.
  */
 
 #ifndef PALL_HPP

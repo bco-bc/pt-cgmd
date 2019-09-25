@@ -52,7 +52,6 @@ namespace simploce {
     
     static std::vector<force_t> fis_{};      // Forces at time t(n).
     static std::vector<position_t> ris_{};   // Positions at time t(n).
-    static std::vector<momentum_t> pis_{};   // Momenta at time t(n).
     
     // Random vector, each element is a array of size 3.
     static std::random_device rd_;
@@ -83,7 +82,6 @@ namespace simploce {
         
         fis_ = std::vector<force_t>(nparticles, force_t{});
         ris_ = std::vector<position_t>(nparticles, position_t{});
-        pis_ = std::vector<momentum_t>(nparticles, momentum_t{});
         
         W_ = std::vector<std::array<real_t, 3>>(nparticles, std::array<real_t, 3>{0.0, 0.0, 0.0});
         auto value = util::seedValue<std::size_t>();
@@ -96,7 +94,7 @@ namespace simploce {
             mass_t mass2 = mass * 2.0;
             real_t fc =  mass() * gamma;                          // Friction coefficient in u/ps.
             frictionCoefficients_[index] = fc;                    // Save friction coefficient for 
-                                                                  // momentum update.
+                                                                  // velocity update.
 
             // All kinds of constant factors for each particle.
             B_[index] = 1.0 / ( 1.0 + fc * dt() / mass2() );      // No units.
@@ -130,9 +128,6 @@ namespace simploce {
         for (std::size_t index = 0; index != particles.size(); ++index) {
             auto& particle = *particles[index];
     
-            // Some required values.
-            mass_t mass = particle.mass();
-
             // Update position, not momentum.
             static std::array<real_t, 3> w;            // Random vector at t(n+1).
             w[0] = dis_(gen_);
@@ -143,8 +138,7 @@ namespace simploce {
             force_t fi = particle.force();             // Force (kJ/(mol nm) = (u nm)/(ps^2))
             fis_[index] = fi;                          // at time t(n).
       
-            momentum_t pi = particle.momentum();       // Momentum (u nm/ps) at time t(n).
-            pis_[index] = pi;                          // Save for next step.
+            velocity_t vi = particle.velocity();       // Velocity (nm/ps) at time t(n).
             position_t ri = particle.position();       // Position at time t(n).
             ris_[index] = ri;                          // Save for momentum update.
             static position_t rf;
@@ -153,9 +147,8 @@ namespace simploce {
             real_t a2 = A2_[index];                    // ps^2/u
             real_t strength = strengths_[index];
             for (std::size_t k = 0; k != 3; ++k) { 
-                real_t vi = pi[k] / mass();            // Velocity (nm/ps) at time t(n)
                 rf[k] = ri[k] +
-                    b * dt() * vi +
+                    b * dt() * vi[k] +
                     b * a2 * fi[k] +
                     b * a1 * strength * w[k];          // Position at time t(n+1).
             }
@@ -166,7 +159,7 @@ namespace simploce {
     }
     
     template <typename T>
-    SimulationData displaceMomentum_(const std::vector<std::shared_ptr<T>>& particles)
+    SimulationData displaceVelocity_(const std::vector<std::shared_ptr<T>>& particles)
     {
         SimulationData data;
         
@@ -186,7 +179,7 @@ namespace simploce {
       
             force_t ff = particle.force();             // Force (kJ/(mol nm) = (u nm)/(ps^2))
                                                        // at time t(n+1).
-            momentum_t pi = particle.momentum();       // Momentum (u nm/ps) at time t(n).
+            velocity_t vi = particle.velocity();       // velocity (nm/ps) at time t(n).
             position_t rf = particle.position();       // Position at time t(n+1).
       
             real_t fc = frictionCoefficients_[index];
@@ -196,15 +189,14 @@ namespace simploce {
             static velocity_t vf{};
             static momentum_t pf{};
             for (std::size_t k = 0; k != 3; ++k) {
-                vf[k] = pi[k] / mass() +
+                vf[k] = vi[k] +
                     a1 * ( fi[k] + ff[k] ) -
                     fc * ( rf[k] - ri[k] ) / mass() +
                     strength * w[k] / mass();          // Velocity at time t(n+1).
-                pf[k] = mass() * vf[k];                // Momentum (u nm/ps) at time t(n+1). 
             }
       
-            // Update momentum.
-            particle.momentum(pf);
+            // Update velocity.
+            particle.velocity(vf);
       
             // Kinetic energy at time t(n+1)..
             data.ekin += 0.5 * mass() * inner<real_t>(vf, vf);
@@ -230,8 +222,8 @@ namespace simploce {
         static bool setup = false;
 
         static stime_t dt{0.0};
-        static temperature_t temperature{298.15};
-        static real_t gamma{0.5};
+        static temperature_t temperature{0.0};
+        static real_t gamma{0.0};
         static std::size_t counter = 0;
 
         if ( !setup ) {            
@@ -259,7 +251,7 @@ namespace simploce {
         energy_t epot = interactor_->interact(param, at);
         
         SimulationData data = at->doWithAll<SimulationData>([] (const std::vector<atom_ptr_t>& atoms) {
-            return displaceMomentum_<Atom>(atoms);
+            return displaceVelocity_<Atom>(atoms);
         });
         data.epot = epot;
         
@@ -314,7 +306,7 @@ namespace simploce {
         energy_t epot = interactor_->interact(param, cg);
         
         SimulationData data = cg->doWithAll<SimulationData>([] (const std::vector<bead_ptr_t>& beads) {
-            return displaceMomentum_<Bead>(beads);
+            return displaceVelocity_<Bead>(beads);
         });
         data.epot = epot;
         

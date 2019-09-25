@@ -34,18 +34,24 @@
 
 #include "bead.hpp"
 #include "protonatable.hpp"
+#include "ptypes.hpp"
 #include <iostream>
 
 namespace simploce {
     
     /**
      * A bead capable of binding and releasing protons. There is no upper limit for
-     * the number of bound protons.
+     * the number of bound protons. A protonatable bead will display fluctuating mass 
+     * and charge values.
      */
     class ProtonatableBead: public Bead, Protonatable {
     public:
         
         virtual ~ProtonatableBead();
+        
+        virtual charge_t charge() const override;
+        
+        virtual mass_t mass() const override;
         
         void protonate() override;
         
@@ -59,7 +65,7 @@ namespace simploce {
         
         void writeState(std::ostream& stream) const override;
         
-        void readState(std::istream& stream) override;
+        void readState(std::istream& stream) override;                
         
     private:
         
@@ -77,7 +83,8 @@ namespace simploce {
                          std::size_t numberOfBoundProtons,
                          const bead_spec_ptr_t &spec);
                
-        std::size_t numberOfBoundProtons_;        
+        std::size_t numberOfBoundProtons_;
+        real_t current_t I_;
     };
     
     /**
