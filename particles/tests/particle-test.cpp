@@ -58,11 +58,12 @@ void test3()
     CoarseGrained coarseGrained;
     bead_spec_ptr_t spec = 
             ParticleSpec::createForProtonatableBead("COOH", charge_t{-1.0}, 5.0, 3.0, 7.9);
-    prot_bead_ptr_t pb = coarseGrained.addBead(1, "COOH", position_t{}, spec);
-    pb->protonate();
-    std::cot << "Protonated:" << std::endl;
-    std::cout << "Charge: " << pb->charge() << std::endl;
-    std::cout << "Charge: " << pb->charge() << std::endl;
+    dprot_bead_ptr_t bead = 
+            coarseGrained.addProtonatableBead(1, "COOH", position_t{}, 0, spec);
+    bead->protonate();
+    std::cout << "Protonated:" << std::endl;
+    std::cout << "Charge: " << bead->charge() << std::endl;
+    std::cout << "Charge: " << bead->charge() << std::endl;
     
     coarseGrained.doWithAll<void>([] (const std::vector<bead_ptr_t>& beads) {
         for (auto bead : beads) {

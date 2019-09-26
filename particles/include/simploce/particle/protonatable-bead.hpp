@@ -40,9 +40,7 @@
 namespace simploce {
     
     /**
-     * A bead capable of binding and releasing protons. There is no upper limit for
-     * the number of bound protons. A protonatable bead will display fluctuating mass 
-     * and charge values.
+     * Protonatable undergoing -discrete- changes in mass and charge values. 
      */
     class ProtonatableBead: public Bead, Protonatable {
     public:
@@ -65,17 +63,17 @@ namespace simploce {
         
         void writeState(std::ostream& stream) const override;
         
-        void readState(std::istream& stream) override;                
+        void readState(std::istream& stream) override;        
         
     private:
         
         friend class CoarseGrained;
         
-        static prot_bead_ptr_t create(std::size_t id,
-                                      std::size_t index, 
-                                      const std::string& name,
-                                      std::size_t numberOfBoundProtons,
-                                      const bead_spec_ptr_t& spec);
+        static dprot_bead_ptr_t create(std::size_t id,
+                                       std::size_t index, 
+                                       const std::string& name,
+                                       std::size_t numberOfBoundProtons,
+                                       const bead_spec_ptr_t& spec);
                 
         ProtonatableBead(std::size_t id,
                          std::size_t index, 
@@ -84,7 +82,6 @@ namespace simploce {
                          const bead_spec_ptr_t &spec);
                
         std::size_t numberOfBoundProtons_;
-        real_t current_t I_;
     };
     
     /**
@@ -93,7 +90,7 @@ namespace simploce {
      * @param pbead Protonatable bead.
      * @return Output stream.
      */
-    std::ostream& operator << (std::ostream& stream, const ProtonatableBead& pbeab);
+    std::ostream& operator << (std::ostream& stream, const ProtonatableBead& bead);
 }
 
 #endif /* PROTONATABLE_BEAD_HPP */

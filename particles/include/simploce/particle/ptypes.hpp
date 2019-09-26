@@ -44,6 +44,7 @@ namespace simploce {
     class Atom;
     class Bead;
     class ProtonatableBead;
+    class ProtonatingBead;
     class ParticleSpec;    
     class ParticleSpecCatalog;
     class ProtonationSiteCatalog;
@@ -136,10 +137,15 @@ namespace simploce {
      */
     using bead_ptr_t = std::shared_ptr<Bead>;        
     
-    /**
-     * Protonatable bead pointer type.
+    /*
+     * Protonatable (discrete) bead pointer type.
      */
-    using prot_bead_ptr_t = std::shared_ptr<ProtonatableBead>;
+    using dprot_bead_ptr_t = std::shared_ptr<ProtonatableBead>;
+    
+    /**
+     * Protonatable (continouos) bead pointer type.
+     */
+    using cprot_bead_ptr_t = std::shared_ptr<ProtonatingBead>;
     
     /**
      * Particle specification pointer type

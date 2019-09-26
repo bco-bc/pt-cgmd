@@ -44,6 +44,7 @@ OBJECTFILES= \
 	${OBJECTDIR}/src/particle.o \
 	${OBJECTDIR}/src/pfactory.o \
 	${OBJECTDIR}/src/protonatable-bead.o \
+	${OBJECTDIR}/src/protonating-bead.o \
 	${OBJECTDIR}/src/protonation-site-catalog.o
 
 # Test Directory
@@ -137,6 +138,11 @@ ${OBJECTDIR}/src/protonatable-bead.o: src/protonatable-bead.cpp
 	${MKDIR} -p ${OBJECTDIR}/src
 	${RM} "$@.d"
 	$(COMPILE.cc) -O2 -Wall -Iinclude -I../cpputil/include -std=c++14 -fPIC  -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/protonatable-bead.o src/protonatable-bead.cpp
+
+${OBJECTDIR}/src/protonating-bead.o: src/protonating-bead.cpp
+	${MKDIR} -p ${OBJECTDIR}/src
+	${RM} "$@.d"
+	$(COMPILE.cc) -O2 -Wall -Iinclude -I../cpputil/include -std=c++14 -fPIC  -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/protonating-bead.o src/protonating-bead.cpp
 
 ${OBJECTDIR}/src/protonation-site-catalog.o: src/protonation-site-catalog.cpp
 	${MKDIR} -p ${OBJECTDIR}/src
@@ -327,6 +333,19 @@ ${OBJECTDIR}/src/protonatable-bead_nomain.o: ${OBJECTDIR}/src/protonatable-bead.
 	    $(COMPILE.cc) -O2 -Wall -Iinclude -I../cpputil/include -std=c++14 -fPIC  -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/protonatable-bead_nomain.o src/protonatable-bead.cpp;\
 	else  \
 	    ${CP} ${OBJECTDIR}/src/protonatable-bead.o ${OBJECTDIR}/src/protonatable-bead_nomain.o;\
+	fi
+
+${OBJECTDIR}/src/protonating-bead_nomain.o: ${OBJECTDIR}/src/protonating-bead.o src/protonating-bead.cpp 
+	${MKDIR} -p ${OBJECTDIR}/src
+	@NMOUTPUT=`${NM} ${OBJECTDIR}/src/protonating-bead.o`; \
+	if (echo "$$NMOUTPUT" | ${GREP} '|main$$') || \
+	   (echo "$$NMOUTPUT" | ${GREP} 'T main$$') || \
+	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
+	then  \
+	    ${RM} "$@.d";\
+	    $(COMPILE.cc) -O2 -Wall -Iinclude -I../cpputil/include -std=c++14 -fPIC  -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/protonating-bead_nomain.o src/protonating-bead.cpp;\
+	else  \
+	    ${CP} ${OBJECTDIR}/src/protonating-bead.o ${OBJECTDIR}/src/protonating-bead_nomain.o;\
 	fi
 
 ${OBJECTDIR}/src/protonation-site-catalog_nomain.o: ${OBJECTDIR}/src/protonation-site-catalog.o src/protonation-site-catalog.cpp 

@@ -91,7 +91,8 @@ namespace simploce {
     const momentum_t Particle::momentum() const
     { 
         real_t ma = this->mass()();
-        return momentum_t{ma * v_[0], ma * v_[1], ma * v_[2]};
+        velocity_t vv = ma * v_;
+        return momentum_t{vv.toArray()};
     }
     
     void Particle::momentum(const momentum_t& p) 
@@ -135,7 +136,7 @@ namespace simploce {
         stream << std::setw(10) << this->spec()->name();
         stream << space << std::setw(10) << this->id();
         stream << space << this->position();
-        stream << space << this->momentum();
+        stream << space << this->velocity();
     }
     
     void Particle::writeState(std::ostream& stream) const
@@ -143,17 +144,17 @@ namespace simploce {
         const auto space = conf::SPACE;
         
         stream << space << this->position();
-        stream << space << this->momentum();
+        stream << space << this->velocity();
     }
     
     void Particle::readState(std::istream& stream)
     {
-        real_t x, y, z, px, py, pz;
-        stream >> x >> y >> z >> px >> py >> pz;
+        real_t x, y, z, vx, vy, vz;
+        stream >> x >> y >> z >> vx >> vy >> vz;
         position_t r{x, y, z};
-        momentum_t p{px, py, pz};
+        velocity_t v{vx, vy, vz};
         this->position(r);
-        this->momentum(p);
+        this->velocity(v);
     }
     
     void Particle::reset_(const particle_spec_ptr_t &spec)

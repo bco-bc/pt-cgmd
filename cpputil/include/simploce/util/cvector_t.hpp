@@ -136,6 +136,12 @@ namespace simploce {
          * Resets all components to zero.
          */
         void reset();
+        
+        /**
+         * Returns all elements.
+         * @return Elements.
+         */
+        std::array<V,3> toArray() { return elems_; }
 
     private:
         

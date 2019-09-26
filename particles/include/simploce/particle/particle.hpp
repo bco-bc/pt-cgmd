@@ -39,7 +39,7 @@
 namespace simploce {
     
     /**
-     * Recognizable unit composing the physical system at any time. Has location,
+     * Recognisable unit composing the physical system at any time. Has location,
      * feels forces, and may be moving. Also, has charge and mass.
      */
     class Particle {
@@ -101,14 +101,15 @@ namespace simploce {
         void position(const position_t& r);
         
         /**
-         * Returns linear momentum. Computes as mass * v where v is the particle's velocity.
+         * Returns linear momentum. Computes as mass * v where v is the 
+         * particle's velocity.
          * @return Momentum.
          */
         const momentum_t momentum() const;
         
         /**
-         * Sets linear momentum. This actually sets the velocity as the particle is 
-         * assumed to have constant mass.
+         * Sets linear momentum. This also sets the velocity. This is correct as 
+         * long as the particle's mass is constant.
          * @param p Momentum.
          */
         void momentum(const momentum_t& p);
@@ -149,13 +150,13 @@ namespace simploce {
         virtual void write(std::ostream& stream) const;
         
         /**
-         * Writes state to an output stream.
+         * Writes state (position, velocity) to an output stream.
          * @param stream Output stream.
          */
         virtual void writeState(std::ostream& stream) const;
         
         /**
-         * Reads state from an input stream.
+         * Reads state (position, velocity) from an input stream.
          * @param stream Input stream.
          */
         virtual void readState(std::istream& stream);

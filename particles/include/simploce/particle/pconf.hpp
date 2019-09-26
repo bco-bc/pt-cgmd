@@ -46,12 +46,22 @@ namespace simploce {
         /**
          * Mass of a proton (u)
          */
-        static mass_t MASS_PROTON = 1.007276466879;
+        const mass_t MASS_PROTON = 1.007276466879;
         
         /**
          * Charge of a proton (e).
          */
-        static charge_t CHARGE_PROTON = 1.0;
+        const charge_t CHARGE_PROTON = 1.0;
+        
+        /**
+         * Discrete changes in particle's protonation state.
+         */
+        const std::size_t PROTONATABLE = 1;
+        
+        /**
+         * continouos change in particle's protonation state.
+         */
+        const std::size_t PROTONATING = 2;
         
     }
 }

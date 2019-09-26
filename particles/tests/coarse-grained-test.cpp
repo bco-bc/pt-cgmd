@@ -70,7 +70,7 @@ void test1()
     
     bead_spec_ptr_t pspec = 
             ParticleSpec::createForProtonatableBead("pspec", 2.0, 1.0, 1.0, 7.0);
-    prot_bead_ptr_t pbead = cg.addProtonatableBead(3, "ptest", r, 0, pspec);
+    dprot_bead_ptr_t pbead = cg.addProtonatableBead(3, "ptest", r, 0, pspec);
     
     Bond<Bead> bond2 = Bond<Bead>::makeBond(bead2, pbead);
     

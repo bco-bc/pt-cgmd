@@ -20,6 +20,7 @@
       <itemPath>include/simploce/particle/pproperties.hpp</itemPath>
       <itemPath>include/simploce/particle/protonatable-bead.hpp</itemPath>
       <itemPath>include/simploce/particle/protonatable.hpp</itemPath>
+      <itemPath>include/simploce/particle/protonating-bead.hpp</itemPath>
       <itemPath>include/simploce/particle/protonation-site-catalog.hpp</itemPath>
       <itemPath>include/simploce/particle/protonation-site.hpp</itemPath>
       <itemPath>include/simploce/particle/ptypes.hpp</itemPath>
@@ -43,6 +44,7 @@
       <itemPath>src/particle.cpp</itemPath>
       <itemPath>src/pfactory.cpp</itemPath>
       <itemPath>src/protonatable-bead.cpp</itemPath>
+      <itemPath>src/protonating-bead.cpp</itemPath>
       <itemPath>src/protonation-site-catalog.cpp</itemPath>
     </logicalFolder>
     <logicalFolder name="TestFiles"
@@ -285,6 +287,11 @@
             tool="3"
             flavor2="0">
       </item>
+      <item path="include/simploce/particle/protonating-bead.hpp"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
       <item path="include/simploce/particle/protonation-site-catalog.hpp"
             ex="false"
             tool="3"
@@ -326,6 +333,8 @@
       <item path="src/pfactory.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="src/protonatable-bead.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="src/protonating-bead.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="src/protonation-site-catalog.cpp" ex="false" tool="1" flavor2="0">
       </item>
@@ -545,6 +554,11 @@
             tool="3"
             flavor2="0">
       </item>
+      <item path="include/simploce/particle/protonating-bead.hpp"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
       <item path="include/simploce/particle/protonation-site-catalog.hpp"
             ex="false"
             tool="3"
@@ -586,6 +600,8 @@
       <item path="src/pfactory.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="src/protonatable-bead.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="src/protonating-bead.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="src/protonation-site-catalog.cpp" ex="false" tool="1" flavor2="0">
       </item>

@@ -62,17 +62,31 @@ namespace simploce {
                            const bead_spec_ptr_t& spec);
         
         /**
-         * Adds new protonatable bead to this coarse grained particle model.
+         * Adds new discrete protonatable bead to this coarse grained particle model.
          * @param id Unique identifier.
          * @param name Name.
          * @param r Position.
          * @param protonationState Number of bound protons. Must be >= 0.
          * @param spec Specification.
          */
-        prot_bead_ptr_t addProtonatableBead(std::size_t id,
+        dprot_bead_ptr_t addProtonatableBead(std::size_t id,
+                                             const std::string& name, 
+                                             const position_t& r,
+                                             std::size_t protonationState,
+                                             const bead_spec_ptr_t& spec);
+        
+        /**
+         * Adds new protonating bead to this coarse grained particle model.
+         * @param id Unique identifier.
+         * @param name Name.
+         * @param r Position.
+         * @param protonationState Number of bound protons. Must be >= 0.
+         * @param spec Specification.
+         */
+        cprot_bead_ptr_t addProtonatingBead(std::size_t id,
                                             const std::string& name, 
                                             const position_t& r,
-                                            int protonationState,
+                                            std::size_t protonationState,
                                             const bead_spec_ptr_t& spec);
                         
         /**
@@ -84,6 +98,10 @@ namespace simploce {
         bead_group_ptr_t addBeadGroup(const std::vector<bead_ptr_t>& beads, 
                                       const std::vector<id_pair_t>& bbonds);
         
+        /**
+         * Returns the total number of discrete and continuous protonatables.
+         * @return 
+         */
         std::size_t numberOfProtonationSites() const override;
         
         std::size_t protonationState() const override;
@@ -107,11 +125,12 @@ namespace simploce {
          * @return Result.
          */
         template <typename R, typename TASK>
-        R doWithProtBeads(const TASK& task) { return task(protonatableBeads_); }
+        R doWithProtBeads(const TASK& task) { return task(discrete_, continouos_); }
         
     private:
         
-        std::vector<prot_bead_ptr_t> protonatableBeads_;
+        std::vector<dprot_bead_ptr_t> discrete_;
+        std::vector<cprot_bead_ptr_t> continouos_;
     };    
     
     /**
