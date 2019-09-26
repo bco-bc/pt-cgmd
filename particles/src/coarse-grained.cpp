@@ -49,7 +49,7 @@ namespace simploce {
     }
         
     CoarseGrained::CoarseGrained() :
-        ParticleModel<Bead,bead_group_t>{}, discrete_{}, continouos_{}
+        ParticleModel<Bead,bead_group_t>{}, discrete_{}, continuous_{}
     {        
     }
     
@@ -90,7 +90,7 @@ namespace simploce {
         cprot_bead_ptr_t bead = 
             ProtonatingBead::create(id, index, name, protonationState, spec);
         bead->position(r);
-        continouos_.push_back(bead);
+        continuous_.push_back(bead);
         this->add(bead);
         return bead;
     }
@@ -105,7 +105,7 @@ namespace simploce {
     
     std::size_t CoarseGrained::numberOfProtonationSites() const
     {
-        return discrete_.size() + continouos_.size();
+        return discrete_.size() + continuous_.size();
     }
                 
     std::size_t CoarseGrained::protonationState() const
@@ -114,7 +114,7 @@ namespace simploce {
         for (auto d: discrete_) {
             numberOfProtons += d->protonationState();
         }
-        for (auto c: continouos_) {
+        for (auto c: continuous_) {
             numberOfProtons += c->protonationState();
         }
         return numberOfProtons;

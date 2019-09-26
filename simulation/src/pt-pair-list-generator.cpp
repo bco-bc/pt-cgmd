@@ -31,7 +31,7 @@
 
 #include "simploce/simulation/pt-pair-list-generator.hpp"
 #include "simploce/simulation/bc.hpp"
-#include "simploce/particle/protonatable-bead.hpp"
+#include "simploce/particle/protonating-bead.hpp"
 #include "simploce/particle/coarse-grained.hpp"
 #include "simploce/util/cvector_t.hpp"
 
@@ -43,24 +43,25 @@ namespace simploce {
     {        
     }
     
-    ProtonTransferPairListGenerator::prot_bead_pair_list_t 
+    ProtonTransferPairListGenerator::prot_pair_list_t 
     ProtonTransferPairListGenerator::generate(const cg_ptr_t& cg) const
     {
         real_t rmax2 = rmax_() * rmax_();
         bc_ptr_t bc = bc_;
         
-        return cg->doWithProtBeads<prot_bead_pair_list_t>([bc, rmax2] (const std::vector<prot_bead_ptr_t>& beads) {
-            prot_bead_pair_list_t pairlist{};
-            for (std::size_t i = 0; i != beads.size() - 1; ++i) {
-                prot_bead_ptr_t beadi = beads[i];
+        return cg->doWithProtBeads<prot_pair_list_t>([bc, rmax2] (const std::vector<dprot_bead_ptr_t>& discrete,
+                                                                  const std::vector<cprot_bead_ptr_t>& continuous) {
+            prot_pair_list_t pairlist{};
+            for (std::size_t i = 0; i != continuous.size() - 1; ++i) {
+                auto beadi = continuous[i];
                 const position_t& ri = beadi->position();
-                for (std::size_t j = i + 1; j != beads.size(); ++j) {
-                    prot_bead_ptr_t beadj = beads[j];
+                for (std::size_t j = i + 1; j != continuous.size(); ++j) {
+                    auto beadj = continuous[j];
                     const position_t& rj = beadj->position();
                     dist_vect_t R = bc->apply(ri, rj);
                     real_t R2 = norm2<real_t>(R);
                     if ( R2 < rmax2 ) {
-                        prot_bead_pair_t pair = std::make_pair(beadi, beadj);
+                        prot_pair_t pair = std::make_pair(beadi, beadj);
                         pairlist.push_back(pair);
                     }
                 }

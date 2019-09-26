@@ -97,6 +97,10 @@ void test1() {
     sim_param_t param;
     param.add<std::size_t>("nsteps", 100);
     param.add<real_t>("timestep", 0.001);
+    param.add<real_t>("temperature", 298);
+    param.add<real_t>("gamma", 0.5);
+    param.add<std::size_t>("nwrite", 10);
+    param.add<std::size_t>("npairlists", 10);
     simulation.perform(param, trajStream, dataStream);
     
     trajStream.close();

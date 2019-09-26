@@ -49,31 +49,30 @@ namespace simploce {
     static SimulationData displace_(const stime_t dt, 
                                     const std::vector<std::shared_ptr<T>>& particles)
     {
+        static std::size_t counter = 0;
         
         // Assume current step n-1/2 at time t(n-1/2).
-            
+
+        counter += 1;
+        
         // Compute linear momentum and position, plus kinetic energy.
         SimulationData data;
         for (auto ptr : particles) {
             T &particle = *ptr;
             mass_t mass = particle.mass();             // In u.
             const force_t &f = particle.force();       // Force (kJ/(mol nm) at time t(n-1/2).
-            momentum_t p = particle.momentum();        // Momentum (u nm/ps) at time t(n-1/2).
-        
-            static velocity_t vi{}, vf{};
+            velocity_t vi = particle.velocity();       // velocity (nm/ps) at time t(n-1/2).
             position_t r = particle.position();        // Position at time t(n).
       
+            static velocity_t vf{};
             for (std::size_t k = 0; k != 3; ++k) {
-                vi[k] = p[k] / mass();                     // Velocity (nm/ps) at time t(n-1/2)
-                p[k] += dt() * f[k];                      // Momentum at time t(n+1/2)
-        
-                vf[k] = p[k] / mass();                     // Velocity at time t(n+1/2)
-                r[k] += dt() * vf[k];                     // Position at time t(n+1).
+                vf[k] = vi[k] + dt() * f[k] / mass();  // Velocity at time t(n+1/2)
+                r[k] += dt() * vf[k];                  // Position at time t(n+1).
             }
 
-            // Save new position and linear momentum.
+            // Save new position and velocity.
             particle.position(r);
-            particle.momentum(p);
+            particle.velocity(vf);
 
             // Kinetic energy
             velocity_t va = 0.5 * (vi + vf);           // Average velocity at time t(n).
@@ -82,6 +81,9 @@ namespace simploce {
         
         // Temperature at t(n).
         data.temperature = temperature<T>(particles, data.ekin);
+        
+        // Time.
+        data.t = counter * dt;
         
         return data;        
     }

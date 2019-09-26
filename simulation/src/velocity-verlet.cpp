@@ -64,11 +64,11 @@ namespace simploce {
             force_t fi = particle.force();                 // Force (kJ/(mol nm) = (u nm)/(ps^2)) 
             fis[index] = fi;                               // at time t(n).
       
-            momentum_t pi = particle.momentum();           // Momentum (u nm/ps) at time t(n).
             position_t ri = particle.position();           // Position at time t(n).
+            velocity_t vi = particle.velocity();           // Velocity at time t(n).
             static position_t rf{};
             for ( std::size_t k = 0; k != 3; ++k) {
-                rf[k] = ri[k] + dt() * pi[k] / mass() + a2 * fi[k]; // Position at time t(n+1).
+                rf[k] = ri[k] + dt() * vi[k] + a2 * fi[k]; // Position at time t(n+1).
             }
         
             // Save new position.       
@@ -78,7 +78,7 @@ namespace simploce {
     }
     
     /*
-     * Displaces particle momenta.
+     * Displaces particle velocities.
      * @param T Particle type.
      * @param dt Time step.
      * @param fis Forces at t(n)
@@ -107,16 +107,14 @@ namespace simploce {
             force_t ff = particle.force();                 // Force (kJ/(mol nm) = (u nm)/(ps^2))
                                                            // at time t(n+1).
 
-            momentum_t pi = particle.momentum();           // Momentum (u nm/ps) at time t(n).
-            static momentum_t pf{};
+            velocity_t vi = particle.velocity();           // velocity (nm/ps) at time t(n).
             static velocity_t vf{};
             for (std::size_t k = 0; k != 3; ++k) {
-                vf[k] = pi[k] / mass() + a1 * ( fi[k] + ff[k] );  // Velocity at time t(n+1).
-                pf[k] = mass() * vf[k];                           // Momentum at time t(n+1).
+                vf[k] = vi[k] + a1 * ( fi[k] + ff[k] );    // Velocity at time t(n+1).
             }
       
-            // Save momentum.
-            particle.momentum(pf);
+            // Save velocity
+            particle.velocity(vf);
       
             // Kinetic energy at t(n+1).
             data.ekin += 0.5 * mass() * inner<real_t>(vf, vf);
@@ -124,7 +122,7 @@ namespace simploce {
     
         // Instantaneous temperature at t(n+1).
         data.temperature = temperature<T>(particles, data.ekin);
-
+        
         return data;        
     }
        
@@ -136,10 +134,13 @@ namespace simploce {
     SimulationData VelocityVerlet<Atomistic>::displace(const sim_param_t& param, 
                                                        const at_ptr_t& at) const
     {        
+        static std::size_t counter = 0;
         static bool firstTime = true;
         
         static stime_t dt{0.0};        
         static std::vector<force_t> fis{};
+        
+        counter += 1;
         
         if ( firstTime) {
             dt = param.get<real_t>("timestep");
@@ -160,6 +161,9 @@ namespace simploce {
             return displaceMomentum_<Atom>(dt, fis, atoms);
         });
         data.epot = epot;
+        
+        data.t = counter * dt;
+        
         return data;
     }
     
@@ -176,11 +180,13 @@ namespace simploce {
     SimulationData VelocityVerlet<CoarseGrained>::displace(const sim_param_t& param, 
                                                            const cg_ptr_t& cg) const
     {        
+        static std::size_t counter = 0;
         static bool firstTime = true;
         
         static stime_t dt{0.0};      
         static std::vector<force_t> fis{};
         
+        counter += 1;
         if ( firstTime) {
             dt = param.get<real_t>("timestep");
             interactor_->interact(param, cg);
@@ -200,6 +206,9 @@ namespace simploce {
             return displaceMomentum_<Bead>(dt, fis, beads);
         });
         data.epot = epot;
+        
+        data.t = counter * dt;
+        
         return data;
     }
         

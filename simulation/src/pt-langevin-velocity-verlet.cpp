@@ -53,11 +53,11 @@ namespace simploce {
     SimulationData ProtonTransferLangevinVelocityVerlet::displace(const sim_param_t& param, 
                                                                   const cg_ptr_t& cg) const
     {
-        using prot_bead_pair_list_t = 
-            ProtonTransferPairListGenerator::prot_bead_pair_list_t;
+        using prot_pair_list_t = 
+            ProtonTransferPairListGenerator::prot_pair_list_t;
         
         static std::size_t counter = 0;
-        static prot_bead_pair_list_t pairlist{};
+        static prot_pair_list_t pairlist{};
         
         SimulationData data{};
         counter += 1;

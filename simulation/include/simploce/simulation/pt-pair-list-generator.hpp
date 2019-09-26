@@ -39,20 +39,21 @@
 namespace simploce {
     
     /**
-     * Finds pairs of beads that may be involved in transferring protons.
+     * Finds pairs of beads that may be involved in transferring protons. This 
+     * applies to protonatables undergoing continuous changes in protonation state.
      */
     class ProtonTransferPairListGenerator {
     public:
+                
+        /**
+         * Protonatable pair type.
+         */
+        using prot_pair_t = std::pair<cprot_bead_ptr_t, cprot_bead_ptr_t>;
         
         /**
-         * Particle pair type.
+         * Protonatable bead pair list type.
          */
-        using prot_bead_pair_t = std::pair<prot_bead_ptr_t, prot_bead_ptr_t>;
-        
-        /**
-         * Particle pair lists type.
-         */
-        using prot_bead_pair_list_t = std::vector<prot_bead_pair_t>;
+        using prot_pair_list_t = std::vector<prot_pair_t>;
         
         /**
          * Constructor 
@@ -68,7 +69,7 @@ namespace simploce {
          * @param cg Coarse grained particle model.
          * @return List of pairs of beads possibly involved in proton transfer.
          */
-        prot_bead_pair_list_t generate(const cg_ptr_t& cg) const;
+        prot_pair_list_t generate(const cg_ptr_t& cg) const;
         
     private:
         
@@ -76,6 +77,8 @@ namespace simploce {
         bc_ptr_t bc_;
         
     };
+    
+     
 }
 
 #endif /* PT_PAIR_LIST_GENERATOR_HPP */

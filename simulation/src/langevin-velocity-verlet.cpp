@@ -128,7 +128,7 @@ namespace simploce {
         for (std::size_t index = 0; index != particles.size(); ++index) {
             auto& particle = *particles[index];
     
-            // Update position, not momentum.
+            // Update position, not velocity.
             static std::array<real_t, 3> w;            // Random vector at t(n+1).
             w[0] = dis_(gen_);
             w[1] = dis_(gen_);
@@ -140,7 +140,7 @@ namespace simploce {
       
             velocity_t vi = particle.velocity();       // Velocity (nm/ps) at time t(n).
             position_t ri = particle.position();       // Position at time t(n).
-            ris_[index] = ri;                          // Save for momentum update.
+            ris_[index] = ri;                          // Save for velocity update.
             static position_t rf;
             real_t b = B_[index];                      // No units.
             real_t a1 = A1_[index];                    // ps/u
@@ -187,7 +187,6 @@ namespace simploce {
             real_t strength = strengths_[index];
       
             static velocity_t vf{};
-            static momentum_t pf{};
             for (std::size_t k = 0; k != 3; ++k) {
                 vf[k] = vi[k] +
                     a1 * ( fi[k] + ff[k] ) -

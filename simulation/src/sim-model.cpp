@@ -40,6 +40,7 @@
 #include "simploce/particle/coarse-grained.hpp"
 #include "simploce/particle/bead.hpp"
 #include "simploce/particle/protonatable-bead.hpp"
+#include "simploce/particle/protonating-bead.hpp"
 #include "simploce/util/cube.hpp"
 #include <memory>
 #include <utility>
@@ -85,9 +86,13 @@ namespace simploce {
                 bead->writeState(stream);
             }
         });
-        cg_->doWithProtBeads<void>([&stream] (const std::vector<prot_bead_ptr_t>& pbeads) {
-            for (auto const pbead : pbeads) {
-                pbead->writeState(stream);
+        cg_->doWithProtBeads<void>([&stream] (const std::vector<dprot_bead_ptr_t>& discrete,
+                                              const std::vector<cprot_bead_ptr_t>& continuous) {
+            for (auto const d : discrete) {
+                d->writeState(stream);
+            }
+            for (auto const c : continuous) {
+                c->writeState(stream);
             }
         });
     }
@@ -99,9 +104,13 @@ namespace simploce {
                 bead->readState(stream);
             }
         });
-        cg_->doWithProtBeads<void>([&stream] (const std::vector<prot_bead_ptr_t>& pbeads) {
-            for (auto pbead : pbeads) {
-                pbead->readState(stream);
+        cg_->doWithProtBeads<void>([&stream] (const std::vector<dprot_bead_ptr_t>& discrete,
+                                              const std::vector<cprot_bead_ptr_t>& continuous) {
+            for (auto d : discrete) {
+                d->readState(stream);
+            }
+            for (auto c : continuous) {
+                c->readState(stream);
             }
         });       
     }

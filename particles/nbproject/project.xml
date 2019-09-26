@@ -34,6 +34,7 @@
             <word>Noncopyable</word>
             <word>protonatable</word>
             <word>protonatables</word>
+            <word>protonating</word>
         </spellchecker-wordlist>
     </configuration>
 </project>

@@ -125,12 +125,12 @@ namespace simploce {
          * @return Result.
          */
         template <typename R, typename TASK>
-        R doWithProtBeads(const TASK& task) { return task(discrete_, continouos_); }
+        R doWithProtBeads(const TASK& task) { return task(discrete_, continuous_); }
         
     private:
         
         std::vector<dprot_bead_ptr_t> discrete_;
-        std::vector<cprot_bead_ptr_t> continouos_;
+        std::vector<cprot_bead_ptr_t> continuous_;
     };    
     
     /**
