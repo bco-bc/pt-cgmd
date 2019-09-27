@@ -47,10 +47,11 @@ namespace simploce {
     {        
     }
     
-    atom_ptr_t Atomistic::addAtom(std::size_t id,
-                                  const std::string& name,
-                                  const position_t& r, 
-                                  const atom_spec_ptr_t& spec)
+    atom_ptr_t 
+    Atomistic::addAtom(std::size_t id,
+                       const std::string& name,
+                       const position_t& r, 
+                       const spec_ptr_t& spec)
     {
         int index = indexGenerator_(*this);
         atom_ptr_t atom = Atom::create(id, index, name, spec);
@@ -59,18 +60,21 @@ namespace simploce {
         return atom;
     }
     
-    void Atomistic::protonationSites(const prot_site_catalog_ptr_t& catalog)
+    void 
+    Atomistic::protonationSites(const prot_site_catalog_ptr_t& catalog)
     {
         protonationSites_ = catalog->lookup(*this);
     }
     
-    std::size_t Atomistic::numberOfProtonationSites() const
+    std::size_t 
+    Atomistic::numberOfProtonationSites() const
     {
         return protonationSites_.size();
     }
     
     
-    std::size_t Atomistic::protonationState() const
+    std::size_t 
+    Atomistic::protonationState() const
     {
         std::size_t numberOfProtons{0};
         for (auto ps : protonationSites_) {
@@ -79,7 +83,8 @@ namespace simploce {
         return numberOfProtons;
     }  
     
-    std::size_t Atomistic::numberOfAtoms() const
+    std::size_t
+    Atomistic::numberOfAtoms() const
     {
         return this->numberOfParticles();
     }

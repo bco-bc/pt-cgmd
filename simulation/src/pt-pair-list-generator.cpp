@@ -31,7 +31,7 @@
 
 #include "simploce/simulation/pt-pair-list-generator.hpp"
 #include "simploce/simulation/bc.hpp"
-#include "simploce/particle/protonating-bead.hpp"
+#include "simploce/particle/continuous-protonatable-bead.hpp"
 #include "simploce/particle/coarse-grained.hpp"
 #include "simploce/util/cvector_t.hpp"
 
@@ -52,13 +52,13 @@ namespace simploce {
         return cg->doWithProtBeads<prot_pair_list_t>([bc, rmax2] (const std::vector<dprot_bead_ptr_t>& discrete,
                                                                   const std::vector<cprot_bead_ptr_t>& continuous) {
             prot_pair_list_t pairlist{};
-            for (std::size_t i = 0; i != continuous.size() - 1; ++i) {
-                auto beadi = continuous[i];
-                const position_t& ri = beadi->position();
-                for (std::size_t j = i + 1; j != continuous.size(); ++j) {
-                    auto beadj = continuous[j];
-                    const position_t& rj = beadj->position();
-                    dist_vect_t R = bc->apply(ri, rj);
+            for (auto i = continuous.begin(); i != (continuous.end() - 1); ++i) {
+                auto beadi = *i;
+                const auto& ri = beadi->position();
+                for (auto j = i + 1; j != continuous.end(); ++j) {
+                    auto beadj = *j;
+                    const auto& rj = beadj->position();
+                    auto R = bc->apply(ri, rj);
                     real_t R2 = norm2<real_t>(R);
                     if ( R2 < rmax2 ) {
                         prot_pair_t pair = std::make_pair(beadi, beadj);

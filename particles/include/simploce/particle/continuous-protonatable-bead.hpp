@@ -23,34 +23,35 @@
  */
 
 /* 
- * File:   protonating-bead.hpp
+ * File:   continuously-protonatable-bead.hpp
  * Author: juffer
  *
  * Created on 25 September 2019, 20:25
  */
 
-#ifndef PROTONATING_BEAD_HPP
-#define PROTONATING_BEAD_HPP
+#ifndef CONTINUOUS_PROTONATABLE_BEAD_HPP
+#define CONTINUOUS_PROTONATABLE_BEAD_HPP
 
 #include "bead.hpp"
-#include "protonatable-bead.hpp"
+#include "protonatable.hpp"
 #include "ptypes.hpp"
 #include <iostream>
 
 namespace simploce {
     
     /**
-     * Protonatable undergoing in - continuous- changes in mass and charge values. 
+     * Protonatable bead undergoing - continuous- changes in mass and charge values.
      * This is due to involvement in proton transfer processes, the state of 
      * which is measured from a current or flow of mass and charge to and from 
-     * the bead. If the state is denoted as x, then the associated 
+     * the bead, respectively. If the state is denoted as x, then the associated 
      * current I = dx/dt, where t is time. Here, x is in [0,1], where a value 
-     * of 1(0) represents a fully (de)protonated state.
+     * of 1(0) represents a fully (de)protonated state. A maximum of one 
+     * proton can be bound or released.
      */
-    class ProtonatingBead : public Bead, Protonatable  {
+    class ContinuousProtonatableBead : public Bead, Protonatable  {
     public:
         
-        virtual ~ProtonatingBead();
+        virtual ~ContinuousProtonatableBead();
         
         /**
          * Returns state.
@@ -102,22 +103,28 @@ namespace simploce {
                                        std::size_t index, 
                                        const std::string& name,
                                        std::size_t protonationState,
-                                       const bead_spec_ptr_t& spec);
+                                       const spec_ptr_t& spec);
         
-        ProtonatingBead(std::size_t id,
-                        std::size_t index, 
-                        const std::string &name,
-                        std::size_t protonationState,
-                        const bead_spec_ptr_t &spec);
+        ContinuousProtonatableBead(std::size_t id,
+                                   std::size_t index, 
+                                   const std::string &name,
+                                   std::size_t protonationState,
+                                   const spec_ptr_t &spec);
         
-        // Represents state of transfer, relative to a fully deprotonated state.
         real_t x_;
-        real_t I_;  // Current, I = dx/dt.
+        real_t I_;
         std::size_t protonationState_;
         
     };
     
-    std::ostream& operator << (std::ostream& stream, const ProtonatingBead& bead);
+    /**
+     * Writes a protonatable to an output stream.
+     * @param stream Output stream.
+     * @param pbead Protonatable.
+     * @return Output stream.
+     */
+    std::ostream& operator << (std::ostream& stream, 
+                               const ContinuousProtonatableBead& bead);
 }
 
 #endif /* PROTONATING_BEAD_HPP */

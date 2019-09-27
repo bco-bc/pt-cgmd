@@ -14,7 +14,7 @@
 #include "simploce/particle/coarse-grained.hpp"
 #include "simploce/particle/particle-spec.hpp"
 #include "simploce/particle/particle-spec-catalog.hpp"
-#include "simploce/particle/protonatable-bead.hpp"
+#include "simploce/particle/discrete-protonatable-bead.hpp"
 #include "simploce/particle/protonation-site.hpp"
 #include "simploce/particle/bond.hpp"
 #include "simploce/particle/ptypes.hpp"
@@ -47,9 +47,9 @@ void test1()
     
     position_t r;
     
-    bead_spec_ptr_t spec1_dp = 
-            ParticleSpec::createForBead("pspec1", 1.0, 1.0, 1.0);
-    bead_spec_ptr_t spec1_p = ParticleSpec::createForBead("dpspec1", 1.0, 1.0, 1.0);
+    spec_ptr_t spec1_dp = 
+        ParticleSpec::create("pspec1", 1.0, 1.0, 1.0);
+    spec_ptr_t spec1_p = ParticleSpec::create("dpspec1", 1.0, 1.0, 1.0);
     
     bead_ptr_t bead1 = cg.addBead(1, "test1", r, spec1_dp);
     bead_ptr_t bead2 = cg.addBead(2, "test2", r, spec1_p);
@@ -68,9 +68,9 @@ void test1()
     
     Bond<Bead> bond1 = Bond<Bead>::makeBond(bead1, bead2);
     
-    bead_spec_ptr_t pspec = 
-            ParticleSpec::createForProtonatableBead("pspec", 2.0, 1.0, 1.0, 7.0);
-    dprot_bead_ptr_t pbead = cg.addProtonatableBead(3, "ptest", r, 0, pspec);
+    spec_ptr_t pspec = 
+        ParticleSpec::create("pspec", 2.0, 1.0, 1.0, 7.0, false);
+    dprot_bead_ptr_t pbead = cg.addDiscreteProtonatableBead(3, "ptest", r, 0, pspec);
     
     Bond<Bead> bond2 = Bond<Bead>::makeBond(bead2, pbead);
     

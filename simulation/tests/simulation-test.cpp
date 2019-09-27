@@ -76,8 +76,8 @@ void test1() {
     using simulation_t = Simulation<Bead>;
 
     bead_spec_ptr_t spec1_dp = 
-        ParticleSpec::createForBead("pspec1", 1.0, 1.0, 1.0);
-    bead_spec_ptr_t spec1_p = ParticleSpec::createForBead("dpspec1", 1.0, 1.0, 1.0);
+        ParticleSpec::create("pspec1", 1.0, 1.0, 1.0);
+    bead_spec_ptr_t spec1_p = ParticleSpec::create("dpspec1", 1.0, 1.0, 1.0);
     
     cg_ptr_t cg = factory::coarseGrained();
     cg->addBead(1, "test1", position_t{}, spec1_dp);

@@ -38,7 +38,7 @@ namespace simploce {
     Bead::Bead(std::size_t id, 
                std::size_t index, 
                const std::string& name, 
-               const bead_spec_ptr_t& spec) :
+               const spec_ptr_t& spec) :
         Particle(id, index, name, spec)
     {        
     }
@@ -52,7 +52,7 @@ namespace simploce {
        const auto space = conf::SPACE;
         
        Particle::write(stream);
-       stream << space << 0;
+       stream << space << conf::NOT_PROTONATABLE;
     }
     
     void Bead::writeState(std::ostream& stream) const
@@ -68,7 +68,7 @@ namespace simploce {
     bead_ptr_t Bead::create(std::size_t id, 
                             std::size_t index,
                             const std::string& name,
-                            const bead_spec_ptr_t& spec)
+                            const spec_ptr_t& spec)
     {
         return bead_ptr_t(new Bead(id, index, name, spec));
     }

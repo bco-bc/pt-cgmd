@@ -31,17 +31,17 @@ void test1() {
     Atomistic atomistic;
     
     // Identical spec names!
-    atom_spec_ptr_t spec1_dp = ParticleSpec::createForAtom("pspec1", 0.0, 1.0, 1.0);
-    atom_spec_ptr_t spec1_p = ParticleSpec::createForAtom("pspec1", 1.0, 1.0, 1.0);
+    spec_ptr_t spec1_dp = ParticleSpec::create("pspec1", 0.0, 1.0, 1.0);
+    spec_ptr_t spec1_p = ParticleSpec::create("pspec1", 1.0, 1.0, 1.0);
     
     atom_ptr_t atom1 = atomistic.addAtom(1, "test1", position_t{}, spec1_dp);
     atom_ptr_t atom2 = atomistic.addAtom(11, "test2", position_t{}, spec1_dp);
     
     std::vector<atom_ptr_t> atoms{atom1, atom2};    
-    std::vector<atom_spec_ptr_t> deprotonated{spec1_dp, spec1_dp};    
-    std::vector<atom_spec_ptr_t> protonated{spec1_p, spec1_p};
+    std::vector<spec_ptr_t> deprotonated{spec1_dp, spec1_dp};    
+    std::vector<spec_ptr_t> protonated{spec1_p, spec1_p};
     
-    ProtonationSite<Atom, AtomSpec> site("test", atoms, deprotonated, protonated);
+    ProtonationSite<Atom> site("test", atoms, deprotonated, protonated);
     
     std::cout << "Is protonated: " << site.isProtonated() << std::endl;
     

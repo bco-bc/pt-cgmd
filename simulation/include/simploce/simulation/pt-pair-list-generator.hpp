@@ -39,14 +39,14 @@
 namespace simploce {
     
     /**
-     * Finds pairs of beads that may be involved in transferring protons. This 
+     * Finds pairs of protonatables that may be involved in transferring protons. This 
      * applies to protonatables undergoing continuous changes in protonation state.
      */
     class ProtonTransferPairListGenerator {
     public:
                 
         /**
-         * Protonatable pair type.
+         * Protonatable beads pair type.
          */
         using prot_pair_t = std::pair<cprot_bead_ptr_t, cprot_bead_ptr_t>;
         

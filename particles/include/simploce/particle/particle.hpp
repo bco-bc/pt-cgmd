@@ -39,7 +39,7 @@
 namespace simploce {
     
     /**
-     * Recognisable unit composing the physical system at any time. Has location,
+     * Recognizable unit composing the physical system at any time. Has location,
      * feels forces, and may be moving. Also, has charge and mass.
      */
     class Particle {
@@ -74,7 +74,7 @@ namespace simploce {
          * Returns specification.
          * @return 
          */
-        particle_spec_ptr_t spec() const;
+        spec_ptr_t spec() const;
         
         /**
          * Returns total charge value.
@@ -101,16 +101,16 @@ namespace simploce {
         void position(const position_t& r);
         
         /**
-         * Returns linear momentum. Computes as mass * v where v is the 
-         * particle's velocity.
+         * Returns linear momentum.
          * @return Momentum.
          */
         const momentum_t momentum() const;
         
         /**
-         * Sets linear momentum. This also sets the velocity. This is correct as 
-         * long as the particle's mass is constant.
+         * Sets linear momentum. For a constant mass particle, calling this method
+         * is equivalent to setting the particle's velocity.
          * @param p Momentum.
+         * @see #velocity(const velocity_t& v)
          */
         void momentum(const momentum_t& p);
         
@@ -173,22 +173,23 @@ namespace simploce {
         Particle(std::size_t id,
                  std::size_t index, 
                  const std::string& name, 
-                 const particle_spec_ptr_t& spec);        
+                 const spec_ptr_t& spec);        
                         
     private:
         
         template <typename P, typename PG>
         friend class ParticleModel;
 
-        template <typename T, typename S>
+        template <typename P>
         friend class ProtonationSite;
         
-        void reset_(const particle_spec_ptr_t& spec);
+        // Reassigns particle specification.
+        void reset_(const spec_ptr_t& spec);
 
         std::size_t id_;
         std::size_t index_;
         std::string name_;
-        particle_spec_ptr_t spec_;
+        spec_ptr_t spec_;
         position_t r_;
         momentum_t p_;
         velocity_t v_;

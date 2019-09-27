@@ -30,7 +30,7 @@ void test1() {
                     "/home/ajuffer/simploce/pt-cgmd/particles/resources/particles-specs.dat");
     spec_catalog_ptr_t catalog = ParticleSpecCatalog::create(stream);
     stream.close();
-    std::cout << *catalog << std::endl << std::endl;
+    std::cout << *catalog << std::endl;
     
     std::cout << "Particle model:" << std::endl;
     file::open_input(stream,

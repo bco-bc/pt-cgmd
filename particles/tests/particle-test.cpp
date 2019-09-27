@@ -15,7 +15,7 @@
 #include "simploce/particle/atom.hpp"
 #include "simploce/particle/bead.hpp"
 #include "simploce/particle/coarse-grained.hpp"
-#include "simploce/particle/protonatable-bead.hpp"
+#include "simploce/particle/discrete-protonatable-bead.hpp"
 #include "simploce/particle/particle-spec.hpp"
 #include "simploce/particle/atomistic.hpp"
 #include <cstdlib>
@@ -30,7 +30,7 @@ using namespace simploce;
 void test1() {
     std::cout << "particle-test test 1" << std::endl;
     Atomistic atomistic;
-    atom_spec_ptr_t spec = ParticleSpec::createForAtom("spec_123",1.0, 2.0, 3.0);
+    spec_ptr_t spec = ParticleSpec::create("spec_123",1.0, 2.0, 3.0);
     atom_ptr_t atom = atomistic.addAtom(1, "C", position_t{}, spec);
     std::cout << *atom << std::endl;
 }
@@ -39,7 +39,7 @@ void test2() {
     std::cout << "particle-test test 2" << std::endl;
     CoarseGrained coarseGrained;
     std::cout << "particle-test test 2" << std::endl;
-    bead_spec_ptr_t spec = ParticleSpec::createForBead("spec_456", 2.0, 3.0, 4.0);
+    spec_ptr_t spec = ParticleSpec::create("spec_456", 2.0, 3.0, 4.0);
     bead_ptr_t bead = coarseGrained.addBead(1, "bead1", position_t{}, spec);
     std::cout << *bead << std::endl;
     
@@ -56,10 +56,9 @@ void test3()
 {
     std::cout << "particle-test test 3" << std::endl;
     CoarseGrained coarseGrained;
-    bead_spec_ptr_t spec = 
-            ParticleSpec::createForProtonatableBead("COOH", charge_t{-1.0}, 5.0, 3.0, 7.9);
+    spec_ptr_t spec = ParticleSpec::create("COOH", charge_t{-1.0}, 5.0, 3.0, 7.9, false);
     dprot_bead_ptr_t bead = 
-            coarseGrained.addProtonatableBead(1, "COOH", position_t{}, 0, spec);
+        coarseGrained.addDiscreteProtonatableBead(1, "COOH", position_t{}, 0, spec);
     bead->protonate();
     std::cout << "Protonated:" << std::endl;
     std::cout << "Charge: " << bead->charge() << std::endl;
@@ -76,9 +75,9 @@ void test4()
 {
     std::cout << "particle-test test 4" << std::endl;
     CoarseGrained coarseGrained;
-    bead_spec_ptr_t spec = 
-            ParticleSpec::createForProtonatableBead("NH4", 0.0, 5.0, 2.0, 10.0);
-    coarseGrained.addProtonatableBead(1111, "NH4", position_t{}, 1, spec);
+    spec_ptr_t spec = 
+        ParticleSpec::create("NH4", 0.0, 5.0, 2.0, 10.0, false);
+    coarseGrained.addDiscreteProtonatableBead(1111, "NH4", position_t{}, 1, spec);
     coarseGrained.doWithAll<void>([] (const std::vector<bead_ptr_t>& beads) {
         for (auto bead : beads) {
             std::cout << *bead << std::endl;   

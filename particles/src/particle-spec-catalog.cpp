@@ -44,94 +44,85 @@ namespace simploce {
     {
     }
     
-    particle_spec_ptr_t ParticleSpecCatalog::lookup(const std::string& particleName) const
+    spec_ptr_t ParticleSpecCatalog::lookup(const std::string& name) const
     {
-        using iter_t = map_specs_t::const_iterator;
-        
-        iter_t iter = specs_.find(particleName);
+        auto iter = specs_.find(name);
         if ( iter == specs_.end() ) {
             throw std::domain_error(
-                particleName + ": No particle specification available for this particle."
+                name + ": No specification available for this particle."
             );
         }
         return (*iter).second;
     }
     
-    particle_spec_ptr_t ParticleSpecCatalog::molecularWater() const
+    spec_ptr_t ParticleSpecCatalog::molecularWater() const
     {
         return this->lookup("mH2O");
     }
     
     spec_catalog_ptr_t ParticleSpecCatalog::create(std::istream& stream)
     {
-        using pair_t = std::pair<std::string, particle_spec_ptr_t>;
         map_specs_t specs{};
         
         const size_t bufferSize = conf::NAME_WIDTH;
         char charBuffer[bufferSize];
         std::string stringBuffer;
         
-        real_t charge, mass, radius, pKa;
-        
-        // Skip first line.
+        // Skip header (first line).
         std::getline(stream, stringBuffer);
         
-        // Read first specification type name ("atom", "bead", "prot_bead").
-        stream.read(charBuffer, bufferSize);
+        bool protonatable;
+        stream >> protonatable;  // Represents a protonatable particle?
         while ( stream.good() ) {
-            std::string tname = std::string(charBuffer, bufferSize);            
-            boost::trim(tname);
-            stream.read(charBuffer, bufferSize);
+            stream.read(charBuffer, bufferSize);  // Extra spaces.
+            stream.read(charBuffer, bufferSize);  // Should hold spec name.
             std::string name = std::string(charBuffer, bufferSize); 
             boost::trim(name);
+            real_t charge, mass, radius;        
             stream >> mass >> charge >> radius;            
-            if ( tname == "atom") {
-                atom_spec_ptr_t spec = 
-                    ParticleSpec::createForAtom(name, charge, mass, radius);
-                pair_t p = std::make_pair(name, spec);
-                specs.insert(p);
-            } else if (tname == "bead") {
-                bead_spec_ptr_t spec = 
-                    ParticleSpec::createForBead(name, charge, mass, radius);
-                pair_t p = std::make_pair(name, spec);
-                specs.insert(p);                
-            } else if (tname == "prot_bead" ) {
-                stream >> pKa;
-                prot_bead_spec_ptr_t spec = 
-                    ParticleSpec::createForProtonatableBead(
-                        name, charge, mass, radius, pKa
-                    );
-                pair_t p = std::make_pair(name, spec);
-                specs.insert(p);                
+            if ( !protonatable ) {
+                spec_ptr_t spec = 
+                    ParticleSpec::create(name, charge, mass, radius);
+                auto pair = std::make_pair(name, spec);
+                specs.insert(pair);
             } else {
-                throw std::domain_error(tname + ": Unknown particle specification type.");
+                real_t pKa;
+                bool continuous;
+                stream >> pKa >> continuous;
+                spec_ptr_t spec = 
+                    ParticleSpec::create(name, charge, mass, radius, pKa, continuous);
+                auto p = std::make_pair(name, spec);
+                specs.insert(p);                
             }
             
             stringBuffer.clear();
             std::getline(stream, stringBuffer);  // Read EOL.
-            stream.read(charBuffer, bufferSize);
+            
+            // Next.
+            stream >> protonatable;
         }
-        return std::shared_ptr<ParticleSpecCatalog>(new ParticleSpecCatalog(specs));
+        return spec_catalog_ptr_t(new ParticleSpecCatalog{specs});
     }
     
-    std::ostream& operator << (std::ostream& stream, const ParticleSpecCatalog& catalog)
+    void ParticleSpecCatalog::write(std::ostream& stream) const
     {
-        using map_specs_t = ParticleSpecCatalog::map_specs_t;
-        using iter_t = map_specs_t::const_iterator;
-        using pair_t = std::pair<std::string, particle_spec_ptr_t>;
-        
-        map_specs_t specs = catalog.specs_;
-        std::size_t size = specs.size();
-        std::size_t index = 0;
-        for (iter_t iter = specs.begin(); iter != specs.end(); ++iter ) {
-            pair_t pair = *iter;
+        std::size_t counter = 0;
+        for (auto iter = specs_.begin(); iter != specs_.end(); ++iter)
+        {
+            counter += 1;
+            auto pair = *iter;
             auto spec = *pair.second;
             stream << spec;
-            if ( index < (size - 1) ) {
+            if ( counter < specs_.size() ) {
                 stream << std::endl;
             }
-            index += 1;
         }
+    }
+    
+    std::ostream& operator << (std::ostream& stream, 
+                               const ParticleSpecCatalog& catalog)
+    {
+        catalog.write(stream);
         return stream;
     }
 }

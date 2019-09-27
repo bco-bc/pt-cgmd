@@ -34,6 +34,7 @@
 
 #include "protonatable.hpp"
 #include "particle.hpp"
+#include "particle-spec.hpp"
 #include <stdexcept>
 #include <vector>
 #include <memory>
@@ -43,12 +44,11 @@ namespace simploce {
     
     /**
      * A protonatable entity composed of two or more particles. (De)protonation 
-     * results in a redistribution of charge over the constituting particles. 
+     * results in a redistribution of charge and mass over the constituting particles. 
      * A maximum of one proton can be bound or released.
      * @param T Particle type.
-     * @param S Particle specification type.
      */
-    template <typename P, typename S>
+    template <typename P>
     class ProtonationSite: public Protonatable {
     public:
         
@@ -57,12 +57,7 @@ namespace simploce {
          */
         using p_ptr_t = std::shared_ptr<P>;
         
-        /**
-         * Particle specification type.
-         */
-        using ps_ptr_t = std::shared_ptr<S>;        
-        
-        /**
+       /**
          * Constructor. Creates a protonation site, which initially will be deprotonated.
          * @param name Name, e.g. COOH.
          * @param particles Constituting particles.
@@ -73,8 +68,8 @@ namespace simploce {
          */
         ProtonationSite(const std::string& name,
                         const std::vector<p_ptr_t> &particles,
-                        const std::vector<ps_ptr_t> &deprotonated,
-                        const std::vector<ps_ptr_t> &protonated);
+                        const std::vector<spec_ptr_t> &deprotonated,
+                        const std::vector<spec_ptr_t> &protonated);
         
         /**
          * Returns site name.
@@ -100,16 +95,16 @@ namespace simploce {
         
         std::string name_;
         std::vector<p_ptr_t> particles_;
-        std::vector<ps_ptr_t> deprotonated_;
-        std::vector<ps_ptr_t> protonated_;
+        std::vector<spec_ptr_t> deprotonated_;
+        std::vector<spec_ptr_t> protonated_;
         bool proton_;
     };
     
-    template <typename T, typename S>
-    ProtonationSite<T,S>::ProtonationSite(const std::string& name,
-                                          const std::vector<p_ptr_t>& particles,
-                                          const std::vector<ps_ptr_t>& deprotonated,
-                                          const std::vector<ps_ptr_t>& protonated) :
+    template <typename P>
+    ProtonationSite<P>::ProtonationSite(const std::string& name,
+                                        const std::vector<p_ptr_t>& particles,
+                                        const std::vector<spec_ptr_t>& deprotonated,
+                                        const std::vector<spec_ptr_t>& protonated) :
         name_(name), particles_{particles}, deprotonated_{deprotonated}, 
         protonated_{protonated}, proton_{true}
     {
@@ -135,14 +130,14 @@ namespace simploce {
         this->deprotonate();
     }
         
-    template <typename T, typename S>
-    std::string ProtonationSite<T,S>::name() const 
+    template <typename P>
+    std::string ProtonationSite<P>::name() const 
     {
         return name_;
     }
     
-    template <typename T, typename S>
-    void ProtonationSite<T,S>::protonate()
+    template <typename P>
+    void ProtonationSite<P>::protonate()
     {
         assert( !this->isProtonated() );
         for (std::size_t index = 0; index != particles_.size(); ++index) {
@@ -153,8 +148,8 @@ namespace simploce {
         proton_ = true;
     }
     
-    template <typename T, typename S>
-    void ProtonationSite<T,S>::deprotonate()
+    template <typename P>
+    void ProtonationSite<P>::deprotonate()
     {
         assert( this->isProtonated() );
         for (std::size_t index = 0; index != particles_.size(); ++index) {
@@ -165,22 +160,22 @@ namespace simploce {
         proton_ = false;
     }
     
-    template <typename T, typename S>
-    bool ProtonationSite<T,S>::isProtonated() const
+    template <typename P>
+    bool ProtonationSite<P>::isProtonated() const
     {
         return proton_;
     }
     
-    template <typename T, typename S>
-    std::size_t ProtonationSite<T,S>::protonationState() const
+    template <typename P>
+    std::size_t ProtonationSite<P>::protonationState() const
     {
         return (this->isProtonated() ? 1 : 0);
     }
     
-    template <typename T, typename S>
-    charge_t ProtonationSite<T,S>::charge() const
+    template <typename P>
+    charge_t ProtonationSite<P>::charge() const
     {
-        const std::vector<ps_ptr_t>& state = 
+        const std::vector<spec_ptr_t>& state = 
             this->isProtonated() ? protonated_ : deprotonated_;
         charge_t charge{0};
         for (auto spec : state) {

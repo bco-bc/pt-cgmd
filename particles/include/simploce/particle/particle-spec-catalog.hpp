@@ -46,17 +46,17 @@ namespace simploce {
     public:
         
         /**
-         * Returns a specification on the basis of the particle name.
-         * @param particleName Particle name.
+         * Returns a specification.
+         * @param name Specification name.
          * @return Specification.
          */
-        particle_spec_ptr_t lookup(const std::string& particleName) const;
+        spec_ptr_t lookup(const std::string& name) const;
         
         /**
          * Returns specification for molecular water.
          * @return Specification.
          */
-        particle_spec_ptr_t molecularWater() const;
+        spec_ptr_t molecularWater() const;
         
         /**
          * Creates a catalog by reading specifications from a given input stream.
@@ -65,19 +65,23 @@ namespace simploce {
          */
         static spec_catalog_ptr_t create(std::istream& stream);
         
+        /**
+         * Writes this catalog to an output stream.
+         * @param stream Output stream.
+         */
+        void write(std::ostream& stream) const;
+        
     private:
         
-        friend 
-        std::ostream& operator << (std::ostream& stream, const ParticleSpecCatalog& catalog);    
-
-        using map_specs_t = std::map<std::string, particle_spec_ptr_t>;
+        using map_specs_t = std::map<std::string, spec_ptr_t>;
                 
         ParticleSpecCatalog(const map_specs_t& specs);
         
         map_specs_t specs_{};
     };
     
-    std::ostream& operator << (std::ostream& stream, const ParticleSpecCatalog& catalog);
+    std::ostream& operator << (std::ostream& stream, 
+                               const ParticleSpecCatalog& catalog);
 }
 
 #endif /* PARTICLE_CATALOG_HPP */

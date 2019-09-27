@@ -39,12 +39,12 @@ OBJECTFILES= \
 	${OBJECTDIR}/src/atomistic.o \
 	${OBJECTDIR}/src/bead.o \
 	${OBJECTDIR}/src/coarse-grained.o \
+	${OBJECTDIR}/src/continuous-protonatable-bead.o \
+	${OBJECTDIR}/src/discrete-protonatable-bead.o \
 	${OBJECTDIR}/src/particle-spec-catalog.o \
 	${OBJECTDIR}/src/particle-spec.o \
 	${OBJECTDIR}/src/particle.o \
 	${OBJECTDIR}/src/pfactory.o \
-	${OBJECTDIR}/src/protonatable-bead.o \
-	${OBJECTDIR}/src/protonating-bead.o \
 	${OBJECTDIR}/src/protonation-site-catalog.o
 
 # Test Directory
@@ -114,6 +114,16 @@ ${OBJECTDIR}/src/coarse-grained.o: src/coarse-grained.cpp
 	${RM} "$@.d"
 	$(COMPILE.cc) -g -Wall -Iinclude -I../cpputil/include -std=c++14 -fPIC  -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/coarse-grained.o src/coarse-grained.cpp
 
+${OBJECTDIR}/src/continuous-protonatable-bead.o: src/continuous-protonatable-bead.cpp
+	${MKDIR} -p ${OBJECTDIR}/src
+	${RM} "$@.d"
+	$(COMPILE.cc) -g -Wall -Iinclude -I../cpputil/include -std=c++14 -fPIC  -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/continuous-protonatable-bead.o src/continuous-protonatable-bead.cpp
+
+${OBJECTDIR}/src/discrete-protonatable-bead.o: src/discrete-protonatable-bead.cpp
+	${MKDIR} -p ${OBJECTDIR}/src
+	${RM} "$@.d"
+	$(COMPILE.cc) -g -Wall -Iinclude -I../cpputil/include -std=c++14 -fPIC  -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/discrete-protonatable-bead.o src/discrete-protonatable-bead.cpp
+
 ${OBJECTDIR}/src/particle-spec-catalog.o: src/particle-spec-catalog.cpp
 	${MKDIR} -p ${OBJECTDIR}/src
 	${RM} "$@.d"
@@ -133,16 +143,6 @@ ${OBJECTDIR}/src/pfactory.o: src/pfactory.cpp
 	${MKDIR} -p ${OBJECTDIR}/src
 	${RM} "$@.d"
 	$(COMPILE.cc) -g -Wall -Iinclude -I../cpputil/include -std=c++14 -fPIC  -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/pfactory.o src/pfactory.cpp
-
-${OBJECTDIR}/src/protonatable-bead.o: src/protonatable-bead.cpp
-	${MKDIR} -p ${OBJECTDIR}/src
-	${RM} "$@.d"
-	$(COMPILE.cc) -g -Wall -Iinclude -I../cpputil/include -std=c++14 -fPIC  -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/protonatable-bead.o src/protonatable-bead.cpp
-
-${OBJECTDIR}/src/protonating-bead.o: src/protonating-bead.cpp
-	${MKDIR} -p ${OBJECTDIR}/src
-	${RM} "$@.d"
-	$(COMPILE.cc) -g -Wall -Iinclude -I../cpputil/include -std=c++14 -fPIC  -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/protonating-bead.o src/protonating-bead.cpp
 
 ${OBJECTDIR}/src/protonation-site-catalog.o: src/protonation-site-catalog.cpp
 	${MKDIR} -p ${OBJECTDIR}/src
@@ -270,6 +270,32 @@ ${OBJECTDIR}/src/coarse-grained_nomain.o: ${OBJECTDIR}/src/coarse-grained.o src/
 	    ${CP} ${OBJECTDIR}/src/coarse-grained.o ${OBJECTDIR}/src/coarse-grained_nomain.o;\
 	fi
 
+${OBJECTDIR}/src/continuous-protonatable-bead_nomain.o: ${OBJECTDIR}/src/continuous-protonatable-bead.o src/continuous-protonatable-bead.cpp 
+	${MKDIR} -p ${OBJECTDIR}/src
+	@NMOUTPUT=`${NM} ${OBJECTDIR}/src/continuous-protonatable-bead.o`; \
+	if (echo "$$NMOUTPUT" | ${GREP} '|main$$') || \
+	   (echo "$$NMOUTPUT" | ${GREP} 'T main$$') || \
+	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
+	then  \
+	    ${RM} "$@.d";\
+	    $(COMPILE.cc) -g -Wall -Iinclude -I../cpputil/include -std=c++14 -fPIC  -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/continuous-protonatable-bead_nomain.o src/continuous-protonatable-bead.cpp;\
+	else  \
+	    ${CP} ${OBJECTDIR}/src/continuous-protonatable-bead.o ${OBJECTDIR}/src/continuous-protonatable-bead_nomain.o;\
+	fi
+
+${OBJECTDIR}/src/discrete-protonatable-bead_nomain.o: ${OBJECTDIR}/src/discrete-protonatable-bead.o src/discrete-protonatable-bead.cpp 
+	${MKDIR} -p ${OBJECTDIR}/src
+	@NMOUTPUT=`${NM} ${OBJECTDIR}/src/discrete-protonatable-bead.o`; \
+	if (echo "$$NMOUTPUT" | ${GREP} '|main$$') || \
+	   (echo "$$NMOUTPUT" | ${GREP} 'T main$$') || \
+	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
+	then  \
+	    ${RM} "$@.d";\
+	    $(COMPILE.cc) -g -Wall -Iinclude -I../cpputil/include -std=c++14 -fPIC  -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/discrete-protonatable-bead_nomain.o src/discrete-protonatable-bead.cpp;\
+	else  \
+	    ${CP} ${OBJECTDIR}/src/discrete-protonatable-bead.o ${OBJECTDIR}/src/discrete-protonatable-bead_nomain.o;\
+	fi
+
 ${OBJECTDIR}/src/particle-spec-catalog_nomain.o: ${OBJECTDIR}/src/particle-spec-catalog.o src/particle-spec-catalog.cpp 
 	${MKDIR} -p ${OBJECTDIR}/src
 	@NMOUTPUT=`${NM} ${OBJECTDIR}/src/particle-spec-catalog.o`; \
@@ -320,32 +346,6 @@ ${OBJECTDIR}/src/pfactory_nomain.o: ${OBJECTDIR}/src/pfactory.o src/pfactory.cpp
 	    $(COMPILE.cc) -g -Wall -Iinclude -I../cpputil/include -std=c++14 -fPIC  -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/pfactory_nomain.o src/pfactory.cpp;\
 	else  \
 	    ${CP} ${OBJECTDIR}/src/pfactory.o ${OBJECTDIR}/src/pfactory_nomain.o;\
-	fi
-
-${OBJECTDIR}/src/protonatable-bead_nomain.o: ${OBJECTDIR}/src/protonatable-bead.o src/protonatable-bead.cpp 
-	${MKDIR} -p ${OBJECTDIR}/src
-	@NMOUTPUT=`${NM} ${OBJECTDIR}/src/protonatable-bead.o`; \
-	if (echo "$$NMOUTPUT" | ${GREP} '|main$$') || \
-	   (echo "$$NMOUTPUT" | ${GREP} 'T main$$') || \
-	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
-	then  \
-	    ${RM} "$@.d";\
-	    $(COMPILE.cc) -g -Wall -Iinclude -I../cpputil/include -std=c++14 -fPIC  -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/protonatable-bead_nomain.o src/protonatable-bead.cpp;\
-	else  \
-	    ${CP} ${OBJECTDIR}/src/protonatable-bead.o ${OBJECTDIR}/src/protonatable-bead_nomain.o;\
-	fi
-
-${OBJECTDIR}/src/protonating-bead_nomain.o: ${OBJECTDIR}/src/protonating-bead.o src/protonating-bead.cpp 
-	${MKDIR} -p ${OBJECTDIR}/src
-	@NMOUTPUT=`${NM} ${OBJECTDIR}/src/protonating-bead.o`; \
-	if (echo "$$NMOUTPUT" | ${GREP} '|main$$') || \
-	   (echo "$$NMOUTPUT" | ${GREP} 'T main$$') || \
-	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
-	then  \
-	    ${RM} "$@.d";\
-	    $(COMPILE.cc) -g -Wall -Iinclude -I../cpputil/include -std=c++14 -fPIC  -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/protonating-bead_nomain.o src/protonating-bead.cpp;\
-	else  \
-	    ${CP} ${OBJECTDIR}/src/protonating-bead.o ${OBJECTDIR}/src/protonating-bead_nomain.o;\
 	fi
 
 ${OBJECTDIR}/src/protonation-site-catalog_nomain.o: ${OBJECTDIR}/src/protonation-site-catalog.o src/protonation-site-catalog.cpp 

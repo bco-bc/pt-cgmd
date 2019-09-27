@@ -39,8 +39,8 @@
 #include "simploce/simulation/no-bc.hpp"
 #include "simploce/particle/coarse-grained.hpp"
 #include "simploce/particle/bead.hpp"
-#include "simploce/particle/protonatable-bead.hpp"
-#include "simploce/particle/protonating-bead.hpp"
+#include "simploce/particle/discrete-protonatable-bead.hpp"
+#include "simploce/particle/continuous-protonatable-bead.hpp"
 #include "simploce/util/cube.hpp"
 #include <memory>
 #include <utility>

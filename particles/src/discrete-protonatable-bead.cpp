@@ -23,13 +23,13 @@
  */
 
 /* 
- * File:   protonatable-bead.cpp
+ * File:   discretely-protonatable-bead.cpp
  * Author: André H. Juffer, Biocenter Oulu.
  *
  * Created on August 5, 2019, 3:34 PM
  */
 
-#include "simploce/particle/protonatable-bead.hpp"
+#include "simploce/particle/discrete-protonatable-bead.hpp"
 #include "simploce/particle/ptypes.hpp"
 #include "simploce/particle/particle-spec.hpp"
 #include "simploce/particle/bead.hpp"
@@ -38,11 +38,11 @@
 
 namespace simploce {
     
-    ProtonatableBead::~ProtonatableBead()
+    DiscreteProtonatableBead::~DiscreteProtonatableBead()
     {        
     }
     
-    charge_t ProtonatableBead::charge() const 
+    charge_t DiscreteProtonatableBead::charge() const 
     {
         // Fully deprotonated state.
         charge_t charge = Particle::charge();
@@ -52,7 +52,7 @@ namespace simploce {
         return charge;
     }
     
-    mass_t ProtonatableBead::mass() const
+    mass_t DiscreteProtonatableBead::mass() const
     {
         // Fully deprotonated state.
         mass_t mass = Particle::mass();
@@ -63,12 +63,12 @@ namespace simploce {
         return mass;
     }
     
-    void ProtonatableBead::protonate()
+    void DiscreteProtonatableBead::protonate()
     {
         numberOfBoundProtons_ += 1;
     }
     
-    void ProtonatableBead::deprotonate()
+    void DiscreteProtonatableBead::deprotonate()
     {
         if ( !this->isProtonated() ) {
             throw std::domain_error(
@@ -78,43 +78,43 @@ namespace simploce {
         numberOfBoundProtons_ -= 1;              
     }
     
-    bool ProtonatableBead::isProtonated() const
+    bool DiscreteProtonatableBead::isProtonated() const
     {
         return numberOfBoundProtons_ > 0;
     }
     
-    std::size_t ProtonatableBead::protonationState() const
+    std::size_t DiscreteProtonatableBead::protonationState() const
     {
         return numberOfBoundProtons_;
     }
     
-    void ProtonatableBead::write(std::ostream& stream) const
+    void DiscreteProtonatableBead::write(std::ostream& stream) const
     {
         const auto space = conf::SPACE;
         
-        Bead::write(stream);
-        stream << space << conf::PROTONATABLE << space << numberOfBoundProtons_;
+        Particle::write(stream);
+        stream << space << conf::DISCRETELY_PROTONATABLE << space << numberOfBoundProtons_;
     }
     
-    void ProtonatableBead::writeState(std::ostream& stream) const
+    void DiscreteProtonatableBead::writeState(std::ostream& stream) const
     {
         const auto space = conf::SPACE;
         
-        Bead::writeState(stream);
+        Particle::writeState(stream);
         stream << space << this->protonationState();
     }
     
-    void ProtonatableBead::readState(std::istream& stream)
+    void DiscreteProtonatableBead::readState(std::istream& stream)
     {
-        Bead::readState(stream);
+        Particle::readState(stream);
         stream >> numberOfBoundProtons_;        
     }
     
-    dprot_bead_ptr_t ProtonatableBead::create(std::size_t id,
+    dprot_bead_ptr_t DiscreteProtonatableBead::create(std::size_t id,
                                               std::size_t index, 
                                               const std::string& name,
                                               std::size_t numberOfBoundProtons,
-                                              const bead_spec_ptr_t& spec)
+                                              const spec_ptr_t& spec)
     {
         if ( !spec->isProtonatable() ) {
             throw std::domain_error(
@@ -122,23 +122,24 @@ namespace simploce {
                 ": this specification does not allow for (de)protonation."
             );
         }
-        return dprot_bead_ptr_t(new ProtonatableBead(id,
+        return dprot_bead_ptr_t(new DiscreteProtonatableBead(id,
                                                      index, 
                                                      name, 
                                                      numberOfBoundProtons, 
                                                      spec));
     }
     
-    ProtonatableBead::ProtonatableBead(std::size_t id,
-                                       std::size_t index, 
-                                       const std::string& name,
-                                       std::size_t numberOfBoundProtons,
-                                       const bead_spec_ptr_t& spec) :
+    DiscreteProtonatableBead::DiscreteProtonatableBead(std::size_t id,
+                                                       std::size_t index, 
+                                                       const std::string& name,
+                                                       std::size_t numberOfBoundProtons,
+                                                       const spec_ptr_t& spec) :
         Bead(id, index, name, spec), numberOfBoundProtons_(numberOfBoundProtons)
     {        
     }
     
-    std::ostream& operator << (std::ostream& stream, const ProtonatableBead& bead)
+    std::ostream& operator << (std::ostream& stream, 
+                               const DiscreteProtonatableBead& bead)
     {
         bead.write(stream);
         return stream;

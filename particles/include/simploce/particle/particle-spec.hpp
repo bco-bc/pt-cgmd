@@ -60,8 +60,8 @@ namespace simploce {
         charge_t charge() const;
         
         /**
-         * Returns mass. If protonatable, then the value of the 
-         * deprotonated state is returned.
+         * Returns mass. If this specification is for a protonatable, then 
+         * the value of the fully deprotonated state is returned.
          * @return Value.
          * @see #isProtonatable()
          */
@@ -80,36 +80,43 @@ namespace simploce {
         radius_t radius() const;
         
         /**
-         * This specification allows for binding and releasing protons?
+         * This specification is for a protonatable particle?
          * @return Result.
          */
         bool isProtonatable() const;
         
         /**
-         * Creates a new specification from a given specification, but with different 
-         * name and charge.
+         * This specification is for a protonatable particle with continuously varying 
+         * protonation state.
+         * @return Result.
+         */
+        bool isContinuousProtonatable() const;
+        
+        /**
+         * Creates a new specification from a given specification, but with 
+         * different name and charge.
          * @param spec Specification.
          * @return New specification.
          */
-        static particle_spec_ptr_t createFrom(const particle_spec_ptr_t& spec, 
-                                              const std::string& name,
-                                              charge_t charge);
+        static spec_ptr_t createFrom(const spec_ptr_t& spec, 
+                                     const std::string& name,
+                                     charge_t charge);
         
         /**
-         * Creates a non-protonatable bead specification.
+         * Creates a non-protonatable particle specification.
          * @param name Unique specification name.
          * @param charge Charge value.
          * @param mass Mass value.
          * @param radius Radius.
-         * @return Bead Specification.
+         * @return Specification.
          */
-        static bead_spec_ptr_t createForBead(const std::string& name,
-                                             charge_t charge,
-                                             mass_t mass,
-                                             radius_t radius);
+        static spec_ptr_t create(const std::string& name,
+                                 charge_t charge,
+                                 mass_t mass,
+                                 radius_t radius);
         
         /**
-         * Creates a protonatable bead specification.
+         * Creates a protonatable particle specification.
          * @param name Unique specification name.
          * @param charge Charge value. This value must be that of the fully 
          * -deprotonated- state.
@@ -117,32 +124,22 @@ namespace simploce {
          * -deprotonated- state.
          * @param radius Radius.
          * @param pKa pKa value. 
-         * @return Protonatable bead Specification.
+         * @param continuous If true, then this specification is meant for
+         * a protonatable with a continuously varying protonation state.
+         * @return Specification.
          */
-        static prot_bead_spec_ptr_t createForProtonatableBead(const std::string& name,
-                                                              charge_t charge,
-                                                              mass_t mass,
-                                                              radius_t radius,
-                                                              pKa_t pKa);
-        
-        /**
-         * Creates an atom specification. Not protonatable.
-         * @param name Unique specification name.
-         * @param charge Charge value.
-         * @param mass Mass value.
-         * @param radius Radius.
-         * @return Atom specification.
-         */
-        static atom_spec_ptr_t createForAtom(const std::string& name,
-                                             charge_t charge,
-                                             mass_t mass,
-                                             radius_t radius);
+        static spec_ptr_t create(const std::string& name,
+                                 charge_t charge,
+                                 mass_t mass,
+                                 radius_t radius,
+                                 pKa_t pKa,
+                                 bool continuous);
         
         /**
          * Writes this specification to an output stream.
          * @param stream Output steam.
          */
-        void writeTo(std::ostream& stream) const;
+        void write(std::ostream& stream) const;
         
     private:
         
@@ -152,7 +149,7 @@ namespace simploce {
                      radius_t radius,
                      pKa_t pKa,
                      bool protonatable,
-                     const std::string& type);
+                     bool continuous);
                 
         std::string name_;
         charge_t charge_;
@@ -160,9 +157,7 @@ namespace simploce {
         radius_t radius_;
         pKa_t pKa_;        
         bool protonatable_;
-        
-        // One of "atom", "bead" or "prot_bead".
-        std::string type_;
+        bool continuous_;        
     };
 
     /**

@@ -196,6 +196,7 @@ int main(int argc, char* argv[])
       std::ifstream stream;
       file::open_input(stream, fnInputModel);
       model = modelFactory->readCoarseGrainedFrom(stream);
+      std::clog << "Read model from input file '" << fnInputModel << "'." << std::endl;
       stream.close();
     }
 

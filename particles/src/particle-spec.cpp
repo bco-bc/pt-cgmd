@@ -66,58 +66,55 @@ namespace simploce {
         return protonatable_;
     }
     
-    particle_spec_ptr_t ParticleSpec::createFrom(const particle_spec_ptr_t& spec,
-                                                 const std::string& name,
-                                                 charge_t charge)
+    bool ParticleSpec::isContinuousProtonatable() const
     {
-        return particle_spec_ptr_t(new ParticleSpec(
+        return continuous_;
+    }
+    
+    spec_ptr_t ParticleSpec::createFrom(const spec_ptr_t& spec,
+                                        const std::string& name,
+                                        charge_t charge)
+    {
+        return spec_ptr_t(new ParticleSpec(
             name, charge, spec->mass(), spec->radius(), spec->pKa(), 
-            spec->isProtonatable(), spec->type_
+            spec->isProtonatable(), spec->isContinuousProtonatable()
         ));
     }
     
-    bead_spec_ptr_t ParticleSpec::createForBead(const std::string& name, 
-                                                charge_t charge, 
-                                                mass_t mass,
-                                                radius_t radius)
+    spec_ptr_t ParticleSpec::create(const std::string& name, 
+                                    charge_t charge, 
+                                    mass_t mass,
+                                    radius_t radius)
     {
-        return bead_spec_ptr_t(
-            new ParticleSpec(name, charge, mass, radius, 0.0, false, "bead")
+        return spec_ptr_t(
+            new ParticleSpec(name, charge, mass, radius, 0.0, false, false)
         );
     }
     
-    prot_bead_spec_ptr_t ParticleSpec::createForProtonatableBead(const std::string& name,
-                                                                 charge_t charge,
-                                                                 mass_t mass,
-                                                                 radius_t radius,
-                                                                 pKa_t pKa)
+    spec_ptr_t ParticleSpec::create(const std::string& name,
+                                    charge_t charge,
+                                    mass_t mass,
+                                    radius_t radius,
+                                    pKa_t pKa,
+                                    bool continuous)
     {
-        return prot_bead_spec_ptr_t(
-            new ParticleSpec(name, charge, mass, radius, pKa, true, "prot_bead")
+        return spec_ptr_t(
+            new ParticleSpec(name, charge, mass, radius, pKa, true, continuous)
         );
     }
-    
-    atom_spec_ptr_t ParticleSpec::createForAtom(const std::string& name, 
-                                                charge_t charge,
-                                                mass_t mass,
-                                                radius_t radius)
-    {
-        return atom_spec_ptr_t(
-            new ParticleSpec(name, charge, mass, radius, 0.0, false, "atom")
-        );
-    }
-    
-    void ParticleSpec::writeTo(std::ostream& stream) const
-    {
-        const char space = ' ';
-        const int width = conf::NAME_WIDTH;
         
-        stream << std::setw(width) << type_ << std::setw(width) << name_;
+    void ParticleSpec::write(std::ostream& stream) const
+    {
+        const auto space = conf::SPACE;
+        const auto width = conf::NAME_WIDTH;
+        
+        stream << std::setw(width) << protonatable_;
+        stream << std::setw(width) << name_;
         stream << space << mass_;
         stream << space << charge_;
         stream << space << radius_;
         if ( this->isProtonatable() ) {
-            stream << space << pKa_;
+            stream << space << pKa_ << space << continuous_;
         }        
     }
     
@@ -127,9 +124,9 @@ namespace simploce {
                                radius_t radius,
                                pKa_t pKa, 
                                bool protonatable,
-                               const std::string& type) :
+                               bool continuous) :
         name_{name}, charge_{charge}, mass_{mass}, radius_{radius}, pKa_{pKa}, 
-        protonatable_{protonatable}, type_{type}
+        protonatable_{protonatable}, continuous_{continuous}
     {        
         if ( name_.empty() ) {
             throw std::domain_error("A particle specification name must be provided.");
@@ -141,7 +138,7 @@ namespace simploce {
         
     std::ostream& operator << (std::ostream& stream, const ParticleSpec& spec)
     {
-        spec.writeTo(stream);
+        spec.write(stream);
         return stream;
     }    
 }

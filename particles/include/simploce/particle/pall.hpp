@@ -47,7 +47,7 @@
 #include "pconf.hpp"
 #include "pfactory.hpp"
 #include "pproperties.hpp"
-#include "protonatable-bead.hpp"
+#include "discrete-protonatable-bead.hpp"
 #include "protonatable.hpp"
 #include "protonation-site-catalog.hpp"
 #include "protonation-site.hpp"

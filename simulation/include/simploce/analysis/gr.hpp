@@ -221,6 +221,9 @@ namespace simploce {
             auto pair = std::make_pair(ri, g);
             gr.push_back(pair);
         }
+        
+        std::clog << "Number of observations: " << counter_ << std::endl;
+        
         return gr;
     }
     

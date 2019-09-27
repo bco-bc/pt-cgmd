@@ -43,18 +43,18 @@ namespace simploce {
     // Forward declarations.
     class Atom;
     class Bead;
-    class ProtonatableBead;
-    class ProtonatingBead;
+    class DiscreteProtonatableBead;
+    class ContinuousProtonatableBead;
     class ParticleSpec;    
     class ParticleSpecCatalog;
     class ProtonationSiteCatalog;
     class Atomistic;
     class CoarseGrained;
     
-    template <typename T>
+    template <typename P>
     class ParticleGroup;
     
-    template <typename T, typename S>
+    template <typename P>
     class ProtonationSite;
     
     /**
@@ -118,7 +118,7 @@ namespace simploce {
     using dist_vect_t = position_t;        
     
     /**
-     * Atomistic model pointer type.
+     * Atomistic particle model pointer type.
      */
     using at_ptr_t = std::shared_ptr<Atomistic>;
     
@@ -128,7 +128,7 @@ namespace simploce {
     using atom_ptr_t = std::shared_ptr<Atom>;
     
     /**
-     * Coarse grained model pointer type.
+     * Coarse grained particle model pointer type.
      */
     using cg_ptr_t = std::shared_ptr<CoarseGrained>;
     
@@ -138,49 +138,19 @@ namespace simploce {
     using bead_ptr_t = std::shared_ptr<Bead>;        
     
     /*
-     * Protonatable (discrete) bead pointer type.
+     * Discretely protonatable bead pointer type.
      */
-    using dprot_bead_ptr_t = std::shared_ptr<ProtonatableBead>;
+    using dprot_bead_ptr_t = std::shared_ptr<DiscreteProtonatableBead>;
     
     /**
-     * Protonatable (continouos) bead pointer type.
+     * Continuous protonatable bead pointer type.
      */
-    using cprot_bead_ptr_t = std::shared_ptr<ProtonatingBead>;
+    using cprot_bead_ptr_t = std::shared_ptr<ContinuousProtonatableBead>;
     
     /**
      * Particle specification pointer type
      */
-    using particle_spec_ptr_t = std::shared_ptr<ParticleSpec>;     
-    
-    /**
-     * Atom specification type.
-     */
-    using AtomSpec = ParticleSpec;
-    
-    /**
-     * Atom specification type.
-     */
-    using atom_spec_ptr_t = particle_spec_ptr_t;
-    
-    /**
-     * Bead specification type.
-     */
-    using BeadSpec = ParticleSpec;
-    
-    /**
-     * Bead specification pointer type.
-     */
-    using bead_spec_ptr_t = particle_spec_ptr_t;
-    
-    /**
-     * Protonatable bead specification.
-     */
-    using ProtBeadSpec = ParticleSpec;
-    
-    /**
-     * Protonatable bead specification pointer type.
-     */
-    using prot_bead_spec_ptr_t = particle_spec_ptr_t;
+    using spec_ptr_t = std::shared_ptr<ParticleSpec>;     
     
     /**
      * Particle specification catalog pointer type.
@@ -190,7 +160,7 @@ namespace simploce {
     /**
      * Atom-based protonation site type.
      */
-    using atom_prot_site_t = ProtonationSite<Atom, AtomSpec>;
+    using atom_prot_site_t = ProtonationSite<Atom>;
     
     /**
      * Atom-based protonation site pointer type.
@@ -200,7 +170,7 @@ namespace simploce {
     /**
      * Bead-based protonation site type.
      */
-    using bead_prot_site_t = ProtonationSite<Bead, BeadSpec>;
+    using bead_prot_site_t = ProtonationSite<Bead>;
     
     /**
      * Bead-based protonation site pointer type.

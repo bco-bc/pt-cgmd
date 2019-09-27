@@ -59,7 +59,7 @@ namespace simploce {
         atom_ptr_t addAtom(std::size_t id,
                            const std::string& name,
                            const position_t& r, 
-                           const atom_spec_ptr_t& spec);
+                           const spec_ptr_t& spec);
         
         /**
          * Identify protonation sites.

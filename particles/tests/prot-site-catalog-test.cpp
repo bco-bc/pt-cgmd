@@ -43,10 +43,10 @@ void test1() {
     spec_catalog_ptr_t specs = ParticleSpecCatalog::create(stream);
     std::cout << *specs << std::endl;
     
-    atom_spec_ptr_t specC = specs->lookup("C");
-    atom_spec_ptr_t specO = specs->lookup("O");
-    atom_spec_ptr_t specH = specs->lookup("H");
-    atom_spec_ptr_t specN = specs->lookup("N");
+    spec_ptr_t specC = specs->lookup("C");
+    spec_ptr_t specO = specs->lookup("O");
+    spec_ptr_t specH = specs->lookup("H");
+    spec_ptr_t specN = specs->lookup("N");
    
     position_t r;
     

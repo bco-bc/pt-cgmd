@@ -34,9 +34,6 @@
 
 #include "particle.hpp"
 #include "ptypes.hpp"
-#include <vector>
-#include <memory>
-#include <string>
 
 namespace simploce {
     
@@ -64,10 +61,11 @@ namespace simploce {
         Bead(std::size_t id,
              std::size_t index, 
              const std::string& name,
-             const bead_spec_ptr_t& spec);
+             const spec_ptr_t& spec);
         
     private:
         
+        // Owns beads.
         friend class CoarseGrained;
         
         /**
@@ -80,7 +78,7 @@ namespace simploce {
         static bead_ptr_t create(std::size_t id,
                                  std::size_t index,
                                  const std::string& name,
-                                 const bead_spec_ptr_t& spec);
+                                 const spec_ptr_t& spec);
         
     };
 }

@@ -32,7 +32,7 @@ void test1() {
     file::open_input(stream, fileName);
     spec_catalog_ptr_t catalog = ParticleSpecCatalog::create(stream);
     std::cout << *catalog << std::endl;
-    atom_spec_ptr_t spec = catalog->lookup("O");
+    spec_ptr_t spec = catalog->lookup("O");
     std::cout << "spec: " << *spec << std::endl;
 }
 

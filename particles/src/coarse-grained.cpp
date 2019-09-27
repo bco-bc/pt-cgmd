@@ -30,9 +30,10 @@
  */
 
 #include "simploce/particle/coarse-grained.hpp"
-#include "simploce/particle/protonatable-bead.hpp"
-#include "simploce/particle/protonating-bead.hpp"
+#include "simploce/particle/discrete-protonatable-bead.hpp"
+#include "simploce/particle/continuous-protonatable-bead.hpp"
 #include "simploce/particle/pconf.hpp"
+#include "simploce/particle/particle-spec.hpp"
 #include "simploce/particle/particle-spec-catalog.hpp"
 #include "simploce/particle/particle-group.hpp"
 #include <boost/algorithm/string.hpp>
@@ -53,10 +54,11 @@ namespace simploce {
     {        
     }
     
-    bead_ptr_t CoarseGrained::addBead(std::size_t id,
-                                      const std::string& name, 
-                                      const position_t& r, 
-                                      const bead_spec_ptr_t& spec)
+    bead_ptr_t 
+    CoarseGrained::addBead(std::size_t id,
+                       const std::string& name, 
+                       const position_t& r, 
+                       const spec_ptr_t& spec)
     {
         auto index = indexGenerator_(*this);
         bead_ptr_t bead = Bead::create(id, index, name, spec);
@@ -65,50 +67,56 @@ namespace simploce {
         return bead;
     }
             
-    dprot_bead_ptr_t CoarseGrained::addProtonatableBead(std::size_t id,
-                                                       const std::string& name, 
-                                                       const position_t& r,
-                                                       std::size_t protonationState,
-                                                       const bead_spec_ptr_t& spec)
+
+    dprot_bead_ptr_t 
+    CoarseGrained::addDiscreteProtonatableBead(std::size_t id,
+                                               const std::string& name, 
+                                               const position_t& r,
+                                               std::size_t protonationState,
+                                               const spec_ptr_t& spec)
     {  
         auto index = indexGenerator_(*this);
         dprot_bead_ptr_t bead = 
-            ProtonatableBead::create(id, index, name, protonationState, spec);
+            DiscreteProtonatableBead::create(id, index, name, protonationState, spec);
         bead->position(r);
         discrete_.push_back(bead);
         this->add(bead);
         return bead;
     }
     
-    cprot_bead_ptr_t CoarseGrained::addProtonatingBead(std::size_t id,
-                                                       const std::string& name, 
-                                                       const position_t& r,
-                                                       std::size_t protonationState,
-                                                       const bead_spec_ptr_t& spec)
+    cprot_bead_ptr_t
+    CoarseGrained::addContinuousProtonatableBead(std::size_t id,
+                                                 const std::string& name, 
+                                                 const position_t& r,
+                                                 std::size_t protonationState,
+                                                 const spec_ptr_t& spec)
     {
         auto index = indexGenerator_(*this);
         cprot_bead_ptr_t bead = 
-            ProtonatingBead::create(id, index, name, protonationState, spec);
+            ContinuousProtonatableBead::create(id, index, name, protonationState, spec);
         bead->position(r);
         continuous_.push_back(bead);
         this->add(bead);
         return bead;
     }
     
-    bead_group_ptr_t CoarseGrained::addBeadGroup(const std::vector<bead_ptr_t>& beads, 
-                                                 const std::vector<id_pair_t>& pairs)
+    bead_group_ptr_t 
+    CoarseGrained::addBeadGroup(const std::vector<bead_ptr_t>& beads, 
+                                const std::vector<id_pair_t>& pairs)
     {
         bead_group_ptr_t group = std::make_shared<ParticleGroup<Bead>>(beads, pairs);
         this->addGroup(group);
         return group;
     }
     
-    std::size_t CoarseGrained::numberOfProtonationSites() const
+    std::size_t 
+    CoarseGrained::numberOfProtonationSites() const
     {
         return discrete_.size() + continuous_.size();
     }
                 
-    std::size_t CoarseGrained::protonationState() const
+    std::size_t 
+    CoarseGrained::protonationState() const
     {
         std::size_t numberOfProtons{0};
         for (auto d: discrete_) {
@@ -120,8 +128,9 @@ namespace simploce {
         return numberOfProtons;
     }
     
-    cg_ptr_t CoarseGrained::readFrom(std::istream& stream, 
-                                     const spec_catalog_ptr_t& catalog)
+    cg_ptr_t 
+    CoarseGrained::readFrom(std::istream& stream, 
+                            const spec_catalog_ptr_t& catalog)
     {
         cg_ptr_t cg = std::make_shared<CoarseGrained>();
         
@@ -142,7 +151,7 @@ namespace simploce {
             stream.read(charBuffer, bufferSize);
             std::string specName = std::string(charBuffer, bufferSize);
             boost::trim(specName);
-            bead_spec_ptr_t spec = catalog->lookup(specName);
+            spec_ptr_t spec = catalog->lookup(specName);
             std::size_t id;
             stream >> id;
             real_t x, y, z, vx, vy, vz;
@@ -151,20 +160,20 @@ namespace simploce {
             velocity_t v{vx, vy, vz};
             std::size_t protonatable;
             stream >> protonatable;
-            if ( protonatable == conf::PROTONATABLE) {
+            if ( protonatable == conf::DISCRETELY_PROTONATABLE) {
                 // Discrete changes in protonation state.
                 std::size_t protonationState;            
                 stream >> protonationState;
                 dprot_bead_ptr_t bead = 
-                    cg->addProtonatableBead(id, name, r, protonationState, spec);
+                    cg->addDiscreteProtonatableBead(id, name, r, protonationState, spec);
                 bead->velocity(v);
-            } else if ( protonatable == conf::PROTONATING) {
+            } else if ( protonatable == conf::CONTINUOUSLY_PROTONATABLE) {
                 // Continuous change in protonation state.
                 std::size_t protonationState;
                 real_t x, I;
                 stream >> protonationState >> x >> I;
                 cprot_bead_ptr_t bead =
-                    cg->addProtonatingBead(id, name, r, protonationState, spec);
+                    cg->addContinuousProtonatableBead(id, name, r, protonationState, spec);
                 bead->velocity(v);
                 bead->state(x);
                 bead->current(I);
@@ -180,6 +189,12 @@ namespace simploce {
         cg->readFreeAndGroups(stream);
         
         return cg; 
+    }
+    
+    std::size_t 
+    CoarseGrained::numberOfBeads() const
+    {
+        return this->numberOfParticles();
     }
     
     std::ostream& operator << (std::ostream& stream, const CoarseGrained& cg)

@@ -22,7 +22,7 @@
  * THE SOFTWARE.
  */
 
-#include "simploce/particle/protonating-bead.hpp"
+#include "simploce/particle/continuous-protonatable-bead.hpp"
 #include "simploce/particle/pconf.hpp"
 #include <stdexcept>
 #include <iomanip>
@@ -30,32 +30,32 @@
 
 namespace simploce {
     
-    ProtonatingBead::~ProtonatingBead()
+    ContinuousProtonatableBead::~ContinuousProtonatableBead()
     {        
     }
     
-    real_t ProtonatingBead::state() const
+    real_t ContinuousProtonatableBead::state() const
     {
         return x_;
     }
     
-    void ProtonatingBead::state(real_t x)
+    void ContinuousProtonatableBead::state(real_t x)
     {
         assert(x >= 0.0 && x <= 1.0);
         x_ = x;
     }
     
-    real_t ProtonatingBead::current() const
+    real_t ContinuousProtonatableBead::current() const
     {
         return I_;
     }
     
-    void ProtonatingBead::current(real_t I)
+    void ContinuousProtonatableBead::current(real_t I)
     {
         I_ = I;
     }
     
-    charge_t ProtonatingBead::charge() const
+    charge_t ContinuousProtonatableBead::charge() const
     {
         // Fully deprotonated state.
         charge_t charge = Particle::charge();
@@ -66,7 +66,7 @@ namespace simploce {
         return charge;
     }
     
-    mass_t ProtonatingBead::mass() const
+    mass_t ContinuousProtonatableBead::mass() const
     {
         // Fully deprotonated state.
         mass_t mass = Particle::mass();
@@ -77,78 +77,81 @@ namespace simploce {
         return mass;
     }
     
-    void ProtonatingBead::protonate()
+    void ContinuousProtonatableBead::protonate()
     {
         protonationState_ = 1;
     }
     
-    void ProtonatingBead::deprotonate()
+    void ContinuousProtonatableBead::deprotonate()
     {
         protonationState_ = 0;
     }
     
-    bool ProtonatingBead::isProtonated() const
+    bool ContinuousProtonatableBead::isProtonated() const
     {
         return this->protonationState() == 1;
     }
     
-    std::size_t ProtonatingBead::protonationState() const 
+    std::size_t ContinuousProtonatableBead::protonationState() const 
     {
         return protonationState_;
     }
     
-    cprot_bead_ptr_t ProtonatingBead::create(std::size_t id,
-                                             std::size_t index, 
-                                             const std::string& name,
-                                             std::size_t protonationState,
-                                             const bead_spec_ptr_t& spec)
-    {  
-        return cprot_bead_ptr_t(new ProtonatingBead(id, 
-                                                 index, 
-                                                 name, 
-                                                 protonationState, 
-                                                 spec));
-    }
-    
-    void ProtonatingBead::write(std::ostream& stream) const
+    void ContinuousProtonatableBead::write(std::ostream& stream) const
     {
         const auto space = conf::SPACE;
         
         stream.setf(std::ios::scientific);        
-        Bead::write(stream);
-        stream << space << conf::PROTONATING << space << protonationState_ 
+        Particle::write(stream);
+        stream << space << conf::CONTINUOUSLY_PROTONATABLE << space << protonationState_ 
                << space << std::setw(conf::WIDTH) << x_ 
                << space << std::setw(conf::WIDTH) << I_;
     }
     
-    void ProtonatingBead::writeState(std::ostream& stream) const
+    void ContinuousProtonatableBead::writeState(std::ostream& stream) const
     {
         const auto space = conf::SPACE;
         
-        Bead::writeState(stream);
+        Particle::writeState(stream);
         stream << space << protonationState_ << space << x_ << space << I_;
     }
     
-    void ProtonatingBead::readState(std::istream& stream)
+    void ContinuousProtonatableBead::readState(std::istream& stream)
     {
-        Bead::readState(stream);
+        Particle::readState(stream);
         stream >> protonationState_ >> x_ >> I_;        
     }
         
-    ProtonatingBead::ProtonatingBead(std::size_t id,
-                                     std::size_t index, 
-                                     const std::string &name,
-                                     std::size_t protonationState,
-                                     const bead_spec_ptr_t &spec) :
+    cprot_bead_ptr_t ContinuousProtonatableBead::create(std::size_t id,
+                                                        std::size_t index, 
+                                                        const std::string& name,
+                                                        std::size_t protonationState,
+                                                        const spec_ptr_t& spec)
+    {  
+        return cprot_bead_ptr_t(
+                new ContinuousProtonatableBead(id, 
+                                               index, 
+                                               name, 
+                                               protonationState, 
+                                               spec)
+                );
+    }
+    
+    ContinuousProtonatableBead::ContinuousProtonatableBead(std::size_t id,
+                                                           std::size_t index, 
+                                                           const std::string &name,
+                                                           std::size_t protonationState,
+                                                           const spec_ptr_t &spec) :
         Bead(id, index, name, spec), 
-        x_{0.0}, I_{}, protonationState_{protonationState}
+        x_{0.0}, I_{0.0}, protonationState_{protonationState}
     {        
         if ( protonationState_ > 1 ) {
             throw std::domain_error("ProtonatingBead: Illegal protonation state.");
-        }
+        }        
     }
         
-    std::ostream& operator << (std::ostream& stream, const ProtonatingBead& bead)
+    std::ostream& operator << (std::ostream& stream, 
+                               const ContinuousProtonatableBead& bead)
     {
         bead.write(stream);
         return stream;

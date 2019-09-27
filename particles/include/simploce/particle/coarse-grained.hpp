@@ -59,36 +59,35 @@ namespace simploce {
         bead_ptr_t addBead(std::size_t id,
                            const std::string& name, 
                            const position_t& r, 
-                           const bead_spec_ptr_t& spec);
+                           const spec_ptr_t& spec);
         
         /**
-         * Adds new discrete protonatable bead to this coarse grained particle model.
+         * Adds new discrete protonatable bead.
          * @param id Unique identifier.
-         * @param name Name.
+         * @param name Bead name.
          * @param r Position.
-         * @param protonationState Number of bound protons. Must be >= 0.
+         * @param protonationState Protonation state. Must be in {0, 1, 2, ...}.
          * @param spec Specification.
          */
-        dprot_bead_ptr_t addProtonatableBead(std::size_t id,
-                                             const std::string& name, 
-                                             const position_t& r,
-                                             std::size_t protonationState,
-                                             const bead_spec_ptr_t& spec);
+        dprot_bead_ptr_t addDiscreteProtonatableBead(std::size_t id,
+                                                     const std::string& name, 
+                                                     const position_t& r,
+                                                     std::size_t protonationState,
+                                                     const spec_ptr_t& spec);
         
         /**
-         * Adds new protonating bead to this coarse grained particle model.
+         * Adds new continuous protonatable bead.
          * @param id Unique identifier.
-         * @param name Name.
+         * @param name Bead name.
          * @param r Position.
-         * @param protonationState Number of bound protons. Must be >= 0.
+         * @param protonationState Protonation state. Either 0 or 1.
          * @param spec Specification.
          */
-        cprot_bead_ptr_t addProtonatingBead(std::size_t id,
-                                            const std::string& name, 
-                                            const position_t& r,
-                                            std::size_t protonationState,
-                                            const bead_spec_ptr_t& spec);
-                        
+        cprot_bead_ptr_t addContinuousProtonatableBead(std::size_t id,
+                                                       const std::string& name, 
+                                                       const position_t& r,
+                                                       std::size_t protonationState,
+                                                       const spec_ptr_t& spec);
         /**
          * Adds a bead group with bonds to this physical system.
          * @param beads Beads. Must be already in this particle model.
@@ -126,6 +125,12 @@ namespace simploce {
          */
         template <typename R, typename TASK>
         R doWithProtBeads(const TASK& task) { return task(discrete_, continuous_); }
+        
+        /**
+         * Returns number of beads.
+         * @return Number.
+         */
+        std::size_t numberOfBeads() const;        
         
     private:
         

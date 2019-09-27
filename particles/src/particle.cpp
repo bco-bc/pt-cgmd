@@ -33,7 +33,7 @@ namespace simploce {
     Particle::Particle(std::size_t id,
                        std::size_t index, 
                        const std::string& name, 
-                       const particle_spec_ptr_t& spec) :
+                       const spec_ptr_t& spec) :
         id_{id}, index_{index}, name_{name}, spec_{spec}, r_{}, p_{}, v_{}, f_{}
     {
         if ( name_.empty() ) {
@@ -63,7 +63,7 @@ namespace simploce {
         return name_;
     }
     
-    particle_spec_ptr_t Particle::spec() const
+    spec_ptr_t Particle::spec() const
     {
         return spec_;
     }
@@ -157,7 +157,7 @@ namespace simploce {
         this->velocity(v);
     }
     
-    void Particle::reset_(const particle_spec_ptr_t &spec)
+    void Particle::reset_(const spec_ptr_t &spec)
     {
         if ( !spec ) {
             throw std::domain_error("A particle specification must be provided.");

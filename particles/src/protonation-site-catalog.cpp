@@ -148,23 +148,23 @@ namespace simploce {
                          std::size_t index,
                          const catalog_protonation_site_t& site,
                          std::vector<atom_ptr_t>& particles,
-                         std::vector<atom_spec_ptr_t>& deprotonated,
-                         std::vector<atom_spec_ptr_t>& protonated)
+                         std::vector<spec_ptr_t>& deprotonated,
+                         std::vector<spec_ptr_t>& protonated)
     {
         // Add atom.
         particles.push_back(atom);
                         
         // Create new specification for deprotonated state.
-        atom_spec_ptr_t spec = atom->spec();
+        spec_ptr_t spec = atom->spec();
         std::string dspecName = "D_" + spec->name();
         charge_t dcharge = site.deprotonated[index].charge;
-        atom_spec_ptr_t dspec = ParticleSpec::createFrom(spec, dspecName, dcharge);
+        spec_ptr_t dspec = ParticleSpec::createFrom(spec, dspecName, dcharge);
         deprotonated.push_back(dspec);  
         
         // Create new specification for protonated state.
         std::string pspecName = "P_" + spec->name();
         charge_t pcharge = site.protonated[index].charge;
-        atom_spec_ptr_t pspec = 
+        spec_ptr_t pspec = 
         ParticleSpec::createFrom(spec, pspecName, pcharge);
         protonated.push_back(pspec);                                
     }
@@ -195,8 +195,8 @@ namespace simploce {
         
         // Protonation site.
         std::vector<atom_ptr_t> particles{};
-        std::vector<atom_spec_ptr_t> deprotonated{};
-        std::vector<atom_spec_ptr_t> protonated{};
+        std::vector<spec_ptr_t> deprotonated{};
+        std::vector<spec_ptr_t> protonated{};
                            
         // Build.
         while ( counter < natoms ) {
@@ -270,13 +270,13 @@ namespace simploce {
     static protonation_site_catalog_t catalog_{};
     
     
-    std::vector<atom_prot_site_ptr_t> ProtonationSiteCatalog::lookup(Atomistic& atomistic) const
+    std::vector<atom_prot_site_ptr_t> ProtonationSiteCatalog::lookup(Atomistic& at) const
     {
         using prot_sites_cont_t = std::vector<atom_prot_site_ptr_t>;
         using iter_t = protonation_site_catalog_t::const_iterator;
         using pair_t = std::pair<std::string, catalog_protonation_site_t>;
         
-        return atomistic.doWithAll<prot_sites_cont_t>([] (const std::vector<atom_ptr_t>& atoms) {
+        return at.doWithAll<prot_sites_cont_t>([] (const auto& atoms) {
             prot_sites_cont_t protonationSites{};
             
             for (iter_t iter = catalog_.begin(); iter != catalog_.end(); ++iter) {

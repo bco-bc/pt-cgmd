@@ -47,17 +47,10 @@ namespace simploce {
         
         /**
          * Looks up protonation sites composed of atoms.
-         * @param name Protonation site name.
-         * @return Protonation sites. These have not been added to <code>atomistic</code>.
+         * @param at Atomistic particle model.
+         * @return Protonation sites.
          */
-        std::vector<atom_prot_site_ptr_t> lookup(Atomistic& atomistic) const;
-        
-        /**
-         * Looks up a protonation site composed of beads.
-         * @param name Protonation site name.
-         * @return Protonation site.
-         */
-        //std::vector<bead_prot_site_ptr_t> tookup(CoarseGrained& coarseGrained) const;
+        std::vector<atom_prot_site_ptr_t> lookup(Atomistic& at) const;
         
         /**
          * Returns all protonation site names.

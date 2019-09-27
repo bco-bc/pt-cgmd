@@ -54,14 +54,19 @@ namespace simploce {
         const charge_t CHARGE_PROTON = 1.0;
         
         /**
-         * Discrete changes in particle's protonation state.
+         * No changes in protonation state.
          */
-        const std::size_t PROTONATABLE = 1;
+        const std::size_t NOT_PROTONATABLE = 0;
         
         /**
-         * continouos change in particle's protonation state.
+         * Discrete changes in particle's protonation state.
          */
-        const std::size_t PROTONATING = 2;
+        const std::size_t DISCRETELY_PROTONATABLE = 1;
+        
+        /**
+         * Continouos changes in particle's protonation state.
+         */
+        const std::size_t CONTINUOUSLY_PROTONATABLE = 2;
         
     }
 }

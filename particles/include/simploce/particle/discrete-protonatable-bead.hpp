@@ -23,14 +23,14 @@
  */
 
 /* 
- * File:   protonatable-bead.hpp
+ * File:   discretely-protonatable-bead.hpp
  * Author: André H. Juffer, Biocenter Oulu.
  *
  * Created on July 30, 2019, 5:33 PM
  */
 
-#ifndef PROTONATABLE_BEAD_HPP
-#define PROTONATABLE_BEAD_HPP
+#ifndef DISCRETE_PROTONATABLE_BEAD_HPP
+#define DISCRETE_PROTONATABLE_BEAD_HPP
 
 #include "bead.hpp"
 #include "protonatable.hpp"
@@ -40,23 +40,24 @@
 namespace simploce {
     
     /**
-     * Protonatable undergoing -discrete- changes in mass and charge values. 
+     * Protonatable bead undergoing -discrete- or -discontinuous- changes in 
+     * mass and charge values. Can bind more that one proton.
      */
-    class ProtonatableBead: public Bead, Protonatable {
+    class DiscreteProtonatableBead: public Bead, Protonatable {
     public:
         
-        virtual ~ProtonatableBead();
+        virtual ~DiscreteProtonatableBead();
         
-        virtual charge_t charge() const override;
+        charge_t charge() const override;
         
-        virtual mass_t mass() const override;
+        mass_t mass() const override;
         
         void protonate() override;
         
         void deprotonate() override;
         
         bool isProtonated() const override;
-        
+                
         std::size_t protonationState() const override;
         
         void write(std::ostream& stream) const override;
@@ -73,24 +74,25 @@ namespace simploce {
                                        std::size_t index, 
                                        const std::string& name,
                                        std::size_t numberOfBoundProtons,
-                                       const bead_spec_ptr_t& spec);
+                                       const spec_ptr_t& spec);
                 
-        ProtonatableBead(std::size_t id,
-                         std::size_t index, 
-                         const std::string &name,
-                         std::size_t numberOfBoundProtons,
-                         const bead_spec_ptr_t &spec);
+        DiscreteProtonatableBead(std::size_t id,
+                                   std::size_t index, 
+                                   const std::string &name,
+                                   std::size_t numberOfBoundProtons,
+                                   const spec_ptr_t &spec);
                
         std::size_t numberOfBoundProtons_;
     };
     
     /**
-     * Writes a protonatable bead to an output stream.
+     * Writes a protonatable to an output stream.
      * @param stream Output stream.
-     * @param pbead Protonatable bead.
+     * @param pbead Protonatable.
      * @return Output stream.
      */
-    std::ostream& operator << (std::ostream& stream, const ProtonatableBead& bead);
+    std::ostream& operator << (std::ostream& stream, 
+                               const DiscreteProtonatableBead& bead);
 }
 
 #endif /* PROTONATABLE_BEAD_HPP */
