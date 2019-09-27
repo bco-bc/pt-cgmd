@@ -113,9 +113,9 @@ namespace simploce {
         // How many CG particles? A single polarizable CG water particle represents 
         // 5 water molecules. Each CG water particles consists of two connected 
         // CG particles (CW and DP).
-        bead_spec_ptr_t mh2o = catalog_->molecularWater();
-        bead_spec_ptr_t cwSpec = catalog_->lookup("CW");
-        bead_spec_ptr_t dpSpec = catalog_->lookup("DP");
+        spec_ptr_t mh2o = catalog_->molecularWater();
+        spec_ptr_t cwSpec = catalog_->lookup("CW");
+        spec_ptr_t dpSpec = catalog_->lookup("DP");
         const length_t R_cw_dp = CoarseGrainedPolarizableWater::idealDistanceCWDP();
         std::clog << "\"Ideal\" distance between CW and DP: " << R_cw_dp 
                   << " nm" << std::endl;

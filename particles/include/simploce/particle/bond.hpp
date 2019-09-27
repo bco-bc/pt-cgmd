@@ -48,7 +48,7 @@ namespace simploce {
         /**
          * Particle pointer type.
          */
-        using particle_ptr_t = std::shared_ptr<P>;
+        using p_ptr_t = std::shared_ptr<P>;
         
         virtual ~Bond() {}
     
@@ -58,55 +58,62 @@ namespace simploce {
          * @param p2 Second particle, particle "2".
          * @return Bond.
          */
-        static Bond makeBond(const particle_ptr_t& p1, const particle_ptr_t& p2);
+        static Bond makeBond(const p_ptr_t& p1, 
+                             const p_ptr_t& p2);
     
         /**
          * Returns particle "1" involved in this bond.
          * @return Particle "1".
          */
-        const particle_ptr_t getParticleOne() const { return p1_; }
+        const p_ptr_t getParticleOne() const { return p1_; }
     
         /**
          * Returns particle "2" involved in this bond.
          * @return Particle "2".
          */
-        const particle_ptr_t getParticleTwo() const { return p2_; }
+        const p_ptr_t getParticleTwo() const { return p2_; }
     
         /**
          * Is given particle part of this bond.
          * @param particle Particle.
          * @return Result.
          */
-        bool contains(const particle_ptr_t& particle) const;
+        bool contains(const p_ptr_t& particle) const;
     
     private:
     
-        Bond(const particle_ptr_t& p1, const particle_ptr_t& p2) ;
+        Bond(const p_ptr_t& p1, 
+             const p_ptr_t& p2) ;
     
-        particle_ptr_t p1_;
-        particle_ptr_t p2_;
+        p_ptr_t p1_;
+        p_ptr_t p2_;
     
   };
   
   template <typename P>
-  Bond<P> Bond<P>::makeBond(const particle_ptr_t& p1, const particle_ptr_t& p2)
+  Bond<P> 
+  Bond<P>::makeBond(const p_ptr_t& p1, 
+                    const p_ptr_t& p2)
   {
-     if ( !p1 || !p2 ) {
-         throw std::domain_error("Bond: Two particles must be provided.");
-     }
      return Bond{p1, p2};
   }
   
   template <typename P>
-  bool Bond<P>::contains(const particle_ptr_t& particle) const
+  bool 
+  Bond<P>::contains(const p_ptr_t& particle) const
   {
       return particle == p1_ || particle == p2_;
   }
   
   template <typename P>
-  Bond<P>::Bond(const particle_ptr_t& p1, const particle_ptr_t& p2) :
+  Bond<P>::Bond(const p_ptr_t& p1, 
+                const p_ptr_t& p2) :
       p1_{p1}, p2_{p2}
   {      
+     if ( !p1_ || !p2_ ) {
+         throw std::domain_error("Bond: Two particles must be provided.");
+     }
+          
   }
     
 }

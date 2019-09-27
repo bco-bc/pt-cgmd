@@ -44,7 +44,8 @@ namespace simploce {
     {
     }
     
-    spec_ptr_t ParticleSpecCatalog::lookup(const std::string& name) const
+    spec_ptr_t 
+    ParticleSpecCatalog::lookup(const std::string& name) const
     {
         auto iter = specs_.find(name);
         if ( iter == specs_.end() ) {
@@ -55,12 +56,14 @@ namespace simploce {
         return (*iter).second;
     }
     
-    spec_ptr_t ParticleSpecCatalog::molecularWater() const
+    spec_ptr_t 
+    ParticleSpecCatalog::molecularWater() const
     {
         return this->lookup("mH2O");
     }
     
-    spec_catalog_ptr_t ParticleSpecCatalog::create(std::istream& stream)
+    spec_catalog_ptr_t 
+    ParticleSpecCatalog::create(std::istream& stream)
     {
         map_specs_t specs{};
         
@@ -104,7 +107,8 @@ namespace simploce {
         return spec_catalog_ptr_t(new ParticleSpecCatalog{specs});
     }
     
-    void ParticleSpecCatalog::write(std::ostream& stream) const
+    void 
+    ParticleSpecCatalog::write(std::ostream& stream) const
     {
         std::size_t counter = 0;
         for (auto iter = specs_.begin(); iter != specs_.end(); ++iter)
@@ -119,8 +123,9 @@ namespace simploce {
         }
     }
     
-    std::ostream& operator << (std::ostream& stream, 
-                               const ParticleSpecCatalog& catalog)
+    std::ostream& 
+    operator << (std::ostream& stream, 
+                 const ParticleSpecCatalog& catalog)
     {
         catalog.write(stream);
         return stream;

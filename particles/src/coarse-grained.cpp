@@ -197,7 +197,9 @@ namespace simploce {
         return this->numberOfParticles();
     }
     
-    std::ostream& operator << (std::ostream& stream, const CoarseGrained& cg)
+    std::ostream& 
+    operator << (std::ostream& stream, 
+                 const CoarseGrained& cg)
     {
         cg.write(stream);
         return stream;

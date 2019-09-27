@@ -14,6 +14,7 @@
 #ifndef UTIL_HPP
 #define UTIL_HPP
 
+#include <boost/lexical_cast.hpp>
 #include <ctime>
 #include <random>
 #include <cstdlib>
@@ -87,8 +88,18 @@ namespace simploce {
             for (auto& f : futures)
                 results.push_back(f.get());
             return results;
-        }            
-            
+        }       
+        
+        /**
+         * Returns string representation of t.
+         * @param t Simple type.
+         * @return String.
+         */
+        template <typename T>
+        std::string toString(const T& t)
+        {
+            return boost::lexical_cast<std::string, T>(t);
+        }
     }
 }
 

@@ -35,8 +35,12 @@ void test1()
     std::cout << "a1, a2: " << map2.at("a1", "a2") << std::endl;
     
     // Error.
-    std::cout << "Following should result in an exception..." << std::endl;
-    std::cout << map2.at("a1", "a3") << std::endl;  
+    try {
+        std::cout << "Following should result in an exception..." << std::endl;
+        std::cout << map2.at("a1", "a3") << std::endl;  
+    } catch(std::exception& ex) {
+        std::cerr << ex.what() << std::endl;
+    }
     
     std::map<std::string, double> mp;
     std::cout << mp << std::endl;

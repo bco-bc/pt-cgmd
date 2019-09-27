@@ -45,10 +45,11 @@ namespace simploce {
     {        
     }
     
-    atom_ptr_t Atom::create(std::size_t id,
-                            std::size_t index, 
-                            const std::string &name, 
-                            const spec_ptr_t &spec)
+    atom_ptr_t 
+    Atom::create(std::size_t id,
+                 std::size_t index, 
+                 const std::string &name, 
+                 const spec_ptr_t &spec)
     {
         return atom_ptr_t(new Atom(id, index, name, spec));
     }

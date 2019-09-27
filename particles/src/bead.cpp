@@ -47,7 +47,8 @@ namespace simploce {
     {        
     }
     
-    void Bead::write(std::ostream& stream) const
+    void
+    Bead::write(std::ostream& stream) const
     {
        const auto space = conf::SPACE;
         
@@ -55,20 +56,23 @@ namespace simploce {
        stream << space << conf::NOT_PROTONATABLE;
     }
     
-    void Bead::writeState(std::ostream& stream) const
+    void
+    Bead::writeState(std::ostream& stream) const
     {
         Particle::writeState(stream);
     }
     
-    void Bead::readState(std::istream& stream)
+    void
+    Bead::readState(std::istream& stream)
     {
         Particle::readState(stream);
     }
         
-    bead_ptr_t Bead::create(std::size_t id, 
-                            std::size_t index,
-                            const std::string& name,
-                            const spec_ptr_t& spec)
+    bead_ptr_t 
+    Bead::create(std::size_t id, 
+                 std::size_t index,
+                 const std::string& name,
+                 const spec_ptr_t& spec)
     {
         return bead_ptr_t(new Bead(id, index, name, spec));
     }

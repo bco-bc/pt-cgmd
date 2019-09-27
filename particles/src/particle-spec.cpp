@@ -36,44 +36,52 @@
 
 namespace simploce {
     
-    std::string ParticleSpec::name() const
+    std::string 
+    ParticleSpec::name() const
     {
         return name_;
     }
     
-    charge_t ParticleSpec::charge() const
+    charge_t 
+    ParticleSpec::charge() const
     {
         return charge_;
     }
     
-    mass_t ParticleSpec::mass() const
+    mass_t 
+    ParticleSpec::mass() const
     {
         return mass_;
     }
     
-    radius_t ParticleSpec::radius() const
+    radius_t 
+    ParticleSpec::radius() const
     {
         return radius_;
     }
     
-    pKa_t ParticleSpec::pKa() const
+    pKa_t 
+    ParticleSpec::pKa() const
     {
         return pKa_;
     }
     
-    bool ParticleSpec::isProtonatable() const
+    bool 
+    ParticleSpec::isProtonatable() const
     {
         return protonatable_;
     }
     
-    bool ParticleSpec::isContinuousProtonatable() const
+    bool 
+    ParticleSpec::isContinuousProtonatable() const
     {
         return continuous_;
     }
     
-    spec_ptr_t ParticleSpec::createFrom(const spec_ptr_t& spec,
-                                        const std::string& name,
-                                        charge_t charge)
+    spec_ptr_t 
+    ParticleSpec::createFrom(const spec_ptr_t& spec,
+                             const std::string& name,
+                             charge_t charge)
     {
         return spec_ptr_t(new ParticleSpec(
             name, charge, spec->mass(), spec->radius(), spec->pKa(), 
@@ -81,29 +89,32 @@ namespace simploce {
         ));
     }
     
-    spec_ptr_t ParticleSpec::create(const std::string& name, 
-                                    charge_t charge, 
-                                    mass_t mass,
-                                    radius_t radius)
+    spec_ptr_t 
+    ParticleSpec::create(const std::string& name, 
+                         charge_t charge, 
+                         mass_t mass,
+                         radius_t radius)
     {
         return spec_ptr_t(
             new ParticleSpec(name, charge, mass, radius, 0.0, false, false)
         );
     }
     
-    spec_ptr_t ParticleSpec::create(const std::string& name,
-                                    charge_t charge,
-                                    mass_t mass,
-                                    radius_t radius,
-                                    pKa_t pKa,
-                                    bool continuous)
+    spec_ptr_t 
+    ParticleSpec::create(const std::string& name,
+                         charge_t charge,
+                         mass_t mass,
+                         radius_t radius,
+                         pKa_t pKa,
+                         bool continuous)
     {
         return spec_ptr_t(
             new ParticleSpec(name, charge, mass, radius, pKa, true, continuous)
         );
     }
         
-    void ParticleSpec::write(std::ostream& stream) const
+    void 
+    ParticleSpec::write(std::ostream& stream) const
     {
         const auto space = conf::SPACE;
         const auto width = conf::NAME_WIDTH;
@@ -136,7 +147,9 @@ namespace simploce {
         }        
     }
         
-    std::ostream& operator << (std::ostream& stream, const ParticleSpec& spec)
+    std::ostream& 
+    operator << (std::ostream& stream, 
+                 const ParticleSpec& spec)
     {
         spec.write(stream);
         return stream;

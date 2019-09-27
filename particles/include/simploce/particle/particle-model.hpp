@@ -36,6 +36,7 @@
 #include "pproperties.hpp"
 #include "ptypes.hpp"
 #include "pconf.hpp"
+#include "simploce/util/util.hpp"
 #include <memory>
 #include <vector>
 #include <stdexcept>
@@ -43,7 +44,6 @@
 #include <iostream>
 #include <iomanip>
 #include <utility>
-#include <boost/lexical_cast.hpp>
 
 namespace simploce {
     
@@ -150,14 +150,14 @@ namespace simploce {
          * R operator () (const std::vector<p_ptr_t>& all);
          * </code>
          * where 'all' represents all the particles in this model.
-         * @param task Task of type TASK. This may also be a lamdba expression.
-         * @return Result of type R.
+         * @param task Task of type TASK. This may be a lambda expression.
+         * @return Result of type R. May be void.
          */
         template <typename R, typename TASK>
-        R doWithAll(const TASK task) { return task(all_); }
+        R doWithAll(const TASK& task) { return task(all_); }
         
         /**
-         * Performs a 'task' with all and free particles, as well as the 
+         * Performs a "task" with all and free particles, as well as the 
          * particle groups. The given task must expose the operator
          * <code>
          *  R operator () (const std::vector<p_ptr_t>& all,
@@ -165,12 +165,13 @@ namespace simploce {
          *                 const std::vector<pg_ptr_t>& groups);
          * </code>
          * where 'all' represents -all- particles, 'free' refers to those particles
-         * not in any particle group (e.g. ions), and 'groups' are all particle groups.
-         * @param task Task of type TASK. This may also be a lamdba expression.
-         * @return Result of type R.
+         * not in any particle group (e.g. ions), and 'groups' are all particle 
+         * groups, respectively.
+         * @param task Task of type TASK. This may be a lambda expression.
+         * @return Result of type R. May be void.
          */
         template <typename R, typename TASK>
-        R doWithAllFreeGroups(const TASK task) { return task(all_, free_, groups_); }
+        R doWithAllFreeGroups(const TASK& task) { return task(all_, free_, groups_); }
         
         /**
          * Writes this particle model to an output stream.
@@ -246,23 +247,27 @@ namespace simploce {
     }
     
     template <typename P, typename PG>
-    void ParticleModel<P,PG>::resetForces()
+    void 
+    ParticleModel<P,PG>::resetForces()
     {
-        std::for_each(all_.begin(), all_.end(), [] (P& p) { p->resetForce(); });
+        std::for_each(all_.begin(), all_.end(), [] (P& p) { 
+            p->resetForce(); 
+        });
     }
     
     template <typename P, typename PG>
-    void ParticleModel<P,PG>::write(std::ostream& stream) const
+    void 
+    ParticleModel<P,PG>::write(std::ostream& stream) const
     {
         const char space = conf::SPACE;
         
         stream << all_.size() << std::endl;
-        for (const p_ptr_t& p: all_) {
+        for (const auto& p: all_) {
             p->write(stream);
             stream << std::endl;            
         }
         stream << free_.size() << std::endl;        
-        for (const p_ptr_t& p : free_) {
+        for (const auto& p : free_) {
             stream << space << p->index();
         }
         if ( !free_.empty() ) {
@@ -279,60 +284,63 @@ namespace simploce {
     }
     
     template <typename P, typename PG>
-    void ParticleModel<P,PG>::writeState(std::ostream& stream) const
+    void 
+    ParticleModel<P,PG>::writeState(std::ostream& stream) const
     {
-        for (const p_ptr_t& p: all_) {
+        for (const auto& p: all_) {
             p->writeState(stream);        
         }
     }
     
     template <typename P, typename PG>
-    void ParticleModel<P,PG>::add(const p_ptr_t& p)
+    void 
+    ParticleModel<P,PG>::add(const p_ptr_t& p)
     {
         if ( this->contains(p->id()) ) {
             std::string msg = 
-                boost::lexical_cast<std::string, std::size_t>(p->id()) +
-                ": Already added to particle model.";    
+                util::toString(p->id()) +  ": Already added to particle model."; 
             throw std::domain_error(msg);
         }
         all_.push_back(p);
     }
     
     template <typename P, typename PG>
-    void ParticleModel<P,PG>::addFree(const p_ptr_t& fp) 
+    void 
+    ParticleModel<P,PG>::addFree(const p_ptr_t& fp) 
     {
         if ( this->contains(fp->id()) ) {
-            std::string msg = 
-                boost::lexical_cast<std::string, std::size_t>(fp->id()) +
-                ": Already added to particle model.";    
-            throw std::domain_error(msg);
+            throw std::domain_error(
+                util::toString(fp->id()) +  ": Already added to particle model."   
+            );
         }
         this->add(fp);
         free_.push_back(fp); 
     }
     
     template <typename P, typename PG>
-    void ParticleModel<P,PG>::addGroup(const pg_ptr_t& pg)
+    void
+    ParticleModel<P,PG>::addGroup(const pg_ptr_t& pg)
     {
         for (const p_ptr_t& p : pg->particles() ) {
             if ( !this->contains(p->id()) ) {
-                std::string msg =
-                    boost::lexical_cast<std::string, std::size_t>(p->id()) +
-                    ": Not yet added to particle model."; 
-                throw std::domain_error(msg);
+                throw std::domain_error(
+                    util::toString(p->id()) + ": Not yet added to particle model." 
+                );
             }
         }
         for (auto g : groups_ ) {
             if ( g == pg) {
                 throw std::domain_error(
-                    "Particle group already added to particle model.");
+                    "Particle group already added to particle model."
+                );
             }
         }
         groups_.push_back(pg);
     }
         
     template <typename P, typename PG>
-    void ParticleModel<P,PG>::readFreeAndGroups(std::istream& stream)
+    void
+    ParticleModel<P,PG>::readFreeAndGroups(std::istream& stream)
     {
         std::string stringBuffer;
         
@@ -345,10 +353,7 @@ namespace simploce {
             stream >> id;
             p_ptr_t particle = this->find(id);
             if ( particle == nullptr ) {
-                std::string msg = 
-                    boost::lexical_cast<std::string, std::size_t>(id) +
-                    ": No such free particle.";
-                throw std::domain_error(msg);
+                throw std::domain_error(util::toString(id) + ": No such free particle.");
             }
             free_.push_back(particle);
         }
@@ -372,10 +377,7 @@ namespace simploce {
                 stream >> id;
                 p_ptr_t particle = this->find(id);
                 if ( particle == nullptr ) {
-                    std::string msg = 
-                        boost::lexical_cast<std::string, std::size_t>(id) +
-                        ": No such particle.";
-                    throw std::domain_error(msg);
+                    throw std::domain_error(util::toString(id) + ": No such particle.");
                 }
                 particles.push_back(particle);
             }                        

@@ -38,7 +38,8 @@
 
 namespace simploce {
     
-    static std::size_t indexGenerator_(const Atomistic& at)
+    static std::size_t 
+    indexGenerator_(const Atomistic& at)
     {
         return at.numberOfAtoms();
     }
