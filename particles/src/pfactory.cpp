@@ -37,7 +37,8 @@
 namespace simploce {
     namespace factory {
         
-        spec_catalog_ptr_t particleSpecCatalog(const std::string& fileName)
+        spec_catalog_ptr_t 
+        particleSpecCatalog(const std::string& fileName)
         {
             std::ifstream stream;
             file::open_input(stream, fileName);
@@ -46,7 +47,8 @@ namespace simploce {
             return catalog;
         }
         
-        spec_catalog_ptr_t particleSpecCatalog(std::istream& stream)
+        spec_catalog_ptr_t 
+        particleSpecCatalog(std::istream& stream)
         {
             return ParticleSpecCatalog::create(stream);
         }

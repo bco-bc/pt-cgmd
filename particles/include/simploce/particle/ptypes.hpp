@@ -138,12 +138,12 @@ namespace simploce {
     using bead_ptr_t = std::shared_ptr<Bead>;        
     
     /*
-     * Discretely protonatable bead pointer type.
+     * Protonatable (discrete) bead pointer type.
      */
     using dprot_bead_ptr_t = std::shared_ptr<DiscreteProtonatableBead>;
     
     /**
-     * Continuous protonatable bead pointer type.
+     * Protonatable (continuous) bead pointer type.
      */
     using cprot_bead_ptr_t = std::shared_ptr<ContinuousProtonatableBead>;
     

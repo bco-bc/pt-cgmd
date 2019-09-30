@@ -34,6 +34,7 @@
 
 #include "bond.hpp"
 #include "particle.hpp"
+#include "particle-group.hpp"
 #include "pproperties.hpp"
 #include "ptypes.hpp"
 #include "pconf.hpp"
@@ -86,7 +87,8 @@ namespace simploce {
          * @param particles Constituting particles.
          * @param bonds Bonds. Particles forming bonds must be constituting particles.
          */
-        ParticleGroup(const p_ptr_cont_t& particles, const bond_cont_t& bonds);
+        ParticleGroup(const p_ptr_cont_t& particles, 
+                      const bond_cont_t& bonds);
         
         /**
          * Constructor.
@@ -106,8 +108,7 @@ namespace simploce {
          * @param particle Particle.
          * @return Result.
          */
-        bool contains(const p_ptr_t& p) const { return particles_.find(p) != particles_.end(); }
-        
+        bool contains(const p_ptr_t& p) const;
         /**
          * Returns group's charge.
          * @return Charge.
@@ -149,7 +150,7 @@ namespace simploce {
         
     private:
         
-        p_ptr_t find_(std::size_t id) const { return properties::find<P>(id, particles_); }
+        p_ptr_t find_(std::size_t id) const;
         
         void validate_() const;
         
@@ -191,6 +192,12 @@ namespace simploce {
         }
         this->validate_();
     }
+        
+    template <typename P> 
+    bool 
+    ParticleGroup<P>::contains(const p_ptr_t& p) const { 
+        return particles_.find(p) != particles_.end();
+    }    
     
     template <typename P>    
     typename ParticleGroup<P>::pg_ptr_t 
@@ -201,7 +208,14 @@ namespace simploce {
     }    
         
     template <typename P>
-    void ParticleGroup<P>::validate_() const
+    typename ParticleGroup<P>::p_ptr_t 
+    ParticleGroup<P>::find_(std::size_t id) const { 
+        return properties::find<P>(id, particles_); 
+    }
+    
+    template <typename P>
+    void 
+    ParticleGroup<P>::validate_() const
     {
         if (particles_.empty() ) {
             throw std::domain_error(
@@ -227,7 +241,9 @@ namespace simploce {
     }
     
     template <typename P>
-    std::ostream& operator << (std::ostream& stream, const ParticleGroup<P>& group)
+    std::ostream& 
+    operator << (std::ostream& stream, 
+                 const ParticleGroup<P>& group)
     {        
         const char space = conf::SPACE;
         

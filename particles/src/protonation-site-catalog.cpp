@@ -64,8 +64,9 @@ namespace simploce {
         std::vector<catalog_particle_t> protonated;    // protonated state.
     };
         
-    static std::ostream& operator << (std::ostream& stream, 
-                                      const catalog_protonation_site_t& site)
+    static std::ostream& 
+    operator << (std::ostream& stream, 
+                 const catalog_protonation_site_t& site)
     {
         const int nameWidth = conf::NAME_WIDTH;
         
@@ -86,16 +87,17 @@ namespace simploce {
     /**
      * Selects atom for an actual protonation site.
      * @param first First identified atom. The requested atom should in the 
-     * "neighborhood" of the first atom.
+     * "neighbourhood" of the first atom.
      * @param window Search window around first atom.
      * @param name Name of atom sought.
      * @param atoms All atoms of physical system.
      * @return Iterator of selected atom in atoms, or atoms.end() if not found.
      */
-    static atom_iter_t selectAtom_(int first,
-                                   int window,
-                                   const std::string& name, 
-                                   const std::vector<atom_ptr_t>& atoms)
+    static atom_iter_t 
+    selectAtom_(int first,
+                int window,
+                const std::string& name, 
+                const std::vector<atom_ptr_t>& atoms)
     {        
         int natoms = atoms.size();
         
@@ -144,12 +146,13 @@ namespace simploce {
      * @param deprotonated Deprotonated state protonation site.
      * @param protonated protonated state protonation site.
      */
-    static void addAtom_(const atom_ptr_t& atom,
-                         std::size_t index,
-                         const catalog_protonation_site_t& site,
-                         std::vector<atom_ptr_t>& particles,
-                         std::vector<spec_ptr_t>& deprotonated,
-                         std::vector<spec_ptr_t>& protonated)
+    static void 
+    addAtom_(const atom_ptr_t& atom,
+             std::size_t index,
+             const catalog_protonation_site_t& site,
+             std::vector<atom_ptr_t>& particles,
+             std::vector<spec_ptr_t>& deprotonated,
+             std::vector<spec_ptr_t>& protonated)
     {
         // Add atom.
         particles.push_back(atom);
@@ -176,8 +179,8 @@ namespace simploce {
      * @return Protonation sites,
      */
     static std::vector<atom_prot_site_ptr_t> 
-        buildAll_(const catalog_protonation_site_t& site, 
-                  const std::vector<atom_ptr_t>& atoms)
+    buildAll_(const catalog_protonation_site_t& site, 
+              const std::vector<atom_ptr_t>& atoms)
     {   
         // Initial search window.
         const int initial_window = 1;
@@ -241,13 +244,6 @@ namespace simploce {
                     }
                 }
                 
-                // Create the protonation site.
-                /*
-                atom_prot_site_ptr_t protonationSite(new atom_prot_site_t{site.name, 
-                                                                          particles, 
-                                                                          deprotonated, 
-                                                                          protonated});
-                                                                          */
                 atom_prot_site_ptr_t protonationSite = 
                         std::make_shared<atom_prot_site_t>(site.name, 
                                                           particles, 
@@ -270,7 +266,8 @@ namespace simploce {
     static protonation_site_catalog_t catalog_{};
     
     
-    std::vector<atom_prot_site_ptr_t> ProtonationSiteCatalog::lookup(Atomistic& at) const
+    std::vector<atom_prot_site_ptr_t> 
+    ProtonationSiteCatalog::lookup(Atomistic& at) const
     {
         using prot_sites_cont_t = std::vector<atom_prot_site_ptr_t>;
         using iter_t = protonation_site_catalog_t::const_iterator;
@@ -296,7 +293,8 @@ namespace simploce {
         });
     }
     
-    prot_site_catalog_ptr_t ProtonationSiteCatalog::create(std::istream& stream)
+    prot_site_catalog_ptr_t 
+    ProtonationSiteCatalog::create(std::istream& stream)
     {
         using pair_t = std::pair<std::string, catalog_protonation_site_t>;
         
@@ -368,7 +366,9 @@ namespace simploce {
     {        
     }
     
-    std::ostream& operator << (std::ostream& stream, const ProtonationSiteCatalog& catalog)
+    std::ostream& 
+    operator << (std::ostream& stream, 
+                 const ProtonationSiteCatalog& catalog)
     {
         using iter_t = protonation_site_catalog_t::const_iterator;
         using pair_t = std::pair<std::string, catalog_protonation_site_t>;

@@ -48,54 +48,64 @@ namespace simploce {
     {        
     }
     
-    std::size_t Particle::id() const
+    std::size_t 
+    Particle::id() const
     {
         return id_;
     }
     
-    std::size_t Particle::index() const
+    std::size_t 
+    Particle::index() const
     {
         return index_;
     }
     
-    std::string Particle::name() const
+    std::string 
+    Particle::name() const
     {
         return name_;
     }
     
-    spec_ptr_t Particle::spec() const
+    spec_ptr_t 
+    Particle::spec() const
     {
         return spec_;
     }
     
-    charge_t Particle::charge() const
+    charge_t 
+    Particle::charge() const
     {
         return spec_->charge();
     }
     
-    mass_t Particle::mass() const
+    mass_t 
+    Particle::mass() const
     {
         return spec_->mass();
     }
     
-    const position_t Particle::position() const
+    const 
+    position_t Particle::position() const
     {
         return r_;
     }
     
-    void Particle::position(const position_t& r) 
+    void 
+    Particle::position(const position_t& r) 
     {
         r_ = r; 
     }
     
-    const momentum_t Particle::momentum() const
+    const 
+    momentum_t Particle::momentum() const
     { 
         real_t ma = this->mass()();
         velocity_t vv = ma * v_;
         return momentum_t{vv.toArray()};
     }
     
-    void Particle::momentum(const momentum_t& p) 
+    void 
+    Particle::momentum(const momentum_t& p) 
     { 
         real_t ma = this->mass()();
         for (std::size_t k = 0; k != 3; ++k) {
@@ -103,32 +113,38 @@ namespace simploce {
         }
     }
     
-    velocity_t Particle::velocity() const
+    velocity_t 
+    Particle::velocity() const
     {
         return v_;
     }
     
-    void Particle::velocity(const velocity_t& v)
+    void 
+    Particle::velocity(const velocity_t& v)
     {
         v_ = v;
     }
     
-    const force_t Particle::force() const 
+    const 
+    force_t Particle::force() const 
     {
         return f_; 
     }
     
-    void Particle::force(const force_t& f) 
+    void 
+    Particle::force(const force_t& f) 
     { 
         f_ = f;
     }
     
-    void Particle::resetForce() 
+    void 
+    Particle::resetForce() 
     { 
         f_ = force_t{}; 
     }
     
-    void Particle::write(std::ostream& stream) const
+    void 
+    Particle::write(std::ostream& stream) const
     {
         const auto space = conf::SPACE;
         
@@ -139,7 +155,8 @@ namespace simploce {
         stream << space << this->velocity();
     }
     
-    void Particle::writeState(std::ostream& stream) const
+    void 
+    Particle::writeState(std::ostream& stream) const
     {
         const auto space = conf::SPACE;
         
@@ -147,7 +164,8 @@ namespace simploce {
         stream << space << this->velocity();
     }
     
-    void Particle::readState(std::istream& stream)
+    void 
+    Particle::readState(std::istream& stream)
     {
         real_t x, y, z, vx, vy, vz;
         stream >> x >> y >> z >> vx >> vy >> vz;
@@ -157,7 +175,8 @@ namespace simploce {
         this->velocity(v);
     }
     
-    void Particle::reset_(const spec_ptr_t &spec)
+    void 
+    Particle::reset_(const spec_ptr_t &spec)
     {
         if ( !spec ) {
             throw std::domain_error("A particle specification must be provided.");
@@ -165,7 +184,9 @@ namespace simploce {
         spec_ = spec;
     }
     
-    std::ostream& operator << (std::ostream& stream, const Particle& particle)
+    std::ostream& 
+    operator << (std::ostream& stream, 
+                 const Particle& particle)
     {
         particle.write(stream);
         return stream;

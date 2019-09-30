@@ -115,13 +115,17 @@ namespace simploce {
                                  const spec_catalog_ptr_t& catalog);
         
         /**
-         * Perform a task with protonatable beads. The given task must expose the 
+         * Perform a "task" with protonatable beads. The given task must expose the 
          * operator
          * <code>
-         *  R operator () (const std::vector<prot_bead_ptr_t>& protonatableBeads);
+         *  R operator () (const std::vector<dprot_bead_ptr_t>& discrete,
+         *                 const std::vector<cprot_bead_ptr_t>& continuous);
          * </code>
-         * @param task Task. Maybe a lambda expression.
-         * @return Result.
+         * where 'discrete' represents all protonatables with discontinuously
+         * varying protonation states and 'continuous' are all protonatables with
+         * continuously varying protonation states, respectively.
+         * @param task Task. This may be a lambda expression.
+         * @return Result of type R. May be void.
          */
         template <typename R, typename TASK>
         R doWithProtBeads(const TASK& task) { return task(discrete_, continuous_); }
