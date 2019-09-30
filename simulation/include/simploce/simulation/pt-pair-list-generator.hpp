@@ -39,8 +39,9 @@
 namespace simploce {
     
     /**
-     * Finds pairs of protonatables that may be involved in transferring protons. This 
-     * applies to protonatables undergoing continuous changes in protonation state.
+     * Finds pairs of protonatables that may be involved in transferring 
+     * protons. This applies to protonatables undergoing continuous changes 
+     * in protonation state.
      */
     class ProtonTransferPairListGenerator {
     public:
