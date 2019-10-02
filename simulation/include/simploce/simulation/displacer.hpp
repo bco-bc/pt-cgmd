@@ -36,6 +36,9 @@
 
 namespace simploce {
     
+    /**
+     * Displaces or changes the state of simulation model.
+     */
     struct Displacer {
         
         virtual ~Displacer() {}

@@ -47,7 +47,7 @@ namespace simploce {
     class SimulationModel;
     
     /**
-     * specialisation for beads.
+     * Specialization for beads.
      */
     template <>
     class SimulationModel<Bead> {
@@ -60,6 +60,7 @@ namespace simploce {
         /**
          * Constructor
          * @param cg Coarse grained particle model.
+         * @param displacer Displacer.
          * @param forcefield Coarse grained force field.
          * @param box Simulation box.
          * @param bc Boundary condition.
@@ -136,6 +137,12 @@ namespace simploce {
         template <typename R, typename TASK>
         R doWithAll(const TASK task) { return cg_->doWithAll<R>(task); }
         
+        /**
+         * Assigns new displacer.
+         * @param displacer Displacer.
+         */
+        void displacer(const displacer_ptr_t& displacer);
+        
     private:
         
         friend std::ostream& operator << (std::ostream& stream, const SimulationModel<Bead>& sm);
@@ -143,7 +150,7 @@ namespace simploce {
         friend class ModelFactory;
         
         SimulationModel();
-        
+                        
         cg_ptr_t cg_;
         cg_displacer_ptr_t displacer_;
         cg_interactor_ptr_t interactor_;

@@ -50,8 +50,9 @@ namespace simploce {
         }
     }
     
-    SimulationData ProtonTransferLangevinVelocityVerlet::displace(const sim_param_t& param, 
-                                                                  const cg_ptr_t& cg) const
+    SimulationData 
+    ProtonTransferLangevinVelocityVerlet::displace(const sim_param_t& param, 
+                                                   const cg_ptr_t& cg) const
     {
         using prot_pair_list_t = 
             ProtonTransferPairListGenerator::prot_pair_list_t;
@@ -68,7 +69,7 @@ namespace simploce {
             data.numberOfProtonTransferPairs = pairlist.size();
         }
         
-        // Transfer protons.
+        // Transfer protons to update mass and charge values.
         if ( !pairlist.empty() ) {
             
         }

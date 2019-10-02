@@ -36,6 +36,9 @@
 
 namespace simploce {
     
+    /**
+     * Updates protonatable beads with continuous varying charges and mass values.
+     */
     class ProtonTransferLangevinVelocityVerlet : public CoarseGrainedDisplacer {
     public:
         

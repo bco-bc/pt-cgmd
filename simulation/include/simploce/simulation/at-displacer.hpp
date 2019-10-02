@@ -37,12 +37,15 @@
 
 namespace simploce {
 
+    /**
+     * Displaces atoms of an atomistic simulation model.
+     */
     struct AtomisticDisplacer : public Displacer {
         
         virtual ~AtomisticDisplacer() {}
         
         /**
-         * Displaces beads of a coarse grained particle model.
+         * Displaces atoms.
          * @param param Simulation parameters.
          * @param cg Coarse grained particle model.
          * @return Simulation data (e.g. kinetic energy, temperature, etc).

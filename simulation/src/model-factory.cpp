@@ -88,6 +88,8 @@ namespace simploce {
         std::clog.setf(std::ios_base::scientific, std::ios_base::floatfield);
         
         std::clog << "Creating Polarizable CGF Water:" << std::endl;
+        
+        std::clog << "Temperature: " << temperature << std::endl;
 
         // Convert kg/m^3 to u/nm^3.
         density_t atDensity = atDensitySI / (SIUnits<real_t>::MU * 1.0e+27);
@@ -207,7 +209,7 @@ namespace simploce {
             i += 1;
         }
         std::clog << "Created " << cg->numberOfParticles() << " beads." << std::endl;
-        std::clog << "Created " << cg->numberOfParticleGroups() << "polarizable waters" << std::endl;
+        std::clog << "Created " << cg->numberOfParticleGroups() << " polarizable waters." << std::endl;
 
         // Interactor.
         cg_interactor_ptr_t interactor = 
@@ -220,6 +222,34 @@ namespace simploce {
         // Done.
         return std::make_shared<cg_sim_model_t>(cg, displacer, interactor, box, bc);
     }    
+    
+    cg_sim_model_ptr_t 
+    ModelFactory::createFormicAcidSolution(const spec_catalog_ptr_t& catalog,
+                                           const box_ptr_t& box,
+                                           const molarity_t molarity,
+                                           const temperature_t temperature)
+    {
+        std::clog.setf(std::ios_base::scientific, std::ios_base::floatfield);
+        
+        std::clog << "Creating CG Formic Acid solution" << std::endl;
+        std::clog << "Molarity: " << molarity << " M" << std::endl;
+        
+        // Create CG polarizable water.
+        cg_sim_model_ptr_t cg = this->createPolarizableWater(catalog, box);
+        
+        volume_t volume = box->volume();
+        
+        // Molarity to number of HCOOH per water molecules.
+        number_density_t numberDensity =
+            molarity() * SIUnits<real_t>::NA / MUUnits<real_t>::l_to_nm3;
+        std::size_t nHCOOH = util::nint<real_t>(numberDensity() * volume());
+        std::clog << "Number of HCOOH: " << nHCOOH << std::endl;
+        
+        // Replace groups by HCCOH.
+        
+        
+        return cg;
+    }
     
     cg_sim_model_ptr_t ModelFactory::readCoarseGrainedFrom(std::istream& stream)
     {

@@ -52,9 +52,11 @@ namespace simploce {
          * Returns a coarse-grained (CG) simulation model of polarizable water 
          * according to Riniker and van Gunsteren, J. Chem. Phys. 134, 084119, 2011. 
          * The model maps 5 waters onto a polarizable coarse-grained bead with two mass points.
+         * @param catalog Particle specifications catalog.
          * @param box Simulation box.
          * @param atDensitySI Atomistic density in SI units kg/m^3. Default is 
          * 997.0479 kg/m^3 at 298.15 K (25 C).
+         * @param temperature Temperature, default is 298.15 K.
          * @return Coarse grained model.
          * @see <a href="https://en.wikipedia.org/wiki/Density#Water">Water Density</a>
          */
@@ -62,6 +64,19 @@ namespace simploce {
                                                   const box_ptr_t& box,
                                                   const density_t atDensitySI = 997.0479,
                                                   const temperature_t temperature = 298.15);
+        
+        /**
+         * Create a coarse grained simulation of formic acid in water.
+         * @param catalog Particle specifications catalog.
+         * @param box Simulation box.
+         * @param molarity Molarity. Default 0.1 M.
+         * @param temperature Temperature. Default is 298.15 K.
+         * @return Coarse grained model.
+         */
+        cg_sim_model_ptr_t createFormicAcidSolution(const spec_catalog_ptr_t& catalog,
+                                                    const box_ptr_t& box,
+                                                    const molarity_t molarity = 0.1,
+                                                    const temperature_t temperature = 298.15);
         
         /**
          * Creates new coarse grained model by reading it from an input stream.

@@ -62,6 +62,30 @@ namespace simploce {
         return this->lookup("mH2O");
     }
     
+    spec_ptr_t 
+    ParticleSpecCatalog::H() const
+    {
+        return this->lookup("H");
+    }
+    
+    spec_ptr_t 
+    ParticleSpecCatalog::C() const
+    {
+        return this->lookup("C");
+    }
+    
+    spec_ptr_t 
+    ParticleSpecCatalog::O() const
+    {
+        return this->lookup("O");
+    }
+    
+    spec_ptr_t 
+    ParticleSpecCatalog::N() const
+    {
+        return this->lookup("N");
+    }
+    
     spec_catalog_ptr_t 
     ParticleSpecCatalog::create(std::istream& stream)
     {

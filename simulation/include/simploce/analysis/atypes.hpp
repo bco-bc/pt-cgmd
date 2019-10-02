@@ -41,6 +41,9 @@ namespace simploce {
     template <typename P>
     class Analyzer;
     
+    /**
+     * Coarse grained analyzer pointer type.
+     */
     using cg_analyzer_ptr_t = std::shared_ptr<Analyzer<Bead>>;
 }
 

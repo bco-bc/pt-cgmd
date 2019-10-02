@@ -47,7 +47,7 @@
 namespace simploce {
     
     /**
-     * Calculates the radial distribution function g(r) for particles of
+     * Calculates the radial distribution function g(r) between particles of
      * given types.
      */
     template <typename P>
@@ -77,7 +77,8 @@ namespace simploce {
     
         /**
          * Returns results.
-         * @return Radial distribution function.
+         * @return Radial distribution function. First of each pair is r and the second
+         * is g(r).
          */
         std::vector<std::pair<real_t, real_t>> results() const;
         
@@ -163,6 +164,7 @@ namespace simploce {
             std::clog << "Number of particles of type '" << specName1_ << ": " << nparticles1_ << std::endl;
             std::clog << "Number of particles of type '" << specName2_ << ": " << nparticles2_ << std::endl;
             std::clog << "Upper limit for g(r): " << rmax_ << std::endl;
+            std::clog << "Bin size: " << dr_ << std::endl;
         }
         
         // For all particle pairs.

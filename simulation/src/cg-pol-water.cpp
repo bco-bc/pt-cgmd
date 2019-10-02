@@ -138,11 +138,12 @@ namespace simploce {
     {      
             setup_(catalog, bc);
     }
-    
-    energy_t CoarseGrainedPolarizableWater::interact(const std::vector<bead_ptr_t>& all,
-                                                     const std::vector<bead_ptr_t>& free,
-                                                     const std::vector<bead_group_ptr_t>& groups,
-                                                     const std::vector<bead_pair_list_t>& pairLists)
+            
+    energy_t 
+    CoarseGrainedPolarizableWater::interact(const std::vector<bead_ptr_t>& all,
+                                            const std::vector<bead_ptr_t>& free,
+                                            const std::vector<bead_group_ptr_t>& groups,
+                                            const std::vector<bead_pair_list_t>& pairLists)
     {
         std::pair<energy_t, std::vector<force_t>> bonded = bonded_(all.size(), groups);
         energy_t epot = LJ_COULOMB_F->interact(all, free, groups, pairLists);
@@ -159,12 +160,14 @@ namespace simploce {
         return epot;
     }
     
-    std::string CoarseGrainedPolarizableWater::id() const
+    std::string 
+    CoarseGrainedPolarizableWater::id() const
     {
         return conf::POLARIZABLE_WATER;
     }
     
-    length_t CoarseGrainedPolarizableWater::idealDistanceCWDP()
+    length_t
+    CoarseGrainedPolarizableWater::idealDistanceCWDP()
     {
         return R_CW_DP;
     }

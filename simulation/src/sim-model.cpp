@@ -62,24 +62,28 @@ namespace simploce {
     {
     }
        
-    std::size_t SimulationModel<Bead>::size() const
+    std::size_t 
+    SimulationModel<Bead>::size() const
     {
         return cg_->numberOfParticles();
     }
        
-    SimulationData SimulationModel<Bead>::interact(const sim_param_t& param)
+    SimulationData 
+    SimulationModel<Bead>::interact(const sim_param_t& param)
     {
         SimulationData data;
         data.epot = interactor_->interact(param, cg_);
         return data;
     }
     
-    SimulationData SimulationModel<Bead>::displace(const sim_param_t& param)
+    SimulationData 
+    SimulationModel<Bead>::displace(const sim_param_t& param)
     { 
         return displacer_->displace(param, cg_); 
     }
         
-    void SimulationModel<Bead>::saveState(std::ostream& stream)
+    void 
+    SimulationModel<Bead>::saveState(std::ostream& stream)
     {
         cg_->doWithAll<void>([&stream] (const std::vector<bead_ptr_t>& beads) {
             for (auto bead: beads) {
@@ -97,7 +101,8 @@ namespace simploce {
         });
     }
     
-    void SimulationModel<Bead>::readState(std::istream& stream)
+    void 
+    SimulationModel<Bead>::readState(std::istream& stream)
     {
          cg_->doWithAll<void>([&stream] (const std::vector<bead_ptr_t>& beads) {
             for (auto bead: beads) {
@@ -115,8 +120,9 @@ namespace simploce {
         });       
     }
     
-    void SimulationModel<Bead>::readFrom(std::istream& stream,
-                                         const spec_catalog_ptr_t& catalog)
+    void 
+    SimulationModel<Bead>::readFrom(std::istream& stream,
+                                    const spec_catalog_ptr_t& catalog)
     {
         std::string stringBuffer;
         
@@ -157,7 +163,18 @@ namespace simploce {
         
     }
     
-    std::ostream& operator << (std::ostream& stream, const SimulationModel<Bead>& sm)
+    void 
+    SimulationModel<Bead>::displacer(const displacer_ptr_t& displacer)
+    {
+        if ( !displacer ) {
+            throw std::domain_error("No displacer specified.");
+        }
+        displacer_ = displacer;
+    }
+    
+    std::ostream& 
+    operator << (std::ostream& stream, 
+                 const SimulationModel<Bead>& sm)
     {
         stream << *sm.cg_ << std::endl;
         stream << *sm.box_ << std::endl;

@@ -134,9 +134,18 @@ namespace simploce {
          * Returns number of beads.
          * @return Number.
          */
-        std::size_t numberOfBeads() const;        
+        std::size_t numberOfBeads() const;   
+                
+        /**
+         * 
+         * @param spec
+         * @param ngroups
+         */
+        void replaceGroupsByBeads_(const spec_ptr_t& spec, std::size_t ngroups = 1);
         
     private:
+        
+        friend class ModelFactory;
         
         std::vector<dprot_bead_ptr_t> discrete_;
         std::vector<cprot_bead_ptr_t> continuous_;

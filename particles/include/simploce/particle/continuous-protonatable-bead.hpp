@@ -123,8 +123,9 @@ namespace simploce {
      * @param pbead Protonatable.
      * @return Output stream.
      */
-    std::ostream& operator << (std::ostream& stream, 
-                               const ContinuousProtonatableBead& bead);
+    std::ostream& 
+    operator << (std::ostream& stream, 
+                 const ContinuousProtonatableBead& bead);
 }
 
 #endif /* PROTONATING_BEAD_HPP */

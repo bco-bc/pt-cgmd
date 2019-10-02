@@ -66,7 +66,9 @@ namespace simploce {
     {        
     }
         
-    energy_t Interactor<Atom>::interact(const sim_param_t& param, const at_ptr_t& at)
+    energy_t 
+    Interactor<Atom>::interact(const sim_param_t& param, 
+                               const at_ptr_t& at)
     {
         static bool setup = false;
         static std::size_t npairlist = 0;
@@ -93,7 +95,8 @@ namespace simploce {
         return epot;
     }
     
-    void Interactor<Atom>::updatePairlists_(const at_ptr_t& at)
+    void 
+    Interactor<Atom>::updatePairlists_(const at_ptr_t& at)
     {
         atomPairLists_ = 
             at->doWithAllFreeGroups<std::vector<atom_pair_list_t>>([this] (const std::vector<atom_ptr_t>& all,
@@ -103,7 +106,8 @@ namespace simploce {
             });
     }
     
-    std::string Interactor<Atom>::id() const
+    std::string 
+    Interactor<Atom>::id() const
     {
         return forcefield_->id();
     }
@@ -115,7 +119,9 @@ namespace simploce {
     {      
     }
         
-    energy_t Interactor<Bead>::interact(const sim_param_t& param, const cg_ptr_t& cg)
+    energy_t 
+    Interactor<Bead>::interact(const sim_param_t& param, 
+                               const cg_ptr_t& cg)
     {
         static bool setup = false;
         static std::size_t npairlist = 0;
@@ -129,20 +135,22 @@ namespace simploce {
             this->updatePairlists_(cg);
         }
         
-        energy_t epot = cg->doWithAllFreeGroups<energy_t>([this] (const std::vector<bead_ptr_t>& all,
-                                                                  const std::vector<bead_ptr_t>& free,
-                                                                  const std::vector<bead_group_ptr_t>& groups) {
-            for (auto p: all) {
-                p->resetForce();
-            }
-            return this->forcefield_->interact(all, free, groups, beadPairLists_);
-        });
+        energy_t epot = 
+            cg->doWithAllFreeGroups<energy_t>([this] (const std::vector<bead_ptr_t>& all,
+                                                      const std::vector<bead_ptr_t>& free,
+                                                      const std::vector<bead_group_ptr_t>& groups) {
+                for (auto p: all) {
+                    p->resetForce();
+                }
+                return this->forcefield_->interact(all, free, groups, beadPairLists_);
+            });
         
         counter += 1;
         return epot;
     }
     
-    void Interactor<Bead>::updatePairlists_(const cg_ptr_t& cg)
+    void
+    Interactor<Bead>::updatePairlists_(const cg_ptr_t& cg)
     {
         beadPairLists_ = 
             cg->doWithAllFreeGroups<std::vector<bead_pair_list_t>>([this] (const std::vector<bead_ptr_t>& all,
@@ -152,8 +160,10 @@ namespace simploce {
             });
     }
     
-    std::string Interactor<Bead>::id() const
+    std::string
+    Interactor<Bead>::id() const
     {
         return forcefield_->id();
     }
+
 }

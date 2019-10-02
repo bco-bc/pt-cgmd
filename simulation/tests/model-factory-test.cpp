@@ -56,17 +56,32 @@ void test1() {
     
     sim_model_factory_ptr_t mf = factory::modelFactory(catalog);
     
-    box_ptr_t box = factory::cube(length_t{5.0});
+    box_ptr_t box = factory::cube(length_t{7.27});
     cg_sim_model_ptr_t polWater = mf->createPolarizableWater(catalog, box);
 
     std::cout << "Number of polarizable waters: " << polWater->size() << std::endl;
-    std::cout << *polWater << std::endl;
+    //std::cout << *polWater << std::endl;
     
 }
 
 void test2() {
     std::cout << "model-factory-test test 2" << std::endl;
-    std::cout << "%TEST_FAILED% time=0 testname=test2 (model-factory-test) message=error message sample" << std::endl;
+    
+    std::cout << "model-factory-test test 1" << std::endl;
+    std::string fileName = "/home/ajuffer/simploce/pt-cgmd/particles/resources/particles-specs.dat";
+    std::ifstream stream;
+    file::open_input(stream, fileName);
+    spec_catalog_ptr_t catalog = factory::particleSpecCatalog(stream);
+    //std::cout << *catalog << std::endl;
+    
+    sim_model_factory_ptr_t mf = factory::modelFactory(catalog);
+    
+    box_ptr_t box = factory::cube(length_t{7.27});
+    cg_sim_model_ptr_t hcooh = 
+        mf->createFormicAcidSolution(catalog, box, molarity_t{0.1});
+    
+    std::cout << "Number of beads in HCCOH model: " << hcooh->size() << std::endl;
+    //std::cout << *hcooh << std::endl;
 }
 
 int main(int argc, char** argv) {
@@ -77,9 +92,9 @@ int main(int argc, char** argv) {
     test1();
     std::cout << "%TEST_FINISHED% time=0 test1 (model-factory-test)" << std::endl;
 
-    //std::cout << "%TEST_STARTED% test2 (model-factory-test)\n" << std::endl;
-    //test2();
-    //std::cout << "%TEST_FINISHED% time=0 test2 (model-factory-test)" << std::endl;
+    std::cout << "%TEST_STARTED% test2 (model-factory-test)\n" << std::endl;
+    test2();
+    std::cout << "%TEST_FINISHED% time=0 test2 (model-factory-test)" << std::endl;
 
     std::cout << "%SUITE_FINISHED% time=0" << std::endl;
 

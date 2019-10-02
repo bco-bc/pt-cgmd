@@ -38,12 +38,15 @@
 
 namespace simploce {
     
+    /**
+     * Displaces beads of a coarse grained simulation model
+     */
     struct CoarseGrainedDisplacer : public Displacer {
         
         virtual ~CoarseGrainedDisplacer() {}
         
         /**
-         * Displaces beads of a coarse grained particle model.
+         * Displaces beads.
          * @param param Simulation parameters.
          * @param cg Coarse grained particle model.
          * @return Simulation data (e.g. kinetic energy, temperature, etc).

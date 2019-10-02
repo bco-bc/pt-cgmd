@@ -36,6 +36,9 @@
 
 namespace simploce {
     
+    /**
+     * Force field.
+     */
     struct ForceField {
         
         virtual ~ForceField() {}

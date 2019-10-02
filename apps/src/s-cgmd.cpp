@@ -178,7 +178,7 @@ int main(int argc, char* argv[])
     std::clog << "Particle specifications: " << std::endl;
     std::clog << *catalog << std::endl;
 
-    // Read or set up new model.
+    // Read or set up new simulation model.
     sim_model_factory_ptr_t modelFactory = factory::modelFactory(catalog);
     cg_sim_model_ptr_t model;
     if ( fnInputModel.empty() ) {

@@ -59,6 +59,30 @@ namespace simploce {
         spec_ptr_t molecularWater() const;
         
         /**
+         * Hydrogen.
+         * @return Specification.
+         */
+        spec_ptr_t H() const;
+        
+        /**
+         * Carbon
+         * @return Specification.
+         */
+        spec_ptr_t C() const;
+        
+        /**
+         * Oxygen.
+         * @return Specification. 
+         */
+        spec_ptr_t O() const;
+        
+        /**
+         * Nitrogen.
+         * @return Specification.
+         */
+        spec_ptr_t N() const;        
+        
+        /**
          * Creates a catalog by reading specifications from a given input stream.
          * @param stream Input stream.
          * @return Specifications catalog.

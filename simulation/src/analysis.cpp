@@ -34,7 +34,8 @@ namespace simploce {
     {        
     }
         
-    void Analysis<Bead>::perform(std::istream& trajectory)
+    void 
+    Analysis<Bead>::perform(std::istream& trajectory)
     {
         sm_->readState(trajectory);
         while (trajectory.good() ) {
