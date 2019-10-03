@@ -37,7 +37,7 @@
 #include "simploce/simulation/velocity-verlet.hpp"
 #include "simploce/simulation/langevin-velocity-verlet.hpp"
 #include "simploce/simulation/interactor.hpp"
-#include "simploce/simulation/model-factory.hpp"
+#include "simploce/simulation/sim-model-factory.hpp"
 #include "simploce/simulation/pt-pair-list-generator.hpp"
 #include "simploce/simulation/pbc.hpp"
 #include "simploce/particle/bead.hpp"
@@ -76,9 +76,8 @@ namespace simploce {
         static at_displacer_ptr_t atLVV_{};
         static cg_displacer_ptr_t cgLVV_{};
         
-        static sim_model_factory_ptr_t modelFactory_{};
+        static sim_model_fact_ptr_t modelFactory_{};
         
-        static box_ptr_t box_{};
         static bc_ptr_t pbc_{};
         
         // Interactor for coarse grained polarizable water.
@@ -97,16 +96,22 @@ namespace simploce {
             return cgPolWaterFF_;
         }
         
-        sim_model_factory_ptr_t modelFactory(const spec_catalog_ptr_t& catalog)
+        sim_model_fact_ptr_t 
+        simulationModelFactory(const spec_catalog_ptr_t& catalog)
         {
+            particle_model_fact_ptr_t particleModelFactory = 
+                factory::particleModelFactory(catalog);
             if ( !modelFactory_ ) {
-                modelFactory_ = std::make_shared<ModelFactory>(catalog);
+                modelFactory_ = 
+                    std::make_shared<SimulationModelFactory>(particleModelFactory, 
+                                                             catalog);
             }
             return modelFactory_;
         }
         
-        cg_ppair_list_gen_ptr_t coarseGrainedPairListGenerator(const box_ptr_t& box,
-                                                               const bc_ptr_t& bc)
+        cg_ppair_list_gen_ptr_t 
+        coarseGrainedPairListGenerator(const box_ptr_t& box,
+                                       const bc_ptr_t& bc)
         {
             if ( !cgPairlistGen_ ) {
                 cgPairlistGen_ = std::make_shared<ParticlePairListGenerator<Bead>>(box, bc);
@@ -114,8 +119,9 @@ namespace simploce {
             return cgPairlistGen_;
         }
         
-        at_ppair_list_gen_ptr_t atomisticPairListGenerator(const box_ptr_t& box,
-                                                           const bc_ptr_t& bc)
+        at_ppair_list_gen_ptr_t 
+        atomisticPairListGenerator(const box_ptr_t& box,
+                                   const bc_ptr_t& bc)
         {
             if ( !atpairListGen_ ) {
                 atpairListGen_ = std::make_shared<ParticlePairListGenerator<Atom>>(box, bc);
@@ -137,7 +143,8 @@ namespace simploce {
             return cgPolWaterInteractor_;
         }
         
-        at_displacer_ptr_t leapFrog(at_interactor_ptr_t& interactor)
+        at_displacer_ptr_t 
+        leapFrog(at_interactor_ptr_t& interactor)
         {
             if ( !atLeapFrog_ ) {
                 atLeapFrog_ = std::make_shared<at_leap_frog_t>(interactor);
@@ -145,7 +152,8 @@ namespace simploce {
             return atLeapFrog_;
         }
         
-        cg_displacer_ptr_t leapFrog(cg_interactor_ptr_t& interactor)
+        cg_displacer_ptr_t 
+        leapFrog(cg_interactor_ptr_t& interactor)
         {
             if ( !cgLeapFrog_ ) {
                 cgLeapFrog_ = std::make_shared<cg_leap_frog_t>(interactor);
@@ -154,7 +162,8 @@ namespace simploce {
             
         }
         
-        at_displacer_ptr_t velocityVerlet(at_interactor_ptr_t& interactor)
+        at_displacer_ptr_t 
+        velocityVerlet(at_interactor_ptr_t& interactor)
         {
             if ( !atVV_ ) {
                 atVV_ = std::make_shared<at_vv_t>(interactor);
@@ -162,7 +171,8 @@ namespace simploce {
             return atVV_;            
         }
         
-        cg_displacer_ptr_t velocityVerlet(cg_interactor_ptr_t& interactor)
+        cg_displacer_ptr_t 
+        velocityVerlet(cg_interactor_ptr_t& interactor)
         {
             if ( !cgVV_ ) {
                 cgVV_ = std::make_shared<cg_vv_t>(interactor);
@@ -170,7 +180,8 @@ namespace simploce {
             return cgVV_;                        
         }
         
-        at_displacer_ptr_t langevinVelocityVerlet(at_interactor_ptr_t& interactor)
+        at_displacer_ptr_t 
+        langevinVelocityVerlet(at_interactor_ptr_t& interactor)
         {
             if ( !atLVV_ ) {
                 atVV_ = std::make_shared<at_lvv_t>(interactor);
@@ -178,7 +189,8 @@ namespace simploce {
             return atLVV_;                        
         }
         
-        cg_displacer_ptr_t langevinVelocityVerlet(cg_interactor_ptr_t& interactor)
+        cg_displacer_ptr_t 
+        langevinVelocityVerlet(cg_interactor_ptr_t& interactor)
         {
             if ( !cgLVV_ ) {
                 cgLVV_ = std::make_shared<cg_lvv_t>(interactor);
@@ -186,15 +198,8 @@ namespace simploce {
             return cgLVV_;                                    
         }
         
-        box_ptr_t cube(const length_t& side)
-        {
-            if ( !box_ ) {
-                box_ = std::make_shared<Cube<real_t>>(side());
-            }
-            return box_;
-        }
-        
-        bc_ptr_t pbc(const box_ptr_t& box)
+        bc_ptr_t 
+        pbc(const box_ptr_t& box)
         {
             if ( !pbc_ ) {
                 pbc_ = std::make_shared<PeriodicBoundaryCondition>(box);
@@ -202,18 +207,9 @@ namespace simploce {
             return pbc_;
         }
         
-        at_ptr_t atomistic()
-        {
-            return std::make_shared<Atomistic>();
-        }
-        
-        cg_ptr_t coarseGrained()
-        {
-            return std::make_shared<CoarseGrained>();
-        }
-        
-        pt_pair_list_gen_ptr_t protonTransferPairListGenerator(const length_t& rmax,
-                                                               const bc_ptr_t& bc)
+        pt_pair_list_gen_ptr_t 
+        protonTransferPairListGenerator(const length_t& rmax,
+                                        const bc_ptr_t& bc)
         {
             if ( !ptPairlisGen_) {
                 ptPairlisGen_ = 

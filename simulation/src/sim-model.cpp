@@ -164,7 +164,7 @@ namespace simploce {
     }
     
     void 
-    SimulationModel<Bead>::displacer(const displacer_ptr_t& displacer)
+    SimulationModel<Bead>::displacer(const cg_displacer_ptr_t& displacer)
     {
         if ( !displacer ) {
             throw std::domain_error("No displacer specified.");

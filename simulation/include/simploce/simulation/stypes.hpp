@@ -33,7 +33,6 @@
 #define STYPES_HPP
 
 #include "simploce/particle/ptypes.hpp"
-#include "simploce/util/cube.hpp"
 #include "simploce/util/param.hpp"
 #include <tuple>
 
@@ -45,7 +44,7 @@ namespace simploce {
     class CoarseGrainedDisplacer;
     class AtomisticDisplacer;
     class AtomisticForceField;
-    class ModelFactory;
+    class SimulationModelFactory;
     class ProtonTransferPairListGenerator;
     
     // P is particle type, e.g. Atom or Bead.
@@ -59,22 +58,6 @@ namespace simploce {
     // P is particle type, e.g. Atom or Bead.
     template <typename P>
     class SimulationModel;    
-    
-    using temperature_t = simploce::value_t<real_t, 100>;
-    
-    using density_t = simploce::value_t<real_t, 101>;
-    
-    using length_t = simploce::value_t<real_t, 102>;
-    
-    using volume_t = simploce::value_t<real_t, 103>;
-    
-    using number_density_t = simploce::value_t<real_t, 104>;
-    
-    using molarity_t = simploce::value_t<real_t, 105>;
-    
-    using box_t = Cube<real_t>;
-    
-    using box_ptr_t = std::shared_ptr<box_t>;
     
     using bc_t = BoundaryCondition;
     
@@ -126,7 +109,7 @@ namespace simploce {
      */
     using cg_sim_model_ptr_t = std::shared_ptr<SimulationModel<Bead>>;
     
-    using sim_model_factory_ptr_t = std::shared_ptr<ModelFactory>;
+    using sim_model_fact_ptr_t = std::shared_ptr<SimulationModelFactory>;
             
     /**
      * Type for holding simulation parameters, such as values for the time step 

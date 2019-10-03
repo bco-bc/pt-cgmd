@@ -41,13 +41,13 @@ OBJECTFILES= \
 	${OBJECTDIR}/src/langevin-velocity-verlet.o \
 	${OBJECTDIR}/src/leap-frog.o \
 	${OBJECTDIR}/src/lj-coulomb-forces.o \
-	${OBJECTDIR}/src/model-factory.o \
 	${OBJECTDIR}/src/no-bc.o \
 	${OBJECTDIR}/src/pbc.o \
 	${OBJECTDIR}/src/pt-langevin-velocity-verlet.o \
 	${OBJECTDIR}/src/pt-pair-list-generator.o \
 	${OBJECTDIR}/src/sfactory.o \
 	${OBJECTDIR}/src/sim-data.o \
+	${OBJECTDIR}/src/sim-model-factory.o \
 	${OBJECTDIR}/src/sim-model.o \
 	${OBJECTDIR}/src/simulation.o \
 	${OBJECTDIR}/src/velocity-verlet.o
@@ -59,18 +59,18 @@ TESTDIR=${CND_BUILDDIR}/${CND_CONF}/${CND_PLATFORM}/tests
 TESTFILES= \
 	${TESTDIR}/TestFiles/f1 \
 	${TESTDIR}/TestFiles/f5 \
-	${TESTDIR}/TestFiles/f3 \
 	${TESTDIR}/TestFiles/f4 \
 	${TESTDIR}/TestFiles/f6 \
+	${TESTDIR}/TestFiles/f3 \
 	${TESTDIR}/TestFiles/f2
 
 # Test Object Files
 TESTOBJECTFILES= \
 	${TESTDIR}/tests/displacer-test.o \
 	${TESTDIR}/tests/gr-test.o \
-	${TESTDIR}/tests/model-factory-test.o \
 	${TESTDIR}/tests/pair-list-test.o \
 	${TESTDIR}/tests/pt-pairlist-test.o \
+	${TESTDIR}/tests/simulation-model-factory-test.o \
 	${TESTDIR}/tests/simulation-test.o
 
 # C Compiler Flags
@@ -131,11 +131,6 @@ ${OBJECTDIR}/src/lj-coulomb-forces.o: src/lj-coulomb-forces.cpp
 	${RM} "$@.d"
 	$(COMPILE.cc) -O2 -Wall -Iinclude -I../cpputil/include -I../particles/include -std=c++14 -fPIC  -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/lj-coulomb-forces.o src/lj-coulomb-forces.cpp
 
-${OBJECTDIR}/src/model-factory.o: src/model-factory.cpp
-	${MKDIR} -p ${OBJECTDIR}/src
-	${RM} "$@.d"
-	$(COMPILE.cc) -O2 -Wall -Iinclude -I../cpputil/include -I../particles/include -std=c++14 -fPIC  -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/model-factory.o src/model-factory.cpp
-
 ${OBJECTDIR}/src/no-bc.o: src/no-bc.cpp
 	${MKDIR} -p ${OBJECTDIR}/src
 	${RM} "$@.d"
@@ -165,6 +160,11 @@ ${OBJECTDIR}/src/sim-data.o: src/sim-data.cpp
 	${MKDIR} -p ${OBJECTDIR}/src
 	${RM} "$@.d"
 	$(COMPILE.cc) -O2 -Wall -Iinclude -I../cpputil/include -I../particles/include -std=c++14 -fPIC  -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/sim-data.o src/sim-data.cpp
+
+${OBJECTDIR}/src/sim-model-factory.o: src/sim-model-factory.cpp
+	${MKDIR} -p ${OBJECTDIR}/src
+	${RM} "$@.d"
+	$(COMPILE.cc) -O2 -Wall -Iinclude -I../cpputil/include -I../particles/include -std=c++14 -fPIC  -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/sim-model-factory.o src/sim-model-factory.cpp
 
 ${OBJECTDIR}/src/sim-model.o: src/sim-model.cpp
 	${MKDIR} -p ${OBJECTDIR}/src
@@ -198,10 +198,6 @@ ${TESTDIR}/TestFiles/f5: ${TESTDIR}/tests/gr-test.o ${OBJECTFILES:%.o=%_nomain.o
 	${MKDIR} -p ${TESTDIR}/TestFiles
 	${LINK.cc} -o ${TESTDIR}/TestFiles/f5 $^ ${LDLIBSOPTIONS}   
 
-${TESTDIR}/TestFiles/f3: ${TESTDIR}/tests/model-factory-test.o ${OBJECTFILES:%.o=%_nomain.o}
-	${MKDIR} -p ${TESTDIR}/TestFiles
-	${LINK.cc} -o ${TESTDIR}/TestFiles/f3 $^ ${LDLIBSOPTIONS}   
-
 ${TESTDIR}/TestFiles/f4: ${TESTDIR}/tests/pair-list-test.o ${OBJECTFILES:%.o=%_nomain.o}
 	${MKDIR} -p ${TESTDIR}/TestFiles
 	${LINK.cc} -o ${TESTDIR}/TestFiles/f4 $^ ${LDLIBSOPTIONS}   
@@ -209,6 +205,10 @@ ${TESTDIR}/TestFiles/f4: ${TESTDIR}/tests/pair-list-test.o ${OBJECTFILES:%.o=%_n
 ${TESTDIR}/TestFiles/f6: ${TESTDIR}/tests/pt-pairlist-test.o ${OBJECTFILES:%.o=%_nomain.o}
 	${MKDIR} -p ${TESTDIR}/TestFiles
 	${LINK.cc} -o ${TESTDIR}/TestFiles/f6 $^ ${LDLIBSOPTIONS}   
+
+${TESTDIR}/TestFiles/f3: ${TESTDIR}/tests/simulation-model-factory-test.o ${OBJECTFILES:%.o=%_nomain.o}
+	${MKDIR} -p ${TESTDIR}/TestFiles
+	${LINK.cc} -o ${TESTDIR}/TestFiles/f3 $^ ${LDLIBSOPTIONS}   
 
 ${TESTDIR}/TestFiles/f2: ${TESTDIR}/tests/simulation-test.o ${OBJECTFILES:%.o=%_nomain.o}
 	${MKDIR} -p ${TESTDIR}/TestFiles
@@ -227,12 +227,6 @@ ${TESTDIR}/tests/gr-test.o: tests/gr-test.cpp
 	$(COMPILE.cc) -O2 -Wall -Iinclude -I../cpputil/include -I../particles/include -I. -std=c++14 -MMD -MP -MF "$@.d" -o ${TESTDIR}/tests/gr-test.o tests/gr-test.cpp
 
 
-${TESTDIR}/tests/model-factory-test.o: tests/model-factory-test.cpp 
-	${MKDIR} -p ${TESTDIR}/tests
-	${RM} "$@.d"
-	$(COMPILE.cc) -O2 -Wall -Iinclude -I../cpputil/include -I../particles/include -I. -std=c++14 -MMD -MP -MF "$@.d" -o ${TESTDIR}/tests/model-factory-test.o tests/model-factory-test.cpp
-
-
 ${TESTDIR}/tests/pair-list-test.o: tests/pair-list-test.cpp 
 	${MKDIR} -p ${TESTDIR}/tests
 	${RM} "$@.d"
@@ -243,6 +237,12 @@ ${TESTDIR}/tests/pt-pairlist-test.o: tests/pt-pairlist-test.cpp
 	${MKDIR} -p ${TESTDIR}/tests
 	${RM} "$@.d"
 	$(COMPILE.cc) -O2 -Wall -Iinclude -I../cpputil/include -I../particles/include -I. -std=c++14 -MMD -MP -MF "$@.d" -o ${TESTDIR}/tests/pt-pairlist-test.o tests/pt-pairlist-test.cpp
+
+
+${TESTDIR}/tests/simulation-model-factory-test.o: tests/simulation-model-factory-test.cpp 
+	${MKDIR} -p ${TESTDIR}/tests
+	${RM} "$@.d"
+	$(COMPILE.cc) -O2 -Wall -Iinclude -I../cpputil/include -I../particles/include -I. -std=c++14 -MMD -MP -MF "$@.d" -o ${TESTDIR}/tests/simulation-model-factory-test.o tests/simulation-model-factory-test.cpp
 
 
 ${TESTDIR}/tests/simulation-test.o: tests/simulation-test.cpp 
@@ -329,19 +329,6 @@ ${OBJECTDIR}/src/lj-coulomb-forces_nomain.o: ${OBJECTDIR}/src/lj-coulomb-forces.
 	    ${CP} ${OBJECTDIR}/src/lj-coulomb-forces.o ${OBJECTDIR}/src/lj-coulomb-forces_nomain.o;\
 	fi
 
-${OBJECTDIR}/src/model-factory_nomain.o: ${OBJECTDIR}/src/model-factory.o src/model-factory.cpp 
-	${MKDIR} -p ${OBJECTDIR}/src
-	@NMOUTPUT=`${NM} ${OBJECTDIR}/src/model-factory.o`; \
-	if (echo "$$NMOUTPUT" | ${GREP} '|main$$') || \
-	   (echo "$$NMOUTPUT" | ${GREP} 'T main$$') || \
-	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
-	then  \
-	    ${RM} "$@.d";\
-	    $(COMPILE.cc) -O2 -Wall -Iinclude -I../cpputil/include -I../particles/include -std=c++14 -fPIC  -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/model-factory_nomain.o src/model-factory.cpp;\
-	else  \
-	    ${CP} ${OBJECTDIR}/src/model-factory.o ${OBJECTDIR}/src/model-factory_nomain.o;\
-	fi
-
 ${OBJECTDIR}/src/no-bc_nomain.o: ${OBJECTDIR}/src/no-bc.o src/no-bc.cpp 
 	${MKDIR} -p ${OBJECTDIR}/src
 	@NMOUTPUT=`${NM} ${OBJECTDIR}/src/no-bc.o`; \
@@ -420,6 +407,19 @@ ${OBJECTDIR}/src/sim-data_nomain.o: ${OBJECTDIR}/src/sim-data.o src/sim-data.cpp
 	    ${CP} ${OBJECTDIR}/src/sim-data.o ${OBJECTDIR}/src/sim-data_nomain.o;\
 	fi
 
+${OBJECTDIR}/src/sim-model-factory_nomain.o: ${OBJECTDIR}/src/sim-model-factory.o src/sim-model-factory.cpp 
+	${MKDIR} -p ${OBJECTDIR}/src
+	@NMOUTPUT=`${NM} ${OBJECTDIR}/src/sim-model-factory.o`; \
+	if (echo "$$NMOUTPUT" | ${GREP} '|main$$') || \
+	   (echo "$$NMOUTPUT" | ${GREP} 'T main$$') || \
+	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
+	then  \
+	    ${RM} "$@.d";\
+	    $(COMPILE.cc) -O2 -Wall -Iinclude -I../cpputil/include -I../particles/include -std=c++14 -fPIC  -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/sim-model-factory_nomain.o src/sim-model-factory.cpp;\
+	else  \
+	    ${CP} ${OBJECTDIR}/src/sim-model-factory.o ${OBJECTDIR}/src/sim-model-factory_nomain.o;\
+	fi
+
 ${OBJECTDIR}/src/sim-model_nomain.o: ${OBJECTDIR}/src/sim-model.o src/sim-model.cpp 
 	${MKDIR} -p ${OBJECTDIR}/src
 	@NMOUTPUT=`${NM} ${OBJECTDIR}/src/sim-model.o`; \
@@ -465,9 +465,9 @@ ${OBJECTDIR}/src/velocity-verlet_nomain.o: ${OBJECTDIR}/src/velocity-verlet.o sr
 	then  \
 	    ${TESTDIR}/TestFiles/f1 || true; \
 	    ${TESTDIR}/TestFiles/f5 || true; \
-	    ${TESTDIR}/TestFiles/f3 || true; \
 	    ${TESTDIR}/TestFiles/f4 || true; \
 	    ${TESTDIR}/TestFiles/f6 || true; \
+	    ${TESTDIR}/TestFiles/f3 || true; \
 	    ${TESTDIR}/TestFiles/f2 || true; \
 	else  \
 	    ./${TEST} || true; \

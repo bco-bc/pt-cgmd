@@ -29,7 +29,7 @@
  * Created on August 30, 2019, 1:53 PM
  */
 
-#include "simploce/simulation/model-factory.hpp"
+#include "simploce/simulation/sim-model-factory.hpp"
 #include "simploce/simulation/sfactory.hpp"
 #include "simploce/simulation/stypes.hpp"
 #include "simploce/particle/particle-spec-catalog.hpp"
@@ -46,42 +46,49 @@ using namespace simploce;
  * Simple C++ Test Suite
  */
 
-void test1() {
-    std::cout << "model-factory-test test 1" << std::endl;
+void test1() 
+{
+    std::cout << "simulation-model-factory-test test 1" << std::endl;
     std::string fileName = "/home/ajuffer/simploce/pt-cgmd/particles/resources/particles-specs.dat";
     std::ifstream stream;
     file::open_input(stream, fileName);
     spec_catalog_ptr_t catalog = factory::particleSpecCatalog(stream);
     std::cout << *catalog << std::endl;
     
-    sim_model_factory_ptr_t mf = factory::modelFactory(catalog);
+    sim_model_fact_ptr_t pmf = 
+            factory::simulationModelFactory(catalog);
     
     box_ptr_t box = factory::cube(length_t{7.27});
-    cg_sim_model_ptr_t polWater = mf->createPolarizableWater(catalog, box);
+    cg_sim_model_ptr_t polWater = pmf->polarizableWater(box);
 
     std::cout << "Number of polarizable waters: " << polWater->size() << std::endl;
     //std::cout << *polWater << std::endl;
     
 }
 
-void test2() {
-    std::cout << "model-factory-test test 2" << std::endl;
+void test2() 
+{
+    std::cout << "simulation-model-factory-test test 2" << std::endl;
     
-    std::cout << "model-factory-test test 1" << std::endl;
     std::string fileName = "/home/ajuffer/simploce/pt-cgmd/particles/resources/particles-specs.dat";
     std::ifstream stream;
     file::open_input(stream, fileName);
     spec_catalog_ptr_t catalog = factory::particleSpecCatalog(stream);
     //std::cout << *catalog << std::endl;
     
-    sim_model_factory_ptr_t mf = factory::modelFactory(catalog);
+    sim_model_fact_ptr_t pmf = 
+            factory::simulationModelFactory(catalog);
     
     box_ptr_t box = factory::cube(length_t{7.27});
-    cg_sim_model_ptr_t hcooh = 
-        mf->createFormicAcidSolution(catalog, box, molarity_t{0.1});
+    cg_sim_model_ptr_t hcooh = pmf->formicAcidSolution(box);
     
     std::cout << "Number of beads in HCCOH model: " << hcooh->size() << std::endl;
-    //std::cout << *hcooh << std::endl;
+    std::cout << *hcooh << std::endl;
+}
+
+void test3()
+{
+    std::cout << "simulation-model-factory-test test 3" << std::endl;
 }
 
 int main(int argc, char** argv) {

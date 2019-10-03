@@ -80,7 +80,8 @@ namespace simploce {
         radius_t radius() const;
         
         /**
-         * This specification is for a protonatable particle?
+         * This specification is for a protonatable particle, either with 
+         * continuously or discretely varying protonation state) ?
          * @return Result.
          */
         bool isProtonatable() const;

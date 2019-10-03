@@ -40,10 +40,12 @@ namespace simploce {
         
         /**
          * Returns simulation model factory.
-         * @param catalog Particle spec catalog.
+         * @param particle_model_fact_ptr_t Particle model factory.
+         * @param catalog Particle specifications catalog.
          * @return Model factory.
          */
-        sim_model_factory_ptr_t modelFactory(const spec_catalog_ptr_t& catalog);
+        sim_model_fact_ptr_t 
+        simulationModelFactory(const spec_catalog_ptr_t& catalog);
         
         /**
          * Returns particle pair list generator for coarse grained particle models.
@@ -51,7 +53,8 @@ namespace simploce {
          * @param bc Boundary condition.
          * @return Pair list generator.
          */
-        cg_ppair_list_gen_ptr_t coarseGrainedPairListGenerator(const box_ptr_t& box,
+        cg_ppair_list_gen_ptr_t
+        coarseGrainedPairListGenerator(const box_ptr_t& box,
                                                                const bc_ptr_t& bc);
         
         /**
@@ -60,8 +63,9 @@ namespace simploce {
          * @param bc Boundary condition.
          * @return Pair list generator.
          */
-        at_ppair_list_gen_ptr_t atomisticPairListGenerator(const box_ptr_t& box,
-                                                           const bc_ptr_t& bc);
+        at_ppair_list_gen_ptr_t 
+        atomisticPairListGenerator(const box_ptr_t& box,
+                                   const bc_ptr_t& bc);
         
         
         /**
@@ -80,68 +84,56 @@ namespace simploce {
          * @param interactor Atomistic interactor.
          * @return Algorithm.
          */
-        at_displacer_ptr_t leapFrog(at_interactor_ptr_t& interactor);
+        at_displacer_ptr_t 
+        leapFrog(at_interactor_ptr_t& interactor);
         
         /**
          * Leap frog algorithm for coarse grained particle models.
          * @param interactor Coarse grained interactor.
          * @return Algorithm.
          */
-        cg_displacer_ptr_t leapFrog(cg_interactor_ptr_t& interactor);
+        cg_displacer_ptr_t 
+        leapFrog(cg_interactor_ptr_t& interactor);
         
         /**
          * Velocity Verlet algorithm for atomistic particle models.
          * @param interactor Atomistic interactor.
          * @return Algorithm.
          */
-        at_displacer_ptr_t velocityVerlet(at_interactor_ptr_t& interactor);
+        at_displacer_ptr_t 
+        velocityVerlet(at_interactor_ptr_t& interactor);
         
         /**
          * Velocity Verlet algorithm for coarse grained particle models.
          * @param interactor Coarse grained interactor.
          * @return Algorithm.
          */
-        cg_displacer_ptr_t velocityVerlet(cg_interactor_ptr_t& interactor);
+        cg_displacer_ptr_t 
+        velocityVerlet(cg_interactor_ptr_t& interactor);
 
         /**
          * Langevin Velocity Verlet algorithm for atomistic particle models.
          * @param interactor Atomistic interactor.
          * @return Algorithm.
          */
-        at_displacer_ptr_t langevinVelocityVerlet(at_interactor_ptr_t& interactor);
+        at_displacer_ptr_t 
+        langevinVelocityVerlet(at_interactor_ptr_t& interactor);
         
         /**
          * Langevin Velocity Verlet algorithm for coarse grained particle models.
          * @param interactor Coarse grained interactor.
          * @return Algorithm.
          */
-        cg_displacer_ptr_t langevinVelocityVerlet(cg_interactor_ptr_t& interactor);
-        
-        /**
-         * Returns cubic simulation box.
-         * @param side Side length.
-         * @return Box.
-         */
-        box_ptr_t cube(const length_t& side);
+        cg_displacer_ptr_t 
+        langevinVelocityVerlet(cg_interactor_ptr_t& interactor);
         
         /**
          * Returns periodic boundary conditions.
          * @param box Simulation box.
          * @return Boundary condition.
          */
-        bc_ptr_t pbc(const box_ptr_t& box);
-        
-        /**
-         * Return empty atomistic particle model.
-         * @return Model.
-         */
-        at_ptr_t atomistic();
-        
-        /**
-         * Returns empty coarse grained particle model.
-         * @return Model.
-         */
-        cg_ptr_t coarseGrained();
+        bc_ptr_t 
+        pbc(const box_ptr_t& box);
         
         /**
          * Returns generator of pairs of protonatable beads possibly involved in proton
@@ -150,8 +142,9 @@ namespace simploce {
          * @param bc Boundary condition.
          * @return Generator.
          */
-        pt_pair_list_gen_ptr_t protonTransferPairListGenerator(const length_t& rmax,
-                                                               const bc_ptr_t& bc);
+        pt_pair_list_gen_ptr_t 
+        protonTransferPairListGenerator(const length_t& rmax,
+                                        const bc_ptr_t& bc);
     }
 }
 

@@ -32,7 +32,7 @@
 #include "simploce/simulation/pair-list-generator.hpp"
 #include "simploce/simulation/sfactory.hpp"
 #include "simploce/simulation/stypes.hpp"
-#include "simploce/simulation/model-factory.hpp"
+#include "simploce/simulation/sim-model-factory.hpp"
 #include "simploce/particle/bead.hpp"
 #include "simploce/particle/particle-spec-catalog.hpp"
 #include "simploce/util/file.hpp"
@@ -62,10 +62,13 @@ void test1() {
     spec_catalog_ptr_t catalog = ParticleSpecCatalog::create(stream);
     std::cout << *catalog << std::endl;
     
-    sim_model_factory_ptr_t mf = factory::modelFactory(catalog);
+    particle_model_fact_ptr_t particleModelFactory = 
+        factory::particleModelFactory(catalog);
+    
+    sim_model_fact_ptr_t pmf = factory::simulationModelFactory(catalog);
     
     box_ptr_t box = std::make_shared<box_t>(5.0);
-    cg_sim_model_ptr_t polWater = mf->createPolarizableWater(catalog, box);
+    cg_sim_model_ptr_t polWater = pmf->polarizableWater(box);
 
     std::cout << "Number of polarizable waters: " << polWater->size() << std::endl;
     

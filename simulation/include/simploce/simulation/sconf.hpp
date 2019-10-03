@@ -39,6 +39,7 @@ namespace simploce {
         
         const std::string LEAP_FROG = "lf";
         const std::string LANGEVIN_VELOCITY_VERLET = "lvv";
+        const std::string PT_LANGEVIN_VELOCITY_VERLET = "pt-lvv";
         const std::string VELOCITY_VERLET = "vv";
         
         const std::string NOBC = "no-bc";

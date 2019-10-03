@@ -141,13 +141,13 @@ namespace simploce {
          * Assigns new displacer.
          * @param displacer Displacer.
          */
-        void displacer(const displacer_ptr_t& displacer);
+        void displacer(const cg_displacer_ptr_t & displacer);
         
     private:
         
         friend std::ostream& operator << (std::ostream& stream, const SimulationModel<Bead>& sm);
         
-        friend class ModelFactory;
+        friend class SimulationModelFactory;
         
         SimulationModel();
                         

@@ -40,6 +40,13 @@ namespace simploce {
     namespace factory {
         
         /**
+         * Returns cubic box.
+         * @param side Side length.
+         * @return Box. Always new instance.
+         */
+        box_ptr_t cube(const length_t& side);        
+        
+        /**
          * Reads a specification catalog from a file.
          * @param fileName Input file name.
          * @return Particle specification catalog.
@@ -52,6 +59,26 @@ namespace simploce {
          * @return Particle specification catalog.
          */
         spec_catalog_ptr_t particleSpecCatalog(std::istream& stream);
+        
+        /**
+         * Returns particle model factory.
+         * @param catalog Particle specification catalog.
+         * @return Particle model factory.
+         */
+        particle_model_fact_ptr_t particleModelFactory(const spec_catalog_ptr_t& catalog);
+        
+        /**
+         * Returns an empty atomistic particle model.
+         * @return Particle model.
+         */
+        at_ptr_t atomistic();
+        
+        /**
+         * Returns an empty coarse grained particle model.
+         * @return Particle model.
+         */
+        cg_ptr_t coarseGrained();
+        
     }
 }
 

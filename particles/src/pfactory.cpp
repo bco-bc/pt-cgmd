@@ -23,7 +23,7 @@
  */
 
 /* 
- * File:   newfile.cpp
+ * File:   pfactory.cpp
  * Author: André H. Juffer, Biocenter Oulu.
  *
  * Created on September 6, 2019, 4:59 PM
@@ -31,26 +31,62 @@
 
 #include "simploce/particle/pfactory.hpp"
 #include "simploce/particle/particle-spec-catalog.hpp"
+#include "simploce/particle/particle-model-factory.hpp"
+#include "simploce/particle/atomistic.hpp"
+#include "simploce/particle/coarse-grained.hpp"
 #include "simploce/util/file.hpp"
 #include <fstream>
 
 namespace simploce {
     namespace factory {
         
+        static spec_catalog_ptr_t catalog_{};
+        static particle_model_fact_ptr_t particleModelFactory_{};
+
+        box_ptr_t cube(const length_t& side)
+        {
+            return std::make_shared<Cube<real_t>>(side());
+        }                
+        
         spec_catalog_ptr_t 
         particleSpecCatalog(const std::string& fileName)
         {
-            std::ifstream stream;
-            file::open_input(stream, fileName);
-            spec_catalog_ptr_t catalog = factory::particleSpecCatalog(stream);
-            stream.close();
-            return catalog;
+            if ( !catalog_ ) {
+                std::ifstream stream;
+                file::open_input(stream, fileName);
+                catalog_ = factory::particleSpecCatalog(stream);
+                stream.close();
+            }
+            return catalog_;
         }
         
         spec_catalog_ptr_t 
         particleSpecCatalog(std::istream& stream)
         {
-            return ParticleSpecCatalog::create(stream);
+            if ( !catalog_ ) {
+                catalog_ = ParticleSpecCatalog::create(stream);
+            }
+            return catalog_;
         }
+        
+        particle_model_fact_ptr_t 
+        particleModelFactory(const spec_catalog_ptr_t& catalog)
+        {
+            if ( !particleModelFactory_ ) {
+                particleModelFactory_ = std::make_shared<ParticleModelFactory>(catalog);
+            }
+            return particleModelFactory_;
+        }
+        
+        at_ptr_t atomistic()
+        {
+            return std::make_shared<Atomistic>();
+        }
+        
+        cg_ptr_t coarseGrained()
+        {
+            return std::make_shared<CoarseGrained>();
+        }
+        
     }
 }

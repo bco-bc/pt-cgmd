@@ -41,10 +41,12 @@ OBJECTFILES= \
 	${OBJECTDIR}/src/coarse-grained.o \
 	${OBJECTDIR}/src/continuous-protonatable-bead.o \
 	${OBJECTDIR}/src/discrete-protonatable-bead.o \
+	${OBJECTDIR}/src/particle-model-factory.o \
 	${OBJECTDIR}/src/particle-spec-catalog.o \
 	${OBJECTDIR}/src/particle-spec.o \
 	${OBJECTDIR}/src/particle.o \
 	${OBJECTDIR}/src/pfactory.o \
+	${OBJECTDIR}/src/polarizable-water.o \
 	${OBJECTDIR}/src/protonation-site-catalog.o
 
 # Test Directory
@@ -53,6 +55,7 @@ TESTDIR=${CND_BUILDDIR}/${CND_CONF}/${CND_PLATFORM}/tests
 # Test Files
 TESTFILES= \
 	${TESTDIR}/TestFiles/f1 \
+	${TESTDIR}/TestFiles/f7 \
 	${TESTDIR}/TestFiles/f2 \
 	${TESTDIR}/TestFiles/f3 \
 	${TESTDIR}/TestFiles/f5 \
@@ -62,6 +65,7 @@ TESTFILES= \
 # Test Object Files
 TESTOBJECTFILES= \
 	${TESTDIR}/tests/coarse-grained-test.o \
+	${TESTDIR}/tests/particle-model-factory-test.o \
 	${TESTDIR}/tests/particle-spec-catalog-test.o \
 	${TESTDIR}/tests/particle-test.o \
 	${TESTDIR}/tests/prot-site-catalog-test.o \
@@ -124,6 +128,11 @@ ${OBJECTDIR}/src/discrete-protonatable-bead.o: src/discrete-protonatable-bead.cp
 	${RM} "$@.d"
 	$(COMPILE.cc) -O2 -Wall -Iinclude -I../cpputil/include -std=c++14 -fPIC  -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/discrete-protonatable-bead.o src/discrete-protonatable-bead.cpp
 
+${OBJECTDIR}/src/particle-model-factory.o: src/particle-model-factory.cpp
+	${MKDIR} -p ${OBJECTDIR}/src
+	${RM} "$@.d"
+	$(COMPILE.cc) -O2 -Wall -Iinclude -I../cpputil/include -std=c++14 -fPIC  -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/particle-model-factory.o src/particle-model-factory.cpp
+
 ${OBJECTDIR}/src/particle-spec-catalog.o: src/particle-spec-catalog.cpp
 	${MKDIR} -p ${OBJECTDIR}/src
 	${RM} "$@.d"
@@ -144,6 +153,11 @@ ${OBJECTDIR}/src/pfactory.o: src/pfactory.cpp
 	${RM} "$@.d"
 	$(COMPILE.cc) -O2 -Wall -Iinclude -I../cpputil/include -std=c++14 -fPIC  -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/pfactory.o src/pfactory.cpp
 
+${OBJECTDIR}/src/polarizable-water.o: src/polarizable-water.cpp
+	${MKDIR} -p ${OBJECTDIR}/src
+	${RM} "$@.d"
+	$(COMPILE.cc) -O2 -Wall -Iinclude -I../cpputil/include -std=c++14 -fPIC  -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/polarizable-water.o src/polarizable-water.cpp
+
 ${OBJECTDIR}/src/protonation-site-catalog.o: src/protonation-site-catalog.cpp
 	${MKDIR} -p ${OBJECTDIR}/src
 	${RM} "$@.d"
@@ -160,6 +174,10 @@ ${OBJECTDIR}/src/protonation-site-catalog.o: src/protonation-site-catalog.cpp
 ${TESTDIR}/TestFiles/f1: ${TESTDIR}/tests/coarse-grained-test.o ${OBJECTFILES:%.o=%_nomain.o}
 	${MKDIR} -p ${TESTDIR}/TestFiles
 	${LINK.cc} -o ${TESTDIR}/TestFiles/f1 $^ ${LDLIBSOPTIONS}   
+
+${TESTDIR}/TestFiles/f7: ${TESTDIR}/tests/particle-model-factory-test.o ${OBJECTFILES:%.o=%_nomain.o}
+	${MKDIR} -p ${TESTDIR}/TestFiles
+	${LINK.cc} -o ${TESTDIR}/TestFiles/f7 $^ ${LDLIBSOPTIONS}   
 
 ${TESTDIR}/TestFiles/f2: ${TESTDIR}/tests/particle-spec-catalog-test.o ${OBJECTFILES:%.o=%_nomain.o}
 	${MKDIR} -p ${TESTDIR}/TestFiles
@@ -186,6 +204,12 @@ ${TESTDIR}/tests/coarse-grained-test.o: tests/coarse-grained-test.cpp
 	${MKDIR} -p ${TESTDIR}/tests
 	${RM} "$@.d"
 	$(COMPILE.cc) -O2 -Wall -Iinclude -I../cpputil/include -I. -std=c++14 -MMD -MP -MF "$@.d" -o ${TESTDIR}/tests/coarse-grained-test.o tests/coarse-grained-test.cpp
+
+
+${TESTDIR}/tests/particle-model-factory-test.o: tests/particle-model-factory-test.cpp 
+	${MKDIR} -p ${TESTDIR}/tests
+	${RM} "$@.d"
+	$(COMPILE.cc) -O2 -Wall -Iinclude -I../cpputil/include -I. -std=c++14 -MMD -MP -MF "$@.d" -o ${TESTDIR}/tests/particle-model-factory-test.o tests/particle-model-factory-test.cpp
 
 
 ${TESTDIR}/tests/particle-spec-catalog-test.o: tests/particle-spec-catalog-test.cpp 
@@ -296,6 +320,19 @@ ${OBJECTDIR}/src/discrete-protonatable-bead_nomain.o: ${OBJECTDIR}/src/discrete-
 	    ${CP} ${OBJECTDIR}/src/discrete-protonatable-bead.o ${OBJECTDIR}/src/discrete-protonatable-bead_nomain.o;\
 	fi
 
+${OBJECTDIR}/src/particle-model-factory_nomain.o: ${OBJECTDIR}/src/particle-model-factory.o src/particle-model-factory.cpp 
+	${MKDIR} -p ${OBJECTDIR}/src
+	@NMOUTPUT=`${NM} ${OBJECTDIR}/src/particle-model-factory.o`; \
+	if (echo "$$NMOUTPUT" | ${GREP} '|main$$') || \
+	   (echo "$$NMOUTPUT" | ${GREP} 'T main$$') || \
+	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
+	then  \
+	    ${RM} "$@.d";\
+	    $(COMPILE.cc) -O2 -Wall -Iinclude -I../cpputil/include -std=c++14 -fPIC  -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/particle-model-factory_nomain.o src/particle-model-factory.cpp;\
+	else  \
+	    ${CP} ${OBJECTDIR}/src/particle-model-factory.o ${OBJECTDIR}/src/particle-model-factory_nomain.o;\
+	fi
+
 ${OBJECTDIR}/src/particle-spec-catalog_nomain.o: ${OBJECTDIR}/src/particle-spec-catalog.o src/particle-spec-catalog.cpp 
 	${MKDIR} -p ${OBJECTDIR}/src
 	@NMOUTPUT=`${NM} ${OBJECTDIR}/src/particle-spec-catalog.o`; \
@@ -348,6 +385,19 @@ ${OBJECTDIR}/src/pfactory_nomain.o: ${OBJECTDIR}/src/pfactory.o src/pfactory.cpp
 	    ${CP} ${OBJECTDIR}/src/pfactory.o ${OBJECTDIR}/src/pfactory_nomain.o;\
 	fi
 
+${OBJECTDIR}/src/polarizable-water_nomain.o: ${OBJECTDIR}/src/polarizable-water.o src/polarizable-water.cpp 
+	${MKDIR} -p ${OBJECTDIR}/src
+	@NMOUTPUT=`${NM} ${OBJECTDIR}/src/polarizable-water.o`; \
+	if (echo "$$NMOUTPUT" | ${GREP} '|main$$') || \
+	   (echo "$$NMOUTPUT" | ${GREP} 'T main$$') || \
+	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
+	then  \
+	    ${RM} "$@.d";\
+	    $(COMPILE.cc) -O2 -Wall -Iinclude -I../cpputil/include -std=c++14 -fPIC  -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/polarizable-water_nomain.o src/polarizable-water.cpp;\
+	else  \
+	    ${CP} ${OBJECTDIR}/src/polarizable-water.o ${OBJECTDIR}/src/polarizable-water_nomain.o;\
+	fi
+
 ${OBJECTDIR}/src/protonation-site-catalog_nomain.o: ${OBJECTDIR}/src/protonation-site-catalog.o src/protonation-site-catalog.cpp 
 	${MKDIR} -p ${OBJECTDIR}/src
 	@NMOUTPUT=`${NM} ${OBJECTDIR}/src/protonation-site-catalog.o`; \
@@ -366,6 +416,7 @@ ${OBJECTDIR}/src/protonation-site-catalog_nomain.o: ${OBJECTDIR}/src/protonation
 	@if [ "${TEST}" = "" ]; \
 	then  \
 	    ${TESTDIR}/TestFiles/f1 || true; \
+	    ${TESTDIR}/TestFiles/f7 || true; \
 	    ${TESTDIR}/TestFiles/f2 || true; \
 	    ${TESTDIR}/TestFiles/f3 || true; \
 	    ${TESTDIR}/TestFiles/f5 || true; \

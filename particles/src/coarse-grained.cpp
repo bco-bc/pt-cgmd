@@ -58,12 +58,17 @@ namespace simploce {
     CoarseGrained::addBead(std::size_t id,
                        const std::string& name, 
                        const position_t& r, 
-                       const spec_ptr_t& spec)
+                       const spec_ptr_t& spec,
+                       bool free)
     {
         auto index = indexGenerator_(*this);
         bead_ptr_t bead = Bead::create(id, index, name, spec);
         bead->position(r);
-        this->add(bead);
+        if ( free ) {
+            this->addFree(bead);
+        } else {
+            this->add(bead);
+        }
         return bead;
     }
             
@@ -73,14 +78,19 @@ namespace simploce {
                                                const std::string& name, 
                                                const position_t& r,
                                                std::size_t protonationState,
-                                               const spec_ptr_t& spec)
+                                               const spec_ptr_t& spec,
+                                               bool free)
     {  
         auto index = indexGenerator_(*this);
         dprot_bead_ptr_t bead = 
             DiscreteProtonatableBead::create(id, index, name, protonationState, spec);
         bead->position(r);
         discrete_.push_back(bead);
-        this->add(bead);
+        if ( free ) {
+            this->addFree(bead);
+        } else {
+            this->add(bead);
+        }
         return bead;
     }
     
@@ -89,14 +99,19 @@ namespace simploce {
                                                  const std::string& name, 
                                                  const position_t& r,
                                                  std::size_t protonationState,
-                                                 const spec_ptr_t& spec)
+                                                 const spec_ptr_t& spec,
+                                                 bool free)
     {
         auto index = indexGenerator_(*this);
         cprot_bead_ptr_t bead = 
             ContinuousProtonatableBead::create(id, index, name, protonationState, spec);
         bead->position(r);
         continuous_.push_back(bead);
-        this->add(bead);
+        if ( free ) {
+            this->addFree(bead);
+        } else {
+            this->add(bead);
+        }
         return bead;
     }
     
@@ -195,6 +210,12 @@ namespace simploce {
     CoarseGrained::numberOfBeads() const
     {
         return this->numberOfParticles();
+    }
+    
+    position_t
+    CoarseGrained::removeGroup_()
+    {
+        return position_t{};
     }
     
     std::ostream& 

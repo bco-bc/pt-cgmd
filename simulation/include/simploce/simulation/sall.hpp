@@ -45,7 +45,7 @@
 #include "interactor.hpp"
 #include "langevin-velocity-verlet.hpp"
 #include "leap-frog.hpp"
-#include "model-factory.hpp"
+#include "sim-model-factory.hpp"
 #include "no-bc.hpp"
 #include "pair-list-generator.hpp"
 #include "pbc.hpp"

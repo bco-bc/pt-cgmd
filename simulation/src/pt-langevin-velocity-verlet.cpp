@@ -31,6 +31,7 @@
 
 #include "simploce/simulation/pt-langevin-velocity-verlet.hpp"
 #include "simploce/simulation/pt-pair-list-generator.hpp"
+#include "simploce/simulation/sconf.hpp"
 #include <stdexcept>
 
 namespace simploce {
@@ -77,6 +78,12 @@ namespace simploce {
         // Update positions and velocities.
         
         return SimulationData{};
+    }
+    
+    std::string 
+    ProtonTransferLangevinVelocityVerlet::id() const
+    {
+        return conf::PT_LANGEVIN_VELOCITY_VERLET;
     }
 }
 

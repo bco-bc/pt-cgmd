@@ -48,6 +48,8 @@ namespace simploce {
         SimulationData displace(const sim_param_t& param, 
                                 const cg_ptr_t& cg) const override;
         
+        std::string id() const override;
+        
     private:
         
         cg_interactor_ptr_t interactor_;

@@ -9,5 +9,7 @@ Protonatable? Name      Mass        Charge (deprotonated)  Radius   pKa   Contin
 1             COOH      45.01600   -1.0                    0.0      3.77  0
 1             mH2O      18.01471    0.0                    0.0      7.00  0
 0             CW        60.07700   -0.57500                0.0
-1             PCW       60.07700   -0.57500                0.0      7.00  0 
+1             PCW       60.07700   -0.57500                0.0      7.00  1 
 0             DP        30.00000    0.57500                0.0
+1             HCOOH     46.00926   -1.0                    0.0      3.77  1
+

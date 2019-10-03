@@ -215,6 +215,12 @@ namespace simploce {
          * @param stream Input stream.
          */
         void readFreeAndGroups(std::istream& stream);
+        
+        /**
+         * Returns groups.
+         * @return 
+         */
+        std::vector<pg_ptr_t>& groups() { return groups_; }
                 
     private:
         
@@ -268,7 +274,7 @@ namespace simploce {
         }
         stream << free_.size() << std::endl;        
         for (const auto& p : free_) {
-            stream << space << p->index();
+            stream << space << p->id();
         }
         if ( !free_.empty() ) {
             stream << std::endl;        

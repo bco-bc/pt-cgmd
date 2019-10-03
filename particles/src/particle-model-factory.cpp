@@ -1,51 +1,32 @@
 /*
- * The MIT License
- *
- * Copyright 2019 André H. Juffer, Biocenter Oulu
- *
- * Permission is hereby granted, free of charge, to any person obtaining a copy
- * of this software and associated documentation files (the "Software"), to deal
- * in the Software without restriction, including without limitation the rights
- * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- * copies of the Software, and to permit persons to whom the Software is
- * furnished to do so, subject to the following conditions:
- *
- * The above copyright notice and this permission notice shall be included in
- * all copies or substantial portions of the Software.
- *
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
- * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
- * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
- * THE SOFTWARE.
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
  */
 
 /* 
- * File:   model-factory.cpp
+ * File:   particle-model-factory.cpp
  * Author: André H. Juffer, Biocenter Oulu.
  *
- * Created on August 30, 2019, 12:51 PM
+ * Created on October 3, 2019, 12:50 PM
  */
 
-#include "simploce/simulation/model-factory.hpp"
-#include "simploce/simulation/sfactory.hpp"
-#include "simploce/simulation/interactor.hpp"
-#include "simploce/simulation/langevin-velocity-verlet.hpp"
-#include "simploce/simulation/cg-pol-water.hpp"
-#include "simploce/simulation/pbc.hpp"
+#include "simploce/particle/particle-model-factory.hpp"
 #include "simploce/particle/particle-spec-catalog.hpp"
 #include "simploce/particle/particle-spec.hpp"
+#include "simploce/particle/polarizable-water.hpp"
+#include "simploce/particle/pfactory.hpp"
 #include "simploce/particle/bead.hpp"
-#include "simploce/util/mu-units.hpp"
+#include "simploce/particle/continuous-protonatable-bead.hpp"
 #include "simploce/util/util.hpp"
-#include <algorithm>
-#include <random>
-#include <cmath>
-#include <memory>
+#include "simploce/util/mu-units.hpp"
+#include "simploce/util/box.hpp"
+#include <stdexcept>
+#include <iostream>
 
 namespace simploce {
+    
+    static const length_t DISTANCE_CW_DP = 0.2; // nm.
     
     // From Maxwell velocity distribution.
     // https://en.wikipedia.org/wiki/Maxwell%E2%80%93Boltzmann_distribution
@@ -72,22 +53,24 @@ namespace simploce {
         }
         particle->momentum(p);
     }
-
     
-    ModelFactory::ModelFactory(const spec_catalog_ptr_t& catalog) :
+    
+    ParticleModelFactory::ParticleModelFactory(const spec_catalog_ptr_t& catalog) :
         catalog_{catalog}
     {        
+        if ( !catalog_ ) {
+            throw std::domain_error("ParticleModelFactory: Missing particle specifications catalog.");
+        }
     }
-    
-    
-    cg_sim_model_ptr_t ModelFactory::createPolarizableWater(const spec_catalog_ptr_t& catalog,
-                                                            const box_ptr_t& box,
-                                                            const density_t atDensitySI,
-                                                            const temperature_t temperature)
+        
+    cg_pol_water_ptr_t
+    ParticleModelFactory::polarizableWater(const box_ptr_t& box,
+                                           const density_t atDensitySI,
+                                           const temperature_t temperature) const
     {
         std::clog.setf(std::ios_base::scientific, std::ios_base::floatfield);
         
-        std::clog << "Creating Polarizable CGF Water:" << std::endl;
+        std::clog << "Creating particle model for polarizable water." << std::endl;
         
         std::clog << "Temperature: " << temperature << std::endl;
 
@@ -108,18 +91,13 @@ namespace simploce {
         std::clog << "Box size (nm): " << box->size() << std::endl;
         std::clog << "Box volume (nm^3): " << volume << std::endl;
         
-        // Periodic boundary conditions.
-        bc_ptr_t bc = factory::pbc(box);
-        std::clog << "Created periodic boundary conditions." << std::endl;
-         
         // How many CG particles? A single polarizable CG water particle represents 
         // 5 water molecules. Each CG water particles consists of two connected 
         // CG particles (CW and DP).
         spec_ptr_t mh2o = catalog_->molecularWater();
         spec_ptr_t cwSpec = catalog_->lookup("CW");
         spec_ptr_t dpSpec = catalog_->lookup("DP");
-        const length_t R_cw_dp = CoarseGrainedPolarizableWater::idealDistanceCWDP();
-        std::clog << "\"Ideal\" distance between CW and DP: " << R_cw_dp 
+        std::clog << "\"Ideal\" distance between CW and DP: " << DISTANCE_CW_DP
                   << " nm" << std::endl;
 
         number_density_t atNumberDensity = atDensity / mh2o->mass();
@@ -146,7 +124,7 @@ namespace simploce {
         std::clog.flush();
         
         // Start from an empty particle model.
-        cg_ptr_t cg = std::make_shared<CoarseGrained>();
+        cg_pol_water_ptr_t cg = std::make_shared<PolarizableWater>();
         
         // Add beads.
         std::size_t counter = 0;
@@ -165,7 +143,7 @@ namespace simploce {
                     real_t y = (j + 0.5) * spacing();
                     real_t z = (k + 0.5) * spacing();
                     position_t r1{x,y,z};
-                    bead_ptr_t cwBead = cg->addBead(id, "CW", r1, cwSpec);
+                    bead_ptr_t cwBead = cg->addBead(id, "CW", r1, cwSpec, false);
                     assignMomentum(cwBead, temperature);
                     beads.push_back(cwBead);
           
@@ -174,23 +152,23 @@ namespace simploce {
                     std::size_t l = util::random<real_t>() * 3.0;
                     switch (l) {
                         case 0: {
-                            real_t coord = x + R_cw_dp();
+                            real_t coord = x + DISTANCE_CW_DP();
                             r2 = position_t{coord, y, z};              
                             break;
                         }
                         case 1: {
-                            real_t coord = y + R_cw_dp();
+                            real_t coord = y + DISTANCE_CW_DP();
                             r2 = position_t{x,coord,z};
                             break;
                         }
                         default: {
-                            real_t coord = z + R_cw_dp();
+                            real_t coord = z + DISTANCE_CW_DP();
                             r2 = position_t{x,y,coord};
                             break;
                         }
                     }
                     id += 1;
-                    bead_ptr_t dpBead = cg->addBead(id, "DP", r2, dpSpec);
+                    bead_ptr_t dpBead = cg->addBead(id, "DP", r2, dpSpec, false);
                     assignMomentum<Bead>(dpBead, temperature);
                     beads.push_back(dpBead);
                     
@@ -209,54 +187,46 @@ namespace simploce {
             i += 1;
         }
         std::clog << "Created " << cg->numberOfParticles() << " beads." << std::endl;
-        std::clog << "Created " << cg->numberOfParticleGroups() << " polarizable waters." << std::endl;
-
-        // Interactor.
-        cg_interactor_ptr_t interactor = 
-                factory::interactorCoarseGrainedPolarizableWater(catalog, box, bc);
+        std::clog << "Created " << cg->numberOfParticleGroups() << " waters groups." << std::endl;
         
-        // Displacer.
-        std::shared_ptr<CoarseGrainedDisplacer> displacer = 
-            std::make_shared<LangevinVelocityVerlet<CoarseGrained>>(interactor);
-        
-        // Done.
-        return std::make_shared<cg_sim_model_t>(cg, displacer, interactor, box, bc);
-    }    
+        return cg;
+    }
     
-    cg_sim_model_ptr_t 
-    ModelFactory::createFormicAcidSolution(const spec_catalog_ptr_t& catalog,
-                                           const box_ptr_t& box,
-                                           const molarity_t molarity,
-                                           const temperature_t temperature)
+    cg_ptr_t 
+    ParticleModelFactory::formicAcidSolution(const box_ptr_t& box,
+                                             const density_t atDensitySI,
+                                             const molarity_t molarity,
+                                             const temperature_t temperature) const
     {
+        std::clog << "Creating coarse grained simulation for formic acid." << std::endl;
+
         std::clog.setf(std::ios_base::scientific, std::ios_base::floatfield);
         
-        std::clog << "Creating CG Formic Acid solution" << std::endl;
         std::clog << "Molarity: " << molarity << " M" << std::endl;
         
         // Create CG polarizable water.
-        cg_sim_model_ptr_t cg = this->createPolarizableWater(catalog, box);
+        cg_pol_water_ptr_t cg = 
+            this->polarizableWater(box, atDensitySI, temperature);
         
+        // Molarity to number of HCOOH molecules.
         volume_t volume = box->volume();
-        
-        // Molarity to number of HCOOH per water molecules.
         number_density_t numberDensity =
             molarity() * SIUnits<real_t>::NA / MUUnits<real_t>::l_to_nm3;
         std::size_t nHCOOH = util::nint<real_t>(numberDensity() * volume());
         std::clog << "Number of HCOOH: " << nHCOOH << std::endl;
         
-        // Replace groups by HCCOH.
+        std::clog << "Replacing two water groups by HCOOH beads." << std::endl;
+        spec_ptr_t spec = catalog_->lookup("HCOOH");
+        for (std::size_t counter = 0; counter != nHCOOH; ++counter) {
+            std::size_t id = cg->numberOfBeads() + 1;
+            position_t r = cg->removeGroup_();
+            auto bead = cg->addContinuousProtonatableBead(id, "HCOOH", r, 0, spec, true);
+            assignMomentum(bead, temperature);
+        }
         
-        
+        std::clog << "Created " << cg->numberOfParticles() << " beads." << std::endl;
+        std::clog << "Created " << cg->numberOfParticleGroups() << " waters groups" << std::endl;
+        std::clog << "Created " << cg->numberOfFreeParticles() << " HCCOH beads." << std::endl;
         return cg;
     }
-    
-    cg_sim_model_ptr_t ModelFactory::readCoarseGrainedFrom(std::istream& stream)
-    {
-        cg_sim_model_ptr_t cg{new SimulationModel<Bead>};
-        cg->readFrom(stream, catalog_);
-        return cg;
-    }
-  
 }
-

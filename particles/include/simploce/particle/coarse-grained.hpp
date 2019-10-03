@@ -55,11 +55,14 @@ namespace simploce {
          * @param name Name.
          * @param r Position.
          * @param spec Specification.
+         * @param free If true, the protonatable should be considered a free bead 
+         * (that is, not in any bead group).
          */
         bead_ptr_t addBead(std::size_t id,
                            const std::string& name, 
                            const position_t& r, 
-                           const spec_ptr_t& spec);
+                           const spec_ptr_t& spec,
+                           bool free = true);
         
         /**
          * Adds new discrete protonatable bead.
@@ -68,12 +71,16 @@ namespace simploce {
          * @param r Position.
          * @param protonationState Protonation state. Must be in {0, 1, 2, ...}.
          * @param spec Specification.
+         * @param free If true, the protonatable should be considered a free bead 
+         * (that is, not in any bead group).
+         * @return Added bead.
          */
         dprot_bead_ptr_t addDiscreteProtonatableBead(std::size_t id,
                                                      const std::string& name, 
                                                      const position_t& r,
                                                      std::size_t protonationState,
-                                                     const spec_ptr_t& spec);
+                                                     const spec_ptr_t& spec,
+                                                     bool free = true);
         
         /**
          * Adds new continuous protonatable bead.
@@ -82,12 +89,16 @@ namespace simploce {
          * @param r Position.
          * @param protonationState Protonation state. Either 0 or 1.
          * @param spec Specification.
+         * @param free If true, the protonatable should be considered a free bead 
+         * (that is, not in any bead group).
+         * @return Added bead.
          */
         cprot_bead_ptr_t addContinuousProtonatableBead(std::size_t id,
                                                        const std::string& name, 
                                                        const position_t& r,
                                                        std::size_t protonationState,
-                                                       const spec_ptr_t& spec);
+                                                       const spec_ptr_t& spec,
+                                                       bool free = true);
         /**
          * Adds a bead group with bonds to this physical system.
          * @param beads Beads. Must be already in this particle model.
@@ -136,16 +147,14 @@ namespace simploce {
          */
         std::size_t numberOfBeads() const;   
                 
-        /**
-         * 
-         * @param spec
-         * @param ngroups
-         */
-        void replaceGroupsByBeads_(const spec_ptr_t& spec, std::size_t ngroups = 1);
-        
     private:
         
-        friend class ModelFactory;
+        friend class ParticleModelFactory;
+        
+        /**
+         * Removes a single group.
+         */
+        virtual position_t removeGroup_();
         
         std::vector<dprot_bead_ptr_t> discrete_;
         std::vector<cprot_bead_ptr_t> continuous_;

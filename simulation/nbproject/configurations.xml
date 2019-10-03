@@ -20,7 +20,6 @@
       <itemPath>include/simploce/simulation/langevin-velocity-verlet.hpp</itemPath>
       <itemPath>include/simploce/simulation/leap-frog.hpp</itemPath>
       <itemPath>include/simploce/simulation/lj-coulomb-forces.hpp</itemPath>
-      <itemPath>include/simploce/simulation/model-factory.hpp</itemPath>
       <itemPath>include/simploce/simulation/no-bc.hpp</itemPath>
       <itemPath>include/simploce/simulation/pair-list-generator.hpp</itemPath>
       <itemPath>include/simploce/simulation/pbc.hpp</itemPath>
@@ -30,6 +29,7 @@
       <itemPath>include/simploce/simulation/sconf.hpp</itemPath>
       <itemPath>include/simploce/simulation/sfactory.hpp</itemPath>
       <itemPath>include/simploce/simulation/sim-data.hpp</itemPath>
+      <itemPath>include/simploce/simulation/sim-model-factory.hpp</itemPath>
       <itemPath>include/simploce/simulation/sim-model.hpp</itemPath>
       <itemPath>include/simploce/simulation/simulation.hpp</itemPath>
       <itemPath>include/simploce/simulation/sproperties.hpp</itemPath>
@@ -49,13 +49,13 @@
       <itemPath>src/langevin-velocity-verlet.cpp</itemPath>
       <itemPath>src/leap-frog.cpp</itemPath>
       <itemPath>src/lj-coulomb-forces.cpp</itemPath>
-      <itemPath>src/model-factory.cpp</itemPath>
       <itemPath>src/no-bc.cpp</itemPath>
       <itemPath>src/pbc.cpp</itemPath>
       <itemPath>src/pt-langevin-velocity-verlet.cpp</itemPath>
       <itemPath>src/pt-pair-list-generator.cpp</itemPath>
       <itemPath>src/sfactory.cpp</itemPath>
       <itemPath>src/sim-data.cpp</itemPath>
+      <itemPath>src/sim-model-factory.cpp</itemPath>
       <itemPath>src/sim-model.cpp</itemPath>
       <itemPath>src/simulation.cpp</itemPath>
       <itemPath>src/velocity-verlet.cpp</itemPath>
@@ -76,12 +76,6 @@
                      kind="TEST">
         <itemPath>tests/gr-test.cpp</itemPath>
       </logicalFolder>
-      <logicalFolder name="f3"
-                     displayName="Model Factory Test"
-                     projectFiles="true"
-                     kind="TEST">
-        <itemPath>tests/model-factory-test.cpp</itemPath>
-      </logicalFolder>
       <logicalFolder name="f4"
                      displayName="Pair List Test"
                      projectFiles="true"
@@ -93,6 +87,12 @@
                      projectFiles="true"
                      kind="TEST">
         <itemPath>tests/pt-pairlist-test.cpp</itemPath>
+      </logicalFolder>
+      <logicalFolder name="f3"
+                     displayName="Simulation Model Factory Test"
+                     projectFiles="true"
+                     kind="TEST">
+        <itemPath>tests/simulation-model-factory-test.cpp</itemPath>
       </logicalFolder>
       <logicalFolder name="f2"
                      displayName="Simulation Test"
@@ -331,11 +331,6 @@
             tool="3"
             flavor2="0">
       </item>
-      <item path="include/simploce/simulation/model-factory.hpp"
-            ex="false"
-            tool="3"
-            flavor2="0">
-      </item>
       <item path="include/simploce/simulation/no-bc.hpp"
             ex="false"
             tool="3"
@@ -381,6 +376,11 @@
             tool="3"
             flavor2="0">
       </item>
+      <item path="include/simploce/simulation/sim-model-factory.hpp"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
       <item path="include/simploce/simulation/sim-model.hpp"
             ex="false"
             tool="3"
@@ -418,8 +418,6 @@
       </item>
       <item path="src/lj-coulomb-forces.cpp" ex="false" tool="1" flavor2="0">
       </item>
-      <item path="src/model-factory.cpp" ex="false" tool="1" flavor2="0">
-      </item>
       <item path="src/no-bc.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="src/pbc.cpp" ex="false" tool="1" flavor2="0">
@@ -435,6 +433,8 @@
       </item>
       <item path="src/sim-data.cpp" ex="false" tool="1" flavor2="0">
       </item>
+      <item path="src/sim-model-factory.cpp" ex="false" tool="1" flavor2="0">
+      </item>
       <item path="src/sim-model.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="src/simulation.cpp" ex="false" tool="1" flavor2="0">
@@ -445,11 +445,14 @@
       </item>
       <item path="tests/gr-test.cpp" ex="false" tool="1" flavor2="0">
       </item>
-      <item path="tests/model-factory-test.cpp" ex="false" tool="1" flavor2="0">
-      </item>
       <item path="tests/pair-list-test.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="tests/pt-pairlist-test.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="tests/simulation-model-factory-test.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
       </item>
       <item path="tests/simulation-test.cpp" ex="false" tool="1" flavor2="0">
       </item>
@@ -676,11 +679,6 @@
             tool="3"
             flavor2="0">
       </item>
-      <item path="include/simploce/simulation/model-factory.hpp"
-            ex="false"
-            tool="3"
-            flavor2="0">
-      </item>
       <item path="include/simploce/simulation/no-bc.hpp"
             ex="false"
             tool="3"
@@ -726,6 +724,11 @@
             tool="3"
             flavor2="0">
       </item>
+      <item path="include/simploce/simulation/sim-model-factory.hpp"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
       <item path="include/simploce/simulation/sim-model.hpp"
             ex="false"
             tool="3"
@@ -763,8 +766,6 @@
       </item>
       <item path="src/lj-coulomb-forces.cpp" ex="false" tool="1" flavor2="0">
       </item>
-      <item path="src/model-factory.cpp" ex="false" tool="1" flavor2="0">
-      </item>
       <item path="src/no-bc.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="src/pbc.cpp" ex="false" tool="1" flavor2="0">
@@ -780,6 +781,8 @@
       </item>
       <item path="src/sim-data.cpp" ex="false" tool="1" flavor2="0">
       </item>
+      <item path="src/sim-model-factory.cpp" ex="false" tool="1" flavor2="0">
+      </item>
       <item path="src/sim-model.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="src/simulation.cpp" ex="false" tool="1" flavor2="0">
@@ -790,11 +793,14 @@
       </item>
       <item path="tests/gr-test.cpp" ex="false" tool="1" flavor2="0">
       </item>
-      <item path="tests/model-factory-test.cpp" ex="false" tool="1" flavor2="0">
-      </item>
       <item path="tests/pair-list-test.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="tests/pt-pairlist-test.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="tests/simulation-model-factory-test.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
       </item>
       <item path="tests/simulation-test.cpp" ex="false" tool="1" flavor2="0">
       </item>

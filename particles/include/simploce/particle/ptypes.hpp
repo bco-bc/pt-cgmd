@@ -35,6 +35,7 @@
 
 #include "simploce/util/cvector_t.hpp"
 #include "simploce/util/value_t.hpp"
+#include "simploce/util/cube.hpp"
 #include <memory>
 #include <utility>
 
@@ -50,6 +51,8 @@ namespace simploce {
     class ProtonationSiteCatalog;
     class Atomistic;
     class CoarseGrained;
+    class PolarizableWater;
+    class ParticleModelFactory;
     
     template <typename P>
     class ParticleGroup;
@@ -93,6 +96,36 @@ namespace simploce {
     using energy_t = simploce::value_t<real_t, 6>;
     
     /**
+     * Density type.
+     */
+    using density_t = simploce::value_t<real_t, 7>;
+    
+    /**
+     * Temperature type.
+     */
+    using temperature_t = simploce::value_t<real_t, 8>;   
+    
+    /**
+     * Length or distance type.
+     */
+    using length_t = simploce::value_t<real_t, 9>;
+    
+    /**
+     * Volume type.
+     */
+    using volume_t = simploce::value_t<real_t, 10>;
+    
+    /**
+     * Number density type.
+     */
+    using number_density_t = simploce::value_t<real_t, 11>;
+    
+    /**
+     * Molarity type.
+     */
+    using molarity_t = simploce::value_t<real_t, 12>;
+            
+    /**
      * Position.
      */
     using position_t = cvector_t<real_t, 1>;
@@ -115,7 +148,18 @@ namespace simploce {
     /**
      * Distance (difference) type
      */
-    using dist_vect_t = position_t;        
+    using dist_vect_t = position_t;     
+    
+    /**
+     * Particle box type.
+     */
+    using box_t = Cube<real_t>;
+    
+    /**
+     * Particle box pointer type.
+     */
+    using box_ptr_t = std::shared_ptr<box_t>;
+       
     
     /**
      * Atomistic particle model pointer type.
@@ -131,6 +175,11 @@ namespace simploce {
      * Coarse grained particle model pointer type.
      */
     using cg_ptr_t = std::shared_ptr<CoarseGrained>;
+    
+        /**
+     * Coarse grained polarizable particle model pointer type.
+     */
+    using cg_pol_water_ptr_t = std::shared_ptr<PolarizableWater>;
     
     /**
      * Bead pointer type.
@@ -206,6 +255,11 @@ namespace simploce {
      * Type for a pair of particle identifiers.
      */
     using id_pair_t = std::pair<std::size_t, std::size_t>;
+    
+    /**
+     * Particle model factory type.
+     */
+    using particle_model_fact_ptr_t = std::shared_ptr<ParticleModelFactory>;
     
 }
 

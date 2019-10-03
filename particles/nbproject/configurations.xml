@@ -13,12 +13,14 @@
       <itemPath>include/simploce/particle/discrete-protonatable-bead.hpp</itemPath>
       <itemPath>include/simploce/particle/pall.hpp</itemPath>
       <itemPath>include/simploce/particle/particle-group.hpp</itemPath>
+      <itemPath>include/simploce/particle/particle-model-factory.hpp</itemPath>
       <itemPath>include/simploce/particle/particle-model.hpp</itemPath>
       <itemPath>include/simploce/particle/particle-spec-catalog.hpp</itemPath>
       <itemPath>include/simploce/particle/particle-spec.hpp</itemPath>
       <itemPath>include/simploce/particle/particle.hpp</itemPath>
       <itemPath>include/simploce/particle/pconf.hpp</itemPath>
       <itemPath>include/simploce/particle/pfactory.hpp</itemPath>
+      <itemPath>include/simploce/particle/polarizable-water.hpp</itemPath>
       <itemPath>include/simploce/particle/pproperties.hpp</itemPath>
       <itemPath>include/simploce/particle/protonatable.hpp</itemPath>
       <itemPath>include/simploce/particle/protonation-site-catalog.hpp</itemPath>
@@ -41,10 +43,12 @@
       <itemPath>src/coarse-grained.cpp</itemPath>
       <itemPath>src/continuous-protonatable-bead.cpp</itemPath>
       <itemPath>src/discrete-protonatable-bead.cpp</itemPath>
+      <itemPath>src/particle-model-factory.cpp</itemPath>
       <itemPath>src/particle-spec-catalog.cpp</itemPath>
       <itemPath>src/particle-spec.cpp</itemPath>
       <itemPath>src/particle.cpp</itemPath>
       <itemPath>src/pfactory.cpp</itemPath>
+      <itemPath>src/polarizable-water.cpp</itemPath>
       <itemPath>src/protonation-site-catalog.cpp</itemPath>
     </logicalFolder>
     <logicalFolder name="TestFiles"
@@ -56,6 +60,12 @@
                      projectFiles="true"
                      kind="TEST">
         <itemPath>tests/coarse-grained-test.cpp</itemPath>
+      </logicalFolder>
+      <logicalFolder name="f7"
+                     displayName="Particle Model Factory Test"
+                     projectFiles="true"
+                     kind="TEST">
+        <itemPath>tests/particle-model-factory-test.cpp</itemPath>
       </logicalFolder>
       <logicalFolder name="f2"
                      displayName="Particle Spec CatalogTest"
@@ -219,6 +229,21 @@
           <output>${TESTDIR}/TestFiles/f6</output>
         </linkerTool>
       </folder>
+      <folder path="TestFiles/f7">
+        <cTool>
+          <incDir>
+            <pElem>.</pElem>
+          </incDir>
+        </cTool>
+        <ccTool>
+          <incDir>
+            <pElem>.</pElem>
+          </incDir>
+        </ccTool>
+        <linkerTool>
+          <output>${TESTDIR}/TestFiles/f7</output>
+        </linkerTool>
+      </folder>
       <item path="include/simploce/particle/atom.hpp" ex="false" tool="3" flavor2="0">
       </item>
       <item path="include/simploce/particle/atomistic.hpp"
@@ -252,6 +277,11 @@
             tool="3"
             flavor2="0">
       </item>
+      <item path="include/simploce/particle/particle-model-factory.hpp"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
       <item path="include/simploce/particle/particle-model.hpp"
             ex="false"
             tool="3"
@@ -278,6 +308,11 @@
             flavor2="0">
       </item>
       <item path="include/simploce/particle/pfactory.hpp"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="include/simploce/particle/polarizable-water.hpp"
             ex="false"
             tool="3"
             flavor2="0">
@@ -331,6 +366,8 @@
       </item>
       <item path="src/discrete-protonatable-bead.cpp" ex="false" tool="1" flavor2="0">
       </item>
+      <item path="src/particle-model-factory.cpp" ex="false" tool="1" flavor2="0">
+      </item>
       <item path="src/particle-spec-catalog.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="src/particle-spec.cpp" ex="false" tool="1" flavor2="0">
@@ -339,9 +376,16 @@
       </item>
       <item path="src/pfactory.cpp" ex="false" tool="1" flavor2="0">
       </item>
+      <item path="src/polarizable-water.cpp" ex="false" tool="1" flavor2="0">
+      </item>
       <item path="src/protonation-site-catalog.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="tests/coarse-grained-test.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="tests/particle-model-factory-test.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
       </item>
       <item path="tests/particle-spec-catalog-test.cpp"
             ex="false"
@@ -489,6 +533,21 @@
           <output>${TESTDIR}/TestFiles/f6</output>
         </linkerTool>
       </folder>
+      <folder path="TestFiles/f7">
+        <cTool>
+          <incDir>
+            <pElem>.</pElem>
+          </incDir>
+        </cTool>
+        <ccTool>
+          <incDir>
+            <pElem>.</pElem>
+          </incDir>
+        </ccTool>
+        <linkerTool>
+          <output>${TESTDIR}/TestFiles/f7</output>
+        </linkerTool>
+      </folder>
       <item path="include/simploce/particle/atom.hpp" ex="false" tool="3" flavor2="0">
       </item>
       <item path="include/simploce/particle/atomistic.hpp"
@@ -522,6 +581,11 @@
             tool="3"
             flavor2="0">
       </item>
+      <item path="include/simploce/particle/particle-model-factory.hpp"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
       <item path="include/simploce/particle/particle-model.hpp"
             ex="false"
             tool="3"
@@ -548,6 +612,11 @@
             flavor2="0">
       </item>
       <item path="include/simploce/particle/pfactory.hpp"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="include/simploce/particle/polarizable-water.hpp"
             ex="false"
             tool="3"
             flavor2="0">
@@ -601,6 +670,8 @@
       </item>
       <item path="src/discrete-protonatable-bead.cpp" ex="false" tool="1" flavor2="0">
       </item>
+      <item path="src/particle-model-factory.cpp" ex="false" tool="1" flavor2="0">
+      </item>
       <item path="src/particle-spec-catalog.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="src/particle-spec.cpp" ex="false" tool="1" flavor2="0">
@@ -609,9 +680,16 @@
       </item>
       <item path="src/pfactory.cpp" ex="false" tool="1" flavor2="0">
       </item>
+      <item path="src/polarizable-water.cpp" ex="false" tool="1" flavor2="0">
+      </item>
       <item path="src/protonation-site-catalog.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="tests/coarse-grained-test.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="tests/particle-model-factory-test.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
       </item>
       <item path="tests/particle-spec-catalog-test.cpp"
             ex="false"

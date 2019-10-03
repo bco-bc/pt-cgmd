@@ -38,8 +38,10 @@
 #include "simploce/particle/bead.hpp"
 #include "simploce/particle/coarse-grained.hpp"
 #include "simploce/particle/particle-spec-catalog.hpp"
+#include "simploce/particle/particle-model-factory.hpp"
 #include "simploce/util/file.hpp"
 #include "simploce/util/param.hpp"
+#include "simploce/simulation/sim-model-factory.hpp"
 #include <fstream>
 #include <cstdlib>
 #include <iostream>
@@ -67,17 +69,19 @@ void test1() {
     param.add<real_t>("gamma", 0.5);
     std::cout << param << std::endl;
     
-    cg_ptr_t cg = factory::coarseGrained();
-
     box_ptr_t box = factory::cube(length_t{5.0});
     bc_ptr_t bc = factory::pbc(box);
+
+    particle_model_fact_ptr_t factory = factory::particleModelFactory(catalog);
+    cg_ptr_t cg = factory->polarizableWater(box);
     cg_interactor_ptr_t interactor = 
-        factory::interactorCoarseGrainedPolarizableWater(catalog, box, bc);
+            factory::interactorCoarseGrainedPolarizableWater(catalog, box, bc);
     
-    cg_displacer_ptr_t leapFrog = factory::leapFrog(interactor);
+    cg_displacer_ptr_t leapFrog = factory::leapFrog(interactor);    
     SimulationData data = leapFrog->displace(param, cg);
     
     cg_displacer_ptr_t velocityVerlet = factory::velocityVerlet(interactor);
+    
     data = velocityVerlet->displace(param, cg);
     std::cout << data << std::endl;
           
