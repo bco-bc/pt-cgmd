@@ -57,7 +57,7 @@ namespace simploce {
     
     // P is particle type, e.g. Atom or Bead.
     template <typename P>
-    class SimulationModel;    
+    class SimulationModel;
     
     using bc_t = BoundaryCondition;
     

@@ -36,7 +36,9 @@ OBJECTDIR=${CND_BUILDDIR}/${CND_CONF}/${CND_PLATFORM}
 # Object Files
 OBJECTFILES= \
 	${OBJECTDIR}/src/file.o \
-	${OBJECTDIR}/src/param.o
+	${OBJECTDIR}/src/param.o \
+	${OBJECTDIR}/src/poisson-process.o \
+	${OBJECTDIR}/src/telegraph-process.o
 
 # Test Directory
 TESTDIR=${CND_BUILDDIR}/${CND_CONF}/${CND_PLATFORM}/tests
@@ -47,6 +49,7 @@ TESTFILES= \
 	${TESTDIR}/TestFiles/f1 \
 	${TESTDIR}/TestFiles/f6 \
 	${TESTDIR}/TestFiles/f4 \
+	${TESTDIR}/TestFiles/f7 \
 	${TESTDIR}/TestFiles/f3 \
 	${TESTDIR}/TestFiles/f2
 
@@ -56,6 +59,7 @@ TESTOBJECTFILES= \
 	${TESTDIR}/tests/cvector-test.o \
 	${TESTDIR}/tests/matrix-map-test.o \
 	${TESTDIR}/tests/seed-value-test.o \
+	${TESTDIR}/tests/telegraph-process-test.o \
 	${TESTDIR}/tests/value-cvector-test.o \
 	${TESTDIR}/tests/value_type_test.o
 
@@ -93,6 +97,16 @@ ${OBJECTDIR}/src/param.o: src/param.cpp
 	${RM} "$@.d"
 	$(COMPILE.cc) -O2 -Iinclude -std=c++14 -fPIC  -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/param.o src/param.cpp
 
+${OBJECTDIR}/src/poisson-process.o: src/poisson-process.cpp
+	${MKDIR} -p ${OBJECTDIR}/src
+	${RM} "$@.d"
+	$(COMPILE.cc) -O2 -Iinclude -std=c++14 -fPIC  -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/poisson-process.o src/poisson-process.cpp
+
+${OBJECTDIR}/src/telegraph-process.o: src/telegraph-process.cpp
+	${MKDIR} -p ${OBJECTDIR}/src
+	${RM} "$@.d"
+	$(COMPILE.cc) -O2 -Iinclude -std=c++14 -fPIC  -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/telegraph-process.o src/telegraph-process.cpp
+
 # Subprojects
 .build-subprojects:
 
@@ -115,6 +129,10 @@ ${TESTDIR}/TestFiles/f6: ${TESTDIR}/tests/matrix-map-test.o ${OBJECTFILES:%.o=%_
 ${TESTDIR}/TestFiles/f4: ${TESTDIR}/tests/seed-value-test.o ${OBJECTFILES:%.o=%_nomain.o}
 	${MKDIR} -p ${TESTDIR}/TestFiles
 	${LINK.cc} -o ${TESTDIR}/TestFiles/f4 $^ ${LDLIBSOPTIONS}   
+
+${TESTDIR}/TestFiles/f7: ${TESTDIR}/tests/telegraph-process-test.o ${OBJECTFILES:%.o=%_nomain.o}
+	${MKDIR} -p ${TESTDIR}/TestFiles
+	${LINK.cc} -o ${TESTDIR}/TestFiles/f7 $^ ${LDLIBSOPTIONS}   
 
 ${TESTDIR}/TestFiles/f3: ${TESTDIR}/tests/value-cvector-test.o ${OBJECTFILES:%.o=%_nomain.o}
 	${MKDIR} -p ${TESTDIR}/TestFiles
@@ -147,6 +165,12 @@ ${TESTDIR}/tests/seed-value-test.o: tests/seed-value-test.cpp
 	${MKDIR} -p ${TESTDIR}/tests
 	${RM} "$@.d"
 	$(COMPILE.cc) -O2 -Iinclude -I. -std=c++14 -MMD -MP -MF "$@.d" -o ${TESTDIR}/tests/seed-value-test.o tests/seed-value-test.cpp
+
+
+${TESTDIR}/tests/telegraph-process-test.o: tests/telegraph-process-test.cpp 
+	${MKDIR} -p ${TESTDIR}/tests
+	${RM} "$@.d"
+	$(COMPILE.cc) -O2 -Iinclude -I. -std=c++14 -MMD -MP -MF "$@.d" -o ${TESTDIR}/tests/telegraph-process-test.o tests/telegraph-process-test.cpp
 
 
 ${TESTDIR}/tests/value-cvector-test.o: tests/value-cvector-test.cpp 
@@ -187,6 +211,32 @@ ${OBJECTDIR}/src/param_nomain.o: ${OBJECTDIR}/src/param.o src/param.cpp
 	    ${CP} ${OBJECTDIR}/src/param.o ${OBJECTDIR}/src/param_nomain.o;\
 	fi
 
+${OBJECTDIR}/src/poisson-process_nomain.o: ${OBJECTDIR}/src/poisson-process.o src/poisson-process.cpp 
+	${MKDIR} -p ${OBJECTDIR}/src
+	@NMOUTPUT=`${NM} ${OBJECTDIR}/src/poisson-process.o`; \
+	if (echo "$$NMOUTPUT" | ${GREP} '|main$$') || \
+	   (echo "$$NMOUTPUT" | ${GREP} 'T main$$') || \
+	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
+	then  \
+	    ${RM} "$@.d";\
+	    $(COMPILE.cc) -O2 -Iinclude -std=c++14 -fPIC  -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/poisson-process_nomain.o src/poisson-process.cpp;\
+	else  \
+	    ${CP} ${OBJECTDIR}/src/poisson-process.o ${OBJECTDIR}/src/poisson-process_nomain.o;\
+	fi
+
+${OBJECTDIR}/src/telegraph-process_nomain.o: ${OBJECTDIR}/src/telegraph-process.o src/telegraph-process.cpp 
+	${MKDIR} -p ${OBJECTDIR}/src
+	@NMOUTPUT=`${NM} ${OBJECTDIR}/src/telegraph-process.o`; \
+	if (echo "$$NMOUTPUT" | ${GREP} '|main$$') || \
+	   (echo "$$NMOUTPUT" | ${GREP} 'T main$$') || \
+	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
+	then  \
+	    ${RM} "$@.d";\
+	    $(COMPILE.cc) -O2 -Iinclude -std=c++14 -fPIC  -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/telegraph-process_nomain.o src/telegraph-process.cpp;\
+	else  \
+	    ${CP} ${OBJECTDIR}/src/telegraph-process.o ${OBJECTDIR}/src/telegraph-process_nomain.o;\
+	fi
+
 # Run Test Targets
 .test-conf:
 	@if [ "${TEST}" = "" ]; \
@@ -195,6 +245,7 @@ ${OBJECTDIR}/src/param_nomain.o: ${OBJECTDIR}/src/param.o src/param.cpp
 	    ${TESTDIR}/TestFiles/f1 || true; \
 	    ${TESTDIR}/TestFiles/f6 || true; \
 	    ${TESTDIR}/TestFiles/f4 || true; \
+	    ${TESTDIR}/TestFiles/f7 || true; \
 	    ${TESTDIR}/TestFiles/f3 || true; \
 	    ${TESTDIR}/TestFiles/f2 || true; \
 	else  \

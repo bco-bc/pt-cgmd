@@ -13,6 +13,7 @@
       <itemPath>include/simploce/simulation/cg-displacer.hpp</itemPath>
       <itemPath>include/simploce/simulation/cg-forcefield.hpp</itemPath>
       <itemPath>include/simploce/simulation/cg-pol-water.hpp</itemPath>
+      <itemPath>include/simploce/simulation/constant-rate-pt.hpp</itemPath>
       <itemPath>include/simploce/simulation/displacer.hpp</itemPath>
       <itemPath>include/simploce/simulation/forcefield.hpp</itemPath>
       <itemPath>include/simploce/analysis/gr.hpp</itemPath>
@@ -25,6 +26,7 @@
       <itemPath>include/simploce/simulation/pbc.hpp</itemPath>
       <itemPath>include/simploce/simulation/pt-langevin-velocity-verlet.hpp</itemPath>
       <itemPath>include/simploce/simulation/pt-pair-list-generator.hpp</itemPath>
+      <itemPath>include/simploce/simulation/pt.hpp</itemPath>
       <itemPath>include/simploce/simulation/sall.hpp</itemPath>
       <itemPath>include/simploce/simulation/sconf.hpp</itemPath>
       <itemPath>include/simploce/simulation/sfactory.hpp</itemPath>
@@ -45,6 +47,7 @@
                    projectFiles="true">
       <itemPath>src/analysis.cpp</itemPath>
       <itemPath>src/cg-pol-water.cpp</itemPath>
+      <itemPath>src/constant-rate-pt.cpp</itemPath>
       <itemPath>src/interactor.cpp</itemPath>
       <itemPath>src/langevin-velocity-verlet.cpp</itemPath>
       <itemPath>src/leap-frog.cpp</itemPath>
@@ -301,6 +304,11 @@
             tool="3"
             flavor2="0">
       </item>
+      <item path="include/simploce/simulation/constant-rate-pt.hpp"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
       <item path="include/simploce/simulation/displacer.hpp"
             ex="false"
             tool="3"
@@ -356,6 +364,8 @@
             tool="3"
             flavor2="0">
       </item>
+      <item path="include/simploce/simulation/pt.hpp" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="include/simploce/simulation/sall.hpp"
             ex="false"
             tool="3"
@@ -409,6 +419,8 @@
       <item path="src/analysis.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="src/cg-pol-water.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="src/constant-rate-pt.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="src/interactor.cpp" ex="false" tool="1" flavor2="0">
       </item>
@@ -649,6 +661,11 @@
             tool="3"
             flavor2="0">
       </item>
+      <item path="include/simploce/simulation/constant-rate-pt.hpp"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
       <item path="include/simploce/simulation/displacer.hpp"
             ex="false"
             tool="3"
@@ -704,6 +721,8 @@
             tool="3"
             flavor2="0">
       </item>
+      <item path="include/simploce/simulation/pt.hpp" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="include/simploce/simulation/sall.hpp"
             ex="false"
             tool="3"
@@ -757,6 +776,8 @@
       <item path="src/analysis.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="src/cg-pol-water.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="src/constant-rate-pt.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="src/interactor.cpp" ex="false" tool="1" flavor2="0">
       </item>

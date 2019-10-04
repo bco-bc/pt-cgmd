@@ -37,6 +37,7 @@ OBJECTDIR=${CND_BUILDDIR}/${CND_CONF}/${CND_PLATFORM}
 OBJECTFILES= \
 	${OBJECTDIR}/src/analysis.o \
 	${OBJECTDIR}/src/cg-pol-water.o \
+	${OBJECTDIR}/src/constant-rate-pt.o \
 	${OBJECTDIR}/src/interactor.o \
 	${OBJECTDIR}/src/langevin-velocity-verlet.o \
 	${OBJECTDIR}/src/leap-frog.o \
@@ -110,6 +111,11 @@ ${OBJECTDIR}/src/cg-pol-water.o: src/cg-pol-water.cpp
 	${MKDIR} -p ${OBJECTDIR}/src
 	${RM} "$@.d"
 	$(COMPILE.cc) -g -Wall -Iinclude -I../cpputil/include -I../particles/include -std=c++14 -fPIC  -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/cg-pol-water.o src/cg-pol-water.cpp
+
+${OBJECTDIR}/src/constant-rate-pt.o: src/constant-rate-pt.cpp
+	${MKDIR} -p ${OBJECTDIR}/src
+	${RM} "$@.d"
+	$(COMPILE.cc) -g -Wall -Iinclude -I../cpputil/include -I../particles/include -std=c++14 -fPIC  -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/constant-rate-pt.o src/constant-rate-pt.cpp
 
 ${OBJECTDIR}/src/interactor.o: src/interactor.cpp
 	${MKDIR} -p ${OBJECTDIR}/src
@@ -275,6 +281,19 @@ ${OBJECTDIR}/src/cg-pol-water_nomain.o: ${OBJECTDIR}/src/cg-pol-water.o src/cg-p
 	    $(COMPILE.cc) -g -Wall -Iinclude -I../cpputil/include -I../particles/include -std=c++14 -fPIC  -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/cg-pol-water_nomain.o src/cg-pol-water.cpp;\
 	else  \
 	    ${CP} ${OBJECTDIR}/src/cg-pol-water.o ${OBJECTDIR}/src/cg-pol-water_nomain.o;\
+	fi
+
+${OBJECTDIR}/src/constant-rate-pt_nomain.o: ${OBJECTDIR}/src/constant-rate-pt.o src/constant-rate-pt.cpp 
+	${MKDIR} -p ${OBJECTDIR}/src
+	@NMOUTPUT=`${NM} ${OBJECTDIR}/src/constant-rate-pt.o`; \
+	if (echo "$$NMOUTPUT" | ${GREP} '|main$$') || \
+	   (echo "$$NMOUTPUT" | ${GREP} 'T main$$') || \
+	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
+	then  \
+	    ${RM} "$@.d";\
+	    $(COMPILE.cc) -g -Wall -Iinclude -I../cpputil/include -I../particles/include -std=c++14 -fPIC  -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/constant-rate-pt_nomain.o src/constant-rate-pt.cpp;\
+	else  \
+	    ${CP} ${OBJECTDIR}/src/constant-rate-pt.o ${OBJECTDIR}/src/constant-rate-pt_nomain.o;\
 	fi
 
 ${OBJECTDIR}/src/interactor_nomain.o: ${OBJECTDIR}/src/interactor.o src/interactor.cpp 

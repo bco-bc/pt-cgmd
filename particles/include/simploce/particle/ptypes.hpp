@@ -33,9 +33,7 @@
 #ifndef TYPES_HPP
 #define TYPES_HPP
 
-#include "simploce/util/cvector_t.hpp"
-#include "simploce/util/value_t.hpp"
-#include "simploce/util/cube.hpp"
+#include "simploce/util/utypes.hpp"
 #include <memory>
 #include <utility>
 
@@ -61,11 +59,6 @@ namespace simploce {
     class ProtonationSite;
     
     /**
-     * Real number.
-     */
-    using real_t = double;
-    
-    /**
      * Charge value.
      */
     using charge_t = simploce::value_t<real_t, 1>;
@@ -84,11 +77,6 @@ namespace simploce {
      * Radius.
      */
     using radius_t = simploce::value_t<real_t, 4>;
-    
-    /**
-     * Time.
-     */
-    using stime_t = simploce::value_t<real_t, 5>;
     
     /**
      * Energy.
