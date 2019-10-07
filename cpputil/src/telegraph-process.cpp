@@ -1,6 +1,7 @@
 #include "simploce/util/telegraph-process.hpp"
 #include "simploce/util/poisson-process.hpp"
 #include "simploce/util/uconf.hpp"
+#include <iomanip>
 
 namespace simploce {
 
@@ -69,15 +70,20 @@ namespace simploce {
     operator << (std::ostream& stream, 
                  const std::vector<pair_t>& values)
     {
-      char const space = conf::SPACE;
+      const char space = conf::SPACE;
+      const int width = conf::WIDTH;
+      
+      stream.setf(std::ios::scientific);
       
       for (std::size_t k = 1; k != values.size(); ++k) {
 	pair_t pair_k_1 = values[k-1];
 	pair_t pair_k = values[k];
 	if ( pair_k.second != pair_k_1.second ) {
-	  stream << pair_k_1.first << space << pair_k.second << std::endl;
+	  stream << std::setw(width) << pair_k_1.first 
+                 << space << std::setw(width) << pair_k.second << std::endl;
 	}
-	stream << pair_k.first << space << pair_k.second;
+	stream << std::setw(width) << pair_k.first 
+               << space << std::setw(width) << pair_k.second;
 	if ( k != values.size() - 1 ) {
 	  stream << std::endl;
 	}

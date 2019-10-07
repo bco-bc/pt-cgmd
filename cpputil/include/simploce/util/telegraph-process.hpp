@@ -4,7 +4,7 @@
 #include "utypes.hpp"
 #include <utility>
 #include <vector>
-#include <ostream>
+#include <iostream>
 
 namespace simploce {
         
