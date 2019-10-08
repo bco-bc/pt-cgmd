@@ -4,6 +4,7 @@
     <logicalFolder name="HeaderFiles"
                    displayName="Header Files"
                    projectFiles="true">
+      <itemPath>include/simploce/simulation/acid-base-solution.hpp</itemPath>
       <itemPath>include/simploce/analysis/analysis.hpp</itemPath>
       <itemPath>include/simploce/analysis/analyzer.hpp</itemPath>
       <itemPath>include/simploce/simulation/at-displacer.hpp</itemPath>
@@ -45,6 +46,7 @@
     <logicalFolder name="SourceFiles"
                    displayName="Source Files"
                    projectFiles="true">
+      <itemPath>src/acid-base-solution.cpp</itemPath>
       <itemPath>src/analysis.cpp</itemPath>
       <itemPath>src/cg-pol-water.cpp</itemPath>
       <itemPath>src/constant-rate-pt.cpp</itemPath>
@@ -277,6 +279,11 @@
       </item>
       <item path="include/simploce/analysis/gr.hpp" ex="false" tool="3" flavor2="0">
       </item>
+      <item path="include/simploce/simulation/acid-base-solution.hpp"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
       <item path="include/simploce/simulation/at-displacer.hpp"
             ex="false"
             tool="3"
@@ -415,6 +422,8 @@
             ex="false"
             tool="3"
             flavor2="0">
+      </item>
+      <item path="src/acid-base-solution.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="src/analysis.cpp" ex="false" tool="1" flavor2="0">
       </item>
@@ -634,6 +643,11 @@
       </item>
       <item path="include/simploce/analysis/gr.hpp" ex="false" tool="3" flavor2="0">
       </item>
+      <item path="include/simploce/simulation/acid-base-solution.hpp"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
       <item path="include/simploce/simulation/at-displacer.hpp"
             ex="false"
             tool="3"
@@ -772,6 +786,8 @@
             ex="false"
             tool="3"
             flavor2="0">
+      </item>
+      <item path="src/acid-base-solution.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="src/analysis.cpp" ex="false" tool="1" flavor2="0">
       </item>

@@ -23,55 +23,46 @@
  */
 
 /* 
- * File:   lj-coulomb.hpp
+ * File:   acid-base-solution.hpp
  * Author: André H. Juffer, Biocenter Oulu.
  *
- * Created on September 17, 2019, 3:06 PM
+ * Created on October 8, 2019, 3:28 PM
  */
 
-#ifndef LJ_COULOMB_HPP
-#define LJ_COULOMB_HPP
+#ifndef ACID_BASE_SOLUTION_HPP
+#define ACID_BASE_SOLUTION_HPP
 
 #include "cg-forcefield.hpp"
+#include "sim-data.hpp"
 #include "stypes.hpp"
-#include "simploce/util/map2.hpp"
-#include <string>
-#include <map>
 #include <vector>
 
 namespace simploce {
     
     /**
-     * Calculates LJ and Coulomb interaction.
-     * @param P Particle type.
+     * Coarse grained protonatable acids and/or bases in coarse grained polarizable water.
      */
-    template <typename P>
-    class LJCoulombForces;
-    
-    /**
-     * specialization for beads.
-     */
-    template <>
-    class LJCoulombForces<Bead> : public CoarseGrainedForceField {
-    public:
+    class AcidBaseSolution : public CoarseGrainedForceField {
         
-        LJCoulombForces(const lj_params_t& ljParams, 
-                        const el_params_t& elParams,
-                        const bc_ptr_t& bc);
+        /**
+         * Constructor.
+         * @param catalog Particle specifications catalog.
+         * @param bc Boundary conditions.
+         * @param water Protonatable water.
+         */
+        AcidBaseSolution(const spec_catalog_ptr_t& catalog,
+                         const bc_ptr_t& bc,
+                         const cg_ff_ptr_t& water);
         
         energy_t interact(const std::vector<bead_ptr_t>& all,
                           const std::vector<bead_ptr_t>& free,
                           const std::vector<bead_group_ptr_t>& groups,
                           const std::vector<bead_pair_list_t>& pairLists) override;
         
-        /**
-         * No bonded interactions.
-         * @return 0.0.
-         */
         energy_t bonded(const std::vector<bead_ptr_t>& all,
                         const std::vector<bead_ptr_t>& free,
                         const std::vector<bead_group_ptr_t>& groups,
-                        const std::vector<bead_pair_list_t>& pairLists) override;
+                        const std::vector<bead_pair_list_t>& pairLists) override;   
         
         std::string id() const override;
         
@@ -79,11 +70,12 @@ namespace simploce {
         
     private:
         
-        lj_params_t ljParams_;
-        el_params_t elParams_;
+        spec_catalog_ptr_t catalog_;
         bc_ptr_t bc_;
+        cg_ff_ptr_t water_;
+        
     };
 }
 
-#endif /* LJ_COULOMB_HPP */
+#endif /* ACID_BASE_SOLUTION_HPP */
 

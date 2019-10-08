@@ -33,7 +33,7 @@
 #define CG_FORCEFIELD_HPP
 
 #include "forcefield.hpp"
-#include "simploce/particle/ptypes.hpp"
+#include "stypes.hpp"
 #include <vector>
 
 namespace simploce {
@@ -56,7 +56,7 @@ namespace simploce {
         virtual ~CoarseGrainedForceField() {}
         
         /**
-         * Computes forces on beads.
+         * Computes forces due to -all- interactions on beads.
          * @param all All beads.
          * @param free Free beads.
          * @param groups All bead groups.
@@ -67,6 +67,19 @@ namespace simploce {
                                   const std::vector<bead_ptr_t>& free,
                                   const std::vector<bead_group_ptr_t>& groups,
                                   const std::vector<bead_pair_list_t>& pairLists) = 0;
+        
+        /**
+         * Computes forces due to bonded interactions on beads.
+         * @param all All beads.
+         * @param free Free beads.
+         * @param groups  All bead groups.
+         * @param pairLists  One or multiple bead pair lists.
+         * @return Potential energy.
+         */
+        virtual energy_t bonded(const std::vector<bead_ptr_t>& all,
+                                const std::vector<bead_ptr_t>& free,
+                                const std::vector<bead_group_ptr_t>& groups,
+                                const std::vector<bead_pair_list_t>& pairLists) = 0;
         
     };
 }

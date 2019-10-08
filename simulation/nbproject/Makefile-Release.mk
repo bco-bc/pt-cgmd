@@ -35,6 +35,7 @@ OBJECTDIR=${CND_BUILDDIR}/${CND_CONF}/${CND_PLATFORM}
 
 # Object Files
 OBJECTFILES= \
+	${OBJECTDIR}/src/acid-base-solution.o \
 	${OBJECTDIR}/src/analysis.o \
 	${OBJECTDIR}/src/cg-pol-water.o \
 	${OBJECTDIR}/src/constant-rate-pt.o \
@@ -101,6 +102,11 @@ ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/libsimulation.${CND_DLIB_EXT}: ../par
 ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/libsimulation.${CND_DLIB_EXT}: ${OBJECTFILES}
 	${MKDIR} -p ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}
 	${LINK.cc} -o ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/libsimulation.${CND_DLIB_EXT} ${OBJECTFILES} ${LDLIBSOPTIONS} -lpthread -pthread -shared -fPIC
+
+${OBJECTDIR}/src/acid-base-solution.o: src/acid-base-solution.cpp
+	${MKDIR} -p ${OBJECTDIR}/src
+	${RM} "$@.d"
+	$(COMPILE.cc) -O2 -Wall -Iinclude -I../cpputil/include -I../particles/include -std=c++14 -fPIC  -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/acid-base-solution.o src/acid-base-solution.cpp
 
 ${OBJECTDIR}/src/analysis.o: src/analysis.cpp
 	${MKDIR} -p ${OBJECTDIR}/src
@@ -256,6 +262,19 @@ ${TESTDIR}/tests/simulation-test.o: tests/simulation-test.cpp
 	${RM} "$@.d"
 	$(COMPILE.cc) -O2 -Wall -Iinclude -I../cpputil/include -I../particles/include -I. -std=c++14 -MMD -MP -MF "$@.d" -o ${TESTDIR}/tests/simulation-test.o tests/simulation-test.cpp
 
+
+${OBJECTDIR}/src/acid-base-solution_nomain.o: ${OBJECTDIR}/src/acid-base-solution.o src/acid-base-solution.cpp 
+	${MKDIR} -p ${OBJECTDIR}/src
+	@NMOUTPUT=`${NM} ${OBJECTDIR}/src/acid-base-solution.o`; \
+	if (echo "$$NMOUTPUT" | ${GREP} '|main$$') || \
+	   (echo "$$NMOUTPUT" | ${GREP} 'T main$$') || \
+	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
+	then  \
+	    ${RM} "$@.d";\
+	    $(COMPILE.cc) -O2 -Wall -Iinclude -I../cpputil/include -I../particles/include -std=c++14 -fPIC  -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/acid-base-solution_nomain.o src/acid-base-solution.cpp;\
+	else  \
+	    ${CP} ${OBJECTDIR}/src/acid-base-solution.o ${OBJECTDIR}/src/acid-base-solution_nomain.o;\
+	fi
 
 ${OBJECTDIR}/src/analysis_nomain.o: ${OBJECTDIR}/src/analysis.o src/analysis.cpp 
 	${MKDIR} -p ${OBJECTDIR}/src

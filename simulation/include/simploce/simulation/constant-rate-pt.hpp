@@ -45,15 +45,19 @@ namespace simploce {
         /**
          * Constructor
          * @param rate Rate.
+         * @param gamma gamma^-1 is time constant of decay.
          */
-        ConstantRateProtonTransfer(const rate_t& rate);
+        ConstantRateProtonTransfer(const rate_t& rate, 
+                                   const real_t& gamma);
         
         void transfer(const sim_param_t& param,
+                      const std::vector<cprot_bead_ptr_t>& continuous,
                       const prot_pair_list_t& pairList) const override;
         
     private:
         
         rate_t rate_;
+        real_t gamma_;
     };
 }
 

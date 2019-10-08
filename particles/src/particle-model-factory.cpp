@@ -66,7 +66,8 @@ namespace simploce {
     cg_pol_water_ptr_t
     ParticleModelFactory::polarizableWater(const box_ptr_t& box,
                                            const density_t atDensitySI,
-                                           const temperature_t temperature) const
+                                           const temperature_t temperature,
+                                           bool protonatable) const
     {
         std::clog.setf(std::ios_base::scientific, std::ios_base::floatfield);
         
@@ -95,7 +96,8 @@ namespace simploce {
         // 5 water molecules. Each CG water particles consists of two connected 
         // CG particles (CW and DP).
         spec_ptr_t mh2o = catalog_->molecularWater();
-        spec_ptr_t cwSpec = catalog_->lookup("CW");
+        spec_ptr_t cwSpec = 
+            protonatable ? catalog_->lookup("PCW") : catalog_->lookup("CW");
         spec_ptr_t dpSpec = catalog_->lookup("DP");
         std::clog << "\"Ideal\" distance between CW and DP: " << DISTANCE_CW_DP
                   << " nm" << std::endl;
@@ -143,7 +145,10 @@ namespace simploce {
                     real_t y = (j + 0.5) * spacing();
                     real_t z = (k + 0.5) * spacing();
                     position_t r1{x,y,z};
-                    bead_ptr_t cwBead = cg->addBead(id, "CW", r1, cwSpec, false);
+                    bead_ptr_t cwBead = 
+                        protonatable ? 
+                        cg->addContinuousProtonatableBead(id, "P-CW", r1, 0, cwSpec, false) :
+                        cg->addBead(id, "CW", r1, cwSpec, false);
                     assignMomentum(cwBead, temperature);
                     beads.push_back(cwBead);
           
@@ -196,7 +201,8 @@ namespace simploce {
     ParticleModelFactory::formicAcidSolution(const box_ptr_t& box,
                                              const density_t atDensitySI,
                                              const molarity_t molarity,
-                                             const temperature_t temperature) const
+                                             const temperature_t temperature,
+                                             bool protonatable) const
     {
         std::clog << "Creating coarse grained simulation for formic acid." << std::endl;
 
@@ -206,7 +212,7 @@ namespace simploce {
         
         // Create CG polarizable water.
         cg_pol_water_ptr_t cg = 
-            this->polarizableWater(box, atDensitySI, temperature);
+            this->polarizableWater(box, atDensitySI, temperature, protonatable);
         
         // Molarity to number of HCOOH molecules.
         volume_t volume = box->volume();
@@ -220,7 +226,7 @@ namespace simploce {
         for (std::size_t counter = 0; counter != nHCOOH; ++counter) {
             std::size_t id = cg->numberOfBeads() + 1;
             position_t r = cg->removeGroup_();
-            auto bead = cg->addContinuousProtonatableBead(id, "HCOOH", r, 0, spec, true);
+            auto bead = cg->addContinuousProtonatableBead(id, "HCOOH", r, 1, spec, true);
             assignMomentum(bead, temperature);
         }
         

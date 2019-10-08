@@ -86,7 +86,8 @@ namespace simploce {
     SimulationModelFactory::formicAcidSolution(const box_ptr_t& box,
                                                const density_t atDensitySI,
                                                const molarity_t molarity,
-                                               const temperature_t temperature)
+                                               const temperature_t temperature,
+                                               bool protonatable)
     {
         std::clog << "Creating coarse grained simulation for formic acid." << std::endl;
 
@@ -98,7 +99,8 @@ namespace simploce {
         cg_ptr_t cg = particleModelFactory_->formicAcidSolution(box, 
                                                                 atDensitySI, 
                                                                 molarity, 
-                                                                temperature);
+                                                                temperature,
+                                                                protonatable);
         
         // Periodic boundary conditions.
         bc_ptr_t bc = factory::pbc(box);
@@ -106,14 +108,23 @@ namespace simploce {
 
         // Interactor.
         cg_interactor_ptr_t interactor = 
-                factory::interactorCoarseGrainedPolarizableWater(catalog_, box, bc);
+            factory::interactorCoarseGrainedPolarizableWater(catalog_, 
+                                                             box, 
+                                                             bc, 
+                                                             protonatable);
         
         pt_pair_list_gen_ptr_t generator = 
             factory::protonTransferPairListGenerator(PT_RMAX, bc);
         
+        rate_t rate = 1.0/1.5;
+        real_t gamma = 1.0 / rate();
+        pt_displacer_ptr_t ptDisplacer = factory::constantRate(rate, gamma);
+        
         // Displacer.
         std::shared_ptr<CoarseGrainedDisplacer> displacer = 
-            std::make_shared<ProtonTransferLangevinVelocityVerlet>(interactor, generator);
+            std::make_shared<ProtonTransferLangevinVelocityVerlet>(interactor, 
+                                                                   generator,
+                                                                   ptDisplacer);
         std::clog << "Using \"Langevin Velocity Verlet + Proton Transfer\" algorithm." << std::endl;
         
         // Done.

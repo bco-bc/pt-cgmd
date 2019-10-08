@@ -77,6 +77,7 @@ void test1() {
     cg_interactor_ptr_t interactor = 
             factory::interactorCoarseGrainedPolarizableWater(catalog, box, bc);
     
+    /*
     cg_displacer_ptr_t leapFrog = factory::leapFrog(interactor);    
     SimulationData data = leapFrog->displace(param, cg);
     
@@ -87,6 +88,15 @@ void test1() {
           
     cg_displacer_ptr_t lvelocityVerlet = factory::langevinVelocityVerlet(interactor);
     data = lvelocityVerlet->displace(param, cg);
+    std::cout << data << std::endl;
+    */
+    cg_ptr_t ptcg = factory->formicAcidSolution(box);
+    pt_pair_list_gen_ptr_t generator = factory::protonTransferPairListGenerator(0.4, bc);
+    pt_displacer_ptr_t ptDisplacer = factory::constantRate(1.0/1.5, 1.5);
+    cg_displacer_ptr_t pt = factory::protonTransferlangevinVelocityVerlet(interactor,
+                                                                          generator,
+                                                                          ptDisplacer);
+    SimulationData data = pt->displace(param, ptcg);
     std::cout << data << std::endl;
 }
 

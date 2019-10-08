@@ -36,11 +36,12 @@
 #include "simploce/util/util.hpp"
 #include "simploce/util/mu-units.hpp"
 #include <future>
+#include <utility>
 
 namespace simploce {
     
-    using lj_params_t = LJCoulombForces<Bead>::lj_params_t;
-    using el_params_t = LJCoulombForces<Bead>::el_params_t;
+    using lj_params_t = ForceField::lj_params_t;
+    using el_params_t = ForceField::el_params_t;
     using result_t = std::pair<energy_t, std::vector<force_t>>;
     using bead_pair_list_t = ParticlePairListGenerator<Bead>::p_pair_list_t;
     
@@ -198,8 +199,23 @@ namespace simploce {
         return epot;
     }
     
+    energy_t 
+    LJCoulombForces<Bead>::bonded(const std::vector<bead_ptr_t>& all,
+                                  const std::vector<bead_ptr_t>& free,
+                                  const std::vector<bead_group_ptr_t>& groups,
+                                  const std::vector<bead_pair_list_t>& pairLists)
+    {
+        return 0.0;
+    }
+    
     std::string LJCoulombForces<Bead>::id() const
     {
         return "lj-coulomb-forces";
+    }
+    
+    std::pair<lj_params_t, el_params_t> 
+    LJCoulombForces<Bead>::parameters() const
+    {
+        return std::make_pair(lj_params_t{}, el_params_t{});
     }
 }

@@ -11,7 +11,6 @@
             <file>file:/koti/ajuffer/simploce/pt-cgmd/particles/include/simploce/particle/discrete-protonatable-bead.hpp</file>
             <file>file:/koti/ajuffer/simploce/pt-cgmd/particles/include/simploce/particle/particle-model.hpp</file>
             <file>file:/koti/ajuffer/simploce/pt-cgmd/particles/include/simploce/particle/ptypes.hpp</file>
-            <file>file:/koti/ajuffer/simploce/pt-cgmd/particles/include/simploce/particle/pfactory.hpp</file>
             <file>file:/koti/ajuffer/simploce/pt-cgmd/particles/tests/prot-site-catalog-test.cpp</file>
             <file>file:/koti/ajuffer/simploce/pt-cgmd/particles/src/discrete-protonatable-bead.cpp</file>
             <file>file:/koti/ajuffer/simploce/pt-cgmd/particles/include/simploce/particle/coarse-grained.hpp</file>
@@ -45,8 +44,8 @@
             <file>file:/koti/ajuffer/simploce/pt-cgmd/particles/include/simploce/particle/bead.hpp</file>
             <file>file:/koti/ajuffer/simploce/pt-cgmd/particles/include/simploce/particle/particle-group.hpp</file>
             <file>file:/koti/ajuffer/simploce/pt-cgmd/particles/include/simploce/particle/bond.hpp</file>
-            <file>file:/koti/ajuffer/simploce/pt-cgmd/particles/resources/particles-specs.dat</file>
             <file>file:/koti/ajuffer/simploce/pt-cgmd/particles/src/coarse-grained.cpp</file>
+            <file>file:/koti/ajuffer/simploce/pt-cgmd/particles/resources/particles-specs.dat</file>
             <file>file:/koti/ajuffer/simploce/pt-cgmd/particles/include/simploce/particle/pproperties.hpp</file>
             <file>file:/koti/ajuffer/simploce/pt-cgmd/particles/src/polarizable-water.cpp</file>
         </group>

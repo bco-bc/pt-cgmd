@@ -43,6 +43,9 @@
 
 namespace simploce {
     
+    using lj_params_t = ForceField::lj_params_t;
+    using el_params_t = ForceField::el_params_t;
+    
     // Interaction parameters, from Riniker et al, 2011.
     static const real_t EPS_R = 78.5;             // Relative permittivity
     static const length_t R_CW_DP = 0.2;          // nm.
@@ -54,32 +57,34 @@ namespace simploce {
     
     static std::unique_ptr<LJCoulombForces<Bead>> LJ_COULOMB_F{};
     
+    static el_params_t elParams_;
+    static lj_params_t ljParams_;
+    
     static void setup_(const spec_catalog_ptr_t& catalog,
-                       const bc_ptr_t& bc)
+                       const bc_ptr_t& bc, 
+                       bool protonatable)
     {
-        CW = catalog->lookup("CW");
+        CW = protonatable ? catalog->lookup("PCW") : catalog->lookup("CW");
         DP = catalog->lookup("DP");
     
         // Electrostatics.
-        LJCoulombForces<Bead>::el_params_t elParams;
         auto eps_r = std::make_pair("eps_r", EPS_R);
-        elParams.insert(eps_r);
+        elParams_.insert(eps_r);
         std::clog << "Electrostatic interaction parameters:" << std::endl;
-        std::clog << elParams << std::endl;
+        std::clog << elParams_ << std::endl;
 
         // LJ
-        LJCoulombForces<Bead>::lj_params_t ljParams;
         auto CW_CW = std::make_pair(C12_CW_CW, C6_CW_CW);    
-        ljParams.add(CW->name(), CW->name(), CW_CW);
+        ljParams_.add(CW->name(), CW->name(), CW_CW);
         auto zero = std::make_pair(0.0, 0.0);    
-        ljParams.add(CW->name(), DP->name(), zero);
-        ljParams.add(DP->name(), CW->name(), zero);
-        ljParams.add(DP->name(), DP->name(), zero);
+        ljParams_.add(CW->name(), DP->name(), zero);
+        ljParams_.add(DP->name(), CW->name(), zero);
+        ljParams_.add(DP->name(), DP->name(), zero);
 
         std::clog << "LJ Interaction parameters" << std::endl;
-        std::clog << ljParams << std::endl;
+        std::clog << ljParams_ << std::endl;
     
-        LJ_COULOMB_F = std::make_unique<LJCoulombForces<Bead>>(ljParams, elParams, bc);
+        LJ_COULOMB_F = std::make_unique<LJCoulombForces<Bead>>(ljParams_, elParams_, bc);
   }
 
     
@@ -133,10 +138,11 @@ namespace simploce {
     }
     
     CoarseGrainedPolarizableWater::CoarseGrainedPolarizableWater(const spec_catalog_ptr_t& catalog,
-                                                                 const bc_ptr_t& bc) :
+                                                                 const bc_ptr_t& bc,
+                                                                 bool protonatable) :
         CoarseGrainedForceField{}, catalog_{catalog}, bc_{bc}
     {      
-            setup_(catalog, bc);
+            setup_(catalog, bc, protonatable);
     }
             
     energy_t 
@@ -160,10 +166,34 @@ namespace simploce {
         return epot;
     }
     
+    energy_t 
+    CoarseGrainedPolarizableWater::bonded(const std::vector<bead_ptr_t>& all,
+                                          const std::vector<bead_ptr_t>& free,
+                                          const std::vector<bead_group_ptr_t>& groups,
+                                          const std::vector<bead_pair_list_t>& pairLists)
+    {
+        std::pair<energy_t, std::vector<force_t>> bonded = bonded_(all.size(), groups);
+        std::vector<force_t>& forces = bonded.second;
+        for (std::size_t index = 0; index != all.size(); ++index) {
+            Bead& bead = *all[index];
+            force_t force = bead.force();
+            force += forces[index];
+            bead.force(force);
+        }
+        
+        return bonded.first;
+    }
+    
     std::string 
     CoarseGrainedPolarizableWater::id() const
     {
         return conf::POLARIZABLE_WATER;
+    }
+    
+    std::pair<lj_params_t, el_params_t> 
+    CoarseGrainedPolarizableWater::parameters() const
+    {        
+        return std::make_pair(ljParams_, elParams_);
     }
     
     length_t

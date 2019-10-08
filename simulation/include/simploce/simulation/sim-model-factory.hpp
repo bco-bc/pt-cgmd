@@ -73,12 +73,15 @@ namespace simploce {
          * 997.0479 kg/m^3 at 298.15 K (25 C).
          * @param molarity Molarity. Default 0.1 M.
          * @param temperature Temperature. Default is 298.15 K.
+         * @param protonatable If true, both water and HCOOH are protonatable. HCOOH
+         * will be fully protonated. if false, only HCOOH is protonatable.
          * @return Coarse grained model.
          */
         cg_sim_model_ptr_t formicAcidSolution(const box_ptr_t& box,
                                               const density_t atDensitySI = 997.0479,
                                               const molarity_t molarity = 0.1,
-                                              const temperature_t temperature = 298.15);
+                                              const temperature_t temperature = 298.15,
+                                              bool protonatable = true);
         
         /**
          * Creates new coarse grained model by reading it from an input stream.

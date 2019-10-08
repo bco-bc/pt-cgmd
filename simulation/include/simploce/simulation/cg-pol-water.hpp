@@ -47,21 +47,22 @@ namespace simploce {
     public:
         
         CoarseGrainedPolarizableWater(const spec_catalog_ptr_t& catalog,
-                                      const bc_ptr_t& bc);
+                                      const bc_ptr_t& bc,
+                                      bool protonatable);
         
-        /**
-         * Computes forces on all particles.
-         * @param all All beads, including free beads and those part of groups.
-         * @param free All free beads, not in any groups.
-         * @param groups Polarizable groups, each group consists of two beads.
-         * @return Data, total potential energy.
-         */
         energy_t interact(const std::vector<bead_ptr_t>& all,
                           const std::vector<bead_ptr_t>& free,
                           const std::vector<bead_group_ptr_t>& groups,
                           const std::vector<bead_pair_list_t>& pairLists) override;
         
+        energy_t bonded(const std::vector<bead_ptr_t>& all,
+                        const std::vector<bead_ptr_t>& free,
+                        const std::vector<bead_group_ptr_t>& groups,
+                        const std::vector<bead_pair_list_t>& pairLists) override;        
+        
         std::string id() const override;
+        
+        std::pair<lj_params_t, el_params_t> parameters() const override;
         
         /**
          * Ideal distance between CW and DP.

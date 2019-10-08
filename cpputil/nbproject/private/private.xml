@@ -11,15 +11,14 @@
             <file>file:/koti/ajuffer/simploce/pt-cgmd/cpputil/src/telegraph-process.cpp</file>
             <file>file:/koti/ajuffer/simploce/pt-cgmd/cpputil/include/simploce/util/map2.hpp</file>
             <file>file:/koti/ajuffer/simploce/pt-cgmd/cpputil/include/simploce/util/param.hpp</file>
-            <file>file:/koti/ajuffer/simploce/pt-cgmd/cpputil/src/poisson-process.cpp</file>
             <file>file:/koti/ajuffer/simploce/pt-cgmd/cpputil/include/simploce/util/utypes.hpp</file>
+            <file>file:/koti/ajuffer/simploce/pt-cgmd/cpputil/src/poisson-process.cpp</file>
             <file>file:/koti/ajuffer/simploce/pt-cgmd/cpputil/src/file.cpp</file>
-            <file>file:/koti/ajuffer/simploce/pt-cgmd/cpputil/tests/telegraph-process-test.cpp</file>
             <file>file:/koti/ajuffer/simploce/pt-cgmd/cpputil/include/simploce/util/value_t.hpp</file>
             <file>file:/koti/ajuffer/simploce/pt-cgmd/cpputil/src/param.cpp</file>
+            <file>file:/koti/ajuffer/simploce/pt-cgmd/cpputil/include/simploce/util/cvector_t.hpp</file>
             <file>file:/koti/ajuffer/simploce/pt-cgmd/cpputil/include/simploce/util/util.hpp</file>
             <file>file:/koti/ajuffer/simploce/pt-cgmd/cpputil/include/simploce/util/telegraph-process.hpp</file>
-            <file>file:/koti/ajuffer/simploce/pt-cgmd/cpputil/include/simploce/util/poisson-process.hpp</file>
             <file>file:/koti/ajuffer/simploce/pt-cgmd/cpputil/include/simploce/util/math-constants.hpp</file>
         </group>
     </open-files>

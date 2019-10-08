@@ -54,9 +54,12 @@ namespace simploce {
         /**
          * Transfers proton between two beads.
          * @param param Simulation parameters.
+         * @param continuous Protonatable beads with continuously varying 
+         * protonation states.
          * @param pairList Pairs of protonatables possibly involved in proton transfer.
          */
         virtual void transfer(const sim_param_t& param,
+                              const std::vector<cprot_bead_ptr_t>& continuous,
                               const prot_pair_list_t& pairList) const = 0;
     };
 }

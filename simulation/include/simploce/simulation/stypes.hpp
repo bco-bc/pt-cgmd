@@ -46,6 +46,7 @@ namespace simploce {
     class AtomisticForceField;
     class SimulationModelFactory;
     class ProtonTransferPairListGenerator;
+    class ProtonTransfer;
     
     // P is particle type, e.g. Atom or Bead.
     template <typename P>
@@ -131,6 +132,11 @@ namespace simploce {
      * Protonatable beads pair list generator pointer type.
      */
     using pt_pair_list_gen_ptr_t = std::shared_ptr<ProtonTransferPairListGenerator>;
+    
+    /**
+     * Proton transfer displacer pointer type.
+     */
+    using pt_displacer_ptr_t = std::shared_ptr<ProtonTransfer>;
     
 }
 

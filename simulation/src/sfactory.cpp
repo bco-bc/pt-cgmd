@@ -39,7 +39,9 @@
 #include "simploce/simulation/interactor.hpp"
 #include "simploce/simulation/sim-model-factory.hpp"
 #include "simploce/simulation/pt-pair-list-generator.hpp"
+#include "simploce/simulation/pt-langevin-velocity-verlet.hpp"
 #include "simploce/simulation/pbc.hpp"
+#include "simploce/simulation/constant-rate-pt.hpp"
 #include "simploce/particle/bead.hpp"
 #include "simploce/particle/atom.hpp"
 #include "simploce/particle/atomistic.hpp"
@@ -72,9 +74,12 @@ namespace simploce {
         static at_displacer_ptr_t atVV_{};
         static cg_displacer_ptr_t cgVV_{};
         
-        // Velocity Verlet
+        // Langevin Velocity Verlet
         static at_displacer_ptr_t atLVV_{};
         static cg_displacer_ptr_t cgLVV_{};
+        
+        // Langevin Proton Transfer Langevin Velocity Verlet
+        static cg_displacer_ptr_t cgPTLVV_{};
         
         static sim_model_fact_ptr_t modelFactory_{};
         
@@ -84,14 +89,19 @@ namespace simploce {
         static std::shared_ptr<Interactor<Bead>> cgPolWaterInteractor_{};
         
         static pt_pair_list_gen_ptr_t ptPairlisGen_{};
+        
+        static pt_displacer_ptr_t constantRate_{};
                 
-        static cg_ff_ptr_t 
-        coarseGrainedPolarizableWaterForceField(const spec_catalog_ptr_t& catalog,
-                                                const bc_ptr_t& bc)
+        cg_ff_ptr_t 
+        polarizableWaterForceField(const spec_catalog_ptr_t& catalog,
+                                   const bc_ptr_t& bc,
+                                   bool protonatable)
         {
             if ( !cgPolWaterFF_ ) {
                 cgPolWaterFF_ = 
-                    std::make_shared<CoarseGrainedPolarizableWater>(catalog, bc);
+                    std::make_shared<CoarseGrainedPolarizableWater>(catalog, 
+                                                                    bc, 
+                                                                    protonatable);
             }
             return cgPolWaterFF_;
         }
@@ -132,12 +142,14 @@ namespace simploce {
         cg_interactor_ptr_t 
         interactorCoarseGrainedPolarizableWater(const spec_catalog_ptr_t& catalog,
                                                 const box_ptr_t& box, 
-                                                const bc_ptr_t& bc)        
+                                                const bc_ptr_t& bc,
+                                                bool protonatable)        
         {
             cg_ppair_list_gen_ptr_t generator = 
-                    factory::coarseGrainedPairListGenerator(box, bc);
+                factory::coarseGrainedPairListGenerator(box, bc);
             if ( !cgPolWaterInteractor_ ) {
-                cg_ff_ptr_t forcefield = coarseGrainedPolarizableWaterForceField(catalog, bc);
+                cg_ff_ptr_t forcefield = 
+                    polarizableWaterForceField(catalog, bc, protonatable);
                 cgPolWaterInteractor_ = std::make_shared<Interactor<Bead>>(forcefield, generator);
             }
             return cgPolWaterInteractor_;
@@ -198,6 +210,20 @@ namespace simploce {
             return cgLVV_;                                    
         }
         
+        cg_displacer_ptr_t
+        protonTransferlangevinVelocityVerlet(const cg_interactor_ptr_t& interactor,
+                                             const pt_pair_list_gen_ptr_t& generator,
+                                             const pt_displacer_ptr_t& displacer)
+        {
+            if ( !cgPTLVV_ ) {
+                cgPTLVV_ = 
+                    std::make_shared<ProtonTransferLangevinVelocityVerlet>(interactor,
+                                                                           generator,
+                                                                           displacer);
+            }
+            return cgPTLVV_;
+        }   
+        
         bc_ptr_t 
         pbc(const box_ptr_t& box)
         {
@@ -216,6 +242,16 @@ namespace simploce {
                     std::make_shared<ProtonTransferPairListGenerator>(rmax, bc);
             }
             return ptPairlisGen_;
+        }
+        
+        pt_displacer_ptr_t 
+        constantRate(const rate_t& rate, const real_t& gamma)
+        {
+            if ( !constantRate_ ) {
+                constantRate_ = 
+                    std::make_shared<ConstantRateProtonTransfer>(rate, gamma);
+            }
+            return constantRate_;
         }
         
     }

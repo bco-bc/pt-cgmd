@@ -39,6 +39,18 @@ namespace simploce {
     namespace factory {
         
         /**
+         * Coarse grained force field for polarizable water.
+         * @param catalog Particle specification catalog.
+         * @param bc Boundary condition.
+         * @param protonatable If true, water is protonatable.
+         * @return Force field.
+         */
+        cg_ff_ptr_t
+        polarizableWaterForceField(const spec_catalog_ptr_t& catalog,
+                                   const bc_ptr_t& bc,
+                                   bool protonatable = false);
+        
+        /**
          * Returns simulation model factory.
          * @param particle_model_fact_ptr_t Particle model factory.
          * @param catalog Particle specifications catalog.
@@ -72,12 +84,15 @@ namespace simploce {
          * Returns coarse grained interactor.
          * @param box SImulation box.
          * @param bc Boundary condition.
+         * @param protonatable If true, the interactor will assume parameters for 
+         * protonatable waters.
          * @return Interactor.
          */
         cg_interactor_ptr_t 
         interactorCoarseGrainedPolarizableWater(const spec_catalog_ptr_t& catalog,
                                                 const box_ptr_t& box, 
-                                                const bc_ptr_t& bc);
+                                                const bc_ptr_t& bc,
+                                                bool protonatable = false);
         
         /**
          * Leap frog algorithm for atomistic particle models.
@@ -128,6 +143,19 @@ namespace simploce {
         langevinVelocityVerlet(cg_interactor_ptr_t& interactor);
         
         /**
+         * Returns Langevin Velocity Verlet algorithm with proton transfer for 
+         * coarse grained models.
+         * @param interactor Coarse grained interactor.
+         * @param generator Protonatable bead pair list generator.
+         * @param displacer Proton transfer displacer.
+         * @return Displacer.
+         */
+        cg_displacer_ptr_t
+        protonTransferlangevinVelocityVerlet(const cg_interactor_ptr_t& interactor,
+                                             const pt_pair_list_gen_ptr_t& generator,
+                                             const pt_displacer_ptr_t& displacer);
+        
+        /**
          * Returns periodic boundary conditions.
          * @param box Simulation box.
          * @return Boundary condition.
@@ -145,6 +173,14 @@ namespace simploce {
         pt_pair_list_gen_ptr_t 
         protonTransferPairListGenerator(const length_t& rmax,
                                         const bc_ptr_t& bc);
+        
+        /**
+         * Returns proton transfer (PT) displacer with constant rate.
+         * @param rate Rate.
+         * @param gamma Inverse of time constant of decay.
+         * @return PT displacer
+         */
+        pt_displacer_ptr_t constantRate(const rate_t& rate, const real_t& gamma);
     }
 }
 

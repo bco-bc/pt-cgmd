@@ -46,6 +46,7 @@ namespace simploce {
         const std::string PBC = "pbc";
         
         const std::string POLARIZABLE_WATER = "pol-water";
+        const std::string ACID_BASE_SOLUTION = "acid-vase-solution";
         
     }
 }

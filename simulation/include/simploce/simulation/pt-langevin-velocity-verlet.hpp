@@ -33,17 +33,19 @@
 #define PT_LANGEVIN_VELOCITY_VERLET_HPP
 
 #include "cg-displacer.hpp"
+#include "stypes.hpp"
 
 namespace simploce {
     
     /**
-     * Updates protonatable beads with continuous varying charges and mass values.
+     * Displaces protonatable beads with continuous varying charges and mass values.
      */
     class ProtonTransferLangevinVelocityVerlet : public CoarseGrainedDisplacer {
     public:
         
         ProtonTransferLangevinVelocityVerlet(const cg_interactor_ptr_t& interactor,
-                                             const pt_pair_list_gen_ptr_t& generator);
+                                             const pt_pair_list_gen_ptr_t& generator,
+                                             const pt_displacer_ptr_t& displacer);
         
         SimulationData displace(const sim_param_t& param, 
                                 const cg_ptr_t& cg) const override;
@@ -54,6 +56,7 @@ namespace simploce {
         
         cg_interactor_ptr_t interactor_;
         pt_pair_list_gen_ptr_t generator_;
+        pt_displacer_ptr_t displacer_;
     };
 }
 

@@ -38,11 +38,13 @@ namespace simploce {
          * Default is 997.0479 kg/m^3 at 298.15 K (25 C).
          * @param temperature Requested temperature in SI units (K). Default is 
          * 298.15 K.
+         * @param protonable If true, water will be protonatable. Default is false.
          * @return Coarse grained particle model.
          */
         cg_pol_water_ptr_t polarizableWater(const box_ptr_t& box,
                                             const density_t atDensitySI = 997.0479,
-                                            const temperature_t temperature = 298.15) const;
+                                            const temperature_t temperature = 298.15,
+                                            bool protonatable = false) const;
         
         /**
          * Returns coarse grained model for a formic acid solution.
@@ -52,12 +54,15 @@ namespace simploce {
          * @param molarity Requested molarity of formic acid. Default is 0.1 M.
          * @param temperature Requested temperature in SI units (K). Default is 
          * 298.15 K.
+         * @param protonatable If true, both water and HCOOH are protonatable. HCOOH
+         * will be fully protonated.
          * @return Coarse grained particle model.
          */
         cg_ptr_t formicAcidSolution(const box_ptr_t& box,
                                     const density_t atDensitySI = 997.0479,
                                     const molarity_t molarity = 0.1,
-                                    const temperature_t temperature = 298.15) const;
+                                    const temperature_t temperature = 298.15,
+                                    bool protonatable = true) const;
         
     private:
         
