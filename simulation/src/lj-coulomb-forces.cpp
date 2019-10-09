@@ -45,6 +45,37 @@ namespace simploce {
     using result_t = std::pair<energy_t, std::vector<force_t>>;
     using bead_pair_list_t = ParticlePairListGenerator<Bead>::p_pair_list_t;
     
+    static std::pair<energy_t, force_t> coulombForce_(const position_t& ri,
+                                                      const charge_t& qi,
+                                                      const position_t& rj,
+                                                      const charge_t& qj,
+                                                      real_t eps_r,
+                                                      const bc_ptr_t& bc)
+    {
+        const real_t four_pi_e0 = MUUnits<real_t>::FOUR_PI_E0;
+        
+        // Apply boundary condition.
+        dist_vect_t rij = bc->apply(ri, rj);
+        real_t Rij = norm<real_t>(rij);
+        real_t Rij2 = Rij * Rij;
+        
+        // Potential energy
+                
+        // Coulomb
+        real_t t3 = qi * qj / (four_pi_e0 * eps_r);
+        real_t epot = t3 / Rij;  // kJ/mol
+        
+        // Forces.
+        dist_vect_t uv = rij/Rij;
+        real_t dElecdR = -t3 / Rij2;
+        force_t f{};
+        for (std::size_t k = 0; k != 3; ++k) {
+            f[k] = -dElecdR * uv[k];             // kJ/(mol nm)
+        }
+
+        return std::make_pair(epot, f);        
+    }
+    
     /**
      * Returns potential energy and force on particle i.
      */
@@ -61,22 +92,28 @@ namespace simploce {
         
         // Apply boundary condition.
         dist_vect_t rij = bc->apply(ri, rj);
-    
-        // Potential energy.
         real_t Rij = norm<real_t>(rij);
+    
+        // Potential energy
+        
+        // LJ
         real_t Rij2 = Rij * Rij;
         real_t Rij6 = Rij2 * Rij2 * Rij2;
         real_t Rij12 = Rij6 * Rij6;
         real_t t1 = C12 / Rij12;
         real_t t2 = C6 / Rij6;
         real_t LJ = t1 - t2;                          // kj/mol
+        
+        // Coulomb
         real_t t3 = qi * qj / (four_pi_e0 * eps_r);
-        real_t elec = t3 / Rij;                       // kJ/mol
+        real_t elec = t3 / Rij;  // kJ/mol
+        
+        // Total potential energy.
         energy_t total = LJ + elec;
     
         // Forces.
         dist_vect_t uv = rij/Rij;
-        real_t dLJdR = -6.0 * ( 2.0 * t1 - t2 ) / Rij;  // kJ/(mol nm)
+        real_t dLJdR = -6.0 * ( 2.0 * t1 - t2 ) / Rij;  // kJ/(mol nm)            
         real_t dElecdR = -t3 / Rij2;
         force_t f{};
         for (std::size_t k = 0; k != 3; ++k) {
@@ -86,8 +123,10 @@ namespace simploce {
         }
 
         return std::make_pair(total, f);
-  }    
+    }    
     
+    
+    // Ignores LJ for pairs for which no parameters were identified.
     static result_t forces_(const bead_pair_list_t& single,
                             std::size_t nbeads,
                             const lj_params_t& ljParams,
@@ -116,13 +155,15 @@ namespace simploce {
             charge_t qj = pj->charge();
             std::size_t index_j = pj->index();
 
-            // LJ parameters.
-            auto ljParam = ljParams.at(name_i, name_j);
-            energy_t C12 = ljParam.first;
-            length_t C6 = ljParam.second;
-
-            std::pair<energy_t, force_t> ef = 
-                ljCoulombForce_(ri, qi, rj, qj, C12(), C6(), eps_r, bc);
+            std::pair<energy_t, force_t> ef;
+            if ( ljParams.contains(name_i, name_j) ) {
+                auto ljParam = ljParams.at(name_i, name_j);
+                energy_t C12 = ljParam.first;
+                length_t C6 = ljParam.second;
+                ef = ljCoulombForce_(ri, qi, rj, qj, C12(), C6(), eps_r, bc);
+            } else {
+                ef = coulombForce_(ri, qi, rj, qj, eps_r, bc);
+            }
 
             // Store.
             epot += ef.first;

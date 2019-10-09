@@ -31,6 +31,7 @@
 
 #include "simploce/simulation/sfactory.hpp"
 #include "simploce/simulation/cg-pol-water.hpp"
+#include "simploce/simulation/acid-base-solution.hpp"
 #include "simploce/simulation/pair-list-generator.hpp"
 #include "simploce/simulation/stypes.hpp"
 #include "simploce/simulation/leap-frog.hpp"
@@ -59,8 +60,9 @@ namespace simploce {
         using at_lvv_t = LangevinVelocityVerlet<Atomistic>;
         using cg_lvv_t = LangevinVelocityVerlet<CoarseGrained>;
         
-        // Coarse grained polarizable force field.
-        static cg_ff_ptr_t cgPolWaterFF_{};
+        // Force fields.
+        static cg_ff_ptr_t cgPolWaterFF_{};             // Polarizable water.
+        static cg_ff_ptr_t cgFormicAcidSolutionFF_{};   // Formic acid in water.
         
         // Pair lists generators.
         static cg_ppair_list_gen_ptr_t  cgPairlistGen_{};
@@ -85,8 +87,9 @@ namespace simploce {
         
         static bc_ptr_t pbc_{};
         
-        // Interactor for coarse grained polarizable water.
+        // Interactors
         static std::shared_ptr<Interactor<Bead>> cgPolWaterInteractor_{};
+        static std::shared_ptr<Interactor<Bead>> cgFormicAcidSolutionInteractor_{};
         
         static pt_pair_list_gen_ptr_t ptPairlisGen_{};
         
@@ -105,6 +108,18 @@ namespace simploce {
             }
             return cgPolWaterFF_;
         }
+        
+        cg_ff_ptr_t formicAcidSolutionForceField(const spec_catalog_ptr_t& catalog,
+                                                 const bc_ptr_t& bc,
+                                                 const cg_ff_ptr_t& water)
+        {
+            if ( !cgFormicAcidSolutionFF_ ) {
+                cgFormicAcidSolutionFF_ = 
+                    std::make_shared<AcidBaseSolution>(catalog, bc, water);
+            }
+            return cgFormicAcidSolutionFF_;
+        }
+       
         
         sim_model_fact_ptr_t 
         simulationModelFactory(const spec_catalog_ptr_t& catalog)
@@ -140,20 +155,40 @@ namespace simploce {
         }
         
         cg_interactor_ptr_t 
-        interactorCoarseGrainedPolarizableWater(const spec_catalog_ptr_t& catalog,
-                                                const box_ptr_t& box, 
-                                                const bc_ptr_t& bc,
-                                                bool protonatable)        
+        polarizableWaterInteractor(const spec_catalog_ptr_t& catalog,
+                                   const box_ptr_t& box, 
+                                   const bc_ptr_t& bc,
+                                   bool protonatable)        
         {
-            cg_ppair_list_gen_ptr_t generator = 
-                factory::coarseGrainedPairListGenerator(box, bc);
             if ( !cgPolWaterInteractor_ ) {
+                cg_ppair_list_gen_ptr_t generator = 
+                    factory::coarseGrainedPairListGenerator(box, bc);
                 cg_ff_ptr_t forcefield = 
                     polarizableWaterForceField(catalog, bc, protonatable);
-                cgPolWaterInteractor_ = std::make_shared<Interactor<Bead>>(forcefield, generator);
+                cgPolWaterInteractor_ = 
+                    std::make_shared<Interactor<Bead>>(forcefield, generator);
             }
             return cgPolWaterInteractor_;
         }
+        
+        cg_interactor_ptr_t
+        formicAcidSolutionInteractor(const spec_catalog_ptr_t& catalog,
+                                     const box_ptr_t& box, 
+                                     const bc_ptr_t& bc)
+        {
+            if ( !cgFormicAcidSolutionInteractor_) {
+                cg_ppair_list_gen_ptr_t generator = 
+                    factory::coarseGrainedPairListGenerator(box, bc);
+                cg_ff_ptr_t water = 
+                    polarizableWaterForceField(catalog, bc, true);
+                cg_ff_ptr_t forcefield = 
+                    formicAcidSolutionForceField(catalog, bc, water);
+                cgFormicAcidSolutionInteractor_ = 
+                    std::make_shared<Interactor<Bead>>(forcefield, generator);
+            }
+            return cgFormicAcidSolutionInteractor_;
+        }
+        
         
         at_displacer_ptr_t 
         leapFrog(at_interactor_ptr_t& interactor)

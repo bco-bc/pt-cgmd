@@ -62,6 +62,11 @@ namespace simploce {
         
         std::string id() const override;
         
+        /**
+         * Includes C12, and C6 LJ parameters for the particle specifications 
+         * pair (CW, CW).
+         * @return Parameters.
+         */
         std::pair<lj_params_t, el_params_t> parameters() const override;
         
         /**

@@ -56,7 +56,8 @@ namespace simploce {
         virtual ~CoarseGrainedForceField() {}
         
         /**
-         * Computes forces due to -all- interactions on beads.
+         * Computes forces due to -all- interactions on beads. Updates/adds all forces 
+         * acting on beads.
          * @param all All beads.
          * @param free Free beads.
          * @param groups All bead groups.
@@ -69,7 +70,8 @@ namespace simploce {
                                   const std::vector<bead_pair_list_t>& pairLists) = 0;
         
         /**
-         * Computes forces due to bonded interactions on beads.
+         * Computes forces due to bonded interactions on beads. Updates/adds forces 
+         * bonded acting on beads.
          * @param all All beads.
          * @param free Free beads.
          * @param groups  All bead groups.

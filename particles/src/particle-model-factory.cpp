@@ -71,7 +71,8 @@ namespace simploce {
     {
         std::clog.setf(std::ios_base::scientific, std::ios_base::floatfield);
         
-        std::clog << "Creating particle model for polarizable water." << std::endl;
+        std::clog << "Creating coarse grained particle model "
+                     "for polarizable water." << std::endl;
         
         std::clog << "Temperature: " << temperature << std::endl;
 
@@ -204,7 +205,8 @@ namespace simploce {
                                              const temperature_t temperature,
                                              bool protonatable) const
     {
-        std::clog << "Creating coarse grained simulation for formic acid." << std::endl;
+        std::clog << "Creating coarse grained particle model for formic acid "
+                     "(HCOOH) in water." << std::endl;
 
         std::clog.setf(std::ios_base::scientific, std::ios_base::floatfield);
         

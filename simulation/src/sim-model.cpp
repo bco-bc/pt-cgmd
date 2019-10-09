@@ -148,7 +148,7 @@ namespace simploce {
         // Interactor.
         std::getline(stream, stringBuffer);
         if ( stringBuffer.find(conf::POLARIZABLE_WATER, 0) != std::string::npos ) {
-            interactor_ = factory::interactorCoarseGrainedPolarizableWater(catalog, 
+            interactor_ = factory::polarizableWaterInteractor(catalog, 
                                                                            box_, 
                                                                            bc_);
         } else {

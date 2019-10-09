@@ -95,9 +95,9 @@ int main(int argc, char** argv) {
     std::cout << "%SUITE_STARTING% model-factory-test" << std::endl;
     std::cout << "%SUITE_STARTED%" << std::endl;
 
-    std::cout << "%TEST_STARTED% test1 (model-factory-test)" << std::endl;
-    test1();
-    std::cout << "%TEST_FINISHED% time=0 test1 (model-factory-test)" << std::endl;
+    //std::cout << "%TEST_STARTED% test1 (model-factory-test)" << std::endl;
+    //test1();
+    //std::cout << "%TEST_FINISHED% time=0 test1 (model-factory-test)" << std::endl;
 
     std::cout << "%TEST_STARTED% test2 (model-factory-test)\n" << std::endl;
     test2();

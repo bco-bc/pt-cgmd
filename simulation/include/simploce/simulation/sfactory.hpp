@@ -51,6 +51,18 @@ namespace simploce {
                                    bool protonatable = false);
         
         /**
+         * Returns coarse grained force field for formic acid (HCOOH) in water.
+         * @param catalog Particle specification catalog.
+         * @param bc Boundary condition.
+         * @param water Coarse grained force field for water.
+         * @return Force field.
+         */
+        cg_ff_ptr_t 
+        formicAcidSolutionForceField(const spec_catalog_ptr_t& catalog,
+                                     const bc_ptr_t& bc,
+                                     const cg_ff_ptr_t& water);
+        
+        /**
          * Returns simulation model factory.
          * @param particle_model_fact_ptr_t Particle model factory.
          * @param catalog Particle specifications catalog.
@@ -82,17 +94,31 @@ namespace simploce {
         
         /**
          * Returns coarse grained interactor.
-         * @param box SImulation box.
+         * @param catalog Particle specifications catalog.
+         * @param box Simulation box.
          * @param bc Boundary condition.
          * @param protonatable If true, the interactor will assume parameters for 
          * protonatable waters.
          * @return Interactor.
          */
         cg_interactor_ptr_t 
-        interactorCoarseGrainedPolarizableWater(const spec_catalog_ptr_t& catalog,
-                                                const box_ptr_t& box, 
-                                                const bc_ptr_t& bc,
-                                                bool protonatable = false);
+        polarizableWaterInteractor(const spec_catalog_ptr_t& catalog,
+                                   const box_ptr_t& box, 
+                                   const bc_ptr_t& bc,
+                                   bool protonatable = false);
+        
+        /**
+         * Returns coarse grained interactor.
+         * @param catalog Particle specifications catalog.
+         * @param box Simulation box.
+         * @param bc Boundary conditions.
+         * @return Interactor.
+         */
+        cg_interactor_ptr_t
+        formicAcidSolutionInteractor(const spec_catalog_ptr_t& catalog,
+                                     const box_ptr_t& box, 
+                                     const bc_ptr_t& bc);
+        
         
         /**
          * Leap frog algorithm for atomistic particle models.

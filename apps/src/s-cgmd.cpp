@@ -30,9 +30,9 @@ int main(int argc, char* argv[])
 
     std::size_t nsteps = 1000;
     std::size_t nwrite = 10;
-    real_t timestep{0.001};                          // 0.001 ps = 1 fs.q
+    real_t timestep{0.020};                          // 0.001 ps = 1 fs.
     real_t boxSize{6.0};                             // nm.
-    real_t molarity{1.0};                            // mol/l
+    real_t molarity{0.1};                            // mol/l
     real_t density{997.0479};                        // kg/m^3
     real_t temperature{298.15};                      // K.
     real_t gamma{0.50};                              // ps^-1
@@ -53,7 +53,7 @@ int main(int argc, char* argv[])
       
       (
        "fn-trajectory",  po::value<std::string>(&fnTrajectory),
-       "Output file name trajectory. Default is 'traj.dat'."
+       "Output file name trajectory. Default is 'trajectory.dat'."
        )
       (
        "fn-output-model",  po::value<std::string>(&fnOutputModel),
@@ -70,7 +70,7 @@ int main(int argc, char* argv[])
        )
       (
        "molarity", po::value<real_t>(&molarity),
-       "Molarity of NaCl electrolyte (mol/l). Default is 1.0 M."
+       "Molarity of NaCl electrolyte (mol/l). Default is 0.1 M."
        )
       (
        "density", po::value<real_t>(&density),
@@ -82,13 +82,13 @@ int main(int argc, char* argv[])
        "Temperature (K). Default is 298.15 K."
        )
       (
-       "damping-rate", po::value<real_t>(&gamma),
-       "Damping rate (1/ps). Default is 0.5 ps^-1."
+       "damping-rate (Langevin heat bath)", po::value<real_t>(&gamma),
+       "Damping rate (ps^-1). Default is 0.5 ps^-1."
       )
       
       (
        "number-of-steps", po::value<std::size_t>(&nsteps),
-       "Number of steps. Default is 10000."
+       "Number of steps. Default is 1000."
       )
       (
        "number-steps-between-save", po::value<std::size_t>(&nwrite),
@@ -96,13 +96,13 @@ int main(int argc, char* argv[])
       )
       (
        "time-step-size", po::value<real_t>(&timestep),
-       "Time step size (ps). Default is 0.001 ps."
+       "Time step size (ps). Default is 0.020 ps or 20 fs."
        )
       
       (
        "model-type", po::value<std::string>(&modelType),
-       "Type of model or system. Default is 'cg-pol-water'. "
-       "Alternatives include 'electrolyte'.")
+       "Type of model or system. Default is 'pol-water'. "
+       "Other choices: acid-base-solution'.")
       
       (
        "help", "Help message"
@@ -179,12 +179,14 @@ int main(int argc, char* argv[])
     std::clog << *catalog << std::endl;
 
     // Read or set up new simulation model.
-    sim_model_factory_ptr_t modelFactory = factory::modelFactory(catalog);
+    sim_model_fact_ptr_t simModelFactory = factory::simulationModelFactory(catalog);
     cg_sim_model_ptr_t model;
     if ( fnInputModel.empty() ) {
       box_ptr_t box = std::make_shared<box_t>(boxSize);      
       if ( modelType == conf::POLARIZABLE_WATER ) {
-	model = modelFactory->createPolarizableWater(catalog, box, density, temperature);
+	model = simModelFactory->polarizableWater(box, density, temperature);
+      } else if ( modelType == conf::ACID_BASE_SOLUTION ) {
+	model = simModelFactory->formicAcidSolution(box, density, molarity, temperature, true);
       } else {
 	throw std::domain_error(modelType + ": No such simulation model type available (yet).");
       }
@@ -195,7 +197,7 @@ int main(int argc, char* argv[])
     } else {
       std::ifstream stream;
       file::open_input(stream, fnInputModel);
-      model = modelFactory->readCoarseGrainedFrom(stream);
+      model = simModelFactory->readCoarseGrainedFrom(stream);
       std::clog << "Read model from input file '" << fnInputModel << "'." << std::endl;
       stream.close();
     }

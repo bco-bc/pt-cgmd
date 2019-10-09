@@ -99,10 +99,10 @@ int main(int argc, char *argv[])
   std::clog << "Particle specifications: " << std::endl;
   std::clog << *catalog << std::endl;
   
-  sim_model_factory_ptr_t modelFactory = factory::modelFactory(catalog);
+  sim_model_fact_ptr_t simModelFactory = factory::simulationModelFactory(catalog);
   std::ifstream istream;
   file::open_input(istream, fnInputModel);
-  cg_sim_model_ptr_t sm = modelFactory->readCoarseGrainedFrom(istream);
+  cg_sim_model_ptr_t sm = simModelFactory->readCoarseGrainedFrom(istream);
   istream.close();
   std::clog << *sm << std::endl;
 

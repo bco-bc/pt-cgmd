@@ -56,7 +56,7 @@ void test1() {
     using particle_ptr_t = generator_t::p_ptr_t;
     using particle_ptr_group_t = generator_t::pg_ptr_t;
         
-    std::string fileName = "/home/ajuffer/simploce/particles/resources/particles-specs.dat";
+    std::string fileName = "/home/ajuffer/simploce/pt-cgmd/particles/resources/particles-specs.dat";
     std::ifstream stream;
     file::open_input(stream, fileName);
     spec_catalog_ptr_t catalog = ParticleSpecCatalog::create(stream);

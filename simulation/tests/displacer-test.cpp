@@ -75,7 +75,7 @@ void test1() {
     particle_model_fact_ptr_t factory = factory::particleModelFactory(catalog);
     cg_ptr_t cg = factory->polarizableWater(box);
     cg_interactor_ptr_t interactor = 
-            factory::interactorCoarseGrainedPolarizableWater(catalog, box, bc);
+            factory::polarizableWaterInteractor(catalog, box, bc);
     
     /*
     cg_displacer_ptr_t leapFrog = factory::leapFrog(interactor);    

@@ -1,6 +1,7 @@
 #ifndef MAP2_HPP
 #define MAP2_HPP
 
+#include "map.hpp"
 #include <boost/lexical_cast.hpp>
 #include <map>
 #include <vector>

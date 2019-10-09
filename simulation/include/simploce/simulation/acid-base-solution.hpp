@@ -43,6 +43,7 @@ namespace simploce {
      * Coarse grained protonatable acids and/or bases in coarse grained polarizable water.
      */
     class AcidBaseSolution : public CoarseGrainedForceField {
+    public:
         
         /**
          * Constructor.

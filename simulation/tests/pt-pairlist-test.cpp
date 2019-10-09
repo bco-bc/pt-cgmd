@@ -48,7 +48,8 @@ void test1() {
     bc_ptr_t bc = factory::pbc(box);
     ProtonTransferPairListGenerator(0.3, bc);
     
-    pt_pair_list_gen_ptr_t generator = factory::protonTransferPairListGenerator(0.3, bc);
+    pt_pair_list_gen_ptr_t generator = 
+            factory::protonTransferPairListGenerator(0.3, bc);
 }
 
 int main(int argc, char** argv) {

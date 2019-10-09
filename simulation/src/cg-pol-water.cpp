@@ -52,8 +52,8 @@ namespace simploce {
     static spec_ptr_t CW{};
     static spec_ptr_t DP{};
     static const real_t FC = 2.0e+06;             // Force constant in kJ/(mol nm^4)
-    static const real_t C12_CW_CW = 1.298e-03;    // kJ/(mol nm^12)
-    static const real_t C6_CW_CW = 0.088;         // kJ/(mol nm^6)
+    static const real_t C12_CW_CW = 1.298e-03;    // kJ nm^12/mol
+    static const real_t C6_CW_CW = 0.088;         // kJ nm^6 /mol
     
     static std::unique_ptr<LJCoulombForces<Bead>> LJ_COULOMB_F{};
     
@@ -70,17 +70,18 @@ namespace simploce {
         // Electrostatics.
         auto eps_r = std::make_pair("eps_r", EPS_R);
         elParams_.insert(eps_r);
-        std::clog << "Electrostatic interaction parameters:" << std::endl;
-        std::clog << elParams_ << std::endl;
 
         // LJ
         auto CW_CW = std::make_pair(C12_CW_CW, C6_CW_CW);    
         ljParams_.add(CW->name(), CW->name(), CW_CW);
-        auto zero = std::make_pair(0.0, 0.0);    
-        ljParams_.add(CW->name(), DP->name(), zero);
-        ljParams_.add(DP->name(), CW->name(), zero);
-        ljParams_.add(DP->name(), DP->name(), zero);
+        //auto zero = std::make_pair(0.0, 0.0);    
+        //ljParams_.add(CW->name(), DP->name(), zero);
+        //ljParams_.add(DP->name(), CW->name(), zero);
+        //ljParams_.add(DP->name(), DP->name(), zero);
 
+        std::clog << "Polarizable water:" << std::endl;
+        std::clog << "Electrostatic interaction parameters:" << std::endl;
+        std::clog << elParams_ << std::endl;
         std::clog << "LJ Interaction parameters" << std::endl;
         std::clog << ljParams_ << std::endl;
     

@@ -71,7 +71,7 @@ namespace simploce {
 
         // Interactor.
         cg_interactor_ptr_t interactor = 
-                factory::interactorCoarseGrainedPolarizableWater(catalog_, box, bc);
+                factory::polarizableWaterInteractor(catalog_, box, bc);
         
         // Displacer.
         std::shared_ptr<CoarseGrainedDisplacer> displacer = 
@@ -89,13 +89,14 @@ namespace simploce {
                                                const temperature_t temperature,
                                                bool protonatable)
     {
-        std::clog << "Creating coarse grained simulation for formic acid." << std::endl;
+        std::clog << "Creating coarse grained simulation model for formic acid (HCOOH)." 
+                  << std::endl;
 
         std::clog.setf(std::ios_base::scientific, std::ios_base::floatfield);
         
-        std::clog << "Molarity: " << molarity << " M" << std::endl;
+        std::clog << "HCOOH Molarity: " << molarity << " M" << std::endl;
         
-        // Create CG polarizable water.
+        // Create formic acid in CG polarizable water.
         cg_ptr_t cg = particleModelFactory_->formicAcidSolution(box, 
                                                                 atDensitySI, 
                                                                 molarity, 
@@ -107,15 +108,14 @@ namespace simploce {
         std::clog << "Using periodic boundary conditions." << std::endl;
 
         // Interactor.
-        cg_interactor_ptr_t interactor = 
-            factory::interactorCoarseGrainedPolarizableWater(catalog_, 
-                                                             box, 
-                                                             bc, 
-                                                             protonatable);
+        cg_interactor_ptr_t interactor =
+            factory::formicAcidSolutionInteractor(catalog_, box, bc);            
         
+        // Pair list for protonatables.
         pt_pair_list_gen_ptr_t generator = 
             factory::protonTransferPairListGenerator(PT_RMAX, bc);
         
+        // Proton transfer.
         rate_t rate = 1.0/1.5;
         real_t gamma = 1.0 / rate();
         pt_displacer_ptr_t ptDisplacer = factory::constantRate(rate, gamma);

@@ -52,17 +52,19 @@ namespace simploce {
         return cg->doWithProtBeads<prot_pair_list_t>([bc, rmax2] (const std::vector<dprot_bead_ptr_t>& discrete,
                                                                   const std::vector<cprot_bead_ptr_t>& continuous) {
             prot_pair_list_t pairlist{};
-            for (auto i = continuous.begin(); i != (continuous.end() - 1); ++i) {
-                auto beadi = *i;
-                const auto& ri = beadi->position();
-                for (auto j = i + 1; j != continuous.end(); ++j) {
-                    auto beadj = *j;
-                    const auto& rj = beadj->position();
-                    auto R = bc->apply(ri, rj);
-                    real_t R2 = norm2<real_t>(R);
-                    if ( R2 < rmax2 ) {
-                        prot_pair_t pair = std::make_pair(beadi, beadj);
-                        pairlist.push_back(pair);
+            if ( !continuous.empty() ) {
+                for (auto i = continuous.begin(); i != (continuous.end() - 1); ++i) {
+                    auto beadi = *i;
+                    const auto& ri = beadi->position();
+                    for (auto j = i + 1; j != continuous.end(); ++j) {
+                        auto beadj = *j;
+                        const auto& rj = beadj->position();
+                        auto R = bc->apply(ri, rj);
+                        real_t R2 = norm2<real_t>(R);
+                        if ( R2 < rmax2 ) {
+                            prot_pair_t pair = std::make_pair(beadi, beadj);
+                            pairlist.push_back(pair);
+                        }
                     }
                 }
             }
