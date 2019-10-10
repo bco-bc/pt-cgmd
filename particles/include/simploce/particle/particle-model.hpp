@@ -221,6 +221,11 @@ namespace simploce {
          * @return 
          */
         std::vector<pg_ptr_t>& groups() { return groups_; }
+        
+        /**
+         * Return particles.
+         */
+        std::vector<p_ptr_t>& all() { return all_; }
                 
     private:
         

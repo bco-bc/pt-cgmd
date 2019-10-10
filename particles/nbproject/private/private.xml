@@ -9,9 +9,10 @@
         <group>
             <file>file:/koti/ajuffer/simploce/pt-cgmd/particles/include/simploce/particle/particle-spec-catalog.hpp</file>
             <file>file:/koti/ajuffer/simploce/pt-cgmd/particles/include/simploce/particle/discrete-protonatable-bead.hpp</file>
+            <file>file:/koti/ajuffer/simploce/pt-cgmd/particles/include/simploce/particle/particle-model.hpp</file>
             <file>file:/koti/ajuffer/simploce/pt-cgmd/particles/include/simploce/particle/ptypes.hpp</file>
-            <file>file:/koti/ajuffer/simploce/pt-cgmd/particles/src/discrete-protonatable-bead.cpp</file>
             <file>file:/koti/ajuffer/simploce/pt-cgmd/particles/tests/prot-site-catalog-test.cpp</file>
+            <file>file:/koti/ajuffer/simploce/pt-cgmd/particles/src/discrete-protonatable-bead.cpp</file>
             <file>file:/koti/ajuffer/simploce/pt-cgmd/particles/include/simploce/particle/coarse-grained.hpp</file>
             <file>file:/koti/ajuffer/simploce/pt-cgmd/particles/src/particle-spec.cpp</file>
             <file>file:/koti/ajuffer/simploce/pt-cgmd/particles/src/particle-model-factory.cpp</file>
@@ -26,11 +27,12 @@
             <file>file:/koti/ajuffer/simploce/pt-cgmd/particles/include/simploce/particle/protonatable.hpp</file>
             <file>file:/koti/ajuffer/simploce/pt-cgmd/particles/resources/coarse-grained-system.dat</file>
             <file>file:/koti/ajuffer/simploce/pt-cgmd/particles/include/simploce/particle/atomistic.hpp</file>
-            <file>file:/koti/ajuffer/simploce/pt-cgmd/particles/include/simploce/particle/continuous-protonatable-bead.hpp</file>
             <file>file:/koti/ajuffer/simploce/pt-cgmd/particles/include/simploce/particle/pall.hpp</file>
+            <file>file:/koti/ajuffer/simploce/pt-cgmd/particles/include/simploce/particle/continuous-protonatable-bead.hpp</file>
             <file>file:/koti/ajuffer/simploce/pt-cgmd/particles/include/simploce/particle/polarizable-water.hpp</file>
             <file>file:/koti/ajuffer/simploce/pt-cgmd/particles/include/simploce/particle/protonation-site-catalog.hpp</file>
             <file>file:/koti/ajuffer/simploce/pt-cgmd/particles/include/simploce/particle/particle.hpp</file>
+            <file>file:/koti/ajuffer/simploce/pt-cgmd/particles/tests/particle-model-factory-test.cpp</file>
             <file>file:/koti/ajuffer/simploce/pt-cgmd/particles/include/simploce/particle/bead.hpp</file>
             <file>file:/koti/ajuffer/simploce/pt-cgmd/particles/include/simploce/particle/particle-group.hpp</file>
             <file>file:/koti/ajuffer/simploce/pt-cgmd/particles/include/simploce/particle/bond.hpp</file>

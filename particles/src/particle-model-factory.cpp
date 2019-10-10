@@ -105,7 +105,8 @@ namespace simploce {
 
         number_density_t atNumberDensity = atDensity / mh2o->mass();
         std::size_t natWaters = atNumberDensity * volume;
-        std::size_t ncgWaters = util::nint(real_t(natWaters) / 5.0);
+        //std::size_t ncgWaters = util::nint(real_t(natWaters) / 5.0);
+        std::size_t ncgWaters = real_t(natWaters) / 5.0;
         number_density_t cgNumberDensity = real_t(ncgWaters) / volume();
         density_t cgDensity = cgNumberDensity * (cwSpec->mass() + dpSpec->mass());
         std::clog << "CG: Requested density (u/nm^3): " << cgDensity << std::endl;
@@ -223,10 +224,11 @@ namespace simploce {
         std::size_t nHCOOH = util::nint<real_t>(numberDensity() * volume());
         std::clog << "Number of HCOOH: " << nHCOOH << std::endl;
         
-        std::clog << "Replacing two water groups by HCOOH beads." << std::endl;
+        std::clog << "Replacing " << nHCOOH << " water groups by HCOOH beads." << std::endl;
         spec_ptr_t spec = catalog_->lookup("HCOOH");
+        auto size = cg->numberOfBeads();
         for (std::size_t counter = 0; counter != nHCOOH; ++counter) {
-            std::size_t id = cg->numberOfBeads() + 1;
+            std::size_t id = size + counter + 1;
             position_t r = cg->removeGroup_();
             auto bead = cg->addContinuousProtonatableBead(id, "HCOOH", r, 1, spec, true);
             assignMomentum(bead, temperature);
