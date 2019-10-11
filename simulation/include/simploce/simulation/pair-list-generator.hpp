@@ -43,16 +43,23 @@
 namespace simploce {
     
     /**
+     * Creates particle pairs lists.
      * @param P Particle type.
      */
     template <typename P>
-    class ParticlePairListGenerator {
+    class ParticlePairListGenerator;
+    
+    /**
+     * Specialization for beads.
+     */
+    template <>
+    class ParticlePairListGenerator<Bead> {
     public:
         
         /**
          * Particle pointer type.
          */
-        using p_ptr_t = std::shared_ptr<P>;
+        using p_ptr_t = bead_ptr_t;
         
         /**
          * Particle pair type.
@@ -70,14 +77,9 @@ namespace simploce {
         using p_pair_lists_t = std::vector<p_pair_list_t>;
         
         /**
-         * Particle group type.
-         */
-        using pg_t = ParticleGroup<P>;
-        
-        /**
          * Particle group pointer type.
          */
-        using pg_ptr_t = std::shared_ptr<pg_t>;
+        using pg_ptr_t = bead_group_ptr_t;
         
         /**
          * Constructor.
@@ -86,7 +88,7 @@ namespace simploce {
          * @param dt Time step.
          */        
         ParticlePairListGenerator(const box_ptr_t& box,
-                                  const bc_ptr_t& bc) : box_{box}, bc_{bc} {}
+                                  const bc_ptr_t& bc);
         
         /**
          * Generates particle pairs lists.
@@ -131,7 +133,7 @@ namespace simploce {
         bc_ptr_t bc_;
     };
     
-    
+    /*
     template <typename P>    
     typename ParticlePairListGenerator<P>::p_pair_lists_t
     ParticlePairListGenerator<P>::generate(const std::vector<p_ptr_t>& all,
@@ -194,8 +196,8 @@ namespace simploce {
     template <typename P>
     real_t ParticlePairListGenerator<P>::rc2_() const
     {
-        length_t boxSize = box_->size();
-        length_t rc = (RINCLUDE_() > boxSize() ? boxSize : RINCLUDE_);
+        length_t halve = 0.5 * box_->size();
+        length_t rc = (RINCLUDE_ > halve ? halve : RINCLUDE_);
         real_t rc2 = rc * rc;
         return rc2;        
     }
@@ -308,6 +310,7 @@ namespace simploce {
         // Done.
         return pairs;
     }
+     */
 }
 
 #endif /* PAIR_LIST_GENERATOR_HPP */
