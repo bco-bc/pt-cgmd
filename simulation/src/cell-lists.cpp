@@ -25,35 +25,15 @@
 #include "simploce/simulation/cell-lists.hpp"
 #include "simploce/simulation/bc.hpp"
 #include "simploce/particle/particle-group.hpp"
-#include <boost/multi_array.hpp>
 #include <tuple>
 #include <memory>
 #include <vector>
 #include <thread>
+#include <cassert>
 
 namespace simploce {
     
-    // Cell.
-    template <typename P>
-    struct Cell {
-        using p_ptr_t = typename CellLists<P>::p_ptr_t;
-        using pg_ptr_t = typename CellLists<P>::pg_ptr_t;
-        using indices_t = std::tuple<std::size_t, std::size_t, std::size_t>;
-        
-        Cell() : r_{}, all_{}, free_{}, groups_{}, indices_{} {}
-        
-        Cell(const position_t& r, 
-             const indices_t& indices) : 
-            r_{r}, all_{}, free_{}, groups_{}, indices_{indices} {}
-        
-        position_t r_;
-        std::vector<p_ptr_t> all_;
-        std::vector<p_ptr_t> free_;
-        std::vector<pg_ptr_t> groups_;
-        indices_t indices_;
-    };
-    
-    // Cutoff distance for non bonded interactions.
+    // Default cutoff distance for non bonded interactions.
     static length_t RCUTOFF_DISTANCE_{2.5};  // nm.
     
     /**
@@ -79,42 +59,147 @@ namespace simploce {
         length_t rc = rc_(box);
         return rc * rc;
     }
+                
+    // Cell in grid. Holds free particles and groups.
+    template <typename P>
+    struct Cell {
+        
+        // Types.
+        using p_ptr_t = typename CellLists<P>::p_ptr_t;
+        using pg_ptr_t = typename CellLists<P>::pg_ptr_t;
+        using indices_t = std::tuple<std::size_t, std::size_t, std::size_t>;
+        
+        // Constructors
+        Cell() : r_{}, free_{}, groups_{}, indices_{} {}        
+        Cell(const position_t& r, const indices_t& indices) : 
+            r_{r}, free_{}, groups_{}, indices_{indices} {}
+            
+        position_t r_;                  // Cell position, center of cell.
+        std::vector<p_ptr_t> free_;     // Free particles located in this cell.
+        std::vector<pg_ptr_t> groups_;  // Particle groups located in this cell.
+        indices_t indices_;             // Cell indices.
+    };
+    
+    // Grid. Made off cells.
+    template <typename P>
+    struct Grid {
+
+        // Constructors. Note: n is size per dimension.
+        Grid() : cells_{} {}        
+        Grid(std::size_t n) : 
+            n_{n}, n3_{n * n * n}, cells_{n3_, Cell<P>{}}, edgeLength_{0.0} {}
+        
+        /**
+         * Returns empty, but with position and indices of cells assigned.
+         * @param box Box.
+         * @param rc Cutoff distance.
+         * @return Grid.
+         */
+        static Grid<P> make(const box_ptr_t& box,
+                       const length_t& rc);
+        
+        // Getters.
+        Cell<P>& operator () (std::size_t i, std::size_t j, std::size_t k);
+
+        // Setters. Use cell indices.
+        void set(const Cell<P>& cell);                
+               
+        // Returns location in cells_.
+        std::size_t index(std::size_t i, std::size_t j, std::size_t k) const {
+            return 9 * i + 3 * j + k;
+        }
+        
+        /**
+         * Returns neighboring cells.
+         */
+        std::vector<Cell<P>> neighbors(const Cell<P>& cell);
+        
+        /**
+         * Clear free particles and groups from cell.s
+         */
+        void clear();
+        
+        /**
+         * Place free particles and groups in cells.
+         */
+        void place(const bc_ptr_t& bc,
+                   const std::vector<std::shared_ptr<P>>& particles,
+                   const std::vector<std::shared_ptr<P>>& free,
+                   const std::vector<std::shared_ptr<ParticleGroup<P>>>& groups);
+        
+        std::size_t n_;
+        std::size_t n3_;
+        std::vector<Cell<P>> cells_;
+        length_t edgeLength_;
+    };
     
     template <typename P>
-    static std::tuple<std::size_t, std::size_t, std::size_t, std::size_t, std::size_t, std::size_t>
-    neighbors_(const Cell<P>& cell, std::size_t size)
+    Cell<P>& 
+    Grid<P>::operator () (std::size_t i, std::size_t j, std::size_t k)
     {
-        const auto& indices = cell.indices_;
+        auto index = this->index(i, j, k);
+        return cells_[index];
+    }
+    
+    template <typename P>
+    void 
+    Grid<P>::set(const Cell<P>& cell)
+    {
+        auto i = std::get<0>(cell.indices_);
+        auto j = std::get<1>(cell.indices_);
+        auto k = std::get<2>(cell.indices_);
+        auto index = this->index(i, j, k);
+        assert(index < n3_);
+        cells_[index] = cell;
+    }
+    
+    template <typename P>
+    std::vector<Cell<P>> 
+    Grid<P>::neighbors(const Cell<P>& cell)
+    {
+        
+        std::vector<Cell<P>> neighbors;
+
+        const auto& indices = cell.indices_;       
         auto l = std::get<0>(indices);
         auto i_i = l > 0 ? l - 1 : l;
-        auto i_f = l < size - 1 ? size : l;
+        auto i_f = l < n_ - 1 ? n_ : l;
         l = std::get<1>(indices);
         auto j_i = l > 0 ? l - 1 : l;
-        auto j_f = l < size - 1 ? size : l; 
+        auto j_f = l < n_ - 1 ? n_ : l; 
         l = std::get<2>(indices);
         auto k_i = l > 0 ? l - 1 : l;
-        auto k_f = l < size - 1 ? size : l; 
-        return std::make_tuple(i_i, i_f, j_i, j_f, k_i, k_f);
+        auto k_f = l < n_ - 1 ? n_ : l; 
+        
+        for ( std::size_t i = i_i; i != i_f; ++i) {
+            for ( std::size_t j = j_i; j != j_f; ++j) {
+                for ( std::size_t k = k_i; k != k_f; ++k) {
+                    auto cell = this->operator ()(i, j, k);
+                    neighbors.push_back(cell);
+                }
+            }
+        }
+        return std::move(neighbors);
     }
     
     /**
-     * Makes cells
+     * Makes the grid.
      * @param box Simulation box.
      * @param rc Cutoff distance.
      * @return Cells, cell edge length, and size per dimension.
      */
     template <typename P>
-    static std::tuple<boost::multi_array<Cell<P>, 3>, length_t, std::size_t>
-    makeCells_(const box_ptr_t& box,
-               const length_t& rc)
+    Grid<P> 
+    Grid<P>::make(const box_ptr_t& box, 
+                  const length_t& rc)
     {
         using cell_t = Cell<P>;
-        using cells_t = boost::multi_array<cell_t, 3>;
         using indices_t = typename Cell<P>::indices_t;
         
         auto edgeLength = 0.5 * rc;
         std::size_t n = box->edgeLength() / edgeLength();
-        cells_t cells(boost::extents[n][n][n]);
+        Grid<P> grid{n};
+        grid.edgeLength_ = edgeLength;
         for (std::size_t i = 0; i != n; ++i) {
             real_t x = (i + 0.5) * edgeLength();
             for (std::size_t j = 0; j != n; ++j) {
@@ -125,72 +210,54 @@ namespace simploce {
                     indices_t indices = std::make_tuple(i,j,k);
                     // Create cell without any particles.
                     cell_t cell{r, indices};                   
-                    cells[i][j][k] = cell;
+                    grid.set(cell);
                 }
             }
         }
-        return std::make_tuple(cells, edgeLength, n);
+        return grid;
     }
     
     template <typename P>
-    static void 
-    placeInCells_(boost::multi_array<Cell<P>, 3>& cells,
-                  const length_t& edgeLength,
-                  const bc_ptr_t& bc,
-                  const std::vector<std::shared_ptr<P>>& particles,
-                  const std::vector<std::shared_ptr<P>>& free,
-                  const std::vector<std::shared_ptr<ParticleGroup<P>>>& groups)
-    {    
-        /*
-        for (auto p : particles) {
-            auto r = p->position();
-            r = bc->placeInside(r);
-            std::size_t n0 = r[0] / edgeLength();
-            std::size_t n1 = r[1] / edgeLength();
-            std::size_t n2 = r[2] / edgeLength();
-            auto& cell = cells[n0][n1][n2];
-            auto& all = cell.all_;
-            all.push_back(p);
+    void 
+    Grid<P>::clear()
+    {
+        for (auto iter = cells_.begin(); iter != cells_.end(); ++iter) {
+            auto& cell = *iter;
+            cell.free_.clear();
+            cell.groups_.clear();
         }
-        */
+    }
+    
+    
+    template <typename P>
+    void 
+    Grid<P>::place(const bc_ptr_t& bc,
+                   const std::vector<std::shared_ptr<P>>& particles,
+                   const std::vector<std::shared_ptr<P>>& free,
+                   const std::vector<std::shared_ptr<ParticleGroup<P>>>& groups)
+    {    
         for (auto p : free) {
             auto r = p->position();
             r = bc->placeInside(r);
-            std::size_t n0 = r[0] / edgeLength();
-            std::size_t n1 = r[1] / edgeLength();
-            std::size_t n2 = r[2] / edgeLength();
-            auto& cell = cells[n0][n1][n2];
+            std::size_t i = r[0] / edgeLength_();
+            std::size_t j = r[1] / edgeLength_();
+            std::size_t k = r[2] / edgeLength_();
+            auto& cell = this->operator()(i, j, k);
             auto& free = cell.free_;
             free.push_back(p);
         }
         for (auto g: groups) {
             auto r = g->position();
             r = bc->placeInside(r);
-            std::size_t n0 = r[0] / edgeLength();
-            std::size_t n1 = r[1] / edgeLength();
-            std::size_t n2 = r[2] / edgeLength();
-            auto& cell = cells[n0][n1][n2];
+            std::size_t i = r[0] / edgeLength_();
+            std::size_t j = r[1] / edgeLength_();
+            std::size_t k = r[2] / edgeLength_();
+            auto& cell = this->operator()(i, j, k);
             auto& groups = cell.groups_;
             groups.push_back(g);
         }
     }
     
-    template <typename P>
-    static void 
-    clearCells_(boost::multi_array<Cell<P>, 3>& cells,
-                std::size_t size)
-    {
-        using cell_t = Cell<P>;
-        
-        for (auto iter = cells.origin(); 
-                  iter != cells.origin() + cells.num_elements(); 
-                ++iter) {
-            cell_t& cell = *iter;
-            cell.all_.clear();
-            cell.free_.clear();
-            cell.groups_.clear();
-        }
-    }
     
     // Between free and other free particles, and free and particles in groups.
     template <typename P>
@@ -296,48 +363,37 @@ namespace simploce {
                    const std::vector<typename CellLists<P>::pg_ptr_t>& groups)
     {
         using cell_t = Cell<P>;
+        using grid_t = Grid<P>;
         using p_pair_list_t = typename CellLists<P>::p_pair_list_t;
-        
-        static boost::multi_array<Cell<P>, 3> cells{};
-        static std::size_t size{0};
-        static length_t edgeLength{0.0};
+            
+        static grid_t grid{};
         static real_t rc2;
         
         // Set up if still required.
         static bool setup = false;
         if ( !setup ) {
             auto rc = rc_(box);
-            auto created = makeCells_<P>(box, rc);
-            cells = std::get<0>(created);
-            edgeLength = std::get<1>(created);
-            size = std::get<2>(created);
+            grid = Grid<P>::make(box, rc);
             rc2 = rc2_(box);
             setup = true;
         }
         
         // Determine full particle pair list.
         p_pair_list_t full{};
-        clearCells_(cells, size);
-        placeInCells_(cells, edgeLength, bc, all, free, groups);                
-        for (auto iter = cells.origin(); 
-                  iter != cells.origin() + cells.num_elements(); 
-                ++iter) {
+        grid.clear();
+        grid.place(bc, all, free, groups);
+        auto& cells = grid.cells_;
+        for (auto iter = cells.begin(); iter != cells.end(); ++iter) {
             const cell_t& cell = *iter;
             const auto& free = cell.free_;
-            //const std::vector<typename CellLists<P>::p_ptr_t>& free = cell.free_;
             const auto& groups = cell.groups_;
-            //const std::vector<typename CellLists<P>::pg_ptr_t>& groups = cell.groups_;
-            auto neighbors = neighbors_(cell, size);
-            for (std::size_t i = std::get<0>(neighbors); i != std::get<1>(neighbors); ++i) {
-                for (std::size_t j = std::get<2>(neighbors); j != std::get<3>(neighbors); ++j) {
-                    for (std::size_t k = std::get<4>(neighbors); k != std::get<5>(neighbors); ++k) {
-                        cell_t& c = cells[i][j][k];
-                        p_pair_list_t pl = forFree_<P>(free, c, bc, rc2);
-                        full.insert(full.end(), pl.begin(), pl.end());
-                        pl = forGroups_<P>(groups, c, bc, rc2);
-                        full.insert(full.end(), pl.begin(), pl.end());
-                    }
-                }
+            auto neighbors = grid.neighbors(cell);
+            for (auto it = neighbors.begin(); it != neighbors.end(); ++it) {
+                cell_t& neighbor = *it;
+                p_pair_list_t pl = forFree_<P>(free, neighbor, bc, rc2);
+                full.insert(full.end(), pl.begin(), pl.end());
+                pl = forGroups_<P>(groups, neighbor, bc, rc2);
+                full.insert(full.end(), pl.begin(), pl.end());
             }
         }
         
