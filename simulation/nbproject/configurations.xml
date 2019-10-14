@@ -11,6 +11,7 @@
       <itemPath>include/simploce/simulation/at-forcefield.hpp</itemPath>
       <itemPath>include/simploce/analysis/atypes.hpp</itemPath>
       <itemPath>include/simploce/simulation/bc.hpp</itemPath>
+      <itemPath>include/simploce/simulation/cell-lists.hpp</itemPath>
       <itemPath>include/simploce/simulation/cg-displacer.hpp</itemPath>
       <itemPath>include/simploce/simulation/cg-forcefield.hpp</itemPath>
       <itemPath>include/simploce/simulation/cg-pol-water.hpp</itemPath>
@@ -48,6 +49,7 @@
                    projectFiles="true">
       <itemPath>src/acid-base-solution.cpp</itemPath>
       <itemPath>src/analysis.cpp</itemPath>
+      <itemPath>src/cell-lists.cpp</itemPath>
       <itemPath>src/cg-pol-water.cpp</itemPath>
       <itemPath>src/constant-rate-pt.cpp</itemPath>
       <itemPath>src/interactor.cpp</itemPath>
@@ -297,6 +299,11 @@
       </item>
       <item path="include/simploce/simulation/bc.hpp" ex="false" tool="3" flavor2="0">
       </item>
+      <item path="include/simploce/simulation/cell-lists.hpp"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
       <item path="include/simploce/simulation/cg-displacer.hpp"
             ex="false"
             tool="3"
@@ -427,6 +434,8 @@
       <item path="src/acid-base-solution.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="src/analysis.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="src/cell-lists.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="src/cg-pol-water.cpp" ex="false" tool="1" flavor2="0">
       </item>
@@ -663,6 +672,11 @@
       </item>
       <item path="include/simploce/simulation/bc.hpp" ex="false" tool="3" flavor2="0">
       </item>
+      <item path="include/simploce/simulation/cell-lists.hpp"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
       <item path="include/simploce/simulation/cg-displacer.hpp"
             ex="false"
             tool="3"
@@ -793,6 +807,8 @@
       <item path="src/acid-base-solution.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="src/analysis.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="src/cell-lists.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="src/cg-pol-water.cpp" ex="false" tool="1" flavor2="0">
       </item>

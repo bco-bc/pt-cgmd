@@ -33,33 +33,26 @@
 #define PAIR_LIST_GENERATOR_HPP
 
 #include "stypes.hpp"
-#include "bc.hpp"
 #include "simploce/particle/particle-group.hpp"
 #include <vector>
 #include <utility>
 #include <thread>
 #include <memory>
 
-namespace simploce {
+namespace simploce {        
     
     /**
-     * Creates particle pairs lists.
+     * Finds all particles pairs in molecular dynamics simulations.
      * @param P Particle type.
      */
     template <typename P>
-    class ParticlePairListGenerator;
-    
-    /**
-     * Specialization for beads.
-     */
-    template <>
-    class ParticlePairListGenerator<Bead> {
+    class ParticlePairListGenerator {
     public:
         
         /**
          * Particle pointer type.
          */
-        using p_ptr_t = bead_ptr_t;
+        using p_ptr_t = std::shared_ptr<P>;
         
         /**
          * Particle pair type.
@@ -69,47 +62,28 @@ namespace simploce {
         /**
          * Particle pair lists type (single list).
          */
-        using p_pair_list_t = std::vector<p_pair_t>;
-        
-        /**
-         * Particle pair lists type (multiple lists).
-         */
-        using p_pair_lists_t = std::vector<p_pair_list_t>;
+        using p_pair_list_t = std::vector<p_pair_t>;        
         
         /**
          * Particle group pointer type.
          */
-        using pg_ptr_t = bead_group_ptr_t;
+        using pg_ptr_t = std::shared_ptr<ParticleGroup<P>>;
         
         /**
-         * Constructor.
-         * @param box Simulation box.
-         * @param bc Boundary condition.
-         * @param dt Time step.
-         */        
-        ParticlePairListGenerator(const box_ptr_t& box,
-                                  const bc_ptr_t& bc);
-        
-        /**
-         * Generates particle pairs lists.
-         * @return List, multiple or just one. Depends on the number of available threads.
-         */
-        std::vector<p_pair_list_t> generate(const std::vector<p_ptr_t>& all,
-                                            const std::vector<p_ptr_t>& free,
-                                            const std::vector<pg_ptr_t>& groups) const;
-        
-        /**
-         * Generates particle pairs lists.
-         * @param All particles.
+         * Returns multiple pair lists.
+         * @param all All particles.
          * @param free All free particles.
-         * @param groups Particle groups.
-         * @return List, multiple or just one. Depends on the number of available threads.
+         * @param groups All particle groups.
+         * @return Pair lists.
          */
-        p_pair_lists_t operator () (const std::vector<p_ptr_t>& all,
-                                    const std::vector<p_ptr_t>& free,
-                                    const std::vector<pg_ptr_t>& groups) const;
-                
-        
+        virtual std::vector<p_pair_list_t> 
+        generate(const std::vector<p_ptr_t>& all,
+                 const std::vector<p_ptr_t>& free,
+                 const std::vector<pg_ptr_t>& groups) const = 0;
+    };
+    
+    
+    /*
     private:
         
         const length_t RINCLUDE_{2.5};
@@ -124,16 +98,16 @@ namespace simploce {
         p_pair_list_t forFreeAndGroups_(const std::vector<p_ptr_t>& free,
                                         const std::vector<pg_ptr_t>& groups) const;
         
-        /**
+        **
          * Returns square of suitable cutoff distance.
-         */
+         *
         real_t rc2_() const;
         
         box_ptr_t box_;
         bc_ptr_t bc_;
     };
     
-    /*
+    
     template <typename P>    
     typename ParticlePairListGenerator<P>::p_pair_lists_t
     ParticlePairListGenerator<P>::generate(const std::vector<p_ptr_t>& all,

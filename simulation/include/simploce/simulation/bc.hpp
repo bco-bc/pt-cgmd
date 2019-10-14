@@ -53,6 +53,13 @@ namespace simploce {
     virtual dist_vect_t apply(const position_t& r1, const position_t& r2) const = 0;
     
     /**
+     * Moves given position to the inside of the simulation box.
+     * @param r Position possibly outside simulation box.
+     * @return Position Inside simulation box.
+     */
+    virtual position_t placeInside(const position_t& r) const = 0;
+    
+    /**
      * Returns an identifying name.
      * @return Identifying name.
      */

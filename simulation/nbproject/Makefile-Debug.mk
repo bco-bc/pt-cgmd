@@ -37,6 +37,7 @@ OBJECTDIR=${CND_BUILDDIR}/${CND_CONF}/${CND_PLATFORM}
 OBJECTFILES= \
 	${OBJECTDIR}/src/acid-base-solution.o \
 	${OBJECTDIR}/src/analysis.o \
+	${OBJECTDIR}/src/cell-lists.o \
 	${OBJECTDIR}/src/cg-pol-water.o \
 	${OBJECTDIR}/src/constant-rate-pt.o \
 	${OBJECTDIR}/src/interactor.o \
@@ -113,6 +114,11 @@ ${OBJECTDIR}/src/analysis.o: src/analysis.cpp
 	${MKDIR} -p ${OBJECTDIR}/src
 	${RM} "$@.d"
 	$(COMPILE.cc) -g -Wall -Iinclude -I../cpputil/include -I../particles/include -std=c++14 -fPIC  -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/analysis.o src/analysis.cpp
+
+${OBJECTDIR}/src/cell-lists.o: src/cell-lists.cpp
+	${MKDIR} -p ${OBJECTDIR}/src
+	${RM} "$@.d"
+	$(COMPILE.cc) -g -Wall -Iinclude -I../cpputil/include -I../particles/include -std=c++14 -fPIC  -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/cell-lists.o src/cell-lists.cpp
 
 ${OBJECTDIR}/src/cg-pol-water.o: src/cg-pol-water.cpp
 	${MKDIR} -p ${OBJECTDIR}/src
@@ -293,6 +299,19 @@ ${OBJECTDIR}/src/analysis_nomain.o: ${OBJECTDIR}/src/analysis.o src/analysis.cpp
 	    $(COMPILE.cc) -g -Wall -Iinclude -I../cpputil/include -I../particles/include -std=c++14 -fPIC  -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/analysis_nomain.o src/analysis.cpp;\
 	else  \
 	    ${CP} ${OBJECTDIR}/src/analysis.o ${OBJECTDIR}/src/analysis_nomain.o;\
+	fi
+
+${OBJECTDIR}/src/cell-lists_nomain.o: ${OBJECTDIR}/src/cell-lists.o src/cell-lists.cpp 
+	${MKDIR} -p ${OBJECTDIR}/src
+	@NMOUTPUT=`${NM} ${OBJECTDIR}/src/cell-lists.o`; \
+	if (echo "$$NMOUTPUT" | ${GREP} '|main$$') || \
+	   (echo "$$NMOUTPUT" | ${GREP} 'T main$$') || \
+	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
+	then  \
+	    ${RM} "$@.d";\
+	    $(COMPILE.cc) -g -Wall -Iinclude -I../cpputil/include -I../particles/include -std=c++14 -fPIC  -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/cell-lists_nomain.o src/cell-lists.cpp;\
+	else  \
+	    ${CP} ${OBJECTDIR}/src/cell-lists.o ${OBJECTDIR}/src/cell-lists_nomain.o;\
 	fi
 
 ${OBJECTDIR}/src/cg-pol-water_nomain.o: ${OBJECTDIR}/src/cg-pol-water.o src/cg-pol-water.cpp 

@@ -43,6 +43,8 @@ namespace simploce {
 
         dist_vect_t apply(const position_t& r1, const position_t& r2) const override;
         
+        virtual position_t placeInside(const position_t& r) const override;
+        
         std::string id() const override;
 
     };

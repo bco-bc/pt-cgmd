@@ -33,6 +33,7 @@
 #include "simploce/simulation/stypes.hpp"
 #include "simploce/simulation/sconf.hpp"
 #include "simploce/util/util.hpp"
+#include <cmath>
 
 namespace simploce {
 
@@ -44,10 +45,11 @@ namespace simploce {
         }
     }
 
-    dist_vect_t PeriodicBoundaryCondition::apply(const position_t& r1, 
-                                                 const position_t& r2) const 
+    dist_vect_t 
+    PeriodicBoundaryCondition::apply(const position_t& r1, 
+                                     const position_t& r2) const 
     {        
-        static const box_t& box = *box_;
+        const box_t& box = *box_;
     
         dist_vect_t r12{};
         for (std::size_t k = 0; k != 3; ++k) {
@@ -58,7 +60,26 @@ namespace simploce {
         return r12;  
     }
     
-    std::string PeriodicBoundaryCondition::id() const
+    position_t 
+    PeriodicBoundaryCondition::placeInside(const position_t& r) const
+    {
+        const box_t& box = *box_;
+        position_t rin{r};
+        for (std::size_t k = 0; k != 3; ++k) {
+            auto rk = rin[k];
+            real_t boxk = box[k];
+            real_t n = -rk/boxk;  // n > 0 for rk < 0.0
+            if ( rin[k] < 0.0 ) {
+                rin[k] += n * boxk;
+            } else {
+                rin[k] -= n * boxk;
+            }
+        }
+        return rin;        
+    }
+    
+    std::string 
+    PeriodicBoundaryCondition::id() const
     {
         return conf::PBC;
     }

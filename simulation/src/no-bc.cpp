@@ -34,13 +34,21 @@
 
 namespace simploce {
 
-    dist_vect_t NoBoundaryCondition::apply(const position_t& r1, 
-                                           const position_t& r2) const 
+    dist_vect_t 
+    NoBoundaryCondition::apply(const position_t& r1, 
+                               const position_t& r2) const 
     {
         return r1 - r2;
     }
     
-    std::string NoBoundaryCondition::id() const
+    position_t 
+    NoBoundaryCondition::placeInside(const position_t& r) const
+    {
+        return r;
+    }
+    
+    std::string 
+    NoBoundaryCondition::id() const
     {
         return conf::NOBC;
     }
