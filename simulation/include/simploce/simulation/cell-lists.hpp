@@ -47,7 +47,34 @@ namespace simploce {
     class CellLists;
     
     /**
-     * Specialisation for beads.
+     * specialization for atoms.
+     */
+    template <>
+    class CellLists<Atom> : public ParticlePairListGenerator<Atom> {
+    public:
+        
+        using p_ptr_t = typename ParticlePairListGenerator<Atom>::p_ptr_t;
+        using pg_ptr_t = typename ParticlePairListGenerator<Atom>::pg_ptr_t;
+        using p_pair_t = typename ParticlePairListGenerator<Atom>::p_pair_t;
+        using p_pair_list_t = typename ParticlePairListGenerator<Atom>::p_pair_list_t;
+        
+        CellLists(const box_ptr_t& box,
+                  const bc_ptr_t& bc);
+        
+        std::vector<p_pair_list_t> 
+        generate(const std::vector<p_ptr_t>& all,
+                 const std::vector<p_ptr_t>& free,
+                 const std::vector<pg_ptr_t>& groups) const override;
+        
+    private:
+                        
+        box_ptr_t box_;
+        bc_ptr_t bc_;
+    };
+    
+    
+    /**
+     * specialization for beads.
      */
     template <>
     class CellLists<Bead> : public ParticlePairListGenerator<Bead> {
@@ -55,6 +82,7 @@ namespace simploce {
         
         using p_ptr_t = typename ParticlePairListGenerator<Bead>::p_ptr_t;
         using pg_ptr_t = typename ParticlePairListGenerator<Bead>::pg_ptr_t;
+        using p_pair_t = typename ParticlePairListGenerator<Bead>::p_pair_t;
         using p_pair_list_t = typename ParticlePairListGenerator<Bead>::p_pair_list_t;
         
         CellLists(const box_ptr_t& box,

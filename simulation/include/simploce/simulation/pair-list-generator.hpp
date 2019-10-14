@@ -49,6 +49,8 @@ namespace simploce {
     class ParticlePairListGenerator {
     public:
         
+        virtual ~ParticlePairListGenerator() {}
+        
         /**
          * Particle pointer type.
          */

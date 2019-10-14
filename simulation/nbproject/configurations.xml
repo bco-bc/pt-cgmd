@@ -57,7 +57,6 @@
       <itemPath>src/leap-frog.cpp</itemPath>
       <itemPath>src/lj-coulomb-forces.cpp</itemPath>
       <itemPath>src/no-bc.cpp</itemPath>
-      <itemPath>src/pair-list-generator.cpp</itemPath>
       <itemPath>src/pbc.cpp</itemPath>
       <itemPath>src/pt-langevin-velocity-verlet.cpp</itemPath>
       <itemPath>src/pt-pair-list-generator.cpp</itemPath>
@@ -451,8 +450,6 @@
       </item>
       <item path="src/no-bc.cpp" ex="false" tool="1" flavor2="0">
       </item>
-      <item path="src/pair-list-generator.cpp" ex="false" tool="1" flavor2="0">
-      </item>
       <item path="src/pbc.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="src/pt-langevin-velocity-verlet.cpp"
@@ -823,8 +820,6 @@
       <item path="src/lj-coulomb-forces.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="src/no-bc.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="src/pair-list-generator.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="src/pbc.cpp" ex="false" tool="1" flavor2="0">
       </item>
