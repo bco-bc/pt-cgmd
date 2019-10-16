@@ -110,9 +110,10 @@ namespace simploce {
             return cgPolWaterFF_;
         }
         
-        cg_ff_ptr_t formicAcidSolutionForceField(const spec_catalog_ptr_t& catalog,
-                                                 const bc_ptr_t& bc,
-                                                 const cg_ff_ptr_t& water)
+        cg_ff_ptr_t 
+        formicAcidSolutionForceField(const spec_catalog_ptr_t& catalog,
+                                     const bc_ptr_t& bc,
+                                     const cg_ff_ptr_t& water)
         {
             if ( !cgFormicAcidSolutionFF_ ) {
                 cgFormicAcidSolutionFF_ = 

@@ -12,6 +12,7 @@
       <itemPath>include/simploce/analysis/atypes.hpp</itemPath>
       <itemPath>include/simploce/simulation/bc.hpp</itemPath>
       <itemPath>include/simploce/simulation/cell-lists.hpp</itemPath>
+      <itemPath>include/simploce/simulation/cell.hpp</itemPath>
       <itemPath>include/simploce/simulation/cg-displacer.hpp</itemPath>
       <itemPath>include/simploce/simulation/cg-forcefield.hpp</itemPath>
       <itemPath>include/simploce/simulation/cg-pol-water.hpp</itemPath>
@@ -19,6 +20,7 @@
       <itemPath>include/simploce/simulation/displacer.hpp</itemPath>
       <itemPath>include/simploce/simulation/forcefield.hpp</itemPath>
       <itemPath>include/simploce/analysis/gr.hpp</itemPath>
+      <itemPath>include/simploce/simulation/grid.hpp</itemPath>
       <itemPath>include/simploce/simulation/interactor.hpp</itemPath>
       <itemPath>include/simploce/simulation/langevin-velocity-verlet.hpp</itemPath>
       <itemPath>include/simploce/simulation/leap-frog.hpp</itemPath>
@@ -303,6 +305,11 @@
             tool="3"
             flavor2="0">
       </item>
+      <item path="include/simploce/simulation/cell.hpp"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
       <item path="include/simploce/simulation/cg-displacer.hpp"
             ex="false"
             tool="3"
@@ -329,6 +336,11 @@
             flavor2="0">
       </item>
       <item path="include/simploce/simulation/forcefield.hpp"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="include/simploce/simulation/grid.hpp"
             ex="false"
             tool="3"
             flavor2="0">
@@ -674,6 +686,11 @@
             tool="3"
             flavor2="0">
       </item>
+      <item path="include/simploce/simulation/cell.hpp"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
       <item path="include/simploce/simulation/cg-displacer.hpp"
             ex="false"
             tool="3"
@@ -700,6 +717,11 @@
             flavor2="0">
       </item>
       <item path="include/simploce/simulation/forcefield.hpp"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="include/simploce/simulation/grid.hpp"
             ex="false"
             tool="3"
             flavor2="0">

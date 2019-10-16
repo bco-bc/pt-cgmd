@@ -78,7 +78,7 @@ namespace simploce {
             npairlist = param.get<std::size_t>("npairlists");
             setup = true;
         }
-        if ( counter % npairlist == 0) {
+        if ( counter % npairlist == 0 || counter == 0) {
             this->updatePairlists_(at);
         }
         

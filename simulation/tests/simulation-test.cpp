@@ -95,7 +95,7 @@ void test1() {
     cg->addBead(2, "test2", position_t{}, spec1_p);
     std::cout << "Number of beads: " << cg->numberOfParticles() << std::endl;
     
-    box_ptr_t box = factory::cube(length_t{5.0});
+    box_ptr_t box = factory::cube(length_t{1.0});
     bc_ptr_t bc = factory::pbc(box);
     
     cg_ff_ptr_t forcefield = std::make_shared<SimpleForceField>();
