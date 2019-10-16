@@ -33,6 +33,7 @@
 #define SCONF_HPP
 
 #include "simploce/particle/pconf.hpp"
+#include "stypes.hpp"
 
 namespace simploce {
     namespace conf {
@@ -48,6 +49,9 @@ namespace simploce {
         const std::string POLARIZABLE_WATER = "pol-water";
         const std::string ACID_BASE_SOLUTION = "acid-base-solution";
         
+        // Default cutoff distance for non bonded interactions.
+        static length_t RCUTOFF_DISTANCE_{2.5};  // nm.
+    
     }
 }
 

@@ -25,6 +25,7 @@
 #include "simploce/simulation/cell-lists.hpp"
 #include "simploce/simulation/grid.hpp"
 #include "simploce/simulation/bc.hpp"
+#include "simploce/simulation/sconf.hpp"
 #include "simploce/particle/particle-group.hpp"
 #include <memory>
 #include <vector>
@@ -33,34 +34,20 @@
 
 namespace simploce {
     
-    // Default cutoff distance for non bonded interactions.
-    static length_t RCUTOFF_DISTANCE_{2.5};  // nm.
-    
     /**
-     * Returns cutoff distance.
+     * Returns grid element side length.
      * @param box Box.
-     * @return Cutoff Distance, always <= 0.5 * box size.
+     * @return Side length.
      */
     static length_t 
-    rc_(const box_ptr_t& box)
+    sideLength_(const box_ptr_t& box)
     {
         length_t halve = 0.5 * box->size();
-        length_t rc = RCUTOFF_DISTANCE_() > halve() ? halve : RCUTOFF_DISTANCE_;
-        return rc;
+        return conf::RCUTOFF_DISTANCE_() > halve() ? 
+               halve : 
+               conf::RCUTOFF_DISTANCE_;
     }
     
-    /**
-     * Returns square of cutoff distance.
-     * @param box Box.
-     * @return Square.
-     */
-    static real_t 
-    rc2_(const box_ptr_t& box)
-    {
-        length_t rc = rc_(box);
-        return rc * rc;
-    }
-                
     // Between free and other free particles, and free and particles in groups.
     template <typename P>
     static typename CellLists<P>::p_pair_list_t
@@ -164,8 +151,8 @@ namespace simploce {
                    const std::vector<typename CellLists<P>::p_ptr_t>& free,
                    const std::vector<typename CellLists<P>::pg_ptr_t>& groups)
     {
-        using cell_t = Cell<P>;
         using grid_t = Grid<P>;
+        using cell_t = typename grid_t::cell_t;
         using p_pair_list_t = typename CellLists<P>::p_pair_list_t;
             
         static grid_t grid{};
@@ -174,9 +161,9 @@ namespace simploce {
         // Set up if still required.
         static bool setup = false;
         if ( !setup ) {
-            auto rc = rc_(box);
-            grid = Grid<P>::make(box, rc);
-            rc2 = rc2_(box);
+            auto sideLength = sideLength_(box);
+            grid = grid_t::make(box, sideLength);
+            rc2 = sideLength * sideLength;
             setup = true;
         }
         
@@ -189,7 +176,7 @@ namespace simploce {
             const cell_t& cell = *iter;
             const auto& free = cell.free();
             const auto& groups = cell.groups();
-            auto neighbors = grid.neighbors(cell);
+            auto neighbors = grid.neighbors(cell.location());
             for (auto it = neighbors.begin(); it != neighbors.end(); ++it) {
                 cell_t& neighbor = *it;
                 p_pair_list_t pl = forFree_<P>(free, neighbor, bc, rc2);
@@ -255,7 +242,6 @@ namespace simploce {
                               const std::vector<pg_ptr_t>& groups) const
     {
         return std::move(makePairLists_<Bead>(box_, bc_, all, free, groups));
-    }
-    
+    }    
     
 }

@@ -74,6 +74,7 @@ void test1() {
     
     bc_ptr_t bc = factory::pbc(box);
     cg_ppair_list_gen_ptr_t generator = factory::coarseGrainedPairListGenerator(box, bc);
+    
     std::vector<particle_ptr_t> free{};
     std::vector<particle_ptr_t> all{};
     std::vector<particle_ptr_group_t> groups{};

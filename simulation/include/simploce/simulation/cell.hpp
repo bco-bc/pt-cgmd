@@ -61,20 +61,16 @@ namespace simploce {
         /**
          * Indices. Specifies location in grid.
          */
-        using indices_t = std::tuple<std::size_t, std::size_t, std::size_t>;
+        using location_t = std::tuple<std::size_t, std::size_t, std::size_t>;
         
         /**
-         * Constructor. Empty cell.
+         * Constructor. Creates cell with position and location in grid. No
+         * free particles and particles groups.
+         * @param r Position in Cartesian coordinates system.
+         * @param indices Location in grid.
          */
-        Cell() : r_{}, free_{}, groups_{}, indices_{} {}        
-        
-        /**
-         * Constructor. Creates cell with position and location in grid.
-         * @param r
-         * @param indices
-         */
-        Cell(const position_t& r, const indices_t& indices) : 
-            r_{r}, free_{}, groups_{}, indices_{indices} {}
+        Cell(const position_t& r, const location_t& location) : 
+            r_{r}, free_{}, groups_{}, location_{location} {} 
             
         /**
          * Clears this cell from free particles and particle groups.
@@ -82,26 +78,38 @@ namespace simploce {
         void clear() { free_.clear(); groups_.clear(); }
         
         /**
-         * Returns free particles.
+         * Returns position in Cartesian coordinate system.
+         * @return Position.
+         */
+        position_t position() const { return r_; }
+        
+        /**
+         * Returns free particles currently located in this cell.
          * @return Free particles.
          */
         const std::vector<p_ptr_t>& free() const { return free_; }
         
         /**
-         * Returns particle groups.
+         * Returns particle groups currently located in this cell.
          * @return Particle groups.
          */
         const std::vector<pg_ptr_t>& groups() const { return groups_; }
+        
+        /**
+         * Returns cell location in grid.
+         * @return Location.
+         */
+        location_t location() const { return location_; }
             
     private:
         
         template <typename PP>
         friend class Grid;
         
-        position_t r_;                  // Cell position, center of cell.
-        std::vector<p_ptr_t> free_;     // Free particles located in this cell.
-        std::vector<pg_ptr_t> groups_;  // Particle groups located in this cell.
-        indices_t indices_;             // Cell indices.
+        position_t r_;
+        std::vector<p_ptr_t> free_;
+        std::vector<pg_ptr_t> groups_;
+        location_t location_;
     };
     
 }
