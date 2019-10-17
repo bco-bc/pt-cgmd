@@ -23,41 +23,31 @@
  */
 
 /* 
- * File:   properties.hpp
+ * File:   sim-util.cpp
  * Author: André H. Juffer, Biocenter Oulu.
  *
- * Created on August 16, 2019, 3:24 PM
+ * Created on October 17, 2019, 1:38 PM
  */
 
-#ifndef SPROPERTIES_HPP
-#define SPROPERTIES_HPP
-
-#include "simploce/util/mu-units.hpp"
+#include "simploce/simulation/sim-util.hpp"
+#include "simploce/simulation/sconf.hpp"
 
 namespace simploce {
-    
-    /**
-     * Calculates instantaneous temperature for a collection of particles.
-     * @param particles Particles.
-     * @param ekin Kinetic energy.
-     * @return Instantaneous temperature.
-     */
-    template <typename T>
-    temperature_t temperature(const std::vector<std::shared_ptr<T>>& particles, 
-                              const energy_t& ekin)
-    {
-        std::size_t nparticles = particles.size();
-        //std::size_t ndof = ( 3 * nparticles - 3 );  // -3 to remove rigid body translation
-        std::size_t ndof = 3 * nparticles;
-        if ( ndof > 3 ) {
-            return 2.0 * ekin() / ( real_t(ndof) * MUUnits<real_t>::KB );  // In K.
-        } else {
-            // No point calculating temperature for a low number of degrees of freedom.
-            return 0.0;
-        }        
+    namespace util {
+        
+        length_t cutoffDistance(const box_ptr_t& box)
+        {
+            length_t halve = 0.5 * box->size();
+            return conf::RCUTOFF_DISTANCE_() > halve() ? 
+                   halve : 
+                   conf::RCUTOFF_DISTANCE_;
+        }
+        
+        real_t squareCutoffDistance(const box_ptr_t& box)
+        {
+            length_t rc = cutoffDistance(box);
+            return rc * rc;
+        }
+                
     }
-    
 }
-
-#endif /* PROPERTIES_HPP */
-

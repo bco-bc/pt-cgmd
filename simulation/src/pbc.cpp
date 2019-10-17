@@ -57,7 +57,7 @@ namespace simploce {
         for (std::size_t k = 0; k != 3; ++k) {
             real_t boxk = box[k];
             real_t dr = r1[k] - r2[k];
-            int n = dr/boxk;
+            real_t n = util::nint<int>(dr/boxk);
             r12[k] = dr - n * boxk;
         }
         return r12;  
@@ -69,9 +69,9 @@ namespace simploce {
         const box_t& box = *box_;
         position_t rin{r};
         for (std::size_t k = 0; k != 3; ++k) {
-            auto rk = rin[k];
+            real_t rk = rin[k];
             real_t boxk = box[k];
-            int n = rk/boxk;
+            real_t n = std::floor(rk/boxk);
             rin[k] -= n * boxk;
             
             std::cout << "k, r[k], rin[k], n: " << k << ' ' << r[k] << ' ' << rin[k] << ' ' << n << std::endl;

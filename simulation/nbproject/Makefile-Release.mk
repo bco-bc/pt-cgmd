@@ -40,6 +40,7 @@ OBJECTFILES= \
 	${OBJECTDIR}/src/cell-lists.o \
 	${OBJECTDIR}/src/cg-pol-water.o \
 	${OBJECTDIR}/src/constant-rate-pt.o \
+	${OBJECTDIR}/src/distance-lists.o \
 	${OBJECTDIR}/src/interactor.o \
 	${OBJECTDIR}/src/langevin-velocity-verlet.o \
 	${OBJECTDIR}/src/leap-frog.o \
@@ -52,6 +53,7 @@ OBJECTFILES= \
 	${OBJECTDIR}/src/sim-data.o \
 	${OBJECTDIR}/src/sim-model-factory.o \
 	${OBJECTDIR}/src/sim-model.o \
+	${OBJECTDIR}/src/sim-util.o \
 	${OBJECTDIR}/src/simulation.o \
 	${OBJECTDIR}/src/velocity-verlet.o
 
@@ -129,6 +131,11 @@ ${OBJECTDIR}/src/constant-rate-pt.o: src/constant-rate-pt.cpp
 	${RM} "$@.d"
 	$(COMPILE.cc) -O2 -Wall -Iinclude -I../cpputil/include -I../particles/include -std=c++14 -fPIC  -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/constant-rate-pt.o src/constant-rate-pt.cpp
 
+${OBJECTDIR}/src/distance-lists.o: src/distance-lists.cpp
+	${MKDIR} -p ${OBJECTDIR}/src
+	${RM} "$@.d"
+	$(COMPILE.cc) -O2 -Wall -Iinclude -I../cpputil/include -I../particles/include -std=c++14 -fPIC  -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/distance-lists.o src/distance-lists.cpp
+
 ${OBJECTDIR}/src/interactor.o: src/interactor.cpp
 	${MKDIR} -p ${OBJECTDIR}/src
 	${RM} "$@.d"
@@ -188,6 +195,11 @@ ${OBJECTDIR}/src/sim-model.o: src/sim-model.cpp
 	${MKDIR} -p ${OBJECTDIR}/src
 	${RM} "$@.d"
 	$(COMPILE.cc) -O2 -Wall -Iinclude -I../cpputil/include -I../particles/include -std=c++14 -fPIC  -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/sim-model.o src/sim-model.cpp
+
+${OBJECTDIR}/src/sim-util.o: src/sim-util.cpp
+	${MKDIR} -p ${OBJECTDIR}/src
+	${RM} "$@.d"
+	$(COMPILE.cc) -O2 -Wall -Iinclude -I../cpputil/include -I../particles/include -std=c++14 -fPIC  -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/sim-util.o src/sim-util.cpp
 
 ${OBJECTDIR}/src/simulation.o: src/simulation.cpp
 	${MKDIR} -p ${OBJECTDIR}/src
@@ -332,6 +344,19 @@ ${OBJECTDIR}/src/constant-rate-pt_nomain.o: ${OBJECTDIR}/src/constant-rate-pt.o 
 	    $(COMPILE.cc) -O2 -Wall -Iinclude -I../cpputil/include -I../particles/include -std=c++14 -fPIC  -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/constant-rate-pt_nomain.o src/constant-rate-pt.cpp;\
 	else  \
 	    ${CP} ${OBJECTDIR}/src/constant-rate-pt.o ${OBJECTDIR}/src/constant-rate-pt_nomain.o;\
+	fi
+
+${OBJECTDIR}/src/distance-lists_nomain.o: ${OBJECTDIR}/src/distance-lists.o src/distance-lists.cpp 
+	${MKDIR} -p ${OBJECTDIR}/src
+	@NMOUTPUT=`${NM} ${OBJECTDIR}/src/distance-lists.o`; \
+	if (echo "$$NMOUTPUT" | ${GREP} '|main$$') || \
+	   (echo "$$NMOUTPUT" | ${GREP} 'T main$$') || \
+	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
+	then  \
+	    ${RM} "$@.d";\
+	    $(COMPILE.cc) -O2 -Wall -Iinclude -I../cpputil/include -I../particles/include -std=c++14 -fPIC  -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/distance-lists_nomain.o src/distance-lists.cpp;\
+	else  \
+	    ${CP} ${OBJECTDIR}/src/distance-lists.o ${OBJECTDIR}/src/distance-lists_nomain.o;\
 	fi
 
 ${OBJECTDIR}/src/interactor_nomain.o: ${OBJECTDIR}/src/interactor.o src/interactor.cpp 
@@ -488,6 +513,19 @@ ${OBJECTDIR}/src/sim-model_nomain.o: ${OBJECTDIR}/src/sim-model.o src/sim-model.
 	    $(COMPILE.cc) -O2 -Wall -Iinclude -I../cpputil/include -I../particles/include -std=c++14 -fPIC  -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/sim-model_nomain.o src/sim-model.cpp;\
 	else  \
 	    ${CP} ${OBJECTDIR}/src/sim-model.o ${OBJECTDIR}/src/sim-model_nomain.o;\
+	fi
+
+${OBJECTDIR}/src/sim-util_nomain.o: ${OBJECTDIR}/src/sim-util.o src/sim-util.cpp 
+	${MKDIR} -p ${OBJECTDIR}/src
+	@NMOUTPUT=`${NM} ${OBJECTDIR}/src/sim-util.o`; \
+	if (echo "$$NMOUTPUT" | ${GREP} '|main$$') || \
+	   (echo "$$NMOUTPUT" | ${GREP} 'T main$$') || \
+	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
+	then  \
+	    ${RM} "$@.d";\
+	    $(COMPILE.cc) -O2 -Wall -Iinclude -I../cpputil/include -I../particles/include -std=c++14 -fPIC  -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/sim-util_nomain.o src/sim-util.cpp;\
+	else  \
+	    ${CP} ${OBJECTDIR}/src/sim-util.o ${OBJECTDIR}/src/sim-util_nomain.o;\
 	fi
 
 ${OBJECTDIR}/src/simulation_nomain.o: ${OBJECTDIR}/src/simulation.o src/simulation.cpp 

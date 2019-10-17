@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright 2019 juffer.
+ * Copyright 2019 André H. Juffer, Biocenter Oulu
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -23,44 +23,42 @@
  */
 
 /* 
- * File:   cell-lists.hpp
- * Author: juffer
+ * File:   distance-lists.hpp
+ * Author: André H. Juffer, Biocenter Oulu.
  *
- * Created on 11 October 2019, 16:29
+ * Created on October 17, 2019, 12:13 PM
  */
 
-#ifndef CELL_LISTS_HPP
-#define CELL_LISTS_HPP
+#ifndef DISTANCE_LISTS_HPP
+#define DISTANCE_LISTS_HPP
 
 #include "pair-list-generator.hpp"
-#include "stypes.hpp"
 #include "simploce/particle/bead.hpp"
-#include "simploce/particle/atom.hpp"
+#include "stypes.hpp"
 
 namespace simploce {
     
     /**
-     * Finds all particles pairs within a given cut-off distance of each other 
-     * in molecular dynamics simulations.
-     * @see <a href="https://en.wikipedia.org/wiki/Cell_lists">Cell lists at Wikipedia</a>
+     * Creates particle pair lists based on distances between particles.
+     * @param P Particle type.
      */
     template <typename P>
-    class CellLists;
+    class DistanceLists;
     
     /**
-     * specialization for atoms.
+     * Specialization for atoms
      */
     template <>
-    class CellLists<Atom> : public ParticlePairListGenerator<Atom> {
+    class DistanceLists<Atom> : public ParticlePairListGenerator<Atom> {
     public:
         
         using p_ptr_t = typename ParticlePairListGenerator<Atom>::p_ptr_t;
         using pg_ptr_t = typename ParticlePairListGenerator<Atom>::pg_ptr_t;
         using p_pair_t = typename ParticlePairListGenerator<Atom>::p_pair_t;
         using p_pair_list_t = typename ParticlePairListGenerator<Atom>::p_pair_list_t;
-        
-        CellLists(const box_ptr_t& box,
-                  const bc_ptr_t& bc);
+                
+        DistanceLists(const box_ptr_t& box,
+                      const bc_ptr_t& bc);
         
         std::vector<p_pair_list_t> 
         generate(const std::vector<p_ptr_t>& all,
@@ -68,26 +66,27 @@ namespace simploce {
                  const std::vector<pg_ptr_t>& groups) const override;
         
     private:
-                        
+        
         box_ptr_t box_;
         bc_ptr_t bc_;
+                
     };
     
     
     /**
-     * specialization for beads.
+     * Specialization for beads.
      */
     template <>
-    class CellLists<Bead> : public ParticlePairListGenerator<Bead> {
+    class DistanceLists<Bead> : public ParticlePairListGenerator<Bead> {
     public:
         
         using p_ptr_t = typename ParticlePairListGenerator<Bead>::p_ptr_t;
         using pg_ptr_t = typename ParticlePairListGenerator<Bead>::pg_ptr_t;
         using p_pair_t = typename ParticlePairListGenerator<Bead>::p_pair_t;
         using p_pair_list_t = typename ParticlePairListGenerator<Bead>::p_pair_list_t;
-        
-        CellLists(const box_ptr_t& box,
-                  const bc_ptr_t& bc);
+                
+        DistanceLists(const box_ptr_t& box,
+                      const bc_ptr_t& bc);
         
         std::vector<p_pair_list_t> 
         generate(const std::vector<p_ptr_t>& all,
@@ -95,11 +94,13 @@ namespace simploce {
                  const std::vector<pg_ptr_t>& groups) const override;
         
     private:
-                        
+        
         box_ptr_t box_;
         bc_ptr_t bc_;
+                
     };
 }
 
-#endif /* CELL_LISTS_HPP */
+
+#endif /* DISTANCE_LISTS_HPP */
 

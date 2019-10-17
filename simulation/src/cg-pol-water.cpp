@@ -102,7 +102,7 @@ namespace simploce {
         // Potential energy and forces.
         energy_t epot{0.0};
         std::vector<force_t> forces(nparticles, force_t{});
-        
+                
         for (auto g : groups) {
             ParticleGroup<Bead>& group = *g;
             const bond_cont_t& bonds = group.bonds();
@@ -135,6 +135,7 @@ namespace simploce {
                 forces[index_j] += fj;
             }
         }
+        
         return std::make_pair(epot, forces);
     }
     

@@ -194,7 +194,8 @@ namespace simploce {
         std::size_t nbeads = all.size();
         
         if ( pairLists.size() > 1 ) {
-            std::size_t ntasks = pairLists.size() - 1;  // One other for the current thread.
+            std::size_t ntasks = pairLists.size() - 1;  // One other for the 
+                                                        // current thread.
             futures.clear();
             results.clear();
             for (std::size_t k = 0; k != ntasks; ++k) {

@@ -82,9 +82,10 @@ namespace simploce {
             this->updatePairlists_(at);
         }
         
-        energy_t epot = at->doWithAllFreeGroups<energy_t>([this] (const std::vector<atom_ptr_t>& all,
-                                                                  const std::vector<atom_ptr_t>& free,
-                                                                  const std::vector<atom_group_ptr_t>& groups) {
+        energy_t epot = 
+            at->doWithAllFreeGroups<energy_t>([this] (const std::vector<atom_ptr_t>& all,
+                                                      const std::vector<atom_ptr_t>& free,
+                                                      const std::vector<atom_group_ptr_t>& groups) {
             for (auto p: all) {
                 p->resetForce();
             }
@@ -131,7 +132,7 @@ namespace simploce {
             npairlist = param.get<std::size_t>("npairlists");
             setup = true;
         }
-        if ( counter % npairlist == 0) {
+        if ( counter % npairlist == 0 || counter == 0) {
             this->updatePairlists_(cg);
         }
         

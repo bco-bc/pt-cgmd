@@ -34,6 +34,7 @@
 #include "simploce/simulation/acid-base-solution.hpp"
 #include "simploce/simulation/pair-list-generator.hpp"
 #include "simploce/simulation/cell-lists.hpp"
+#include "simploce/simulation/distance-lists.hpp"
 #include "simploce/simulation/stypes.hpp"
 #include "simploce/simulation/leap-frog.hpp"
 #include "simploce/simulation/velocity-verlet.hpp"
@@ -67,7 +68,7 @@ namespace simploce {
         
         // Pair lists generators.
         static cg_ppair_list_gen_ptr_t  cgPairlistGen_{};
-        static at_ppair_list_gen_ptr_t atpairListGen_{};
+        static at_ppair_list_gen_ptr_t atPairListGen_{};
         
         // Leap Frog
         static at_displacer_ptr_t atLeapFrog_{};
@@ -141,7 +142,8 @@ namespace simploce {
                                        const bc_ptr_t& bc)
         {
             if ( !cgPairlistGen_ ) {
-                cgPairlistGen_ = std::make_shared<CellLists<Bead>>(box, bc);
+                cgPairlistGen_ = std::make_shared<DistanceLists<Bead>>(box, bc);
+                //cgPairlistGen_ = std::make_shared<CellLists<Bead>>(box, bc);
             }
             return cgPairlistGen_;
         }
@@ -150,10 +152,10 @@ namespace simploce {
         atomisticPairListGenerator(const box_ptr_t& box,
                                    const bc_ptr_t& bc)
         {
-            if ( !atpairListGen_ ) {
-                atpairListGen_ = std::make_shared<CellLists<Atom>>(box, bc);
+            if ( !atPairListGen_ ) {
+                atPairListGen_ = std::make_shared<CellLists<Atom>>(box, bc);
             }
-            return atpairListGen_;
+            return atPairListGen_;
         }
         
         cg_interactor_ptr_t 

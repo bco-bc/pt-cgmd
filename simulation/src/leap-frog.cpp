@@ -31,7 +31,7 @@
 
 #include "simploce/simulation/leap-frog.hpp"
 #include "simploce/simulation/interactor.hpp"
-#include "simploce/simulation/sproperties.hpp"
+#include "simploce/simulation/sim-util.hpp"
 #include "simploce/simulation/sconf.hpp"
 #include "simploce/particle/atom.hpp"
 #include "simploce/particle/bead.hpp"
@@ -80,7 +80,7 @@ namespace simploce {
         }
         
         // Temperature at t(n).
-        data.temperature = temperature<T>(particles, data.ekin);
+        data.temperature = util::temperature<T>(particles, data.ekin);
         
         // Time.
         data.t = counter * dt;

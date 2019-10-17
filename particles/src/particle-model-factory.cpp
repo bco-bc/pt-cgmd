@@ -131,6 +131,9 @@ namespace simploce {
         cg_pol_water_ptr_t cg = std::make_shared<PolarizableWater>();
         
         // Add beads.
+        real_t x0 = 0.0; //-0.5 * Lx();
+        real_t y0 = 0.0; //-0.5 * Ly();
+        real_t z0 = 0.0; //-0.5 * Lz();
         std::size_t counter = 0;
         std::size_t i = 0, j = 0, k = 0;         
         while ( i < nx && counter < ncgWaters ) {
@@ -143,9 +146,9 @@ namespace simploce {
                     std::vector<bead_ptr_t> beads{};
                     std::vector<id_pair_t> bbonds{};
                             
-                    real_t x = (i + 0.5) * spacing();
-                    real_t y = (j + 0.5) * spacing();
-                    real_t z = (k + 0.5) * spacing();
+                    real_t x = x0 + (i + 0.5) * spacing();
+                    real_t y = y0 + (j + 0.5) * spacing();
+                    real_t z = z0 + (k + 0.5) * spacing();
                     position_t r1{x,y,z};
                     bead_ptr_t cwBead = 
                         protonatable ? 

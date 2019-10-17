@@ -26,6 +26,7 @@
 #include "simploce/simulation/grid.hpp"
 #include "simploce/simulation/bc.hpp"
 #include "simploce/simulation/sconf.hpp"
+#include "simploce/simulation/sim-util.hpp"
 #include "simploce/particle/particle-group.hpp"
 #include <memory>
 #include <vector>
@@ -42,10 +43,7 @@ namespace simploce {
     static length_t 
     sideLength_(const box_ptr_t& box)
     {
-        length_t halve = 0.5 * box->size();
-        return conf::RCUTOFF_DISTANCE_() > halve() ? 
-               halve : 
-               conf::RCUTOFF_DISTANCE_;
+        return util::cutoffDistance(box);
     }
     
     // Between free and other free particles, and free and particles in groups.
