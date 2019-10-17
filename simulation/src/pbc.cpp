@@ -34,6 +34,8 @@
 #include "simploce/simulation/sconf.hpp"
 #include "simploce/util/util.hpp"
 #include <cmath>
+#include <cassert>
+#include <iostream>
 
 namespace simploce {
 
@@ -53,9 +55,10 @@ namespace simploce {
     
         dist_vect_t r12{};
         for (std::size_t k = 0; k != 3; ++k) {
-            length_t boxk = box[k];
+            real_t boxk = box[k];
             real_t dr = r1[k] - r2[k];
-            r12[k] = dr - util::nint(dr/boxk()) * boxk();
+            int n = dr/boxk;
+            r12[k] = dr - n * boxk;
         }
         return r12;  
     }
@@ -68,12 +71,11 @@ namespace simploce {
         for (std::size_t k = 0; k != 3; ++k) {
             auto rk = rin[k];
             real_t boxk = box[k];
-            real_t n = -rk/boxk;  // n > 0 for rk < 0.0
-            if ( rin[k] < 0.0 ) {
-                rin[k] += n * boxk;
-            } else {
-                rin[k] -= n * boxk;
-            }
+            int n = rk/boxk;
+            rin[k] -= n * boxk;
+            
+            std::cout << "k, r[k], rin[k], n: " << k << ' ' << r[k] << ' ' << rin[k] << ' ' << n << std::endl;
+            assert(rin[k] >= 0 && rin[k] <= boxk);
         }
         return rin;        
     }

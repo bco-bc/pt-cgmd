@@ -273,10 +273,7 @@ namespace simploce {
             std::size_t i = r[0] / sideLength_();
             std::size_t j = r[1] / sideLength_();
             std::size_t k = r[2] / sideLength_();
-            auto location = this->location_(i, j, k);
-            std::cout << "i, j, k, index, ncells_ "
-                      << i << ' ' << j << ' ' << k
-                      << ' ' << this->index_(location) << std::endl;
+            auto location = this->location_(i, j, k);                        
             auto& cell = this->operator()(location);
             cell.groups_.push_back(g);
         }
@@ -289,6 +286,13 @@ namespace simploce {
         auto j = std::get<1>(location);
         auto k = std::get<2>(location);
         std::size_t index = 9 * i + 3 * j + k;
+         
+        /*
+        std::cout << "i, j, k, index, ncells_ "
+                  << i << ' ' << j << ' ' << k
+                  << ' ' << index << ' ' << ncells_ 
+                  << std::endl;
+        */
         assert(index < ncells_);
         return index;
     }

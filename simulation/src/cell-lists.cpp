@@ -58,7 +58,6 @@ namespace simploce {
     {
         using p_pair_list_t = typename CellLists<P>::p_pair_list_t;
         using p_pair_t = typename CellLists<P>::p_pair_t;
-        using p_ptr_cont_t = typename ParticleGroup<P>::p_ptr_cont_t;
         
         p_pair_list_t pairList{};
         for (auto f : free) {
@@ -84,13 +83,9 @@ namespace simploce {
                 if ( r2 <= rc2) {
                     // Include all interactions between free particle and the 
                     // particles in the given group.
-                    p_ptr_cont_t particles = pg->particles();
-                    for ( auto p : particles) {
-                        // Avoid double counting, or interacting with itself..
-                        if ( p->index() > index ) {
-                            p_pair_t pair = std::make_pair(f, p);
-                            pairList.push_back(pair);
-                        }
+                    for ( auto p : pg->particles()) {
+                        p_pair_t pair = std::make_pair(f, p);
+                        pairList.push_back(pair);                        
                     }
                 }
             }
@@ -108,14 +103,13 @@ namespace simploce {
                real_t rc2)
     {
         using p_pair_list_t = typename CellLists<P>::p_pair_list_t;
-        using p_ptr_cont_t = typename ParticleGroup<P>::p_ptr_cont_t;
         using p_pair_t = typename CellLists<P>::p_pair_t;
         
         p_pair_list_t pairList{};
         for (auto gi: groups) {
             position_t ri = gi->position();
-            auto particles_i = gi->particles();
-            for (const auto& gj: cell.groups()) {
+            const auto& particles_i = gi->particles();
+            for (auto gj: cell.groups()) {
                 // Avoid particles in the same group.
                 if (gj != gi ) {
                    position_t rj = gj->position();
@@ -124,7 +118,7 @@ namespace simploce {
                     if ( r2 <= rc2) {
                         // Include all interactions between particles of this 
                         // group pair.
-                        p_ptr_cont_t particles_j = gj->particles();
+                        const auto& particles_j = gj->particles();
                         for (auto pi :  particles_i) {
                             auto index = pi->index();
                             for (auto pj : particles_j) {

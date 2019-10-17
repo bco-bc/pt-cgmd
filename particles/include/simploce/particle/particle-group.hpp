@@ -104,6 +104,13 @@ namespace simploce {
         ParticleGroup& operator = (const ParticleGroup&) = delete;
         
         /**
+         * Equality operator.
+         * @param group Another group.
+         * @return Result.
+         */
+        bool operator == (const ParticleGroup& group) { return id_ == group.id_; }
+        
+        /**
          * Is the given particle in this group.
          * @param particle Particle.
          * @return Result.
@@ -150,6 +157,10 @@ namespace simploce {
         
     private:
         
+        static std::size_t ID_;
+
+        std::size_t id_;
+        
         p_ptr_t find_(std::size_t id) const;
         
         void validate_() const;
@@ -160,7 +171,7 @@ namespace simploce {
     
     template <typename P>
     ParticleGroup<P>::ParticleGroup(const p_ptr_cont_t& particles) :
-        particles_{particles}, bonds_{}
+        id_{++ID_}, particles_{particles}, bonds_{}
     {
         this->validate_();
     }
@@ -239,6 +250,9 @@ namespace simploce {
             }
         }
     }
+    
+    template <typename P>
+    std::size_t ParticleGroup<P>::ID_ = 0;
     
     template <typename P>
     std::ostream& 
