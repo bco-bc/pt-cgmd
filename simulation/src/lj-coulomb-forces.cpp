@@ -155,6 +155,7 @@ namespace simploce {
             charge_t qj = pj->charge();
             std::size_t index_j = pj->index();
             
+            /*
             dist_vect_t rij = bc->apply(ri, rj);
             real_t Rij = norm<real_t>(rij);
             if ( Rij < 0.1 ) {
@@ -164,6 +165,10 @@ namespace simploce {
             }
 
 
+            std::clog << "(" << name_i << ", " << name_j << "): has C12, C6? "
+                      << ljParams.contains(name_i, name_j) << std::endl;
+            */
+            
             std::pair<energy_t, force_t> ef;
             if ( ljParams.contains(name_i, name_j) ) {
                 auto ljParam = ljParams.at(name_i, name_j);

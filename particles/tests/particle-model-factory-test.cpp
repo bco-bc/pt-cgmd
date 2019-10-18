@@ -37,7 +37,8 @@ void test1() {
     particle_model_fact_ptr_t factory = factory::particleModelFactory(catalog);
     
     box_ptr_t box = factory::cube(length_t{7.27});
-    cg_ptr_t cg = factory->formicAcidSolution(box);
+    //cg_ptr_t cg = factory->formicAcidSolution(box);
+    auto cg = factory->electrolyte(box);
     std::clog << *cg << std::endl;
 }
 

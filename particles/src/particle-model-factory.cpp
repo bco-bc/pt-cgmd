@@ -242,4 +242,97 @@ namespace simploce {
         std::clog << "Created " << cg->numberOfFreeParticles() << " HCCOH beads." << std::endl;
         return cg;
     }
+    
+    cg_ptr_t 
+    ParticleModelFactory::electrolyte(const box_ptr_t& box,
+                                      molarity_t molarity,
+                                      temperature_t temperature)
+    {
+        std::clog.setf(std::ios_base::scientific, std::ios_base::floatfield);
+        
+        std::clog << "Creating coarse grained particle model "
+                     "for an electrolyte solution." << std::endl;
+        
+        std::clog << "Molarity (mol/l): " << molarity << std::endl;
+        std::clog << "Temperature (K) : " << temperature << std::endl;
+
+
+        spec_ptr_t NA = catalog_->lookup("Na+");
+        spec_ptr_t CL = catalog_->lookup("Cl-");
+        
+        // Box details.
+        length_t Lx = box->lengthX();
+        length_t Ly = box->lengthY();
+        length_t Lz = box->lengthZ();
+        volume_t volume = box->volume();
+        std::clog << "Unit Cell side length (nm): " << box->size() << std::endl;
+        std::clog << "Unit Cell volume (nm^3): " << volume << std::endl;
+        
+        // Determine required number of ions.
+        number_density_t numberDensity =
+            molarity() * SIUnits<real_t>::NA / MUUnits<real_t>::l_to_nm3;
+        std::size_t nions = util::nint(2.0 * numberDensity * volume);
+        nions = (nions % 2 != 0 ? nions + 1 : nions);  // Neutrality condition.
+        std::clog << "TOTAL number of ions requested: " << nions << std::endl;
+    
+        // Spacing between particles.
+        const length_t spacing = 0.4; // The location of the first peak of g(r) for 
+                                      // 0.1 M NaCl is around 0.3 nm.
+        std::size_t nx = util::nint(Lx / spacing);
+        std::size_t ny = util::nint(Ly / spacing);
+        std::size_t nz = util::nint(Lz / spacing);
+        std::clog << "Distance spacing between ion particles: " << spacing << std::endl;
+        std::clog << "Number of coordinates in x-direction: " << nx << std::endl;
+        std::clog << "Number of coordinates in y-direction: " << ny << std::endl;
+        std::clog << "Number of coordinates in z-direction: " << nz << std::endl;
+        
+        // Start from an empty particle model.
+        auto cg = std::make_shared<CoarseGrained>();
+        
+        // Create ions.
+        std::size_t counter = 0;
+        std::size_t i = 0, j = 0, k = 0;
+        
+        while ( i < nx && counter < nions ) {
+            while ( j < ny && counter < nions ) {
+                while ( k < nz && counter < nions ) {
+                    // Id.
+                    auto id = counter + 1;
+                    
+                    // Position.
+                    real_t x = (i + 0.5) * spacing() + util::random<real_t>() * 0.1;
+                    real_t y = (j + 0.5) * spacing() - util::random<real_t>() * 0.1;
+                    real_t z = (k + 0.5) * spacing() + util::random<real_t>() * 0.1;
+                    position_t r{x,y,z};
+                    bead_ptr_t ion{};
+                    if ( counter % 2 == 0 ) {
+                        // Na+
+                        ion = cg->addBead(id, NA->name(), r, NA, true);
+                        assignMomentum<Bead>(ion, temperature);
+                    } else {
+                        // Na+
+                        ion = cg->addBead(id, CL->name(), r, CL, true);
+                        assignMomentum<Bead>(ion, temperature);
+                    }                        
+                    assignMomentum<Bead>(ion, temperature);
+                    
+                    counter += 1;
+                    k += 1;
+                }
+                k = 0;
+                j += 1;
+            }
+            j = 0;
+            i += 1;
+        }
+
+        std::clog << "Number of ion particles generated: " << counter << std::endl;
+        if ( counter < nions) {
+            std::clog << "WARNING: Number of generated ions is smaller than requested.";
+            std::clog << std::endl;
+        }
+        std::clog << "Ion number density (1/nm^3): "<< real_t(counter)/volume() << std::endl;
+        
+        return cg;        
+    }
 }

@@ -64,6 +64,22 @@ namespace simploce {
                                     const temperature_t temperature = 298.15,
                                     bool protonatable = true) const;
         
+        /**
+         * Returns electrolyte solution of given molarity in a box. This model 
+         * is loosely based upon the Debye-Huckel theory of electrolytes.
+         * Ions are represented by Na+ and Cl- particles, while water is 
+         * considered as a background continuum. The Debye-Huckel theory is 
+         * valid for low ionic strength only.
+         * @param box Particle box
+         * @param molarity Molarity in mol/l (M). Default is 1.0 M. Note 
+         * that physiological salt concentration is about 0.15 mM.
+         * @param temperature Requested temperature in K. Default is 298.15 K.
+         * @return Coarse grained particle model.
+         */
+        cg_ptr_t electrolyte(const box_ptr_t& box,
+                             molarity_t molarity = 1.0,
+                             temperature_t temperature = 298.15);
+        
     private:
         
         spec_catalog_ptr_t catalog_;

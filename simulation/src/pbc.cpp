@@ -58,6 +58,8 @@ namespace simploce {
             real_t boxk = box[k];
             real_t dr = r1[k] - r2[k];
             real_t n = util::nint<int>(dr/boxk);
+            std::cout << "boxk, dr, dr/boxk, n " << boxk << ' ' << dr << ' ' 
+                      << n << ' ' << dr/boxk << std::endl;
             r12[k] = dr - n * boxk;
         }
         return r12;  

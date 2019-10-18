@@ -102,7 +102,7 @@ int main(int argc, char* argv[])
       (
        "model-type", po::value<std::string>(&modelType),
        "Type of model or system. Default is 'pol-water'. "
-       "Other choices: acid-base-solution'.")
+       "Other choices: 'acid-base-solution', 'electrolyte'.")
       
       (
        "help", "Help message"
@@ -187,6 +187,8 @@ int main(int argc, char* argv[])
 	model = simModelFactory->polarizableWater(box, density, temperature);
       } else if ( modelType == conf::ACID_BASE_SOLUTION ) {
 	model = simModelFactory->formicAcidSolution(box, density, molarity, temperature, true);
+      } else if ( modelType == conf::ELECTROLYTE ) {
+	model = simModelFactory->electrolyte(box, molarity, temperature);
       } else {
 	throw std::domain_error(modelType + ": No such simulation model type available (yet).");
       }

@@ -148,9 +148,9 @@ namespace simploce {
         // Interactor.
         std::getline(stream, stringBuffer);
         if ( stringBuffer.find(conf::POLARIZABLE_WATER, 0) != std::string::npos ) {
-            interactor_ = factory::polarizableWaterInteractor(catalog, 
-                                                                           box_, 
-                                                                           bc_);
+            interactor_ = factory::polarizableWaterInteractor(catalog, box_, bc_);
+        } else if (stringBuffer.find(conf::ELECTROLYTE, 0) != std::string::npos) {
+            interactor_ = factory::electrolyteInteractor(catalog, box_, bc_);
         } else {
             throw std::domain_error("Cannot identify force field.");
         }
@@ -159,8 +159,11 @@ namespace simploce {
         std::getline(stream, stringBuffer);
         if ( stringBuffer.find(conf::LANGEVIN_VELOCITY_VERLET, 0) != std::string::npos ) {
             displacer_ = factory::langevinVelocityVerlet(interactor_);
-        }
-        
+        } else if ( stringBuffer.find(conf::LEAP_FROG, 0) != std::string::npos) {
+            displacer_ = factory::leapFrog(interactor_);
+        } else {
+            throw std::domain_error("Cannot identify displacer.");
+        }        
     }
     
     void 

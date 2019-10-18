@@ -38,6 +38,7 @@ OBJECTFILES= \
 	${OBJECTDIR}/src/acid-base-solution.o \
 	${OBJECTDIR}/src/analysis.o \
 	${OBJECTDIR}/src/cell-lists.o \
+	${OBJECTDIR}/src/cg-electrolyte.o \
 	${OBJECTDIR}/src/cg-pol-water.o \
 	${OBJECTDIR}/src/constant-rate-pt.o \
 	${OBJECTDIR}/src/distance-lists.o \
@@ -65,6 +66,7 @@ TESTFILES= \
 	${TESTDIR}/TestFiles/f1 \
 	${TESTDIR}/TestFiles/f5 \
 	${TESTDIR}/TestFiles/f4 \
+	${TESTDIR}/TestFiles/f7 \
 	${TESTDIR}/TestFiles/f6 \
 	${TESTDIR}/TestFiles/f3 \
 	${TESTDIR}/TestFiles/f2
@@ -74,6 +76,7 @@ TESTOBJECTFILES= \
 	${TESTDIR}/tests/displacer-test.o \
 	${TESTDIR}/tests/gr-test.o \
 	${TESTDIR}/tests/pair-list-test.o \
+	${TESTDIR}/tests/pdb-test.o \
 	${TESTDIR}/tests/pt-pairlist-test.o \
 	${TESTDIR}/tests/simulation-model-factory-test.o \
 	${TESTDIR}/tests/simulation-test.o
@@ -120,6 +123,11 @@ ${OBJECTDIR}/src/cell-lists.o: src/cell-lists.cpp
 	${MKDIR} -p ${OBJECTDIR}/src
 	${RM} "$@.d"
 	$(COMPILE.cc) -g -Wall -Iinclude -I../cpputil/include -I../particles/include -std=c++14 -fPIC  -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/cell-lists.o src/cell-lists.cpp
+
+${OBJECTDIR}/src/cg-electrolyte.o: src/cg-electrolyte.cpp
+	${MKDIR} -p ${OBJECTDIR}/src
+	${RM} "$@.d"
+	$(COMPILE.cc) -g -Wall -Iinclude -I../cpputil/include -I../particles/include -std=c++14 -fPIC  -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/cg-electrolyte.o src/cg-electrolyte.cpp
 
 ${OBJECTDIR}/src/cg-pol-water.o: src/cg-pol-water.cpp
 	${MKDIR} -p ${OBJECTDIR}/src
@@ -232,6 +240,10 @@ ${TESTDIR}/TestFiles/f4: ${TESTDIR}/tests/pair-list-test.o ${OBJECTFILES:%.o=%_n
 	${MKDIR} -p ${TESTDIR}/TestFiles
 	${LINK.cc} -o ${TESTDIR}/TestFiles/f4 $^ ${LDLIBSOPTIONS}   
 
+${TESTDIR}/TestFiles/f7: ${TESTDIR}/tests/pdb-test.o ${OBJECTFILES:%.o=%_nomain.o}
+	${MKDIR} -p ${TESTDIR}/TestFiles
+	${LINK.cc} -o ${TESTDIR}/TestFiles/f7 $^ ${LDLIBSOPTIONS}   
+
 ${TESTDIR}/TestFiles/f6: ${TESTDIR}/tests/pt-pairlist-test.o ${OBJECTFILES:%.o=%_nomain.o}
 	${MKDIR} -p ${TESTDIR}/TestFiles
 	${LINK.cc} -o ${TESTDIR}/TestFiles/f6 $^ ${LDLIBSOPTIONS}   
@@ -261,6 +273,12 @@ ${TESTDIR}/tests/pair-list-test.o: tests/pair-list-test.cpp
 	${MKDIR} -p ${TESTDIR}/tests
 	${RM} "$@.d"
 	$(COMPILE.cc) -g -Wall -Iinclude -I../cpputil/include -I../particles/include -Iinclude -I../../cpputil/include -I../../particles/include -I. -std=c++14 -MMD -MP -MF "$@.d" -o ${TESTDIR}/tests/pair-list-test.o tests/pair-list-test.cpp
+
+
+${TESTDIR}/tests/pdb-test.o: tests/pdb-test.cpp 
+	${MKDIR} -p ${TESTDIR}/tests
+	${RM} "$@.d"
+	$(COMPILE.cc) -g -Wall -Iinclude -I../cpputil/include -I../particles/include -Iinclude -I../../cpputil/include -I../../particles/include -I. -std=c++14 -MMD -MP -MF "$@.d" -o ${TESTDIR}/tests/pdb-test.o tests/pdb-test.cpp
 
 
 ${TESTDIR}/tests/pt-pairlist-test.o: tests/pt-pairlist-test.cpp 
@@ -318,6 +336,19 @@ ${OBJECTDIR}/src/cell-lists_nomain.o: ${OBJECTDIR}/src/cell-lists.o src/cell-lis
 	    $(COMPILE.cc) -g -Wall -Iinclude -I../cpputil/include -I../particles/include -std=c++14 -fPIC  -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/cell-lists_nomain.o src/cell-lists.cpp;\
 	else  \
 	    ${CP} ${OBJECTDIR}/src/cell-lists.o ${OBJECTDIR}/src/cell-lists_nomain.o;\
+	fi
+
+${OBJECTDIR}/src/cg-electrolyte_nomain.o: ${OBJECTDIR}/src/cg-electrolyte.o src/cg-electrolyte.cpp 
+	${MKDIR} -p ${OBJECTDIR}/src
+	@NMOUTPUT=`${NM} ${OBJECTDIR}/src/cg-electrolyte.o`; \
+	if (echo "$$NMOUTPUT" | ${GREP} '|main$$') || \
+	   (echo "$$NMOUTPUT" | ${GREP} 'T main$$') || \
+	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
+	then  \
+	    ${RM} "$@.d";\
+	    $(COMPILE.cc) -g -Wall -Iinclude -I../cpputil/include -I../particles/include -std=c++14 -fPIC  -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/cg-electrolyte_nomain.o src/cg-electrolyte.cpp;\
+	else  \
+	    ${CP} ${OBJECTDIR}/src/cg-electrolyte.o ${OBJECTDIR}/src/cg-electrolyte_nomain.o;\
 	fi
 
 ${OBJECTDIR}/src/cg-pol-water_nomain.o: ${OBJECTDIR}/src/cg-pol-water.o src/cg-pol-water.cpp 
@@ -561,6 +592,7 @@ ${OBJECTDIR}/src/velocity-verlet_nomain.o: ${OBJECTDIR}/src/velocity-verlet.o sr
 	    ${TESTDIR}/TestFiles/f1 || true; \
 	    ${TESTDIR}/TestFiles/f5 || true; \
 	    ${TESTDIR}/TestFiles/f4 || true; \
+	    ${TESTDIR}/TestFiles/f7 || true; \
 	    ${TESTDIR}/TestFiles/f6 || true; \
 	    ${TESTDIR}/TestFiles/f3 || true; \
 	    ${TESTDIR}/TestFiles/f2 || true; \

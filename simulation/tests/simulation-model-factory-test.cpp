@@ -88,7 +88,22 @@ void test2()
 
 void test3()
 {
-    std::cout << "simulation-model-factory-test test 3" << std::endl;
+    std::cout << "simulation-model-factory-test test 2" << std::endl;
+    
+    std::string fileName = "/home/ajuffer/simploce/pt-cgmd/particles/resources/particles-specs.dat";
+    std::ifstream stream;
+    file::open_input(stream, fileName);
+    spec_catalog_ptr_t catalog = factory::particleSpecCatalog(stream);
+    //std::cout << *catalog << std::endl;
+    
+    sim_model_fact_ptr_t pmf = 
+            factory::simulationModelFactory(catalog);
+    
+    box_ptr_t box = factory::cube(length_t{7.27});
+    cg_sim_model_ptr_t nacl = pmf->electrolyte(box);
+    
+    std::cout << "Number of beads in NaCl model: " << nacl->size() << std::endl;
+    std::cout << *nacl << std::endl;
 }
 
 int main(int argc, char** argv) {
@@ -99,10 +114,13 @@ int main(int argc, char** argv) {
     //test1();
     //std::cout << "%TEST_FINISHED% time=0 test1 (model-factory-test)" << std::endl;
 
-    std::cout << "%TEST_STARTED% test2 (model-factory-test)\n" << std::endl;
-    test2();
-    std::cout << "%TEST_FINISHED% time=0 test2 (model-factory-test)" << std::endl;
+//    std::cout << "%TEST_STARTED% test2 (model-factory-test)\n" << std::endl;
+//    test2();
+//    std::cout << "%TEST_FINISHED% time=0 test2 (model-factory-test)" << std::endl;
 
+    std::cout << "%TEST_STARTED% test2 (model-factory-test)\n" << std::endl;
+    test3();
+    std::cout << "%TEST_FINISHED% time=0 test2 (model-factory-test)" << std::endl;
     std::cout << "%SUITE_FINISHED% time=0" << std::endl;
 
     return (EXIT_SUCCESS);

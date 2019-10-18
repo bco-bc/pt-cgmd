@@ -63,6 +63,7 @@ namespace simploce {
         using p_pair_list_t = typename DistanceLists<P>::p_pair_list_t;
         
         static real_t rc2 = rcutoff2_(box);
+        std::clog << "rc2: " << rc2 << std::endl;
         
         if ( particles.empty() ) {
             return p_pair_list_t{};  // Empty list.
@@ -80,6 +81,7 @@ namespace simploce {
                 position_t rj = pj->position();
                 dist_vect_t R = bc->apply(ri, rj);
                 real_t R2 = norm2<real_t>(R);
+                std::clog << "R2: " << R2 << std::endl;
                 if ( R2 < rc2 ) {
                     // Include this pair.
                     auto pair = std::make_pair(pi, pj);
@@ -194,7 +196,9 @@ namespace simploce {
             std::clog << "Using particles pair lists based on distances between particles." 
                       << std::endl;
             std::clog << "Cutoff distance: " << util::cutoffDistance(box) << std::endl;
-            firstTime = false;
+            std::clog << "Total number of particles: " << all.size() << std::endl;
+            std::clog << "Total number of free particles: " << free.size() << std::endl;
+            std::clog << "Total number of particle groups: " << groups.size() << std::endl;
         }
         
         // Prepare new particle pair list.
@@ -236,6 +240,12 @@ namespace simploce {
             }
         }
         
+        if ( firstTime ) {
+            std::clog << "Number of particle pairs: " << pairList.size() << std::endl;
+            std::clog << "Number of pair lists: " << pairLists.size() << std::endl;
+            firstTime = false;
+        }
+
         // Done.
         return pairLists;
     }

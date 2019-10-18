@@ -14,6 +14,7 @@
       <itemPath>include/simploce/simulation/cell-lists.hpp</itemPath>
       <itemPath>include/simploce/simulation/cell.hpp</itemPath>
       <itemPath>include/simploce/simulation/cg-displacer.hpp</itemPath>
+      <itemPath>include/simploce/simulation/cg-electrolyte.hpp</itemPath>
       <itemPath>include/simploce/simulation/cg-forcefield.hpp</itemPath>
       <itemPath>include/simploce/simulation/cg-pol-water.hpp</itemPath>
       <itemPath>include/simploce/simulation/constant-rate-pt.hpp</itemPath>
@@ -53,6 +54,7 @@
       <itemPath>src/acid-base-solution.cpp</itemPath>
       <itemPath>src/analysis.cpp</itemPath>
       <itemPath>src/cell-lists.cpp</itemPath>
+      <itemPath>src/cg-electrolyte.cpp</itemPath>
       <itemPath>src/cg-pol-water.cpp</itemPath>
       <itemPath>src/constant-rate-pt.cpp</itemPath>
       <itemPath>src/distance-lists.cpp</itemPath>
@@ -93,6 +95,9 @@
                      projectFiles="true"
                      kind="TEST">
         <itemPath>tests/pair-list-test.cpp</itemPath>
+      </logicalFolder>
+      <logicalFolder name="f7" displayName="PDB Test" projectFiles="true" kind="TEST">
+        <itemPath>tests/pdb-test.cpp</itemPath>
       </logicalFolder>
       <logicalFolder name="f6"
                      displayName="PT Pair List Test"
@@ -269,6 +274,21 @@
           <output>${TESTDIR}/TestFiles/f6</output>
         </linkerTool>
       </folder>
+      <folder path="TestFiles/f7">
+        <cTool>
+          <incDir>
+            <pElem>.</pElem>
+          </incDir>
+        </cTool>
+        <ccTool>
+          <incDir>
+            <pElem>.</pElem>
+          </incDir>
+        </ccTool>
+        <linkerTool>
+          <output>${TESTDIR}/TestFiles/f7</output>
+        </linkerTool>
+      </folder>
       <item path="include/simploce/analysis/analysis.hpp"
             ex="false"
             tool="3"
@@ -314,6 +334,11 @@
             flavor2="0">
       </item>
       <item path="include/simploce/simulation/cg-displacer.hpp"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="include/simploce/simulation/cg-electrolyte.hpp"
             ex="false"
             tool="3"
             flavor2="0">
@@ -456,6 +481,8 @@
       </item>
       <item path="src/cell-lists.cpp" ex="false" tool="1" flavor2="0">
       </item>
+      <item path="src/cg-electrolyte.cpp" ex="false" tool="1" flavor2="0">
+      </item>
       <item path="src/cg-pol-water.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="src/constant-rate-pt.cpp" ex="false" tool="1" flavor2="0">
@@ -500,6 +527,8 @@
       <item path="tests/gr-test.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="tests/pair-list-test.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="tests/pdb-test.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="tests/pt-pairlist-test.cpp" ex="false" tool="1" flavor2="0">
       </item>
@@ -659,6 +688,21 @@
           <output>${TESTDIR}/TestFiles/f6</output>
         </linkerTool>
       </folder>
+      <folder path="TestFiles/f7">
+        <cTool>
+          <incDir>
+            <pElem>.</pElem>
+          </incDir>
+        </cTool>
+        <ccTool>
+          <incDir>
+            <pElem>.</pElem>
+          </incDir>
+        </ccTool>
+        <linkerTool>
+          <output>${TESTDIR}/TestFiles/f7</output>
+        </linkerTool>
+      </folder>
       <item path="include/simploce/analysis/analysis.hpp"
             ex="false"
             tool="3"
@@ -704,6 +748,11 @@
             flavor2="0">
       </item>
       <item path="include/simploce/simulation/cg-displacer.hpp"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="include/simploce/simulation/cg-electrolyte.hpp"
             ex="false"
             tool="3"
             flavor2="0">
@@ -846,6 +895,8 @@
       </item>
       <item path="src/cell-lists.cpp" ex="false" tool="1" flavor2="0">
       </item>
+      <item path="src/cg-electrolyte.cpp" ex="false" tool="1" flavor2="0">
+      </item>
       <item path="src/cg-pol-water.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="src/constant-rate-pt.cpp" ex="false" tool="1" flavor2="0">
@@ -890,6 +941,8 @@
       <item path="tests/gr-test.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="tests/pair-list-test.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="tests/pdb-test.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="tests/pt-pairlist-test.cpp" ex="false" tool="1" flavor2="0">
       </item>

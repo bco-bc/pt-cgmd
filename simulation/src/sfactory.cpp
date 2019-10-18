@@ -32,6 +32,7 @@
 #include "simploce/simulation/sfactory.hpp"
 #include "simploce/simulation/cg-pol-water.hpp"
 #include "simploce/simulation/acid-base-solution.hpp"
+#include "simploce/simulation/cg-electrolyte.hpp"
 #include "simploce/simulation/pair-list-generator.hpp"
 #include "simploce/simulation/cell-lists.hpp"
 #include "simploce/simulation/distance-lists.hpp"
@@ -65,6 +66,7 @@ namespace simploce {
         // Force fields.
         static cg_ff_ptr_t cgPolWaterFF_{};             // Polarizable water.
         static cg_ff_ptr_t cgFormicAcidSolutionFF_{};   // Formic acid in water.
+        static cg_ff_ptr_t cgElectrolyteFF_{};          // NaCl solution.
         
         // Pair lists generators.
         static cg_ppair_list_gen_ptr_t  cgPairlistGen_{};
@@ -92,6 +94,7 @@ namespace simploce {
         // Interactors
         static std::shared_ptr<Interactor<Bead>> cgPolWaterInteractor_{};
         static std::shared_ptr<Interactor<Bead>> cgFormicAcidSolutionInteractor_{};
+        static std::shared_ptr<Interactor<Bead>> cgElectrolyteInteractor_{};
         
         static pt_pair_list_gen_ptr_t ptPairlisGen_{};
         
@@ -121,6 +124,17 @@ namespace simploce {
                     std::make_shared<AcidBaseSolution>(catalog, bc, water);
             }
             return cgFormicAcidSolutionFF_;
+        }
+        
+        cg_ff_ptr_t
+        electrolyteForceField(const spec_catalog_ptr_t& catalog,
+                              const bc_ptr_t& bc)
+        {
+            if ( !cgElectrolyteFF_ ) {
+                cgElectrolyteFF_ = 
+                    std::make_shared<CoarseGrainedElectrolyte>(catalog, bc);
+            }
+            return cgElectrolyteFF_;
         }
        
         
@@ -193,6 +207,21 @@ namespace simploce {
             return cgFormicAcidSolutionInteractor_;
         }
         
+        cg_interactor_ptr_t
+        electrolyteInteractor(const spec_catalog_ptr_t& catalog,
+                              const box_ptr_t& box, 
+                              const bc_ptr_t& bc)
+        {
+            if ( !cgElectrolyteInteractor_) {
+                cg_ppair_list_gen_ptr_t generator = 
+                    factory::coarseGrainedPairListGenerator(box, bc);
+                cg_ff_ptr_t forcefield =
+                    factory::electrolyteForceField(catalog, bc);
+                cgElectrolyteInteractor_ = 
+                    std::make_shared<Interactor<Bead>>(forcefield, generator);
+            }
+            return cgElectrolyteInteractor_;
+        }
         
         at_displacer_ptr_t 
         leapFrog(at_interactor_ptr_t& interactor)

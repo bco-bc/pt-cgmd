@@ -58,7 +58,7 @@ namespace simploce {
          * @param atDensitySI Atomistic water density in SI units kg/m^3. Default is 
          * 997.0479 kg/m^3 at 298.15 K (25 C).
          * @param temperature Temperature, default is 298.15 K.
-         * @return Coarse grained model.
+         * @return Coarse grained simulation model.
          * @see <a href="https://en.wikipedia.org/wiki/Density#Water">Water Density</a>
          */
         cg_sim_model_ptr_t polarizableWater(const box_ptr_t& box,
@@ -75,13 +75,31 @@ namespace simploce {
          * @param temperature Temperature. Default is 298.15 K.
          * @param protonatable If true, both water and HCOOH are protonatable. HCOOH
          * will be fully protonated. if false, only HCOOH is protonatable.
-         * @return Coarse grained model.
+         * @return Coarse grained simulation model.
          */
         cg_sim_model_ptr_t formicAcidSolution(const box_ptr_t& box,
                                               const density_t atDensitySI = 997.0479,
                                               const molarity_t molarity = 0.1,
                                               const temperature_t temperature = 298.15,
                                               bool protonatable = true);
+        
+        /**
+         * Returns electrolyte solution of given molarity in a box. This model 
+         * is loosely based upon the Debye-Huckel theory of electrolytes.
+         * Ions are represented by Na+ and Cl- particles, while water is 
+         * considered as a background continuum. The Debye-Huckel theory is 
+         * valid for low ionic strength only. The force field 
+         * consists of simple Lennard-Jones and screened Coulomb interactions 
+         * between ions. PBC is applied.
+         * @param box Simulation box.
+         * @param molarity Molarity in mol/l (M). Default is 1.0 M. Note 
+         * that physiological salt concentration is about 0.15 mM.
+         * @param temperature Requested temperature in K. Default is 298.15 K.
+         * @return Coarse grained simulation model.
+         */
+        cg_sim_model_ptr_t electrolyte(const box_ptr_t& box,
+                                       molarity_t molarity = 1.0,
+                                       temperature_t temperature = 298.15);
         
         /**
          * Creates new coarse grained model by reading it from an input stream.
