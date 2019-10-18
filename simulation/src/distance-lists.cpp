@@ -39,6 +39,8 @@
 
 namespace simploce {
     
+    static const std::size_t MIN_NUMBER_OF_PARTICLES = 100;        
+    
     static real_t rcutoff2_(const box_ptr_t& box)
     {
         static length_t rc = util::cutoffDistance(box);
@@ -107,7 +109,7 @@ namespace simploce {
         // Pair list.
         p_pair_list_t pairs{};
 
-        // For all pairs of groups.
+        // For all pairs of different groups.
         for (auto iter_i = groups.begin(); iter_i != groups.end() - 1; ++iter_i) {
             const auto& pg_i = **iter_i;
             position_t ri = pg_i.position();
@@ -211,9 +213,9 @@ namespace simploce {
         // Prepare sublists, the number of which will depend on the number of 
         // hardware threads available.               
         std::vector<p_pair_list_t> pairLists{};
+        std::size_t counter = 0;      
         static const std::size_t nlists = std::thread::hardware_concurrency();        
         std::size_t npairsSubList = pairList.size() / nlists;                                                              
-        std::size_t counter = 0;      
         for (std::size_t k = 0; k != nlists; ++k) {
             p_pair_list_t single{};  // One sublist of particle pairs.
             std::size_t n = 0;
@@ -227,7 +229,7 @@ namespace simploce {
     
         // Add remaining particles pairs, if any, to the last set.
         if ( counter < pairList.size() ) {
-            p_pair_list_t& last =  *(pairLists.end() - 1);
+            p_pair_list_t& last = *(pairLists.end() - 1);
             while ( counter != pairList.size() ) {
                 last.push_back(pairList[counter]);
                 counter += 1;

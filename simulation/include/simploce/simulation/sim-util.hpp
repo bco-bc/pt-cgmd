@@ -62,7 +62,7 @@ namespace simploce {
         /**
          * Returns cutoff distance.
          * @param box Simulation box.
-         * @return Cutoff distance.
+         * @return Cutoff distance. Always <= 0.5 * box.size().
          */
         length_t cutoffDistance(const box_ptr_t& box);
         

@@ -103,10 +103,12 @@ namespace simploce {
             dt = param.get<real_t>("timestep");        
         }
         
-        interactor_->interact(param, at);
-        return at->doWithAll<SimulationData>([] (const std::vector<atom_ptr_t>& atoms) {
+        auto epot = interactor_->interact(param, at);
+        SimulationData data = at->doWithAll<SimulationData>([] (const std::vector<atom_ptr_t>& atoms) {
             return displace_<Atom>(dt, atoms);
-        });        
+        });
+        data.epot = epot;
+        return data;
     }
     
     std::string LeapFrog<Atomistic>::id() const
@@ -129,10 +131,12 @@ namespace simploce {
             dt = param.get<real_t>("timestep");        
         }
         
-        interactor_->interact(param, cg);
-        return cg->doWithAll<SimulationData>([] (const std::vector<bead_ptr_t>& beads) {
+        auto epot = interactor_->interact(param, cg);
+        SimulationData data = cg->doWithAll<SimulationData>([] (const std::vector<bead_ptr_t>& beads) {
             return displace_<Bead>(dt, beads);
         });
+        data.epot = epot;
+        return data;
     }
     
     std::string LeapFrog<CoarseGrained>::id() const

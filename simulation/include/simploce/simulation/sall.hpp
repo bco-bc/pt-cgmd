@@ -54,7 +54,7 @@
 #include "sim-data.hpp"
 #include "sim-model.hpp"
 #include "simulation.hpp"
-#include "sproperties.hpp"
+#include "sim-util.hpp"
 #include "velocity-verlet.hpp"
 #include "pt-pair-list-generator.hpp"
 

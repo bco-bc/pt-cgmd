@@ -52,13 +52,12 @@ namespace simploce {
                                                       real_t eps_r,
                                                       const bc_ptr_t& bc)
     {
-        const real_t four_pi_e0 = MUUnits<real_t>::FOUR_PI_E0;
+        static const real_t four_pi_e0 = MUUnits<real_t>::FOUR_PI_E0;
         
         // Apply boundary condition.
         dist_vect_t rij = bc->apply(ri, rj);
         real_t Rij = norm<real_t>(rij);
-        real_t Rij2 = Rij * Rij;
-        
+                
         // Potential energy
                 
         // Coulomb
@@ -66,6 +65,7 @@ namespace simploce {
         real_t epot = t3 / Rij;  // kJ/mol
         
         // Forces.
+        real_t Rij2 = Rij * Rij;
         dist_vect_t uv = rij/Rij;
         real_t dElecdR = -t3 / Rij2;
         force_t f{};
@@ -88,11 +88,11 @@ namespace simploce {
                                                         real_t eps_r,
                                                         const bc_ptr_t& bc)
     {
-        const real_t four_pi_e0 = MUUnits<real_t>::FOUR_PI_E0;
+        static const real_t four_pi_e0 = MUUnits<real_t>::FOUR_PI_E0;
         
         // Apply boundary condition.
         dist_vect_t rij = bc->apply(ri, rj);
-        real_t Rij = norm<real_t>(rij);
+        real_t Rij = norm<real_t>(rij);        
     
         // Potential energy
         
@@ -154,6 +154,15 @@ namespace simploce {
             std::string name_j = pj->spec()->name();
             charge_t qj = pj->charge();
             std::size_t index_j = pj->index();
+            
+            dist_vect_t rij = bc->apply(ri, rj);
+            real_t Rij = norm<real_t>(rij);
+            if ( Rij < 0.1 ) {
+                std::clog << "Name 1" << name_i << std::endl;
+                std::clog << "Name 2" << name_j << std::endl;
+                std::clog << "Rij = " << Rij << std::endl;
+            }
+
 
             std::pair<energy_t, force_t> ef;
             if ( ljParams.contains(name_i, name_j) ) {
@@ -193,7 +202,7 @@ namespace simploce {
         std::size_t nlists = pairLists.size();
         std::size_t nbeads = all.size();
         
-        if ( pairLists.size() > 1 ) {
+        if ( nlists > 1 ) {
             std::size_t ntasks = pairLists.size() - 1;  // One other for the 
                                                         // current thread.
             futures.clear();
@@ -217,9 +226,11 @@ namespace simploce {
         }
     
         // Current thread.
-        const bead_pair_list_t& last = pairLists[nlists - 1];
-        result_t result = forces_(last, nbeads, ljParams_, elParams_, bc_);
-        results.push_back(result);
+        if ( nlists > 0 ) {
+            const bead_pair_list_t& last = pairLists[nlists - 1];
+            result_t result = forces_(last, nbeads, ljParams_, elParams_, bc_);
+            results.push_back(result);
+        }
         
         // Collect potential energies and forces.
         std::vector<force_t> forces(nbeads, force_t{});

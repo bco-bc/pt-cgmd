@@ -34,6 +34,7 @@
 #include "simploce/simulation/interactor.hpp"
 #include "simploce/simulation/langevin-velocity-verlet.hpp"
 #include "simploce/simulation/pt-langevin-velocity-verlet.hpp"
+#include "simploce/simulation/leap-frog.hpp"
 #include "simploce/simulation/cg-pol-water.hpp"
 #include "simploce/simulation/pbc.hpp"
 #include "simploce/particle/particle-model-factory.hpp"
@@ -75,8 +76,10 @@ namespace simploce {
         
         // Displacer.
         std::shared_ptr<CoarseGrainedDisplacer> displacer = 
-            std::make_shared<LangevinVelocityVerlet<CoarseGrained>>(interactor);
-        std::clog << "Using \"Langevin Velocity Verlet\" algorithm." << std::endl;
+            std::make_shared<LeapFrog<CoarseGrained>>(interactor);
+        std::clog << "Using \"Leapfrog\" algorithm." << std::endl;
+            //std::make_shared<LangevinVelocityVerlet<CoarseGrained>>(interactor);
+        //std::clog << "Using \"Langevin Velocity Verlet\" algorithm." << std::endl;
         
         // Done.
         return std::make_shared<cg_sim_model_t>(cg, displacer, interactor, box, bc);

@@ -30,7 +30,7 @@ int main(int argc, char* argv[])
 
     std::size_t nsteps = 1000;
     std::size_t nwrite = 10;
-    real_t timestep{0.020};                          // 0.001 ps = 1 fs.
+    real_t timestep{0.020};                          // 0.001 ps = 1 fs. Default is 20 fs.
     real_t boxSize{6.0};                             // nm.
     real_t molarity{0.1};                            // mol/l
     real_t density{997.0479};                        // kg/m^3

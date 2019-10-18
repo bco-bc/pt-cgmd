@@ -74,10 +74,10 @@ namespace simploce {
         // LJ
         auto CW_CW = std::make_pair(C12_CW_CW, C6_CW_CW);    
         ljParams_.add(CW->name(), CW->name(), CW_CW);
-        //auto zero = std::make_pair(0.0, 0.0);    
-        //ljParams_.add(CW->name(), DP->name(), zero);
-        //ljParams_.add(DP->name(), CW->name(), zero);
-        //ljParams_.add(DP->name(), DP->name(), zero);
+        auto zero = std::make_pair(0.0, 0.0);    
+        ljParams_.add(CW->name(), DP->name(), zero);
+        ljParams_.add(DP->name(), CW->name(), zero);
+        ljParams_.add(DP->name(), DP->name(), zero);
 
         std::clog << "Polarizable water:" << std::endl;
         std::clog << "Electrostatic interaction parameters:" << std::endl;
@@ -86,7 +86,7 @@ namespace simploce {
         std::clog << ljParams_ << std::endl;
     
         LJ_COULOMB_F = std::make_unique<LJCoulombForces<Bead>>(ljParams_, elParams_, bc);
-  }
+    }
 
     
     static std::pair<energy_t, std::vector<force_t>> 
