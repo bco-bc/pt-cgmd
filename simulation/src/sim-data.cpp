@@ -36,7 +36,8 @@
 namespace simploce {
     
     SimulationData::SimulationData() :
-        t{0.0}, ekin{0.0}, epot{0.0}, temperature{0.0}, numberOfProtonTransferPairs{0}
+        t{0.0}, ekin{0.0}, epot{0.0}, temperature{0.0}, numberOfProtonTransferPairs{0},
+        accepted{false}
     {            
     }
         
@@ -54,7 +55,8 @@ namespace simploce {
                << space << std::setw(width) << data.epot;
         stream << space << std::setw(width) << etot
                << space << std::setw(width) << data.temperature
-               << space << std::setw(width) << data.numberOfProtonTransferPairs;
+               << space << std::setw(width) << data.numberOfProtonTransferPairs
+               << space << data.accepted;
         
         return stream;
     }

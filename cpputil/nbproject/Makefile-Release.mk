@@ -38,7 +38,8 @@ OBJECTFILES= \
 	${OBJECTDIR}/src/file.o \
 	${OBJECTDIR}/src/param.o \
 	${OBJECTDIR}/src/poisson-process.o \
-	${OBJECTDIR}/src/telegraph-process.o
+	${OBJECTDIR}/src/telegraph-process.o \
+	${OBJECTDIR}/src/util.o
 
 # Test Directory
 TESTDIR=${CND_BUILDDIR}/${CND_CONF}/${CND_PLATFORM}/tests
@@ -48,6 +49,7 @@ TESTFILES= \
 	${TESTDIR}/TestFiles/f5 \
 	${TESTDIR}/TestFiles/f1 \
 	${TESTDIR}/TestFiles/f6 \
+	${TESTDIR}/TestFiles/f8 \
 	${TESTDIR}/TestFiles/f4 \
 	${TESTDIR}/TestFiles/f7 \
 	${TESTDIR}/TestFiles/f3 \
@@ -58,6 +60,7 @@ TESTOBJECTFILES= \
 	${TESTDIR}/tests/box-cube-test.o \
 	${TESTDIR}/tests/cvector-test.o \
 	${TESTDIR}/tests/matrix-map-test.o \
+	${TESTDIR}/tests/nint-test.o \
 	${TESTDIR}/tests/seed-value-test.o \
 	${TESTDIR}/tests/telegraph-process-test.o \
 	${TESTDIR}/tests/value-cvector-test.o \
@@ -107,6 +110,11 @@ ${OBJECTDIR}/src/telegraph-process.o: src/telegraph-process.cpp
 	${RM} "$@.d"
 	$(COMPILE.cc) -O2 -Iinclude -std=c++14 -fPIC  -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/telegraph-process.o src/telegraph-process.cpp
 
+${OBJECTDIR}/src/util.o: src/util.cpp
+	${MKDIR} -p ${OBJECTDIR}/src
+	${RM} "$@.d"
+	$(COMPILE.cc) -O2 -Iinclude -std=c++14 -fPIC  -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/util.o src/util.cpp
+
 # Subprojects
 .build-subprojects:
 
@@ -125,6 +133,10 @@ ${TESTDIR}/TestFiles/f1: ${TESTDIR}/tests/cvector-test.o ${OBJECTFILES:%.o=%_nom
 ${TESTDIR}/TestFiles/f6: ${TESTDIR}/tests/matrix-map-test.o ${OBJECTFILES:%.o=%_nomain.o}
 	${MKDIR} -p ${TESTDIR}/TestFiles
 	${LINK.cc} -o ${TESTDIR}/TestFiles/f6 $^ ${LDLIBSOPTIONS}   
+
+${TESTDIR}/TestFiles/f8: ${TESTDIR}/tests/nint-test.o ${OBJECTFILES:%.o=%_nomain.o}
+	${MKDIR} -p ${TESTDIR}/TestFiles
+	${LINK.cc} -o ${TESTDIR}/TestFiles/f8 $^ ${LDLIBSOPTIONS}   
 
 ${TESTDIR}/TestFiles/f4: ${TESTDIR}/tests/seed-value-test.o ${OBJECTFILES:%.o=%_nomain.o}
 	${MKDIR} -p ${TESTDIR}/TestFiles
@@ -159,6 +171,12 @@ ${TESTDIR}/tests/matrix-map-test.o: tests/matrix-map-test.cpp
 	${MKDIR} -p ${TESTDIR}/tests
 	${RM} "$@.d"
 	$(COMPILE.cc) -O2 -Iinclude -I. -std=c++14 -MMD -MP -MF "$@.d" -o ${TESTDIR}/tests/matrix-map-test.o tests/matrix-map-test.cpp
+
+
+${TESTDIR}/tests/nint-test.o: tests/nint-test.cpp 
+	${MKDIR} -p ${TESTDIR}/tests
+	${RM} "$@.d"
+	$(COMPILE.cc) -O2 -Iinclude -I. -std=c++14 -MMD -MP -MF "$@.d" -o ${TESTDIR}/tests/nint-test.o tests/nint-test.cpp
 
 
 ${TESTDIR}/tests/seed-value-test.o: tests/seed-value-test.cpp 
@@ -237,6 +255,19 @@ ${OBJECTDIR}/src/telegraph-process_nomain.o: ${OBJECTDIR}/src/telegraph-process.
 	    ${CP} ${OBJECTDIR}/src/telegraph-process.o ${OBJECTDIR}/src/telegraph-process_nomain.o;\
 	fi
 
+${OBJECTDIR}/src/util_nomain.o: ${OBJECTDIR}/src/util.o src/util.cpp 
+	${MKDIR} -p ${OBJECTDIR}/src
+	@NMOUTPUT=`${NM} ${OBJECTDIR}/src/util.o`; \
+	if (echo "$$NMOUTPUT" | ${GREP} '|main$$') || \
+	   (echo "$$NMOUTPUT" | ${GREP} 'T main$$') || \
+	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
+	then  \
+	    ${RM} "$@.d";\
+	    $(COMPILE.cc) -O2 -Iinclude -std=c++14 -fPIC  -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/util_nomain.o src/util.cpp;\
+	else  \
+	    ${CP} ${OBJECTDIR}/src/util.o ${OBJECTDIR}/src/util_nomain.o;\
+	fi
+
 # Run Test Targets
 .test-conf:
 	@if [ "${TEST}" = "" ]; \
@@ -244,6 +275,7 @@ ${OBJECTDIR}/src/telegraph-process_nomain.o: ${OBJECTDIR}/src/telegraph-process.
 	    ${TESTDIR}/TestFiles/f5 || true; \
 	    ${TESTDIR}/TestFiles/f1 || true; \
 	    ${TESTDIR}/TestFiles/f6 || true; \
+	    ${TESTDIR}/TestFiles/f8 || true; \
 	    ${TESTDIR}/TestFiles/f4 || true; \
 	    ${TESTDIR}/TestFiles/f7 || true; \
 	    ${TESTDIR}/TestFiles/f3 || true; \

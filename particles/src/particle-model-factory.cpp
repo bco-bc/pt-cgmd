@@ -23,6 +23,7 @@
 #include "simploce/util/box.hpp"
 #include <stdexcept>
 #include <iostream>
+#include <cmath>
 
 namespace simploce {
     
@@ -67,7 +68,8 @@ namespace simploce {
     ParticleModelFactory::polarizableWater(const box_ptr_t& box,
                                            const density_t atDensitySI,
                                            const temperature_t temperature,
-                                           bool protonatable) const
+                                           bool protonatable,
+                                           std::size_t nlimit) const
     {
         std::clog.setf(std::ios_base::scientific, std::ios_base::floatfield);
         
@@ -81,9 +83,9 @@ namespace simploce {
         std::clog << "Requested density (kg/m^3): " << atDensitySI << std::endl;
         std::clog << "Requested density (u/nm^3): " << atDensity << std::endl;
         
-        // Spacing between particles.
+        // Spacing between DW water beads.
         const length_t spacing{0.53};  // Roughly the location of the first peak of g(r), in nm.
-        std::clog << "Spacing between particles: " << spacing << " nm" << std::endl;
+        std::clog << "Spacing between CW beads: " << spacing << " nm" << std::endl;
         
         // Box details.
         length_t Lx = box->lengthX();
@@ -104,10 +106,11 @@ namespace simploce {
                   << " nm" << std::endl;
 
         number_density_t atNumberDensity = atDensity / mh2o->mass();
-        std::size_t natWaters = atNumberDensity * volume;
-        //std::size_t ncgWaters = util::nint(real_t(natWaters) / 5.0);
+        std::size_t natWaters = atNumberDensity * volume;       
         std::size_t ncgWaters = real_t(natWaters) / 5.0;
+        ncgWaters = ncgWaters > nlimit ? nlimit : ncgWaters;
         number_density_t cgNumberDensity = real_t(ncgWaters) / volume();
+        std::size_t nOneDirection = std::pow(ncgWaters, 1.0/3.0);
         density_t cgDensity = cgNumberDensity * (cwSpec->mass() + dpSpec->mass());
         std::clog << "CG: Requested density (u/nm^3): " << cgDensity << std::endl;
         std::clog << "AT: Requested number density (1/nm^3): " << atNumberDensity << std::endl;
@@ -115,20 +118,21 @@ namespace simploce {
         std::clog << "CG: Requested number density (1/nm^3): " << cgNumberDensity << std::endl;
         std::clog << "CG: Requested number density (1/m^3): " << cgNumberDensity*1.0e+27 << std::endl;
         std::clog << "AT: Requested number of water molecules: " << natWaters << std::endl;
-        std::clog << "CG: Requested number of water particles: " << ncgWaters << std::endl;
+        std::clog << "CG: Requested number of water water groups: " << ncgWaters << std::endl;
         std::clog.flush();
 
         std::size_t nx = util::nint(Lx / spacing);
         std::size_t ny = util::nint(Ly / spacing);
         std::size_t nz = util::nint(Lz / spacing);
-        std::clog << "Distance spacing between CG water particles: " << spacing << std::endl;
+        std::clog << "Distance spacing between CW beads: " << spacing << std::endl;
         std::clog << "Number of coordinates in x-direction: " << nx << std::endl;
         std::clog << "Number of coordinates in y-direction: " << ny << std::endl;
         std::clog << "Number of coordinates in z-direction: " << nz << std::endl;
+        std::clog << "Number of coordinates in any direction: " << nOneDirection << std::endl;
         std::clog.flush();
         
         // Start from an empty particle model.
-        cg_pol_water_ptr_t cg = std::make_shared<PolarizableWater>();
+        cg_pol_water_ptr_t cg = std::make_shared<PolarizableWater>();                
         
         // Add beads.
         real_t x0 = 0.0; //-0.5 * Lx();
@@ -137,18 +141,21 @@ namespace simploce {
         std::size_t counter = 0;
         std::size_t i = 0, j = 0, k = 0;         
         while ( i < nx && counter < ncgWaters ) {
+            //real_t x = x0 + (i + 0.5) * spacing();
+            real_t x = x0 + i * spacing();
             while ( j < ny && counter < ncgWaters ) {
+                //real_t y = y0 + (j + 0.5) * spacing();
+                real_t y = y0 + j * spacing();
                 while ( k < nz && counter < ncgWaters ) {
-                    
+                    //real_t z = z0 + (k + 0.5) * spacing();                    
+                    real_t z = z0 + k * spacing();
                     std::size_t id = 2 * counter + 1;
 
                     // Single water group.
                     std::vector<bead_ptr_t> beads{};
                     std::vector<id_pair_t> bbonds{};
                             
-                    real_t x = x0 + (i + 0.5) * spacing();
-                    real_t y = y0 + (j + 0.5) * spacing();
-                    real_t z = z0 + (k + 0.5) * spacing();
+                    
                     position_t r1{x,y,z};
                     bead_ptr_t cwBead = 
                         protonatable ? 
@@ -224,7 +231,7 @@ namespace simploce {
         volume_t volume = box->volume();
         number_density_t numberDensity =
             molarity() * SIUnits<real_t>::NA / MUUnits<real_t>::l_to_nm3;
-        std::size_t nHCOOH = util::nint<real_t>(numberDensity() * volume());
+        std::size_t nHCOOH = util::nint(numberDensity() * volume());
         std::clog << "Number of HCOOH: " << nHCOOH << std::endl;
         
         std::clog << "Replacing " << nHCOOH << " water groups by HCOOH beads." << std::endl;

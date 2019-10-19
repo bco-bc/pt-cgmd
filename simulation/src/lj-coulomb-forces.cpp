@@ -35,6 +35,7 @@
 #include "simploce/particle/particle-spec.hpp"
 #include "simploce/util/util.hpp"
 #include "simploce/util/mu-units.hpp"
+#include "simploce/simulation/sconf.hpp"
 #include <future>
 #include <utility>
 
@@ -207,7 +208,7 @@ namespace simploce {
         std::size_t nlists = pairLists.size();
         std::size_t nbeads = all.size();
         
-        if ( nlists > 1 ) {
+        if ( nlists > 1 && nbeads > conf::MIN_NUMBER_OF_PARTICLES ) {
             std::size_t ntasks = pairLists.size() - 1;  // One other for the 
                                                         // current thread.
             futures.clear();
@@ -230,9 +231,13 @@ namespace simploce {
             results = util::waitForAll<result_t>(futures);
         }
     
-        // Current thread.
-        if ( nlists > 0 ) {
+        // Current thread.        
+        if ( nlists > 0 && nbeads > conf::MIN_NUMBER_OF_PARTICLES) {
             const bead_pair_list_t& last = pairLists[nlists - 1];
+            result_t result = forces_(last, nbeads, ljParams_, elParams_, bc_);
+            results.push_back(result);
+        } else {
+            const bead_pair_list_t& last = *pairLists.begin();
             result_t result = forces_(last, nbeads, ljParams_, elParams_, bc_);
             results.push_back(result);
         }
@@ -255,6 +260,15 @@ namespace simploce {
         }
         
         return epot;
+    }
+    
+    energy_t 
+    LJCoulombForces<Bead>::interact(const bead_ptr_t& bead,
+                                    const std::vector<bead_ptr_t>& all,
+                                    const std::vector<bead_ptr_t>& free,
+                                    const std::vector<bead_group_ptr_t>& groups)
+    {
+        return energy_t{};
     }
     
     energy_t 

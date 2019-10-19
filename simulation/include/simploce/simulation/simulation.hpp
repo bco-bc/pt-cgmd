@@ -52,7 +52,7 @@ namespace simploce {
         
         /**
          * Constructor.
-         * @param sm Simulation model. Its content is moved to this simulation.
+         * @param sm Simulation model.
          */
         Simulation(const cg_sim_model_ptr_t& sm);
         

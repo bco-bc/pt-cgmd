@@ -58,7 +58,12 @@ namespace simploce {
         energy_t bonded(const std::vector<bead_ptr_t>& all,
                         const std::vector<bead_ptr_t>& free,
                         const std::vector<bead_group_ptr_t>& groups,
-                        const std::vector<bead_pair_list_t>& pairLists) override;        
+                        const std::vector<bead_pair_list_t>& pairLists) override; 
+        
+        energy_t interact(const bead_ptr_t& bead,
+                          const std::vector<bead_ptr_t>& all,
+                          const std::vector<bead_ptr_t>& free,
+                          const std::vector<bead_group_ptr_t>& groups) override;
         
         std::string id() const override;
         

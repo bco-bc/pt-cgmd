@@ -134,7 +134,7 @@ namespace simploce {
                 forces[index_i] += fi;
                 forces[index_j] += fj;
             }
-        }
+        }        
         
         return std::make_pair(epot, forces);
     }
@@ -184,6 +184,17 @@ namespace simploce {
         }
         
         return bonded.first;
+    }
+    
+    energy_t 
+    CoarseGrainedPolarizableWater::interact(const bead_ptr_t& bead,
+                                            const std::vector<bead_ptr_t>& all,
+                                            const std::vector<bead_ptr_t>& free,
+                                            const std::vector<bead_group_ptr_t>& groups)
+    {
+        energy_t epot = LJ_COULOMB_F->interact(bead, all, free, groups);
+        
+        return epot;
     }
     
     std::string 

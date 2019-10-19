@@ -36,6 +36,7 @@ int main(int argc, char* argv[])
     real_t density{997.0479};                        // kg/m^3
     real_t temperature{298.15};                      // K.
     real_t gamma{0.50};                              // ps^-1
+    std::size_t nmaxPolWaters = 1000000;             // Maximum number of polarizable waters (groups).
     std::string modelType{conf::POLARIZABLE_WATER};  // Coarse grained polarizable water.
 
     po::options_description usage("Usage");
@@ -102,8 +103,12 @@ int main(int argc, char* argv[])
       (
        "model-type", po::value<std::string>(&modelType),
        "Type of model or system. Default is 'pol-water'. "
-       "Other choices: 'acid-base-solution', 'electrolyte'.")
-      
+       "Other choices: 'acid-base-solution', 'electrolyte'."
+      )
+      (
+       "max-number-of-water-groups", po::value<std::size_t>(&nmaxPolWaters),
+       "Maximum number of water groups. Default is 1000000."
+      )
       (
        "help", "Help message"
       )
@@ -161,6 +166,9 @@ int main(int argc, char* argv[])
     if ( vm.count("model-type") ) {
       modelType = vm["model-type"].as<std::string>();
     }
+    if ( vm.count("max-number-of-water-groups") ) {
+      nmaxPolWaters = vm["max-number-of-water-groups"].as<std::size_t>();
+    }
     
     // Simulation parameters
     sim_param_t param;    
@@ -184,18 +192,24 @@ int main(int argc, char* argv[])
     if ( fnInputModel.empty() ) {
       box_ptr_t box = std::make_shared<box_t>(boxSize);      
       if ( modelType == conf::POLARIZABLE_WATER ) {
-	model = simModelFactory->polarizableWater(box, density, temperature);
+	model = simModelFactory->polarizableWater(box, density, temperature, nmaxPolWaters);
       } else if ( modelType == conf::ACID_BASE_SOLUTION ) {
 	model = simModelFactory->formicAcidSolution(box, density, molarity, temperature, true);
       } else if ( modelType == conf::ELECTROLYTE ) {
-	model = simModelFactory->electrolyte(box, molarity, temperature);
+	model = simModelFactory->electrolyte(box, molarity, temperature);	
       } else {
 	throw std::domain_error(modelType + ": No such simulation model type available (yet).");
       }
       std::clog << std::endl;
       std::clog << "Created molecular model:" << std::endl;
       
-      std::cout << *model << std::endl;
+      std::ofstream stream;
+      file::open_output(stream, "created.model");
+      stream << *model << std::endl;
+      stream.close();
+      
+      std::clog << "Created model saved in 'created.model'." << std::endl;
+      std::clog << std::endl;
     } else {
       std::ifstream stream;
       file::open_input(stream, fnInputModel);

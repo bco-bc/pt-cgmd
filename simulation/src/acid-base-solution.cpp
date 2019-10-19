@@ -156,6 +156,15 @@ namespace simploce {
     }
     
     energy_t 
+    AcidBaseSolution::interact(const bead_ptr_t& bead,
+                               const std::vector<bead_ptr_t>& all,
+                               const std::vector<bead_ptr_t>& free,
+                               const std::vector<bead_group_ptr_t>& groups)
+    {
+        return energy_t{};
+    }
+    
+    energy_t 
     AcidBaseSolution::bonded(const std::vector<bead_ptr_t>& all,
                              const std::vector<bead_ptr_t>& free,
                              const std::vector<bead_group_ptr_t>& groups,

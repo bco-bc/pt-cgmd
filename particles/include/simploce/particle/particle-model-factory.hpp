@@ -39,12 +39,14 @@ namespace simploce {
          * @param temperature Requested temperature in SI units (K). Default is 
          * 298.15 K.
          * @param protonable If true, water will be protonatable. Default is false.
+         * @param nlimit Upper limit for the number of CG waters.
          * @return Coarse grained particle model.
          */
         cg_pol_water_ptr_t polarizableWater(const box_ptr_t& box,
                                             const density_t atDensitySI = 997.0479,
                                             const temperature_t temperature = 298.15,
-                                            bool protonatable = false) const;
+                                            bool protonatable = false,
+                                            std::size_t nlimit = 1000000) const;
         
         /**
          * Returns coarse grained model for a formic acid solution.

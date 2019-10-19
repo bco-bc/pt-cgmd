@@ -21,6 +21,7 @@
 namespace po = boost::program_options;
 using namespace simploce;
 
+
 int main(int argc, char *argv[])
 {
   using gr_t = Gr<Bead>;

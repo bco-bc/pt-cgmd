@@ -34,6 +34,7 @@
 
 #include "analyzer.hpp"
 #include "atypes.hpp"
+#include "../simulation/sim-util.hpp"
 #include "../simulation/bc.hpp"
 #include "simploce/particle/particle-spec.hpp"
 #include "simploce/util/cvector_t.hpp"
@@ -156,7 +157,7 @@ namespace simploce {
             }
 
             // Upper limit for g(r).
-            rmax_ = 0.5 * box_->size();
+            rmax_ = util::cutoffDistance(box_);
     
             std::size_t nbins = rmax_() / dr_();
             hr_.resize(nbins, 0);
@@ -165,6 +166,9 @@ namespace simploce {
             std::clog << "Number of particles of type '" << specName2_ << ": " << nparticles2_ << std::endl;
             std::clog << "Upper limit for g(r): " << rmax_ << std::endl;
             std::clog << "Bin size: " << dr_ << std::endl;
+            if ( nparticles1_ == 0 || nparticles2_ == 0 ) {
+                throw std::domain_error("No such particles.");
+            }
         }
         
         // For all particle pairs.

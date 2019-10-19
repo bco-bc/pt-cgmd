@@ -58,12 +58,14 @@ namespace simploce {
          * @param atDensitySI Atomistic water density in SI units kg/m^3. Default is 
          * 997.0479 kg/m^3 at 298.15 K (25 C).
          * @param temperature Temperature, default is 298.15 K.
+         * @param nlimit Upper limit for the number of CG waters.
          * @return Coarse grained simulation model.
          * @see <a href="https://en.wikipedia.org/wiki/Density#Water">Water Density</a>
          */
         cg_sim_model_ptr_t polarizableWater(const box_ptr_t& box,
                                             const density_t atDensitySI = 997.0479,
-                                            const temperature_t temperature = 298.15);
+                                            const temperature_t temperature = 298.15,
+                                            std::size_t nlimit = 1000000);
         
         /**
          * Create a coarse grained simulation of formic acid in water.

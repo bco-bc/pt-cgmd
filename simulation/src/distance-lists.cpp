@@ -63,7 +63,6 @@ namespace simploce {
         using p_pair_list_t = typename DistanceLists<P>::p_pair_list_t;
         
         static real_t rc2 = rcutoff2_(box);
-        std::clog << "rc2: " << rc2 << std::endl;
         
         if ( particles.empty() ) {
             return p_pair_list_t{};  // Empty list.
@@ -80,8 +79,7 @@ namespace simploce {
                 const auto& pj = *iter_j;
                 position_t rj = pj->position();
                 dist_vect_t R = bc->apply(ri, rj);
-                real_t R2 = norm2<real_t>(R);
-                std::clog << "R2: " << R2 << std::endl;
+                real_t R2 = norm2<real_t>(R);                
                 if ( R2 < rc2 ) {
                     // Include this pair.
                     auto pair = std::make_pair(pi, pj);
@@ -217,27 +215,31 @@ namespace simploce {
         // Prepare sublists, the number of which will depend on the number of 
         // hardware threads available.               
         std::vector<p_pair_list_t> pairLists{};
-        std::size_t counter = 0;      
-        static const std::size_t nlists = std::thread::hardware_concurrency();        
-        std::size_t npairsSubList = pairList.size() / nlists;                                                              
-        for (std::size_t k = 0; k != nlists; ++k) {
-            p_pair_list_t single{};  // One sublist of particle pairs.
-            std::size_t n = 0;
-            while (counter != pairList.size() && n != npairsSubList) {
-                single.push_back(pairList[counter]);
-                counter += 1;
-                n += 1;
+        if ( all.size() > conf::MIN_NUMBER_OF_PARTICLES ) {
+            std::size_t counter = 0;      
+            static const std::size_t nlists = std::thread::hardware_concurrency();        
+            std::size_t npairsSubList = pairList.size() / nlists;                                                              
+            for (std::size_t k = 0; k != nlists; ++k) {
+                p_pair_list_t single{};  // One sublist of particle pairs.
+                std::size_t n = 0;
+                while (counter != pairList.size() && n != npairsSubList) {
+                    single.push_back(pairList[counter]);
+                    counter += 1;
+                    n += 1;
+                }
+                pairLists.push_back(single);          // Store list.
             }
-            pairLists.push_back(single);          // Store list.
-        }
     
-        // Add remaining particles pairs, if any, to the last set.
-        if ( counter < pairList.size() ) {
-            p_pair_list_t& last = *(pairLists.end() - 1);
-            while ( counter != pairList.size() ) {
-                last.push_back(pairList[counter]);
-                counter += 1;
+            // Add remaining particles pairs, if any, to the last set.
+            if ( counter < pairList.size() ) {
+                p_pair_list_t& last = *(pairLists.end() - 1);
+                while ( counter != pairList.size() ) {
+                    last.push_back(pairList[counter]);
+                    counter += 1;
+                }
             }
+        } else {
+            pairLists.push_back(pairList);
         }
         
         if ( firstTime ) {

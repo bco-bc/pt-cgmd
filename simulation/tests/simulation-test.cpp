@@ -30,6 +30,7 @@
  */
 
 #include "simploce/simulation/simulation.hpp"
+#include "simploce/simulation/mc.hpp"
 #include "simploce/simulation/sim-model.hpp"
 #include "simploce/simulation/langevin-velocity-verlet.hpp"
 #include "simploce/simulation/sfactory.hpp"
@@ -84,7 +85,8 @@ void test1() {
     file::open_output(trajStream, "/localdisk/tests/trajectory.dat");
     file::open_output(dataStream, "/localdisk/tests/simulation.dat");
     
-    using simulation_t = Simulation<Bead>;
+    //using simulation_t = Simulation<Bead>;
+    using simulation_t = MC<Bead>;
 
     spec_ptr_t spec1_dp = 
         ParticleSpec::create("pspec1", 1.0, 1.0, 1.0);

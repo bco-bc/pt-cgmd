@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright 2019 André H. Juffer, Biocenter Oulu
+ * Copyright 2019 juffer.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -23,63 +23,62 @@
  */
 
 /* 
- * File:   sim-data.hpp
- * Author: André H. Juffer, Biocenter Oulu.
+ * File:   mc.hpp
+ * Author: juffer
  *
- * Created on August 16, 2019, 12:54 PM
+ * Created on 19 October 2019, 18:56
  */
 
-#ifndef SIM_DATA_HPP
-#define SIM_DATA_HPP
+#ifndef MC_HPP
+#define MC_HPP
 
 #include "stypes.hpp"
+#include "simploce/particle/bead.hpp"
 #include <iostream>
 
 namespace simploce {
     
-    struct SimulationData {
-        
-        SimulationData();
-        
-        /**
-         * Time
-         */
-        stime_t t;
-        
-        /**
-         * Kinetic energy.
-         */
-        energy_t ekin;
-        
-        /**
-         * Potential energy.
-         */
-        energy_t epot;
-        
-        /**
-         * Temperature.
-         */
-        temperature_t temperature;
-        
-        /**
-         * Number of particle pairs possibly involved in proton transfer.
-         */
-        std::size_t numberOfProtonTransferPairs;
-        
-        /**
-         * Move was accepted in a Monte Carlo simulation.
-         */
-        bool accepted;
-    };
+    /**
+     * Monte Carlo
+     */
+    template <typename P>
+    class MC;
     
     /**
-     * Writes simulation data to output stream.
-     * @param stream Output stream.
-     * @param data Simulation data.
-     * @return Output stream.
+     * Specialization for beads.
      */
-    std::ostream& operator << (std::ostream& stream, const SimulationData& data);
+    template <>
+    class MC<Bead> {
+    public:
+                
+        /**
+         * Constructor.
+         * @param sm Simulation model. 
+         */
+        MC(const cg_sim_model_ptr_t& sm);
+        
+        /**
+         * Performs the simulation.
+         * @param param Parameters. Must provide,
+         * <ul>
+         *  <li>nsteps: Number of steps.</li>
+         *  <li>
+         *      nwrite: Number of steps between writing simulation data and saving state
+         *      in the trajectectory.
+         *  </li>
+         * </ul>
+         * @param trajStream Output trajectory stream.
+         * @param dataStream Output simulation data stream.
+         */
+        void perform(const sim_param_t& param,
+                     std::ofstream& trajStream,
+                     std::ofstream& dataStream);
+        
+    private:
+    
+        cg_sim_model_ptr_t sm_;
+    };
 }
 
-#endif /* SIM_DATA_HPP */
+#endif /* MC_HPP */
 

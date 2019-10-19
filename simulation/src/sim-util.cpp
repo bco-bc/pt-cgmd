@@ -37,13 +37,11 @@ namespace simploce {
         
         length_t cutoffDistance(const box_ptr_t& box)
         {
-            return 0.5 * box->size();
-            /*
+            //return 0.5 * box->size();            
             length_t halve = 0.5 * box->size();
             return conf::RCUTOFF_DISTANCE_() > halve() ? 
                    halve : 
-                   conf::RCUTOFF_DISTANCE_;
-             */
+                   conf::RCUTOFF_DISTANCE_;             
         }
         
         real_t squareCutoffDistance(const box_ptr_t& box)

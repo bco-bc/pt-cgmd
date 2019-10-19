@@ -83,6 +83,20 @@ namespace simploce {
                                 const std::vector<bead_group_ptr_t>& groups,
                                 const std::vector<bead_pair_list_t>& pairLists) = 0;
         
+        
+        /**
+         * Returns interaction energy of given bead with all other bead.
+         * @param bead Bead
+         * @param all All beads.
+         * @param free Free beads.
+         * @param groups bead groups.
+         * @return Energy.
+         */
+        virtual energy_t interact(const bead_ptr_t& bead,
+                                  const std::vector<bead_ptr_t>& all,
+                                  const std::vector<bead_ptr_t>& free,
+                                  const std::vector<bead_group_ptr_t>& groups) = 0;
+        
     };
 }
 

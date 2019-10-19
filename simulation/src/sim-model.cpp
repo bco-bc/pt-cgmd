@@ -77,6 +77,13 @@ namespace simploce {
     }
     
     SimulationData 
+    SimulationModel<Bead>::interact(const bead_ptr_t& bead,
+                                    const sim_param_t& param)
+    {
+        return SimulationData{};
+    }
+    
+    SimulationData 
     SimulationModel<Bead>::displace(const sim_param_t& param)
     { 
         return displacer_->displace(param, cg_); 

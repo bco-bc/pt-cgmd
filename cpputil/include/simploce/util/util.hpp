@@ -14,6 +14,7 @@
 #ifndef UTIL_HPP
 #define UTIL_HPP
 
+#include "utypes.hpp"
 #include <boost/lexical_cast.hpp>
 #include <ctime>
 #include <random>
@@ -48,12 +49,7 @@ namespace simploce {
          * @param val Val.
          * @return Nearest integer.
          */
-        template <typename V>
-        int nint(V val)
-        {
-            std::fesetround(FE_TONEAREST);
-            return std::nearbyint(val);
-        }
+        int nint(real_t val);
             
         /**
          * Very -simple- random number generator.

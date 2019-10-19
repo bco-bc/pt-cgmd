@@ -78,11 +78,20 @@ namespace simploce {
         std::size_t size() const;
         
         /**
-         * Lets particles interact.
+         * Lets all particles interact.
          * @param param Simulation parameters. 
          * @return Data (e.g. potential energy).
          */
         SimulationData interact(const sim_param_t& param);
+        
+        /**
+         * Lets given bead interact with all other particles.
+         * @param bead Bead.
+         * @param param Simulation parameters. 
+         * @return Data (e.g. potential energy).
+         */
+        SimulationData interact(const bead_ptr_t& bead, 
+                                const sim_param_t& param);
         
         /**
          * Displaces the particles.

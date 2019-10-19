@@ -123,6 +123,15 @@ namespace simploce {
         return energy_t{0.0};
     }
     
+    energy_t 
+    CoarseGrainedElectrolyte::interact(const bead_ptr_t& bead,
+                                       const std::vector<bead_ptr_t>& all,
+                                       const std::vector<bead_ptr_t>& free,
+                                       const std::vector<bead_group_ptr_t>& groups) 
+    {
+        return LJ_COULOMB_F->interact(bead, all, free, groups);
+    }
+    
     std::string 
     CoarseGrainedElectrolyte::id() const
     {

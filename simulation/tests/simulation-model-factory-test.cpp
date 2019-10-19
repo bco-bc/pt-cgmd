@@ -59,10 +59,11 @@ void test1()
             factory::simulationModelFactory(catalog);
     
     box_ptr_t box = factory::cube(length_t{7.27});
-    cg_sim_model_ptr_t polWater = pmf->polarizableWater(box);
+    cg_sim_model_ptr_t polWater = 
+        pmf->polarizableWater(box, 997.0479, 298.15, 2);
 
     std::cout << "Number of polarizable waters: " << polWater->size() << std::endl;
-    //std::cout << *polWater << std::endl;
+    std::cout << *polWater << std::endl;
     
 }
 
@@ -110,17 +111,17 @@ int main(int argc, char** argv) {
     std::cout << "%SUITE_STARTING% model-factory-test" << std::endl;
     std::cout << "%SUITE_STARTED%" << std::endl;
 
-    //std::cout << "%TEST_STARTED% test1 (model-factory-test)" << std::endl;
-    //test1();
-    //std::cout << "%TEST_FINISHED% time=0 test1 (model-factory-test)" << std::endl;
+    std::cout << "%TEST_STARTED% test1 (model-factory-test)" << std::endl;
+    test1();
+    std::cout << "%TEST_FINISHED% time=0 test1 (model-factory-test)" << std::endl;
 
 //    std::cout << "%TEST_STARTED% test2 (model-factory-test)\n" << std::endl;
 //    test2();
 //    std::cout << "%TEST_FINISHED% time=0 test2 (model-factory-test)" << std::endl;
 
-    std::cout << "%TEST_STARTED% test2 (model-factory-test)\n" << std::endl;
-    test3();
-    std::cout << "%TEST_FINISHED% time=0 test2 (model-factory-test)" << std::endl;
+    //std::cout << "%TEST_STARTED% test2 (model-factory-test)\n" << std::endl;
+    //test3();
+    //std::cout << "%TEST_FINISHED% time=0 test2 (model-factory-test)" << std::endl;
     std::cout << "%SUITE_FINISHED% time=0" << std::endl;
 
     return (EXIT_SUCCESS);
