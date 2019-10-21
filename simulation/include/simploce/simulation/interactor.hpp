@@ -73,6 +73,17 @@ namespace simploce {
         energy_t interact(const sim_param_t& param, const at_ptr_t& at);
         
         /**
+         * Calculates interaction energy of given atom with all other particles.
+         * @param atom Atom.
+         * @param param Simulation parameters.
+         * @param at Atomistic particle model.
+         * @return Interaction (potential) energy.
+         */
+        energy_t interact(const atom_ptr_t& atom,
+                          const sim_param_t& param, 
+                          const at_ptr_t& at);
+        
+        /**
          * Returns identifying name.
          * @return Identifying name.
          */
@@ -110,6 +121,16 @@ namespace simploce {
          */
         energy_t interact(const sim_param_t& param, const cg_ptr_t& cg);
         
+        /**
+         * Calculates interaction energy of given bead with all other beads.
+         * @param bead Bead.
+         * @param param Simulation parameters.
+         * @param at Coarse grained particle model.
+         * @return Interaction (potential) energy.
+         */
+        energy_t interact(const bead_ptr_t& bead,
+                          const sim_param_t& param, 
+                          const cg_ptr_t& cg);
         /**
          * Returns identifying name.
          * @return Identifying name.

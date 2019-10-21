@@ -96,6 +96,16 @@ namespace simploce {
         return epot;
     }
     
+    energy_t 
+    Interactor<Atom>::interact(const atom_ptr_t& atom,
+                               const sim_param_t& param, 
+                               const at_ptr_t& at)
+    {
+        throw std::domain_error(
+            "Atomistic force field: No interaction energy calculator available."
+        );
+    }
+    
     void 
     Interactor<Atom>::updatePairlists_(const at_ptr_t& at)
     {
@@ -148,6 +158,18 @@ namespace simploce {
         
         counter += 1;
         return epot;
+    }
+    
+    energy_t 
+    Interactor<Bead>::interact(const bead_ptr_t& bead,
+                               const sim_param_t& param, 
+                               const cg_ptr_t& cg)
+    {
+        return cg->doWithAllFreeGroups<energy_t>([this, bead] (const std::vector<bead_ptr_t>& all,
+                                                               const std::vector<bead_ptr_t>& free,
+                                                               const std::vector<bead_group_ptr_t>& groups) {
+            return this->forcefield_->interact(bead, all, free, groups);
+        });
     }
     
     void

@@ -56,7 +56,8 @@ namespace simploce {
         stream << space << std::setw(width) << etot
                << space << std::setw(width) << data.temperature
                << space << std::setw(width) << data.numberOfProtonTransferPairs
-               << space << data.accepted;
+               << space << data.accepted
+               << space << std::setw(width) << data.acceptanceRatio;
         
         return stream;
     }

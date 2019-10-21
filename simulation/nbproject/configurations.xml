@@ -30,6 +30,7 @@
       <itemPath>include/simploce/simulation/mc.hpp</itemPath>
       <itemPath>include/simploce/simulation/no-bc.hpp</itemPath>
       <itemPath>include/simploce/simulation/pair-list-generator.hpp</itemPath>
+      <itemPath>include/simploce/simulation/pair-lists.hpp</itemPath>
       <itemPath>include/simploce/simulation/pbc.hpp</itemPath>
       <itemPath>include/simploce/simulation/pt-langevin-velocity-verlet.hpp</itemPath>
       <itemPath>include/simploce/simulation/pt-pair-list-generator.hpp</itemPath>
@@ -408,6 +409,11 @@
             flavor2="0">
       </item>
       <item path="include/simploce/simulation/pair-list-generator.hpp"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="include/simploce/simulation/pair-lists.hpp"
             ex="false"
             tool="3"
             flavor2="0">
@@ -826,6 +832,11 @@
             flavor2="0">
       </item>
       <item path="include/simploce/simulation/pair-list-generator.hpp"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="include/simploce/simulation/pair-lists.hpp"
             ex="false"
             tool="3"
             flavor2="0">

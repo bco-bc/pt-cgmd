@@ -38,6 +38,7 @@ int main(int argc, char* argv[])
     real_t gamma{0.50};                              // ps^-1
     std::size_t nmaxPolWaters = 1000000;             // Maximum number of polarizable waters (groups).
     std::string modelType{conf::POLARIZABLE_WATER};  // Coarse grained polarizable water.
+    bool mc = false;
 
     po::options_description usage("Usage");
     usage.add_options()
@@ -110,6 +111,10 @@ int main(int argc, char* argv[])
        "Maximum number of water groups. Default is 1000000."
       )
       (
+       "monte-carlo",
+       "Perform a Monte Carlo simulation."
+      )
+      (
        "help", "Help message"
       )
       ;
@@ -169,6 +174,9 @@ int main(int argc, char* argv[])
     if ( vm.count("max-number-of-water-groups") ) {
       nmaxPolWaters = vm["max-number-of-water-groups"].as<std::size_t>();
     }
+    if ( vm.count("monte-carlo") ) {
+      mc = true;
+    }
     
     // Simulation parameters
     sim_param_t param;    
@@ -214,16 +222,21 @@ int main(int argc, char* argv[])
       std::ifstream stream;
       file::open_input(stream, fnInputModel);
       model = simModelFactory->readCoarseGrainedFrom(stream);
-      std::clog << "Read model from input file '" << fnInputModel << "'." << std::endl;
       stream.close();
+      std::clog << "Read model from input file '" << fnInputModel << "'." << std::endl;
     }
 
     // Simulate.
-    Simulation<Bead> simulation(model);
     std::ofstream traj, data;
     file::open_output(traj, fnTrajectory);
     file::open_output(data, fnSimulationData);
-    simulation.perform(param, traj, data);
+    if ( mc ) {
+      MC<Bead> mc(model);
+      mc.perform(param, traj, data);
+    } else {
+      Simulation<Bead> simulation(model);
+      simulation.perform(param, traj, data);
+    }
     traj.close();
     data.close();
     
@@ -232,6 +245,7 @@ int main(int argc, char* argv[])
     file::open_output(stream, fnOutputModel);
     stream << *model << std::endl;
     stream.close();
+    std::clog << "Wrote model to output file '" << fnOutputModel << "'." << std::endl;
     
     return 0;    
 }

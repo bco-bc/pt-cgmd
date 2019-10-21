@@ -34,9 +34,13 @@
 
 #include "stypes.hpp"
 #include "simploce/util/mu-units.hpp"
+#include "pair-lists.hpp"
+#include <vector>
+#include <set>
+#include <thread>
 
 namespace simploce {
-    namespace util {
+    namespace util {        
         
         /**
          * Calculates instantaneous temperature for a collection of particles.
@@ -72,6 +76,50 @@ namespace simploce {
          * @return Square of cutoff distance.
          */
         real_t squareCutoffDistance(const box_ptr_t& box);
+        
+        /**
+         * Returns sub lists of a list of items.
+         * @param items Items
+         * @return Sub lists of items.
+         */
+        template <typename T>
+        std::set<std::vector<T>> 
+        makeSubLists(const std::vector<T>& items)
+        {
+            using sublists_t = std::set<std::vector<T>>;
+            
+            if ( items.empty() ) {
+                return sublists_t{};
+            }
+            
+            // Sub lists.
+            sublists_t subLists;
+            
+            std::size_t counter = 0;      
+            static const std::size_t nsublists = std::thread::hardware_concurrency();        
+            std::size_t numberOfItemsPerSubList = items.size() / nsublists;                                                              
+            for (std::size_t k = 0; k != nsublists; ++k) {
+                std::vector<T> single{};  // One sublist of items.
+                std::size_t n = 0;
+                while (counter != items.size() && n != numberOfItemsPerSubList) {
+                    single.push_back(items[counter]);
+                    counter += 1;
+                    n += 1;
+                }
+                subLists.push_back(single);          // Store list.
+            }
+    
+            // Add remaining pairs, if any, to the last set.
+            if ( counter < items.size() ) {
+                auto& last = *(items.end() - 1);
+                while ( counter != items.size() ) {
+                    last.push_back(items[counter]);
+                    counter += 1;
+                }
+            }
+            
+            return subLists;
+        }
         
     }
 }

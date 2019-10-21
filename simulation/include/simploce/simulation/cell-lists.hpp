@@ -40,8 +40,7 @@
 namespace simploce {
     
     /**
-     * Finds all particles pairs within a given cut-off distance of each other 
-     * in molecular dynamics simulations.
+     * Creates particle pair lists based on location of particles in cells.
      * @see <a href="https://en.wikipedia.org/wiki/Cell_lists">Cell lists at Wikipedia</a>
      */
     template <typename P>
@@ -54,18 +53,14 @@ namespace simploce {
     class CellLists<Atom> : public ParticlePairListGenerator<Atom> {
     public:
         
-        using p_ptr_t = typename ParticlePairListGenerator<Atom>::p_ptr_t;
-        using pg_ptr_t = typename ParticlePairListGenerator<Atom>::pg_ptr_t;
-        using p_pair_t = typename ParticlePairListGenerator<Atom>::p_pair_t;
-        using p_pair_list_t = typename ParticlePairListGenerator<Atom>::p_pair_list_t;
         
         CellLists(const box_ptr_t& box,
                   const bc_ptr_t& bc);
         
-        std::vector<p_pair_list_t> 
-        generate(const std::vector<p_ptr_t>& all,
-                 const std::vector<p_ptr_t>& free,
-                 const std::vector<pg_ptr_t>& groups) const override;
+        PairLists<Atom>
+        generate(const std::vector<atom_ptr_t>& all,
+                 const std::vector<atom_ptr_t>& free,
+                 const std::vector<atom_group_ptr_t>& groups) const override;
         
     private:
                         
@@ -81,19 +76,13 @@ namespace simploce {
     class CellLists<Bead> : public ParticlePairListGenerator<Bead> {
     public:
         
-        using p_ptr_t = typename ParticlePairListGenerator<Bead>::p_ptr_t;
-        using pg_ptr_t = typename ParticlePairListGenerator<Bead>::pg_ptr_t;
-        using p_pair_t = typename ParticlePairListGenerator<Bead>::p_pair_t;
-        using p_pair_list_t = typename ParticlePairListGenerator<Bead>::p_pair_list_t;
-        
         CellLists(const box_ptr_t& box,
                   const bc_ptr_t& bc);
         
-        std::vector<p_pair_list_t> 
-        generate(const std::vector<p_ptr_t>& all,
-                 const std::vector<p_ptr_t>& free,
-                 const std::vector<pg_ptr_t>& groups) const override;
-        
+        PairLists<Bead> 
+        generate(const std::vector<bead_ptr_t>& all,
+                 const std::vector<bead_ptr_t>& free,
+                 const std::vector<bead_group_ptr_t>& groups) const override;
     private:
                         
         box_ptr_t box_;

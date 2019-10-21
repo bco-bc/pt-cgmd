@@ -164,7 +164,7 @@ namespace simploce {
     CoarseGrainedPolarizableWater::interact(const std::vector<bead_ptr_t>& all,
                                             const std::vector<bead_ptr_t>& free,
                                             const std::vector<bead_group_ptr_t>& groups,
-                                            const std::vector<bead_pair_list_t>& pairLists)
+                                            const PairLists<Bead>& pairLists)
     {
         std::pair<energy_t, std::vector<force_t>> bonded = bonded_(all.size(), groups);
         energy_t epot = LJ_COULOMB_F->interact(all, free, groups, pairLists);
@@ -185,7 +185,7 @@ namespace simploce {
     CoarseGrainedPolarizableWater::bonded(const std::vector<bead_ptr_t>& all,
                                           const std::vector<bead_ptr_t>& free,
                                           const std::vector<bead_group_ptr_t>& groups,
-                                          const std::vector<bead_pair_list_t>& pairLists)
+                                          const PairLists<Bead>& pairLists)
     {
         std::pair<energy_t, std::vector<force_t>> bonded = bonded_(all.size(), groups);
         std::vector<force_t>& forces = bonded.second;

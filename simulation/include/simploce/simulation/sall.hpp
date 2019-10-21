@@ -57,6 +57,7 @@
 #include "sim-util.hpp"
 #include "velocity-verlet.hpp"
 #include "pt-pair-list-generator.hpp"
+#include "mc.hpp"
 
 #endif /* SALL_HPP */
 

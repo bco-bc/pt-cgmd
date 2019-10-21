@@ -36,6 +36,7 @@
 #include <stdexcept>
 #include <iostream>
 #include <iomanip>
+#include <iostream>
 
 namespace simploce {
     
@@ -55,7 +56,9 @@ namespace simploce {
                 "No particles! Nothing to simulate."
             );
         }
-
+        
+        std::clog << "Performing a (CG) MD simulation..." << std::endl;
+        
         std::size_t nsteps = param.get<std::size_t>("nsteps", 10000);
         std::size_t nwrite = param.get<std::size_t>("nwrite", 10);
         
@@ -68,6 +71,8 @@ namespace simploce {
                 dataStream.flush();
             }
         }
+        
+        std::clog << "Done." << std::endl;
     }
     
 }

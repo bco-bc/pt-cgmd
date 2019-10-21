@@ -33,6 +33,7 @@
 #define CG_FORCEFIELD_HPP
 
 #include "forcefield.hpp"
+#include "pair-lists.hpp"
 #include "stypes.hpp"
 #include <vector>
 
@@ -67,7 +68,7 @@ namespace simploce {
         virtual energy_t interact(const std::vector<bead_ptr_t>& all,
                                   const std::vector<bead_ptr_t>& free,
                                   const std::vector<bead_group_ptr_t>& groups,
-                                  const std::vector<bead_pair_list_t>& pairLists) = 0;
+                                  const PairLists<Bead>& pairLists) = 0;
         
         /**
          * Computes forces due to bonded interactions on beads. Updates/adds forces 
@@ -81,7 +82,7 @@ namespace simploce {
         virtual energy_t bonded(const std::vector<bead_ptr_t>& all,
                                 const std::vector<bead_ptr_t>& free,
                                 const std::vector<bead_group_ptr_t>& groups,
-                                const std::vector<bead_pair_list_t>& pairLists) = 0;
+                                const PairLists<Bead>& pairLists) = 0;
         
         
         /**

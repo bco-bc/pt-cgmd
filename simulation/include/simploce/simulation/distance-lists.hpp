@@ -52,18 +52,13 @@ namespace simploce {
     class DistanceLists<Atom> : public ParticlePairListGenerator<Atom> {
     public:
         
-        using p_ptr_t = typename ParticlePairListGenerator<Atom>::p_ptr_t;
-        using pg_ptr_t = typename ParticlePairListGenerator<Atom>::pg_ptr_t;
-        using p_pair_t = typename ParticlePairListGenerator<Atom>::p_pair_t;
-        using p_pair_list_t = typename ParticlePairListGenerator<Atom>::p_pair_list_t;
-                
         DistanceLists(const box_ptr_t& box,
                       const bc_ptr_t& bc);
         
-        std::vector<p_pair_list_t> 
-        generate(const std::vector<p_ptr_t>& all,
-                 const std::vector<p_ptr_t>& free,
-                 const std::vector<pg_ptr_t>& groups) const override;
+        PairLists<Atom>
+        generate(const std::vector<atom_ptr_t>& all,
+                 const std::vector<atom_ptr_t>& free,
+                 const std::vector<atom_group_ptr_t>& groups) const override;
         
     private:
         
@@ -80,18 +75,14 @@ namespace simploce {
     class DistanceLists<Bead> : public ParticlePairListGenerator<Bead> {
     public:
         
-        using p_ptr_t = typename ParticlePairListGenerator<Bead>::p_ptr_t;
-        using pg_ptr_t = typename ParticlePairListGenerator<Bead>::pg_ptr_t;
-        using p_pair_t = typename ParticlePairListGenerator<Bead>::p_pair_t;
-        using p_pair_list_t = typename ParticlePairListGenerator<Bead>::p_pair_list_t;
                 
         DistanceLists(const box_ptr_t& box,
                       const bc_ptr_t& bc);
         
-        std::vector<p_pair_list_t> 
-        generate(const std::vector<p_ptr_t>& all,
-                 const std::vector<p_ptr_t>& free,
-                 const std::vector<pg_ptr_t>& groups) const override;
+        PairLists<Bead> 
+        generate(const std::vector<bead_ptr_t>& all,
+                 const std::vector<bead_ptr_t>& free,
+                 const std::vector<bead_group_ptr_t>& groups) const override;
         
     private:
         

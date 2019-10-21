@@ -80,7 +80,9 @@ namespace simploce {
     SimulationModel<Bead>::interact(const bead_ptr_t& bead,
                                     const sim_param_t& param)
     {
-        return SimulationData{};
+        SimulationData data{};
+        data.epot = interactor_->interact(bead, param, cg_);
+        return data;
     }
     
     SimulationData 

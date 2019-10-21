@@ -32,7 +32,7 @@
 #ifndef PAIR_LIST_GENERATOR_HPP
 #define PAIR_LIST_GENERATOR_HPP
 
-#include "stypes.hpp"
+#include "pair-lists.hpp"
 #include "simploce/particle/particle-group.hpp"
 #include <vector>
 #include <utility>
@@ -57,28 +57,18 @@ namespace simploce {
         using p_ptr_t = std::shared_ptr<P>;
         
         /**
-         * Particle pair type.
-         */
-        using p_pair_t = std::pair<p_ptr_t, p_ptr_t>;
-        
-        /**
-         * Particle pair lists type (single list).
-         */
-        using p_pair_list_t = std::vector<p_pair_t>;        
-        
-        /**
          * Particle group pointer type.
          */
         using pg_ptr_t = std::shared_ptr<ParticleGroup<P>>;
-        
+                
         /**
-         * Returns multiple pair lists.
+         * Returns all pair lists.
          * @param all All particles.
          * @param free All free particles.
          * @param groups All particle groups.
          * @return Pair lists.
          */
-        virtual std::vector<p_pair_list_t> 
+        virtual PairLists<P>
         generate(const std::vector<p_ptr_t>& all,
                  const std::vector<p_ptr_t>& free,
                  const std::vector<pg_ptr_t>& groups) const = 0;

@@ -118,7 +118,8 @@ namespace simploce {
     {
         
         // Set up.
-        static bool setup = false;        
+        static bool setup = false;
+        static energy_t epot{0.0};
         static std::random_device rd;
         static std::mt19937 gen(rd());
         static std::uniform_int_distribution<std::size_t> dis(0, all.size() - 1);
@@ -132,7 +133,8 @@ namespace simploce {
         auto result = displaceParticle_(particle, sm, param);
         
         SimulationData data{};
-        data.epot = result.second;
+        epot += result.first;
+        data.epot = epot;
         data.accepted = result.second;
         
         return data;
@@ -155,16 +157,25 @@ namespace simploce {
                 "No particles! Nothing to simulate."
             );
         }
+        
+        std::clog << "Performing a Monte Calrlo simulation..." << std::endl;
 
+        std::size_t numberAccepted = 0;
         std::size_t nsteps = param.get<std::size_t>("nsteps", 10000);
         std::size_t nwrite = param.get<std::size_t>("nwrite", 10);
+        temperature_t temperature = param.get<real_t>("temperature", 298.15);
         
         for (std::size_t counter = 1; counter <= nsteps; ++counter) {
             SimulationData data = 
                 sm_->doWithAll<SimulationData>([this, param] (std::vector<bead_ptr_t>& all) {
                     return displaceOneParticle_<Bead>(all, this->sm_, param);
                 });
+                if ( data.accepted ) {
+                    numberAccepted += 1;
+                }
             if ( counter % nwrite == 0 ) {
+                data.acceptanceRatio = real_t(numberAccepted)/real_t(counter) * 100.0;
+                data.temperature = temperature;
                 dataStream << std::setw(width) << counter << space << data << std::endl;
                 sm_->saveState(trajStream);
                 trajStream.flush();
@@ -172,6 +183,7 @@ namespace simploce {
             }
         }
         
+        std::clog << "Done." << std::endl;
     }
     
 }

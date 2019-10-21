@@ -45,7 +45,7 @@ namespace simploce {
     using lj_params_t = ForceField::lj_params_t;
     using el_params_t = ForceField::el_params_t;
     using result_t = std::pair<energy_t, std::vector<force_t>>;
-    using bead_pair_list_t = ParticlePairListGenerator<Bead>::p_pair_list_t;
+    using bead_pair_list_t = PairLists<Bead>::pp_list_cont_t;
     
     static std::pair<energy_t, force_t> coulombForce_(const position_t& ri,
                                                       const charge_t& qi,
@@ -128,8 +128,8 @@ namespace simploce {
     }    
     
     
-    // Ignores LJ for pairs for which no parameters were identified.
-    static result_t forces_(const bead_pair_list_t& single,
+    // Ignores LJ for bead pairs for which no parameters were identified.
+    static result_t forces_(const bead_pair_list_t single,
                             std::size_t nbeads,
                             const lj_params_t& ljParams,
                             const el_params_t& elParams,
@@ -156,20 +156,6 @@ namespace simploce {
             std::string name_j = pj->spec()->name();
             charge_t qj = pj->charge();
             std::size_t index_j = pj->index();
-            
-            /*
-            dist_vect_t rij = bc->apply(ri, rj);
-            real_t Rij = norm<real_t>(rij);
-            if ( Rij < 0.1 ) {
-                std::clog << "Name 1" << name_i << std::endl;
-                std::clog << "Name 2" << name_j << std::endl;
-                std::clog << "Rij = " << Rij << std::endl;
-            }
-
-
-            std::clog << "(" << name_i << ", " << name_j << "): has C12, C6? "
-                      << ljParams.contains(name_i, name_j) << std::endl;
-            */
             
             std::pair<energy_t, force_t> ef;
             if ( ljParams.contains(name_i, name_j) ) {
@@ -292,7 +278,32 @@ namespace simploce {
     energy_t LJCoulombForces<Bead>::interact(const std::vector<bead_ptr_t>& all,
                                              const std::vector<bead_ptr_t>& free,
                                              const std::vector<bead_group_ptr_t>& groups,
-                                             const std::vector<bead_pair_list_t>& pairLists)
+                                             const PairLists<Bead>& pairLists)
+    {
+        static std::vector<result_t> results;
+        static std::vector<std::future<result_t> > futures{};
+        
+        if ( all.size() > conf::MIN_NUMBER_OF_PARTICLES ) {
+            // Concurrent
+        } else {
+            // Not concurrent
+            
+            auto resultFree = 
+                forces_(pairLists.particlePairList(), 
+                        all.size(), 
+                        ljParams_, 
+                        elParams_, 
+                        bc_);
+        }
+        
+        return 0.0;
+    }
+        
+    /*
+    energy_t LJCoulombForces<Bead>::interact(const std::vector<bead_ptr_t>& all,
+                                             const std::vector<bead_ptr_t>& free,
+                                             const std::vector<bead_group_ptr_t>& groups,
+                                             const PairList<Bead>& pairLists)
     {   
         static std::vector<result_t> results;
         static std::vector<std::future<result_t> > futures{};
@@ -354,6 +365,7 @@ namespace simploce {
         
         return epot;
     }
+    */
     
     energy_t 
     LJCoulombForces<Bead>::interact(const bead_ptr_t& bead,
@@ -362,6 +374,7 @@ namespace simploce {
                                     const std::vector<bead_group_ptr_t>& groups)
     {
         energy_t epot = energy_(bead, free, ljParams_, elParams_, bc_, box_);
+        epot += energy_(bead, groups, ljParams_, elParams_, bc_, box_);
         return epot;
     }
     
@@ -369,7 +382,7 @@ namespace simploce {
     LJCoulombForces<Bead>::bonded(const std::vector<bead_ptr_t>& all,
                                   const std::vector<bead_ptr_t>& free,
                                   const std::vector<bead_group_ptr_t>& groups,
-                                  const std::vector<bead_pair_list_t>& pairLists)
+                                  const PairLists<Bead>& pairLists)
     {
         return 0.0;
     }

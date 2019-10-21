@@ -111,7 +111,7 @@ namespace simploce {
     CoarseGrainedElectrolyte::interact(const std::vector<bead_ptr_t>& all,
                                        const std::vector<bead_ptr_t>& free,
                                        const std::vector<bead_group_ptr_t>& groups,
-                                       const std::vector<bead_pair_list_t>& pairLists)
+                                       const PairLists<Bead>& pairLists)
     {
         return LJ_COULOMB_F->interact(all, free, groups, pairLists);
     }
@@ -120,7 +120,7 @@ namespace simploce {
     CoarseGrainedElectrolyte::bonded(const std::vector<bead_ptr_t>& all,
                                      const std::vector<bead_ptr_t>& free,
                                      const std::vector<bead_group_ptr_t>& groups,
-                                     const std::vector<bead_pair_list_t>& pairLists)
+                                     const PairLists<Bead>& pairLists)
     {
         // There are no bounded interaction.
         return energy_t{0.0};

@@ -70,6 +70,11 @@ namespace simploce {
          * Move was accepted in a Monte Carlo simulation.
          */
         bool accepted;
+        
+        /**
+         * Acceptance ratio in a Monte Carlo simulation, in [0, 100].
+         */
+        real_t acceptanceRatio;
     };
     
     /**

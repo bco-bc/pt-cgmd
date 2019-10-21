@@ -39,13 +39,15 @@ namespace simploce {
      * Returns grid element side length.
      * @param box Box.
      * @return Side length.
-     */
+     *
     static length_t 
     sideLength_(const box_ptr_t& box)
     {
         return util::cutoffDistance(box);
     }
+    */
     
+    /*
     // Between free and other free particles, and free and particles in groups.
     template <typename P>
     static typename CellLists<P>::p_pair_list_t
@@ -134,18 +136,19 @@ namespace simploce {
         
         return std::move(pairList);        
     }
+     */
     
     template <typename P>
-    static std::vector<typename CellLists<P>::p_pair_list_t>
+    static PairLists<P>
     makePairLists_(const box_ptr_t& box,
                    const bc_ptr_t& bc,
                    const std::vector<typename CellLists<P>::p_ptr_t>& all,
                    const std::vector<typename CellLists<P>::p_ptr_t>& free,
                    const std::vector<typename CellLists<P>::pg_ptr_t>& groups)
     {
+        /*
         using grid_t = Grid<P>;
         using cell_t = typename grid_t::cell_t;
-        using p_pair_list_t = typename CellLists<P>::p_pair_list_t;
             
         static grid_t grid{};
         static real_t rc2;
@@ -205,7 +208,9 @@ namespace simploce {
         }
         
         // Done.
-        return std::move(pairLists);        
+        return std::move(pairLists);
+         */
+        return PairLists<P>{};
     }
     
     CellLists<Atom>::CellLists(const box_ptr_t& box,
@@ -214,10 +219,10 @@ namespace simploce {
     {        
     }
     
-    std::vector<CellLists<Atom>::p_pair_list_t> 
-    CellLists<Atom>::generate(const std::vector<p_ptr_t>& all,
-                              const std::vector<p_ptr_t>& free,
-                              const std::vector<pg_ptr_t>& groups) const
+    PairLists<Atom>
+    CellLists<Atom>::generate(const std::vector<atom_ptr_t>& all,
+                              const std::vector<atom_ptr_t>& free,
+                              const std::vector<atom_group_ptr_t>& groups) const    
     {
         return std::move(makePairLists_<Atom>(box_, bc_, all, free, groups));
     }
@@ -228,11 +233,10 @@ namespace simploce {
     {        
     }
     
-    std::vector<CellLists<Bead>::p_pair_list_t> 
-    CellLists<Bead>::generate(const std::vector<p_ptr_t>& all,
-                              const std::vector<p_ptr_t>& free,
-                              const std::vector<pg_ptr_t>& groups) const
-    {
+    PairLists<Bead> 
+    CellLists<Bead>::generate(const std::vector<bead_ptr_t>& all,
+                              const std::vector<bead_ptr_t>& free,
+                              const std::vector<bead_group_ptr_t>& groups) const    {
         return std::move(makePairLists_<Bead>(box_, bc_, all, free, groups));
     }    
     
