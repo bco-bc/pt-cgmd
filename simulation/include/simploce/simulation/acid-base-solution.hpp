@@ -53,6 +53,7 @@ namespace simploce {
          */
         AcidBaseSolution(const spec_catalog_ptr_t& catalog,
                          const bc_ptr_t& bc,
+                         const box_ptr_t& box,
                          const cg_ff_ptr_t& water);
         
         energy_t interact(const std::vector<bead_ptr_t>& all,
@@ -78,6 +79,7 @@ namespace simploce {
         
         spec_catalog_ptr_t catalog_;
         bc_ptr_t bc_;
+        box_ptr_t box_;
         cg_ff_ptr_t water_;
         
     };

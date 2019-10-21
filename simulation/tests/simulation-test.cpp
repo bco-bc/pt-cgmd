@@ -66,6 +66,14 @@ struct SimpleForceField : public CoarseGrainedForceField{
         return 0.0;
     }
     
+    energy_t interact(const bead_ptr_t& bead,
+                          const std::vector<bead_ptr_t>& all,
+                          const std::vector<bead_ptr_t>& free,
+                          const std::vector<bead_group_ptr_t>& groups) override
+    {
+        return 0.0;
+    }
+    
     std::string id() const { return "cg-simple-ff"; }
     
     std::pair<lj_params_t, el_params_t> parameters() const override { 

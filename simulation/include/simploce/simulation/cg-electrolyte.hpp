@@ -46,7 +46,8 @@ namespace simploce {
     public:
         
         CoarseGrainedElectrolyte(const spec_catalog_ptr_t& catalog,
-                                 const bc_ptr_t& bc);
+                                 const bc_ptr_t& bc,
+                                 const box_ptr_t& box);
         
         energy_t interact(const std::vector<bead_ptr_t>& all,
                           const std::vector<bead_ptr_t>& free,
@@ -71,6 +72,7 @@ namespace simploce {
         
         spec_catalog_ptr_t catalog_;
         bc_ptr_t bc_;
+        box_ptr_t box_;
         
     };
 }

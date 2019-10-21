@@ -61,7 +61,8 @@ namespace simploce {
     static lj_params_t ljParams_;
     
     static void setup_(const spec_catalog_ptr_t& catalog,
-                       const bc_ptr_t& bc, 
+                       const bc_ptr_t& bc,
+                       const box_ptr_t& box,
                        bool protonatable)
     {
         CW = protonatable ? catalog->lookup("PCW") : catalog->lookup("CW");
@@ -85,55 +86,66 @@ namespace simploce {
         std::clog << "LJ Interaction parameters" << std::endl;
         std::clog << ljParams_ << std::endl;
     
-        LJ_COULOMB_F = std::make_unique<LJCoulombForces<Bead>>(ljParams_, elParams_, bc);
+        LJ_COULOMB_F = 
+            std::make_unique<LJCoulombForces<Bead>>(ljParams_, elParams_, bc, box);
     }
-
     
-    static std::pair<energy_t, std::vector<force_t>> 
-    bonded_(std::size_t nparticles, const std::vector<bead_group_ptr_t>& groups)
+    static energy_t
+    bonded_(const bead_group_ptr_t& group,
+            std::vector<force_t> forces)
     {
         using bond_cont_t = typename ParticleGroup<Bead>::bond_cont_t;
-        
+
         static real_t fc2 = 2.0 * FC;
         static real_t halve_fc = 0.5 * FC;
         static force_t fi;
         static force_t fj;
         
+        energy_t epot{0.0};
+        
+        const bond_cont_t& bonds = group->bonds();
+        const Bond<Bead>& bond = bonds[0];                    // There is 1 bond only.
+        const bead_ptr_t pi = bond.getParticleOne();
+        std::size_t index_i = pi->index();                    // Particle id starts at 1.
+        const bead_ptr_t pj = bond.getParticleTwo();
+        std::size_t index_j = pj->index();                    // Particle id starts at 1.
+      
+        position_t ri = pi->position();
+        position_t rj = pj->position();
+        dist_vect_t rij = ri - rj;            // Distance vector (nm), no boundary conditions.
+        length_t R = norm<length_t>(rij);     // Distance (nm)
+
+        // Unit distance vector.
+        dist_vect_t uv = rij / R;
+
+        length_t dis = R - R_CW_DP;
+        if ( dis() > 0.0 ) {
+            real_t dis3 = dis() * dis() * dis();
+            real_t dis4 = dis() * dis3; 
+            epot += halve_fc * dis4;
+            real_t f = -fc2 * dis3;
+            for (std::size_t k = 0; k != 3; ++k) {
+                real_t fv = f * uv[k];
+                fi[k] = fv;
+                fj[k] = -fv;
+            }
+            forces[index_i] += fi;
+            forces[index_j] += fj;
+        }        
+        
+        return epot;
+    }
+
+    
+    static std::pair<energy_t, std::vector<force_t>> 
+    bonded_(std::size_t nparticles, const std::vector<bead_group_ptr_t>& groups)
+    {        
         // Potential energy and forces.
         energy_t epot{0.0};
         std::vector<force_t> forces(nparticles, force_t{});
                 
-        for (auto g : groups) {
-            ParticleGroup<Bead>& group = *g;
-            const bond_cont_t& bonds = group.bonds();
-            const Bond<Bead>& bond = bonds[0];                    // There is 1 bond only.
-            const bead_ptr_t pi = bond.getParticleOne();
-            std::size_t index_i = pi->index();                    // Particle id starts at 1.
-            const bead_ptr_t pj = bond.getParticleTwo();
-            std::size_t index_j = pj->index();                    // Particle id starts at 1.
-      
-            position_t ri = pi->position();
-            position_t rj = pj->position();
-            dist_vect_t rij = ri - rj;            // Distance vector (nm), no boundary conditions.
-            length_t R = norm<length_t>(rij);     // Distance (nm)
-
-            // Unit distance vector.
-            dist_vect_t uv = rij / R;
-
-            length_t dis = R - R_CW_DP;
-            if ( dis() > 0.0 ) {
-                real_t dis3 = dis() * dis() * dis();
-                real_t dis4 = dis() * dis3; 
-                epot += halve_fc * dis4;
-                real_t f = -fc2 * dis3;
-                for (std::size_t k = 0; k != 3; ++k) {
-                    real_t fv = f * uv[k];
-                    fi[k] = fv;
-                    fj[k] = -fv;
-                }
-                forces[index_i] += fi;
-                forces[index_j] += fj;
-            }
+        for (auto g : groups) {            
+            epot += bonded_(g, forces);
         }        
         
         return std::make_pair(epot, forces);
@@ -141,10 +153,11 @@ namespace simploce {
     
     CoarseGrainedPolarizableWater::CoarseGrainedPolarizableWater(const spec_catalog_ptr_t& catalog,
                                                                  const bc_ptr_t& bc,
+                                                                 const box_ptr_t& box,
                                                                  bool protonatable) :
-        CoarseGrainedForceField{}, catalog_{catalog}, bc_{bc}
+        CoarseGrainedForceField{}, catalog_{catalog}, bc_{bc}, box_{box}
     {      
-            setup_(catalog, bc, protonatable);
+            setup_(catalog, bc, box, protonatable);
     }
             
     energy_t 
@@ -192,8 +205,13 @@ namespace simploce {
                                             const std::vector<bead_ptr_t>& free,
                                             const std::vector<bead_group_ptr_t>& groups)
     {
+        std::vector<force_t> forces(all.size(), force_t{});
         energy_t epot = LJ_COULOMB_F->interact(bead, all, free, groups);
-        
+        for (auto g : groups) {            
+            if ( g->contains(bead) ) {
+                epot += bonded_(g, forces);
+            }
+        }
         return epot;
     }
     

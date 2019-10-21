@@ -48,6 +48,7 @@ namespace simploce {
         
         CoarseGrainedPolarizableWater(const spec_catalog_ptr_t& catalog,
                                       const bc_ptr_t& bc,
+                                      const box_ptr_t& box,
                                       bool protonatable);
         
         energy_t interact(const std::vector<bead_ptr_t>& all,
@@ -84,7 +85,7 @@ namespace simploce {
         
         spec_catalog_ptr_t catalog_;
         bc_ptr_t bc_;
-        
+        box_ptr_t box_;
     };
 }
 

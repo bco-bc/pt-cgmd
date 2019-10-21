@@ -36,6 +36,7 @@
 #include "simploce/util/util.hpp"
 #include "simploce/util/mu-units.hpp"
 #include "simploce/simulation/sconf.hpp"
+#include "simploce/simulation/sim-util.hpp"
 #include <future>
 #include <utility>
 
@@ -189,10 +190,102 @@ namespace simploce {
         return std::make_pair(epot, forces);
     }
     
+    energy_t energy_(const bead_ptr_t& bead,
+                     const std::vector<bead_ptr_t>& free,
+                     const lj_params_t& ljParams,
+                     const el_params_t& elParams,
+                     const bc_ptr_t& bc,
+                     const box_ptr_t& box)
+    {
+        // Electrostatic parameters.
+        real_t eps_r = elParams.at("eps_r");
+
+        length_t rc = util::cutoffDistance(box);
+        real_t rc2 = rc * rc;
+        energy_t epot{0.0};
+        
+        position_t ri = bead->position();
+        std::string name_i = bead->spec()->name();
+        charge_t qi = bead->charge();
+        std::size_t index_i = bead->index();
+
+        for (auto f : free) {
+            std::size_t index_j = f->index();
+            if ( index_j != index_i ) {
+                position_t rj = f->position();
+                auto rij = bc->apply(ri, rj);
+                auto Rij2 = norm2<real_t>(rij);
+                if ( Rij2 < rc2 ) {
+                    std::string name_j = f->spec()->name();
+                    charge_t qj = f->charge();
+                    std::pair<energy_t, force_t> ef;
+                    if ( ljParams.contains(name_i, name_j) ) {
+                        auto ljParam = ljParams.at(name_i, name_j);
+                        energy_t C12 = ljParam.first;
+                        length_t C6 = ljParam.second;
+                        ef = ljCoulombForce_(ri, qi, rj, qj, C12(), C6(), eps_r, bc);
+                    } else {
+                        ef = coulombForce_(ri, qi, rj, qj, eps_r, bc);
+                    }
+                    epot += ef.first;
+                }                
+            }
+        }
+        
+        return epot;
+    }
+    
+    energy_t energy_(const bead_ptr_t& bead,
+                     const std::vector<bead_group_ptr_t>& groups,
+                     const lj_params_t& ljParams,
+                     const el_params_t& elParams,
+                     const bc_ptr_t& bc,
+                     const box_ptr_t& box)
+    {
+        // Electrostatic parameters.
+        real_t eps_r = elParams.at("eps_r");
+
+        length_t rc = util::cutoffDistance(box);
+        real_t rc2 = rc * rc;
+        energy_t epot{0.0};
+        
+        position_t ri = bead->position();
+        std::string name_i = bead->spec()->name();
+        charge_t qi = bead->charge();
+        
+        for (auto g : groups) {
+            if ( !g->contains(bead) ) {
+                position_t rj = g->position();
+                auto rij = bc->apply(ri, rj);
+                auto Rij2 = norm2<real_t>(rij);
+                if ( Rij2 < rc2 ) {
+                    for (auto p : g->particles()) {
+                        rj = p->position();
+                        std::string name_j = p->spec()->name();
+                        charge_t qj = p->charge();
+                        std::pair<energy_t, force_t> ef;
+                        if ( ljParams.contains(name_i, name_j) ) {
+                            auto ljParam = ljParams.at(name_i, name_j);
+                            energy_t C12 = ljParam.first;
+                            length_t C6 = ljParam.second;
+                            ef = ljCoulombForce_(ri, qi, rj, qj, C12(), C6(), eps_r, bc);
+                        } else {
+                            ef = coulombForce_(ri, qi, rj, qj, eps_r, bc);
+                        }
+                        epot += ef.first;                                                
+                    }
+                }
+            }
+        }
+        
+        return epot;        
+    }
+    
     LJCoulombForces<Bead>::LJCoulombForces(const lj_params_t& ljParams, 
                                            const el_params_t& elParams, 
-                                           const bc_ptr_t& bc) :
-        ljParams_{ljParams}, elParams_{elParams}, bc_{bc}
+                                           const bc_ptr_t& bc,
+                                           const box_ptr_t& box) :
+        ljParams_{ljParams}, elParams_{elParams}, bc_{bc}, box_{box}
     {        
     }
         
@@ -268,7 +361,8 @@ namespace simploce {
                                     const std::vector<bead_ptr_t>& free,
                                     const std::vector<bead_group_ptr_t>& groups)
     {
-        return energy_t{};
+        energy_t epot = energy_(bead, free, ljParams_, elParams_, bc_, box_);
+        return epot;
     }
     
     energy_t 

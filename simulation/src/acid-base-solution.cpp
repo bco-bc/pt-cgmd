@@ -62,6 +62,7 @@ namespace simploce {
     void
     setup_(const spec_catalog_ptr_t& catalog,
            const bc_ptr_t& bc,
+           const box_ptr_t& box, 
            const cg_ff_ptr_t& water)
     {
         // Polarizable water.
@@ -117,13 +118,15 @@ namespace simploce {
         std::clog << "LJ Interaction parameters" << std::endl;
         std::clog << ljParams_ << std::endl;
         
-        LJ_COULOMB_F = std::make_unique<LJCoulombForces<Bead>>(ljParams_, elParams_, bc);        
+        LJ_COULOMB_F = 
+            std::make_unique<LJCoulombForces<Bead>>(ljParams_, elParams_, bc, box);        
     }
     
     AcidBaseSolution::AcidBaseSolution(const spec_catalog_ptr_t& catalog,
                                        const bc_ptr_t& bc,
+                                       const box_ptr_t& box,
                                        const cg_ff_ptr_t& water) :
-        catalog_{catalog}, bc_{bc}, water_{water}
+        catalog_{catalog}, bc_{bc}, box_{box}, water_{water}
     {   
         if ( !catalog_ ) {
             throw std::domain_error(
@@ -141,7 +144,7 @@ namespace simploce {
             );                        
         }
         
-        setup_(catalog_, bc_, water_);
+        setup_(catalog_, bc_, box_, water_);
     }
     
     energy_t 

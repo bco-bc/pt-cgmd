@@ -57,7 +57,8 @@ namespace simploce {
         
         LJCoulombForces(const lj_params_t& ljParams, 
                         const el_params_t& elParams,
-                        const bc_ptr_t& bc);
+                        const bc_ptr_t& bc,
+                        const box_ptr_t& box);
         
         energy_t interact(const std::vector<bead_ptr_t>& all,
                           const std::vector<bead_ptr_t>& free,
@@ -87,6 +88,7 @@ namespace simploce {
         lj_params_t ljParams_;
         el_params_t elParams_;
         bc_ptr_t bc_;
+        box_ptr_t box_;
     };
 }
 

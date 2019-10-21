@@ -103,12 +103,14 @@ namespace simploce {
         cg_ff_ptr_t 
         polarizableWaterForceField(const spec_catalog_ptr_t& catalog,
                                    const bc_ptr_t& bc,
+                                   const box_ptr_t& box,
                                    bool protonatable)
         {
             if ( !cgPolWaterFF_ ) {
                 cgPolWaterFF_ = 
                     std::make_shared<CoarseGrainedPolarizableWater>(catalog, 
-                                                                    bc, 
+                                                                    bc,
+                                                                    box,
                                                                     protonatable);
             }
             return cgPolWaterFF_;
@@ -117,22 +119,24 @@ namespace simploce {
         cg_ff_ptr_t 
         formicAcidSolutionForceField(const spec_catalog_ptr_t& catalog,
                                      const bc_ptr_t& bc,
+                                     const box_ptr_t& box,
                                      const cg_ff_ptr_t& water)
         {
             if ( !cgFormicAcidSolutionFF_ ) {
                 cgFormicAcidSolutionFF_ = 
-                    std::make_shared<AcidBaseSolution>(catalog, bc, water);
+                    std::make_shared<AcidBaseSolution>(catalog, bc, box, water);
             }
             return cgFormicAcidSolutionFF_;
         }
         
         cg_ff_ptr_t
         electrolyteForceField(const spec_catalog_ptr_t& catalog,
-                              const bc_ptr_t& bc)
+                              const bc_ptr_t& bc,
+                              const box_ptr_t& box)
         {
             if ( !cgElectrolyteFF_ ) {
                 cgElectrolyteFF_ = 
-                    std::make_shared<CoarseGrainedElectrolyte>(catalog, bc);
+                    std::make_shared<CoarseGrainedElectrolyte>(catalog, bc, box);
             }
             return cgElectrolyteFF_;
         }
@@ -182,7 +186,7 @@ namespace simploce {
                 cg_ppair_list_gen_ptr_t generator = 
                     factory::coarseGrainedPairListGenerator(box, bc);
                 cg_ff_ptr_t forcefield = 
-                    polarizableWaterForceField(catalog, bc, protonatable);
+                    polarizableWaterForceField(catalog, bc, box, protonatable);
                 cgPolWaterInteractor_ = 
                     std::make_shared<Interactor<Bead>>(forcefield, generator);
             }
@@ -198,9 +202,9 @@ namespace simploce {
                 cg_ppair_list_gen_ptr_t generator = 
                     factory::coarseGrainedPairListGenerator(box, bc);
                 cg_ff_ptr_t water = 
-                    polarizableWaterForceField(catalog, bc, true);
+                    polarizableWaterForceField(catalog, bc, box, true);
                 cg_ff_ptr_t forcefield = 
-                    formicAcidSolutionForceField(catalog, bc, water);
+                    formicAcidSolutionForceField(catalog, bc, box, water);
                 cgFormicAcidSolutionInteractor_ = 
                     std::make_shared<Interactor<Bead>>(forcefield, generator);
             }
@@ -216,7 +220,7 @@ namespace simploce {
                 cg_ppair_list_gen_ptr_t generator = 
                     factory::coarseGrainedPairListGenerator(box, bc);
                 cg_ff_ptr_t forcefield =
-                    factory::electrolyteForceField(catalog, bc);
+                    factory::electrolyteForceField(catalog, bc, box);
                 cgElectrolyteInteractor_ = 
                     std::make_shared<Interactor<Bead>>(forcefield, generator);
             }

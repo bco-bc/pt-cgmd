@@ -42,35 +42,41 @@ namespace simploce {
          * Coarse grained force field for polarizable water.
          * @param catalog Particle specification catalog.
          * @param bc Boundary condition.
+         * @param box Simulation box.
          * @param protonatable If true, water is protonatable.
          * @return Force field.
          */
         cg_ff_ptr_t
         polarizableWaterForceField(const spec_catalog_ptr_t& catalog,
                                    const bc_ptr_t& bc,
+                                   const box_ptr_t& box,
                                    bool protonatable = false);
         
         /**
          * Returns coarse grained force field for formic acid (HCOOH) in water.
          * @param catalog Particle specification catalog.
          * @param bc Boundary condition.
+         * @param box Simulation box.
          * @param water Coarse grained force field for water.
          * @return Force field.
          */
         cg_ff_ptr_t 
         formicAcidSolutionForceField(const spec_catalog_ptr_t& catalog,
                                      const bc_ptr_t& bc,
+                                     const box_ptr_t& box,
                                      const cg_ff_ptr_t& water);
         
         /**
          * Returns coarse grained force field for an NaCl electrolyte solution.
          * @param catalog Particle specification catalog.
          * @param bc Boundary condition.
+         * @param box Simulation box.
          * @return Force field.
          */
         cg_ff_ptr_t
         electrolyteForceField(const spec_catalog_ptr_t& catalog,
-                              const bc_ptr_t& bc);
+                              const bc_ptr_t& bc,
+                              const box_ptr_t& box);
         
         /**
          * Returns simulation model factory.
@@ -89,7 +95,7 @@ namespace simploce {
          */
         cg_ppair_list_gen_ptr_t
         coarseGrainedPairListGenerator(const box_ptr_t& box,
-                                                               const bc_ptr_t& bc);
+                                       const bc_ptr_t& bc);
         
         /**
          * Returns particle pair list generator for atomistic particle models.

@@ -35,6 +35,7 @@
 #include <random>
 #include <memory>
 #include <utility>
+#include <cmath>
 
 namespace simploce {
     
@@ -64,9 +65,12 @@ namespace simploce {
         // Current position.
         position_t ri = particle->position();
         
-        // Calculate initial energy.
+        // Calculate initial (current) energy.
         energy_t energy_i = sm->interact(particle, param).epot;
-        
+        if ( energy_i() >= LARGE || std::isnan(energy_i()) ) {
+            energy_i = LARGE;
+        }
+
         // Move particle.
         position_t rf;                         // Displaced position.
         for ( std::size_t k = 0; k != 3; ++k ) {
@@ -76,6 +80,9 @@ namespace simploce {
                 
         // Calculate final (new) energy.
         energy_t energy_f = sm->interact(particle, param).epot;
+        if ( energy_f()  >= LARGE || std::isnan(energy_f()) ) {
+            energy_f = 2.0 * LARGE;
+        }
         
         // Accept or reject displacement.
         energy_t difference = energy_f() - energy_i();
@@ -114,7 +121,7 @@ namespace simploce {
         static bool setup = false;        
         static std::random_device rd;
         static std::mt19937 gen(rd());
-        static std::uniform_int_distribution<std::size_t> dis(1, all.size());
+        static std::uniform_int_distribution<std::size_t> dis(0, all.size() - 1);
         if ( !setup ) {
             gen.seed(util::seedValue<std::size_t>());
             setup = true;

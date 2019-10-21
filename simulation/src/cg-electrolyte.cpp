@@ -61,7 +61,8 @@ namespace simploce {
     static lj_params_t ljParams_;
     
     static void setup_(const spec_catalog_ptr_t& catalog,
-                       const bc_ptr_t& bc)
+                       const bc_ptr_t& bc,
+                       const box_ptr_t& box)
     {
         // Electrostatics.
         auto eps_r = std::make_pair("eps_r", EPS_R);
@@ -93,15 +94,17 @@ namespace simploce {
         std::clog << "LJ Interaction parameters" << std::endl;
         std::clog << ljParams_ << std::endl;        
 
-        LJ_COULOMB_F = std::make_unique<LJCoulombForces<Bead>>(ljParams_, elParams_, bc);
+        LJ_COULOMB_F = 
+            std::make_unique<LJCoulombForces<Bead>>(ljParams_, elParams_, bc, box);
     }    
     
     
     CoarseGrainedElectrolyte::CoarseGrainedElectrolyte(const spec_catalog_ptr_t& catalog,
-                                                       const bc_ptr_t& bc) :
-        catalog_{catalog}, bc_{bc}
+                                                       const bc_ptr_t& bc,
+                                                       const box_ptr_t& box) :
+        catalog_{catalog}, bc_{bc}, box_{box}
     {        
-            setup_(catalog_, bc_);
+            setup_(catalog_, bc_, box_);
     }
     
     energy_t 
