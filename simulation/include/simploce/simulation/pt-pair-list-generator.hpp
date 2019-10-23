@@ -58,12 +58,9 @@ namespace simploce {
         
         /**
          * Constructor 
-         * @param rmax Maximum distance for two protonatable beads to be involved
-         * in proton transfer.
          * @param bc Boundary condition.
          */
-        ProtonTransferPairListGenerator(const length_t& rmax,
-                                        const bc_ptr_t& bc);
+        ProtonTransferPairListGenerator(const bc_ptr_t& bc);
         
         /**
          * Generates protonatable bead pair list.
@@ -74,7 +71,7 @@ namespace simploce {
         
     private:
         
-        length_t rmax_;
+        length_t rcutoffPT_;
         bc_ptr_t bc_;
         
     };

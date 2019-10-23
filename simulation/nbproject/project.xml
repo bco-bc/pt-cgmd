@@ -31,6 +31,8 @@
             <word>Analyzer</word>
             <word>Interactor</word>
             <word>Lennard</word>
+            <word>protonatables</word>
+            <word>Verlet</word>
         </spellchecker-wordlist>
     </configuration>
 </project>

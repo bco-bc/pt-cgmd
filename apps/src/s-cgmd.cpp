@@ -39,6 +39,9 @@ int main(int argc, char* argv[])
     std::size_t nmaxPolWaters = 1000000;             // Maximum number of polarizable waters (groups).
     std::string modelType{conf::POLARIZABLE_WATER};  // Coarse grained polarizable water.
     bool mc = false;
+    bool protonatable = true;
+    std::string displacerId =
+      conf::LANGEVIN_VELOCITY_VERLET;                // Displacer.
 
     po::options_description usage("Usage");
     usage.add_options()
@@ -107,6 +110,12 @@ int main(int argc, char* argv[])
        "Other choices: 'acid-base-solution', 'electrolyte'."
       )
       (
+       "displacer", po::value<std::string>(&displacerId),
+       "Displacer specification. Default is 'lvv' (Langevin Velocity Verlet). Other choices are"
+       "'lf' (leapFrog), 'vv' (Velocity Verlet), and "
+       "'pt-lvv' (Langevin Velocity Verlet with Proton Transfer)"
+      )
+      (
        "max-number-of-water-groups", po::value<std::size_t>(&nmaxPolWaters),
        "Maximum number of water groups. Default is 1000000."
       )
@@ -171,6 +180,9 @@ int main(int argc, char* argv[])
     if ( vm.count("model-type") ) {
       modelType = vm["model-type"].as<std::string>();
     }
+    if ( vm.count("displacer") ) {
+      displacerId = vm["displacer"].as<std::string>();
+    }
     if ( vm.count("max-number-of-water-groups") ) {
       nmaxPolWaters = vm["max-number-of-water-groups"].as<std::size_t>();
     }
@@ -202,12 +214,17 @@ int main(int argc, char* argv[])
       if ( modelType == conf::POLARIZABLE_WATER ) {
 	model = simModelFactory->polarizableWater(box, density, temperature, nmaxPolWaters);
       } else if ( modelType == conf::ACID_BASE_SOLUTION ) {
-	model = simModelFactory->formicAcidSolution(box, density, molarity, temperature, true);
+	model = simModelFactory->formicAcidSolution(box,
+						    density,
+						    molarity,
+						    temperature,
+						    protonatable);
       } else if ( modelType == conf::ELECTROLYTE ) {
 	model = simModelFactory->electrolyte(box, molarity, temperature);	
       } else {
 	throw std::domain_error(modelType + ": No such simulation model type available (yet).");
       }
+      factory::changeDisplacer(displacerId, model);
       std::clog << std::endl;
       std::clog << "Created molecular model:" << std::endl;
       

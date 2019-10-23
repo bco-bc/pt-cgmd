@@ -241,12 +241,16 @@ namespace simploce {
             std::size_t id = size + counter + 1;
             position_t r = cg->removeGroup_();
             auto bead = cg->addContinuousProtonatableBead(id, "HCOOH", r, 1, spec, true);
+            if ( !protonatable ) {
+                bead->deprotonate();
+            }
             assignMomentum(bead, temperature);
         }
         
         std::clog << "Created " << cg->numberOfParticles() << " beads." << std::endl;
         std::clog << "Created " << cg->numberOfParticleGroups() << " waters groups" << std::endl;
         std::clog << "Created " << cg->numberOfFreeParticles() << " HCCOH beads." << std::endl;
+        
         return cg;
     }
     

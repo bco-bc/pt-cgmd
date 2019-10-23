@@ -150,7 +150,19 @@ namespace simploce {
          * Assigns new displacer.
          * @param displacer Displacer.
          */
-        void displacer(const cg_displacer_ptr_t & displacer);
+        void displacer(const cg_displacer_ptr_t& displacer);
+        
+        /**
+         * Returns displacer.
+         * @return Displacer.
+         */
+        cg_displacer_ptr_t displacer() const;
+        
+        /**
+         * Returns interactor.
+         * @return Interactor.
+         */
+        cg_interactor_ptr_t interactor() const;
         
     private:
         

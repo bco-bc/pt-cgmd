@@ -75,15 +75,16 @@ namespace simploce {
          * 997.0479 kg/m^3 at 298.15 K (25 C).
          * @param molarity Molarity. Default 0.1 M.
          * @param temperature Temperature. Default is 298.15 K.
-         * @param protonatable If true, both water and HCOOH are protonatable. HCOOH
-         * will be fully protonated. if false, only HCOOH is protonatable.
+         * @param protonatable If true, both water and HCOOH are protonatable, in which
+         * case all HCOOH beads will be protonated initially, If false, no 
+         * (de)protonation will occur and all HCOOH beads will be deprotonated.
          * @return Coarse grained simulation model.
          */
         cg_sim_model_ptr_t formicAcidSolution(const box_ptr_t& box,
-                                              const density_t atDensitySI = 997.0479,
+                                              bool protonatable = true,
                                               const molarity_t molarity = 0.1,
-                                              const temperature_t temperature = 298.15,
-                                              bool protonatable = true);
+                                              const density_t atDensitySI = 997.0479,
+                                              const temperature_t temperature = 298.15);
         
         /**
          * Returns electrolyte solution of given molarity in a box. This model 

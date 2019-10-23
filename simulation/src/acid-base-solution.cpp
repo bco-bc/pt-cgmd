@@ -81,18 +81,15 @@ namespace simploce {
         elParams_ = parameters.second;
         
         // LJ, 
-        //auto zero = std::make_pair(0.0, 0.0);    // No/zero interaction parameters.
+        auto zero = std::make_pair(0.0, 0.0);    // No/zero interaction parameters.
         
-        // water: correct for protonatable.
+        // Protonatable water is required.
         if ( !ljParams_.contains("PCW", "PCW") ) {
             throw std::domain_error(
-                "Missing LJ parameters for polarizable/protontable water."
+                "Missing LJ parameters for polarizable/protonatable water."
             );
         }
         auto PCW_PCW = ljParams_.at("PCW", "PCW");
-        //ljParams_.add(PCW->name(), DP->name(), zero);
-        //ljParams_.add(DP->name(), PCW->name(), zero);
-        //ljParams_.add(DP->name(), DP->name(), zero);
         
         auto c12 = PCW_PCW.first;
         auto c6 = PCW_PCW.second;
@@ -109,8 +106,8 @@ namespace simploce {
         auto HCOOH_PCW = std::make_pair(c12, c6);
         ljParams_.add(PCW->name(), HCOOH->name(), HCOOH_PCW);
         ljParams_.add(HCOOH->name(), PCW->name(), HCOOH_PCW);
-        //ljParams_.add(HCOOH->name(), DP->name(), zero);
-        //ljParams_.add(DP->name(), HCOOH->name(), zero);
+        ljParams_.add(HCOOH->name(), DP->name(), zero);
+        ljParams_.add(DP->name(), HCOOH->name(), zero);
         
         std::clog << "Acids/Bases in polarizable water:" << std::endl;
         std::clog << "Electrostatic interaction parameters:" << std::endl;
@@ -138,6 +135,11 @@ namespace simploce {
                 "AcidBaseSolution: Missing boundary condition."
             );            
         }
+        if ( !box ) {
+            throw std::domain_error(
+                "AcidBaseSolution: Missing simulation box."
+            );
+        }
         if ( !water ) {
             throw std::domain_error(
                 "AcidBaseSolution: Missing protonatable water."
@@ -164,7 +166,7 @@ namespace simploce {
                                const std::vector<bead_ptr_t>& free,
                                const std::vector<bead_group_ptr_t>& groups)
     {
-        return energy_t{};
+        return LJ_COULOMB_F->interact(bead, all, free, groups);
     }
     
     energy_t 

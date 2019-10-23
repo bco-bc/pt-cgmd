@@ -43,6 +43,11 @@ namespace simploce {
     public:
         
         /**
+         * Default constructor with default values for rate and gamma.
+         */
+        ConstantRateProtonTransfer();
+        
+        /**
          * Constructor
          * @param rate Rate.
          * @param gamma gamma^-1 is time constant of decay.

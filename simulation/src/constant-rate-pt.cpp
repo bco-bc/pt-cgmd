@@ -37,11 +37,19 @@
 
 namespace simploce {
     
+    static const rate_t RATE = 1.0 / 1.5;
+    static const real_t GAMMA = 1.0 / RATE(); 
+    
     using prot_pair_t = ProtonTransferPairListGenerator::prot_pair_t;
     
     static bool hasProton_(const prot_pair_t& pair)
     {
         return pair.first->isProtonated() || pair.second->isProtonated();
+    }
+    
+    ConstantRateProtonTransfer::ConstantRateProtonTransfer() :
+        rate_(RATE), gamma_(GAMMA)
+    {        
     }
     
     ConstantRateProtonTransfer::ConstantRateProtonTransfer(const rate_t& rate, 

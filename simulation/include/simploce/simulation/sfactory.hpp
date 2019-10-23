@@ -210,6 +210,13 @@ namespace simploce {
                                              const pt_displacer_ptr_t& displacer);
         
         /**
+         * Change displacer according to given specification.
+         * @param displacerSpec Displacer specification.
+         * @param sm Coarse grained simulation model.
+         */
+        void changeDisplacer(std::string displacerSpec, cg_sim_model_ptr_t& sm);
+        
+        /**
          * Returns periodic boundary conditions.
          * @param box Simulation box.
          * @return Boundary condition.
@@ -220,13 +227,11 @@ namespace simploce {
         /**
          * Returns generator of pairs of protonatable beads possibly involved in proton
          * transfer.
-         * @param rmax Max distance between protonatable beads.
          * @param bc Boundary condition.
          * @return Generator.
          */
         pt_pair_list_gen_ptr_t 
-        protonTransferPairListGenerator(const length_t& rmax,
-                                        const bc_ptr_t& bc);
+        protonTransferPairListGenerator(const bc_ptr_t& bc);
         
         /**
          * Returns proton transfer (PT) displacer with constant rate.
@@ -234,7 +239,8 @@ namespace simploce {
          * @param gamma Inverse of time constant of decay.
          * @return PT displacer
          */
-        pt_displacer_ptr_t constantRate(const rate_t& rate, const real_t& gamma);
+        pt_displacer_ptr_t 
+        protonTransferDisplacer();
     }
 }
 

@@ -43,17 +43,7 @@ namespace simploce {
      * Interface for coarse grained force fields.
      */
     struct CoarseGrainedForceField : public ForceField {
-        
-        /**
-         * Bead pair type.
-         */
-        using bead_pair_t = std::pair<bead_ptr_t, bead_ptr_t>;
-        
-        /**
-         * Bead pair lists type.
-         */
-        using bead_pair_list_t = std::vector<bead_pair_t>;
-                
+                        
         virtual ~CoarseGrainedForceField() {}
         
         /**
@@ -62,8 +52,8 @@ namespace simploce {
          * @param all All beads.
          * @param free Free beads.
          * @param groups All bead groups.
-         * @param pairLists One or multiple bead pair lists.
-         * @return Potential energy.
+         * @param pairLists Pair lists.
+         * @return Total potential energy.
          */
         virtual energy_t interact(const std::vector<bead_ptr_t>& all,
                                   const std::vector<bead_ptr_t>& free,
@@ -76,7 +66,7 @@ namespace simploce {
          * @param all All beads.
          * @param free Free beads.
          * @param groups  All bead groups.
-         * @param pairLists  One or multiple bead pair lists.
+         * @param pairLists Pair lists.
          * @return Potential energy.
          */
         virtual energy_t bonded(const std::vector<bead_ptr_t>& all,
@@ -86,12 +76,12 @@ namespace simploce {
         
         
         /**
-         * Returns interaction energy of given bead with all other bead.
+         * Returns the interaction energy of given bead with all other beads.
          * @param bead Bead
          * @param all All beads.
          * @param free Free beads.
          * @param groups bead groups.
-         * @return Energy.
+         * @return Interaction energy (potential energy).
          */
         virtual energy_t interact(const bead_ptr_t& bead,
                                   const std::vector<bead_ptr_t>& all,

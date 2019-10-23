@@ -56,8 +56,9 @@ namespace simploce {
          * @param molarity Requested molarity of formic acid. Default is 0.1 M.
          * @param temperature Requested temperature in SI units (K). Default is 
          * 298.15 K.
-         * @param protonatable If true, both water and HCOOH are protonatable. HCOOH
-         * will be fully protonated.
+         * @param protonatable If true, both water and HCOOH are protonatable, in
+         * which case all HCOOH beads will be protonated initially. If false, no
+         * (de)protonation will occur and all HCOOH beads will be deprotonated.
          * @return Coarse grained particle model.
          */
         cg_ptr_t formicAcidSolution(const box_ptr_t& box,

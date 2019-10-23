@@ -1,3 +1,4 @@
+# Change prefix, if required.
 PREFIX = /home/ajuffer
 
 # Other

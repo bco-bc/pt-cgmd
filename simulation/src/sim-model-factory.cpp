@@ -46,8 +46,6 @@
 
 namespace simploce {
     
-    const static length_t PT_RMAX = 0.4; // nm.
-    
     SimulationModelFactory::SimulationModelFactory(const particle_model_fact_ptr_t& particleModelFactory,
                                                    const spec_catalog_ptr_t& catalog) :
         particleModelFactory_{particleModelFactory}, catalog_{catalog}
@@ -92,8 +90,9 @@ namespace simploce {
     
     cg_sim_model_ptr_t 
     SimulationModelFactory::formicAcidSolution(const box_ptr_t& box,
-                                               const density_t atDensitySI,
+                                               bool protonatable,
                                                const molarity_t molarity,
+                                               const density_t atDensitySI,
                                                const temperature_t temperature,
                                                bool protonatable)
     {
@@ -119,14 +118,12 @@ namespace simploce {
         cg_interactor_ptr_t interactor =
             factory::formicAcidSolutionInteractor(catalog_, box, bc);            
         
-        // Pair list for protonatables.
+        // Pair list generator for protonatables.
         pt_pair_list_gen_ptr_t generator = 
-            factory::protonTransferPairListGenerator(PT_RMAX, bc);
+            factory::protonTransferPairListGenerator(bc);
         
         // Proton transfer.
-        rate_t rate = 1.0/1.5;
-        real_t gamma = 1.0 / rate();
-        pt_displacer_ptr_t ptDisplacer = factory::constantRate(rate, gamma);
+        pt_displacer_ptr_t ptDisplacer = factory::protonTransferDisplacer();
         
         // Displacer.
         std::shared_ptr<CoarseGrainedDisplacer> displacer = 

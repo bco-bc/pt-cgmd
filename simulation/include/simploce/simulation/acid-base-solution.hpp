@@ -49,6 +49,7 @@ namespace simploce {
          * Constructor.
          * @param catalog Particle specifications catalog.
          * @param bc Boundary conditions.
+         * @param box SImulation box.
          * @param water Protonatable water.
          */
         AcidBaseSolution(const spec_catalog_ptr_t& catalog,

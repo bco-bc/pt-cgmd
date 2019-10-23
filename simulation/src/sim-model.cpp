@@ -42,6 +42,7 @@
 #include "simploce/particle/discrete-protonatable-bead.hpp"
 #include "simploce/particle/continuous-protonatable-bead.hpp"
 #include "simploce/util/cube.hpp"
+#include "simploce/simulation/constant-rate-pt.hpp"
 #include <memory>
 #include <utility>
 #include <stdexcept>
@@ -182,6 +183,18 @@ namespace simploce {
             throw std::domain_error("No displacer specified.");
         }
         displacer_ = displacer;
+    }
+    
+    cg_interactor_ptr_t 
+    SimulationModel<Bead>::interactor() const
+    {
+       return interactor_; 
+    }
+    
+    cg_displacer_ptr_t 
+    SimulationModel<Bead>::displacer() const
+    {
+        return displacer_;
     }
     
     std::ostream& 

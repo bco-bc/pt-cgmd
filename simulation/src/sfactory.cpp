@@ -46,12 +46,14 @@
 #include "simploce/simulation/pt-langevin-velocity-verlet.hpp"
 #include "simploce/simulation/pbc.hpp"
 #include "simploce/simulation/constant-rate-pt.hpp"
+#include "simploce/simulation/sconf.hpp"
 #include "simploce/particle/bead.hpp"
 #include "simploce/particle/atom.hpp"
 #include "simploce/particle/atomistic.hpp"
 #include "simploce/particle/coarse-grained.hpp"
 #include "simploce/particle/pfactory.hpp"
 #include <memory>
+#include <stdexcept>
 
 namespace simploce {
     namespace factory {
@@ -296,6 +298,32 @@ namespace simploce {
             return cgPTLVV_;
         }   
         
+        void 
+        changeDisplacer(std::string displacerId, cg_sim_model_ptr_t& sm)
+        {
+            if ( sm->displacer()->id() != displacerId) {                            
+                auto interactor = sm->interactor();
+                cg_displacer_ptr_t displacer;
+                if ( displacerId == conf::LEAP_FROG ) {
+                    displacer = factory::leapFrog(interactor);                
+                } else if ( displacerId == conf::VELOCITY_VERLET ) {
+                    displacer = factory::velocityVerlet(interactor);
+                } else if ( displacerId == conf::LANGEVIN_VELOCITY_VERLET ) {
+                    displacer = factory::langevinVelocityVerlet(interactor);                
+                } else if ( displacerId == conf::PT_LANGEVIN_VELOCITY_VERLET ) {
+                    auto bc = sm->boundaryCondition();
+                    auto ptGenerator = factory::protonTransferPairListGenerator(bc);
+                    auto ptDisplacer = factory::protonTransferDisplacer();
+                    displacer = factory::protonTransferlangevinVelocityVerlet(interactor, 
+                                                                              ptGenerator, 
+                                                                              ptDisplacer);
+                } else {
+                    throw std::domain_error(displacerId + ": No such displacer.");
+                }
+                sm->displacer(displacer);
+            }
+        }
+        
         bc_ptr_t 
         pbc(const box_ptr_t& box)
         {
@@ -306,22 +334,21 @@ namespace simploce {
         }
         
         pt_pair_list_gen_ptr_t 
-        protonTransferPairListGenerator(const length_t& rmax,
-                                        const bc_ptr_t& bc)
+        protonTransferPairListGenerator(const bc_ptr_t& bc)
         {
             if ( !ptPairlisGen_) {
                 ptPairlisGen_ = 
-                    std::make_shared<ProtonTransferPairListGenerator>(rmax, bc);
+                    std::make_shared<ProtonTransferPairListGenerator>(bc);
             }
             return ptPairlisGen_;
         }
         
         pt_displacer_ptr_t 
-        constantRate(const rate_t& rate, const real_t& gamma)
+        protonransferDisplacer()
         {
             if ( !constantRate_ ) {
                 constantRate_ = 
-                    std::make_shared<ConstantRateProtonTransfer>(rate, gamma);
+                    std::make_shared<ConstantRateProtonTransfer>();
             }
             return constantRate_;
         }

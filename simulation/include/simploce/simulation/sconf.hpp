@@ -55,6 +55,11 @@ namespace simploce {
         
         // Minimum number of particles.
         const std::size_t MIN_NUMBER_OF_PARTICLES = 1000;    
+        
+        /**
+         * Default cutoff distance beyond which protonatables cannot transfer protons.
+         */
+        static length_t RCUTOFF_DISTANCE_PT{0.4};
     }
 }
 

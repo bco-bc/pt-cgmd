@@ -34,19 +34,19 @@
 #include "simploce/particle/continuous-protonatable-bead.hpp"
 #include "simploce/particle/coarse-grained.hpp"
 #include "simploce/util/cvector_t.hpp"
+#include "simploce/simulation/sconf.hpp"
 
 namespace simploce {
     
-    ProtonTransferPairListGenerator::ProtonTransferPairListGenerator(const length_t& rmax,
-                                                                     const bc_ptr_t& bc) :
-        rmax_{rmax}, bc_{bc}
+    ProtonTransferPairListGenerator::ProtonTransferPairListGenerator(const bc_ptr_t& bc) :
+        rcutoffPT_{conf::RCUTOFF_DISTANCE_PT}, bc_{bc}
     {        
     }
     
     ProtonTransferPairListGenerator::prot_pair_list_t 
     ProtonTransferPairListGenerator::generate(const cg_ptr_t& cg) const
     {
-        real_t rmax2 = rmax_() * rmax_();
+        real_t rmax2 = rcutoffPT_() * rcutoffPT_();
         bc_ptr_t bc = bc_;
         
         return cg->doWithProtBeads<prot_pair_list_t>([bc, rmax2] (const std::vector<dprot_bead_ptr_t>& discrete,
@@ -54,15 +54,15 @@ namespace simploce {
             prot_pair_list_t pairlist{};
             if ( !continuous.empty() ) {
                 for (auto i = continuous.begin(); i != (continuous.end() - 1); ++i) {
-                    auto beadi = *i;
-                    const auto& ri = beadi->position();
+                    auto pi = *i;
+                    const auto& ri = pi->position();
                     for (auto j = i + 1; j != continuous.end(); ++j) {
-                        auto beadj = *j;
-                        const auto& rj = beadj->position();
+                        auto pj = *j;
+                        const auto& rj = pj->position();
                         auto R = bc->apply(ri, rj);
                         real_t R2 = norm2<real_t>(R);
                         if ( R2 < rmax2 ) {
-                            prot_pair_t pair = std::make_pair(beadi, beadj);
+                            prot_pair_t pair = std::make_pair(pi, pj);
                             pairlist.push_back(pair);
                         }
                     }
