@@ -79,7 +79,10 @@ namespace simploce {
             setup = true;
         }
         if ( counter % npairlist == 0 || counter == 0) {
-            this->updatePairlists_(at);
+            this->updatePairLists_(at);
+            pairLists_.updated_(true);
+        } else {
+            pairLists_.updated_(false);
         }
         
         energy_t epot = 
@@ -107,12 +110,12 @@ namespace simploce {
     }
     
     void 
-    Interactor<Atom>::updatePairlists_(const at_ptr_t& at)
+    Interactor<Atom>::updatePairLists_(const at_ptr_t& at)
     {
-        atomPairLists_ = 
-            at->doWithAllFreeGroups<std::vector<atom_pair_list_t>>([this] (const std::vector<atom_ptr_t>& all,
-                                                                           const std::vector<atom_ptr_t>& free,
-                                                                           const std::vector<atom_group_ptr_t>& groups) {
+        pairLists_ = 
+            at->doWithAllFreeGroups<PairLists<Atom>>([this] (const std::vector<atom_ptr_t>& all,
+                                                             const std::vector<atom_ptr_t>& free,
+                                                             const std::vector<atom_group_ptr_t>& groups) {
                 return this->pairListGenerator_->generate(all, free, groups);
             });
     }
@@ -143,7 +146,10 @@ namespace simploce {
             setup = true;
         }
         if ( counter % npairlist == 0 || counter == 0) {
-            this->updatePairlists_(cg);
+            this->updatePairLists_(cg);
+            pairLists_.updated_(true);
+        } else {
+            pairLists_.updated_(false);
         }
         
         energy_t epot = 
@@ -153,7 +159,7 @@ namespace simploce {
                 for (auto p: all) {
                     p->resetForce();
                 }
-                return this->forcefield_->interact(all, free, groups, beadPairLists_);
+                return this->forcefield_->interact(all, free, groups, pairLists_);
             });
         
         counter += 1;
@@ -173,12 +179,12 @@ namespace simploce {
     }
     
     void
-    Interactor<Bead>::updatePairlists_(const cg_ptr_t& cg)
+    Interactor<Bead>::updatePairLists_(const cg_ptr_t& cg)
     {
-        beadPairLists_ = 
-            cg->doWithAllFreeGroups<std::vector<bead_pair_list_t>>([this] (const std::vector<bead_ptr_t>& all,
-                                                                           const std::vector<bead_ptr_t>& free,
-                                                                           const std::vector<bead_group_ptr_t>& groups) {
+        pairLists_ = 
+            cg->doWithAllFreeGroups<PairLists<Bead>>([this] (const std::vector<bead_ptr_t>& all,
+                                                             const std::vector<bead_ptr_t>& free,
+                                                             const std::vector<bead_group_ptr_t>& groups) {
                 return this->pairListGenerator_->generate(all, free, groups);
             });
     }

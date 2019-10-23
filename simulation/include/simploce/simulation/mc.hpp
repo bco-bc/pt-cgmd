@@ -77,6 +77,7 @@ namespace simploce {
     private:
     
         cg_sim_model_ptr_t sm_;
+        
     };
 }
 

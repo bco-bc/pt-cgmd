@@ -40,8 +40,7 @@ namespace simploce {
     void remove(K key1, K key2);
 
     /**
-     * Returns a reference to the mapped value of the element with keys equivalent to key1 and 
-     * key2. 
+     * Returns value of the element with keys equivalent to key1 and key2. 
      * @param key1 First key.
      * @param key2 Second key.
      * @return Value.
@@ -50,10 +49,9 @@ namespace simploce {
     V at(K key1, K key2) const;
 
     /**
-     * Returns value.
+     * Returns value of the element with keys equivalent to key1 and key2.
      * @param keys Two key values.
-     * @return Value.
-     * @throws std::out_of_range if nonexistent.
+     * @return Value, or V{} if not existent.
      */
     V get(const std::pair<K,K>& keys) const;
 
@@ -143,7 +141,18 @@ namespace simploce {
   template <typename K, typename V>
   inline V MatrixMap<K,V>::get(const std::pair<K,K>& keys) const
   {
-    return this->at(keys.first, keys.second); 
+    K key1 = keys.first;
+    auto iter1 = cont_.find(key1);
+    if ( iter1 == cont_.end() ) {
+        return V{};
+    }
+    const map_t& rmap = iter1->second;
+    K key2 = keys.second;
+    const auto& iter2 = rmap.find(key2);
+    if ( iter2 == rmap.end() ) {
+        return V{};
+    }
+    return iter2->second;
   }
   
   template <typename K, typename V>

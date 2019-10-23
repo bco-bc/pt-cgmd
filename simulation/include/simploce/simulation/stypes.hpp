@@ -60,6 +60,8 @@ namespace simploce {
     template <typename P>
     class SimulationModel;
     
+    using pressure_t = value_t<real_t, 1111>;
+    
     using bc_t = BoundaryCondition;
     
     using bc_ptr_t = std::shared_ptr<bc_t>;

@@ -62,7 +62,7 @@ namespace simploce {
                            const std::string& name, 
                            const position_t& r, 
                            const spec_ptr_t& spec,
-                           bool free = true);
+                           bool free = false);
         
         /**
          * Adds new discrete protonatable bead.
@@ -80,7 +80,7 @@ namespace simploce {
                                                      const position_t& r,
                                                      std::size_t protonationState,
                                                      const spec_ptr_t& spec,
-                                                     bool free = true);
+                                                     bool free = false);
         
         /**
          * Adds new continuous protonatable bead.
@@ -98,7 +98,7 @@ namespace simploce {
                                                        const position_t& r,
                                                        std::size_t protonationState,
                                                        const spec_ptr_t& spec,
-                                                       bool free = true);
+                                                       bool free = false);
         /**
          * Adds a bead group with bonds to this physical system.
          * @param beads Beads. Must be already in this particle model.

@@ -41,10 +41,12 @@ void test1()
     } catch(std::exception& ex) {
         std::cerr << ex.what() << std::endl;
     }
+    auto keys = std::make_pair("test1", "test2");
+    std::cout << map2.get(keys) << std::endl;
     
     std::map<std::string, double> mp;
     std::cout << mp << std::endl;
-}
+ }
 
 int main(int argc, char** argv) {
     std::cout << "%SUITE_STARTING% matrix-map-test" << std::endl;

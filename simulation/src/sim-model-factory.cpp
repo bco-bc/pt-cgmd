@@ -163,10 +163,10 @@ namespace simploce {
         
         // Displacer.
         std::shared_ptr<CoarseGrainedDisplacer> displacer = 
-            //std::make_shared<LeapFrog<CoarseGrained>>(interactor);
-        //std::clog << "Using \"Leapfrog\" algorithm." << std::endl;
-            std::make_shared<LangevinVelocityVerlet<CoarseGrained>>(interactor);
-        std::clog << "Using \"Langevin Velocity Verlet\" algorithm." << std::endl;
+            std::make_shared<LeapFrog<CoarseGrained>>(interactor);
+        std::clog << "Using \"Leapfrog\" algorithm." << std::endl;
+            //std::make_shared<LangevinVelocityVerlet<CoarseGrained>>(interactor);
+        //std::clog << "Using \"Langevin Velocity Verlet\" algorithm." << std::endl;
         
         // Done.
         return std::make_shared<cg_sim_model_t>(cg, displacer, interactor, box, bc);

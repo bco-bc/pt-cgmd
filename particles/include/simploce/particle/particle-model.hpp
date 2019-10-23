@@ -410,7 +410,10 @@ namespace simploce {
             // Create the group.
             pg_ptr_t group = PG::make(particles, bonds);
             this->addGroup(group);            
-        }        
+        }
+        
+        std::clog << "Read " << free_.size() << " free particles." << std::endl;
+        std::clog << "Read " << groups_.size() << " particle group." << std::endl;
     }
       
 }

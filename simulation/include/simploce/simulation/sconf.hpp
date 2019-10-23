@@ -54,7 +54,7 @@ namespace simploce {
         static length_t RCUTOFF_DISTANCE_{2.5};  // nm.
         
         // Minimum number of particles.
-        const std::size_t MIN_NUMBER_OF_PARTICLES = 100;    
+        const std::size_t MIN_NUMBER_OF_PARTICLES = 1000;    
     }
 }
 

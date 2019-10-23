@@ -25,6 +25,8 @@
 #include <cfenv>
 #include <future>
 #include <vector>
+#include <utility>
+#include <cassert>
 
 namespace simploce {
     namespace util {
@@ -96,6 +98,55 @@ namespace simploce {
         {
             return boost::lexical_cast<std::string, T>(t);
         }
+        
+        /**
+         * Returns sublists of a list of items. The number of sublists is decided by
+         * the number of available hardware threads.
+         * @param items Items
+         * @return Sub lists of items.
+         */
+        template <typename T, template <typename, typename... Args> class CONT>
+        std::vector<std::vector<T>> 
+        makeSubLists(const CONT<T>& items)
+        {
+            using sublists_t = std::vector<std::vector<T>>;
+            
+            assert( !items.empty() );
+            
+            if ( items.empty() ) {
+                return sublists_t{};
+            }            
+            
+            // Sub lists.
+            sublists_t subLists{};
+            
+            std::size_t counter = 0;      
+            static const std::size_t nsublists = std::thread::hardware_concurrency();        
+            std::size_t numberOfItemsPerSubList = items.size() / nsublists;                                                              
+            for (std::size_t k = 0; k != nsublists; ++k) {
+                std::vector<T> single{};  // One sublist of items.
+                std::size_t n = 0;
+                while (counter != items.size() && n != numberOfItemsPerSubList) {
+                    single.push_back(items[counter]);
+                    counter += 1;
+                    n += 1;
+                }
+                subLists.push_back(single); // Store the sublist.               
+            }
+    
+            // Add remaining items, if any, to the last sublist.
+            if ( counter < items.size() ) {
+                auto& last = *(subLists.end() - 1);
+                while ( counter != items.size() ) {
+                    last.push_back(items[counter]);
+                    counter += 1;
+                }
+            }
+            
+            // Done.
+            return subLists;
+        }
+
     }
 }
 

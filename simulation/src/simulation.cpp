@@ -32,6 +32,7 @@
 #include "simploce/simulation/simulation.hpp"
 #include "simploce/simulation/sim-model.hpp"
 #include "simploce/simulation/sim-data.hpp"
+#include "simploce/simulation/sim-util.hpp"
 #include "simploce/simulation/sconf.hpp"
 #include <stdexcept>
 #include <iostream>
@@ -65,6 +66,9 @@ namespace simploce {
         for (std::size_t counter = 1; counter <= nsteps; ++counter) {
             SimulationData data = sm_->displace(param);
             if ( counter % nwrite == 0 ) {
+                data.pressure = sm_->doWithAll<pressure_t>([this, data] (const std::vector<bead_ptr_t>& all) {
+                    return util::pressure(all, data.temperature, this->sm_->box());
+                });
                 dataStream << std::setw(width) << counter << space << data << std::endl;
                 sm_->saveState(trajStream);
                 trajStream.flush();

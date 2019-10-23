@@ -32,13 +32,15 @@
 #include "simploce/simulation/lj-coulomb-forces.hpp"
 #include "simploce/simulation/pair-list-generator.hpp"
 #include "simploce/simulation/bc.hpp"
+#include "simploce/simulation/pair-lists.hpp"
 #include "simploce/particle/particle-spec.hpp"
+#include "simploce/simulation/sim-util.hpp"
+#include "simploce/simulation/sconf.hpp"
 #include "simploce/util/util.hpp"
 #include "simploce/util/mu-units.hpp"
-#include "simploce/simulation/sconf.hpp"
-#include "simploce/simulation/sim-util.hpp"
 #include <future>
 #include <utility>
+#include <cassert>
 
 namespace simploce {
     
@@ -46,40 +48,11 @@ namespace simploce {
     using el_params_t = ForceField::el_params_t;
     using result_t = std::pair<energy_t, std::vector<force_t>>;
     using bead_pair_list_t = PairLists<Bead>::pp_list_cont_t;
-    
-    static std::pair<energy_t, force_t> coulombForce_(const position_t& ri,
-                                                      const charge_t& qi,
-                                                      const position_t& rj,
-                                                      const charge_t& qj,
-                                                      real_t eps_r,
-                                                      const bc_ptr_t& bc)
-    {
-        static const real_t four_pi_e0 = MUUnits<real_t>::FOUR_PI_E0;
-        
-        // Apply boundary condition.
-        dist_vect_t rij = bc->apply(ri, rj);
-        real_t Rij = norm<real_t>(rij);
-                
-        // Potential energy
-                
-        // Coulomb
-        real_t t3 = qi * qj / (four_pi_e0 * eps_r);
-        real_t epot = t3 / Rij;  // kJ/mol
-        
-        // Forces.
-        real_t Rij2 = Rij * Rij;
-        dist_vect_t uv = rij/Rij;
-        real_t dElecdR = -t3 / Rij2;
-        force_t f{};
-        for (std::size_t k = 0; k != 3; ++k) {
-            f[k] = -dElecdR * uv[k];             // kJ/(mol nm)
-        }
-
-        return std::make_pair(epot, f);        
-    }
+    using bead_group_pair_list_t = PairLists<Bead>::pg_list_cont_t;
+    using group_pair_list_t = PairLists<Bead>::gg_list_cont_t;
     
     /**
-     * Returns potential energy and force on particle i.
+     * Returns interaction potential energy and force on particle i.
      */
     static std::pair<energy_t, force_t> ljCoulombForce_(const position_t& ri,
                                                         const charge_t& qi,
@@ -88,14 +61,17 @@ namespace simploce {
                                                         real_t C12,
                                                         real_t C6,
                                                         real_t eps_r,
-                                                        const bc_ptr_t& bc)
+                                                        const bc_ptr_t& bc,
+                                                        bool applyBC,
+                                                        const dist_vect_t& R)
     {
         static const real_t four_pi_e0 = MUUnits<real_t>::FOUR_PI_E0;
         
+
         // Apply boundary condition.
-        dist_vect_t rij = bc->apply(ri, rj);
-        real_t Rij = norm<real_t>(rij);        
-    
+        dist_vect_t rij = applyBC ? bc->apply(ri, rj) : ri - rj - R;
+        real_t Rij = norm<real_t>(rij);
+
         // Potential energy
         
         // LJ
@@ -111,7 +87,7 @@ namespace simploce {
         real_t elec = t3 / Rij;  // kJ/mol
         
         // Total potential energy.
-        energy_t total = LJ + elec;
+        energy_t epot = LJ + elec;
     
         // Forces.
         dist_vect_t uv = rij/Rij;
@@ -124,24 +100,25 @@ namespace simploce {
             f[k] = fLJ + fElec;
         }
 
-        return std::make_pair(total, f);
-    }    
+        return std::make_pair(epot, f);
+    }
     
-    
-    // Ignores LJ for bead pairs for which no parameters were identified.
-    static result_t forces_(const bead_pair_list_t single,
-                            std::size_t nbeads,
-                            const lj_params_t& ljParams,
-                            const el_params_t& elParams,
-                            const bc_ptr_t& bc)
+    // Returns forces on beads and energy for bead pairs.
+    static result_t ppForces_(const bead_pair_list_t ppPairList,
+                              std::size_t nbeads,
+                              const lj_params_t& ljParams,
+                              const el_params_t& elParams,
+                              const bc_ptr_t& bc)
     {
         std::vector<force_t> forces(nbeads, force_t{});
         energy_t epot{0.0};
-    
+        static const dist_vect_t R{};
+        
         // Electrostatic parameters.
-        real_t eps_r = elParams.at("eps_r");
+        static const real_t eps_r = elParams.at("eps_r");
+        
     
-        for (auto pp : single) {
+        for (auto pp : ppPairList) {
             
             // First particle
             bead_ptr_t pi = pp.first;
@@ -157,17 +134,13 @@ namespace simploce {
             charge_t qj = pj->charge();
             std::size_t index_j = pj->index();
             
-            std::pair<energy_t, force_t> ef;
-            if ( ljParams.contains(name_i, name_j) ) {
-                auto ljParam = ljParams.at(name_i, name_j);
-                energy_t C12 = ljParam.first;
-                length_t C6 = ljParam.second;
-                ef = ljCoulombForce_(ri, qi, rj, qj, C12(), C6(), eps_r, bc);
-            } else {
-                ef = coulombForce_(ri, qi, rj, qj, eps_r, bc);
-            }
+            // Calculate interaction.
+            auto ljParam = ljParams.at(name_i, name_j);
+            auto C12 = ljParam.first;
+            auto C6 = ljParam.second;
+            auto ef = ljCoulombForce_(ri, qi, rj, qj, C12, C6, eps_r, bc, true, R);
 
-            // Store.
+            // Store energy and forces.
             epot += ef.first;
             forces[index_i] += ef.second;
             forces[index_j] -= ef.second;
@@ -176,19 +149,125 @@ namespace simploce {
         return std::make_pair(epot, forces);
     }
     
-    energy_t energy_(const bead_ptr_t& bead,
-                     const std::vector<bead_ptr_t>& free,
-                     const lj_params_t& ljParams,
-                     const el_params_t& elParams,
-                     const bc_ptr_t& bc,
-                     const box_ptr_t& box)
+    // Returns forces on beads and energy for for bead/bead group pairs.
+    static result_t pgForces_(const bead_group_pair_list_t& pgPairList,
+                              std::size_t nbeads,
+                              const lj_params_t& ljParams,
+                              const el_params_t& elParams,
+                              const bc_ptr_t& bc)
+    {
+        std::vector<force_t> forces(nbeads, force_t{});
+        energy_t epot{0.0};
+        static const dist_vect_t R{};
+                
+        // Electrostatic parameters.
+        static const real_t eps_r = elParams.at("eps_r");
+            
+        for (auto pg : pgPairList) {
+            
+            // First particle
+            bead_ptr_t pi = pg.first;
+            position_t ri = pi->position();
+            std::string name_i = pi->spec()->name();
+            charge_t qi = pi->charge();
+            std::size_t index_i = pi->index();
+            
+            bead_group_ptr_t g = pg.second;
+            for (auto pj : g->particles()) {
+            
+                // Second particle.
+                position_t rj = pj->position();
+                std::string name_j = pj->spec()->name();
+                charge_t qj = pj->charge();
+                std::size_t index_j = pj->index();       
+                
+                // Calculate interaction.
+                auto ljParam = ljParams.at(name_i, name_j);
+                auto C12 = ljParam.first;
+                auto C6 = ljParam.second;
+                auto ef = ljCoulombForce_(ri, qi, rj, qj, C12, C6, eps_r, bc, true, R);
+
+                // Store energy and forces.
+                epot += ef.first;
+                forces[index_i] += ef.second;
+                forces[index_j] -= ef.second;
+            }            
+        }
+        
+        return std::make_pair(epot, forces);
+    }
+    
+    // Returns forces on beads and energy for bead group/bead group pairs.
+    static result_t ggForces_(const group_pair_list_t& ggPairList,
+                              std::size_t nbeads,
+                              const lj_params_t& ljParams,
+                              const el_params_t& elParams,
+                              const bc_ptr_t& bc)
+    {
+        std::vector<force_t> forces(nbeads, force_t{});
+        energy_t epot{0.0};
+        
+        // Electrostatic parameters.
+        static real_t eps_r = elParams.at("eps_r");
+
+        for (auto gg : ggPairList) {
+            
+            // Groups.
+            bead_group_ptr_t gi = gg.first;
+            position_t rg_i = gi->position();
+            bead_group_ptr_t gj = gg.second;
+            position_t rg_j = gj->position();
+            dist_vect_t Rbc = bc->apply(rg_i, rg_j);
+            dist_vect_t R = Rbc - (rg_i - rg_j);
+            
+            for (auto pi : gi->particles()) {
+                
+                // First particle
+                position_t ri = pi->position();
+                std::string name_i = pi->spec()->name();
+                charge_t qi = pi->charge();
+                std::size_t index_i = pi->index();
+                
+                for (auto pj : gj->particles()) {
+                
+                    // Second particle.
+                    position_t rj = pj->position();
+                    std::string name_j = pj->spec()->name();
+                    charge_t qj = pj->charge();
+                    std::size_t index_j = pj->index();       
+                
+                    // Calculate interaction.
+                    auto ljParam = ljParams.at(name_i, name_j);
+                    auto C12 = ljParam.first;
+                    auto C6 = ljParam.second;
+                    auto ef = ljCoulombForce_(ri, qi, rj, qj, C12, C6, eps_r, bc, true, R);
+
+                    // Store energy and forces.
+                    epot += ef.first;
+                    forces[index_i] += ef.second;
+                    forces[index_j] -= ef.second;                                        
+                }
+            }
+        }
+        
+        return std::make_pair(epot, forces);
+    }
+    
+    // Interaction energy only, forces are ignored.
+    static energy_t energy_(const bead_ptr_t& bead,
+                            const std::vector<bead_ptr_t>& free,
+                            const lj_params_t& ljParams,
+                            const el_params_t& elParams,
+                            const bc_ptr_t& bc,
+                            const box_ptr_t& box)
     {
         // Electrostatic parameters.
-        real_t eps_r = elParams.at("eps_r");
+        static const real_t eps_r = elParams.at("eps_r");
 
         length_t rc = util::cutoffDistance(box);
         real_t rc2 = rc * rc;
         energy_t epot{0.0};
+        static dist_vect_t R{};
         
         position_t ri = bead->position();
         std::string name_i = bead->spec()->name();
@@ -204,15 +283,14 @@ namespace simploce {
                 if ( Rij2 < rc2 ) {
                     std::string name_j = f->spec()->name();
                     charge_t qj = f->charge();
-                    std::pair<energy_t, force_t> ef;
-                    if ( ljParams.contains(name_i, name_j) ) {
-                        auto ljParam = ljParams.at(name_i, name_j);
-                        energy_t C12 = ljParam.first;
-                        length_t C6 = ljParam.second;
-                        ef = ljCoulombForce_(ri, qi, rj, qj, C12(), C6(), eps_r, bc);
-                    } else {
-                        ef = coulombForce_(ri, qi, rj, qj, eps_r, bc);
-                    }
+                                  
+                    // Calculate interaction.      
+                    auto ljParam = ljParams.at(name_i, name_j);
+                    auto C12 = ljParam.first;
+                    auto C6 = ljParam.second;
+                    auto ef = ljCoulombForce_(ri, qi, rj, qj, C12, C6, eps_r, bc, true, R);
+                    
+                    // Store interaction energy.
                     epot += ef.first;
                 }                
             }
@@ -229,11 +307,12 @@ namespace simploce {
                      const box_ptr_t& box)
     {
         // Electrostatic parameters.
-        real_t eps_r = elParams.at("eps_r");
+        static const real_t eps_r = elParams.at("eps_r");
 
         length_t rc = util::cutoffDistance(box);
         real_t rc2 = rc * rc;
         energy_t epot{0.0};
+        static dist_vect_t R{};
         
         position_t ri = bead->position();
         std::string name_i = bead->spec()->name();
@@ -249,15 +328,14 @@ namespace simploce {
                         rj = p->position();
                         std::string name_j = p->spec()->name();
                         charge_t qj = p->charge();
-                        std::pair<energy_t, force_t> ef;
-                        if ( ljParams.contains(name_i, name_j) ) {
-                            auto ljParam = ljParams.at(name_i, name_j);
-                            energy_t C12 = ljParam.first;
-                            length_t C6 = ljParam.second;
-                            ef = ljCoulombForce_(ri, qi, rj, qj, C12(), C6(), eps_r, bc);
-                        } else {
-                            ef = coulombForce_(ri, qi, rj, qj, eps_r, bc);
-                        }
+                        
+                        // Calculate interaction.
+                        auto ljParam = ljParams.at(name_i, name_j);
+                        auto C12 = ljParam.first;
+                        auto C6 = ljParam.second;
+                        auto ef = ljCoulombForce_(ri, qi, rj, qj, C12, C6, eps_r, bc, true, R);
+                        
+                        // Store interaction.
                         epot += ef.first;                                                
                     }
                 }
@@ -279,71 +357,101 @@ namespace simploce {
                                              const std::vector<bead_ptr_t>& free,
                                              const std::vector<bead_group_ptr_t>& groups,
                                              const PairLists<Bead>& pairLists)
-    {
-        static std::vector<result_t> results;
-        static std::vector<std::future<result_t> > futures{};
+    {         
+        static std::vector<group_pair_list_t> subPairLists =
+            util::makeSubLists(pairLists.groupPairList());
+        static bool firstTime = true;
         
-        if ( all.size() > conf::MIN_NUMBER_OF_PARTICLES ) {
-            // Concurrent
-        } else {
-            // Not concurrent
+        // Holds all force calculation results.
+        std::vector<result_t> results{};
+        
+        auto nbeads = all.size();
+        
+        // Concurrent calculation only for large number of particles.        
+        if ( nbeads > conf::MIN_NUMBER_OF_PARTICLES ) {
             
-            auto resultFree = 
-                forces_(pairLists.particlePairList(), 
-                        all.size(), 
-                        ljParams_, 
-                        elParams_, 
-                        bc_);
-        }
-        
-        return 0.0;
-    }
-        
-    /*
-    energy_t LJCoulombForces<Bead>::interact(const std::vector<bead_ptr_t>& all,
-                                             const std::vector<bead_ptr_t>& free,
-                                             const std::vector<bead_group_ptr_t>& groups,
-                                             const PairList<Bead>& pairLists)
-    {   
-        static std::vector<result_t> results;
-        static std::vector<std::future<result_t> > futures{};
-        
-        // Set up tasks for concurrent force and energy calculation.
-        std::size_t nlists = pairLists.size();
-        std::size_t nbeads = all.size();
-        
-        if ( nlists > 1 && nbeads > conf::MIN_NUMBER_OF_PARTICLES ) {
-            std::size_t ntasks = pairLists.size() - 1;  // One other for the 
-                                                        // current thread.
-            futures.clear();
-            results.clear();
-            for (std::size_t k = 0; k != ntasks; ++k) {
-                const bead_pair_list_t& single = pairLists[k];
-                futures.push_back(
-                    std::async(
-                        std::launch::async, 
-                        forces_,
-                        std::ref(single),
-                        nbeads,
-                        std::ref(ljParams_),
-                        std::ref(elParams_),
-                        std::ref(bc_)
-                    )
-                );
+            // Concurrently.
+            
+            std::vector<std::future<result_t> > futures{};
+                        
+            // Handle particle group/particle group interaction concurrently,
+            // where one task is executed by the current thread.
+            if ( pairLists.isModified() && !firstTime) {
+                subPairLists = util::makeSubLists(pairLists.groupPairList());
+                firstTime = false;
             }
-            // Wait for these tasks to complete.
-            results = util::waitForAll<result_t>(futures);
-        }
-    
-        // Current thread.        
-        if ( nlists > 0 && nbeads > conf::MIN_NUMBER_OF_PARTICLES) {
-            const bead_pair_list_t& last = pairLists[nlists - 1];
-            result_t result = forces_(last, nbeads, ljParams_, elParams_, bc_);
-            results.push_back(result);
+            std::size_t ntasks = subPairLists.size() - 1;
+            if ( ntasks > 1 ) {
+                // Setup concurrent force calculations.
+                for (std::size_t k = 0; k != ntasks; ++k) {
+                    const auto& single = subPairLists[k];
+                    futures.push_back(
+                        std::async(
+                            std::launch::async, 
+                            ggForces_,
+                            std::ref(single),
+                            nbeads,
+                            std::ref(ljParams_),
+                            std::ref(elParams_),
+                            std::ref(bc_)
+                        )
+                    );
+                }
+            
+                // Wait for tasks to complete.
+                results = util::waitForAll<result_t>(futures);
+            }
+            
+            // The rest is handled sequentially by the current thread
+            
+            // One remaining particle group/particle group interaction.
+            const auto& single = subPairLists[ntasks - 1];
+            if ( !single.empty() ) {
+                auto ggResult = 
+                    ggForces_(single, nbeads, ljParams_, elParams_, bc_);
+                results.push_back(ggResult);
+            }
+            
+            // Interaction between free particles.
+            auto& ppPairList = pairLists.particlePairList();
+            if ( !ppPairList.empty() ) {
+                auto ppResult = 
+                    ppForces_(ppPairList, nbeads, ljParams_, elParams_, bc_);
+                results.push_back(ppResult);
+            }
+            
+            // Interaction between free particles and particle groups.
+            auto& pgPairList = pairLists.particleGroupPairList();
+            if ( !pgPairList.empty() ) {
+                auto pgResult =
+                    pgForces_(pgPairList, nbeads, ljParams_, elParams_, bc_);
+                results.push_back(pgResult);
+            }
+        
         } else {
-            const bead_pair_list_t& last = *pairLists.begin();
-            result_t result = forces_(last, nbeads, ljParams_, elParams_, bc_);
-            results.push_back(result);
+                    
+            // Sequentially            
+            auto ppResult = 
+                ppForces_(pairLists.particlePairList(), 
+                          nbeads, 
+                          ljParams_, 
+                          elParams_, 
+                          bc_);
+            results.push_back(ppResult);
+            auto pgResult =
+                pgForces_(pairLists.particleGroupPairList(),
+                          nbeads,
+                          ljParams_, 
+                          elParams_, 
+                          bc_);
+            results.push_back(pgResult);
+            auto ggResult =
+                ggForces_(pairLists.groupPairList(),
+                          nbeads,
+                          ljParams_, 
+                          elParams_, 
+                          bc_);
+            results.push_back(ggResult);
         }
         
         // Collect potential energies and forces.
@@ -351,21 +459,22 @@ namespace simploce {
         energy_t epot{0.0};
         for (auto result : results) {
             const std::vector<force_t>& ff = result.second;
-            for (std::size_t index = 0; index != ff.size(); ++index) {
+            for (std::size_t index = 0; index != nbeads; ++index) {
                 forces[index] += ff[index];
             }
             epot += result.first;
         }
-        
-        // Set forces of particles.
-        for (std::size_t index = 0; index != forces.size(); ++index) {
-            Bead& bead = *all[index];
-            bead.force(forces[index]);
+
+        // Update forces of particles.
+        for (std::size_t index = 0; index != nbeads; ++index) {
+            auto& bead = *all[index];
+            force_t f = forces[index] + bead.force();
+            bead.force(f);
         }
         
+        // Done.
         return epot;
     }
-    */
     
     energy_t 
     LJCoulombForces<Bead>::interact(const bead_ptr_t& bead,

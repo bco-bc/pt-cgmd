@@ -33,6 +33,7 @@
 #define INTERACTOR_HPP
 
 #include "sim-data.hpp"
+#include "pair-lists.hpp"
 #include <memory>
 #include <vector>
 #include <utility>
@@ -91,10 +92,11 @@ namespace simploce {
                 
     private:
         
-        void updatePairlists_(const at_ptr_t& at);
+        void updatePairLists_(const at_ptr_t& at);
         
         at_ff_ptr_t forcefield_;
         at_ppair_list_gen_ptr_t pairListGenerator_;
+        PairLists<Atom> pairLists_;
     };
     
     /**
@@ -139,10 +141,11 @@ namespace simploce {
         
     private:
         
-        void updatePairlists_(const cg_ptr_t& cg);
+        void updatePairLists_(const cg_ptr_t& cg);
         
         cg_ff_ptr_t forcefield_;
         cg_ppair_list_gen_ptr_t pairListGenerator_;
+        PairLists<Bead> pairLists_;
     };
     
 }

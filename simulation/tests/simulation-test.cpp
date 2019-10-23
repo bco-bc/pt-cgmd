@@ -40,6 +40,7 @@
 #include "simploce/particle/particle-spec.hpp"
 #include "simploce/particle/particle-spec-catalog.hpp"
 #include "simploce/simulation/cg-forcefield.hpp"
+#include "simploce/simulation/pair-lists.hpp"
 #include "simploce/util/file.hpp"
 #include <cstdlib>
 #include <iostream>
@@ -53,7 +54,7 @@ struct SimpleForceField : public CoarseGrainedForceField{
     energy_t interact(const std::vector<bead_ptr_t>& all,
                       const std::vector<bead_ptr_t>& free,
                       const std::vector<bead_group_ptr_t>& groups,
-                      const std::vector<bead_pair_list_t>& pairLists) override    
+                      const PairLists<Bead>& pairLists) override    
     {
         std::clog << "Computing forces for simulation for all, free, and groups...Done" << std::endl;
         return 0.0;        
@@ -62,14 +63,14 @@ struct SimpleForceField : public CoarseGrainedForceField{
     energy_t bonded(const std::vector<bead_ptr_t>& all,
                     const std::vector<bead_ptr_t>& free,
                     const std::vector<bead_group_ptr_t>& groups,
-                    const std::vector<bead_pair_list_t>& pairLists)  override {
+                    const PairLists<Bead>& pairLists)  override {
         return 0.0;
     }
     
     energy_t interact(const bead_ptr_t& bead,
-                          const std::vector<bead_ptr_t>& all,
-                          const std::vector<bead_ptr_t>& free,
-                          const std::vector<bead_group_ptr_t>& groups) override
+                      const std::vector<bead_ptr_t>& all,
+                      const std::vector<bead_ptr_t>& free,
+                      const std::vector<bead_group_ptr_t>& groups) override
     {
         return 0.0;
     }
@@ -93,8 +94,8 @@ void test1() {
     file::open_output(trajStream, "/localdisk/tests/trajectory.dat");
     file::open_output(dataStream, "/localdisk/tests/simulation.dat");
     
-    //using simulation_t = Simulation<Bead>;
-    using simulation_t = MC<Bead>;
+    using simulation_t = Simulation<Bead>;
+    //using simulation_t = MC<Bead>;
 
     spec_ptr_t spec1_dp = 
         ParticleSpec::create("pspec1", 1.0, 1.0, 1.0);

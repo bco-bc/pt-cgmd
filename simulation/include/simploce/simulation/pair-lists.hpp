@@ -127,16 +127,32 @@ namespace simploce {
             return ggPairList_; 
         }
         
+        /**
+         * Were the pair lists altered.
+         * @return Result.
+         */
+        bool isModified() const { return modified_; }
+        
     private:
+        
+        template <typename PP>
+        friend class Interactor;
+        
+        /**
+         * Signals whether the pair lists were modified.
+         * @param modified If true, lists were updated, otherwise not.
+         */
+        void updated_(bool modified) { modified_ = modified; }
         
         pp_list_cont_t ppPairList_;
         pg_list_cont_t pgPairList_;
         gg_list_cont_t ggPairList_;
+        bool modified_;
     };
     
     template <typename P>
     PairLists<P>::PairLists() :
-        ppPairList_{}, pgPairList_{}, ggPairList_{}
+        ppPairList_{}, pgPairList_{}, ggPairList_{}, modified_{true}
     {
     }
         
@@ -144,7 +160,8 @@ namespace simploce {
     PairLists<P>::PairLists(const pp_list_cont_t& ppPairList,
                             const pg_list_cont_t& pgPairList,
                             const gg_list_cont_t& ggPairList) :
-        ppPairList_{ppPairList}, pgPairList_{pgPairList}, ggPairList_{ggPairList}
+        ppPairList_{ppPairList}, pgPairList_{pgPairList}, 
+        ggPairList_{ggPairList}, modified_{true}
     {
     }
 

@@ -108,7 +108,7 @@ namespace simploce {
         // Group/Group pair list.
         gg_list_cont_t ggPairList{};
 
-        // For all pairs of different groups.
+        // For all particle pairs groups.
         for (auto iter_i = groups.begin(); iter_i != groups.end() - 1; ++iter_i) {
             const auto pg_i = *iter_i;
             position_t ri = pg_i->position();            
@@ -177,47 +177,12 @@ namespace simploce {
             std::clog << "Using particles pair lists based on distances between particles." 
                       << std::endl;
             std::clog << "Cutoff distance: " << util::cutoffDistance(box) << std::endl;
-            std::clog << "Total number of particles: " << all.size() << std::endl;
-            std::clog << "Total number of free particles: " << free.size() << std::endl;
-            std::clog << "Total number of particle groups: " << groups.size() << std::endl;
         }
         
         // Prepare new particle pair list.        
         auto ppPairList = forParticles_<P>(box, bc, free);       
         auto pgPairList = forParticlesAndGroups_<P>(box, bc, free, groups);
         auto ggPairList = forGroups_<P>(box, bc, groups);        
-        
-        /*
-        // Prepare sublists, the number of which will depend on the number of 
-        // hardware threads available.               
-        std::vector<p_pair_list_t> pairLists{};
-        if ( all.size() > conf::MIN_NUMBER_OF_PARTICLES ) {
-            std::size_t counter = 0;      
-            static const std::size_t nlists = std::thread::hardware_concurrency();        
-            std::size_t npairsSubList = pairList.size() / nlists;                                                              
-            for (std::size_t k = 0; k != nlists; ++k) {
-                p_pair_list_t single{};  // One sublist of particle pairs.
-                std::size_t n = 0;
-                while (counter != pairList.size() && n != npairsSubList) {
-                    single.push_back(pairList[counter]);
-                    counter += 1;
-                    n += 1;
-                }
-                pairLists.push_back(single);          // Store list.
-            }
-    
-            // Add remaining particles pairs, if any, to the last set.
-            if ( counter < pairList.size() ) {
-                p_pair_list_t& last = *(pairLists.end() - 1);
-                while ( counter != pairList.size() ) {
-                    last.push_back(pairList[counter]);
-                    counter += 1;
-                }
-            }
-        } else {
-            pairLists.push_back(pairList);
-        }
-        */
         
         if ( firstTime ) {
             std::clog << "Number of free particle pairs: " << ppPairList.size() 
@@ -244,7 +209,7 @@ namespace simploce {
                                   const std::vector<atom_ptr_t>& free,
                                   const std::vector<atom_group_ptr_t>& groups) const 
     {
-        return makePairLists_<Atom>(box_, bc_, all, free, groups);
+        return std::move(makePairLists_<Atom>(box_, bc_, all, free, groups));
     }
     
     DistanceLists<Bead>::DistanceLists(const box_ptr_t& box,
@@ -258,7 +223,7 @@ namespace simploce {
                                   const std::vector<bead_ptr_t>& free,
                                   const std::vector<bead_group_ptr_t>& groups) const 
     {
-        return makePairLists_<Bead>(box_, bc_, all, free, groups);
+        return std::move(makePairLists_<Bead>(box_, bc_, all, free, groups));
     }
     
 }

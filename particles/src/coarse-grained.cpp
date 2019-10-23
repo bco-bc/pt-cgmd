@@ -41,6 +41,7 @@
 #include <vector>
 #include <utility>
 #include <memory>
+#include <iostream>
 
 namespace simploce {
     
@@ -180,7 +181,12 @@ namespace simploce {
                 std::size_t protonationState;            
                 stream >> protonationState;
                 dprot_bead_ptr_t bead = 
-                    cg->addDiscreteProtonatableBead(id, name, r, protonationState, spec);
+                    cg->addDiscreteProtonatableBead(id, 
+                                                    name, 
+                                                    r, 
+                                                    protonationState, 
+                                                    spec, 
+                                                    false);
                 bead->velocity(v);
             } else if ( protonatable == conf::CONTINUOUSLY_PROTONATABLE) {
                 // Continuous change in protonation state.
@@ -188,13 +194,13 @@ namespace simploce {
                 real_t x, I;
                 stream >> protonationState >> x >> I;
                 cprot_bead_ptr_t bead =
-                    cg->addContinuousProtonatableBead(id, name, r, protonationState, spec);
+                    cg->addContinuousProtonatableBead(id, name, r, protonationState, spec, false);
                 bead->velocity(v);
                 bead->state(x);
                 bead->current(I);
             } else {
                 // Regular bead.
-                bead_ptr_t bead = cg->addBead(id, name, r, spec);
+                bead_ptr_t bead = cg->addBead(id, name, r, spec, false);
                 bead->velocity(v);
             }
             
@@ -203,6 +209,14 @@ namespace simploce {
                 
         cg->readFreeAndGroups(stream);
         
+        std::clog << "Total number of beads: " << cg->numberOfBeads() << std::endl;
+        cg->doWithProtBeads<void>([] (const std::vector<dprot_bead_ptr_t>& discrete,
+                                      std::vector<cprot_bead_ptr_t>& continuous) {        
+            std::clog << "Total number of 'discrete protonatable' beads: " 
+                      << discrete.size() << std::endl;
+            std::clog << "Total number of 'continuous protonatable' beads: " 
+                      << continuous.size() << std::endl;
+        });
         return cg; 
     }
     

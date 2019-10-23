@@ -61,7 +61,48 @@ namespace simploce {
                 // No point calculating temperature for a low number of degrees of freedom.
                 return 0.0;
             }        
-        }            
+        }
+        
+        /**
+         * Returns pressure.
+         * @param all All particles.
+         * @param temperature Temperature.
+         * @param box Simulation box.
+         * @return Pressure.
+         */
+        template <typename T>
+        pressure_t pressure(const std::vector<std::shared_ptr<T>>& all,
+                            const temperature_t& temperature,
+                            const box_ptr_t& box)
+        {
+            volume_t volume = box->volume();
+            mass_t totalMass = 0.0;
+            real_t virial1 = 0.0;
+            position_t centerOfMass{};
+            momentum_t totalMomentum{};
+            pressure_t pressure{};
+
+            std::size_t nparticles = all.size();
+            for (const auto& particle : all) {
+                mass_t mass = particle->mass()();
+                position_t r = particle->position();
+                momentum_t p = particle->momentum();
+                force_t f = particle->force();
+                totalMass += mass;
+                centerOfMass += ( mass() * r );
+                totalMomentum += p;
+                virial1 += inner<real_t>(f,r);
+            }
+            centerOfMass /= totalMass();
+            if ( volume() > 0.0 ) {
+                virial1 /= ( 3.0 * volume() );
+                real_t virial2 = nparticles * MUUnits<real_t>::KB * temperature() / volume();
+                pressure = virial1 + virial2; // In kJ/(mol nm^3)    
+            } else {
+                pressure = 0.0;
+            }
+            return pressure;            
+        }
         
         /**
          * Returns cutoff distance.
@@ -76,51 +117,7 @@ namespace simploce {
          * @return Square of cutoff distance.
          */
         real_t squareCutoffDistance(const box_ptr_t& box);
-        
-        /**
-         * Returns sub lists of a list of items.
-         * @param items Items
-         * @return Sub lists of items.
-         */
-        template <typename T>
-        std::set<std::vector<T>> 
-        makeSubLists(const std::vector<T>& items)
-        {
-            using sublists_t = std::set<std::vector<T>>;
-            
-            if ( items.empty() ) {
-                return sublists_t{};
-            }
-            
-            // Sub lists.
-            sublists_t subLists;
-            
-            std::size_t counter = 0;      
-            static const std::size_t nsublists = std::thread::hardware_concurrency();        
-            std::size_t numberOfItemsPerSubList = items.size() / nsublists;                                                              
-            for (std::size_t k = 0; k != nsublists; ++k) {
-                std::vector<T> single{};  // One sublist of items.
-                std::size_t n = 0;
-                while (counter != items.size() && n != numberOfItemsPerSubList) {
-                    single.push_back(items[counter]);
-                    counter += 1;
-                    n += 1;
-                }
-                subLists.push_back(single);          // Store list.
-            }
-    
-            // Add remaining pairs, if any, to the last set.
-            if ( counter < items.size() ) {
-                auto& last = *(items.end() - 1);
-                while ( counter != items.size() ) {
-                    last.push_back(items[counter]);
-                    counter += 1;
-                }
-            }
-            
-            return subLists;
-        }
-        
+                
     }
 }
 

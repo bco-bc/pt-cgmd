@@ -92,7 +92,7 @@ namespace simploce {
     
     static energy_t
     bonded_(const bead_group_ptr_t& group,
-            std::vector<force_t> forces)
+            std::vector<force_t>& forces)
     {
         using bond_cont_t = typename ParticleGroup<Bead>::bond_cont_t;
 
@@ -115,15 +115,14 @@ namespace simploce {
         dist_vect_t rij = ri - rj;            // Distance vector (nm), no boundary conditions.
         length_t R = norm<length_t>(rij);     // Distance (nm)
 
-        // Unit distance vector.
-        dist_vect_t uv = rij / R;
 
         length_t dis = R - R_CW_DP;
         if ( dis() > 0.0 ) {
             real_t dis3 = dis() * dis() * dis();
             real_t dis4 = dis() * dis3; 
             epot += halve_fc * dis4;
-            real_t f = -fc2 * dis3;
+            real_t f = -fc2 * dis3;        
+            dist_vect_t uv = rij / R;  // Unit distance vector.
             for (std::size_t k = 0; k != 3; ++k) {
                 real_t fv = f * uv[k];
                 fi[k] = fv;
@@ -205,7 +204,9 @@ namespace simploce {
                                             const std::vector<bead_ptr_t>& free,
                                             const std::vector<bead_group_ptr_t>& groups)
     {
+        // Forces are not used.
         std::vector<force_t> forces(all.size(), force_t{});
+        
         energy_t epot = LJ_COULOMB_F->interact(bead, all, free, groups);
         for (auto g : groups) {            
             if ( g->contains(bead) ) {
