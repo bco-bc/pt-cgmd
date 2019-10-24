@@ -36,7 +36,8 @@ int main(int argc, char* argv[])
     real_t density{997.0479};                        // kg/m^3
     real_t temperature{298.15};                      // K.
     real_t gamma{0.50};                              // ps^-1
-    std::size_t nmaxPolWaters = 1000000;             // Maximum number of polarizable waters (groups).
+    std::size_t nmaxPolWaters = 1000000;             // Maximum number of polarizable waters
+                                                     // (groups).
     std::string modelType{conf::POLARIZABLE_WATER};  // Coarse grained polarizable water.
     bool mc = false;
     bool protonatable = true;

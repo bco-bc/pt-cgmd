@@ -58,9 +58,12 @@ namespace simploce {
         
         /**
          * Drives the analysis.
+         * @param param Parameters, such as the number of states in the trajectory
+         * to skip (parameter name is "skip") before carrying out the analysis.
          * @param trajectory Input trajectory stream.
          */
-        void perform(std::istream& trajectory);
+        void perform(const sim_param_t& param,
+                     std::istream& trajectory);
         
     private:
         

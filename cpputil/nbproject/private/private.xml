@@ -7,10 +7,9 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/home/juffer/simploce/pt-cgmd/cpputil/include/simploce/util/mu-units.hpp</file>
-            <file>file:/home/juffer/simploce/pt-cgmd/cpputil/include/simploce/util/param.hpp</file>
-            <file>file:/home/juffer/simploce/pt-cgmd/cpputil/src/util.cpp</file>
-            <file>file:/home/juffer/simploce/pt-cgmd/cpputil/include/simploce/util/util.hpp</file>
+            <file>file:/koti/ajuffer/simploce/pt-cgmd/cpputil/include/simploce/util/map2.hpp</file>
+            <file>file:/koti/ajuffer/simploce/pt-cgmd/cpputil/include/simploce/util/util.hpp</file>
+            <file>file:/koti/ajuffer/simploce/pt-cgmd/cpputil/tests/matrix-map-test.cpp</file>
         </group>
     </open-files>
 </project-private>

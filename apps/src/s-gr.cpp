@@ -6,7 +6,6 @@
  */
 
 #include "simploce/simulation/sall.hpp"
-#include "simploce/simulation/sconf.hpp"
 #include "simploce/analysis/gr.hpp"
 #include "simploce/analysis/analysis.hpp"
 #include "simploce/particle/particle-spec-catalog.hpp"
@@ -34,7 +33,9 @@ int main(int argc, char *argv[])
   std::string fnResults{"gr.dat"};
   std::string specName1{"Na+"};
   std::string specName2{"Cl-"};
-  real_t dr{0.1};  // Bin size.
+  real_t dr{0.05};              // Bin size, nm.
+  std::size_t nskip = 0;        // Number of states in trajectory to skip
+                                // before executing analysis.
 
   po::options_description usage("Usage");
   usage.add_options()
@@ -60,7 +61,11 @@ int main(int argc, char *argv[])
     )
     (
      "bin-size", po::value<real_t>(&dr),
-     "Bin size of g(r). Default is 0.1 nm."
+     "Bin size of g(r). Default is 0.05 nm."
+    )
+    (
+     "skip-number-of-states", po::value<std::size_t>(&nskip),
+     "Number of states in trajectory to skip before executing analysis"
     )
     (
      "help", "Help message"
@@ -94,6 +99,16 @@ int main(int argc, char *argv[])
   if ( vm.count("name-spec-2") ) {
     specName2 = vm["name-spec-2"].as<std::string>();
   }
+  if ( vm.count("bin-size") ) {
+    dr = vm["bin-size"].as<real_t>();
+  }
+  if ( vm.count("skip-number-of-states") ) {
+    nskip = vm["skip-number-of-states"].as<std::size_t>();
+  }
+
+  // Simulation parameters
+  sim_param_t param;
+  param.add<std::size_t>("nskip", nskip);
 
   // Read particle specifications.
   spec_catalog_ptr_t catalog = factory::particleSpecCatalog(fnParticleSpecCatalog);
@@ -113,7 +128,7 @@ int main(int argc, char *argv[])
   
   analysis_t analysis(sm, gr);
   file::open_input(istream, fnTrajectory);
-  analysis.perform(istream);
+  analysis.perform(param, istream);
   istream.close();
 
   // Write results.

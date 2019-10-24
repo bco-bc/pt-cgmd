@@ -93,8 +93,7 @@ namespace simploce {
                                                bool protonatable,
                                                const molarity_t molarity,
                                                const density_t atDensitySI,
-                                               const temperature_t temperature,
-                                               bool protonatable)
+                                               const temperature_t temperature)
     {
         std::clog << "Creating coarse grained simulation model for formic acid (HCOOH)." 
                   << std::endl;

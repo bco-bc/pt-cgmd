@@ -344,7 +344,7 @@ namespace simploce {
         }
         
         pt_displacer_ptr_t 
-        protonransferDisplacer()
+        protonTransferDisplacer()
         {
             if ( !constantRate_ ) {
                 constantRate_ = 

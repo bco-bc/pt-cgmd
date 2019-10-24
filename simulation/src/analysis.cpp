@@ -25,6 +25,7 @@
 #include "simploce/analysis/analysis.hpp"
 #include "simploce/analysis/analyzer.hpp"
 #include "simploce/simulation/sim-model.hpp"
+#include <iostream>
 
 namespace simploce {
     
@@ -35,13 +36,21 @@ namespace simploce {
     }
         
     void 
-    Analysis<Bead>::perform(std::istream& trajectory)
+    Analysis<Bead>::perform(const sim_param_t& param,
+                            std::istream& trajectory)
     {
+        const auto nskip = param.get<std::size_t>("nskip");
+        std::clog << "Skipping first " << nskip << " states in trajectory." << std::endl;
+        
+        std::size_t counter = 0;
         sm_->readState(trajectory);
         while (trajectory.good() ) {
-            sm_->doWithAll<void>([this] (const std::vector<bead_ptr_t>& all) {
-                this->analyzer_->perform(all);
-            });
+            counter += 1;
+            if ( counter > nskip ) {
+                sm_->doWithAll<void>([this] (const std::vector<bead_ptr_t>& all) {
+                    this->analyzer_->perform(all);
+                });
+            }
             sm_->readState(trajectory);
         }
     }
