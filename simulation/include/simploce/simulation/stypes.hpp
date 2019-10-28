@@ -62,6 +62,8 @@ namespace simploce {
     
     using pressure_t = value_t<real_t, 1111>;
     
+    using dipole_moment_t = cvector_t<real_t, 2222>;
+    
     using bc_t = BoundaryCondition;
     
     using bc_ptr_t = std::shared_ptr<bc_t>;

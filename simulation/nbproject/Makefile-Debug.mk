@@ -64,8 +64,8 @@ TESTDIR=${CND_BUILDDIR}/${CND_CONF}/${CND_PLATFORM}/tests
 
 # Test Files
 TESTFILES= \
-	${TESTDIR}/TestFiles/f1 \
 	${TESTDIR}/TestFiles/f5 \
+	${TESTDIR}/TestFiles/f1 \
 	${TESTDIR}/TestFiles/f4 \
 	${TESTDIR}/TestFiles/f7 \
 	${TESTDIR}/TestFiles/f6 \
@@ -74,8 +74,8 @@ TESTFILES= \
 
 # Test Object Files
 TESTOBJECTFILES= \
+	${TESTDIR}/tests/analyzers-test.o \
 	${TESTDIR}/tests/displacer-test.o \
-	${TESTDIR}/tests/gr-test.o \
 	${TESTDIR}/tests/pair-list-test.o \
 	${TESTDIR}/tests/pdb-test.o \
 	${TESTDIR}/tests/pt-pairlist-test.o \
@@ -234,13 +234,13 @@ ${OBJECTDIR}/src/velocity-verlet.o: src/velocity-verlet.cpp
 .build-tests-conf: .build-tests-subprojects .build-conf ${TESTFILES}
 .build-tests-subprojects:
 
+${TESTDIR}/TestFiles/f5: ${TESTDIR}/tests/analyzers-test.o ${OBJECTFILES:%.o=%_nomain.o}
+	${MKDIR} -p ${TESTDIR}/TestFiles
+	${LINK.cc} -o ${TESTDIR}/TestFiles/f5 $^ ${LDLIBSOPTIONS}   
+
 ${TESTDIR}/TestFiles/f1: ${TESTDIR}/tests/displacer-test.o ${OBJECTFILES:%.o=%_nomain.o}
 	${MKDIR} -p ${TESTDIR}/TestFiles
 	${LINK.cc} -o ${TESTDIR}/TestFiles/f1 $^ ${LDLIBSOPTIONS}   
-
-${TESTDIR}/TestFiles/f5: ${TESTDIR}/tests/gr-test.o ${OBJECTFILES:%.o=%_nomain.o}
-	${MKDIR} -p ${TESTDIR}/TestFiles
-	${LINK.cc} -o ${TESTDIR}/TestFiles/f5 $^ ${LDLIBSOPTIONS}   
 
 ${TESTDIR}/TestFiles/f4: ${TESTDIR}/tests/pair-list-test.o ${OBJECTFILES:%.o=%_nomain.o}
 	${MKDIR} -p ${TESTDIR}/TestFiles
@@ -263,16 +263,16 @@ ${TESTDIR}/TestFiles/f2: ${TESTDIR}/tests/simulation-test.o ${OBJECTFILES:%.o=%_
 	${LINK.cc} -o ${TESTDIR}/TestFiles/f2 $^ ${LDLIBSOPTIONS}   
 
 
+${TESTDIR}/tests/analyzers-test.o: tests/analyzers-test.cpp 
+	${MKDIR} -p ${TESTDIR}/tests
+	${RM} "$@.d"
+	$(COMPILE.cc) -g -Wall -Iinclude -I../cpputil/include -I../particles/include -Iinclude -I../../cpputil/include -I../../particles/include -I. -std=c++14 -MMD -MP -MF "$@.d" -o ${TESTDIR}/tests/analyzers-test.o tests/analyzers-test.cpp
+
+
 ${TESTDIR}/tests/displacer-test.o: tests/displacer-test.cpp 
 	${MKDIR} -p ${TESTDIR}/tests
 	${RM} "$@.d"
 	$(COMPILE.cc) -g -Wall -Iinclude -I../cpputil/include -I../particles/include -Iinclude -I../../cpputil/include -I../../particles/include -I. -std=c++14 -MMD -MP -MF "$@.d" -o ${TESTDIR}/tests/displacer-test.o tests/displacer-test.cpp
-
-
-${TESTDIR}/tests/gr-test.o: tests/gr-test.cpp 
-	${MKDIR} -p ${TESTDIR}/tests
-	${RM} "$@.d"
-	$(COMPILE.cc) -g -Wall -Iinclude -I../cpputil/include -I../particles/include -Iinclude -I../../cpputil/include -I../../particles/include -I. -std=c++14 -MMD -MP -MF "$@.d" -o ${TESTDIR}/tests/gr-test.o tests/gr-test.cpp
 
 
 ${TESTDIR}/tests/pair-list-test.o: tests/pair-list-test.cpp 
@@ -608,8 +608,8 @@ ${OBJECTDIR}/src/velocity-verlet_nomain.o: ${OBJECTDIR}/src/velocity-verlet.o sr
 .test-conf:
 	@if [ "${TEST}" = "" ]; \
 	then  \
-	    ${TESTDIR}/TestFiles/f1 || true; \
 	    ${TESTDIR}/TestFiles/f5 || true; \
+	    ${TESTDIR}/TestFiles/f1 || true; \
 	    ${TESTDIR}/TestFiles/f4 || true; \
 	    ${TESTDIR}/TestFiles/f7 || true; \
 	    ${TESTDIR}/TestFiles/f6 || true; \

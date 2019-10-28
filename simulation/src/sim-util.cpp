@@ -31,6 +31,7 @@
 
 #include "simploce/simulation/sim-util.hpp"
 #include "simploce/simulation/sconf.hpp"
+#include "simploce/util/mu-units.hpp"
 
 namespace simploce {
     namespace util {
@@ -48,6 +49,22 @@ namespace simploce {
         {
             length_t rc = cutoffDistance(box);
             return rc * rc;
+        }
+        
+        real_t frohlich(real_t aveM2, 
+                        const temperature_t& temperature,
+                        const box_ptr_t& box)
+        {
+            auto E0 = MUUnits<real_t>::E0;
+            auto kT = MUUnits<real_t>::KB * temperature();
+            auto volume = box->volume();
+            real_t h = 1.0 / (E0 * volume) * aveM2 / (3.0 * kT);
+            real_t a = 2;
+            real_t b = -1 - 3 * h;
+            real_t c = -1;
+            real_t D = b * b - 4 * a * c;
+            assert(D > 0);
+            return (-b + std::sqrt(D)) / (2.0 * a);
         }
                 
     }

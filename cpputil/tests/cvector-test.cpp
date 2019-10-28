@@ -55,6 +55,16 @@ void test1() {
     auto cp = simploce::cross<double,2>(r1, r2);
     std::cout << "cp: " << cp << std::endl;
     std::cout << "Angle (r1, cp): " << simploce::angle<double>(r1, cp) << std::endl;
+    
+    position_t p{3.9157429e+00, -7.7622789e-01, -4.5052286e+00};
+    std::cout << "p: " << p << std::endl;
+    auto p2 = simploce::inner<double>(p, p);
+    std::cout << "inner(p, p): " << p2 << std::endl;
+    p2 = 0;
+    for (std::size_t k = 0; k != 3; ++k) {
+        p2 += p[k] * p[k];
+    }
+    std::cout << "p*p: " << p2 << std::endl;
 }
 
 void test2() {

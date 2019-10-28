@@ -117,6 +117,18 @@ namespace simploce {
          * @return Square of cutoff distance.
          */
         real_t squareCutoffDistance(const box_ptr_t& box);
+        
+        /**
+         * Returns dielectric constant according to Fröhlich.
+         * @param aveM2 The average of the M*M, where M is the total dipole moment.
+         * @param temperature Temperature.
+         * @param box Simulation box.
+         * @return Number.
+         * @see 
+         */
+        real_t frohlich(real_t aveM2, 
+                        const temperature_t& temperature,
+                        const box_ptr_t& box);
                 
     }
 }

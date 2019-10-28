@@ -18,6 +18,7 @@
       <itemPath>include/simploce/simulation/cg-forcefield.hpp</itemPath>
       <itemPath>include/simploce/simulation/cg-pol-water.hpp</itemPath>
       <itemPath>include/simploce/simulation/constant-rate-pt.hpp</itemPath>
+      <itemPath>include/simploce/analysis/dipole-moment.hpp</itemPath>
       <itemPath>include/simploce/simulation/displacer.hpp</itemPath>
       <itemPath>include/simploce/simulation/distance-lists.hpp</itemPath>
       <itemPath>include/simploce/simulation/forcefield.hpp</itemPath>
@@ -81,17 +82,17 @@
                    displayName="Test Files"
                    projectFiles="false"
                    kind="TEST_LOGICAL_FOLDER">
+      <logicalFolder name="f5"
+                     displayName="Analyzers Test"
+                     projectFiles="true"
+                     kind="TEST">
+        <itemPath>tests/analyzers-test.cpp</itemPath>
+      </logicalFolder>
       <logicalFolder name="f1"
                      displayName="Displacer Test"
                      projectFiles="true"
                      kind="TEST">
         <itemPath>tests/displacer-test.cpp</itemPath>
-      </logicalFolder>
-      <logicalFolder name="f5"
-                     displayName="G(r) Test"
-                     projectFiles="true"
-                     kind="TEST">
-        <itemPath>tests/gr-test.cpp</itemPath>
       </logicalFolder>
       <logicalFolder name="f4"
                      displayName="Pair List Test"
@@ -307,6 +308,11 @@
             tool="3"
             flavor2="0">
       </item>
+      <item path="include/simploce/analysis/dipole-moment.hpp"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
       <item path="include/simploce/analysis/gr.hpp" ex="false" tool="3" flavor2="0">
       </item>
       <item path="include/simploce/simulation/acid-base-solution.hpp"
@@ -534,9 +540,9 @@
       </item>
       <item path="src/velocity-verlet.cpp" ex="false" tool="1" flavor2="0">
       </item>
-      <item path="tests/displacer-test.cpp" ex="false" tool="1" flavor2="0">
+      <item path="tests/analyzers-test.cpp" ex="false" tool="1" flavor2="0">
       </item>
-      <item path="tests/gr-test.cpp" ex="false" tool="1" flavor2="0">
+      <item path="tests/displacer-test.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="tests/pair-list-test.cpp" ex="false" tool="1" flavor2="0">
       </item>
@@ -730,6 +736,11 @@
             tool="3"
             flavor2="0">
       </item>
+      <item path="include/simploce/analysis/dipole-moment.hpp"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
       <item path="include/simploce/analysis/gr.hpp" ex="false" tool="3" flavor2="0">
       </item>
       <item path="include/simploce/simulation/acid-base-solution.hpp"
@@ -957,9 +968,9 @@
       </item>
       <item path="src/velocity-verlet.cpp" ex="false" tool="1" flavor2="0">
       </item>
-      <item path="tests/displacer-test.cpp" ex="false" tool="1" flavor2="0">
+      <item path="tests/analyzers-test.cpp" ex="false" tool="1" flavor2="0">
       </item>
-      <item path="tests/gr-test.cpp" ex="false" tool="1" flavor2="0">
+      <item path="tests/displacer-test.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="tests/pair-list-test.cpp" ex="false" tool="1" flavor2="0">
       </item>

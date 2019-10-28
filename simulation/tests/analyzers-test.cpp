@@ -30,6 +30,7 @@
  */
 
 #include "simploce/analysis/gr.hpp"
+#include "simploce/analysis/dipole-moment.hpp"
 #include "simploce/analysis/analysis.hpp"
 #include "simploce/particle/bead.hpp"
 #include "simploce/simulation/sall.hpp"
@@ -56,6 +57,14 @@ void test1() {
     gr_t gr(dr, specName, specName, box, bc);
     
     cg_analyzer_ptr_t ptr = gr_t::create(dr, specName, specName, box, bc);    
+}
+
+void test2() {
+    std::cout << "gr-test test 2" << std::endl;
+    
+    using m_m2_t = DipoleMoment<Bead>;
+    
+    m_m2_t mm2(10*0.02);
 }
 
 int main(int argc, char** argv) {

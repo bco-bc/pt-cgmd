@@ -70,7 +70,7 @@ int main(int argc, char *argv[])
     (
      "help", "Help message"
     )
-    ;
+  ;
   
   po::variables_map vm;
   po::store(po::parse_command_line(argc, argv, usage), vm);
