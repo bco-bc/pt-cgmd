@@ -91,8 +91,8 @@ void test1() {
     std::cout << data << std::endl;
     */
     cg_ptr_t ptcg = factory->formicAcidSolution(box);
-    pt_pair_list_gen_ptr_t generator = factory::protonTransferPairListGenerator(0.4, bc);
-    pt_displacer_ptr_t ptDisplacer = factory::protonransferDisplacer(1.0/1.5, 1.5);
+    pt_pair_list_gen_ptr_t generator = factory::protonTransferPairListGenerator(bc);
+    pt_displacer_ptr_t ptDisplacer = factory::protonTransferDisplacer();
     cg_displacer_ptr_t pt = factory::protonTransferlangevinVelocityVerlet(interactor,
                                                                           generator,
                                                                           ptDisplacer);

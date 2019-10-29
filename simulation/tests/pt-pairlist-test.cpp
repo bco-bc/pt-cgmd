@@ -46,10 +46,10 @@ void test1() {
     
     box_ptr_t box = std::make_shared<box_t>(7.0);
     bc_ptr_t bc = factory::pbc(box);
-    ProtonTransferPairListGenerator(0.3, bc);
+    ProtonTransferPairListGenerator g(bc);
     
     pt_pair_list_gen_ptr_t generator = 
-            factory::protonTransferPairListGenerator(0.3, bc);
+            factory::protonTransferPairListGenerator(bc);
 }
 
 int main(int argc, char** argv) {

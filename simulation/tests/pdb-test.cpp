@@ -45,6 +45,7 @@ void test1() {
     std::cout << "pdb-test test 1" << std::endl;
     
     box_ptr_t box = factory::cube(2.0);
+    std::cout << "Box size: " << box->size() << std::endl;
     bc_ptr_t bc = factory::pbc(box);
     
     position_t r1{0,0,0}; 

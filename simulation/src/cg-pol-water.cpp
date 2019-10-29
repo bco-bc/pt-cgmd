@@ -106,9 +106,9 @@ namespace simploce {
         const bond_cont_t& bonds = group->bonds();
         const Bond<Bead>& bond = bonds[0];                    // There is 1 bond only.
         const bead_ptr_t pi = bond.getParticleOne();
-        std::size_t index_i = pi->index();                    // Particle id starts at 1.
+        std::size_t index_i = pi->index();
         const bead_ptr_t pj = bond.getParticleTwo();
-        std::size_t index_j = pj->index();                    // Particle id starts at 1.
+        std::size_t index_j = pj->index();
       
         position_t ri = pi->position();
         position_t rj = pj->position();

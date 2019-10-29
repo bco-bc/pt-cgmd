@@ -112,8 +112,8 @@ void test1() {
     cg_ff_ptr_t forcefield = std::make_shared<SimpleForceField>();
     cg_ppair_list_gen_ptr_t generator = factory::coarseGrainedPairListGenerator(box, bc);
     cg_interactor_ptr_t interactor = std::make_shared<Interactor<Bead>>(forcefield, generator);
-    pt_displacer_ptr_t ptDisplacer = factory::protonransferDisplacer(rate_t{1.0}, 1.0);
-    pt_pair_list_gen_ptr_t ptGenerator = factory::protonTransferPairListGenerator(1.5, bc);
+    pt_displacer_ptr_t ptDisplacer = factory::protonTransferDisplacer();
+    pt_pair_list_gen_ptr_t ptGenerator = factory::protonTransferPairListGenerator(bc);
     cg_displacer_ptr_t displacer = 
             factory::protonTransferlangevinVelocityVerlet(interactor, 
                                                           ptGenerator, 
