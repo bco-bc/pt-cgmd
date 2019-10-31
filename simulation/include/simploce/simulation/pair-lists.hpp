@@ -40,8 +40,7 @@
 namespace simploce {
     
     /**
-     * Holds all particle/particle, particle/group and group/group pair lists. Here,
-     * a particle always refers to a -free- particle.
+     * Holds all particle pairs for non-bonded interactions.
      * @param P Particle type.
      */
     template <typename P>
@@ -64,71 +63,31 @@ namespace simploce {
         using pp_pair_t = std::pair<p_ptr_t, p_ptr_t>;
         
         /**
-         * Particle/particle group pair type.
-         */
-        using pg_pair_t = std::pair<p_ptr_t, pg_ptr_t>;
-        
-        /**
-         * Particle group/particle group pair type.
-         */
-        using gg_pair_t = std::pair<pg_ptr_t, pg_ptr_t>;
-                
-        /**
          * Particle/particle pair list container type.
          */
         using pp_list_cont_t = std::vector<pp_pair_t>;
                 
         /**
-         * Particle/particle group pair list container type.
-         */
-        using pg_list_cont_t = std::vector<pg_pair_t>;
-        
-        /**
-         * Particle group/particle group pair list container type.
-         */
-        using gg_list_cont_t = std::vector<gg_pair_t>;
-        
-        /**
-         * Default constructor. Empty lists.
+         * Default constructor. Empty list.
          */
         PairLists();
         
         /**
          * Constructor.
          * @param ppPairList Particle/particle pair list.
-         * @param pgpairList Particle/particle group pair list.
-         * @param ggPairList Particle group/particle group pair list.
          */
-        PairLists(const pp_list_cont_t& ppPairList,
-                  const pg_list_cont_t& pgPairList,
-                  const gg_list_cont_t& ggPairList);
+        PairLists(const pp_list_cont_t& pairList);
         
         /**
          * Returns particle/particle pair list.
          * @return pair list.
          */
         const pp_list_cont_t& particlePairList() const { 
-            return ppPairList_; 
+            return pairList_; 
         }
-        
+               
         /**
-         * Returns particle/particle group pair list.
-         * @return Pair list.
-         */
-        const pg_list_cont_t& particleGroupPairList() const { 
-            return pgPairList_; 
-        }
-        
-        /**
-         * Returns particle group/particle group pair list.
-         * @return pair list.
-         */
-        const gg_list_cont_t& groupPairList() const { 
-            return ggPairList_; 
-        }
-        
-        /**
-         * Were the pair lists altered.
+         * Was the pair list altered.
          * @return Result.
          */
         bool isModified() const { return modified_; }
@@ -139,30 +98,32 @@ namespace simploce {
         friend class Interactor;
         
         /**
-         * Signals whether the pair lists were modified.
-         * @param modified If true, lists were updated, otherwise not.
+         * Signals whether the pair list was modified.
+         * @param modified If true, list was updated, otherwise not.
          */
-        void updated_(bool modified) { modified_ = modified; }
+        void updated_(bool modified);
         
-        pp_list_cont_t ppPairList_;
-        pg_list_cont_t pgPairList_;
-        gg_list_cont_t ggPairList_;
+        pp_list_cont_t pairList_;
         bool modified_;
     };
     
     template <typename P>
     PairLists<P>::PairLists() :
-        ppPairList_{}, pgPairList_{}, ggPairList_{}, modified_{true}
+        pairList_{}, modified_{true}
     {
     }
         
     template <typename P>
-    PairLists<P>::PairLists(const pp_list_cont_t& ppPairList,
-                            const pg_list_cont_t& pgPairList,
-                            const gg_list_cont_t& ggPairList) :
-        ppPairList_{ppPairList}, pgPairList_{pgPairList}, 
-        ggPairList_{ggPairList}, modified_{true}
+    PairLists<P>::PairLists(const pp_list_cont_t& pairList) :
+        pairList_{pairList}, modified_{true}
     {
+    }
+        
+    template <typename P>
+    void 
+    PairLists<P>::updated_(bool modified)
+    {
+        modified_ = modified;
     }
 
 }

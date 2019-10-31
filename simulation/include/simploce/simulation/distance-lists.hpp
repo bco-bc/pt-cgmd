@@ -74,8 +74,7 @@ namespace simploce {
     template <>
     class DistanceLists<Bead> : public ParticlePairListGenerator<Bead> {
     public:
-        
-                
+                        
         DistanceLists(const box_ptr_t& box,
                       const bc_ptr_t& bc);
         

@@ -39,8 +39,6 @@
 
 namespace simploce {
     
-    static const std::size_t MIN_NUMBER_OF_PARTICLES = 100;        
-    
     static real_t rcutoff2_(const box_ptr_t& box)
     {
         static length_t rc = util::cutoffDistance(box);
@@ -91,77 +89,87 @@ namespace simploce {
     }
     
     template <typename P> 
-    typename PairLists<P>::gg_list_cont_t
+    typename PairLists<P>::pp_list_cont_t
     forGroups_(const box_ptr_t& box,
                const bc_ptr_t& bc,
                const std::vector<std::shared_ptr<ParticleGroup<P>>>& groups)
     {    
-        using gg_list_cont_t = typename PairLists<P>::gg_list_cont_t;
-        using gg_pair_t = typename PairLists<P>::gg_pair_t;
+        using pp_list_cont_t = typename PairLists<P>::pp_list_cont_t;
+        using pp_pair_t = typename PairLists<P>::pp_pair_t;
         
         static real_t rc2 =  rcutoff2_(box);
 
         if ( groups.empty() ) {
-            return gg_list_cont_t{};  // Empty list.
+            return pp_list_cont_t{};  // Empty list.
         }
             
         // Group/Group pair list.
-        gg_list_cont_t ggPairList{};
+        pp_list_cont_t pairList{};
 
         // For all particle pairs groups.
         for (auto iter_i = groups.begin(); iter_i != groups.end() - 1; ++iter_i) {
             const auto g_i = *iter_i;
-            position_t ri = g_i->position();            
+            const auto particles_i = g_i->particles();
             for (auto iter_j = iter_i + 1; iter_j != groups.end(); ++iter_j) {
                 const auto g_j = *iter_j;
-                position_t rj = g_j->position();
-                dist_vect_t R = bc->apply(ri, rj);
-                real_t R2 = norm2<real_t>(R);
-                if ( R2 < rc2 ) {
-                    gg_pair_t pair = std::make_pair(g_i, g_j);
-                    ggPairList.push_back(pair);
+                const auto particles_j = g_j->particles();
+                for (auto pi : particles_i) {
+                    auto ri = pi->position();
+                    for (auto pj : particles_j) {                
+                        auto rj = pj->position();
+                        auto R = bc->apply(ri, rj);
+                        auto R2 = norm2<real_t>(R);
+                        if ( R2 < rc2 ) {
+                            pp_pair_t pair = std::make_pair(pi, pj);
+                            pairList.push_back(pair);
+                        }
+                    }
                 }
             }
         }
 
         // Done.
-        return std::move(ggPairList);        
+        return std::move(pairList);        
     }
     
     template <typename P> 
-    typename PairLists<P>::pg_list_cont_t
+    typename PairLists<P>::pp_list_cont_t
     forParticlesAndGroups_(const box_ptr_t& box,
                            const bc_ptr_t& bc,
                            const std::vector<std::shared_ptr<P>>& particles,
                            const std::vector<std::shared_ptr<ParticleGroup<P>>>& groups)
     {
-        using pg_list_cont_t = typename PairLists<P>::pg_list_cont_t;
-        using pg_pair_t = typename PairLists<P>::pg_pair_t;
+        using pp_list_cont_t = typename PairLists<P>::pp_list_cont_t;
+        using pp_pair_t = typename PairLists<P>::pp_pair_t;
         
         static real_t rc2 =  rcutoff2_(box);
 
         if ( particles.empty() || groups.empty() ) {
-            return pg_list_cont_t{};  // Empty list.
+            return pp_list_cont_t{};  // Empty list.
         }
 
         // Pair list.
-        pg_list_cont_t pgPairList{};
+        pp_list_cont_t pairList{};
         
-        for (auto p : particles) {
-            position_t rp = p->position();
+        for (auto pi : particles) {
+            position_t ri = pi->position();
             for (auto g : groups) {
-                position_t rg = g->position();
-                dist_vect_t R = bc->apply(rp, rg);
-                real_t R2 = norm2<real_t>(R);
-                if ( R2 < rc2 ) {
-                    pg_pair_t pair = std::make_pair(p, g);
-                    pgPairList.push_back(pair);
+                if ( !g->contains(pi) ) {
+                    for (auto pj : g->particles()) {
+                        auto rj = pj->position();
+                        auto R = bc->apply(ri, rj);
+                        real_t R2 = norm2<real_t>(R);
+                        if ( R2 < rc2 ) {
+                            pp_pair_t pair = std::make_pair(pi, pj);
+                            pairList.push_back(pair);
+                        }
+                    }
                 }
             }
         }
     
         // Done.
-        return std::move(pgPairList);
+        return std::move(pairList);
     }
         
     template <typename P>
@@ -174,28 +182,31 @@ namespace simploce {
     {
         static bool firstTime = true;
         if ( firstTime ) {
-            std::clog << "Using particles pair lists based on distances between particles." 
+            std::clog << "Using particles pair lists based on distances "
+                         "between particles." 
                       << std::endl;
             std::clog << "Cutoff distance: " << util::cutoffDistance(box) << std::endl;
         }
         
         // Prepare new particle pair list.        
-        auto ppPairList = forParticles_<P>(box, bc, free);       
-        auto pgPairList = forParticlesAndGroups_<P>(box, bc, free, groups);
-        auto ggPairList = forGroups_<P>(box, bc, groups);        
+        auto pairList = forParticles_<P>(box, bc, free);       
+        auto fgPairList = forParticlesAndGroups_<P>(box, bc, free, groups);
+        pairList.insert(pairList.end(), fgPairList.begin(), fgPairList.end());
+        auto ggPairList = forGroups_<P>(box, bc, groups);
+        pairList.insert(pairList.end(), ggPairList.begin(), ggPairList.end());
         
         if ( firstTime ) {
-            std::clog << "Number of free particle pairs: " << ppPairList.size() 
-                      << std::endl;
-            std::clog << "Number of free particle/particle group pairs: "
-                      << pgPairList.size() << std::endl;
-            std::clog << "Number of particle group pairs: "
+            std::clog << "Number of free-particle/free-particle pairs: " 
+                      << pairList.size() << std::endl;
+            std::clog << "Number of free-particle/particle-in-group pairs: "
+                      << fgPairList.size() << std::endl;
+            std::clog << "Number of particle-in-group/particle-in-group pairs: "
                       << ggPairList.size() << std::endl;
             firstTime = false;
         }
 
         // Done.
-        return std::move(PairLists<P>(ppPairList, pgPairList, ggPairList));
+        return std::move(PairLists<P>(pairList));
     }
     
     DistanceLists<Atom>::DistanceLists(const box_ptr_t& box,
