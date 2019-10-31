@@ -49,6 +49,7 @@ namespace simploce {
         const std::string POLARIZABLE_WATER = "pol-water";
         const std::string ACID_BASE_SOLUTION = "acid-base-solution";
         const std::string ELECTROLYTE = "electrolyte";
+        const std::string LJ_FLUID = "lj-fluid";
         
         // Default cutoff distance for non bonded interactions.
         static length_t RCUTOFF_DISTANCE_{2.5};  // nm.

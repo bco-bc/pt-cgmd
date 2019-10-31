@@ -144,7 +144,10 @@ namespace simploce {
          * @return Result of type R.
          */
         template <typename R, typename TASK>
-        R doWithAll(const TASK task) { return cg_->doWithAll<R>(task); }
+        R 
+        doWithAllFreeGroups(const TASK task) { 
+            return cg_->doWithAllFreeGroups<R>(task); 
+        }
         
         /**
          * Assigns new displacer.

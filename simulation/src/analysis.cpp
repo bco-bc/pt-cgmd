@@ -47,8 +47,10 @@ namespace simploce {
         while (trajectory.good() ) {
             counter += 1;
             if ( counter > nskip ) {
-                sm_->doWithAll<void>([this] (const std::vector<bead_ptr_t>& all) {
-                    this->analyzer_->perform(all);
+                sm_->doWithAllFreeGroups<void>([this] (const std::vector<bead_ptr_t>& all,
+                                                       const std::vector<bead_ptr_t>& free,
+                                                       const std::vector<bead_group_ptr_t>& groups) {
+                    this->analyzer_->perform(all, free, groups);
                 });
             }
             sm_->readState(trajectory);

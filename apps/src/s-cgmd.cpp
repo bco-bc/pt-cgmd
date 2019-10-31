@@ -108,7 +108,7 @@ int main(int argc, char* argv[])
       (
        "model-type", po::value<std::string>(&modelType),
        "Type of model or system. Default is 'pol-water'. "
-       "Other choices: 'acid-base-solution', 'electrolyte'."
+       "Other choices: 'acid-base-solution', 'electrolyte', 'lj-fluid'."
       )
       (
        "displacer", po::value<std::string>(&displacerId),
@@ -222,6 +222,8 @@ int main(int argc, char* argv[])
 						    protonatable);
       } else if ( modelType == conf::ELECTROLYTE ) {
 	model = simModelFactory->electrolyte(box, molarity, temperature);	
+      } else if ( modelType == conf::LJ_FLUID) {
+	model = simModelFactory->ljFluid(box, density, temperature);
       } else {
 	throw std::domain_error(modelType + ": No such simulation model type available (yet).");
       }

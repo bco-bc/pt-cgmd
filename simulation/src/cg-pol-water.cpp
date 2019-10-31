@@ -47,7 +47,7 @@ namespace simploce {
     using el_params_t = ForceField::el_params_t;
     
     // Interaction parameters, from Riniker et al, 2011.
-    static const real_t EPS_R = 78.5;             // Relative permittivity
+    static const real_t EPS_R = 2.5;             // Relative permittivity
     static const length_t R_CW_DP = 0.2;          // nm.
     static spec_ptr_t CW{};
     static spec_ptr_t DP{};
@@ -104,16 +104,17 @@ namespace simploce {
         energy_t epot{0.0};
         
         const bond_cont_t& bonds = group->bonds();
-        const Bond<Bead>& bond = bonds[0];                    // There is 1 bond only.
-        const bead_ptr_t pi = bond.getParticleOne();
+        const Bond<Bead>& bond = bonds[0];          // There is 1 bond only.
+        const auto pi = bond.getParticleOne();
         std::size_t index_i = pi->index();
-        const bead_ptr_t pj = bond.getParticleTwo();
+        const auto pj = bond.getParticleTwo();
         std::size_t index_j = pj->index();
       
         position_t ri = pi->position();
         position_t rj = pj->position();
-        dist_vect_t rij = ri - rj;            // Distance vector (nm), no boundary conditions.
-        length_t R = norm<length_t>(rij);     // Distance (nm)
+        dist_vect_t rij = ri - rj;                 // Distance vector (nm), 
+                                                   // no boundary conditions.
+        length_t R = norm<length_t>(rij);          // Distance (nm)
 
 
         length_t dis = R - R_CW_DP;
@@ -165,16 +166,16 @@ namespace simploce {
                                             const std::vector<bead_group_ptr_t>& groups,
                                             const PairLists<Bead>& pairLists)
     {
-        std::pair<energy_t, std::vector<force_t>> bonded = bonded_(all.size(), groups);
-        energy_t epot = LJ_COULOMB_F->interact(all, free, groups, pairLists);
-        epot += bonded.first;
+        auto bonded = bonded_(all.size(), groups);        
+        auto epot = LJ_COULOMB_F->interact(all, free, groups, pairLists);
         
-        std::vector<force_t>& forces = bonded.second;
-        for (std::size_t index = 0; index != all.size(); ++index) {
-            Bead& bead = *all[index];
-            force_t force = bead.force();
+        epot += bonded.first;        
+        auto& forces = bonded.second;
+        for (auto bead : all) {
+            auto index = bead->index();
+            auto force = bead->force();
             force += forces[index];
-            bead.force(force);
+            bead->force(force);
         }
         
         return epot;
@@ -186,13 +187,13 @@ namespace simploce {
                                           const std::vector<bead_group_ptr_t>& groups,
                                           const PairLists<Bead>& pairLists)
     {
-        std::pair<energy_t, std::vector<force_t>> bonded = bonded_(all.size(), groups);
-        std::vector<force_t>& forces = bonded.second;
-        for (std::size_t index = 0; index != all.size(); ++index) {
-            Bead& bead = *all[index];
-            force_t force = bead.force();
+        auto bonded = bonded_(all.size(), groups);
+        auto& forces = bonded.second;
+        for (auto bead : all) {
+            auto index = bead->index();
+            auto force = bead->force();
             force += forces[index];
-            bead.force(force);
+            bead->force(force);
         }
         
         return bonded.first;

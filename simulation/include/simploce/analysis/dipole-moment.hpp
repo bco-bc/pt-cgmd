@@ -52,6 +52,11 @@ namespace simploce {
         using p_ptr_t = typename Analyzer<P>::p_ptr_t;
         
         /**
+         * Particle group pointer type.
+         */
+        using pg_ptr_t = typename Analyzer<P>::pg_ptr_t;
+        
+        /**
          * Holds result at a single time, time, M, and M*M.
          */
         using result_t = std::tuple<stime_t, dipole_moment_t, real_t>;
@@ -69,7 +74,9 @@ namespace simploce {
         DipoleMoment(const stime_t& dt,
                      const stime_t& t0 = 0);
         
-        void perform(const std::vector<p_ptr_t>& all) override;
+        void perform(const std::vector<p_ptr_t>& all,
+                     const std::vector<p_ptr_t>& free,
+                     const std::vector<pg_ptr_t>& groups) override;
         
         /**
          * Returns results.
@@ -105,7 +112,9 @@ namespace simploce {
     }
     
     template <typename P>
-    void DipoleMoment<P>::perform(const std::vector<p_ptr_t>& all)
+    void DipoleMoment<P>::perform(const std::vector<p_ptr_t>& all,
+                                  const std::vector<p_ptr_t>& free,
+                                  const std::vector<pg_ptr_t>& groups)
     {
         counter_ += 1;
         dipole_moment_t M{0.0, 0.0, 0.0};

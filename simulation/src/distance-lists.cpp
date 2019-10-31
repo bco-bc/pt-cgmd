@@ -110,15 +110,15 @@ namespace simploce {
 
         // For all particle pairs groups.
         for (auto iter_i = groups.begin(); iter_i != groups.end() - 1; ++iter_i) {
-            const auto pg_i = *iter_i;
-            position_t ri = pg_i->position();            
+            const auto g_i = *iter_i;
+            position_t ri = g_i->position();            
             for (auto iter_j = iter_i + 1; iter_j != groups.end(); ++iter_j) {
-                const auto pg_j = *iter_j;
-                position_t rj = pg_j->position();
+                const auto g_j = *iter_j;
+                position_t rj = g_j->position();
                 dist_vect_t R = bc->apply(ri, rj);
                 real_t R2 = norm2<real_t>(R);
                 if ( R2 < rc2 ) {
-                    gg_pair_t pair = std::make_pair(pg_i, pg_j);
+                    gg_pair_t pair = std::make_pair(g_i, g_j);
                     ggPairList.push_back(pair);
                 }
             }

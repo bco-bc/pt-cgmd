@@ -161,6 +161,8 @@ namespace simploce {
             interactor_ = factory::polarizableWaterInteractor(catalog, box_, bc_);
         } else if (stringBuffer.find(conf::ELECTROLYTE, 0) != std::string::npos) {
             interactor_ = factory::electrolyteInteractor(catalog, box_, bc_);
+        } else if (stringBuffer.find(conf::LJ_FLUID, 0) != std::string::npos) {
+            interactor_ = factory::ljFluidInteractor(catalog, box_, bc_);
         } else {
             throw std::domain_error("Cannot identify force field.");
         }

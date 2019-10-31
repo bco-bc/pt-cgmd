@@ -205,7 +205,10 @@ namespace simploce {
         }
         std::clog << "Created " << cg->numberOfParticles() << " beads." << std::endl;
         std::clog << "Created " << cg->numberOfParticleGroups() << " waters groups." << std::endl;
-        
+        if ( cg->numberOfParticleGroups() < ncgWaters ) {
+            std::clog << "The number of created water groups is less then the number "
+                         "of requested water groups." << std::endl;
+        }
         return cg;
     }
     
@@ -345,5 +348,80 @@ namespace simploce {
         std::clog << "Ion number density (1/nm^3): "<< real_t(counter)/volume() << std::endl;
         
         return cg;        
+    }
+    
+    cg_ptr_t 
+    ParticleModelFactory::ljFluid(const box_ptr_t& box,
+                                  const density_t atDensitySI,
+                                  const temperature_t temperature)
+    {
+        std::clog.setf(std::ios_base::scientific, std::ios_base::floatfield);
+        
+        std::clog << "Creating coarse grained particle model "
+                     "for LJ fluid." << std::endl;
+        
+        std::clog << "Temperature: " << temperature << std::endl;
+
+        // Convert kg/m^3 to u/nm^3.
+        density_t atDensity = atDensitySI / (SIUnits<real_t>::MU * 1.0e+27);
+        std::clog << "Requested density (kg/m^3): " << atDensitySI << std::endl;
+        std::clog << "Requested density (u/nm^3): " << atDensity << std::endl;
+        
+        // Spacing between LJ beads.
+        const length_t spacing{0.5};
+        std::clog << "Spacing between LJ beads: " << spacing << " nm" << std::endl;
+        
+        // Box details.
+        length_t Lx = box->lengthX();
+        length_t Ly = box->lengthY();
+        length_t Lz = box->lengthZ();
+        volume_t volume = box->volume();
+        std::clog << "Box size (nm): " << box->size() << std::endl;
+        std::clog << "Box volume (nm^3): " << volume << std::endl;
+        
+        std::size_t nbeads = atDensity() * volume();
+        std::clog << "Requested number of LJ beads: " << nbeads << std::endl;
+        
+        std::size_t nx = util::nint(Lx / spacing);
+        std::size_t ny = util::nint(Ly / spacing);
+        std::size_t nz = util::nint(Lz / spacing);
+        std::clog << "Number of coordinates in x-direction: " << nx << std::endl;
+        std::clog << "Number of coordinates in y-direction: " << ny << std::endl;
+        std::clog << "Number of coordinates in z-direction: " << nz << std::endl;
+        
+        // Start from an empty particle model.
+        auto cg = std::make_shared<CoarseGrained>();
+        
+        // Apolar bead.
+        auto spec = catalog_->lookup("AP");
+        
+        // Add beads.
+        real_t x0 = 0.0;
+        real_t y0 = 0.0;
+        real_t z0 = 0.0;
+        std::size_t counter = 0;
+        std::size_t i = 0, j = 0, k = 0;         
+        while ( i < nx && counter < nbeads ) {
+            real_t x = x0 + (i + 0.5) * spacing();
+            while ( j < ny && counter < nbeads ) {
+                real_t y = y0 + (j + 0.5) * spacing();
+                while ( k < nz && counter < nbeads ) {
+                    real_t z = z0 + (k + 0.5) * spacing();                    
+                    std::size_t id = counter + 1;
+                    position_t r{x,y,z};
+                    auto bead = cg->addBead(id, spec->name(), r, spec, true);
+                    assignMomentum(bead, temperature);
+                    counter += 1;
+                    k += 1;
+                }
+                k = 0;
+                j += 1;
+            }
+            j = 0;
+            i += 1;
+        }
+        std::clog << "Created " << cg->numberOfParticles() << " beads." << std::endl;
+        
+        return cg;
     }
 }

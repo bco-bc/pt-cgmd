@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright 2019 André H. Juffer, Biocenter Oulu
+ * Copyright 2019 juffer.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -23,61 +23,43 @@
  */
 
 /* 
- * File:   lj-coulomb.hpp
- * Author: André H. Juffer, Biocenter Oulu.
+ * File:   cg-lj-fluid.hpp
+ * Author: juffer
  *
- * Created on September 17, 2019, 3:06 PM
+ * Created on 30 October 2019, 14:14
  */
 
-#ifndef LJ_COULOMB_HPP
-#define LJ_COULOMB_HPP
+#ifndef CG_LJ_FLUID_HPP
+#define CG_LJ_FLUID_HPP
 
 #include "cg-forcefield.hpp"
-#include "stypes.hpp"
-#include "simploce/util/map2.hpp"
-#include <string>
-#include <map>
-#include <vector>
 
 namespace simploce {
     
     /**
-     * Calculates LJ and Coulomb interaction.
-     * @param P Particle type.
+     * Simple force field for LJ fluids.
      */
-    template <typename P>
-    class LJCoulombForces;
-    
-    /**
-     * Specialization for beads.
-     */
-    template <>
-    class LJCoulombForces<Bead> : public CoarseGrainedForceField {
+    class CoarseGrainedLJFluid : public CoarseGrainedForceField {
     public:
         
-        LJCoulombForces(const lj_params_t& ljParams, 
-                        const el_params_t& elParams,
-                        const bc_ptr_t& bc,
-                        const box_ptr_t& box);
+        CoarseGrainedLJFluid(const spec_catalog_ptr_t& catalog,
+                             const bc_ptr_t& bc,
+                             const box_ptr_t& box);
         
         energy_t interact(const std::vector<bead_ptr_t>& all,
                           const std::vector<bead_ptr_t>& free,
                           const std::vector<bead_group_ptr_t>& groups,
                           const PairLists<Bead>& pairLists) override;
         
-        energy_t interact(const bead_ptr_t& bead,
-                          const std::vector<bead_ptr_t>& all,
-                          const std::vector<bead_ptr_t>& free,
-                          const std::vector<bead_group_ptr_t>& groups) override;
-        
-        /**
-         * No bonded interactions.
-         * @return 0.0.
-         */
         energy_t bonded(const std::vector<bead_ptr_t>& all,
                         const std::vector<bead_ptr_t>& free,
                         const std::vector<bead_group_ptr_t>& groups,
                         const PairLists<Bead>& pairLists) override;
+        
+        energy_t interact(const bead_ptr_t& bead,
+                          const std::vector<bead_ptr_t>& all,
+                          const std::vector<bead_ptr_t>& free,
+                          const std::vector<bead_group_ptr_t>& groups) override;
         
         std::string id() const override;
         
@@ -85,12 +67,12 @@ namespace simploce {
         
     private:
         
-        lj_params_t ljParams_;
-        el_params_t elParams_;
+        spec_catalog_ptr_t catalog_;
         bc_ptr_t bc_;
         box_ptr_t box_;
     };
+    
 }
 
-#endif /* LJ_COULOMB_HPP */
+#endif /* CG_LJ_FLUID_HPP */
 

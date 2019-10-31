@@ -165,9 +165,36 @@ namespace simploce {
         //std::clog << "Using \"Langevin Velocity Verlet\" algorithm." << std::endl;
         
         // Done.
+        return std::make_shared<cg_sim_model_t>(cg, displacer, interactor, box, bc);                
+    }
+    
+    cg_sim_model_ptr_t 
+    SimulationModelFactory::ljFluid(const box_ptr_t& box,
+                                    const density_t densitySI,
+                                    const temperature_t temperature)
+    {
+        std::clog << "Creating coarse grained simulation model for a"
+                  << " LJ fluid." << std::endl;
+        
+        std::clog.setf(std::ios_base::scientific, std::ios_base::floatfield);
+        
+        cg_ptr_t cg = 
+            particleModelFactory_->ljFluid(box, densitySI, temperature);
+            
+        // Periodic boundary conditions.
+        bc_ptr_t bc = factory::pbc(box);
+        std::clog << "Using periodic boundary conditions." << std::endl;
+
+        // Interactor.
+        cg_interactor_ptr_t interactor = 
+            factory::ljFluidInteractor(catalog_, box, bc);
+        
+        // Displacer.
+        std::shared_ptr<CoarseGrainedDisplacer> displacer = 
+            std::make_shared<LeapFrog<CoarseGrained>>(interactor);
+                
+        // Done.
         return std::make_shared<cg_sim_model_t>(cg, displacer, interactor, box, bc);
-        
-        
     }
     
     cg_sim_model_ptr_t 

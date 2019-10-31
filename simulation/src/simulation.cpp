@@ -66,7 +66,10 @@ namespace simploce {
         for (std::size_t counter = 1; counter <= nsteps; ++counter) {
             SimulationData data = sm_->displace(param);
             if ( counter % nwrite == 0 ) {
-                data.pressure = sm_->doWithAll<pressure_t>([this, data] (const std::vector<bead_ptr_t>& all) {
+                data.pressure = 
+                    sm_->doWithAllFreeGroups<pressure_t>([this, data] (const std::vector<bead_ptr_t>& all,
+                                                                       const std::vector<bead_ptr_t>& free,
+                                                                       const std::vector<bead_group_ptr_t>& groups) {
                     return util::pressure(all, data.temperature, this->sm_->box());
                 });
                 dataStream << std::setw(width) << counter << space << data << std::endl;

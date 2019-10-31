@@ -129,6 +129,27 @@ void test4()
     std::cout << *hcooh << std::endl;
 }
 
+void test5() 
+{
+    std::cout << "simulation-model-factory-test test 5" << std::endl;
+    
+    std::string fileName = "/home/ajuffer/simploce/pt-cgmd/particles/resources/particles-specs.dat";
+    std::ifstream stream;
+    file::open_input(stream, fileName);
+    spec_catalog_ptr_t catalog = factory::particleSpecCatalog(stream);
+    //std::cout << *catalog << std::endl;
+    
+    sim_model_fact_ptr_t pmf = 
+            factory::simulationModelFactory(catalog);
+    
+    box_ptr_t box = factory::cube(length_t{7.27});
+    cg_sim_model_ptr_t sm = pmf->ljFluid(box);
+    std::string displacerId = conf::LANGEVIN_VELOCITY_VERLET;
+    
+    std::cout << "Number of beads in LJ fluid model: " << sm->size() << std::endl;
+    std::cout << *sm << std::endl;
+}
+
 
 
 int main(int argc, char** argv) {
@@ -147,9 +168,13 @@ int main(int argc, char** argv) {
     //test3();
     //std::cout << "%TEST_FINISHED% time=0 test3 (model-factory-test)" << std::endl;
     
-    std::cout << "%TEST_STARTED% test4 (model-factory-test)\n" << std::endl;
-    test4();
-    std::cout << "%TEST_FINISHED% time=0 test4 (model-factory-test)" << std::endl;
+    //std::cout << "%TEST_STARTED% test4 (model-factory-test)\n" << std::endl;
+    //test4();
+    //std::cout << "%TEST_FINISHED% time=0 test4 (model-factory-test)" << std::endl;
+    
+    std::cout << "%TEST_STARTED% test5 (model-factory-test)\n" << std::endl;
+    test5();
+    std::cout << "%TEST_FINISHED% time=0 test5 (model-factory-test)" << std::endl;
     
     std::cout << "%SUITE_FINISHED% time=0" << std::endl;
 

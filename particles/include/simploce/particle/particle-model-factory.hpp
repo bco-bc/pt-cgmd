@@ -83,6 +83,19 @@ namespace simploce {
                              molarity_t molarity = 1.0,
                              temperature_t temperature = 298.15);
         
+        /**
+         * Returns LJ fluid at given density and temperature.
+         * @param box Simulation box.
+         * @param atDensitySI Requested atomistic density in SI units (kg/m^3). 
+         * Default is 997.0479 kg/m^3 at 298.15 K (25 C) (water!).
+         * @param temperature Requested temperature in SI units (K). Default is 
+         * 298.15 K.
+         * @return Coarse grained particle model.
+         */
+        cg_ptr_t ljFluid(const box_ptr_t& box,
+                         const density_t atDensitySI = 997.0479,
+                         const temperature_t temperature = 298.15);
+        
     private:
         
         spec_catalog_ptr_t catalog_;

@@ -34,7 +34,6 @@
 #include "simploce/simulation/lj-coulomb-forces.hpp"
 #include "simploce/particle/particle-spec-catalog.hpp"
 #include "simploce/particle/particle-spec.hpp"
-#include "simploce/simulation/sconf.hpp"
 #include "simploce/util/map2.hpp"
 #include "simploce/util/map.hpp"
 #include "simploce/util/mu-units.hpp"
@@ -122,7 +121,7 @@ namespace simploce {
                                      const std::vector<bead_group_ptr_t>& groups,
                                      const PairLists<Bead>& pairLists)
     {
-        // There are no bounded interaction.
+        // There are no bonded interaction.
         return energy_t{0.0};
     }
     

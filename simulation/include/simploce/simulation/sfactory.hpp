@@ -79,6 +79,18 @@ namespace simploce {
                               const box_ptr_t& box);
         
         /**
+         * Returns coarse grained force field for a LJ fluid.
+         * @param catalog Particle specification catalog.
+         * @param bc Boundary condition.
+         * @param box Simulation box.
+         * @return  Force field.
+         */
+        cg_ff_ptr_t
+        ljFluidForceField(const spec_catalog_ptr_t& catalog,
+                          const bc_ptr_t& bc,
+                          const box_ptr_t& box);
+        
+        /**
          * Returns simulation model factory.
          * @param particle_model_fact_ptr_t Particle model factory.
          * @param catalog Particle specifications catalog.
@@ -147,6 +159,17 @@ namespace simploce {
                               const box_ptr_t& box, 
                               const bc_ptr_t& bc);
         
+        /**
+         * Returns coarse grained interactor for LJ fluid.
+         * @param catalog Particle specifications catalog.
+         * @param box Simulation box.
+         * @param bc Boundary conditions.
+         * @return Interactor.
+         */
+        cg_interactor_ptr_t
+        ljFluidInteractor(const spec_catalog_ptr_t& catalog,
+                              const box_ptr_t& box, 
+                              const bc_ptr_t& bc);
         
         /**
          * Leap frog algorithm for atomistic particle models.

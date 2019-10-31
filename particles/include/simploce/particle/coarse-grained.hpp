@@ -129,8 +129,8 @@ namespace simploce {
          * Perform a "task" with protonatable beads. The given task must expose the 
          * operator
          * <code>
-         *  R operator () (const std::vector<dprot_bead_ptr_t>& discrete,
-         *                 const std::vector<cprot_bead_ptr_t>& continuous);
+         *  R operator () (std::vector<dprot_bead_ptr_t>& discrete,
+         *                 std::vector<cprot_bead_ptr_t>& continuous);
          * </code>
          * where 'discrete' represents all protonatables with discontinuously
          * varying protonation states and 'continuous' are all protonatables with

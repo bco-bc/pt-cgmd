@@ -104,6 +104,20 @@ namespace simploce {
                                        molarity_t molarity = 1.0,
                                        temperature_t temperature = 298.15);
         
+        
+        /**
+         * Returns LJ fluid of given in a simulation box. The force field 
+         * consists of simple Lennard-Jones interactions between LJ 
+         * beads. PBC is applied.
+         * @param box Simulation box.
+         * @param densitySI Density in SI units kg/m^3. Default is 
+         * 997.0479 kg/m^3 at 298.15 K (25 C) (= atomistic water density).
+         * @param temperature Requested temperature in K. Default is 298.15 K.
+         * @return Coarse grained simulation model.
+         */
+        cg_sim_model_ptr_t ljFluid(const box_ptr_t& box,
+                                   const density_t densitySI = 997.0479,
+                                   const temperature_t temperature = 298.15);
         /**
          * Creates new coarse grained model by reading it from an input stream.
          * @param stream Input stream.

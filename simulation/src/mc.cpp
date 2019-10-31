@@ -167,7 +167,9 @@ namespace simploce {
         
         for (std::size_t counter = 1; counter <= nsteps; ++counter) {
             SimulationData data = 
-                sm_->doWithAll<SimulationData>([this, param] (std::vector<bead_ptr_t>& all) {
+                sm_->doWithAllFreeGroups<SimulationData>([this, param] (std::vector<bead_ptr_t>& all,
+                                                                        const std::vector<bead_ptr_t>& free,
+                                                                        const std::vector<bead_group_ptr_t>& groups) {
                     return displaceOneParticle_<Bead>(all, this->sm_, param);
                 });
                 if ( data.accepted ) {

@@ -33,6 +33,7 @@
 #include "simploce/simulation/cg-pol-water.hpp"
 #include "simploce/simulation/acid-base-solution.hpp"
 #include "simploce/simulation/cg-electrolyte.hpp"
+#include "simploce/simulation/cg-lj-fluid.hpp"
 #include "simploce/simulation/pair-list-generator.hpp"
 #include "simploce/simulation/cell-lists.hpp"
 #include "simploce/simulation/distance-lists.hpp"
@@ -69,6 +70,7 @@ namespace simploce {
         static cg_ff_ptr_t cgPolWaterFF_{};             // Polarizable water.
         static cg_ff_ptr_t cgFormicAcidSolutionFF_{};   // Formic acid in water.
         static cg_ff_ptr_t cgElectrolyteFF_{};          // NaCl solution.
+        static cg_ff_ptr_t cgLJFluid_{};                // LJ fluid.
         
         // Pair lists generators.
         static cg_ppair_list_gen_ptr_t  cgPairlistGen_{};
@@ -97,6 +99,7 @@ namespace simploce {
         static std::shared_ptr<Interactor<Bead>> cgPolWaterInteractor_{};
         static std::shared_ptr<Interactor<Bead>> cgFormicAcidSolutionInteractor_{};
         static std::shared_ptr<Interactor<Bead>> cgElectrolyteInteractor_{};
+        static std::shared_ptr<Interactor<Bead>> cgLJFluidInteractor_{};
         
         static pt_pair_list_gen_ptr_t ptPairlisGen_{};
         
@@ -141,6 +144,18 @@ namespace simploce {
                     std::make_shared<CoarseGrainedElectrolyte>(catalog, bc, box);
             }
             return cgElectrolyteFF_;
+        }
+        
+        cg_ff_ptr_t
+        ljFluidForceField(const spec_catalog_ptr_t& catalog,
+                          const bc_ptr_t& bc,
+                          const box_ptr_t& box)
+        {
+            if ( !cgLJFluid_) {
+                cgLJFluid_ = 
+                    std::make_shared<CoarseGrainedLJFluid>(catalog, bc, box);
+            }
+            return cgLJFluid_;
         }
        
         
@@ -227,6 +242,22 @@ namespace simploce {
                     std::make_shared<Interactor<Bead>>(forcefield, generator);
             }
             return cgElectrolyteInteractor_;
+        }
+        
+        cg_interactor_ptr_t
+        ljFluidInteractor(const spec_catalog_ptr_t& catalog,
+                              const box_ptr_t& box, 
+                              const bc_ptr_t& bc)        
+        {
+            if ( !cgLJFluidInteractor_ ) {
+                cg_ppair_list_gen_ptr_t generator = 
+                    factory::coarseGrainedPairListGenerator(box, bc);
+                cg_ff_ptr_t forcefield =
+                    factory::ljFluidForceField(catalog, bc, box);
+                cgLJFluidInteractor_ =
+                    std::make_shared<Interactor<Bead>>(forcefield, generator);
+            }
+            return cgLJFluidInteractor_;
         }
         
         at_displacer_ptr_t 

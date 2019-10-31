@@ -33,6 +33,7 @@
 #define ANALYZER_HPP
 
 #include "atypes.hpp"
+#include "simploce/particle/particle-group.hpp"
 
 namespace simploce {
     
@@ -48,15 +49,24 @@ namespace simploce {
          */
         using p_ptr_t = std::shared_ptr<P>;
         
-        ~Analyzer() {}
+        /**
+         * Particle group pointer type.
+         */
+        using pg_ptr_t = std::shared_ptr<ParticleGroup<P>>;
+        
+        virtual ~Analyzer() {}
         
         /**
          * Carries out the analysis.
-         * @param particles Particles.
+         * @param all All particles.
+         * @param free Free particles.
+         * @param groups Particle groups.
          * @param box Simulation box.
          * @param bc Boundary condition.
          */
-        virtual void perform(const std::vector<p_ptr_t> &particles) = 0;
+        virtual void perform(const std::vector<p_ptr_t>& all,
+                             const std::vector<p_ptr_t>& free,
+                             const std::vector<pg_ptr_t>& groups) = 0;
     };
 }
 

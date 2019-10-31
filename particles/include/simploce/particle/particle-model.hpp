@@ -160,9 +160,9 @@ namespace simploce {
          * Performs a "task" with all and free particles, as well as the 
          * particle groups. The given task must expose the operator
          * <code>
-         *  R operator () (const std::vector<p_ptr_t>& all,
-         *                 const std::vector<p_ptr_t>& free,
-         *                 const std::vector<pg_ptr_t>& groups);
+         *  R operator () (std::vector<p_ptr_t>& all,
+         *                 std::vector<p_ptr_t>& free,
+         *                 std::vector<pg_ptr_t>& groups);
          * </code>
          * where 'all' represents -all- particles, 'free' refers to those particles
          * not in any particle group (e.g. ions), and 'groups' are all particle 
