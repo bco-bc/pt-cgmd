@@ -111,7 +111,10 @@ int main(int argc, char* argv[])
       (
        "model-type", po::value<std::string>(&modelType),
        "Type of model or system. Default is 'pol-water'. "
-       "Other choices: 'acid-base-solution', 'electrolyte', 'lj-fluid'."
+       "Other choices: 'acid-base-solution', 'electrolyte', 'lj-fluid', 'hp'. "
+       "The latter creates a simulation model that consists of a single particle group with a "
+       "single bond whose two particles undergo simple harmonic motion. This model is "
+       "mostly used for testing purposes."
       )
       (
        "displacer", po::value<std::string>(&displacerId),
@@ -226,6 +229,8 @@ int main(int argc, char* argv[])
 	model = simModelFactory->electrolyte(box, molarity, temperature);	
       } else if ( modelType == conf::LJ_FLUID) {
 	model = simModelFactory->ljFluid(box, density, temperature);
+      } else if ( modelType == conf::HP) {
+	model = simModelFactory->harmonic();
       } else {
 	throw std::domain_error(modelType + ": No such simulation model type available (yet).");
       }
