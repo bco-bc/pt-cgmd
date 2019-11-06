@@ -34,7 +34,8 @@ namespace simploce {
                        std::size_t index, 
                        const std::string& name, 
                        const spec_ptr_t& spec) :
-        id_{id}, index_{index}, name_{name}, spec_{spec}, r_{}, p_{}, v_{}, f_{}
+        id_{id}, index_{index}, name_{name}, spec_{spec}, r_{}, p_{}, v_{}, 
+        f_{}, pf_{}
     {
         if ( name_.empty() ) {
             throw std::domain_error("A particle name must be provided.");

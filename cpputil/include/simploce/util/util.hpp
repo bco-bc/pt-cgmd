@@ -27,6 +27,7 @@
 #include <vector>
 #include <utility>
 #include <cassert>
+#include <stdexcept>
 
 namespace simploce {
     namespace util {
@@ -111,10 +112,8 @@ namespace simploce {
         {
             using sublists_t = std::vector<std::vector<T>>;
             
-            assert( !items.empty() );
-            
             if ( items.empty() ) {
-                return sublists_t{};
+                throw std::domain_error("Empty list of items. Cannot create sublists.");
             }            
             
             // Sub lists.

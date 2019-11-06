@@ -76,8 +76,8 @@ TESTOBJECTFILES= \
 CFLAGS=
 
 # CC Compiler Flags
-CCFLAGS=
-CXXFLAGS=
+CCFLAGS=-D _DEBUG
+CXXFLAGS=-D _DEBUG
 
 # Fortran Compiler Flags
 FFLAGS=

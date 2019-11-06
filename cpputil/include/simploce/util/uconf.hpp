@@ -31,6 +31,8 @@ namespace simploce {
          * Space in output streams.
          */
         const char SPACE = ' ';
+        
+        const float LARGE = 1.0e+30;
     }
 }
 

@@ -76,7 +76,7 @@ namespace simploce {
                 position_t rj = pj->position();
                 dist_vect_t R = bc->apply(ri, rj);
                 real_t R2 = norm2<real_t>(R);                
-                if ( R2 < rc2 ) {
+                if ( R2 <= rc2 ) {
                     // Include this pair.
                     auto pair = std::make_pair(pi, pj);
                     ppPairList.push_back(pair);
@@ -119,7 +119,7 @@ namespace simploce {
                         auto rj = pj->position();
                         auto R = bc->apply(ri, rj);
                         auto R2 = norm2<real_t>(R);
-                        if ( R2 < rc2 ) {
+                        if ( R2 <= rc2 ) {
                             pp_pair_t pair = std::make_pair(pi, pj);
                             pairList.push_back(pair);
                         }
@@ -159,7 +159,7 @@ namespace simploce {
                         auto rj = pj->position();
                         auto R = bc->apply(ri, rj);
                         real_t R2 = norm2<real_t>(R);
-                        if ( R2 < rc2 ) {
+                        if ( R2 <= rc2 ) {
                             pp_pair_t pair = std::make_pair(pi, pj);
                             pairList.push_back(pair);
                         }
@@ -189,19 +189,22 @@ namespace simploce {
         }
         
         // Prepare new particle pair list.        
-        auto pairList = forParticles_<P>(box, bc, free);       
+        auto pairList = forParticles_<P>(box, bc, free);
+        auto ppSize = pairList.size();
         auto fgPairList = forParticlesAndGroups_<P>(box, bc, free, groups);
+        auto fgSize = fgPairList.size();
         pairList.insert(pairList.end(), fgPairList.begin(), fgPairList.end());
         auto ggPairList = forGroups_<P>(box, bc, groups);
+        auto ggSize = ggPairList.size();
         pairList.insert(pairList.end(), ggPairList.begin(), ggPairList.end());
         
         if ( firstTime ) {
             std::clog << "Number of free-particle/free-particle pairs: " 
-                      << pairList.size() << std::endl;
+                      << ppSize << std::endl;
             std::clog << "Number of free-particle/particle-in-group pairs: "
-                      << fgPairList.size() << std::endl;
+                      << fgSize << std::endl;
             std::clog << "Number of particle-in-group/particle-in-group pairs: "
-                      << ggPairList.size() << std::endl;
+                      << ggSize << std::endl;
             firstTime = false;
         }
 

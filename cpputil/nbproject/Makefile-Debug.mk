@@ -49,6 +49,7 @@ TESTFILES= \
 	${TESTDIR}/TestFiles/f5 \
 	${TESTDIR}/TestFiles/f1 \
 	${TESTDIR}/TestFiles/f6 \
+	${TESTDIR}/TestFiles/f9 \
 	${TESTDIR}/TestFiles/f8 \
 	${TESTDIR}/TestFiles/f4 \
 	${TESTDIR}/TestFiles/f7 \
@@ -60,6 +61,7 @@ TESTOBJECTFILES= \
 	${TESTDIR}/tests/box-cube-test.o \
 	${TESTDIR}/tests/cvector-test.o \
 	${TESTDIR}/tests/matrix-map-test.o \
+	${TESTDIR}/tests/mu-units-test.o \
 	${TESTDIR}/tests/nint-test.o \
 	${TESTDIR}/tests/seed-value-test.o \
 	${TESTDIR}/tests/telegraph-process-test.o \
@@ -70,8 +72,8 @@ TESTOBJECTFILES= \
 CFLAGS=
 
 # CC Compiler Flags
-CCFLAGS=
-CXXFLAGS=
+CCFLAGS=-D _DEBUG
+CXXFLAGS=-D _DEBUG
 
 # Fortran Compiler Flags
 FFLAGS=
@@ -134,6 +136,10 @@ ${TESTDIR}/TestFiles/f6: ${TESTDIR}/tests/matrix-map-test.o ${OBJECTFILES:%.o=%_
 	${MKDIR} -p ${TESTDIR}/TestFiles
 	${LINK.cc} -o ${TESTDIR}/TestFiles/f6 $^ ${LDLIBSOPTIONS}   
 
+${TESTDIR}/TestFiles/f9: ${TESTDIR}/tests/mu-units-test.o ${OBJECTFILES:%.o=%_nomain.o}
+	${MKDIR} -p ${TESTDIR}/TestFiles
+	${LINK.cc} -o ${TESTDIR}/TestFiles/f9 $^ ${LDLIBSOPTIONS}   
+
 ${TESTDIR}/TestFiles/f8: ${TESTDIR}/tests/nint-test.o ${OBJECTFILES:%.o=%_nomain.o}
 	${MKDIR} -p ${TESTDIR}/TestFiles
 	${LINK.cc} -o ${TESTDIR}/TestFiles/f8 $^ ${LDLIBSOPTIONS}   
@@ -171,6 +177,12 @@ ${TESTDIR}/tests/matrix-map-test.o: tests/matrix-map-test.cpp
 	${MKDIR} -p ${TESTDIR}/tests
 	${RM} "$@.d"
 	$(COMPILE.cc) -g -Wall -Iinclude -I. -std=c++14 -MMD -MP -MF "$@.d" -o ${TESTDIR}/tests/matrix-map-test.o tests/matrix-map-test.cpp
+
+
+${TESTDIR}/tests/mu-units-test.o: tests/mu-units-test.cpp 
+	${MKDIR} -p ${TESTDIR}/tests
+	${RM} "$@.d"
+	$(COMPILE.cc) -g -Wall -Iinclude -I. -std=c++14 -MMD -MP -MF "$@.d" -o ${TESTDIR}/tests/mu-units-test.o tests/mu-units-test.cpp
 
 
 ${TESTDIR}/tests/nint-test.o: tests/nint-test.cpp 
@@ -275,6 +287,7 @@ ${OBJECTDIR}/src/util_nomain.o: ${OBJECTDIR}/src/util.o src/util.cpp
 	    ${TESTDIR}/TestFiles/f5 || true; \
 	    ${TESTDIR}/TestFiles/f1 || true; \
 	    ${TESTDIR}/TestFiles/f6 || true; \
+	    ${TESTDIR}/TestFiles/f9 || true; \
 	    ${TESTDIR}/TestFiles/f8 || true; \
 	    ${TESTDIR}/TestFiles/f4 || true; \
 	    ${TESTDIR}/TestFiles/f7 || true; \

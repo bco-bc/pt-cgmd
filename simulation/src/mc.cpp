@@ -158,7 +158,7 @@ namespace simploce {
             );
         }
         
-        std::clog << "Performing a Monte Calrlo simulation..." << std::endl;
+        std::clog << "Performing a Monte Carlo simulation..." << std::endl;
 
         std::size_t numberAccepted = 0;
         std::size_t nsteps = param.get<std::size_t>("nsteps", 10000);

@@ -37,7 +37,9 @@
 #include "simploce/simulation/leap-frog.hpp"
 #include "simploce/simulation/cg-pol-water.hpp"
 #include "simploce/simulation/pbc.hpp"
+#include "simploce/simulation/no-bc.hpp"
 #include "simploce/particle/particle-model-factory.hpp"
+#include "simploce/particle/particle-spec-catalog.hpp"
 #include "simploce/util/mu-units.hpp"
 #include <algorithm>
 #include <random>
@@ -51,6 +53,48 @@ namespace simploce {
         particleModelFactory_{particleModelFactory}, catalog_{catalog}
     {        
     }
+        
+    /**
+     * Returns a model consisting of a single particle group containing one bond 
+     * whose beads undergo harmonic motion.
+     * @return Model.
+     */
+    cg_sim_model_ptr_t 
+    SimulationModelFactory::harmonic()
+    {
+        std::clog << "Creating coarse grained simulation model for " 
+                  << "a single particle group containing one bond whose beads "
+                  << "undergo harmonic motion."
+                  << std::endl;
+        
+        std::clog.setf(std::ios_base::scientific, std::ios_base::floatfield);
+        
+        box_ptr_t box = factory::cube(conf::LARGE); 
+        
+        // No boundary conditions.
+        bc_ptr_t bc = std::make_shared<NoBoundaryCondition>();
+        std::clog << "No boundary conditions." << std::endl;
+        
+        cg_ptr_t cg;
+        auto spec = catalog_->lookup("AP");
+        position_t r1{0.0, 0.0, -0.25};
+        auto bead_1 = cg->addBead(1, "AP1", r1, spec, false);
+        position_t r2{0.0, 0.0, 0.25};
+        auto bead_2 = cg->addBead(1, "AP2", r2, spec, false);
+        
+        // Interactor.
+        cg_interactor_ptr_t interactor = 
+                factory::harmonicPotentialInteractor(catalog_, box, bc);
+        
+        // Displacer.
+        std::shared_ptr<CoarseGrainedDisplacer> displacer = 
+            std::make_shared<LeapFrog<CoarseGrained>>(interactor);
+        std::clog << "Using \"Leap Frog\" algorithm." << std::endl;
+        
+        // Done.
+        return std::make_shared<cg_sim_model_t>(cg, displacer, interactor, box, bc);
+    }
+       
         
     cg_sim_model_ptr_t 
     SimulationModelFactory::polarizableWater(const box_ptr_t& box,

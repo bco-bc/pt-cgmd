@@ -40,11 +40,12 @@
 #include <random>
 #include <cmath>
 #include <array>
+#include <cassert>
 
 namespace simploce {
     
     // Helpers.
-    static std::vector<real_t> frictionCoefficients_{};
+    static std::vector<real_t> FC_{};
     static std::vector<real_t> B_{};
     static std::vector<real_t> A1_{};
     static std::vector<real_t> A2_{};
@@ -53,10 +54,10 @@ namespace simploce {
     static std::vector<force_t> fis_{};      // Forces at time t(n).
     static std::vector<position_t> ris_{};   // Positions at time t(n).
     
-    // Random vector, each element is a array of size 3.
-    static std::random_device rd_;
+    // Random vector W, each element is a array of size 3.
+    static std::random_device rd_{};
     static std::mt19937 gen_(rd_());
-    static std::normal_distribution<real_t> dis_;
+    static std::normal_distribution<real_t> dis_{0.0, 1.0}; // Standard Wiener/Brownian
     static std::vector<std::array<real_t, 3>> W_{};
     
     /**
@@ -74,7 +75,7 @@ namespace simploce {
         real_t kT = MUUnits<real_t>::KB * temperature();
         std::size_t nparticles = particles.size();
         
-        frictionCoefficients_ = std::vector<real_t>(nparticles, 0.0);
+        FC_ = std::vector<real_t>(nparticles, 0.0);
         B_ = std::vector<real_t>(nparticles, 0.0);
         A1_ = std::vector<real_t>(nparticles, 0.0);
         A2_ = std::vector<real_t>(nparticles, 0.0);
@@ -87,30 +88,33 @@ namespace simploce {
         auto value = util::seedValue<std::size_t>();
         gen_.seed(value);
     
-        for (std::size_t index = 0; index != nparticles; ++index) {
-            auto& particle = *particles[index];
-        
+        for (auto p : particles) {
+            auto& particle = *p;
+            
+            auto index = particle.index();
+            
+            
             mass_t mass = particle.mass();                        // In u.
-            mass_t mass2 = mass * 2.0;
-            real_t fc =  mass() * gamma;                          // Friction coefficient in u/ps.
-            frictionCoefficients_[index] = fc;                    // Save friction coefficient for 
-                                                                  // velocity update.
-
+            real_t fc =  mass() * gamma;                          // Friction 
+            FC_[index] = fc;                                      // coefficient in u/ps.
+                                                                  
             // All kinds of constant factors for each particle.
-            B_[index] = 1.0 / ( 1.0 + fc * dt() / mass2() );      // No units.
-            real_t a1 = dt() / mass2();                           // ps/u
+            real_t a1 = dt() / (2.0 * mass());                    // ps/u
             A1_[index] = a1;
             real_t a2 = a1 * dt();                                // ps^2/u
             A2_[index] = a2;
             real_t strength = std::sqrt( dt() * 2.0 * fc * kT );  // In (u nm) / ps.
             strengths_[index] = strength;
+            real_t b = 1.0 / ( 1.0 + fc * a1);                    // No units.
+            B_[index] = b;
 
             // Validate.
             real_t f1 = fc * a1;
             if ( f1 > 1) {
                 std::clog << "WARNING: " << std::endl;
                 std::clog << "Langevin Velocity Verlet: " << std::endl;
-                std::clog << "f1 = " << f1 << ": f1 > 1 may represent an unphysical regime." << std::endl;
+                std::clog << "factor = fc * dt / (2.0 * m) = " << f1 
+                          << " > 1 may represent an unphysical regime." << std::endl;
             }
         }                
     }
@@ -125,8 +129,10 @@ namespace simploce {
     void displacePosition_(const stime_t& dt,
                            const std::vector<std::shared_ptr<T>>& particles)
     {        
-        for (std::size_t index = 0; index != particles.size(); ++index) {
-            auto& particle = *particles[index];
+        for (auto& p : particles) {
+            auto& particle = *p;
+            
+            auto index = particle.index();
     
             // Update position, not velocity.
             static std::array<real_t, 3> w;            // Random vector at t(n+1).
@@ -135,8 +141,8 @@ namespace simploce {
             w[2] = dis_(gen_);
             W_[index] = w;                             // Save for updating velocities.
         
-            force_t fi = particle.force();             // Force (kJ/(mol nm) = (u nm)/(ps^2))
-            fis_[index] = fi;                          // at time t(n).
+            force_t fi = particle.force();             // Force (kJ/(mol nm) = 
+            fis_[index] = fi;                          // (u nm)/(ps^2)) at time t(n)
       
             velocity_t vi = particle.velocity();       // Velocity (nm/ps) at time t(n).
             position_t ri = particle.position();       // Position at time t(n).
@@ -166,9 +172,11 @@ namespace simploce {
         // Kinetic energy at t(n+1).
         data.ekin = 0.0;
         
-        // Displace particles: momenta.        
-        for (std::size_t index = 0; index != particles.size(); ++index) {
-            auto& particle = *particles[index];
+        // Displace particles: momenta.
+        for (auto& p : particles) {
+            auto& particle = *p;
+            
+            auto index = particle.index();
             
             mass_t mass = particle.mass();             // In u.
       
@@ -182,7 +190,7 @@ namespace simploce {
             velocity_t vi = particle.velocity();       // velocity (nm/ps) at time t(n).
             position_t rf = particle.position();       // Position at time t(n+1).
       
-            real_t fc = frictionCoefficients_[index];
+            real_t fc = FC_[index];
             real_t a1 = A1_[index];
             real_t strength = strengths_[index];
       

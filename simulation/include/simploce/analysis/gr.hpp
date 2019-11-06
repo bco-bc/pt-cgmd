@@ -219,10 +219,9 @@ namespace simploce {
                             auto Rij2 = norm2<real_t>(rij);
                             if ( Rij2 < rc2) {
                                 auto Rij = std::sqrt(Rij2);
-                                if ( Rij <= 0.2) {
-                                    std::clog << "WARNING: Rij <= 0.2, Rij = " 
-                                              << Rij << std::endl;
-                                }
+#if _DEBUG
+                                util::tooClose<P>(pi, pj, std::tuple<energy_t, force_t, length_t>{});
+#endif
                                 std::size_t index = Rij / dr_();
                                 if ( index < hr_.size() ) {
                                     hr_[index] += 1.0;

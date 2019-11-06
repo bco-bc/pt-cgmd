@@ -193,7 +193,8 @@ namespace simploce {
         position_t r_;
         momentum_t p_;
         velocity_t v_;
-        force_t f_;
+        force_t f_;    // Current force
+        force_t pf_;   // Previous force.
         
     };
     

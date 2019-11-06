@@ -51,7 +51,9 @@ namespace simploce {
     using bead_pair_list_t = PairLists<Bead>::pp_list_cont_t;
     
     /**
-     * Returns interaction potential energy and force on particle i.
+     * Returns interaction potential energy and force on particle i. The Coulomb
+     * interaction is calculated according to the shifted force (SF) method of 
+     * Levitt, M. et al, Comput. Phys. Commun. 1995, 91, 215−231.
      */
     static std::tuple<energy_t, force_t, length_t> 
     ljCoulombForce_(const position_t& ri,
@@ -61,14 +63,22 @@ namespace simploce {
                     real_t C12,
                     real_t C6,
                     real_t eps_r,
-                    const bc_ptr_t& bc)
+                    const bc_ptr_t& bc,
+                    const box_ptr_t& box)
     {
         static const real_t four_pi_e0 = MUUnits<real_t>::FOUR_PI_E0;
+        static const length_t rc = util::cutoffDistance(box);
+        static const real_t rc2 = rc() * rc();
         
-
         // Apply boundary condition.
         dist_vect_t rij = bc->apply(ri, rj);
         real_t Rij = norm<real_t>(rij);
+        
+        // Distance may be outside cutoff distance if the pair list was not updated.
+        // If so, ignore.
+        if ( Rij > rc() ) {
+            return std::make_tuple(energy_t{0.0}, force_t{}, Rij);
+        }
         
         // Potential energy
         
@@ -80,21 +90,22 @@ namespace simploce {
         real_t t2 = C6 / Rij6;
         real_t LJ = t1 - t2;                          // kj/mol
         
-        // Coulomb
+        // Shifted Coulomb force.
         real_t t3 = qi * qj / (four_pi_e0 * eps_r);
-        real_t elec = t3 / Rij;  // kJ/mol
+        real_t elec = t3 * (1.0 / Rij - 1.0 / rc() + (Rij - rc())/rc2);  // kJ/mol
         
         // Total potential energy.
         energy_t epot = LJ + elec;
     
         // Forces.
-        dist_vect_t uv = rij/Rij;
-        real_t dLJdR = -6.0 * ( 2.0 * t1 - t2 ) / Rij;  // kJ/(mol nm)            
-        real_t dElecdR = -t3 / Rij2;
+        dist_vect_t uv = rij/Rij;                          // Unit vector
+        real_t dLJdR = -6.0 * ( 2.0 * t1 - t2 ) / Rij;     // kJ/(mol nm)            
+        real_t dElecdR = t3 * (-1.0 / Rij2 + 1.0 / rc2);   // kJ/(mol nm), shifted 
+                                                           // Coulomb
         force_t f{};
         for (std::size_t k = 0; k != 3; ++k) {
-            real_t fLJ = -dLJdR * uv[k];                 // kJ/(mol nm)
-            real_t fElec = -dElecdR * uv[k];             // kJ/(mol nm)
+            real_t fLJ = -dLJdR * uv[k];                   // kJ/(mol nm)
+            real_t fElec = -dElecdR * uv[k];               // kJ/(mol nm)
             f[k] = fLJ + fElec;
         }
 
@@ -106,16 +117,15 @@ namespace simploce {
                               std::size_t nbeads,
                               const lj_params_t& ljParams,
                               const el_params_t& elParams,
-                              const bc_ptr_t& bc)
+                              const bc_ptr_t& bc,
+                              const box_ptr_t& box)
     {
         std::vector<force_t> forces(nbeads, force_t{});
         energy_t epot{0.0};
-        static const dist_vect_t R{};
         
         // Electrostatic parameters.
         static const real_t eps_r = elParams.at("eps_r");
-        
-    
+            
         for (auto pp : ppPairList) {
             
             // First particle
@@ -136,8 +146,13 @@ namespace simploce {
             auto ljParam = ljParams.at(name_i, name_j);
             auto C12 = ljParam.first;
             auto C6 = ljParam.second;
-            auto ef = ljCoulombForce_(ri, qi, rj, qj, C12, C6, eps_r, bc);
+            auto ef = ljCoulombForce_(ri, qi, rj, qj, C12, C6, eps_r, bc, box);
 
+#ifdef _DEBUG
+            // Too close?
+            util::tooClose<Bead>(pi, pj, ef);
+#endif
+            
             // Store energy and forces.
             epot += std::get<0>(ef);
             forces[index_i] += std::get<1>(ef);
@@ -163,27 +178,35 @@ namespace simploce {
         energy_t epot{0.0};
         
         // First particle.
-        position_t ri = bead->position();
-        std::string name_i = bead->spec()->name();
-        charge_t qi = bead->charge();
-        std::size_t index_i = bead->index();
+        auto pi = bead;
+        position_t ri = pi->position();
+        std::string name_i = pi->spec()->name();
+        charge_t qi = pi->charge();
+        std::size_t index_i = pi->index();
 
-        for (auto f : free) {
-            std::size_t index_j = f->index();
+        for (auto pj : free) {            
+            std::size_t index_j = pj->index();
             if ( index_j != index_i ) {
-                position_t rj = f->position();
+                
+                // Second particle.
+                position_t rj = pj->position();
                 auto rij = bc->apply(ri, rj);
                 auto Rij2 = norm2<real_t>(rij);
                 if ( Rij2 < rc2 ) {
-                    std::string name_j = f->spec()->name();
-                    charge_t qj = f->charge();
+                    std::string name_j = pj->spec()->name();
+                    charge_t qj = pj->charge();
                                   
                     // Calculate interaction.      
                     auto ljParam = ljParams.at(name_i, name_j);
                     auto C12 = ljParam.first;
                     auto C6 = ljParam.second;
                     auto ef = 
-                        ljCoulombForce_(ri, qi, rj, qj, C12, C6, eps_r, bc);
+                        ljCoulombForce_(ri, qi, rj, qj, C12, C6, eps_r, bc, box);
+                    
+#ifdef _DEBUG
+                    // Too close?
+                    util::tooClose<Bead>(pi, pj, ef);
+#endif
                     
                     // Store interaction energy.
                     epot += std::get<0>(ef);
@@ -209,9 +232,10 @@ namespace simploce {
         energy_t epot{0.0};
                 
         // First particle.
-        position_t ri = bead->position();
-        std::string name_i = bead->spec()->name();
-        charge_t qi = bead->charge();
+        auto pi = bead;
+        position_t ri = pi->position();
+        std::string name_i = pi->spec()->name();
+        charge_t qi = pi->charge();
         
         for (auto g : groups) {
             if ( !g->contains(bead) ) {
@@ -219,26 +243,24 @@ namespace simploce {
                 auto rij = bc->apply(ri, rj);
                 auto Rij2 = norm2<real_t>(rij);
                 if ( Rij2 < rc2 ) {
-                    for (auto p : g->particles()) {
+                    for (auto pj : g->particles()) {
                         
                         // Second particle.
-                        rj = p->position();
-                        std::string name_j = p->spec()->name();
-                        charge_t qj = p->charge();
+                        rj = pj->position();
+                        std::string name_j = pj->spec()->name();
+                        charge_t qj = pj->charge();
                         
                         // Calculate interaction.
                         auto ljParam = ljParams.at(name_i, name_j);
                         auto C12 = ljParam.first;
                         auto C6 = ljParam.second;
-                        auto ef = ljCoulombForce_(ri, qi, rj, qj, C12, C6, eps_r, bc);
+                        auto ef = 
+                            ljCoulombForce_(ri, qi, rj, qj, C12, C6, eps_r, bc, box);
                         
-                        auto Rij = std::get<2>(ef);
-                        if ( Rij() < 0.2 ) {
-                            std::clog << "WARNING: Rij < 0.2, Rij = " << Rij 
-                                      << " pi = " << bead->name() << ", index = " << bead->index()
-                                      << " pj = " << p->name() << ", index = " << p->index()
-                                      << std::endl;
-                        }
+#ifdef _DEBUG           
+                        // Too close?
+                        util::tooClose<Bead>(pi, pj, ef);
+#endif
                         
                         // Store interaction.
                         epot += std::get<0>(ef);
@@ -297,7 +319,8 @@ namespace simploce {
                             nbeads,
                             std::ref(ljParams_),
                             std::ref(elParams_),
-                            std::ref(bc_)
+                            std::ref(bc_),
+                            std::ref(box_)
                         )
                     );
                 }
@@ -311,7 +334,7 @@ namespace simploce {
             const auto& single = subPairLists[ntasks - 1];
             if ( !single.empty() ) {
                 auto result = 
-                    ppForces_(single, nbeads, ljParams_, elParams_, bc_);
+                    ppForces_(single, nbeads, ljParams_, elParams_, bc_, box_);
                 results.push_back(result);
             }
             
@@ -325,7 +348,8 @@ namespace simploce {
                           nbeads,
                           ljParams_, 
                           elParams_, 
-                          bc_);
+                          bc_,
+                          box_);
             results.push_back(result);            
         }
         

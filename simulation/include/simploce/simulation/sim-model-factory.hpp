@@ -49,6 +49,15 @@ namespace simploce {
          */
         SimulationModelFactory(const particle_model_fact_ptr_t& particleModelFactory,
                                const spec_catalog_ptr_t& catalog);
+        
+        /**
+         * Returns coarse-grained (CG) simulation model of consisting of a 
+         * single particle group containing one bond whose beads undergo 
+         * harmonic motion.
+         * @return Coarse grained simulation model.
+         */
+        cg_sim_model_ptr_t harmonic();
+                
     
         /**
          * Returns a coarse-grained (CG) simulation model of polarizable water 

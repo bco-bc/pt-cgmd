@@ -26,7 +26,7 @@ INCLPATH = -I$(CPPUTIL)/include -I$(PARTICLES)/include -I$(SIMULATION)/include
 OLIBS = -lcpputil -lparticles -lsimulation
 
 # Compiler and linker flags
-CFLAGS = $(INCLPATH) $(OPT) -Wall -std=$(STD) -pthread
+CFLAGS = $(INCLPATH) $(OPT) -Wall -std=$(STD) -pthread -D _DEBUG
 LDFLAGS =  $(INCLPATH) $(OPT) -Wall -std=$(STD) -L. -L$(PREFIX)/lib -pthread
 LIBS = -lm -lpthread $(OLIBS) -lboost_program_options -lboost_iostreams
 # -lbz2 -lz

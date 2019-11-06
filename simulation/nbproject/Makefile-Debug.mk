@@ -39,6 +39,7 @@ OBJECTFILES= \
 	${OBJECTDIR}/src/analysis.o \
 	${OBJECTDIR}/src/cell-lists.o \
 	${OBJECTDIR}/src/cg-electrolyte.o \
+	${OBJECTDIR}/src/cg-hp.o \
 	${OBJECTDIR}/src/cg-lj-fluid.o \
 	${OBJECTDIR}/src/cg-pol-water.o \
 	${OBJECTDIR}/src/constant-rate-pt.o \
@@ -87,8 +88,8 @@ TESTOBJECTFILES= \
 CFLAGS=
 
 # CC Compiler Flags
-CCFLAGS=-pthread
-CXXFLAGS=-pthread
+CCFLAGS=-pthread -D _DEBUG
+CXXFLAGS=-pthread -D _DEBUG
 
 # Fortran Compiler Flags
 FFLAGS=
@@ -130,6 +131,11 @@ ${OBJECTDIR}/src/cg-electrolyte.o: src/cg-electrolyte.cpp
 	${MKDIR} -p ${OBJECTDIR}/src
 	${RM} "$@.d"
 	$(COMPILE.cc) -g -Wall -Iinclude -I../cpputil/include -I../particles/include -std=c++14 -fPIC  -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/cg-electrolyte.o src/cg-electrolyte.cpp
+
+${OBJECTDIR}/src/cg-hp.o: src/cg-hp.cpp
+	${MKDIR} -p ${OBJECTDIR}/src
+	${RM} "$@.d"
+	$(COMPILE.cc) -g -Wall -Iinclude -I../cpputil/include -I../particles/include -std=c++14 -fPIC  -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/cg-hp.o src/cg-hp.cpp
 
 ${OBJECTDIR}/src/cg-lj-fluid.o: src/cg-lj-fluid.cpp
 	${MKDIR} -p ${OBJECTDIR}/src
@@ -361,6 +367,19 @@ ${OBJECTDIR}/src/cg-electrolyte_nomain.o: ${OBJECTDIR}/src/cg-electrolyte.o src/
 	    $(COMPILE.cc) -g -Wall -Iinclude -I../cpputil/include -I../particles/include -std=c++14 -fPIC  -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/cg-electrolyte_nomain.o src/cg-electrolyte.cpp;\
 	else  \
 	    ${CP} ${OBJECTDIR}/src/cg-electrolyte.o ${OBJECTDIR}/src/cg-electrolyte_nomain.o;\
+	fi
+
+${OBJECTDIR}/src/cg-hp_nomain.o: ${OBJECTDIR}/src/cg-hp.o src/cg-hp.cpp 
+	${MKDIR} -p ${OBJECTDIR}/src
+	@NMOUTPUT=`${NM} ${OBJECTDIR}/src/cg-hp.o`; \
+	if (echo "$$NMOUTPUT" | ${GREP} '|main$$') || \
+	   (echo "$$NMOUTPUT" | ${GREP} 'T main$$') || \
+	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
+	then  \
+	    ${RM} "$@.d";\
+	    $(COMPILE.cc) -g -Wall -Iinclude -I../cpputil/include -I../particles/include -std=c++14 -fPIC  -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/cg-hp_nomain.o src/cg-hp.cpp;\
+	else  \
+	    ${CP} ${OBJECTDIR}/src/cg-hp.o ${OBJECTDIR}/src/cg-hp_nomain.o;\
 	fi
 
 ${OBJECTDIR}/src/cg-lj-fluid_nomain.o: ${OBJECTDIR}/src/cg-lj-fluid.o src/cg-lj-fluid.cpp 

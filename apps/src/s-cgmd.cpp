@@ -22,11 +22,14 @@ using namespace simploce::param;
  */
 int main(int argc, char* argv[]) 
 {
+  std::ofstream traj, data, stream;
+  cg_sim_model_ptr_t model;
+  std::string fnOutputModel{"out.model"};
+  try {
     std::string fnParticleSpecCatalog{"particle-spec-catalog.dat"};
     std::string fnTrajectory{"trajectory.dat"};
     std::string fnSimulationData{"sim-data.dat"};
     std::string fnInputModel{};
-    std::string fnOutputModel{"out.model"};
 
     std::size_t nsteps = 1000;
     std::size_t nwrite = 10;
@@ -35,7 +38,7 @@ int main(int argc, char* argv[])
     real_t molarity{0.1};                            // mol/l
     real_t density{997.0479};                        // kg/m^3
     real_t temperature{298.15};                      // K.
-    real_t gamma{0.50};                              // ps^-1
+    real_t gamma{1.0};                               // ps^-1
     std::size_t nmaxPolWaters = 1000000;             // Maximum number of polarizable waters
                                                      // (groups).
     std::string modelType{conf::POLARIZABLE_WATER};  // Coarse grained polarizable water.
@@ -89,7 +92,7 @@ int main(int argc, char* argv[])
        )
       (
        "damping-rate (Langevin heat bath)", po::value<real_t>(&gamma),
-       "Damping rate (ps^-1). Default is 0.5 ps^-1."
+       "Damping rate (ps^-1). Default is 1.0 ps^-1."
       )
       
       (
@@ -209,7 +212,6 @@ int main(int argc, char* argv[])
 
     // Read or set up new simulation model.
     sim_model_fact_ptr_t simModelFactory = factory::simulationModelFactory(catalog);
-    cg_sim_model_ptr_t model;
     if ( fnInputModel.empty() ) {
       box_ptr_t box = std::make_shared<box_t>(boxSize);      
       if ( modelType == conf::POLARIZABLE_WATER ) {
@@ -247,7 +249,6 @@ int main(int argc, char* argv[])
     }
 
     // Simulate.
-    std::ofstream traj, data;
     file::open_output(traj, fnTrajectory);
     file::open_output(data, fnSimulationData);
     if ( mc ) {
@@ -261,11 +262,21 @@ int main(int argc, char* argv[])
     data.close();
     
     // Write output model.
-    std::ofstream stream;
     file::open_output(stream, fnOutputModel);
     stream << *model << std::endl;
     stream.close();
     std::clog << "Wrote model to output file '" << fnOutputModel << "'." << std::endl;
     
-    return 0;    
+    return 0;
+  } catch (std::exception& exception) {
+    traj.flush();
+    traj.close();
+    data.flush();
+    data.close();
+    file::open_output(stream, fnOutputModel);
+    stream << *model << std::endl;
+    stream.close();
+    std::cerr << exception.what() << std::endl;
+  }
+    
 }

@@ -31,10 +31,14 @@
             <word>Analyzer</word>
             <word>catalog</word>
             <word>Interactor</word>
+            <word>Interactors</word>
             <word>kg</word>
+            <word>Langevin</word>
             <word>Lennard</word>
             <word>mol</word>
+            <word>protonatable</word>
             <word>protonatables</word>
+            <word>unphysical</word>
             <word>Verlet</word>
         </spellchecker-wordlist>
     </configuration>

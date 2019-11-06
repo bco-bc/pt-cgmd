@@ -120,6 +120,7 @@
             <pElem>include</pElem>
             <pElem>../cpputil/include</pElem>
           </incDir>
+          <commandLine>-D _DEBUG</commandLine>
           <warningLevel>2</warningLevel>
         </ccTool>
         <linkerTool>

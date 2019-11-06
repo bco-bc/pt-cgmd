@@ -35,6 +35,7 @@
 #include "stypes.hpp"
 #include "simploce/util/mu-units.hpp"
 #include "pair-lists.hpp"
+#include "sconf.hpp"
 #include <vector>
 #include <set>
 #include <thread>
@@ -129,7 +130,31 @@ namespace simploce {
         real_t frohlich(real_t aveM2, 
                         const temperature_t& temperature,
                         const box_ptr_t& box);
-                
+        
+        /**
+         * Writes a warning to std::clog if particles are too close.
+         * @param pi Particle 1
+         * @param pj Particle 2
+         * @param ef Holds energy and forces.
+         */
+        template <typename P>
+        static void 
+        tooClose(const std::shared_ptr<P>& pi, 
+                 const std::shared_ptr<P>& pj, 
+                 const std::tuple<energy_t, force_t, length_t>& ef)
+        {
+            static length_t Rmin = conf::CLOSE;
+        
+            auto Rij = std::get<2>(ef);
+            if ( Rij() < Rmin() ) {
+                std::clog << "WARNING: Rij < " << Rmin() << ", Rij = " << Rij 
+                          << " pi = " << pi->name() << ", index = " << pi->index()
+                          << " pj = " << pj->name() << ", index = " << pj->index()
+                        << " energy: " << std::get<0>(ef) 
+                        << std::endl;            
+            }
+        }
+        
     }
 }
 

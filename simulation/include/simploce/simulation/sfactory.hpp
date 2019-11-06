@@ -39,6 +39,19 @@ namespace simploce {
     namespace factory {
         
         /**
+         * Returns coarse grained force field for harmonic potential 
+         * applicable to bonds between beads. 
+         * @param catalog Particle specification catalog.
+         * @param bc Boundary condition.
+         * @param box Simulation box.
+         * @return Force field.
+         */
+        cg_ff_ptr_t
+        harmonicPotentialForceField(const spec_catalog_ptr_t& catalog,
+                                    const bc_ptr_t& bc,
+                                    const box_ptr_t& box);
+        
+        /**
          * Coarse grained force field for polarizable water.
          * @param catalog Particle specification catalog.
          * @param bc Boundary condition.
@@ -118,6 +131,18 @@ namespace simploce {
         at_ppair_list_gen_ptr_t 
         atomisticPairListGenerator(const box_ptr_t& box,
                                    const bc_ptr_t& bc);
+        
+        /**
+         * Returns coarse grained interactor for a harmonic potential force field
+         * @param catalog Particle specifications catalog.
+         * @param box Simulation box.
+         * @param bc Boundary condition.
+         * @return Interactor.
+         */
+        cg_interactor_ptr_t
+        harmonicPotentialInteractor(const spec_catalog_ptr_t& catalog,
+                                    const box_ptr_t& box, 
+                                    const bc_ptr_t& bc);
         
         
         /**
@@ -264,6 +289,7 @@ namespace simploce {
          */
         pt_displacer_ptr_t 
         protonTransferDisplacer();
+        
     }
 }
 

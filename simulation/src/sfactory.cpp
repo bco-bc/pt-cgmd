@@ -47,6 +47,7 @@
 #include "simploce/simulation/pt-langevin-velocity-verlet.hpp"
 #include "simploce/simulation/pbc.hpp"
 #include "simploce/simulation/constant-rate-pt.hpp"
+#include "simploce/simulation/cg-hp.hpp"
 #include "simploce/simulation/sconf.hpp"
 #include "simploce/particle/bead.hpp"
 #include "simploce/particle/atom.hpp"
@@ -71,6 +72,7 @@ namespace simploce {
         static cg_ff_ptr_t cgFormicAcidSolutionFF_{};   // Formic acid in water.
         static cg_ff_ptr_t cgElectrolyteFF_{};          // NaCl solution.
         static cg_ff_ptr_t cgLJFluid_{};                // LJ fluid.
+        static cg_ff_ptr_t cgHPFF_;                       // Harmonic potentials.
         
         // Pair lists generators.
         static cg_ppair_list_gen_ptr_t  cgPairlistGen_{};
@@ -95,15 +97,28 @@ namespace simploce {
         
         static bc_ptr_t pbc_{};
         
-        // Interactors
+        // Interactors.
         static std::shared_ptr<Interactor<Bead>> cgPolWaterInteractor_{};
         static std::shared_ptr<Interactor<Bead>> cgFormicAcidSolutionInteractor_{};
         static std::shared_ptr<Interactor<Bead>> cgElectrolyteInteractor_{};
         static std::shared_ptr<Interactor<Bead>> cgLJFluidInteractor_{};
+        static std::shared_ptr<Interactor<Bead>> cgHPInteractor_;
         
         static pt_pair_list_gen_ptr_t ptPairlisGen_{};
         
         static pt_displacer_ptr_t constantRate_{};
+        
+        cg_ff_ptr_t
+        harmonicPotentialForceField(const spec_catalog_ptr_t& catalog,
+                                    const bc_ptr_t& bc,
+                                    const box_ptr_t& box)
+        {
+            if ( !cgHPFF_ ) {
+                cgHPFF_ = std::make_shared<HarmonicPotential>(catalog, bc, box);
+            }
+            return cgHPFF_;
+        }
+        
                 
         cg_ff_ptr_t 
         polarizableWaterForceField(const spec_catalog_ptr_t& catalog,
@@ -192,6 +207,23 @@ namespace simploce {
             }
             return atPairListGen_;
         }
+        
+        cg_interactor_ptr_t
+        harmonicPotentialInteractor(const spec_catalog_ptr_t& catalog,
+                                    const box_ptr_t& box, 
+                                    const bc_ptr_t& bc)
+        {
+            if ( !cgHPInteractor_ ) {
+                cg_ppair_list_gen_ptr_t generator = 
+                    factory::coarseGrainedPairListGenerator(box, bc);
+                cg_ff_ptr_t forcefield = 
+                    factory::harmonicPotentialForceField(catalog, bc, box);
+                cgHPInteractor_ =
+                    std::make_shared<Interactor<Bead>>(forcefield, generator);
+            }
+            return cgHPInteractor_;
+        }
+
         
         cg_interactor_ptr_t 
         polarizableWaterInteractor(const spec_catalog_ptr_t& catalog,

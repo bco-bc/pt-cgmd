@@ -16,6 +16,7 @@
       <itemPath>include/simploce/simulation/cg-displacer.hpp</itemPath>
       <itemPath>include/simploce/simulation/cg-electrolyte.hpp</itemPath>
       <itemPath>include/simploce/simulation/cg-forcefield.hpp</itemPath>
+      <itemPath>include/simploce/simulation/cg-hp.hpp</itemPath>
       <itemPath>include/simploce/simulation/cg-lj-fluid.hpp</itemPath>
       <itemPath>include/simploce/simulation/cg-pol-water.hpp</itemPath>
       <itemPath>include/simploce/simulation/constant-rate-pt.hpp</itemPath>
@@ -59,6 +60,7 @@
       <itemPath>src/analysis.cpp</itemPath>
       <itemPath>src/cell-lists.cpp</itemPath>
       <itemPath>src/cg-electrolyte.cpp</itemPath>
+      <itemPath>src/cg-hp.cpp</itemPath>
       <itemPath>src/cg-lj-fluid.cpp</itemPath>
       <itemPath>src/cg-pol-water.cpp</itemPath>
       <itemPath>src/constant-rate-pt.cpp</itemPath>
@@ -148,7 +150,7 @@
             <pElem>../cpputil/include</pElem>
             <pElem>../particles/include</pElem>
           </incDir>
-          <commandLine>-pthread</commandLine>
+          <commandLine>-pthread -D _DEBUG</commandLine>
           <warningLevel>2</warningLevel>
         </ccTool>
         <linkerTool>
@@ -359,6 +361,11 @@
             tool="3"
             flavor2="0">
       </item>
+      <item path="include/simploce/simulation/cg-hp.hpp"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
       <item path="include/simploce/simulation/cg-lj-fluid.hpp"
             ex="false"
             tool="3"
@@ -505,6 +512,8 @@
       <item path="src/cell-lists.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="src/cg-electrolyte.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="src/cg-hp.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="src/cg-lj-fluid.cpp" ex="false" tool="1" flavor2="0">
       </item>
@@ -794,6 +803,11 @@
             tool="3"
             flavor2="0">
       </item>
+      <item path="include/simploce/simulation/cg-hp.hpp"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
       <item path="include/simploce/simulation/cg-lj-fluid.hpp"
             ex="false"
             tool="3"
@@ -940,6 +954,8 @@
       <item path="src/cell-lists.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="src/cg-electrolyte.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="src/cg-hp.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="src/cg-lj-fluid.cpp" ex="false" tool="1" flavor2="0">
       </item>

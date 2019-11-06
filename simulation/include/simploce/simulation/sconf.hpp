@@ -50,6 +50,7 @@ namespace simploce {
         const std::string ACID_BASE_SOLUTION = "acid-base-solution";
         const std::string ELECTROLYTE = "electrolyte";
         const std::string LJ_FLUID = "lj-fluid";
+        const std::string HP = "hp";
         
         // Default cutoff distance for non bonded interactions.
         static length_t RCUTOFF_DISTANCE_{2.5};  // nm.
@@ -61,6 +62,8 @@ namespace simploce {
          * Default cutoff distance beyond which protonatables cannot transfer protons.
          */
         static length_t RCUTOFF_DISTANCE_PT{0.4};
+        
+        static length_t CLOSE{0.1};
     }
 }
 

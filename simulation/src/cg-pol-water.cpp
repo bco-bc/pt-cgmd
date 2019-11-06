@@ -46,8 +46,8 @@ namespace simploce {
     using lj_params_t = ForceField::lj_params_t;
     using el_params_t = ForceField::el_params_t;
     
-    // Interaction parameters, from Riniker et al, 2011.
-    static const real_t EPS_R = 2.5;             // Relative permittivity
+    // Interaction parameters, adapted from Riniker et al, 2011.
+    static const real_t EPS_R = 2.5;              // Relative permittivity
     static const length_t R_CW_DP = 0.2;          // nm.
     static spec_ptr_t CW{};
     static spec_ptr_t DP{};
