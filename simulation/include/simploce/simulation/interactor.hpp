@@ -69,26 +69,30 @@ namespace simploce {
          * @param param Simulation parameters. Must hold "npairlists", number of steps
          * between updating particle pair lists.
          * @param at Atomistic particle model.
-         * @return Potential energy.
+         * @return Non-bonded and bonded Potential energy.
          */
-        energy_t interact(const sim_param_t& param, const at_ptr_t& at);
+        std::pair<energy_t, energy_t> 
+        interact(const sim_param_t& param, 
+                 const at_ptr_t& at);
         
         /**
          * Calculates interaction energy of given atom with all other particles.
          * @param atom Atom.
          * @param param Simulation parameters.
          * @param at Atomistic particle model.
-         * @return Interaction (potential) energy.
+         * @return Bonded and non-bonded interaction (potential) energy.
          */
-        energy_t interact(const atom_ptr_t& atom,
-                          const sim_param_t& param, 
-                          const at_ptr_t& at);
+        std::pair<energy_t, energy_t> 
+        interact(const atom_ptr_t& atom,
+                 const sim_param_t& param, 
+                 const at_ptr_t& at);
         
         /**
          * Returns identifying name.
          * @return Identifying name.
          */
-        std::string id() const;
+        std::string 
+        id() const;
                 
     private:
         
@@ -119,9 +123,11 @@ namespace simploce {
          * Computes force on beads.
          * @param param Simulation parameters.
          * @param cg Coarse grained particle model.
-         * @return Potential energy.
+         * @return Non-bonded and bonded potential energy.
          */
-        energy_t interact(const sim_param_t& param, const cg_ptr_t& cg);
+        std::pair<energy_t, energy_t> 
+        interact(const sim_param_t& param, 
+                 const cg_ptr_t& cg);
         
         /**
          * Calculates interaction energy of given bead with all other beads.
@@ -130,14 +136,16 @@ namespace simploce {
          * @param at Coarse grained particle model.
          * @return Interaction (potential) energy.
          */
-        energy_t interact(const bead_ptr_t& bead,
-                          const sim_param_t& param, 
-                          const cg_ptr_t& cg);
+        std::pair<energy_t, energy_t> 
+        interact(const bead_ptr_t& bead,
+                 const sim_param_t& param, 
+                 const cg_ptr_t& cg);
         /**
          * Returns identifying name.
          * @return Identifying name.
          */
-        std::string id() const;
+        std::string 
+        id() const;
         
     private:
         

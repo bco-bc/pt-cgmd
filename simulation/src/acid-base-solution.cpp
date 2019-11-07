@@ -149,18 +149,18 @@ namespace simploce {
         setup_(catalog_, bc_, box_, water_);
     }
     
-    energy_t 
+    std::pair<energy_t, energy_t>
     AcidBaseSolution::interact(const std::vector<bead_ptr_t>& all,
                                const std::vector<bead_ptr_t>& free,
                                const std::vector<bead_group_ptr_t>& groups,
                                const PairLists<Bead>& pairLists)
     {
-        energy_t epot = water_->bonded(all, free, groups, pairLists);
-        epot += LJ_COULOMB_F->interact(all, free, groups, pairLists);
-        return epot;        
+        auto bepot = water_->bonded(all, free, groups, pairLists);
+        auto nb = LJ_COULOMB_F->interact(all, free, groups, pairLists);
+        return std::make_pair(bepot, nb.second);
     }
     
-    energy_t 
+    std::pair<energy_t, energy_t>
     AcidBaseSolution::interact(const bead_ptr_t& bead,
                                const std::vector<bead_ptr_t>& all,
                                const std::vector<bead_ptr_t>& free,

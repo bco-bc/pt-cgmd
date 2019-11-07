@@ -46,6 +46,7 @@
 #include <memory>
 #include <utility>
 #include <stdexcept>
+#include <iostream>
 
 namespace simploce {
     
@@ -73,7 +74,9 @@ namespace simploce {
     SimulationModel<Bead>::interact(const sim_param_t& param)
     {
         SimulationData data;
-        data.epot = interactor_->interact(param, cg_);
+        auto result = interactor_->interact(param, cg_);
+        data.bepot = result.first;
+        data.nbepot = result.second;
         return data;
     }
     
@@ -81,8 +84,10 @@ namespace simploce {
     SimulationModel<Bead>::interact(const bead_ptr_t& bead,
                                     const sim_param_t& param)
     {
-        SimulationData data{};
-        data.epot = interactor_->interact(bead, param, cg_);
+        SimulationData data;
+        auto result = interactor_->interact(bead, param, cg_);
+        data.bepot = result.first;
+        data.nbepot = result.second;
         return data;
     }
     
@@ -185,6 +190,7 @@ namespace simploce {
             throw std::domain_error("No displacer specified.");
         }
         displacer_ = displacer;
+        std::clog << "Displacer set to " << displacer->id() << std::endl;
     }
     
     cg_interactor_ptr_t 

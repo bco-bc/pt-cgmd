@@ -40,6 +40,7 @@
 #include <utility>
 #include <memory>
 #include <map>
+#include <iostream>
 
 namespace simploce {
     
@@ -114,16 +115,15 @@ namespace simploce {
         position_t rj = pj->position();
         dist_vect_t rij = ri - rj;                 // Distance vector (nm), 
                                                    // no boundary conditions.
-        length_t R = norm<length_t>(rij);          // Distance (nm)
+        length_t Rij = norm<length_t>(rij);          // Distance (nm)
 
-
-        length_t dis = R - R_CW_DP;
+        length_t dis = Rij - R_CW_DP;
         if ( dis() > 0.0 ) {
             real_t dis3 = dis() * dis() * dis();
             real_t dis4 = dis() * dis3; 
             epot += halve_fc * dis4;
             real_t f = -fc2 * dis3;        
-            dist_vect_t uv = rij / R;  // Unit distance vector.
+            dist_vect_t uv = rij / Rij;  // Unit distance vector.
             for (std::size_t k = 0; k != 3; ++k) {
                 real_t fv = f * uv[k];
                 fi[k] = fv;
@@ -132,6 +132,20 @@ namespace simploce {
             forces[index_i] += fi;
             forces[index_j] += fj;
         }        
+        
+#ifdef _DEBUG        
+        if ( epot() > conf::LARGE ) {
+            std::clog << "WARNING: High potential energy in water group. " 
+                      << "R - R_CW_DP: " << dis << ", "
+                      << "Particle indices: " << index_i << ", " << index_j << ", "
+                      << "Particle identifiers: " << pi->id() << ", " << pj->id() << ", "
+                      << "Energy: " << epot
+                      << std::endl;
+            throw std::domain_error(
+                "High energy polarizable water group displays high energy. See details above."
+            );
+        }
+#endif
         
         return epot;
     }
@@ -160,17 +174,19 @@ namespace simploce {
             setup_(catalog, bc, box, protonatable);
     }
             
-    energy_t 
+    std::pair<energy_t, energy_t> 
     CoarseGrainedPolarizableWater::interact(const std::vector<bead_ptr_t>& all,
                                             const std::vector<bead_ptr_t>& free,
                                             const std::vector<bead_group_ptr_t>& groups,
                                             const PairLists<Bead>& pairLists)
     {
-        auto bonded = bonded_(all.size(), groups);        
-        auto epot = LJ_COULOMB_F->interact(all, free, groups, pairLists);
+        auto b = bonded_(all.size(), groups);        
+        auto bepot = b.first;
+
+        auto nb = LJ_COULOMB_F->interact(all, free, groups, pairLists);
+        auto nbepot = nb.second;
         
-        epot += bonded.first;        
-        auto& forces = bonded.second;
+        auto& forces = b.second;
         for (auto bead : all) {
             auto index = bead->index();
             auto force = bead->force();
@@ -178,7 +194,7 @@ namespace simploce {
             bead->force(force);
         }
         
-        return epot;
+        return std::make_pair(bepot, nbepot);
     }
     
     energy_t 
@@ -199,7 +215,7 @@ namespace simploce {
         return bonded.first;
     }
     
-    energy_t 
+    std::pair<energy_t, energy_t>
     CoarseGrainedPolarizableWater::interact(const bead_ptr_t& bead,
                                             const std::vector<bead_ptr_t>& all,
                                             const std::vector<bead_ptr_t>& free,
@@ -208,13 +224,14 @@ namespace simploce {
         // Forces are not used.
         std::vector<force_t> forces(all.size(), force_t{});
         
-        energy_t epot = LJ_COULOMB_F->interact(bead, all, free, groups);
+        auto nb = LJ_COULOMB_F->interact(bead, all, free, groups);
+        energy_t bepot{0.0};
         for (auto g : groups) {            
             if ( g->contains(bead) ) {
-                epot += bonded_(g, forces);
+                bepot += bonded_(g, forces);
             }
         }
-        return epot;
+        return std::make_pair(bepot, nb.second);
     }
     
     std::string 

@@ -111,10 +111,13 @@ namespace simploce {
         cg_ff_ptr_t
         harmonicPotentialForceField(const spec_catalog_ptr_t& catalog,
                                     const bc_ptr_t& bc,
-                                    const box_ptr_t& box)
+                                    const box_ptr_t& box,
+                                    real_t fc,
+                                    const length_t& Rref)
         {
             if ( !cgHPFF_ ) {
-                cgHPFF_ = std::make_shared<HarmonicPotential>(catalog, bc, box);
+                cgHPFF_ = 
+                    std::make_shared<HarmonicPotential>(catalog, bc, box, fc, Rref);
             }
             return cgHPFF_;
         }
@@ -211,13 +214,15 @@ namespace simploce {
         cg_interactor_ptr_t
         harmonicPotentialInteractor(const spec_catalog_ptr_t& catalog,
                                     const box_ptr_t& box, 
-                                    const bc_ptr_t& bc)
+                                    const bc_ptr_t& bc,
+                                    real_t fc,
+                                    const length_t& Rref)
         {
             if ( !cgHPInteractor_ ) {
                 cg_ppair_list_gen_ptr_t generator = 
                     factory::coarseGrainedPairListGenerator(box, bc);
                 cg_ff_ptr_t forcefield = 
-                    factory::harmonicPotentialForceField(catalog, bc, box);
+                    factory::harmonicPotentialForceField(catalog, bc, box, fc, Rref);
                 cgHPInteractor_ =
                     std::make_shared<Interactor<Bead>>(forcefield, generator);
             }

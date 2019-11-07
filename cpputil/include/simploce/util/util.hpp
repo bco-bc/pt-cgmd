@@ -123,9 +123,9 @@ namespace simploce {
             static const std::size_t nsublists = std::thread::hardware_concurrency();        
             std::size_t numberOfItemsPerSubList = items.size() / nsublists;                                                              
             for (std::size_t k = 0; k != nsublists; ++k) {
-                std::vector<T> single{};  // One sublist of items.
+                std::vector<T> single{};  // A single sublist of items.
                 std::size_t n = 0;
-                while (counter != items.size() && n != numberOfItemsPerSubList) {
+                while (counter != items.size() && n != numberOfItemsPerSubList) {                    
                     single.push_back(items[counter]);
                     counter += 1;
                     n += 1;

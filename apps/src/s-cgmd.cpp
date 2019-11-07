@@ -46,6 +46,10 @@ int main(int argc, char* argv[])
     bool protonatable = true;
     std::string displacerId =
       conf::LANGEVIN_VELOCITY_VERLET;                // Displacer.
+    real_t fc{100.0};                                // Force constant harmonic potential.
+    length_t Rref{0.4};                              // Reference distance harmonic potential.
+    length_t R0{0.5};                                // Initial distance between particles undergoing
+                                                     // harmonic motion.
 
     po::options_description usage("Usage");
     usage.add_options()
@@ -230,7 +234,7 @@ int main(int argc, char* argv[])
       } else if ( modelType == conf::LJ_FLUID) {
 	model = simModelFactory->ljFluid(box, density, temperature);
       } else if ( modelType == conf::HP) {
-	model = simModelFactory->harmonic();
+	model = simModelFactory->harmonic(R0, Rref, fc);
       } else {
 	throw std::domain_error(modelType + ": No such simulation model type available (yet).");
       }
@@ -278,10 +282,11 @@ int main(int argc, char* argv[])
     traj.close();
     data.flush();
     data.close();
-    file::open_output(stream, fnOutputModel);
-    stream << *model << std::endl;
-    stream.close();
+    if ( model ) {
+      file::open_output(stream, fnOutputModel);
+      stream << *model << std::endl;
+      stream.close();
+    }
     std::cerr << exception.what() << std::endl;
   }
-    
 }

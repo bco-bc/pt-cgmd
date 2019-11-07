@@ -109,17 +109,18 @@ namespace simploce {
         // For all particle pairs groups.
         for (auto iter_i = groups.begin(); iter_i != groups.end() - 1; ++iter_i) {
             const auto g_i = *iter_i;
+            auto rg_i = g_i->position();
             const auto particles_i = g_i->particles();
             for (auto iter_j = iter_i + 1; iter_j != groups.end(); ++iter_j) {
-                const auto g_j = *iter_j;
-                const auto particles_j = g_j->particles();
-                for (auto pi : particles_i) {
-                    auto ri = pi->position();
-                    for (auto pj : particles_j) {                
-                        auto rj = pj->position();
-                        auto R = bc->apply(ri, rj);
-                        auto R2 = norm2<real_t>(R);
-                        if ( R2 <= rc2 ) {
+                auto g_j = *iter_j;
+                auto rg_j = g_j->position();
+                auto R = bc->apply(rg_i, rg_j);
+                auto R2 = norm2<real_t>(R);
+                if ( R2 <= rc2 ) {
+                    // Include all particles of both groups in the pair list.
+                    const auto particles_j = g_j->particles();
+                    for (auto pi : particles_i) {
+                        for (auto pj : particles_j) {
                             pp_pair_t pair = std::make_pair(pi, pj);
                             pairList.push_back(pair);
                         }
@@ -127,7 +128,7 @@ namespace simploce {
                 }
             }
         }
-
+        
         // Done.
         return std::move(pairList);        
     }
@@ -205,6 +206,10 @@ namespace simploce {
                       << fgSize << std::endl;
             std::clog << "Number of particle-in-group/particle-in-group pairs: "
                       << ggSize << std::endl;
+            std::clog << "Total number of particle pairs: "
+                      << pairList.size() << std::endl;
+            std::clog << "Total number of POSSIBLE particle pairs: "
+                      << all.size() * (all.size() - 1) / 2 << std::endl;
             firstTime = false;
         }
 

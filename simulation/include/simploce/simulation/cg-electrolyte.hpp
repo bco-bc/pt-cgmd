@@ -49,20 +49,22 @@ namespace simploce {
                                  const bc_ptr_t& bc,
                                  const box_ptr_t& box);
         
-        energy_t interact(const std::vector<bead_ptr_t>& all,
-                          const std::vector<bead_ptr_t>& free,
-                          const std::vector<bead_group_ptr_t>& groups,
-                          const PairLists<Bead>& pairLists) override;
+        std::pair<energy_t, energy_t>
+        interact(const std::vector<bead_ptr_t>& all,
+                 const std::vector<bead_ptr_t>& free,
+                 const std::vector<bead_group_ptr_t>& groups,
+                 const PairLists<Bead>& pairLists) override;
         
         energy_t bonded(const std::vector<bead_ptr_t>& all,
                         const std::vector<bead_ptr_t>& free,
                         const std::vector<bead_group_ptr_t>& groups,
                         const PairLists<Bead>& pairLists) override;
         
-        energy_t interact(const bead_ptr_t& bead,
-                          const std::vector<bead_ptr_t>& all,
-                          const std::vector<bead_ptr_t>& free,
-                          const std::vector<bead_group_ptr_t>& groups) override;
+        std::pair<energy_t, energy_t>
+        interact(const bead_ptr_t& bead,
+                 const std::vector<bead_ptr_t>& all,
+                 const std::vector<bead_ptr_t>& free,
+                 const std::vector<bead_group_ptr_t>& groups) override;
         
         std::string id() const override;
         

@@ -40,6 +40,7 @@
 #include "simploce/simulation/no-bc.hpp"
 #include "simploce/particle/particle-model-factory.hpp"
 #include "simploce/particle/particle-spec-catalog.hpp"
+#include "simploce/particle/particle-spec.hpp"
 #include "simploce/util/mu-units.hpp"
 #include <algorithm>
 #include <random>
@@ -54,13 +55,10 @@ namespace simploce {
     {        
     }
         
-    /**
-     * Returns a model consisting of a single particle group containing one bond 
-     * whose beads undergo harmonic motion.
-     * @return Model.
-     */
     cg_sim_model_ptr_t 
-    SimulationModelFactory::harmonic()
+    SimulationModelFactory::harmonic(length_t R0, 
+                                     length_t Rref, 
+                                     real_t fc)
     {
         std::clog << "Creating coarse grained simulation model for " 
                   << "a single particle group containing one bond whose beads "
@@ -69,22 +67,27 @@ namespace simploce {
         
         std::clog.setf(std::ios_base::scientific, std::ios_base::floatfield);
         
-        box_ptr_t box = factory::cube(conf::LARGE); 
+        auto spec = catalog_->lookup("AP");
+        
+        std::clog << "Initial distance between particles : " << R0 << " nm." << std::endl;
+        std::clog << "Force constant: " << fc << " kJ/(mol nm^2)" << std::endl;
+        real_t period = 2.0 * MathConstants<real_t>::PI * std::sqrt(spec->mass()() / fc);
+        std::clog << "Period: " << period << " ps" << std::endl;
+        std::clog << "Frequency: " << 1.0 / period << " 1/ps" << std::endl;
+                
+        box_ptr_t box = factory::cube(3.0 * R0);
+        std::clog << "Box size: " << box->size() << std::endl;
         
         // No boundary conditions.
         bc_ptr_t bc = std::make_shared<NoBoundaryCondition>();
         std::clog << "No boundary conditions." << std::endl;
         
-        cg_ptr_t cg;
-        auto spec = catalog_->lookup("AP");
-        position_t r1{0.0, 0.0, -0.25};
-        auto bead_1 = cg->addBead(1, "AP1", r1, spec, false);
-        position_t r2{0.0, 0.0, 0.25};
-        auto bead_2 = cg->addBead(1, "AP2", r2, spec, false);
+        // Two particle model.
+        cg_ptr_t cg = particleModelFactory_->harmonic(R0);
         
         // Interactor.
         cg_interactor_ptr_t interactor = 
-                factory::harmonicPotentialInteractor(catalog_, box, bc);
+                factory::harmonicPotentialInteractor(catalog_, box, bc, fc, Rref);
         
         // Displacer.
         std::shared_ptr<CoarseGrainedDisplacer> displacer = 

@@ -54,10 +54,9 @@ namespace simploce {
                                   const energy_t& ekin)
         {
             std::size_t nparticles = particles.size();
-            //std::size_t ndof = ( 3 * nparticles - 3 );  // -3 to remove rigid body translation
-            std::size_t ndof = 3 * nparticles;
+            real_t ndof = 3 * nparticles - 3;  // Assuming total momentum is constant.
             if ( ndof > 3 ) {
-                return 2.0 * ekin() / ( real_t(ndof) * MUUnits<real_t>::KB );  // In K.
+                return 2.0 * ekin() / ( ndof * MUUnits<real_t>::KB );  // In K.
             } else {
                 // No point calculating temperature for a low number of degrees of freedom.
                 return 0.0;
@@ -65,7 +64,7 @@ namespace simploce {
         }
         
         /**
-         * Returns pressure.
+         * Returns pressure. Calculated from Virial Theorem.
          * @param all All particles.
          * @param temperature Temperature.
          * @param box Simulation box.
@@ -77,28 +76,20 @@ namespace simploce {
                             const box_ptr_t& box)
         {
             volume_t volume = box->volume();
-            mass_t totalMass = 0.0;
             real_t virial1 = 0.0;
-            position_t centerOfMass{};
-            momentum_t totalMomentum{};
             pressure_t pressure{};
 
             std::size_t nparticles = all.size();
             for (const auto& particle : all) {
-                mass_t mass = particle->mass()();
                 position_t r = particle->position();
-                momentum_t p = particle->momentum();
                 force_t f = particle->force();
-                totalMass += mass;
-                centerOfMass += ( mass() * r );
-                totalMomentum += p;
                 virial1 += inner<real_t>(f,r);
             }
-            centerOfMass /= totalMass();
             if ( volume() > 0.0 ) {
                 virial1 /= ( 3.0 * volume() );
-                real_t virial2 = nparticles * MUUnits<real_t>::KB * temperature() / volume();
-                pressure = virial1 + virial2; // In kJ/(mol nm^3)    
+                real_t virial2 = 
+                    nparticles * MUUnits<real_t>::KB * temperature() / volume();
+                pressure = virial2 - virial1; // In kJ/(mol nm^3)    
             } else {
                 pressure = 0.0;
             }

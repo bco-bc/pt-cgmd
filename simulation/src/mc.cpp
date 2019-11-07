@@ -36,6 +36,7 @@
 #include <memory>
 #include <utility>
 #include <cmath>
+#include <tuple>
 
 namespace simploce {
     
@@ -43,8 +44,9 @@ namespace simploce {
     static const real_t LIMIT = 75.0;
     static const real_t LARGE = 1.0e+20;
     
+    // Returns differences in bonded and non-bonded potential energy, and acceptance.
     template <typename P>
-    static std::pair<energy_t, bool> 
+    static std::tuple<energy_t, energy_t, bool> 
     displaceParticle_(std::shared_ptr<P>& particle,
                       const cg_sim_model_ptr_t& sm,
                       const sim_param_t& param)
@@ -66,7 +68,8 @@ namespace simploce {
         position_t ri = particle->position();
         
         // Calculate initial (current) energy.
-        energy_t energy_i = sm->interact(particle, param).epot;
+        auto result_i = sm->interact(particle, param);
+        auto energy_i = result_i.bepot + result_i.nbepot;
         if ( energy_i() >= LARGE || std::isnan(energy_i()) ) {
             energy_i = LARGE;
         }
@@ -79,7 +82,8 @@ namespace simploce {
         particle->position(rf);
                 
         // Calculate final (new) energy.
-        energy_t energy_f = sm->interact(particle, param).epot;
+        auto result_f = sm->interact(particle, param);
+        auto energy_f = result_f.bepot + result_f.nbepot;
         if ( energy_f()  >= LARGE || std::isnan(energy_f()) ) {
             energy_f = 2.0 * LARGE;
         }
@@ -94,19 +98,23 @@ namespace simploce {
                 if ( rv > w ) {
                     // Reject. Restore previous position.
                     particle->position(ri);
-                    return std::make_pair(energy_t(), false);
+                    return std::make_tuple(0.0, 0.0, false);
                 } else {
                     // Accept. Keep new position.
-                    return std::make_pair(difference, true);
+                    return std::make_tuple(result_f.bepot - result_i.bepot, 
+                                           result_f.nbepot - result_i.nbepot,
+                                           true);
                 }
             } else {
                 // Accept. Keep new position.
-                return std::make_pair(difference, true);;
+                return std::make_tuple(result_f.bepot - result_i.bepot, 
+                                       result_f.nbepot - result_i.nbepot,
+                                       true);
             }
         } else {
             // Reject. Restore position.
             particle->position(ri);
-            return std::make_pair(energy_t(), false);;
+            return std::make_tuple(0.0, 0.0, false);
         }
     }
     
@@ -119,7 +127,8 @@ namespace simploce {
         
         // Set up.
         static bool setup = false;
-        static energy_t epot{0.0};
+        static energy_t bepot = 0.0;
+        static energy_t nbepot = 0.0;
         static std::random_device rd;
         static std::mt19937 gen(rd());
         static std::uniform_int_distribution<std::size_t> dis(0, all.size() - 1);
@@ -132,10 +141,12 @@ namespace simploce {
         auto particle = all[index];
         auto result = displaceParticle_(particle, sm, param);
         
-        SimulationData data{};
-        epot += result.first;
-        data.epot = epot;
-        data.accepted = result.second;
+        SimulationData data;
+        bepot += std::get<0>(result);
+        nbepot += std::get<1>(result);
+        data.bepot = bepot; 
+        data.nbepot = nbepot;
+        data.accepted = std::get<2>(result);
         
         return data;
     }

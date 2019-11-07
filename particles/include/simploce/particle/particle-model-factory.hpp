@@ -32,6 +32,15 @@ namespace simploce {
         ParticleModelFactory(const spec_catalog_ptr_t& catalog);
         
         /**
+         * Returns coarse-grained (CG) particle model of consisting of a 
+         * single particle group containing one bond whose beads undergo 
+         * harmonic motion. Particles are placed along the z-axis at a distance R0.
+         * @param R0 Distance between particles.
+         * @return Coarse grained particle model.
+         */
+        cg_ptr_t harmonic(const length_t R0);
+        
+        /**
          * Returns coarse grained polarizable water model.
          * @param box Box.
          * @param atDensitySI Requested atomistic density in SI units (kg/m^3). 

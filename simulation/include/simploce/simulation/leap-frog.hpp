@@ -62,10 +62,12 @@ namespace simploce {
          * @param at Atomistic model.
          * @return Kinetic energy, temperature.
          */
-        SimulationData displace(const sim_param_t& param, 
-                                const at_ptr_t& at) const override;
+        SimulationData 
+        displace(const sim_param_t& param, 
+                 const at_ptr_t& at) const override;
         
-        std::string id() const override;
+        std::string 
+        id() const override;
         
     private:
         
@@ -82,10 +84,12 @@ namespace simploce {
         
         LeapFrog(const cg_interactor_ptr_t& interactor);
         
-        SimulationData displace(const sim_param_t& param, 
-                                const cg_ptr_t& cg) const override;
+        SimulationData 
+        displace(const sim_param_t& param, 
+                 const cg_ptr_t& cg) const override;
         
-        std::string id() const override;
+        std::string 
+        id() const override;
         
     private:
     

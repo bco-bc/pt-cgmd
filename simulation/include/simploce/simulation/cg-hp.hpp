@@ -42,24 +42,36 @@ namespace simploce {
     class HarmonicPotential : public CoarseGrainedForceField {
     public:
         
+        /**
+         * Constructor.
+         * @param catalog Particle catalog.
+         * @param bc Boundary condition.
+         * @param box Simulation box.
+         * @param fc Force constant harmonic potential.
+         * @param Rref Reference particle distance,
+         */
         HarmonicPotential(const spec_catalog_ptr_t& catalog,
                           const bc_ptr_t& bc,
-                          const box_ptr_t& box);
+                          const box_ptr_t& box,
+                          real_t fc,
+                          const length_t& Rref);
         
-        energy_t interact(const std::vector<bead_ptr_t>& all,
-                          const std::vector<bead_ptr_t>& free,
-                          const std::vector<bead_group_ptr_t>& groups,
-                          const PairLists<Bead>& pairLists) override;
+        std::pair<energy_t, energy_t> 
+        interact(const std::vector<bead_ptr_t>& all,
+                 const std::vector<bead_ptr_t>& free,
+                 const std::vector<bead_group_ptr_t>& groups,
+                 const PairLists<Bead>& pairLists) override;
         
         energy_t bonded(const std::vector<bead_ptr_t>& all,
                         const std::vector<bead_ptr_t>& free,
                         const std::vector<bead_group_ptr_t>& groups,
                         const PairLists<Bead>& pairLists) override;
         
-        energy_t interact(const bead_ptr_t& bead,
-                          const std::vector<bead_ptr_t>& all,
-                          const std::vector<bead_ptr_t>& free,
-                          const std::vector<bead_group_ptr_t>& groups) override;
+        std::pair<energy_t, energy_t> 
+        interact(const bead_ptr_t& bead,
+                 const std::vector<bead_ptr_t>& all,
+                 const std::vector<bead_ptr_t>& free,
+                 const std::vector<bead_group_ptr_t>& groups) override;
         
         std::string id() const override;
         
@@ -71,6 +83,8 @@ namespace simploce {
         spec_catalog_ptr_t catalog_;
         bc_ptr_t bc_;
         box_ptr_t box_;
+        real_t fc_;
+        length_t Rref_;
         
     };
 }

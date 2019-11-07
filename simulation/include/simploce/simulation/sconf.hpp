@@ -63,7 +63,7 @@ namespace simploce {
          */
         static length_t RCUTOFF_DISTANCE_PT{0.4};
         
-        static length_t CLOSE{0.1};
+        static length_t CLOSE{0.15};
     }
 }
 

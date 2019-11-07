@@ -61,12 +61,13 @@ namespace simploce {
          * @param free Free atoms.
          * @param groups All atoms groups.
          * @param pairLists One or multiple atom pair lists.
-         * @return Potential energy.
+         * @return Bonded and non-bonded potential energy.
          */
-        virtual energy_t interact(const std::vector<atom_ptr_t>& all,
-                                  const std::vector<atom_ptr_t>& free,
-                                  const std::vector<atom_group_ptr_t>& groups,
-                                  const std::vector<atom_pair_list_t>& pairLists) = 0;
+        virtual std::pair<energy_t, energy_t>
+        interact(const std::vector<atom_ptr_t>& all,
+                 const std::vector<atom_ptr_t>& free,
+                 const std::vector<atom_group_ptr_t>& groups,
+                 const std::vector<atom_pair_list_t>& pairLists) = 0;
     };
 }
 

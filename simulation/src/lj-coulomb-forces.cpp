@@ -217,12 +217,13 @@ namespace simploce {
         return epot;
     }
     
-    energy_t energy_(const bead_ptr_t& bead,
-                     const std::vector<bead_group_ptr_t>& groups,
-                     const lj_params_t& ljParams,
-                     const el_params_t& elParams,
-                     const bc_ptr_t& bc,
-                     const box_ptr_t& box)
+    energy_t 
+    energy_(const bead_ptr_t& bead,
+            const std::vector<bead_group_ptr_t>& groups,
+            const lj_params_t& ljParams,
+            const el_params_t& elParams,
+            const bc_ptr_t& bc,
+            const box_ptr_t& box)
     {
         // Electrostatic parameters.
         static const real_t eps_r = elParams.at("eps_r");
@@ -280,10 +281,11 @@ namespace simploce {
     {        
     }
         
-    energy_t LJCoulombForces<Bead>::interact(const std::vector<bead_ptr_t>& all,
-                                             const std::vector<bead_ptr_t>& free,
-                                             const std::vector<bead_group_ptr_t>& groups,
-                                             const PairLists<Bead>& pairLists)
+    std::pair<energy_t, energy_t>     
+    LJCoulombForces<Bead>::interact(const std::vector<bead_ptr_t>& all,
+                                    const std::vector<bead_ptr_t>& free,
+                                    const std::vector<bead_group_ptr_t>& groups,
+                                    const PairLists<Bead>& pairLists)
     {         
         static std::vector<PairLists<Bead>::pp_list_cont_t> subPairLists{};
         static bool firstTime = true;
@@ -293,7 +295,7 @@ namespace simploce {
         
         auto nbeads = all.size();
         
-        // Concurrent calculation only for large number of particles.        
+        // Concurrent calculation only for large number of particles.
         if ( nbeads > conf::MIN_NUMBER_OF_PARTICLES ) {
             
             // Concurrently.
@@ -331,15 +333,14 @@ namespace simploce {
             
             // One remaining particle group/particle group interaction is handled
             // by the current thread.
-            const auto& single = subPairLists[ntasks - 1];
+            const auto& single = *(subPairLists.end() - 1);
             if ( !single.empty() ) {
                 auto result = 
                     ppForces_(single, nbeads, ljParams_, elParams_, bc_, box_);
                 results.push_back(result);
             }
             
-        } else {
-                    
+        } else {                            
             // Sequentially
             
             // Interaction between all particle groups.
@@ -355,8 +356,8 @@ namespace simploce {
         
         // All other interactions are handled sequentially.
                     
-        // Collect potential energies and forces.
-        energy_t epot{0.0};
+        // Collect non-bonded potential energies and forces.
+        energy_t nbepot{0.0};
         for (auto result : results) {
             const auto& forces = result.second;
             for (auto bead : all) {
@@ -364,22 +365,24 @@ namespace simploce {
                 force_t f = forces[index] + bead->force();
                 bead->force(f);
             }
-            epot += result.first;
+            nbepot += result.first;
         }
 
-        // Done.
-        return epot;
+        // Done. No bonded potential energy.
+        return std::make_pair(0.0, nbepot);
     }
     
-    energy_t 
+    std::pair<energy_t, energy_t>
     LJCoulombForces<Bead>::interact(const bead_ptr_t& bead,
                                     const std::vector<bead_ptr_t>& all,
                                     const std::vector<bead_ptr_t>& free,
                                     const std::vector<bead_group_ptr_t>& groups)
     {
-        energy_t epot = energy_(bead, free, ljParams_, elParams_, bc_, box_);
-        epot += energy_(bead, groups, ljParams_, elParams_, bc_, box_);
-        return epot;
+        auto nbepot = energy_(bead, free, ljParams_, elParams_, bc_, box_);
+        nbepot += energy_(bead, groups, ljParams_, elParams_, bc_, box_);
+        
+        // No bonded interaction energies.
+        return std::make_pair(0.0, nbepot);
     }
     
     energy_t 
@@ -391,7 +394,8 @@ namespace simploce {
         return 0.0;
     }
     
-    std::string LJCoulombForces<Bead>::id() const
+    std::string 
+    LJCoulombForces<Bead>::id() const
     {
         return "lj-coulomb-forces";
     }

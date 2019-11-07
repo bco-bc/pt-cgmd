@@ -255,13 +255,16 @@ namespace simploce {
         });
         
         // Compute forces and potential energy at t(n+1) using positions at t(n+1).
-        energy_t epot = interactor_->interact(param, at);
+        auto result = interactor_->interact(param, at);
         
+        // Displace atom velocities.
         SimulationData data = at->doWithAll<SimulationData>([] (const std::vector<atom_ptr_t>& atoms) {
             return displaceVelocity_<Atom>(atoms);
         });
-        data.epot = epot;
         
+        // Save simulation data
+        data.bepot = result.first;
+        data.nbepot = result.second;        
         data.t = counter * dt;
         
         return data;
@@ -290,7 +293,7 @@ namespace simploce {
         
         counter += 1;
         
-        if ( !setup ) {
+        if ( !setup ) {            
             dt = param.get<real_t>("timestep");
             temperature = param.get<real_t>("temperature");
             gamma = param.get<real_t>("gamma");
@@ -304,25 +307,29 @@ namespace simploce {
             setup = true;
         }
         
-        // Displace atom positions.
+        // Displace bead positions.
         cg->doWithAll<void>([] (const std::vector<bead_ptr_t>& beads) {
             displacePosition_<Bead>(dt, beads);
         });
         
         // Compute forces and potential energy at t(n+1) using positions at t(n+1).
-        energy_t epot = interactor_->interact(param, cg);
+        auto result = interactor_->interact(param, cg);
         
+        // Displace bead velocities.
         SimulationData data = cg->doWithAll<SimulationData>([] (const std::vector<bead_ptr_t>& beads) {
             return displaceVelocity_<Bead>(beads);
         });
-        data.epot = epot;
         
+        // Save simulation data.
+        data.bepot = result.first;
+        data.nbepot = result.second;                
         data.t = counter * dt;
 
         return data;
     }    
 
-    std::string LangevinVelocityVerlet<CoarseGrained>::id() const
+    std::string 
+    LangevinVelocityVerlet<CoarseGrained>::id() const
     {
         return conf::LANGEVIN_VELOCITY_VERLET;
     }

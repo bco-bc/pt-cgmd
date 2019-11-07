@@ -64,6 +64,23 @@ namespace simploce {
         }
     }
         
+    cg_ptr_t 
+    ParticleModelFactory::harmonic(const length_t R0)
+    {
+        cg_ptr_t cg = std::make_shared<CoarseGrained>(); 
+        auto spec = catalog_->lookup("AP");
+        auto h = R0() / 2.0;
+        position_t r1{0.0, 0.0, -h};
+        auto bead_1 = cg->addBead(1, "AP1", r1, spec, false);
+        position_t r2{0.0, 0.0, +h};
+        auto bead_2 = cg->addBead(2, "AP2", r2, spec, false);
+        std::vector<bead_ptr_t> beads{bead_1, bead_2};
+        id_pair_t pair = std::make_pair(bead_1->id(), bead_2->id());
+        std::vector<id_pair_t> pairs{pair};
+        cg->addBeadGroup(beads, pairs);
+        return cg;
+    }
+        
     cg_pol_water_ptr_t
     ParticleModelFactory::polarizableWater(const box_ptr_t& box,
                                            const density_t atDensitySI,

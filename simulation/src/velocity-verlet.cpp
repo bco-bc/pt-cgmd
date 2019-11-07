@@ -47,8 +47,9 @@ namespace simploce {
      * @return Forces at time t(n).
      */
     template <typename T>
-    std::vector<force_t> displacePosition_(const stime_t& dt,
-                                           const std::vector<std::shared_ptr<T>>& particles)
+    std::vector<force_t> 
+    displacePosition_(const stime_t& dt,
+                      const std::vector<std::shared_ptr<T>>& particles)
     {
         // Initial forces (forces at time t(n).
         std::vector<force_t> fis(particles.size(), force_t{});
@@ -86,9 +87,10 @@ namespace simploce {
      * @return Kinetic, potential energy, and temperature.
      */
     template <typename T>
-    SimulationData displaceMomentum_(const stime_t& dt,
-                                     const std::vector<force_t>& fis,
-                                     const std::vector<std::shared_ptr<T>>& particles)
+    SimulationData 
+    displaceMomentum_(const stime_t& dt,
+                      const std::vector<force_t>& fis,
+                      const std::vector<std::shared_ptr<T>>& particles)
     {
         SimulationData data;
         
@@ -131,8 +133,9 @@ namespace simploce {
     {       
     }
         
-    SimulationData VelocityVerlet<Atomistic>::displace(const sim_param_t& param, 
-                                                       const at_ptr_t& at) const
+    SimulationData 
+    VelocityVerlet<Atomistic>::displace(const sim_param_t& param, 
+                                        const at_ptr_t& at) const
     {        
         static std::size_t counter = 0;
         static bool firstTime = true;
@@ -154,20 +157,23 @@ namespace simploce {
         });
         
         // Compute forces and potential energy at t(n+1) using positions at t(n+1).
-        energy_t epot = interactor_->interact(param, at);
+        auto result = interactor_->interact(param, at);
         
         // Displace atom momenta.
         SimulationData data = at->doWithAll<SimulationData>([] (const std::vector<atom_ptr_t>& atoms) {
             return displaceMomentum_<Atom>(dt, fis, atoms);
         });
-        data.epot = epot;
         
+        // Save simulation data.
+        data.bepot = result.first;
+        data.nbepot = result.second;       
         data.t = counter * dt;
         
         return data;
     }
     
-    std::string VelocityVerlet<Atomistic>::id() const
+    std::string 
+    VelocityVerlet<Atomistic>::id() const
     {
         return conf::VELOCITY_VERLET;
     }
@@ -177,8 +183,9 @@ namespace simploce {
     {       
     }
         
-    SimulationData VelocityVerlet<CoarseGrained>::displace(const sim_param_t& param, 
-                                                           const cg_ptr_t& cg) const
+    SimulationData 
+    VelocityVerlet<CoarseGrained>::displace(const sim_param_t& param, 
+                                            const cg_ptr_t& cg) const
     {        
         static std::size_t counter = 0;
         static bool firstTime = true;
@@ -199,20 +206,23 @@ namespace simploce {
         });
         
         // Compute forces and potential energy at t(n+1) using positions at t(n+1).
-        energy_t epot = interactor_->interact(param, cg);
+        auto result = interactor_->interact(param, cg);
         
         // Displace atom momenta.
         SimulationData data = cg->doWithAll<SimulationData>([] (const std::vector<bead_ptr_t>& beads) {
             return displaceMomentum_<Bead>(dt, fis, beads);
         });
-        data.epot = epot;
         
+        // Save simulation data.
+        data.bepot = result.first;
+        data.nbepot = result.second;        
         data.t = counter * dt;
         
         return data;
     }
         
-    std::string VelocityVerlet<CoarseGrained>::id() const
+    std::string 
+    VelocityVerlet<CoarseGrained>::id() const
     {
         return conf::VELOCITY_VERLET;
     }

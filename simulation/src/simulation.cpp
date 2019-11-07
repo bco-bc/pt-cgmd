@@ -64,6 +64,11 @@ namespace simploce {
         std::size_t nwrite = param.get<std::size_t>("nwrite", 10);
         
         for (std::size_t counter = 1; counter <= nsteps; ++counter) {
+            
+#ifdef _DEBUG
+            std::clog << "Step #" << counter << std::endl;
+#endif
+            
             SimulationData data = sm_->displace(param);
             if ( counter % nwrite == 0 ) {
                 data.pressure = 

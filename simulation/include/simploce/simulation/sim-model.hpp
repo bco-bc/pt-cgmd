@@ -75,14 +75,16 @@ namespace simploce {
          * Returns number of particles.
          * @return Number of particles.
          */
-        std::size_t size() const;
+        std::size_t 
+        size() const;
         
         /**
          * Lets all particles interact.
          * @param param Simulation parameters. 
          * @return Data (e.g. potential energy).
          */
-        SimulationData interact(const sim_param_t& param);
+        SimulationData 
+        interact(const sim_param_t& param);
         
         /**
          * Lets given bead interact with all other particles.
@@ -90,8 +92,9 @@ namespace simploce {
          * @param param Simulation parameters. 
          * @return Data (e.g. potential energy).
          */
-        SimulationData interact(const bead_ptr_t& bead, 
-                                const sim_param_t& param);
+        SimulationData 
+        interact(const bead_ptr_t& bead, 
+                 const sim_param_t& param);
         
         /**
          * Displaces the particles.
@@ -99,19 +102,22 @@ namespace simploce {
          * number of steps between updating the particle pair list.
          * @return Simulation data (e.g. kinetic energy, temperature, etc).
          */
-        SimulationData displace(const sim_param_t& param);
+        SimulationData 
+        displace(const sim_param_t& param);
         
         /**
          * Saves state.
          * @param stream Output stream into which state is saved.
          */
-        void saveState(std::ostream& stream);
+        void
+        saveState(std::ostream& stream);
         
         /**
          * Reads state.
          * @param stream Input stream holding states.
          */
-        void readState(std::istream& stream);
+        void
+        readState(std::istream& stream);
         
         /**
          * Reads simulation model from input stream.
@@ -119,19 +125,22 @@ namespace simploce {
          * @param catalog Particle specification catalog.
          * @return Input stream.
          */
-        void readFrom(std::istream& stream, const spec_catalog_ptr_t& catalog);
+        void 
+        readFrom(std::istream& stream, const spec_catalog_ptr_t& catalog);
         
         /**
          * Returns simulation box.
          * @return Box.
          */
-        box_ptr_t box() const { return box_; }
+        box_ptr_t 
+        box() const { return box_; }
         
         /**
          * Returns boundary condition.
          * @return Boundary condition.
          */
-        bc_ptr_t boundaryCondition() const { return bc_; }
+        bc_ptr_t 
+        boundaryCondition() const { return bc_; }
         
         /**
          * Performs a 'task' with all particles. The given task must expose the 
@@ -153,19 +162,22 @@ namespace simploce {
          * Assigns new displacer.
          * @param displacer Displacer.
          */
-        void displacer(const cg_displacer_ptr_t& displacer);
+        void 
+        displacer(const cg_displacer_ptr_t& displacer);
         
         /**
          * Returns displacer.
          * @return Displacer.
          */
-        cg_displacer_ptr_t displacer() const;
+        cg_displacer_ptr_t 
+        displacer() const;
         
         /**
          * Returns interactor.
          * @return Interactor.
          */
-        cg_interactor_ptr_t interactor() const;
+        cg_interactor_ptr_t 
+        interactor() const;
         
     private:
         

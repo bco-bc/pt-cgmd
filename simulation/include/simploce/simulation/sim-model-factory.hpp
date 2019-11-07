@@ -53,10 +53,16 @@ namespace simploce {
         /**
          * Returns coarse-grained (CG) simulation model of consisting of a 
          * single particle group containing one bond whose beads undergo 
-         * harmonic motion.
+         * harmonic motion. Particles are placed along the z-axis.
+         * @param R0 Initial distance between particles. Default value is 0.5 nm.
+         * @param Rref Reference distance between beads. Default value is 0.4 nm.
+         * @param fc Force constant for harmonic potential. Default value is 
+         * 100 kJ/(mol nm^2).
          * @return Coarse grained simulation model.
          */
-        cg_sim_model_ptr_t harmonic();
+        cg_sim_model_ptr_t harmonic(length_t R0 = 0.5, 
+                                    length_t Rref = 0.4, 
+                                    real_t fc = 100.0);
                 
     
         /**

@@ -52,6 +52,7 @@ void test1() {
     real_t dz = 0.1;
     std::size_t N = 20;
     
+    std::cout.setf(std::ios::scientific);
     for (std::size_t k = 1; k != N; ++k) {
         real_t z = k * dz;
         position_t r2{0, 0, z};

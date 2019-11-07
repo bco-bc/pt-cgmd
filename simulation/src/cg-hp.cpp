@@ -32,12 +32,11 @@ namespace simploce {
     using el_params_t = ForceField::el_params_t;
     using result_t = std::pair<energy_t, std::vector<force_t>>;
     
-    static const real_t FC = 1000.0;    
-    static const length_t R_REF = 0.4;  // nm.
-    
     static energy_t
     bonded_(const bead_group_ptr_t& group,
-            std::vector<force_t>& forces)
+            std::vector<force_t>& forces,
+            real_t fc,
+            const length_t& Rref)
     {
         using bond_cont_t = typename ParticleGroup<Bead>::bond_cont_t;
         
@@ -58,11 +57,11 @@ namespace simploce {
             dist_vect_t rij = ri - rj;
             real_t Rij = norm<real_t>(rij);
         
-            real_t R = Rij - R_REF();
+            real_t R = Rij - Rref();
         
-            epot += 0.5 * FC * R * R;
+            epot += 0.5 * fc * R * R;
             dist_vect_t uv = rij/Rij;                          // Unit vector
-            real_t dHPdR = FC * R;
+            real_t dHPdR = fc * R;
             force_t f{};
             for (std::size_t k = 0; k != 3; ++k) {
                 f[k] = -dHPdR * uv[k];
@@ -77,14 +76,17 @@ namespace simploce {
     }
     
     static std::pair<energy_t, std::vector<force_t>> 
-    bonded_(std::size_t nparticles, const std::vector<bead_group_ptr_t>& groups)
+    bonded_(std::size_t nparticles, 
+            const std::vector<bead_group_ptr_t>& groups,
+            real_t fc,
+            const length_t& Rref)
     {        
         // Potential energy and forces.
         energy_t epot{0.0};
         std::vector<force_t> forces(nparticles, force_t{});
                 
         for (auto g : groups) {            
-            epot += bonded_(g, forces);
+            epot += bonded_(g, forces, fc, Rref);
         }        
         
         return std::make_pair(epot, forces);
@@ -92,25 +94,30 @@ namespace simploce {
     
     HarmonicPotential::HarmonicPotential(const spec_catalog_ptr_t& catalog,
                                          const bc_ptr_t& bc,
-                                         const box_ptr_t& box) : 
-        catalog_{catalog}, bc_{bc}, box_{box}
+                                         const box_ptr_t& box,
+                                         real_t fc,
+                                         const length_t& Rref) : 
+        catalog_{catalog}, bc_{bc}, box_{box}, fc_{fc}, Rref_{Rref}
     {            
     }
         
-    energy_t HarmonicPotential::interact(const std::vector<bead_ptr_t>& all,
-                                         const std::vector<bead_ptr_t>& free,
-                                         const std::vector<bead_group_ptr_t>& groups,
-                                         const PairLists<Bead>& pairLists)
+    std::pair<energy_t, energy_t> 
+    HarmonicPotential::interact(const std::vector<bead_ptr_t>& all,
+                                const std::vector<bead_ptr_t>& free,
+                                const std::vector<bead_group_ptr_t>& groups,
+                                const PairLists<Bead>& pairLists)
     {
-        return this->bonded(all, free, groups, pairLists);
+        auto epot = this->bonded(all, free, groups, pairLists);
+        return std::make_pair(epot, 0.0);
     }
     
-    energy_t HarmonicPotential::bonded(const std::vector<bead_ptr_t>& all,
-                                       const std::vector<bead_ptr_t>& free,
-                                       const std::vector<bead_group_ptr_t>& groups,
-                                       const PairLists<Bead>& pairLists)
+    energy_t 
+    HarmonicPotential::bonded(const std::vector<bead_ptr_t>& all,
+                              const std::vector<bead_ptr_t>& free,
+                              const std::vector<bead_group_ptr_t>& groups,
+                              const PairLists<Bead>& pairLists)
     {
-        auto bonded = bonded_(all.size(), groups);
+        auto bonded = bonded_(all.size(), groups, fc_, Rref_);
         auto& forces = bonded.second;
         for (auto bead : all) {
             auto index = bead->index();
@@ -122,10 +129,11 @@ namespace simploce {
         return bonded.first;
     }
     
-    energy_t HarmonicPotential::interact(const bead_ptr_t& bead,
-                                         const std::vector<bead_ptr_t>& all,
-                                         const std::vector<bead_ptr_t>& free,
-                                         const std::vector<bead_group_ptr_t>& groups)
+    std::pair<energy_t, energy_t> 
+    HarmonicPotential::interact(const bead_ptr_t& bead,
+                                const std::vector<bead_ptr_t>& all,
+                                const std::vector<bead_ptr_t>& free,
+                                const std::vector<bead_group_ptr_t>& groups)
     {
         // Forces are not used.
         std::vector<force_t> forces(all.size(), force_t{});
@@ -133,18 +141,20 @@ namespace simploce {
         energy_t epot{0.0};
         for (auto g : groups) {            
             if ( g->contains(bead) ) {
-                epot += bonded_(g, forces);
+                epot += bonded_(g, forces, fc_, Rref_);
             }
         }
-        return epot;
+        return std::make_pair(epot, 0.0);
     }
     
-    std::string HarmonicPotential::id() const
+    std::string 
+    HarmonicPotential::id() const
     {
         return conf::HP;
     }
         
-    std::pair<lj_params_t, el_params_t> HarmonicPotential::parameters() const
+    std::pair<lj_params_t, el_params_t> 
+    HarmonicPotential::parameters() const
     {
         return std::pair<lj_params_t, el_params_t>{};
     }

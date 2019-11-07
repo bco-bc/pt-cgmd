@@ -32,11 +32,12 @@
 #include "simploce/simulation/sim-data.hpp"
 #include "simploce/simulation/sconf.hpp"
 #include <iomanip>
+#include <iostream>
 
 namespace simploce {
     
     SimulationData::SimulationData() :
-        t{0.0}, ekin{0.0}, epot{0.0}, temperature{0.0}, pressure{0.0},
+        t{0.0}, ekin{0.0}, bepot{0.0}, nbepot{0.0}, temperature{0.0}, pressure{0.0},
         numberOfProtonTransferPairs{0}, accepted{false}, acceptanceRatio{0.0}
     {            
     }
@@ -49,17 +50,23 @@ namespace simploce {
         
         stream.setf(std::ios::scientific);
         stream.precision(precision);
-        energy_t etot = data.ekin + data.epot;
+        energy_t etot = data.ekin + data.bepot + data.nbepot;
         stream << std::setw(width) << data.t
                << space << std::setw(width) << data.ekin
-               << space << std::setw(width) << data.epot;
-        stream << space << std::setw(width) << etot
+               << space << std::setw(width) << data.bepot
+               << space << std::setw(width) << data.nbepot
+               << space << std::setw(width) << etot
                << space << std::setw(width) << data.temperature
                << space << std::setw(width) << data.pressure
                << space << std::setw(width) << data.numberOfProtonTransferPairs
                << space << data.accepted
                << space << std::setw(width) << data.acceptanceRatio;
-        
+#ifdef _DEBUG
+        if ( etot() > conf::LARGE ) {
+            std::clog << "Total energy: "  << etot << std::endl;
+            throw std::domain_error("Very high total energy.");
+        }
+#endif
         return stream;
     }
     

@@ -35,6 +35,7 @@
 #include "forcefield.hpp"
 #include "pair-lists.hpp"
 #include "stypes.hpp"
+#include <utility>
 #include <vector>
 
 namespace simploce {
@@ -53,12 +54,13 @@ namespace simploce {
          * @param free Free beads.
          * @param groups All bead groups.
          * @param pairLists Pair lists.
-         * @return Total potential energy.
+         * @return Bonded and non-bonded potential energy.
          */
-        virtual energy_t interact(const std::vector<bead_ptr_t>& all,
-                                  const std::vector<bead_ptr_t>& free,
-                                  const std::vector<bead_group_ptr_t>& groups,
-                                  const PairLists<Bead>& pairLists) = 0;
+        virtual std::pair<energy_t, energy_t> 
+        interact(const std::vector<bead_ptr_t>& all,
+                 const std::vector<bead_ptr_t>& free,
+                 const std::vector<bead_group_ptr_t>& groups,
+                 const PairLists<Bead>& pairLists) = 0;
         
         /**
          * Computes forces due to bonded interactions on beads. Updates/adds forces 
@@ -67,12 +69,13 @@ namespace simploce {
          * @param free Free beads.
          * @param groups  All bead groups.
          * @param pairLists Pair lists.
-         * @return Potential energy.
+         * @return Potential energy for bonded interactions.
          */
-        virtual energy_t bonded(const std::vector<bead_ptr_t>& all,
-                                const std::vector<bead_ptr_t>& free,
-                                const std::vector<bead_group_ptr_t>& groups,
-                                const PairLists<Bead>& pairLists) = 0;
+        virtual energy_t 
+        bonded(const std::vector<bead_ptr_t>& all,
+               const std::vector<bead_ptr_t>& free,
+               const std::vector<bead_group_ptr_t>& groups,
+               const PairLists<Bead>& pairLists) = 0;
         
         
         /**
@@ -81,12 +84,13 @@ namespace simploce {
          * @param all All beads.
          * @param free Free beads.
          * @param groups bead groups.
-         * @return Interaction energy (potential energy).
+         * @return Bonded and non-bonded interaction energy (potential energy).
          */
-        virtual energy_t interact(const bead_ptr_t& bead,
-                                  const std::vector<bead_ptr_t>& all,
-                                  const std::vector<bead_ptr_t>& free,
-                                  const std::vector<bead_group_ptr_t>& groups) = 0;
+        virtual std::pair<energy_t, energy_t> 
+        interact(const bead_ptr_t& bead,
+                 const std::vector<bead_ptr_t>& all,
+                 const std::vector<bead_ptr_t>& free,
+                 const std::vector<bead_group_ptr_t>& groups) = 0;
         
     };
 }

@@ -52,9 +52,14 @@ namespace simploce {
         energy_t ekin;
         
         /**
-         * Potential energy.
+         * Bonded potential energy.
          */
-        energy_t epot;
+        energy_t bepot;
+        
+        /**
+         * Non bonded potential energy.
+         */
+        energy_t nbepot;
         
         /**
          * Temperature.

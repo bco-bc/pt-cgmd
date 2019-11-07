@@ -98,15 +98,15 @@ FFLAGS=
 ASFLAGS=
 
 # Link Libraries and Options
-LDLIBSOPTIONS=-Wl,-rpath,'../cpputil/dist/Debug/GNU-Linux' -L../cpputil/dist/Debug/GNU-Linux -lcpputil -Wl,-rpath,'../particles/dist/Debug/GNU-Linux' -L../particles/dist/Debug/GNU-Linux -lparticles
+LDLIBSOPTIONS=-Wl,-rpath,'../particles/dist/Release/GNU-Linux' -L../particles/dist/Release/GNU-Linux -lparticles -Wl,-rpath,'../cpputil/dist/Release/GNU-Linux' -L../cpputil/dist/Release/GNU-Linux -lcpputil
 
 # Build Targets
 .build-conf: ${BUILD_SUBPROJECTS}
 	"${MAKE}"  -f nbproject/Makefile-${CND_CONF}.mk ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/libsimulation.${CND_DLIB_EXT}
 
-${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/libsimulation.${CND_DLIB_EXT}: ../cpputil/dist/Debug/GNU-Linux/libcpputil.so
+${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/libsimulation.${CND_DLIB_EXT}: ../particles/dist/Release/GNU-Linux/libparticles.so
 
-${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/libsimulation.${CND_DLIB_EXT}: ../particles/dist/Debug/GNU-Linux/libparticles.so
+${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/libsimulation.${CND_DLIB_EXT}: ../cpputil/dist/Release/GNU-Linux/libcpputil.so
 
 ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/libsimulation.${CND_DLIB_EXT}: ${OBJECTFILES}
 	${MKDIR} -p ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}
@@ -239,8 +239,8 @@ ${OBJECTDIR}/src/velocity-verlet.o: src/velocity-verlet.cpp
 
 # Subprojects
 .build-subprojects:
-	cd ../cpputil && ${MAKE}  -f Makefile CONF=Debug
-	cd ../particles && ${MAKE}  -f Makefile CONF=Debug
+	cd ../particles && ${MAKE}  -f Makefile CONF=Release
+	cd ../cpputil && ${MAKE}  -f Makefile CONF=Release
 
 # Build Test Targets
 .build-tests-conf: .build-tests-subprojects .build-conf ${TESTFILES}
@@ -660,13 +660,13 @@ ${OBJECTDIR}/src/velocity-verlet_nomain.o: ${OBJECTDIR}/src/velocity-verlet.o sr
 # Clean Targets
 .clean-conf: ${CLEAN_SUBPROJECTS}
 	${RM} -r ${CND_BUILDDIR}/${CND_CONF}
-	${RM} -r ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/libcpputil.so ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/libparticles.so
+	${RM} -r ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/libparticles.so ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/libcpputil.so
 	${RM} ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/libsimulation.${CND_DLIB_EXT}
 
 # Subprojects
 .clean-subprojects:
-	cd ../cpputil && ${MAKE}  -f Makefile CONF=Debug clean
-	cd ../particles && ${MAKE}  -f Makefile CONF=Debug clean
+	cd ../particles && ${MAKE}  -f Makefile CONF=Release clean
+	cd ../cpputil && ${MAKE}  -f Makefile CONF=Release clean
 
 # Enable dependency checking
 .dep.inc: .depcheck-impl

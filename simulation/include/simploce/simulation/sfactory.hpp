@@ -44,12 +44,16 @@ namespace simploce {
          * @param catalog Particle specification catalog.
          * @param bc Boundary condition.
          * @param box Simulation box.
+         * @param fc Force constant harmonic potential.
+         * @param Rref Reference distance.
          * @return Force field.
          */
         cg_ff_ptr_t
         harmonicPotentialForceField(const spec_catalog_ptr_t& catalog,
                                     const bc_ptr_t& bc,
-                                    const box_ptr_t& box);
+                                    const box_ptr_t& box,
+                                    real_t fc,
+                                    const length_t& Rref);
         
         /**
          * Coarse grained force field for polarizable water.
@@ -137,12 +141,16 @@ namespace simploce {
          * @param catalog Particle specifications catalog.
          * @param box Simulation box.
          * @param bc Boundary condition.
+         * @param fc Force constant harmonic potential.
+         * @param Rref Reference distance.
          * @return Interactor.
          */
         cg_interactor_ptr_t
         harmonicPotentialInteractor(const spec_catalog_ptr_t& catalog,
                                     const box_ptr_t& box, 
-                                    const bc_ptr_t& bc);
+                                    const bc_ptr_t& bc,
+                                    real_t fc,
+                                    const length_t& Rref);
         
         
         /**
