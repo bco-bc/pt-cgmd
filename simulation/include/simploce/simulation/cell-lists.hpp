@@ -47,7 +47,7 @@ namespace simploce {
     class CellLists;
     
     /**
-     * specialization for atoms.
+     * Specialization for atoms.
      */
     template <>
     class CellLists<Atom> : public ParticlePairListGenerator<Atom> {
@@ -70,7 +70,7 @@ namespace simploce {
     
     
     /**
-     * specialization for beads.
+     * Specialization for beads.
      */
     template <>
     class CellLists<Bead> : public ParticlePairListGenerator<Bead> {

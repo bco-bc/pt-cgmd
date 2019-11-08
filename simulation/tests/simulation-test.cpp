@@ -51,13 +51,14 @@ using namespace simploce;
 
 struct SimpleForceField : public CoarseGrainedForceField{
     
-    energy_t interact(const std::vector<bead_ptr_t>& all,
-                      const std::vector<bead_ptr_t>& free,
-                      const std::vector<bead_group_ptr_t>& groups,
-                      const PairLists<Bead>& pairLists) override    
+    std::pair<energy_t, energy_t>
+    interact(const std::vector<bead_ptr_t>& all,
+             const std::vector<bead_ptr_t>& free,
+             const std::vector<bead_group_ptr_t>& groups,
+             const PairLists<Bead>& pairLists) override    
     {
         std::clog << "Computing forces for simulation for all, free, and groups...Done" << std::endl;
-        return 0.0;        
+        return std::make_pair(0.0, 0.0);       
     }
     
     energy_t bonded(const std::vector<bead_ptr_t>& all,
@@ -67,12 +68,13 @@ struct SimpleForceField : public CoarseGrainedForceField{
         return 0.0;
     }
     
-    energy_t interact(const bead_ptr_t& bead,
-                      const std::vector<bead_ptr_t>& all,
-                      const std::vector<bead_ptr_t>& free,
-                      const std::vector<bead_group_ptr_t>& groups) override
+    std::pair<energy_t, energy_t>
+    interact(const bead_ptr_t& bead,
+             const std::vector<bead_ptr_t>& all,
+             const std::vector<bead_ptr_t>& free,
+             const std::vector<bead_group_ptr_t>& groups) override
     {
-        return 0.0;
+        return std::make_pair(0.0, 0.0);     
     }
     
     std::string id() const { return "cg-simple-ff"; }

@@ -39,27 +39,28 @@ namespace simploce {
      * Returns grid element side length.
      * @param box Box.
      * @return Side length.
-     *
+     */
     static length_t 
     sideLength_(const box_ptr_t& box)
     {
         return util::cutoffDistance(box);
     }
-    */
     
-    /*
+    
+    
     // Between free and other free particles, and free and particles in groups.
     template <typename P>
-    static typename CellLists<P>::p_pair_list_t
-    forFree_(const std::vector<typename CellLists<P>::p_ptr_t>& free, 
+    static typename PairLists<P>::pp_list_cont_t
+    forFree_(const std::vector<std::shared_ptr<P>>& free, 
              const Cell<P>& cell,
              const bc_ptr_t& bc,
              real_t rc2)
     {
-        using p_pair_list_t = typename CellLists<P>::p_pair_list_t;
-        using p_pair_t = typename CellLists<P>::p_pair_t;
+        using pp_list_cont_t = typename PairLists<P>::pp_list_cont_t;
         
-        p_pair_list_t pairList{};
+        pp_list_cont_t pairList{};
+        
+        /*
         for (auto f : free) {
             auto index = f->index();
             position_t rf = f->position();
@@ -90,22 +91,24 @@ namespace simploce {
                 }
             }
         }
+        */
         
         return std::move(pairList);
     }
 
     // Between particles in groups.
     template <typename P>
-    static typename CellLists<P>::p_pair_list_t
-    forGroups_(const std::vector<typename CellLists<P>::pg_ptr_t>& groups,
+    static typename PairLists<P>::pp_list_cont_t
+    forGroups_(const std::vector<std::shared_ptr<ParticleGroup<P>>>& groups,
                const Cell<P>& cell,
                const bc_ptr_t& bc,
                real_t rc2)
     {
-        using p_pair_list_t = typename CellLists<P>::p_pair_list_t;
-        using p_pair_t = typename CellLists<P>::p_pair_t;
+        using pp_list_cont_t = typename PairLists<P>::pp_list_cont_t;
         
-        p_pair_list_t pairList{};
+        pp_list_cont_t pairList{};
+        
+        /*
         for (auto gi: groups) {
             position_t ri = gi->position();
             const auto& particles_i = gi->particles();
@@ -133,84 +136,56 @@ namespace simploce {
                 }
             }
         }
+         */
         
         return std::move(pairList);        
     }
-     */
     
     template <typename P>
     static PairLists<P>
     makePairLists_(const box_ptr_t& box,
                    const bc_ptr_t& bc,
-                   const std::vector<typename CellLists<P>::p_ptr_t>& all,
-                   const std::vector<typename CellLists<P>::p_ptr_t>& free,
-                   const std::vector<typename CellLists<P>::pg_ptr_t>& groups)
+                   const std::vector<std::shared_ptr<P>>& all,
+                   const std::vector<std::shared_ptr<P>>& free,
+                   const std::vector<std::shared_ptr<ParticleGroup<P>>>& groups)
     {
-        /*
         using grid_t = Grid<P>;
-        using cell_t = typename grid_t::cell_t;
+        using grid_ptr_t = typename grid_t::grid_ptr_t;
+        using pp_list_cont_t = typename PairLists<P>::pp_list_cont_t;
             
-        static grid_t grid{};
-        static real_t rc2;
+        static bool firstTime = true;
+        static auto sideLength = sideLength_(box);        
+        static grid_ptr_t grid = grid_t::make(box, sideLength);
+        static real_t rc2 = util::squareCutoffDistance(box);
         
-        // Set up if still required.
-        static bool setup = false;
-        if ( !setup ) {
-            auto sideLength = sideLength_(box);
-            grid = grid_t::make(box, sideLength);
-            rc2 = sideLength * sideLength;
-            setup = true;
-        }
+        pp_list_cont_t pairList{};
         
-        // Determine full particle pair list.
-        p_pair_list_t full{};
-        grid.clear();
-        grid.place(bc, free, groups);
-        const auto& cells = grid.cells();
-        for (auto iter = cells.begin(); iter != cells.end(); ++iter) {
-            const cell_t& cell = *iter;
+        grid->clear();
+        grid->place(bc, free, groups);
+        
+        const auto& cells = grid->cells();
+        for (auto& cell : cells) {
             const auto& free = cell.free();
             const auto& groups = cell.groups();
-            auto neighbors = grid.neighbors(cell.location());
-            for (auto it = neighbors.begin(); it != neighbors.end(); ++it) {
-                cell_t& neighbor = *it;
-                p_pair_list_t pl = forFree_<P>(free, neighbor, bc, rc2);
-                full.insert(full.end(), pl.begin(), pl.end());
+            auto neighbors = grid->neighbors(cell.location());
+            for (auto& neighbor : neighbors) {
+                auto pl = forFree_<P>(free, neighbor, bc, rc2);
+                pairList.insert(pairList.end(), pl.begin(), pl.end());
                 pl = forGroups_<P>(groups, neighbor, bc, rc2);
-                full.insert(full.end(), pl.begin(), pl.end());
+                pairList.insert(pairList.end(), pl.begin(), pl.end());
             }
         }
         
-        // Prepare sublists, the number of which depends on number of 
-        // hardware threads available.
-        std::vector<p_pair_list_t> pairLists{};   // Sublists.
-        static const std::size_t nlists = std::thread::hardware_concurrency();        
-        std::size_t npairsSubList = full.size() / nlists;                                                              
-        std::size_t counter = 0;      
-        for (std::size_t k = 0; k != nlists; ++k) {
-            p_pair_list_t single{};  // One list of particle pairs.
-            std::size_t n = 0;
-            while (counter != full.size() && n != npairsSubList) {
-                single.push_back(full[counter]);
-                counter += 1;
-                n += 1;
-            }
-            pairLists.push_back(single);          // Store list.
-        }
-    
-        // Add remaining particles pairs, if any, to the last sublist.
-        if ( counter < full.size() ) {
-            p_pair_list_t& last =  *(pairLists.end() - 1);
-            while ( counter != full.size() ) {
-                last.push_back(full[counter]);
-                counter += 1;
-            }
+        if ( firstTime ) {
+            std::clog << "Total number of particle pairs: "
+                      << pairList.size() << std::endl;
+            std::clog << "Total number of POSSIBLE particle pairs: "
+                      << all.size() * (all.size() - 1) / 2 << std::endl;
+            firstTime = false;
         }
         
         // Done.
-        return std::move(pairLists);
-         */
-        return PairLists<P>{};
+        return std::move(PairLists<P>(pairList));
     }
     
     CellLists<Atom>::CellLists(const box_ptr_t& box,

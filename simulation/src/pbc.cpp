@@ -72,14 +72,18 @@ namespace simploce {
     PeriodicBoundaryCondition::placeInside(const position_t& r) const
     {
         const box_t& box = *box_;
+        
         position_t rin{r};
         for (std::size_t k = 0; k != 3; ++k) {
             real_t rk = rin[k];
             real_t boxk = box[k];
-            real_t n = std::floor(rk/boxk);
+            real_t n = util::nint(std::floor(rk/boxk));
             rin[k] -= n * boxk;
             
-            std::cout << "k, r[k], rin[k], n: " << k << ' ' << r[k] << ' ' << rin[k] << ' ' << n << std::endl;
+            /*
+            std::cout << "k, r[k], rin[k], n: " << k << ' ' << r[k] << ' ' 
+             *        << rin[k] << ' ' << n << std::endl;
+             * */
             assert(rin[k] >= 0 && rin[k] <= boxk);
         }
         return rin;        

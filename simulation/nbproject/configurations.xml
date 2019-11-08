@@ -98,6 +98,12 @@
                      kind="TEST">
         <itemPath>tests/displacer-test.cpp</itemPath>
       </logicalFolder>
+      <logicalFolder name="f8"
+                     displayName="Grid-Cells Test"
+                     projectFiles="true"
+                     kind="TEST">
+        <itemPath>tests/grid-cells-test.cpp</itemPath>
+      </logicalFolder>
       <logicalFolder name="f4"
                      displayName="Pair List Test"
                      projectFiles="true"
@@ -297,6 +303,21 @@
           <output>${TESTDIR}/TestFiles/f7</output>
         </linkerTool>
       </folder>
+      <folder path="TestFiles/f8">
+        <cTool>
+          <incDir>
+            <pElem>.</pElem>
+          </incDir>
+        </cTool>
+        <ccTool>
+          <incDir>
+            <pElem>.</pElem>
+          </incDir>
+        </ccTool>
+        <linkerTool>
+          <output>${TESTDIR}/TestFiles/f8</output>
+        </linkerTool>
+      </folder>
       <item path="include/simploce/analysis/analysis.hpp"
             ex="false"
             tool="3"
@@ -561,6 +582,8 @@
       <item path="tests/analyzers-test.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="tests/displacer-test.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="tests/grid-cells-test.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="tests/pair-list-test.cpp" ex="false" tool="1" flavor2="0">
       </item>
@@ -739,6 +762,21 @@
           <output>${TESTDIR}/TestFiles/f7</output>
         </linkerTool>
       </folder>
+      <folder path="TestFiles/f8">
+        <cTool>
+          <incDir>
+            <pElem>.</pElem>
+          </incDir>
+        </cTool>
+        <ccTool>
+          <incDir>
+            <pElem>.</pElem>
+          </incDir>
+        </ccTool>
+        <linkerTool>
+          <output>${TESTDIR}/TestFiles/f8</output>
+        </linkerTool>
+      </folder>
       <item path="include/simploce/analysis/analysis.hpp"
             ex="false"
             tool="3"
@@ -1003,6 +1041,8 @@
       <item path="tests/analyzers-test.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="tests/displacer-test.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="tests/grid-cells-test.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="tests/pair-list-test.cpp" ex="false" tool="1" flavor2="0">
       </item>

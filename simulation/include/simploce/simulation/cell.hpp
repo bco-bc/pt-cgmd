@@ -37,11 +37,13 @@
 #include <vector>
 #include <tuple>
 #include <memory>
+#include <iostream>
 
 namespace simploce {
     
     /**
-     * An element of a grid. Holds free particles and groups.
+     * An element of a grid. Holds a list of free particles and particle groups
+     * located in this cell.
      * @param P Particle type.
      */
     template <typename P>
@@ -85,18 +87,18 @@ namespace simploce {
         
         /**
          * Returns free particles currently located in this cell.
-         * @return Free particles.
+         * @return Free particles. Unmodifiable.
          */
         const std::vector<p_ptr_t>& free() const { return free_; }
         
         /**
          * Returns particle groups currently located in this cell.
-         * @return Particle groups.
+         * @return Particle groups. Unmodifiable.
          */
         const std::vector<pg_ptr_t>& groups() const { return groups_; }
         
         /**
-         * Returns cell location in grid.
+         * Returns cell location in a grid.
          * @return Location.
          */
         location_t location() const { return location_; }
