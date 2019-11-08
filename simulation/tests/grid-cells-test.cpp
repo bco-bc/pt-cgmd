@@ -117,6 +117,8 @@ void test1() {
                   << " " << std::get<2>(cell.location())
                   << std::endl;
     }
+    
+    
 }
 
 void test2() {

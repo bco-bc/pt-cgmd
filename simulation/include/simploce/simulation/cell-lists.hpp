@@ -62,10 +62,17 @@ namespace simploce {
                  const std::vector<atom_ptr_t>& free,
                  const std::vector<atom_group_ptr_t>& groups) const override;
         
+        /**
+         * Sets and override cell side length. Default is 0.5 of cutoff distance.
+         * @param sideLength Side length.
+         */
+        void sideLength(const length_t& sideLength);
+        
     private:
                         
         box_ptr_t box_;
         bc_ptr_t bc_;
+        length_t sideLength_;
     };
     
     
@@ -83,10 +90,17 @@ namespace simploce {
         generate(const std::vector<bead_ptr_t>& all,
                  const std::vector<bead_ptr_t>& free,
                  const std::vector<bead_group_ptr_t>& groups) const override;
+        /**
+         * Sets and override cell side length. Default is 0.5 of cutoff distance.
+         * @param sideLength Side length.
+         */
+        void sideLength(const length_t& sideLength);
+        
     private:
                         
         box_ptr_t box_;
         bc_ptr_t bc_;
+        length_t sideLength_;
     };
 }
 

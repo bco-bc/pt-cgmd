@@ -29,7 +29,9 @@
  * Created on September 4, 2019, 2:55 PM
  */
 
-#include "simploce/simulation/pair-list-generator.hpp"
+#include "simploce/simulation/cell-lists.hpp"
+#include "simploce/simulation/distance-lists.hpp"
+#include "simploce/simulation/pair-lists.hpp"
 #include "simploce/simulation/sfactory.hpp"
 #include "simploce/simulation/stypes.hpp"
 #include "simploce/simulation/sim-model-factory.hpp"
@@ -37,11 +39,14 @@
 #include "simploce/particle/particle-spec-catalog.hpp"
 #include "simploce/util/file.hpp"
 #include "simploce/simulation/pbc.hpp"
+#include "simploce/simulation/sim-util.hpp"
 #include <cstdlib>
 #include <iostream>
 #include <vector>
 #include <string>
 #include <fstream>
+#include <chrono>
+#include <ctime>
 
 using namespace simploce;
 
@@ -52,9 +57,9 @@ using namespace simploce;
 void test1() {
     std::cout << "pair-list-test test 1" << std::endl;
     
-    using generator_t = ParticlePairListGenerator<Bead>;        
-    using particle_ptr_t = generator_t::p_ptr_t;
-    using particle_ptr_group_t = generator_t::pg_ptr_t;
+    using cell_generator_t = CellLists<Bead>;   
+    using dist_generator_t = DistanceLists<Bead>; 
+    using pairlists_t = PairLists<Bead>;
         
     std::string fileName = "/home/ajuffer/simploce/pt-cgmd/particles/resources/particles-specs.dat";
     std::ifstream stream;
@@ -62,23 +67,39 @@ void test1() {
     spec_catalog_ptr_t catalog = ParticleSpecCatalog::create(stream);
     std::cout << *catalog << std::endl;
     
-    particle_model_fact_ptr_t particleModelFactory = 
-        factory::particleModelFactory(catalog);
+    auto box = factory::cube(7.23);
+    auto smf = factory::simulationModelFactory(catalog);
+    auto sm = smf->polarizableWater(box);
     
-    sim_model_fact_ptr_t pmf = factory::simulationModelFactory(catalog);
+    std::cout << "Number of beads: " << sm->size() << std::endl;
     
-    box_ptr_t box = std::make_shared<box_t>(5.0);
-    cg_sim_model_ptr_t polWater = pmf->polarizableWater(box);
+    dist_generator_t distGen(sm->box(), sm->boundaryCondition());
 
-    std::cout << "Number of polarizable waters: " << polWater->size() << std::endl;
-    
-    bc_ptr_t bc = factory::pbc(box);
-    cg_ppair_list_gen_ptr_t generator = factory::coarseGrainedPairListGenerator(box, bc);
-    
-    std::vector<particle_ptr_t> free{};
-    std::vector<particle_ptr_t> all{};
-    std::vector<particle_ptr_group_t> groups{};
-    generator->generate(all, free, groups);
+    auto start = std::chrono::system_clock::now();
+    auto pairlists = 
+        sm->doWithAllFreeGroups<pairlists_t>([distGen] (const std::vector<bead_ptr_t>& all,
+                                                        const std::vector<bead_ptr_t>& free,
+                                                        const std::vector<bead_group_ptr_t>& groups) {
+        return distGen.generate(all, free, groups);
+    });
+    auto end = std::chrono::system_clock::now();
+    auto distDiff = std::chrono::duration_cast<std::chrono::microseconds>(end - start).count();
+    std::clog << "Distance-based pair lists: Time used: " << distDiff << std::endl;   
+
+    cell_generator_t cellGen(sm->box(), sm->boundaryCondition());
+    cellGen.sideLength(0.5 * util::cutoffDistance(box));
+    start = std::chrono::system_clock::now();
+    pairlists = 
+        sm->doWithAllFreeGroups<pairlists_t>([cellGen] (const std::vector<bead_ptr_t>& all,
+                                                        const std::vector<bead_ptr_t>& free,
+                                                        const std::vector<bead_group_ptr_t>& groups) {
+        return cellGen.generate(all, free, groups);
+    });
+    end = std::chrono::system_clock::now();
+    auto cellDiff = std::chrono::duration_cast<std::chrono::microseconds>(end - start).count();
+    std::clog << "Cell-based pair lists: Time used: " << cellDiff << std::endl;  
+    std::clog << "Speed ratio (distance/cell): " << real_t(distDiff)/real_t(cellDiff)
+              << std::endl;
 }
 
 int main(int argc, char** argv) {

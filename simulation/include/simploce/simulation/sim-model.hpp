@@ -146,10 +146,12 @@ namespace simploce {
          * Performs a 'task' with all particles. The given task must expose the 
          * operator 
          * <code>
-         * R operator () (const std::vector<bead_ptr_t>& all);
+         * R operator () (const std::vector<bead_ptr_t>& all,
+         *                const std::vector<bead_ptr_t>& free,
+         *                const std::vector<bead_group_ptr_t>& groups);
          * </code>
          * where 'all' represents all the particles in this model.
-         * @param task Taks of type TASK. May be a lambda expression.
+         * @param task Task of type TASK. May be a lambda expression.
          * @return Result of type R.
          */
         template <typename R, typename TASK>

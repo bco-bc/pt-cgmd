@@ -39,14 +39,6 @@
 
 namespace simploce {
     
-    static real_t rcutoff2_(const box_ptr_t& box)
-    {
-        static length_t rc = util::cutoffDistance(box);
-        static real_t rc2 = rc * rc;
-        
-        return rc2;
-    }
-    
     /**
      * For -any- collection of particles.
      */
@@ -58,7 +50,7 @@ namespace simploce {
     {
         using pp_list_cont_t = typename PairLists<P>::pp_list_cont_t;
         
-        static real_t rc2 = rcutoff2_(box);
+        static real_t rc2 = util::squareCutoffDistance(box);
         
         if ( particles.empty() ) {
             return pp_list_cont_t{};  // Empty pair list.
@@ -97,7 +89,7 @@ namespace simploce {
         using pp_list_cont_t = typename PairLists<P>::pp_list_cont_t;
         using pp_pair_t = typename PairLists<P>::pp_pair_t;
         
-        static real_t rc2 =  rcutoff2_(box);
+        static real_t rc2 =  util::squareCutoffDistance(box);
 
         if ( groups.empty() ) {
             return pp_list_cont_t{};  // Empty list.
@@ -143,7 +135,7 @@ namespace simploce {
         using pp_list_cont_t = typename PairLists<P>::pp_list_cont_t;
         using pp_pair_t = typename PairLists<P>::pp_pair_t;
         
-        static real_t rc2 =  rcutoff2_(box);
+        static real_t rc2 =  util::squareCutoffDistance(box);
 
         if ( particles.empty() || groups.empty() ) {
             return pp_list_cont_t{};  // Empty list.
@@ -183,8 +175,7 @@ namespace simploce {
     {
         static bool firstTime = true;
         if ( firstTime ) {
-            std::clog << "Using particles pair lists based on distances "
-                         "between particles." 
+            std::clog << "Using distance-based particle pair lists." 
                       << std::endl;
             std::clog << "Cutoff distance: " << util::cutoffDistance(box) << std::endl;
         }
@@ -208,8 +199,11 @@ namespace simploce {
                       << ggSize << std::endl;
             std::clog << "Total number of particle pairs: "
                       << pairList.size() << std::endl;
+            auto total = all.size() * (all.size() - 1) / 2;
             std::clog << "Total number of POSSIBLE particle pairs: "
-                      << all.size() * (all.size() - 1) / 2 << std::endl;
+                      << total << std::endl;
+            std::clog << "Fraction (%): " 
+                      << real_t(pairList.size()) * 100.0 / total << std::endl;
             firstTime = false;
         }
 

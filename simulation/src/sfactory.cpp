@@ -195,8 +195,8 @@ namespace simploce {
                                        const bc_ptr_t& bc)
         {
             if ( !cgPairlistGen_ ) {
-                cgPairlistGen_ = std::make_shared<DistanceLists<Bead>>(box, bc);
-                //cgPairlistGen_ = std::make_shared<CellLists<Bead>>(box, bc);
+                //cgPairlistGen_ = std::make_shared<DistanceLists<Bead>>(box, bc);
+                cgPairlistGen_ = std::make_shared<CellLists<Bead>>(box, bc);
             }
             return cgPairlistGen_;
         }
@@ -206,6 +206,7 @@ namespace simploce {
                                    const bc_ptr_t& bc)
         {
             if ( !atPairListGen_ ) {
+                //atPairlistGen_ = std::make_shared<DistanceLists<Atom>>(box, bc);
                 atPairListGen_ = std::make_shared<CellLists<Atom>>(box, bc);
             }
             return atPairListGen_;
