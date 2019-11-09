@@ -38,17 +38,16 @@ namespace simploce {
         
         length_t cutoffDistance(const box_ptr_t& box)
         {
-            //return 0.5 * box->size();            
-            length_t halve = 0.5 * box->size();
-            return conf::RCUTOFF_DISTANCE() > halve() ? 
-                   halve : 
+            length_t rc = 0.5 * box->size();
+            return conf::RCUTOFF_DISTANCE() > rc() ? 
+                   rc : 
                    conf::RCUTOFF_DISTANCE;             
         }
         
         real_t squareCutoffDistance(const box_ptr_t& box)
         {
             length_t rc = cutoffDistance(box);
-            return rc * rc;
+            return rc() * rc();
         }
         
         real_t frohlich(real_t aveM2, 

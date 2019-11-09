@@ -92,10 +92,10 @@ void test1() {
         counter += 1;
     }
     
-    location_t loc2{1, 1, 1};
+    location_t loc1{1, 1, 1};
     std::clog << "Neighbors of:" << std::endl;
-    printLocation(loc2);
-    auto neighbors = grid->neighbors(loc2);
+    printLocation(loc1);
+    auto neighbors = grid->neighbors(loc1);
     std::clog << "Number of neighbors: " << neighbors.size() << std::endl;
     for (auto& cell : neighbors) {
         std::clog << cell.position();
@@ -105,10 +105,10 @@ void test1() {
                   << std::endl;
     }
     
-    location_t loc3{0, 0, 0};
+    location_t loc0{0, 0, 0};
     std::clog << "Neighbors of:" << std::endl;
-    printLocation(loc3);
-    neighbors = grid->neighbors(location_t{0, 0, 0});
+    printLocation(loc0);
+    neighbors = grid->neighbors(loc0);
     std::clog << "Number of neighbors: " << neighbors.size() << std::endl;
     for (auto& cell : neighbors) {
         std::clog << cell.position();
@@ -118,7 +118,25 @@ void test1() {
                   << std::endl;
     }
     
-    
+    std::clog << std::endl;
+    auto& cell0 = grid->cell(loc0);
+    auto r0 = cell0.position();
+    std::clog << "Position cell0: " << r0 << std::endl;
+    auto& cell1 = grid->cell(loc1);
+    auto r1 = cell1.position();
+    std::clog << "Position cell1: " << r1 << std::endl;
+
+    auto bc = factory::pbc(box);
+    auto rni = bc->apply(r0, r1);
+    real_t RNI = norm<real_t>(rni);
+    real_t R = norm<real_t>(r0 - r1);
+    real_t rc = util::cutoffDistance(box)();
+    std::clog << "Box size: " << box->size() << std::endl;
+    std::clog << "Cutoff distance: " << rc << std::endl;
+    std::clog << "Distance between (0,0,0) and (1,1,1): " << R << std::endl;
+    std::clog << "Distance according to nearest image: " << RNI << std::endl;
+    auto in = RNI < rc ? "YES" : "NO";
+    std::clog << "Within cutoff distance?: " << in << std::endl;
 }
 
 void test2() {

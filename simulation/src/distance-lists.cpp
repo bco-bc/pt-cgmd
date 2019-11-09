@@ -98,19 +98,19 @@ namespace simploce {
         // Group/Group pair list.
         pp_list_cont_t pairList{};
 
-        // For all particle pairs groups.
+        // For all particle group pairs.
         for (auto iter_i = groups.begin(); iter_i != groups.end() - 1; ++iter_i) {
-            const auto g_i = *iter_i;
-            auto rg_i = g_i->position();
-            const auto particles_i = g_i->particles();
+            const auto gi = *iter_i;
+            auto r_gi = gi->position();
+            const auto particles_i = gi->particles();
             for (auto iter_j = iter_i + 1; iter_j != groups.end(); ++iter_j) {
-                auto g_j = *iter_j;
-                auto rg_j = g_j->position();
-                auto R = bc->apply(rg_i, rg_j);
+                auto gj = *iter_j;
+                auto r_gj = gj->position();
+                auto R = bc->apply(r_gi, r_gj);
                 auto R2 = norm2<real_t>(R);
                 if ( R2 <= rc2 ) {
-                    // Include all particles of both groups in the pair list.
-                    const auto particles_j = g_j->particles();
+                    // Include all particle pairs.
+                    const auto particles_j = gj->particles();
                     for (auto pi : particles_i) {
                         for (auto pj : particles_j) {
                             pp_pair_t pair = std::make_pair(pi, pj);

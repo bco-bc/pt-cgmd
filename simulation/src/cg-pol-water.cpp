@@ -115,7 +115,7 @@ namespace simploce {
         position_t rj = pj->position();
         dist_vect_t rij = ri - rj;                 // Distance vector (nm), 
                                                    // no boundary conditions.
-        length_t Rij = norm<length_t>(rij);          // Distance (nm)
+        length_t Rij = norm<length_t>(rij);        // Distance (nm)
 
         length_t dis = Rij - R_CW_DP;
         if ( dis() > 0.0 ) {
@@ -135,7 +135,7 @@ namespace simploce {
         
 #ifdef _DEBUG        
         if ( epot() > conf::LARGE ) {
-            std::clog << "WARNING: High potential energy in water group. " 
+            std::clog << "ERROR: High potential energy in water group. " 
                       << "R - R_CW_DP: " << dis << ", "
                       << "Particle indices: " << index_i << ", " << index_j << ", "
                       << "Particle identifiers: " << pi->id() << ", " << pj->id() << ", "

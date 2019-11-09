@@ -53,7 +53,7 @@ namespace simploce {
         const std::string HP = "hp";
         
         // Default cutoff distance for non bonded interactions.
-        static length_t RCUTOFF_DISTANCE{2.5};  // nm.
+        static length_t RCUTOFF_DISTANCE{2.6};  // nm.
         
         // Minimum number of particles.
         const std::size_t MIN_NUMBER_OF_PARTICLES = 1000;    

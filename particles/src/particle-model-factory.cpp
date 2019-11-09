@@ -134,7 +134,7 @@ namespace simploce {
         std::clog << "AT: Requested number density (1/m^3): " << atNumberDensity*1.0e+27 << std::endl;
         std::clog << "CG: Requested number density (1/nm^3): " << cgNumberDensity << std::endl;
         std::clog << "CG: Requested number density (1/m^3): " << cgNumberDensity*1.0e+27 << std::endl;
-        std::clog << "AT: Requested number of water molecules: " << natWaters << std::endl;
+        std::clog << "AT: Required number of water molecules: " << natWaters << std::endl;
         std::clog << "CG: Requested number of water water groups: " << ncgWaters << std::endl;
         std::clog.flush();
 
@@ -152,9 +152,9 @@ namespace simploce {
         cg_pol_water_ptr_t cg = std::make_shared<PolarizableWater>();                
         
         // Add beads.
-        real_t x0 = 0.0; //-0.5 * Lx();
-        real_t y0 = 0.0; //-0.5 * Ly();
-        real_t z0 = 0.0; //-0.5 * Lz();
+        real_t x0 = 0.01; //-0.5 * Lx();
+        real_t y0 = 0.01; //-0.5 * Ly();
+        real_t z0 = 0.01; //-0.5 * Lz();
         std::size_t counter = 0;
         std::size_t i = 0, j = 0, k = 0;         
         while ( i < nx && counter < ncgWaters ) {

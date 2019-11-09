@@ -63,6 +63,26 @@ void test1() {
     }
 }
 
+void test2() {
+    std::cout << "pdb-test test 2" << std::endl;
+    
+    box_ptr_t box = factory::cube(2.0);
+    std::cout << "Box size: " << box->size() << std::endl;
+    bc_ptr_t bc = factory::pbc(box);
+    
+    real_t z0 = -0.5;
+    real_t dz = 0.1;
+    std::size_t N = 31;
+    
+    std::cout.setf(std::ios::scientific);
+    for (std::size_t k = 0; k != N; ++k) {
+        real_t z = z0 + k * dz;
+        position_t r{z, z, z};
+        auto rin = bc->placeInside(r);
+        std::clog << "Actual: " << r << ", Placed: " << rin << std::endl;
+    }
+}
+
 
 int main(int argc, char** argv) {
     std::cout << "%SUITE_STARTING% pdb-test" << std::endl;
@@ -72,6 +92,10 @@ int main(int argc, char** argv) {
     test1();
     std::cout << "%TEST_FINISHED% time=0 test1 (pdb-test)" << std::endl;
 
+    std::cout << "%TEST_STARTED% test2 (pdb-test)" << std::endl;
+    test2();
+    std::cout << "%TEST_FINISHED% time=0 test2 (pdb-test)" << std::endl;
+    
     std::cout << "%SUITE_FINISHED% time=0" << std::endl;
 
     return (EXIT_SUCCESS);

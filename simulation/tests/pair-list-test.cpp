@@ -65,13 +65,14 @@ void test1() {
     std::ifstream stream;
     file::open_input(stream, fileName);
     spec_catalog_ptr_t catalog = ParticleSpecCatalog::create(stream);
-    std::cout << *catalog << std::endl;
+    //std::clog << *catalog << std::endl;
     
-    auto box = factory::cube(7.23);
+    auto box = factory::cube(7.27);
     auto smf = factory::simulationModelFactory(catalog);
-    auto sm = smf->polarizableWater(box);
+    auto sm = smf->polarizableWater(box, 997.0479, 298.15, 2560);
     
-    std::cout << "Number of beads: " << sm->size() << std::endl;
+    std::clog << "Number of beads: " << sm->size() << std::endl;
+    std::clog << std::endl;
     
     dist_generator_t distGen(sm->box(), sm->boundaryCondition());
 
@@ -85,9 +86,10 @@ void test1() {
     auto end = std::chrono::system_clock::now();
     auto distDiff = std::chrono::duration_cast<std::chrono::microseconds>(end - start).count();
     std::clog << "Distance-based pair lists: Time used: " << distDiff << std::endl;   
+    std::clog << std::endl;
 
     cell_generator_t cellGen(sm->box(), sm->boundaryCondition());
-    cellGen.sideLength(0.5 * util::cutoffDistance(box));
+    //cellGen.sideLength(0.25 * util::cutoffDistance(box));
     start = std::chrono::system_clock::now();
     pairlists = 
         sm->doWithAllFreeGroups<pairlists_t>([cellGen] (const std::vector<bead_ptr_t>& all,
@@ -100,6 +102,7 @@ void test1() {
     std::clog << "Cell-based pair lists: Time used: " << cellDiff << std::endl;  
     std::clog << "Speed ratio (distance/cell): " << real_t(distDiff)/real_t(cellDiff)
               << std::endl;
+    std::clog << std::endl;
 }
 
 int main(int argc, char** argv) {

@@ -34,10 +34,13 @@
 
 #include "stypes.hpp"
 #include "simploce/particle/particle-group.hpp"
+#include <boost/lexical_cast.hpp>
 #include <vector>
 #include <tuple>
 #include <memory>
 #include <iostream>
+#include <cmath>
+#include <string>
 
 namespace simploce {
     
@@ -74,10 +77,6 @@ namespace simploce {
         Cell(const position_t& r, const location_t& location) : 
             r_{r}, free_{}, groups_{}, location_{location} {} 
             
-        /**
-         * Clears this cell from free particles and particle groups.
-         */
-        void clear() { free_.clear(); groups_.clear(); }
         
         /**
          * Returns position in Cartesian coordinate system.
@@ -102,17 +101,35 @@ namespace simploce {
          * @return Location.
          */
         location_t location() const { return location_; }
-            
+        
+        /**
+         * Returns cell location in a grid as a string.
+         * @return Location as string.
+         */
+        std::string locationAsString() const;
+        
     private:
         
         template <typename PP>
         friend class Grid;
+        
+        void clear() { free_.clear(); groups_.clear(); }
         
         position_t r_;
         std::vector<p_ptr_t> free_;
         std::vector<pg_ptr_t> groups_;
         location_t location_;
     };
+    
+    template <typename P>
+    std::string 
+    Cell<P>::locationAsString() const
+    {
+        return 
+            boost::lexical_cast<std::string, std::size_t>(std::get<0>(location_)) + ", " +
+            boost::lexical_cast<std::string, std::size_t>(std::get<1>(location_)) + ", " +
+            boost::lexical_cast<std::string, std::size_t>(std::get<2>(location_));
+    }
     
 }
 

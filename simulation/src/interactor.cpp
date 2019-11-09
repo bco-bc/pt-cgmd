@@ -85,7 +85,6 @@ namespace simploce {
         }
         if ( counter % npairlist == 0 || counter == 0) {
             this->updatePairLists_(at);
-            pairLists_.updated_(true);
         } else {
             pairLists_.updated_(false);
         }
@@ -123,6 +122,7 @@ namespace simploce {
                                                              const std::vector<atom_group_ptr_t>& groups) {
                 return this->pairListGenerator_->generate(all, free, groups);
             });
+        pairLists_.updated_(true);
     }
     
     std::string 
@@ -152,7 +152,6 @@ namespace simploce {
         }
         if ( counter % npairlist == 0 || counter == 0) {
             this->updatePairLists_(cg);
-            pairLists_.updated_(true);
         } else {
             pairLists_.updated_(false);
         }
@@ -192,6 +191,7 @@ namespace simploce {
                                                              const std::vector<bead_group_ptr_t>& groups) {
                 return this->pairListGenerator_->generate(all, free, groups);
             });
+        pairLists_.updated_(true);
     }
     
     std::string

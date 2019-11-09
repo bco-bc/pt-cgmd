@@ -140,10 +140,12 @@ namespace simploce {
             auto Rij = std::get<2>(ef);
             if ( Rij() < Rmin() ) {
                 std::clog << "WARNING: Rij < " << Rmin() << ", Rij = " << Rij 
-                          << " pi = " << pi->name() << ", index = " << pi->index()
-                          << " pj = " << pj->name() << ", index = " << pj->index()
-                        << " energy: " << std::get<0>(ef) 
-                        << std::endl;            
+                          << ", pi = " << pi->name() << ", index = " << pi->index()
+                          << ", id = " << pi->id() 
+                          << ", pj = " << pj->name() << ", index = " << pj->index()
+                          << ", id = " << pj->id()
+                          << ", energy: " << std::get<0>(ef) 
+                          << std::endl;            
             }
         }
         

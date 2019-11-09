@@ -43,7 +43,9 @@ namespace simploce {
         BoundaryCondition{}, box_{box}
     {
         if ( !box_ ) {
-            throw std::domain_error("PeriodicBoundaryCondition: a box must be provided.");
+            throw std::domain_error(
+                "PeriodicBoundaryCondition: a box must be provided."
+            );
         }
     }
 
@@ -59,10 +61,6 @@ namespace simploce {
             real_t dr = r1[k] - r2[k];
             real_t ratio = dr/boxk;
             real_t n = util::nint(ratio);
-            /*
-            std::cout << "boxk, dr, dr/boxk, n " << boxk << ' ' << dr << ' ' 
-                      << ratio << ' ' << n << std::endl;
-             */
             r12[k] = dr - n * boxk;
         }
         return r12;  
@@ -79,11 +77,6 @@ namespace simploce {
             real_t boxk = box[k];
             real_t n = util::nint(std::floor(rk/boxk));
             rin[k] -= n * boxk;
-            
-            /*
-            std::cout << "k, r[k], rin[k], n: " << k << ' ' << r[k] << ' ' 
-             *        << rin[k] << ' ' << n << std::endl;
-             * */
             assert(rin[k] >= 0 && rin[k] <= boxk);
         }
         return rin;        

@@ -101,47 +101,83 @@ namespace simploce {
         
         return std::move(pairList);
     }
-
-    // Between particles in different groups.
+    
+    
+    
+    // For all particle groups in a single cell.
     template <typename P>
     static typename PairLists<P>::pp_list_cont_t
-    forGroups_(const Cell<P>& cell, 
-               const Cell<P>& neighbor,
-               const bc_ptr_t& bc,
-               const box_ptr_t& box)
+    forGroupsInOneCell_(const Cell<P>& cell,
+                        const bc_ptr_t& bc,
+                        const box_ptr_t& box)
     {
         using pp_list_cont_t = typename PairLists<P>::pp_list_cont_t;
         using pp_pair_t = typename PairLists<P>::pp_pair_t;
         
-        //static real_t rc2 = util::squareCutoffDistance(box);
+        if ( cell.groups().empty() || cell.groups().empty() ) {
+            return pp_list_cont_t{};  // Empty list.
+        }
+        
+        pp_list_cont_t pairList{};
+
+        auto& groups = cell.groups();
+        
+        for (auto it_i = groups.begin(); it_i != (groups.end() - 1); ++it_i) {
+            auto& gi = *it_i;
+            const auto particles_i = gi->particles();
+            for ( auto it_j = it_i + 1; it_j != groups.end(); ++it_j) {
+                auto& gj = *it_j;
+                const auto particles_j = gj->particles();
+                // Include all particle pairs.
+                for (auto pi : particles_i) {
+                    for (auto pj : particles_j) {
+                        pp_pair_t pair = std::make_pair(pi, pj);
+                        pairList.push_back(pair);
+                    }
+                }
+            }
+        }
+        
+        // Done.
+        return std::move(pairList);        
+    }
+
+    // For all particle groups in two -different- cells.
+    template <typename P>
+    static typename PairLists<P>::pp_list_cont_t
+    forGroupsInTwoCells_(const Cell<P>& cell, 
+                         const Cell<P>& neighbor,
+                         const bc_ptr_t& bc,
+                         const box_ptr_t& box)
+    {
+        using pp_list_cont_t = typename PairLists<P>::pp_list_cont_t;
+        using pp_pair_t = typename PairLists<P>::pp_pair_t;
+        
+        static real_t rc2 = util::squareCutoffDistance(box);
+        
+        if ( cell.groups().empty() || cell.groups().empty() ) {
+            return pp_list_cont_t{};  // Empty list.
+        }
 
         pp_list_cont_t pairList{};
         
         for (auto& gi: cell.groups()) {
-            //position_t ri = gi->position();
+            auto r_gi = gi->position();
             auto& particles_i = gi->particles();
             for (auto gj: neighbor.groups()) {
-                //position_t rj = gj->position();
-                /*
-                auto R = bc->apply(ri, rj);
+                auto r_gj = gj->position();                
+                auto R = bc->apply(r_gi, r_gj);
                 auto R2 = norm2<real_t>(R);
                 if ( R2 <= rc2) {
-                    // Include all interactions between the particles of this 
-                    // group pair.
-                 */
+                    // Include all particle pairs.
                     auto& particles_j = gj->particles();
                     for (auto pi :  particles_i) {
-                        //auto index_i = pi->index();
                         for (auto pj : particles_j) {
-                            //auto index_j = pj->index();
-                            // Avoid double counting.
-                            //if ( index_j > index_i ) { 
-                                pp_pair_t pair = std::make_pair(pi, pj);
-                                pairList.push_back(pair);                                
-                            //}
+                            pp_pair_t pair = std::make_pair(pi, pj);
+                            pairList.push_back(pair);                                
                         }
                     }
-                //}
+                }
             }
         }
         
@@ -173,40 +209,82 @@ namespace simploce {
         
         pp_list_cont_t pairList{};
         
-        // Update particle location in cells.
-        grid->clear();
+        // Update particle locations in cells.
         grid->place(bc, free, groups);
         
-        // Generate particle pair list.
+        std::size_t nppff = 0;
+        std::size_t nppgg = 0;
         const auto& cells = grid->cells();
-        for (auto it_i = cells.begin(); it_i != cells.end() - 1; ++it_i) {
-            auto& cell_i = *it_i;
-            auto ri = cell_i.position();
-            for (auto it_j = it_i + 1; it_j != cells.end(); ++it_j) {
-                auto& cell_j = *it_j;
-                auto rj = cell_j.position();
+        
+        // Generate particle pair list. Select particles from cells within 
+        // cutoff distance.
+        std::vector<std::size_t> numberOfNeighbors{};
+        for (auto cell_i = cells.begin(); cell_i != (cells.end() - 1); ++cell_i) {
+            auto plCell = forGroupsInOneCell_(*cell_i, bc, box);
+            pairList.insert(pairList.end(), plCell.begin(), plCell.end());
+            std::size_t nb = 0;
+            auto ri = cell_i->position();
+            for (auto cell_j = cell_i + 1; cell_j != cells.end(); ++cell_j) {
+                auto rj = cell_j->position();
                 auto R = bc->apply(ri, rj);
                 auto R2 = norm2<real_t>(R);
                 if ( R2 <= rc2 ) {
-                    auto plf = forFree_<P>(cell_i, cell_j, bc, box);
+#ifdef _DEBUG
+                    std::clog << "Cell pair included: (" 
+                              << cell_i->locationAsString() << ") AND ("
+                              << cell_j->locationAsString() << ")" << std::endl;
+#endif
+                    nb += 1;
+                    auto plf = forFree_<P>(*cell_i, *cell_j, bc, box);
+                    nppff += plf.size();
                     pairList.insert(pairList.end(), plf.begin(), plf.end());
-                    auto plg = forGroups_<P>(cell_i, cell_j, bc, box);
+                    auto plg = forGroupsInTwoCells_<P>(*cell_i, *cell_j, bc, box);
+                    nppgg += plg.size();
                     pairList.insert(pairList.end(), plg.begin(), plg.end());
                 }
             }
+            numberOfNeighbors.push_back(nb);
         }
-        /*
-        for (auto& cell : cells) {
-            auto neighbors = grid->neighbors(cell.location());
-            for (auto& neighbor : neighbors) {
-                auto pl = forFree_<P>(cell, neighbor, bc, box);
-                pairList.insert(pairList.end(), pl.begin(), pl.end());
-                pl = forGroups_<P>(cell, neighbor, bc, box);
-                pairList.insert(pairList.end(), pl.begin(), pl.end());
+        // Last cell
+        auto plCell = forGroupsInOneCell_(*(cells.end() - 1) , bc, box);
+        pairList.insert(pairList.end(), plCell.begin(), plCell.end());
+        numberOfNeighbors.push_back(0);
+
+        // Display some information.
+        //if ( firstTime ) {
+            std::size_t counter = 0;
+            std::size_t sum = 0;
+            for (auto nb : numberOfNeighbors) {
+                sum += nb;
             }
-        }
-        */
-        if ( firstTime ) {
+            std::size_t ave = real_t(sum) /  numberOfNeighbors.size();
+            std::clog << "Cells:" << std::endl;
+            std::clog << "Average number of neighbors: " << ave << std::endl;
+            std::size_t ngroups = 0;
+            for (auto& cell : cells) {
+                
+#ifdef _DEBUG
+                if ( cell.free().size() > 0 || cell.groups().size() > 0 ) {                    
+                    std::clog << "Cell location: (" << cell.locationAsString()
+                              << ")," << space;
+                    std::clog << "Cell position: " << cell.position() << ", ";
+                    std::clog << "Number of free particles: " 
+                              << cell.free().size() << ", ";
+                    std::clog << "Number of particle groups: " 
+                              << cell.groups().size() << ", ";
+                    std::clog << "Number of neighbors: "
+                              << numberOfNeighbors[counter] << std::endl;                     
+                }
+#endif
+                
+                ngroups += cell.groups().size();
+                counter += 1;
+            }
+            assert(ngroups == groups.size());
+            std::clog << "Total number of pairs involving free particles: " 
+                      << nppff << std::endl;
+            std::clog << "Total number of particle-in-group/particle-in-group pairs: "
+                      << nppgg << std::endl;
             std::clog << "Total number of particle pairs: "
                       << pairList.size() << std::endl;
             auto total = all.size() * (all.size() - 1) / 2;
@@ -215,7 +293,7 @@ namespace simploce {
             std::clog << "Fraction (%): " 
                       << real_t(pairList.size()) * 100.0 / total << std::endl;
             firstTime = false;
-        }
+        //}
         
         // Done.
         return std::move(PairLists<P>(pairList));
@@ -223,8 +301,9 @@ namespace simploce {
     
     CellLists<Atom>::CellLists(const box_ptr_t& box,
                                const bc_ptr_t& bc) :
-        box_{box}, bc_{bc}, sideLength_{computeSideLength_(box)}
-    {        
+        box_{box}, bc_{bc}, sideLength_{}
+    {  
+        sideLength_ = computeSideLength_(box_);
     }
     
     PairLists<Atom>

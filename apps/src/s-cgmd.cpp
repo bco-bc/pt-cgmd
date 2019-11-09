@@ -32,7 +32,9 @@ int main(int argc, char* argv[])
     std::string fnInputModel{};
 
     std::size_t nsteps = 1000;
-    std::size_t nwrite = 10;
+    std::size_t nwrite = 10;                         // Number of steps between writing to simulation
+                                                     // data file and trajectory.
+    std::size_t npairlist = 10;                      // Number of steps between updating pair list.
     real_t timestep{0.020};                          // 0.001 ps = 1 fs. Default is 20 fs.
     real_t boxSize{6.0};                             // nm.
     real_t molarity{0.1};                            // mol/l
@@ -57,60 +59,63 @@ int main(int argc, char* argv[])
        "fn-particle-spec-catalog",
        po::value<std::string>(&fnParticleSpecCatalog),
        "Input file name of particle specifications. Default 'particle-spec-catalog.dat'."
-       )
+      )
       (
        "fn-input-model",  po::value<std::string>(&fnInputModel),
        "Input file name model. If provided, this model will be employed for the simulation, "
        "instead of generating a model from scratch."
-       )
+      )
       
       (
        "fn-trajectory",  po::value<std::string>(&fnTrajectory),
        "Output file name trajectory. Default is 'trajectory.dat'."
-       )
+      )
       (
        "fn-output-model",  po::value<std::string>(&fnOutputModel),
        "Output file name model. Default is 'out.model'."
-       )
+      )
       (
        "fn-sim-data", po::value<std::string>(&fnSimulationData),
        "Output file name of simulation data. Default is 'sim-data.dat'."
-       )
+      )
       
       (
        "box-size", po::value<real_t>(&boxSize),
        "Box (cube, unit cell) size (nm). Default is 6.0 nm."
-       )
+      )
       (
        "molarity", po::value<real_t>(&molarity),
        "Molarity of NaCl electrolyte (mol/l). Default is 0.1 M."
-       )
+      )
       (
        "density", po::value<real_t>(&density),
        "Water density. Default is 997.0479 kg/m^3."
-       )
+      )
       
       (
        "temperature", po::value<real_t>(&temperature),
        "Temperature (K). Default is 298.15 K."
-       )
+      )
       (
        "damping-rate (Langevin heat bath)", po::value<real_t>(&gamma),
        "Damping rate (ps^-1). Default is 1.0 ps^-1."
-      )
-      
+      )      
       (
        "number-of-steps", po::value<std::size_t>(&nsteps),
        "Number of steps. Default is 1000."
       )
       (
-       "number-steps-between-save", po::value<std::size_t>(&nwrite),
-       "Number of steps between saving state. Default is 10."
+       "number-of-steps-between-save", po::value<std::size_t>(&nwrite),
+       "Number of steps between writing to simulation data file and trajectory. Default is 10."
       )
       (
-       "time-step-size", po::value<real_t>(&timestep),
-       "Time step size (ps). Default is 0.020 ps or 20 fs."
-       )
+       "number-of-steps-between-pairlist-update", po::value<std::size_t>(&npairlist),
+       "Number of steps between updating pair list. Default is 10."
+      )
+      (
+       "time-step", po::value<real_t>(&timestep),
+       "Time step (ps). Default is 0.020 ps or 20 fs."
+      )
       
       (
        "model-type", po::value<std::string>(&modelType),
@@ -183,10 +188,13 @@ int main(int argc, char* argv[])
       nsteps = vm["number-of-steps"].as<std::size_t>();
     }
     if ( vm.count("number-of-steps-between-save") ) {
-      nwrite = vm["number-of-steps"].as<std::size_t>();
+      nwrite = vm["number-of-steps-between-save"].as<std::size_t>();
     }
-    if (vm.count("time-step-size") ) {
-      timestep = vm["time-step-size"].as<real_t>();
+    if ( vm.count("number-of-steps-between-pairlist-update") ) {
+      npairlist = vm["number-of-steps-between-pairlist-update"].as<std::size_t>();
+    }    
+    if (vm.count("time-step") ) {
+      timestep = vm["time-step"].as<real_t>();
     }
     if ( vm.count("model-type") ) {
       modelType = vm["model-type"].as<std::string>();
@@ -208,7 +216,7 @@ int main(int argc, char* argv[])
     param.add<real_t>("temperature", temperature);
     param.add<real_t>("timestep", timestep);
     param.add<real_t>("gamma", gamma);
-    param.add<std::size_t>("npairlists", 10);
+    param.add<std::size_t>("npairlists", npairlist);
     std::cout << "Simulation parameters:" << std::endl;
     std::cout << param << std::endl;
     
@@ -256,7 +264,7 @@ int main(int argc, char* argv[])
       stream.close();
       std::clog << "Read model from input file '" << fnInputModel << "'." << std::endl;
     }
-
+    
     // Simulate.
     file::open_output(traj, fnTrajectory);
     file::open_output(data, fnSimulationData);
@@ -287,6 +295,6 @@ int main(int argc, char* argv[])
       stream << *model << std::endl;
       stream.close();
     }
-    std::cerr << exception.what() << std::endl;
+    std::cerr << "ERROR: " << exception.what() << std::endl;
   }
 }
