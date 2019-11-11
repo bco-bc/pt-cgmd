@@ -95,7 +95,7 @@ namespace simploce {
             return pp_list_cont_t{};  // Empty list.
         }
             
-        // Group/Group pair list.
+        // Pair list.
         pp_list_cont_t pairList{};
 
         // For all particle group pairs.

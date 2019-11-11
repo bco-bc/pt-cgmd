@@ -48,37 +48,79 @@ namespace simploce {
     }
     
     
-    
-    // Between free and neighboring free particles, and free and particles in 
-    // neighboring groups.
+    // For free particles in a given cells.
     template <typename P>
     static typename PairLists<P>::pp_list_cont_t
-    forFree_(const Cell<P>& cell, 
-             const Cell<P>& neighbor,
-             const bc_ptr_t& bc,
-             const box_ptr_t& box)
+    forFreeInOneCell_(const Cell<P>& cell, 
+                      const bc_ptr_t& bc,
+                      const box_ptr_t& box)
+    {
+        using pp_list_cont_t = typename PairLists<P>::pp_list_cont_t;
+        using pp_pair_t = typename PairLists<P>::pp_pair_t;
+        
+        if ( cell.free().empty() ) {
+            return pp_list_cont_t{};
+        }
+        
+        pp_list_cont_t pairList{};
+        auto& free = cell.free();
+        
+        // All pairs of free particles.
+        for (auto it_i = free.begin(); it_i < (free.end() - 1); ++it_i) {
+            auto& fi = *it_i;
+            for (auto it_j = it_i + 1; it_j != free.end(); ++it_j) {
+                auto& fj = *it_j;
+                pp_pair_t pair = std::make_pair(fi, fj);
+                pairList.push_back(pair);
+            }
+        }
+        
+        // All pairs of free particles and particles in particle groups.
+        for (auto& fi : free) {
+            for (auto &pg : cell.groups()) {
+                for (auto& pj: pg->particles()) {
+                    pp_pair_t pair = std::make_pair(fi, pj);
+                    pairList.push_back(pair);                  
+                }
+            }
+        }
+        
+        return pairList;
+    }
+    
+    // Pairs of free particles in the given cell and particles (free and 
+    // in groups) in a neighboring cell.
+    template <typename P>
+    static typename PairLists<P>::pp_list_cont_t
+    forFreeInTwoCells_(const Cell<P>& cell, 
+                       const Cell<P>& neighbor,
+                       const bc_ptr_t& bc,
+                       const box_ptr_t& box)
     {
         using pp_list_cont_t = typename PairLists<P>::pp_list_cont_t;
         using pp_pair_t = typename PairLists<P>::pp_pair_t;
         
         static real_t rc2 = util::squareCutoffDistance(box);
         
+        if ( cell.free().empty() ) {
+            return pp_list_cont_t{};
+        }
+        
+        // Pair list.
         pp_list_cont_t pairList{};
         
-        for (auto& fi : cell.free()) {
-            auto index_i = fi->index();
+        // All pairs of free particles in the given cell and free particles in
+        // neighboring cell plus particles in particles groups.
+        for (auto& fi : cell.free()) {            
             position_t ri = fi->position();
             for (auto& fj : neighbor.free()) {                
-                auto index_j = fj->index();
-                if ( index_j > index_i ) {
-                    position_t rj = fj->position();
-                    auto R = bc->apply(ri,rj);
-                    auto R2 = norm2<real_t>(R);
-                    if ( R2 <= rc2 ) {
-                        // Include this pair.
-                        pp_pair_t pair = std::make_pair(fi, fj);
-                        pairList.push_back(pair);
-                    }
+                position_t rj = fj->position();
+                auto R = bc->apply(ri,rj);
+                auto R2 = norm2<real_t>(R);
+                if ( R2 <= rc2 ) {
+                    // Include this pair.
+                    pp_pair_t pair = std::make_pair(fi, fj);
+                    pairList.push_back(pair);
                 }
             }
             for (const auto& pg: neighbor.groups()) {
@@ -89,11 +131,8 @@ namespace simploce {
                     // Include all pairs between given free particle and particles
                     // in group.
                     for ( auto pj : pg->particles()) {
-                        auto index_j = pj->index();
-                        if ( index_j > index_i ) { 
-                            pp_pair_t pair = std::make_pair(fi, pj);
-                            pairList.push_back(pair);                        
-                       }
+                        pp_pair_t pair = std::make_pair(fi, pj);
+                        pairList.push_back(pair);                        
                     }
                 }
             }
@@ -102,9 +141,7 @@ namespace simploce {
         return std::move(pairList);
     }
     
-    
-    
-    // For all particle groups in a single cell.
+    // Pairs of particles in particle groups in a single cell.
     template <typename P>
     static typename PairLists<P>::pp_list_cont_t
     forGroupsInOneCell_(const Cell<P>& cell,
@@ -122,6 +159,7 @@ namespace simploce {
 
         auto& groups = cell.groups();
         
+        // All pairs of particles in the cell's particle groups.
         for (auto it_i = groups.begin(); it_i != (groups.end() - 1); ++it_i) {
             auto& gi = *it_i;
             const auto particles_i = gi->particles();
@@ -142,7 +180,7 @@ namespace simploce {
         return std::move(pairList);        
     }
 
-    // For all particle groups in two -different- cells.
+    // Pairs of particles in particle groups in two -different- cells.
     template <typename P>
     static typename PairLists<P>::pp_list_cont_t
     forGroupsInTwoCells_(const Cell<P>& cell, 
@@ -213,18 +251,28 @@ namespace simploce {
         // Update particle locations in cells.
         grid->place(bc, free, groups);
         
-        std::size_t nppff = 0;
-        std::size_t nppgg = 0;
+        std::size_t nppf = 0; // Number of particle pairs involving a free particle.
+        std::size_t nppg = 0; // Number of particle pairs involving a particle 
+                              //in a particle group.
+        
         const auto& cells = grid->cells();
         
         // Generate particle pair list. Select particles from cells within 
         // cutoff distance.
         std::vector<std::size_t> numberOfNeighbors{};
         for (auto cell_i = cells.begin(); cell_i != (cells.end() - 1); ++cell_i) {
-            auto plCell = forGroupsInOneCell_(*cell_i, bc, box);
-            pairList.insert(pairList.end(), plCell.begin(), plCell.end());
+            
+            // Current cell.
+            auto plf1g = forFreeInOneCell_(*cell_i, bc, box);
+            nppf += plf1g.size();
+            pairList.insert(pairList.end(), plf1g.begin(), plf1g.end());
+            auto plg1g = forGroupsInOneCell_(*cell_i, bc, box);
+            nppg += plg1g.size();
+            pairList.insert(pairList.end(), plg1g.begin(), plg1g.end());
             std::size_t nb = 0;
             auto ri = cell_i->position();
+            
+            // Pairs of cells.
             for (auto cell_j = cell_i + 1; cell_j != cells.end(); ++cell_j) {
                 auto rj = cell_j->position();
                 auto R = bc->apply(ri, rj);
@@ -236,19 +284,23 @@ namespace simploce {
                               << cell_j->locationAsString() << ")" << std::endl;
 #endif
                     nb += 1;
-                    auto plf = forFree_<P>(*cell_i, *cell_j, bc, box);
-                    nppff += plf.size();
-                    pairList.insert(pairList.end(), plf.begin(), plf.end());
-                    auto plg = forGroupsInTwoCells_<P>(*cell_i, *cell_j, bc, box);
-                    nppgg += plg.size();
-                    pairList.insert(pairList.end(), plg.begin(), plg.end());
+                    auto plf2g = forFreeInTwoCells_<P>(*cell_i, *cell_j, bc, box);
+                    nppf += plf2g.size();
+                    pairList.insert(pairList.end(), plf2g.begin(), plf2g.end());
+                    auto plg2g = forGroupsInTwoCells_<P>(*cell_i, *cell_j, bc, box);
+                    nppg += plg2g.size();
+                    pairList.insert(pairList.end(), plg2g.begin(), plg2g.end());
                 }
             }
             numberOfNeighbors.push_back(nb);
         }
-        // Last cell
-        auto plCell = forGroupsInOneCell_(*(cells.end() - 1) , bc, box);
-        pairList.insert(pairList.end(), plCell.begin(), plCell.end());
+        
+        // Last cell.
+        auto plf1g = forFreeInOneCell_(*(cells.end() - 1), bc, box);
+        nppf += plf1g.size();
+        pairList.insert(pairList.end(), plf1g.begin(), plf1g.end());
+        auto plg1g = forGroupsInOneCell_(*(cells.end() - 1) , bc, box);
+        pairList.insert(pairList.end(), plg1g.begin(), plg1g.end());
         numberOfNeighbors.push_back(0);
 
         // Display some information.
@@ -285,9 +337,9 @@ namespace simploce {
             }
             assert(ngroups == groups.size());
             std::clog << "Total number of pairs involving free particles: " 
-                      << nppff << std::endl;
+                      << nppf << std::endl;
             std::clog << "Total number of particle-in-group/particle-in-group pairs: "
-                      << nppgg << std::endl;
+                      << nppg << std::endl;
             std::clog << "Total number of particle pairs: "
                       << pairList.size() << std::endl;
             auto total = all.size() * (all.size() - 1) / 2;
