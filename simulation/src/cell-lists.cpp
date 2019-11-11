@@ -201,6 +201,7 @@ namespace simploce {
         static grid_ptr_t grid = grid_t::make(box, sideLength);
         static auto rc2 = util::squareCutoffDistance(box);
         
+        // Display some information.
         if ( firstTime ) {
             std::clog << "Using cell-based particle pair lists." << std::endl;
             std::clog << "Cell side length: " << grid->sideLength() << std::endl;
@@ -251,7 +252,9 @@ namespace simploce {
         numberOfNeighbors.push_back(0);
 
         // Display some information.
-        //if ( firstTime ) {
+#ifndef _DEBUG
+        if ( firstTime ) {            
+#endif
             std::size_t counter = 0;
             std::size_t sum = 0;
             for (auto nb : numberOfNeighbors) {
@@ -293,7 +296,9 @@ namespace simploce {
             std::clog << "Fraction (%): " 
                       << real_t(pairList.size()) * 100.0 / total << std::endl;
             firstTime = false;
-        //}
+#ifndef _DEBUG
+        }
+#endif
         
         // Done.
         return std::move(PairLists<P>(pairList));
