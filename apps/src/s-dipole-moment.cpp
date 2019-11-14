@@ -182,7 +182,7 @@ int main(int argc, char *argv[])
   ostream.precision(conf::PRECISION);
   for (auto& fm: fms) {
     ostream << std::setw(conf::WIDTH) << fm.first
-            << std::setw(conf::WIDTH) << fm.second * dm
+            << std::setw(conf::WIDTH) << fm.second
             << std::setw(conf::WIDTH) << fm.first * MUUnits<real_t>::e_nm_to_D
             << std::endl;
   }
@@ -193,7 +193,8 @@ int main(int argc, char *argv[])
   std::clog << std::endl;
   std::clog << "Data dipole moment M(t) written to (t is time)'"
 	    << fnResultsM << "'." << std::endl;
-  std::clog << "Probability P(m) of the strength m of the group dipole moment written to '"
+  std::clog << "Probability density function f(m) of the strength m "
+            << "of the group dipole moment written to '"
 	    << fnResultsFM << "." << std::endl;
   std::clog << "Format: t M(t) <M(t)> M2(t) "
 	    << "<M2(t)> ((<M(t)>*<M(t)>-<M2(t)>)^2)^1/2" << std::endl;

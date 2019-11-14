@@ -147,6 +147,8 @@ namespace simploce {
                              const std::vector<pg_ptr_t>& groups)
     {
         counter_ += 1;        
+        
+        // Setup if required.
         if ( counter_ == 1 ) {
             ngroups_ = groups.size();
             real_t mmax = mmax_;
@@ -185,7 +187,8 @@ namespace simploce {
         }
         real_t M2 = inner<real_t>(M, M);
         stime_t t = t0_ + counter_ * dt_;
-        std::tuple<stime_t, dipole_moment_t, real_t> result = std::make_tuple(t, M, M2);
+        std::tuple<stime_t, dipole_moment_t, real_t> result = 
+            std::make_tuple(t, M, M2);
         M_.push_back(result);
         
         auto last = hm_.size() - 1;
@@ -212,17 +215,16 @@ namespace simploce {
     typename DipoleMoment<P>::result_t 
     DipoleMoment<P>::results() const
     {
-        //real_t factor = ngroups_ * counter_ ;
         fm_result_t fm{};
         
-        //std::vector<real_t> hm(hm_.size(), 0.0);
+        std::vector<real_t> hm(hm_.size(), 0.0);
         real_t tf = 0.0;
         for (std::size_t k = 0; k != hm_.size(); ++k) {
-            //hm[k] = hm_[k] / ngroups_;      // Average over groups and observations.
+            hm[k] = hm_[k] / counter_;  // Average over states.
             tf += hm_[k];
         }
         std::size_t n = 0;
-        for (auto v: hm_) {
+        for (auto v: hm) {
             real_t m = n * dm_;
             real_t p = v / tf;          // Probability.
             real_t f = p / dm_;         // Probability density function.
@@ -230,6 +232,9 @@ namespace simploce {
             fm.push_back(pair);
             n += 1;
         }
+        
+        std::clog << "Number of observations: " << counter_ << std::endl;
+        
         return std::make_pair(M_, fm);
     }
     

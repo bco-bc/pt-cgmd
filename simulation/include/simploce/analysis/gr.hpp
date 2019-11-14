@@ -325,7 +325,7 @@ namespace simploce {
             real_t n = rho2 * dV;
 
             // Normalise, and also average over the number particles of the 
-            // first specification as well and the number of states (observations).
+            // first specification and the number of states (observations).
             real_t g = counter_ > 0 && nparticles1_ > 0 ?
                        real_t(hr_[i]) / (n * nparticles1_ * counter_) :
                        0.0;
