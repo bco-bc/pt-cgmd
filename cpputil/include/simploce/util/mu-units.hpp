@@ -106,6 +106,16 @@ namespace simploce {
          */
         static const V V_to_kJ_mol_e;
         
+        /**
+         * e nm (dipole moment) to D (Debye)
+         */
+        static const V e_nm_to_D;
+        
+        /**
+         * nm to m.
+         */
+        static const V nm_to_m;
+        
     };
   
     template <typename V>
@@ -151,6 +161,13 @@ namespace simploce {
 
     template <typename V>
     const V MUUnits<V>::V_to_kJ_mol_e = SIUnits<V>::NA * SIUnits<V>::E/1.0e+03;
+    
+    template <typename V>
+    const V MUUnits<V>::nm_to_m = 1.0e-09;
+    
+    template <typename V>
+    const V MUUnits<V>::e_nm_to_D = 
+        SIUnits<V>::E * MUUnits<V>::nm_to_m * 2.9979245817809e+29;
       
 }
 

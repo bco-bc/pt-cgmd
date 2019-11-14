@@ -34,6 +34,7 @@
 
 #include "atypes.hpp"
 #include "simploce/particle/particle-group.hpp"
+#include <vector>
 
 namespace simploce {
     

@@ -47,7 +47,7 @@ namespace simploce {
     
     using lj_params_t = ForceField::lj_params_t;
     using el_params_t = ForceField::el_params_t;
-    using result_t = std::pair<energy_t, std::vector<force_t>>;
+    using dm_result_t = std::pair<energy_t, std::vector<force_t>>;
     using bead_pair_list_t = PairLists<Bead>::pp_list_cont_t;
     
     /**
@@ -113,7 +113,7 @@ namespace simploce {
     }
     
     // Returns forces on beads and energy for bead pairs.
-    static result_t ppForces_(const bead_pair_list_t ppPairList,
+    static dm_result_t ppForces_(const bead_pair_list_t ppPairList,
                               std::size_t nbeads,
                               const lj_params_t& ljParams,
                               const el_params_t& elParams,
@@ -291,7 +291,7 @@ namespace simploce {
         static bool firstTime = true;
         
         // Holds all force calculation results.
-        std::vector<result_t> results{};
+        std::vector<dm_result_t> results{};
         
         auto nbeads = all.size();
         
@@ -300,7 +300,7 @@ namespace simploce {
             
             // Concurrently.
             
-            std::vector<std::future<result_t> > futures{};
+            std::vector<std::future<dm_result_t> > futures{};
                         
             // Handle particle group/particle group interaction concurrently,
             // where one task is executed by the current thread.
@@ -328,7 +328,7 @@ namespace simploce {
                 }
             
                 // Wait for these tasks to complete.
-                results = util::waitForAll<result_t>(futures);
+                results = util::waitForAll<dm_result_t>(futures);
             }
             
             // One remaining particle group/particle group interaction is handled

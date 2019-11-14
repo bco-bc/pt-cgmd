@@ -321,7 +321,7 @@ namespace simploce {
 #ifdef _DEBUG
                 if ( cell.free().size() > 0 || cell.groups().size() > 0 ) {                    
                     std::clog << "Cell location: (" << cell.locationAsString()
-                              << ")," << space;
+                              << "), ";
                     std::clog << "Cell position: " << cell.position() << ", ";
                     std::clog << "Number of free particles: " 
                               << cell.free().size() << ", ";

@@ -1,5 +1,5 @@
 /* 
- * File:   s-gr.cpp
+ * File:   s-dipole-moment.cpp
  * Author: ajuffer
  *
  * Created on October 24, 2019, 3:15 PM
@@ -13,6 +13,7 @@
 #include "simploce/simulation/sim-util.hpp"
 #include "simploce/particle/particle-spec-catalog.hpp"
 #include "simploce/util/file.hpp"
+#include "simploce/util/mu-units.hpp"
 #include <boost/program_options.hpp>
 #include <string>
 #include <iostream>
@@ -33,12 +34,15 @@ int main(int argc, char *argv[])
   std::string fnParticleSpecCatalog{"particle-spec-catalog.dat"};
   std::string fnTrajectory{"trajectory.dat"};
   std::string fnInputModel{"in.model"};
-  std::string fnResults{"dipole-moment.dat"};
+  std::string fnResultsM{"dipole-moment.dat"};
+  std::string fnResultsFM{"f-dipole-moment.dat"};
   real_t dt{10 * 0.02};         // Time interval between successive states in trajectory.
   real_t t0{0.0};               // Start time.
   std::size_t nskip = 0;        // Number of states in trajectory to skip
                                 // before executing analysis.
   real_t temperature(298.15);
+  real_t dm = 0.001;
+  real_t mmax = 1.0;
 
   po::options_description usage("Usage");
   usage.add_options()
@@ -125,7 +129,7 @@ int main(int argc, char *argv[])
   std::clog << "Number of particles: " << sm->size() << std::endl;
 
   // Perform analysis.
-  analyzer_ptr_t analyzer = analyzer_t::create(dt, t0);
+  analyzer_ptr_t analyzer = analyzer_t::create(dt, dm, mmax, t0);
   analysis_t analysis(sm, analyzer);
   file::open_input(istream, fnTrajectory);
   analysis.perform(param, istream);
@@ -134,13 +138,13 @@ int main(int argc, char *argv[])
   // Write results.
   auto results = analyzer->results();
   std::ofstream ostream;
-  file::open_output(ostream, fnResults);
+  file::open_output(ostream, fnResultsM);
   ostream.setf(std::ios::scientific);
   ostream.precision(conf::PRECISION);
   std::size_t counter = 0;
   dipole_moment_t aveM{0.0, 0.0, 0.0};
   real_t aveM2 = 0;
-  for (auto result : results) {
+  for (auto result : results.first) {
     counter += 1;
 
     // Get time, M, and M2.
@@ -167,18 +171,35 @@ int main(int argc, char *argv[])
   ostream.flush();
   ostream.close();
 
-  // Final averages.
+  // Overall averages.
   aveM /= real_t(counter);
   aveM2 /= real_t(counter);
 
+  // Probability density function for group dipole moment.
+  auto fms = results.second;
+  file::open_output(ostream, fnResultsFM);
+  ostream.setf(std::ios::scientific);
+  ostream.precision(conf::PRECISION);
+  for (auto& fm: fms) {
+    ostream << std::setw(conf::WIDTH) << fm.first
+            << std::setw(conf::WIDTH) << fm.second * dm
+            << std::setw(conf::WIDTH) << fm.first * MUUnits<real_t>::e_nm_to_D
+            << std::endl;
+  }
+  ostream.flush();
+  ostream.close();
+  
   // More output.
   std::clog << std::endl;
-  std::clog << "Data dipole moment M(t) written to (t is time)'" << fnResults << "'." << std::endl;
+  std::clog << "Data dipole moment M(t) written to (t is time)'"
+	    << fnResultsM << "'." << std::endl;
+  std::clog << "Probability P(m) of the strength m of the group dipole moment written to '"
+	    << fnResultsFM << "." << std::endl;
   std::clog << "Format: t M(t) <M(t)> M2(t) "
 	    << "<M2(t)> ((<M(t)>*<M(t)>-<M2(t)>)^2)^1/2" << std::endl;
   std::clog << std::endl;
   std::clog << "Average dipole moment <M>: " << aveM << std::endl;
-  std::clog << "Norm average dipole moment |<M>|: " << norm<real_t>(aveM) << std::endl;
+  std::clog << "Norm of average dipole moment |<M>|: " << norm<real_t>(aveM) << std::endl;
   std::clog << "Average <M^2>: " << aveM2 << std::endl;
   real_t t = inner<real_t>(aveM, aveM) - aveM2;
   real_t rmsd = std::sqrt(t * t);
@@ -186,6 +207,8 @@ int main(int argc, char *argv[])
   std::clog << "Dielectric constant according to the Fröhlich equation: "
 	    << util::frohlich(aveM2, temperature, sm->box())
             << std::endl;
+
+  
   
   return 0;
 }

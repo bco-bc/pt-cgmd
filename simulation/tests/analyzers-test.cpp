@@ -23,7 +23,7 @@
  */
 
 /* 
- * File:   gr-test.cpp
+ * File:   analyzers-test.cpp
  * Author: ajuffer
  *
  * Created on September 23, 2019, 3:20 PM
@@ -45,7 +45,7 @@ using namespace simploce;
  */
 
 void test1() {
-    std::cout << "gr-test test 1" << std::endl;
+    std::cout << "analyzers-test test 1" << std::endl;
     
     using gr_t = Gr<Bead>;    
     
@@ -60,20 +60,20 @@ void test1() {
 }
 
 void test2() {
-    std::cout << "gr-test test 2" << std::endl;
+    std::cout << "analyzers-test test 2" << std::endl;
     
     using m_m2_t = DipoleMoment<Bead>;
     
-    m_m2_t mm2(10*0.02);
+    m_m2_t mm2(10*0.02, 0.01, 100);
 }
 
 int main(int argc, char** argv) {
-    std::cout << "%SUITE_STARTING% gr-test" << std::endl;
+    std::cout << "%SUITE_STARTING% analyzers-test" << std::endl;
     std::cout << "%SUITE_STARTED%" << std::endl;
 
-    std::cout << "%TEST_STARTED% test1 (gr-test)" << std::endl;
+    std::cout << "%TEST_STARTED% test1 (analyzers-test)" << std::endl;
     test1();
-    std::cout << "%TEST_FINISHED% time=0 test1 (gr-test)" << std::endl;
+    std::cout << "%TEST_FINISHED% time=0 test1 (analyzers-test)" << std::endl;
 
     std::cout << "%SUITE_FINISHED% time=0" << std::endl;
 

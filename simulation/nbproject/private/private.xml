@@ -2,32 +2,15 @@
 <project-private xmlns="http://www.netbeans.org/ns/project-private/1">
     <data xmlns="http://www.netbeans.org/ns/make-project-private/1">
         <activeConfTypeElem>2</activeConfTypeElem>
-        <activeConfIndexElem>1</activeConfIndexElem>
+        <activeConfIndexElem>0</activeConfIndexElem>
     </data>
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/home/juffer/simploce/pt-cgmd/simulation/src/pbc.cpp</file>
-            <file>file:/home/juffer/simploce/pt-cgmd/simulation/include/simploce/simulation/cell-lists.hpp</file>
-            <file>file:/home/juffer/simploce/pt-cgmd/simulation/tests/grid-cells-test.cpp</file>
-            <file>file:/home/juffer/simploce/pt-cgmd/simulation/src/lj-coulomb-forces.cpp</file>
-            <file>file:/home/juffer/simploce/pt-cgmd/simulation/src/sim-model-factory.cpp</file>
-            <file>file:/home/juffer/simploce/pt-cgmd/simulation/src/sfactory.cpp</file>
-            <file>file:/home/juffer/simploce/pt-cgmd/simulation/src/sim-util.cpp</file>
-            <file>file:/home/juffer/simploce/pt-cgmd/simulation/src/distance-lists.cpp</file>
-            <file>file:/home/juffer/simploce/pt-cgmd/simulation/include/simploce/simulation/pair-list-generator.hpp</file>
-            <file>file:/home/juffer/simploce/pt-cgmd/simulation/include/simploce/simulation/sim-util.hpp</file>
-            <file>file:/home/juffer/simploce/pt-cgmd/simulation/include/simploce/simulation/interactor.hpp</file>
-            <file>file:/home/juffer/simploce/pt-cgmd/simulation/include/simploce/simulation/grid.hpp</file>
-            <file>file:/home/juffer/simploce/pt-cgmd/simulation/include/simploce/simulation/cell.hpp</file>
-            <file>file:/home/juffer/simploce/pt-cgmd/simulation/tests/pdb-test.cpp</file>
-            <file>file:/home/juffer/simploce/pt-cgmd/simulation/src/langevin-velocity-verlet.cpp</file>
-            <file>file:/home/juffer/simploce/pt-cgmd/simulation/tests/pair-list-test.cpp</file>
-            <file>file:/home/juffer/simploce/pt-cgmd/simulation/src/interactor.cpp</file>
-            <file>file:/home/juffer/simploce/pt-cgmd/simulation/include/simploce/simulation/pair-lists.hpp</file>
-            <file>file:/home/juffer/simploce/pt-cgmd/simulation/include/simploce/simulation/sconf.hpp</file>
-            <file>file:/home/juffer/simploce/pt-cgmd/simulation/src/cell-lists.cpp</file>
-            <file>file:/home/juffer/simploce/pt-cgmd/simulation/include/simploce/simulation/sim-model-factory.hpp</file>
+            <file>file:/koti/ajuffer/simploce/pt-cgmd/simulation/include/simploce/analysis/dipole-moment.hpp</file>
+            <file>file:/koti/ajuffer/simploce/pt-cgmd/simulation/tests/analyzers-test.cpp</file>
+            <file>file:/koti/ajuffer/simploce/pt-cgmd/simulation/include/simploce/analysis/gr.hpp</file>
+            <file>file:/koti/ajuffer/simploce/pt-cgmd/simulation/include/simploce/analysis/analyzer.hpp</file>
         </group>
     </open-files>
 </project-private>

@@ -43,7 +43,7 @@ namespace simploce {
     /**
      * Result of energy/force calculation.
      */
-    using result_t = std::pair<energy_t, energy_t>;
+    using tdm_result_t = std::pair<energy_t, energy_t>;
         
     // Atom pair type
     using atom_pair_t = std::pair<atom_ptr_t, atom_ptr_t>;
@@ -89,8 +89,8 @@ namespace simploce {
             pairLists_.updated_(false);
         }
         
-        result_t result = 
-            at->doWithAllFreeGroups<result_t>([this] (const std::vector<atom_ptr_t>& all,
+        tdm_result_t result = 
+            at->doWithAllFreeGroups<tdm_result_t>([this] (const std::vector<atom_ptr_t>& all,
                                                       const std::vector<atom_ptr_t>& free,
                                                       const std::vector<atom_group_ptr_t>& groups) {
             for (auto p: all) {
@@ -156,8 +156,8 @@ namespace simploce {
             pairLists_.updated_(false);
         }
         
-        result_t result = 
-            cg->doWithAllFreeGroups<result_t>([this] (const std::vector<bead_ptr_t>& all,
+        tdm_result_t result = 
+            cg->doWithAllFreeGroups<tdm_result_t>([this] (const std::vector<bead_ptr_t>& all,
                                                       const std::vector<bead_ptr_t>& free,
                                                       const std::vector<bead_group_ptr_t>& groups) {
                 for (auto p: all) {
@@ -175,7 +175,7 @@ namespace simploce {
                                const sim_param_t& param, 
                                const cg_ptr_t& cg)
     {
-        return cg->doWithAllFreeGroups<result_t>([this, bead] (const std::vector<bead_ptr_t>& all,
+        return cg->doWithAllFreeGroups<tdm_result_t>([this, bead] (const std::vector<bead_ptr_t>& all,
                                                                const std::vector<bead_ptr_t>& free,
                                                                const std::vector<bead_group_ptr_t>& groups) {
             return this->forcefield_->interact(bead, all, free, groups);
