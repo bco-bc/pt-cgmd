@@ -7,9 +7,13 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/home/juffer/simploce/pt-cgmd/simulation/include/simploce/analysis/dipole-moment.hpp</file>
-            <file>file:/home/juffer/simploce/pt-cgmd/simulation/include/simploce/analysis/gr.hpp</file>
-            <file>file:/home/juffer/simploce/pt-cgmd/simulation/tests/analyzers-test.cpp</file>
+            <file>file:/koti/ajuffer/simploce/pt-cgmd/simulation/include/simploce/analysis/dipole-moment.hpp</file>
+            <file>file:/koti/ajuffer/simploce/pt-cgmd/simulation/include/simploce/analysis/diffusion.hpp</file>
+            <file>file:/koti/ajuffer/simploce/pt-cgmd/simulation/tests/analyzers-test.cpp</file>
+            <file>file:/koti/ajuffer/simploce/pt-cgmd/simulation/include/simploce/simulation/stypes.hpp</file>
+            <file>file:/koti/ajuffer/simploce/pt-cgmd/simulation/include/simploce/analysis/gr.hpp</file>
+            <file>file:/koti/ajuffer/simploce/pt-cgmd/simulation/include/simploce/analysis/analyzer.hpp</file>
+            <file>file:/koti/ajuffer/simploce/pt-cgmd/simulation/include/simploce/analysis/atypes.hpp</file>
         </group>
     </open-files>
 </project-private>

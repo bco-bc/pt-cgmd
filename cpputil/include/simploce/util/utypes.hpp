@@ -17,7 +17,6 @@
 #include "value_t.hpp"
 #include "cvector_t.hpp"
 #include "cube.hpp"
-#
 
 namespace simploce {
     

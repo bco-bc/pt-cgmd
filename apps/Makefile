@@ -10,7 +10,7 @@ SIMULATION = $(PREFIX)/simploce/pt-cgmd/simulation
 VPATH = ../src
 
 # All sources.
-APPS = s-cgmd.cpp s-gr.cpp s-dipole-moment.cpp
+APPS = s-cgmd.cpp s-gr.cpp s-dipole-moment.cpp s-msd.cpp
 
 # All executables.
 AEXE = $(APPS:.cpp=)

@@ -81,16 +81,18 @@ namespace simploce {
            const box_ptr_t& box,
            const bc_ptr_t& bc);
         
-        void perform(const std::vector<p_ptr_t>& all,
-                     const std::vector<p_ptr_t>& free,
-                     const std::vector<pg_ptr_t>& groups) override;
+        void 
+        perform(const std::vector<p_ptr_t>& all,
+                const std::vector<p_ptr_t>& free,
+                const std::vector<pg_ptr_t>& groups) override;
     
         /**
          * Returns results.
          * @return Radial distribution function. First of each pair is r and the second
          * is g(r).
          */
-        std::vector<std::pair<real_t, real_t>> results() const;
+        std::vector<std::pair<real_t, real_t>> 
+        results() const;
         
         /**
          * Creates an analyzer.
@@ -101,11 +103,12 @@ namespace simploce {
          * @param bc Boundary condition.
          * @return Analyzer.
          */
-        static std::shared_ptr<Gr<P>> create(const length_t& dr,
-                                             const std::string& specName1, 
-                                             const std::string& specName2,
-                                             const box_ptr_t& box,
-                                             const bc_ptr_t& bc);
+        static std::shared_ptr<Gr<P>> 
+        create(const length_t& dr,
+               const std::string& specName1, 
+               const std::string& specName2,
+               const box_ptr_t& box,
+               const bc_ptr_t& bc);
     
     private:
         

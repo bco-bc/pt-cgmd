@@ -1,11 +1,11 @@
-/* 
- * File:   s-dipole-moment.cpp
+/*
+ * File:   s-msd.cpp
  * Author: ajuffer
  *
- * Created on October 24, 2019, 3:15 PM
+ * Created on November 15, 2019, 1:57 PM
  */
 
-#include "simploce/analysis/dipole-moment.hpp"
+#include "simploce/analysis/diffusion.hpp"
 #include "simploce/analysis/analysis.hpp"
 #include "simploce/simulation/sfactory.hpp"
 #include "simploce/simulation/sim-model.hpp"
@@ -18,31 +18,25 @@
 #include <string>
 #include <iostream>
 #include <fstream>
-#include <memory>
-#include <utility>
-#include <tuple>
 
 namespace po = boost::program_options;
 using namespace simploce;
 
 int main(int argc, char *argv[])
 {
-  using analyzer_t = DipoleMoment<Bead>;
+  using analyzer_t = Diffusion<Bead>;
   using analyzer_ptr_t = std::shared_ptr<analyzer_t>;
   using analysis_t = Analysis<Bead>;
-  
+
   std::string fnParticleSpecCatalog{"particle-spec-catalog.dat"};
   std::string fnTrajectory{"trajectory.dat"};
   std::string fnInputModel{"in.model"};
-  std::string fnResultsM{"dipole-moment.dat"};
-  std::string fnResultsFM{"f-dipole-moment.dat"};
+  std::string fnResults{"msd.dat"};
   real_t dt{10 * 0.02};         // Time interval between successive states in trajectory.
   real_t t0{0.0};               // Start time.
+  real_t tau(10.0);             // Window time interval for mean square deviation.
   std::size_t nskip = 0;        // Number of states in trajectory to skip
-                                // before executing analysis.
-  real_t temperature(298.15);
-  real_t dm = 0.001;
-  real_t mmax = 1.0;
+                                // before executing analysis.  
 
   po::options_description usage("Usage");
   usage.add_options()
@@ -73,10 +67,6 @@ int main(int argc, char *argv[])
      "Number of states in trajectory to skip before executing analysis"
     )
     (
-     "temperature", po::value<real_t>(&temperature),
-     "Temperature. Default is 298.15 K."
-    )
-    (
      "help", "Help message"
     )
     ;
@@ -90,7 +80,6 @@ int main(int argc, char *argv[])
     std::cout << usage << "\n";
     return 0;
   }
-
   if ( vm.count("fn-particle-spec-catalog") ) {
     fnParticleSpecCatalog = vm["fn-particle-spec-catalog"].as<std::string>();
   }
@@ -108,10 +97,7 @@ int main(int argc, char *argv[])
   if ( vm.count("skip-number-of-states") ) {
     nskip = vm["skip-number-of-states"].as<std::size_t>();
   }
-  if ( vm.count("temperature") ) {
-    temperature = vm["temperature"].as<real_t>();
-  }
-
+  
   // Simulation parameters
   sim_param_t param;
   param.add<std::size_t>("nskip", nskip);
@@ -127,9 +113,9 @@ int main(int argc, char *argv[])
   cg_sim_model_ptr_t sm = simModelFactory->readCoarseGrainedFrom(istream);
   istream.close();
   std::clog << "Number of particles: " << sm->size() << std::endl;
-
+  
   // Perform analysis.
-  analyzer_ptr_t analyzer = analyzer_t::create(dt, dm, mmax, t0);
+  analyzer_ptr_t analyzer = analyzer_t::create(dt, tau);
   analysis_t analysis(sm, analyzer);
   file::open_input(istream, fnTrajectory);
   analysis.perform(param, istream);
@@ -138,79 +124,18 @@ int main(int argc, char *argv[])
   // Write results.
   auto results = analyzer->results();
   std::ofstream ostream;
-  file::open_output(ostream, fnResultsM);
+  file::open_output(ostream, fnResults);
   ostream.setf(std::ios::scientific);
   ostream.precision(conf::PRECISION);
-  std::size_t counter = 0;
-  dipole_moment_t aveM{0.0, 0.0, 0.0};
-  real_t aveM2 = 0;
-  for (auto result : results.first) {
-    counter += 1;
-
-    // Get time, M, and M2.
-    auto t = std::get<0>(result);
-    auto M = std::get<1>(result);
-    auto M2 = std::get<2>(result);
-    aveM += M;
-    aveM2 += M2;
-    
-    // Compute running averages and deviations.
-    auto raveM = aveM / real_t(counter);
-    auto raveM2 = aveM2 / real_t(counter);
-    real_t dev = inner<real_t>(raveM, raveM) - raveM2;
-    real_t rmsd = std::sqrt(dev * dev);
-
-    // Output
-    ostream << std::setw(conf::WIDTH) << t
-            << std::setw(conf::WIDTH) << M
-            << std::setw(conf::WIDTH) << raveM
-            << std::setw(conf::WIDTH) << M2
-	    << std::setw(conf::WIDTH) << raveM2
-	    << std::setw(conf::WIDTH) << rmsd << std::endl;
+  for (auto& result: results) {
+    ostream << std::setw(conf::WIDTH) << result.first
+	    << std::setw(conf::WIDTH) << result.second
+	    << std::endl;
   }
   ostream.flush();
   ostream.close();
 
-  // Overall averages.
-  aveM /= real_t(counter);
-  aveM2 /= real_t(counter);
+  std::clog << "MSD was written to output file " << fnResults << "'." << std::endl;
 
-  // Probability density function for group dipole moment.
-  auto fms = results.second;
-  file::open_output(ostream, fnResultsFM);
-  ostream.setf(std::ios::scientific);
-  ostream.precision(conf::PRECISION);
-  for (auto& fm: fms) {
-    ostream << std::setw(conf::WIDTH) << fm.first
-            << std::setw(conf::WIDTH) << fm.second
-            << std::setw(conf::WIDTH) << fm.first * MUUnits<real_t>::e_nm_to_D
-            << std::endl;
-  }
-  ostream.flush();
-  ostream.close();
-  
-  // More output.
-  std::clog << std::endl;
-  std::clog << "Data dipole moment M(t) written to (t is time)'"
-	    << fnResultsM << "'." << std::endl;
-  std::clog << "Format: t M(t) <M(t)> M2(t) "
-	    << "<M2(t)> ((<M(t)>*<M(t)>-<M2(t)>)^2)^1/2" << std::endl;
-  std::clog << "Probability density function f(m) of the strength m "
-            << "of the group dipole moment written to '"
-	    << fnResultsFM << "." << std::endl;
-  std::clog << "Format: m (in e nm) f(m) m (in Debye)" << std::endl;
-  std::clog << std::endl;
-  std::clog << "Average dipole moment <M>: " << aveM << std::endl;
-  std::clog << "Norm of average dipole moment |<M>|: " << norm<real_t>(aveM) << std::endl;
-  std::clog << "Average <M^2>: " << aveM2 << std::endl;
-  real_t t = inner<real_t>(aveM, aveM) - aveM2;
-  real_t rmsd = std::sqrt(t * t);
-  std::clog << "( (<M>*<M> - <M2>)^2)^1/2: " << rmsd << std::endl;
-  std::clog << "Dielectric constant according to the Fröhlich equation: "
-	    << util::frohlich(aveM2, temperature, sm->box())
-            << std::endl;
-
-  
-  
   return 0;
 }

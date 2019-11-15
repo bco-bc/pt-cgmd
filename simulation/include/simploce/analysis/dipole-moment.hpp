@@ -33,7 +33,7 @@
 #define DIPOLE_MOMENT_HPP
 
 #include "analyzer.hpp"
-#include "../simulation/stypes.hpp"
+#include "atypes.hpp"
 #include "simploce/util/util.hpp"
 #include <utility>
 #include <tuple>
@@ -79,13 +79,13 @@ namespace simploce {
          * Constructor
          * @param dt Time interval between successive states.
          * @param dm Bin size of probability density f(m).
-         * @param mmax Maximum value of strength m for f(m) (units are e nm). Default is
-         * 10 e nm.
+         * @param mmax Maximum value of strength m (units are e nm) for f(m). 
+         * Default is 1.0 e nm.
          * @param t0 Start time. Default is 0.
          */
         DipoleMoment(const stime_t& dt,
                      real_t dm,
-                     real_t mmax = 10,
+                     real_t mmax = 1.0,
                      const stime_t& t0 = 0);
         
         void 

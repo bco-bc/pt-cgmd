@@ -20,6 +20,7 @@
       <itemPath>include/simploce/simulation/cg-lj-fluid.hpp</itemPath>
       <itemPath>include/simploce/simulation/cg-pol-water.hpp</itemPath>
       <itemPath>include/simploce/simulation/constant-rate-pt.hpp</itemPath>
+      <itemPath>include/simploce/analysis/diffusion.hpp</itemPath>
       <itemPath>include/simploce/analysis/dipole-moment.hpp</itemPath>
       <itemPath>include/simploce/simulation/displacer.hpp</itemPath>
       <itemPath>include/simploce/simulation/distance-lists.hpp</itemPath>
@@ -329,6 +330,11 @@
             flavor2="0">
       </item>
       <item path="include/simploce/analysis/atypes.hpp"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="include/simploce/analysis/diffusion.hpp"
             ex="false"
             tool="3"
             flavor2="0">
@@ -788,6 +794,11 @@
             flavor2="0">
       </item>
       <item path="include/simploce/analysis/atypes.hpp"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="include/simploce/analysis/diffusion.hpp"
             ex="false"
             tool="3"
             flavor2="0">
