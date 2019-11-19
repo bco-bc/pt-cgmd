@@ -103,7 +103,7 @@ namespace simploce {
         // Holds mean square deviation  over a window of length tau
         static std::size_t nmsd = 0;
         
-        // Holds groups position over a window of length tau.
+        // Holds group position over a window of length tau.
         static std::list<std::vector<position_t>> gpos;
         
         static stime_t lastTime = 0;

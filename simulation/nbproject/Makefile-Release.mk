@@ -45,6 +45,7 @@ OBJECTFILES= \
 	${OBJECTDIR}/src/constant-rate-pt.o \
 	${OBJECTDIR}/src/distance-lists.o \
 	${OBJECTDIR}/src/interactor.o \
+	${OBJECTDIR}/src/langevin-leap-frog.o \
 	${OBJECTDIR}/src/langevin-velocity-verlet.o \
 	${OBJECTDIR}/src/leap-frog.o \
 	${OBJECTDIR}/src/lj-coulomb-forces.o \
@@ -163,6 +164,11 @@ ${OBJECTDIR}/src/interactor.o: src/interactor.cpp
 	${MKDIR} -p ${OBJECTDIR}/src
 	${RM} "$@.d"
 	$(COMPILE.cc) -O2 -Wall -Iinclude -I../cpputil/include -I../particles/include -std=c++14 -fPIC  -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/interactor.o src/interactor.cpp
+
+${OBJECTDIR}/src/langevin-leap-frog.o: src/langevin-leap-frog.cpp
+	${MKDIR} -p ${OBJECTDIR}/src
+	${RM} "$@.d"
+	$(COMPILE.cc) -O2 -Wall -Iinclude -I../cpputil/include -I../particles/include -std=c++14 -fPIC  -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/langevin-leap-frog.o src/langevin-leap-frog.cpp
 
 ${OBJECTDIR}/src/langevin-velocity-verlet.o: src/langevin-velocity-verlet.cpp
 	${MKDIR} -p ${OBJECTDIR}/src
@@ -457,6 +463,19 @@ ${OBJECTDIR}/src/interactor_nomain.o: ${OBJECTDIR}/src/interactor.o src/interact
 	    $(COMPILE.cc) -O2 -Wall -Iinclude -I../cpputil/include -I../particles/include -std=c++14 -fPIC  -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/interactor_nomain.o src/interactor.cpp;\
 	else  \
 	    ${CP} ${OBJECTDIR}/src/interactor.o ${OBJECTDIR}/src/interactor_nomain.o;\
+	fi
+
+${OBJECTDIR}/src/langevin-leap-frog_nomain.o: ${OBJECTDIR}/src/langevin-leap-frog.o src/langevin-leap-frog.cpp 
+	${MKDIR} -p ${OBJECTDIR}/src
+	@NMOUTPUT=`${NM} ${OBJECTDIR}/src/langevin-leap-frog.o`; \
+	if (echo "$$NMOUTPUT" | ${GREP} '|main$$') || \
+	   (echo "$$NMOUTPUT" | ${GREP} 'T main$$') || \
+	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
+	then  \
+	    ${RM} "$@.d";\
+	    $(COMPILE.cc) -O2 -Wall -Iinclude -I../cpputil/include -I../particles/include -std=c++14 -fPIC  -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/langevin-leap-frog_nomain.o src/langevin-leap-frog.cpp;\
+	else  \
+	    ${CP} ${OBJECTDIR}/src/langevin-leap-frog.o ${OBJECTDIR}/src/langevin-leap-frog_nomain.o;\
 	fi
 
 ${OBJECTDIR}/src/langevin-velocity-verlet_nomain.o: ${OBJECTDIR}/src/langevin-velocity-verlet.o src/langevin-velocity-verlet.cpp 

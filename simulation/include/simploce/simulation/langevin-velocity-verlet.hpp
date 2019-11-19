@@ -65,7 +65,8 @@ namespace simploce {
         
         
         /**
-         * Displaces atoms of an atomistic model.
+         * Displaces atoms of an atomistic particle model.
+         * @param param Simulation parameters.
          * @param at Atomistic particle model.
          * @return kinetic, potential energy, and temperature.
          */
