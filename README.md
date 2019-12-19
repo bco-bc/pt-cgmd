@@ -3,9 +3,11 @@ Charge fluctuations in coarse-grained molecular dynamics.
 
 Source code for developing and testing concepts related to proton "hopping" in coarse grained molecular dynamics.
 
-Source code is maintained with Netbeans 8.2. Each library (except for 'apps') represents a single netbeans project.
+Source code is maintained with Netbeans. Each library (except for 'apps') represents a single netbeans project. The source code of 'apps' is maintained using emacs and a simple Makefile is provided to compile and install it.
 
-Netbeans 8.2 download: https://netbeans.apache.org/download/archive/index.html
+# Netbeans
+https://netbeans.apache.org/
+
 
 
 

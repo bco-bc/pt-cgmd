@@ -1,10 +1,11 @@
-# Change prefix, if required.
-PREFIX = /home/ajuffer
+# Change prefix and/or ROOTDIR, if required.
+PREFIX = /localdisk
+ROOTDIR=/wrk3
 
 # Other
-CPPUTIL = $(PREFIX)/simploce/pt-cgmd/cpputil
-PARTICLES = $(PREFIX)/simploce/pt-cgmd/particles
-SIMULATION = $(PREFIX)/simploce/pt-cgmd/simulation
+CPPUTIL = $(ROOTDIR)/simploce/pt-cgmd/cpputil
+PARTICLES = $(ROOTDIR)/simploce/pt-cgmd/particles
+SIMULATION = $(ROOTDIR)/simploce/pt-cgmd/simulation
 
 # Relative to build directory.
 VPATH = ../src
