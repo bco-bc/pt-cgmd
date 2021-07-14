@@ -1,10 +1,4 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
-/* 
  * File:   particle-spec-catalog-test.cpp
  * Author: ajuffer
  *
@@ -27,7 +21,7 @@ using namespace simploce;
 
 void test1() {
     std::cout << "particle-spec-catalog-test test 1" << std::endl;
-    std::string fileName = "/home/ajuffer/simploce/pt-cgmd/particles/resources/particles-specs.dat";
+    std::string fileName = "resources/particles-specs.dat";
     std::ifstream stream;
     file::open_input(stream, fileName);
     spec_catalog_ptr_t catalog = ParticleSpecCatalog::create(stream);

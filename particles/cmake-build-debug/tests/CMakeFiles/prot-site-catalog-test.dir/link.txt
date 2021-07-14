@@ -1,0 +1,1 @@
+/usr/bin/c++ -g CMakeFiles/prot-site-catalog-test.dir/prot-site-catalog-test.cpp.o -o prot-site-catalog-test   -L/home/andre/lib  -Wl,-rpath,/home/andre/wrk3/simploce/pt-cgmd/particles/cmake-build-debug:/home/andre/lib ../libparticles.so -lcpputil 

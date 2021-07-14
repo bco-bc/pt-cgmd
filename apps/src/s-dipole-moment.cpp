@@ -1,6 +1,7 @@
-/* 
+/*
+ * Dipole moment.
  * File:   s-dipole-moment.cpp
- * Author: ajuffer
+ * Author: André H. Juffer, Biocenter Oulu, University of Oulu, Finland.
  *
  * Created on October 24, 2019, 3:15 PM
  */
@@ -86,7 +87,7 @@ int main(int argc, char *argv[])
   po::notify(vm);
 
   if ( vm.count("help") || argc == 1) {
-    std::cout << std::endl;
+    std::cout << "Dipole moment" << std::endl;
     std::cout << usage << "\n";
     return 0;
   }

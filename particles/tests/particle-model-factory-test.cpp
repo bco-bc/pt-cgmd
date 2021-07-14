@@ -1,10 +1,4 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
-/* 
  * File:   particle-model-factory-test.cpp
  * Author: ajuffer
  *
@@ -30,7 +24,7 @@ void test1() {
     std::cout << "particle-model-factory-test test 1" << std::endl;
     
     std::string fileName = 
-            "/home/ajuffer/simploce/pt-cgmd/particles/resources/particles-specs.dat";
+            "resources/particles-specs.dat";
     spec_catalog_ptr_t catalog = factory::particleSpecCatalog(fileName);
     std::clog << *catalog << std::endl;
     

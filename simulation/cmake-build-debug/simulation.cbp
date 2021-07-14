@@ -1,0 +1,622 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CodeBlocks_project_file>
+	<FileVersion major="1" minor="6"/>
+	<Project>
+		<Option title="simulation"/>
+		<Option makefile_is_custom="1"/>
+		<Option compiler="gcc"/>
+		<Option virtualFolders="CMake Files\;CMake Files\tests\;"/>
+		<Build>
+			<Target title="all">
+				<Option working_dir="/home/andre/wrk3/simploce/pt-cgmd/simulation/cmake-build-debug"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j6 -f &quot;/home/andre/wrk3/simploce/pt-cgmd/simulation/cmake-build-debug/Makefile&quot;  VERBOSE=1 all"/>
+					<CompileFile command="/usr/bin/make -j6 -f &quot;/home/andre/wrk3/simploce/pt-cgmd/simulation/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j6 -f &quot;/home/andre/wrk3/simploce/pt-cgmd/simulation/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j6 -f &quot;/home/andre/wrk3/simploce/pt-cgmd/simulation/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="install/strip">
+				<Option working_dir="/home/andre/wrk3/simploce/pt-cgmd/simulation/cmake-build-debug"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j6 -f &quot;/home/andre/wrk3/simploce/pt-cgmd/simulation/cmake-build-debug/Makefile&quot;  VERBOSE=1 install/strip"/>
+					<CompileFile command="/usr/bin/make -j6 -f &quot;/home/andre/wrk3/simploce/pt-cgmd/simulation/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j6 -f &quot;/home/andre/wrk3/simploce/pt-cgmd/simulation/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j6 -f &quot;/home/andre/wrk3/simploce/pt-cgmd/simulation/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="install/local">
+				<Option working_dir="/home/andre/wrk3/simploce/pt-cgmd/simulation/cmake-build-debug"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j6 -f &quot;/home/andre/wrk3/simploce/pt-cgmd/simulation/cmake-build-debug/Makefile&quot;  VERBOSE=1 install/local"/>
+					<CompileFile command="/usr/bin/make -j6 -f &quot;/home/andre/wrk3/simploce/pt-cgmd/simulation/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j6 -f &quot;/home/andre/wrk3/simploce/pt-cgmd/simulation/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j6 -f &quot;/home/andre/wrk3/simploce/pt-cgmd/simulation/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="simulation">
+				<Option output="/home/andre/wrk3/simploce/pt-cgmd/simulation/cmake-build-debug/libsimulation.so" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/home/andre/wrk3/simploce/pt-cgmd/simulation/cmake-build-debug"/>
+				<Option object_output="./"/>
+				<Option type="3"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add directory="/home/andre/include"/>
+					<Add directory="/home/andre/wrk3/simploce/pt-cgmd/simulation/include"/>
+					<Add directory="/usr/include/c++/9"/>
+					<Add directory="/usr/include/x86_64-linux-gnu/c++/9"/>
+					<Add directory="/usr/include/c++/9/backward"/>
+					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/9/include"/>
+					<Add directory="/usr/local/include"/>
+					<Add directory="/usr/include/x86_64-linux-gnu"/>
+					<Add directory="/usr/include"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j6 -f &quot;/home/andre/wrk3/simploce/pt-cgmd/simulation/cmake-build-debug/Makefile&quot;  VERBOSE=1 simulation"/>
+					<CompileFile command="/usr/bin/make -j6 -f &quot;/home/andre/wrk3/simploce/pt-cgmd/simulation/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j6 -f &quot;/home/andre/wrk3/simploce/pt-cgmd/simulation/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j6 -f &quot;/home/andre/wrk3/simploce/pt-cgmd/simulation/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="simulation/fast">
+				<Option output="/home/andre/wrk3/simploce/pt-cgmd/simulation/cmake-build-debug/libsimulation.so" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/home/andre/wrk3/simploce/pt-cgmd/simulation/cmake-build-debug"/>
+				<Option object_output="./"/>
+				<Option type="3"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add directory="/home/andre/include"/>
+					<Add directory="/home/andre/wrk3/simploce/pt-cgmd/simulation/include"/>
+					<Add directory="/usr/include/c++/9"/>
+					<Add directory="/usr/include/x86_64-linux-gnu/c++/9"/>
+					<Add directory="/usr/include/c++/9/backward"/>
+					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/9/include"/>
+					<Add directory="/usr/local/include"/>
+					<Add directory="/usr/include/x86_64-linux-gnu"/>
+					<Add directory="/usr/include"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j6 -f &quot;/home/andre/wrk3/simploce/pt-cgmd/simulation/cmake-build-debug/Makefile&quot;  VERBOSE=1 simulation/fast"/>
+					<CompileFile command="/usr/bin/make -j6 -f &quot;/home/andre/wrk3/simploce/pt-cgmd/simulation/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j6 -f &quot;/home/andre/wrk3/simploce/pt-cgmd/simulation/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j6 -f &quot;/home/andre/wrk3/simploce/pt-cgmd/simulation/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="edit_cache">
+				<Option working_dir="/home/andre/wrk3/simploce/pt-cgmd/simulation/cmake-build-debug"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j6 -f &quot;/home/andre/wrk3/simploce/pt-cgmd/simulation/cmake-build-debug/Makefile&quot;  VERBOSE=1 edit_cache"/>
+					<CompileFile command="/usr/bin/make -j6 -f &quot;/home/andre/wrk3/simploce/pt-cgmd/simulation/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j6 -f &quot;/home/andre/wrk3/simploce/pt-cgmd/simulation/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j6 -f &quot;/home/andre/wrk3/simploce/pt-cgmd/simulation/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="rebuild_cache">
+				<Option working_dir="/home/andre/wrk3/simploce/pt-cgmd/simulation/cmake-build-debug"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j6 -f &quot;/home/andre/wrk3/simploce/pt-cgmd/simulation/cmake-build-debug/Makefile&quot;  VERBOSE=1 rebuild_cache"/>
+					<CompileFile command="/usr/bin/make -j6 -f &quot;/home/andre/wrk3/simploce/pt-cgmd/simulation/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j6 -f &quot;/home/andre/wrk3/simploce/pt-cgmd/simulation/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j6 -f &quot;/home/andre/wrk3/simploce/pt-cgmd/simulation/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="install">
+				<Option working_dir="/home/andre/wrk3/simploce/pt-cgmd/simulation/cmake-build-debug"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j6 -f &quot;/home/andre/wrk3/simploce/pt-cgmd/simulation/cmake-build-debug/Makefile&quot;  VERBOSE=1 install"/>
+					<CompileFile command="/usr/bin/make -j6 -f &quot;/home/andre/wrk3/simploce/pt-cgmd/simulation/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j6 -f &quot;/home/andre/wrk3/simploce/pt-cgmd/simulation/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j6 -f &quot;/home/andre/wrk3/simploce/pt-cgmd/simulation/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="list_install_components">
+				<Option working_dir="/home/andre/wrk3/simploce/pt-cgmd/simulation/cmake-build-debug"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j6 -f &quot;/home/andre/wrk3/simploce/pt-cgmd/simulation/cmake-build-debug/Makefile&quot;  VERBOSE=1 list_install_components"/>
+					<CompileFile command="/usr/bin/make -j6 -f &quot;/home/andre/wrk3/simploce/pt-cgmd/simulation/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j6 -f &quot;/home/andre/wrk3/simploce/pt-cgmd/simulation/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j6 -f &quot;/home/andre/wrk3/simploce/pt-cgmd/simulation/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="grid-cells-test">
+				<Option output="/home/andre/wrk3/simploce/pt-cgmd/simulation/cmake-build-debug/tests/grid-cells-test" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/home/andre/wrk3/simploce/pt-cgmd/simulation/cmake-build-debug/tests"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add directory="/home/andre/include"/>
+					<Add directory="/home/andre/wrk3/simploce/pt-cgmd/simulation/include"/>
+					<Add directory="/usr/include/c++/9"/>
+					<Add directory="/usr/include/x86_64-linux-gnu/c++/9"/>
+					<Add directory="/usr/include/c++/9/backward"/>
+					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/9/include"/>
+					<Add directory="/usr/local/include"/>
+					<Add directory="/usr/include/x86_64-linux-gnu"/>
+					<Add directory="/usr/include"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j6 -f &quot;/home/andre/wrk3/simploce/pt-cgmd/simulation/cmake-build-debug/tests/Makefile&quot;  VERBOSE=1 grid-cells-test"/>
+					<CompileFile command="/usr/bin/make -j6 -f &quot;/home/andre/wrk3/simploce/pt-cgmd/simulation/cmake-build-debug/tests/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j6 -f &quot;/home/andre/wrk3/simploce/pt-cgmd/simulation/cmake-build-debug/tests/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j6 -f &quot;/home/andre/wrk3/simploce/pt-cgmd/simulation/cmake-build-debug/tests/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="grid-cells-test/fast">
+				<Option output="/home/andre/wrk3/simploce/pt-cgmd/simulation/cmake-build-debug/tests/grid-cells-test" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/home/andre/wrk3/simploce/pt-cgmd/simulation/cmake-build-debug/tests"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add directory="/home/andre/include"/>
+					<Add directory="/home/andre/wrk3/simploce/pt-cgmd/simulation/include"/>
+					<Add directory="/usr/include/c++/9"/>
+					<Add directory="/usr/include/x86_64-linux-gnu/c++/9"/>
+					<Add directory="/usr/include/c++/9/backward"/>
+					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/9/include"/>
+					<Add directory="/usr/local/include"/>
+					<Add directory="/usr/include/x86_64-linux-gnu"/>
+					<Add directory="/usr/include"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j6 -f &quot;/home/andre/wrk3/simploce/pt-cgmd/simulation/cmake-build-debug/tests/Makefile&quot;  VERBOSE=1 grid-cells-test/fast"/>
+					<CompileFile command="/usr/bin/make -j6 -f &quot;/home/andre/wrk3/simploce/pt-cgmd/simulation/cmake-build-debug/tests/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j6 -f &quot;/home/andre/wrk3/simploce/pt-cgmd/simulation/cmake-build-debug/tests/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j6 -f &quot;/home/andre/wrk3/simploce/pt-cgmd/simulation/cmake-build-debug/tests/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="pair-list-test">
+				<Option output="/home/andre/wrk3/simploce/pt-cgmd/simulation/cmake-build-debug/tests/pair-list-test" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/home/andre/wrk3/simploce/pt-cgmd/simulation/cmake-build-debug/tests"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add directory="/home/andre/include"/>
+					<Add directory="/home/andre/wrk3/simploce/pt-cgmd/simulation/include"/>
+					<Add directory="/usr/include/c++/9"/>
+					<Add directory="/usr/include/x86_64-linux-gnu/c++/9"/>
+					<Add directory="/usr/include/c++/9/backward"/>
+					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/9/include"/>
+					<Add directory="/usr/local/include"/>
+					<Add directory="/usr/include/x86_64-linux-gnu"/>
+					<Add directory="/usr/include"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j6 -f &quot;/home/andre/wrk3/simploce/pt-cgmd/simulation/cmake-build-debug/tests/Makefile&quot;  VERBOSE=1 pair-list-test"/>
+					<CompileFile command="/usr/bin/make -j6 -f &quot;/home/andre/wrk3/simploce/pt-cgmd/simulation/cmake-build-debug/tests/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j6 -f &quot;/home/andre/wrk3/simploce/pt-cgmd/simulation/cmake-build-debug/tests/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j6 -f &quot;/home/andre/wrk3/simploce/pt-cgmd/simulation/cmake-build-debug/tests/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="pair-list-test/fast">
+				<Option output="/home/andre/wrk3/simploce/pt-cgmd/simulation/cmake-build-debug/tests/pair-list-test" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/home/andre/wrk3/simploce/pt-cgmd/simulation/cmake-build-debug/tests"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add directory="/home/andre/include"/>
+					<Add directory="/home/andre/wrk3/simploce/pt-cgmd/simulation/include"/>
+					<Add directory="/usr/include/c++/9"/>
+					<Add directory="/usr/include/x86_64-linux-gnu/c++/9"/>
+					<Add directory="/usr/include/c++/9/backward"/>
+					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/9/include"/>
+					<Add directory="/usr/local/include"/>
+					<Add directory="/usr/include/x86_64-linux-gnu"/>
+					<Add directory="/usr/include"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j6 -f &quot;/home/andre/wrk3/simploce/pt-cgmd/simulation/cmake-build-debug/tests/Makefile&quot;  VERBOSE=1 pair-list-test/fast"/>
+					<CompileFile command="/usr/bin/make -j6 -f &quot;/home/andre/wrk3/simploce/pt-cgmd/simulation/cmake-build-debug/tests/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j6 -f &quot;/home/andre/wrk3/simploce/pt-cgmd/simulation/cmake-build-debug/tests/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j6 -f &quot;/home/andre/wrk3/simploce/pt-cgmd/simulation/cmake-build-debug/tests/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="displacer-test">
+				<Option output="/home/andre/wrk3/simploce/pt-cgmd/simulation/cmake-build-debug/tests/displacer-test" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/home/andre/wrk3/simploce/pt-cgmd/simulation/cmake-build-debug/tests"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add directory="/home/andre/include"/>
+					<Add directory="/home/andre/wrk3/simploce/pt-cgmd/simulation/include"/>
+					<Add directory="/usr/include/c++/9"/>
+					<Add directory="/usr/include/x86_64-linux-gnu/c++/9"/>
+					<Add directory="/usr/include/c++/9/backward"/>
+					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/9/include"/>
+					<Add directory="/usr/local/include"/>
+					<Add directory="/usr/include/x86_64-linux-gnu"/>
+					<Add directory="/usr/include"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j6 -f &quot;/home/andre/wrk3/simploce/pt-cgmd/simulation/cmake-build-debug/tests/Makefile&quot;  VERBOSE=1 displacer-test"/>
+					<CompileFile command="/usr/bin/make -j6 -f &quot;/home/andre/wrk3/simploce/pt-cgmd/simulation/cmake-build-debug/tests/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j6 -f &quot;/home/andre/wrk3/simploce/pt-cgmd/simulation/cmake-build-debug/tests/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j6 -f &quot;/home/andre/wrk3/simploce/pt-cgmd/simulation/cmake-build-debug/tests/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="displacer-test/fast">
+				<Option output="/home/andre/wrk3/simploce/pt-cgmd/simulation/cmake-build-debug/tests/displacer-test" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/home/andre/wrk3/simploce/pt-cgmd/simulation/cmake-build-debug/tests"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add directory="/home/andre/include"/>
+					<Add directory="/home/andre/wrk3/simploce/pt-cgmd/simulation/include"/>
+					<Add directory="/usr/include/c++/9"/>
+					<Add directory="/usr/include/x86_64-linux-gnu/c++/9"/>
+					<Add directory="/usr/include/c++/9/backward"/>
+					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/9/include"/>
+					<Add directory="/usr/local/include"/>
+					<Add directory="/usr/include/x86_64-linux-gnu"/>
+					<Add directory="/usr/include"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j6 -f &quot;/home/andre/wrk3/simploce/pt-cgmd/simulation/cmake-build-debug/tests/Makefile&quot;  VERBOSE=1 displacer-test/fast"/>
+					<CompileFile command="/usr/bin/make -j6 -f &quot;/home/andre/wrk3/simploce/pt-cgmd/simulation/cmake-build-debug/tests/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j6 -f &quot;/home/andre/wrk3/simploce/pt-cgmd/simulation/cmake-build-debug/tests/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j6 -f &quot;/home/andre/wrk3/simploce/pt-cgmd/simulation/cmake-build-debug/tests/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="pt-pairlist-test">
+				<Option output="/home/andre/wrk3/simploce/pt-cgmd/simulation/cmake-build-debug/tests/pt-pairlist-test" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/home/andre/wrk3/simploce/pt-cgmd/simulation/cmake-build-debug/tests"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add directory="/home/andre/include"/>
+					<Add directory="/home/andre/wrk3/simploce/pt-cgmd/simulation/include"/>
+					<Add directory="/usr/include/c++/9"/>
+					<Add directory="/usr/include/x86_64-linux-gnu/c++/9"/>
+					<Add directory="/usr/include/c++/9/backward"/>
+					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/9/include"/>
+					<Add directory="/usr/local/include"/>
+					<Add directory="/usr/include/x86_64-linux-gnu"/>
+					<Add directory="/usr/include"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j6 -f &quot;/home/andre/wrk3/simploce/pt-cgmd/simulation/cmake-build-debug/tests/Makefile&quot;  VERBOSE=1 pt-pairlist-test"/>
+					<CompileFile command="/usr/bin/make -j6 -f &quot;/home/andre/wrk3/simploce/pt-cgmd/simulation/cmake-build-debug/tests/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j6 -f &quot;/home/andre/wrk3/simploce/pt-cgmd/simulation/cmake-build-debug/tests/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j6 -f &quot;/home/andre/wrk3/simploce/pt-cgmd/simulation/cmake-build-debug/tests/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="pt-pairlist-test/fast">
+				<Option output="/home/andre/wrk3/simploce/pt-cgmd/simulation/cmake-build-debug/tests/pt-pairlist-test" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/home/andre/wrk3/simploce/pt-cgmd/simulation/cmake-build-debug/tests"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add directory="/home/andre/include"/>
+					<Add directory="/home/andre/wrk3/simploce/pt-cgmd/simulation/include"/>
+					<Add directory="/usr/include/c++/9"/>
+					<Add directory="/usr/include/x86_64-linux-gnu/c++/9"/>
+					<Add directory="/usr/include/c++/9/backward"/>
+					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/9/include"/>
+					<Add directory="/usr/local/include"/>
+					<Add directory="/usr/include/x86_64-linux-gnu"/>
+					<Add directory="/usr/include"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j6 -f &quot;/home/andre/wrk3/simploce/pt-cgmd/simulation/cmake-build-debug/tests/Makefile&quot;  VERBOSE=1 pt-pairlist-test/fast"/>
+					<CompileFile command="/usr/bin/make -j6 -f &quot;/home/andre/wrk3/simploce/pt-cgmd/simulation/cmake-build-debug/tests/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j6 -f &quot;/home/andre/wrk3/simploce/pt-cgmd/simulation/cmake-build-debug/tests/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j6 -f &quot;/home/andre/wrk3/simploce/pt-cgmd/simulation/cmake-build-debug/tests/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="simulation-model-factory-test">
+				<Option output="/home/andre/wrk3/simploce/pt-cgmd/simulation/cmake-build-debug/tests/simulation-model-factory-test" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/home/andre/wrk3/simploce/pt-cgmd/simulation/cmake-build-debug/tests"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add directory="/home/andre/include"/>
+					<Add directory="/home/andre/wrk3/simploce/pt-cgmd/simulation/include"/>
+					<Add directory="/usr/include/c++/9"/>
+					<Add directory="/usr/include/x86_64-linux-gnu/c++/9"/>
+					<Add directory="/usr/include/c++/9/backward"/>
+					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/9/include"/>
+					<Add directory="/usr/local/include"/>
+					<Add directory="/usr/include/x86_64-linux-gnu"/>
+					<Add directory="/usr/include"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j6 -f &quot;/home/andre/wrk3/simploce/pt-cgmd/simulation/cmake-build-debug/tests/Makefile&quot;  VERBOSE=1 simulation-model-factory-test"/>
+					<CompileFile command="/usr/bin/make -j6 -f &quot;/home/andre/wrk3/simploce/pt-cgmd/simulation/cmake-build-debug/tests/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j6 -f &quot;/home/andre/wrk3/simploce/pt-cgmd/simulation/cmake-build-debug/tests/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j6 -f &quot;/home/andre/wrk3/simploce/pt-cgmd/simulation/cmake-build-debug/tests/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="simulation-model-factory-test/fast">
+				<Option output="/home/andre/wrk3/simploce/pt-cgmd/simulation/cmake-build-debug/tests/simulation-model-factory-test" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/home/andre/wrk3/simploce/pt-cgmd/simulation/cmake-build-debug/tests"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add directory="/home/andre/include"/>
+					<Add directory="/home/andre/wrk3/simploce/pt-cgmd/simulation/include"/>
+					<Add directory="/usr/include/c++/9"/>
+					<Add directory="/usr/include/x86_64-linux-gnu/c++/9"/>
+					<Add directory="/usr/include/c++/9/backward"/>
+					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/9/include"/>
+					<Add directory="/usr/local/include"/>
+					<Add directory="/usr/include/x86_64-linux-gnu"/>
+					<Add directory="/usr/include"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j6 -f &quot;/home/andre/wrk3/simploce/pt-cgmd/simulation/cmake-build-debug/tests/Makefile&quot;  VERBOSE=1 simulation-model-factory-test/fast"/>
+					<CompileFile command="/usr/bin/make -j6 -f &quot;/home/andre/wrk3/simploce/pt-cgmd/simulation/cmake-build-debug/tests/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j6 -f &quot;/home/andre/wrk3/simploce/pt-cgmd/simulation/cmake-build-debug/tests/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j6 -f &quot;/home/andre/wrk3/simploce/pt-cgmd/simulation/cmake-build-debug/tests/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="simulation-test">
+				<Option output="/home/andre/wrk3/simploce/pt-cgmd/simulation/cmake-build-debug/tests/simulation-test" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/home/andre/wrk3/simploce/pt-cgmd/simulation/cmake-build-debug/tests"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add directory="/home/andre/include"/>
+					<Add directory="/home/andre/wrk3/simploce/pt-cgmd/simulation/include"/>
+					<Add directory="/usr/include/c++/9"/>
+					<Add directory="/usr/include/x86_64-linux-gnu/c++/9"/>
+					<Add directory="/usr/include/c++/9/backward"/>
+					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/9/include"/>
+					<Add directory="/usr/local/include"/>
+					<Add directory="/usr/include/x86_64-linux-gnu"/>
+					<Add directory="/usr/include"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j6 -f &quot;/home/andre/wrk3/simploce/pt-cgmd/simulation/cmake-build-debug/tests/Makefile&quot;  VERBOSE=1 simulation-test"/>
+					<CompileFile command="/usr/bin/make -j6 -f &quot;/home/andre/wrk3/simploce/pt-cgmd/simulation/cmake-build-debug/tests/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j6 -f &quot;/home/andre/wrk3/simploce/pt-cgmd/simulation/cmake-build-debug/tests/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j6 -f &quot;/home/andre/wrk3/simploce/pt-cgmd/simulation/cmake-build-debug/tests/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="simulation-test/fast">
+				<Option output="/home/andre/wrk3/simploce/pt-cgmd/simulation/cmake-build-debug/tests/simulation-test" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/home/andre/wrk3/simploce/pt-cgmd/simulation/cmake-build-debug/tests"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add directory="/home/andre/include"/>
+					<Add directory="/home/andre/wrk3/simploce/pt-cgmd/simulation/include"/>
+					<Add directory="/usr/include/c++/9"/>
+					<Add directory="/usr/include/x86_64-linux-gnu/c++/9"/>
+					<Add directory="/usr/include/c++/9/backward"/>
+					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/9/include"/>
+					<Add directory="/usr/local/include"/>
+					<Add directory="/usr/include/x86_64-linux-gnu"/>
+					<Add directory="/usr/include"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j6 -f &quot;/home/andre/wrk3/simploce/pt-cgmd/simulation/cmake-build-debug/tests/Makefile&quot;  VERBOSE=1 simulation-test/fast"/>
+					<CompileFile command="/usr/bin/make -j6 -f &quot;/home/andre/wrk3/simploce/pt-cgmd/simulation/cmake-build-debug/tests/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j6 -f &quot;/home/andre/wrk3/simploce/pt-cgmd/simulation/cmake-build-debug/tests/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j6 -f &quot;/home/andre/wrk3/simploce/pt-cgmd/simulation/cmake-build-debug/tests/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="analyzers-test">
+				<Option output="/home/andre/wrk3/simploce/pt-cgmd/simulation/cmake-build-debug/tests/analyzers-test" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/home/andre/wrk3/simploce/pt-cgmd/simulation/cmake-build-debug/tests"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add directory="/home/andre/include"/>
+					<Add directory="/home/andre/wrk3/simploce/pt-cgmd/simulation/include"/>
+					<Add directory="/usr/include/c++/9"/>
+					<Add directory="/usr/include/x86_64-linux-gnu/c++/9"/>
+					<Add directory="/usr/include/c++/9/backward"/>
+					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/9/include"/>
+					<Add directory="/usr/local/include"/>
+					<Add directory="/usr/include/x86_64-linux-gnu"/>
+					<Add directory="/usr/include"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j6 -f &quot;/home/andre/wrk3/simploce/pt-cgmd/simulation/cmake-build-debug/tests/Makefile&quot;  VERBOSE=1 analyzers-test"/>
+					<CompileFile command="/usr/bin/make -j6 -f &quot;/home/andre/wrk3/simploce/pt-cgmd/simulation/cmake-build-debug/tests/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j6 -f &quot;/home/andre/wrk3/simploce/pt-cgmd/simulation/cmake-build-debug/tests/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j6 -f &quot;/home/andre/wrk3/simploce/pt-cgmd/simulation/cmake-build-debug/tests/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="analyzers-test/fast">
+				<Option output="/home/andre/wrk3/simploce/pt-cgmd/simulation/cmake-build-debug/tests/analyzers-test" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/home/andre/wrk3/simploce/pt-cgmd/simulation/cmake-build-debug/tests"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add directory="/home/andre/include"/>
+					<Add directory="/home/andre/wrk3/simploce/pt-cgmd/simulation/include"/>
+					<Add directory="/usr/include/c++/9"/>
+					<Add directory="/usr/include/x86_64-linux-gnu/c++/9"/>
+					<Add directory="/usr/include/c++/9/backward"/>
+					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/9/include"/>
+					<Add directory="/usr/local/include"/>
+					<Add directory="/usr/include/x86_64-linux-gnu"/>
+					<Add directory="/usr/include"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j6 -f &quot;/home/andre/wrk3/simploce/pt-cgmd/simulation/cmake-build-debug/tests/Makefile&quot;  VERBOSE=1 analyzers-test/fast"/>
+					<CompileFile command="/usr/bin/make -j6 -f &quot;/home/andre/wrk3/simploce/pt-cgmd/simulation/cmake-build-debug/tests/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j6 -f &quot;/home/andre/wrk3/simploce/pt-cgmd/simulation/cmake-build-debug/tests/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j6 -f &quot;/home/andre/wrk3/simploce/pt-cgmd/simulation/cmake-build-debug/tests/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="pdb-test">
+				<Option output="/home/andre/wrk3/simploce/pt-cgmd/simulation/cmake-build-debug/tests/pdb-test" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/home/andre/wrk3/simploce/pt-cgmd/simulation/cmake-build-debug/tests"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add directory="/home/andre/include"/>
+					<Add directory="/home/andre/wrk3/simploce/pt-cgmd/simulation/include"/>
+					<Add directory="/usr/include/c++/9"/>
+					<Add directory="/usr/include/x86_64-linux-gnu/c++/9"/>
+					<Add directory="/usr/include/c++/9/backward"/>
+					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/9/include"/>
+					<Add directory="/usr/local/include"/>
+					<Add directory="/usr/include/x86_64-linux-gnu"/>
+					<Add directory="/usr/include"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j6 -f &quot;/home/andre/wrk3/simploce/pt-cgmd/simulation/cmake-build-debug/tests/Makefile&quot;  VERBOSE=1 pdb-test"/>
+					<CompileFile command="/usr/bin/make -j6 -f &quot;/home/andre/wrk3/simploce/pt-cgmd/simulation/cmake-build-debug/tests/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j6 -f &quot;/home/andre/wrk3/simploce/pt-cgmd/simulation/cmake-build-debug/tests/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j6 -f &quot;/home/andre/wrk3/simploce/pt-cgmd/simulation/cmake-build-debug/tests/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="pdb-test/fast">
+				<Option output="/home/andre/wrk3/simploce/pt-cgmd/simulation/cmake-build-debug/tests/pdb-test" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/home/andre/wrk3/simploce/pt-cgmd/simulation/cmake-build-debug/tests"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add directory="/home/andre/include"/>
+					<Add directory="/home/andre/wrk3/simploce/pt-cgmd/simulation/include"/>
+					<Add directory="/usr/include/c++/9"/>
+					<Add directory="/usr/include/x86_64-linux-gnu/c++/9"/>
+					<Add directory="/usr/include/c++/9/backward"/>
+					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/9/include"/>
+					<Add directory="/usr/local/include"/>
+					<Add directory="/usr/include/x86_64-linux-gnu"/>
+					<Add directory="/usr/include"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j6 -f &quot;/home/andre/wrk3/simploce/pt-cgmd/simulation/cmake-build-debug/tests/Makefile&quot;  VERBOSE=1 pdb-test/fast"/>
+					<CompileFile command="/usr/bin/make -j6 -f &quot;/home/andre/wrk3/simploce/pt-cgmd/simulation/cmake-build-debug/tests/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j6 -f &quot;/home/andre/wrk3/simploce/pt-cgmd/simulation/cmake-build-debug/tests/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j6 -f &quot;/home/andre/wrk3/simploce/pt-cgmd/simulation/cmake-build-debug/tests/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+		</Build>
+		<Unit filename="/home/andre/wrk3/simploce/pt-cgmd/simulation/src/acid-base-solution.cpp">
+			<Option target="simulation"/>
+		</Unit>
+		<Unit filename="/home/andre/wrk3/simploce/pt-cgmd/simulation/src/analysis.cpp">
+			<Option target="simulation"/>
+		</Unit>
+		<Unit filename="/home/andre/wrk3/simploce/pt-cgmd/simulation/src/cell-lists.cpp">
+			<Option target="simulation"/>
+		</Unit>
+		<Unit filename="/home/andre/wrk3/simploce/pt-cgmd/simulation/src/cg-electrolyte.cpp">
+			<Option target="simulation"/>
+		</Unit>
+		<Unit filename="/home/andre/wrk3/simploce/pt-cgmd/simulation/src/cg-hp.cpp">
+			<Option target="simulation"/>
+		</Unit>
+		<Unit filename="/home/andre/wrk3/simploce/pt-cgmd/simulation/src/cg-lj-fluid.cpp">
+			<Option target="simulation"/>
+		</Unit>
+		<Unit filename="/home/andre/wrk3/simploce/pt-cgmd/simulation/src/cg-pol-water.cpp">
+			<Option target="simulation"/>
+		</Unit>
+		<Unit filename="/home/andre/wrk3/simploce/pt-cgmd/simulation/src/constant-rate-pt.cpp">
+			<Option target="simulation"/>
+		</Unit>
+		<Unit filename="/home/andre/wrk3/simploce/pt-cgmd/simulation/src/distance-lists.cpp">
+			<Option target="simulation"/>
+		</Unit>
+		<Unit filename="/home/andre/wrk3/simploce/pt-cgmd/simulation/src/interactor.cpp">
+			<Option target="simulation"/>
+		</Unit>
+		<Unit filename="/home/andre/wrk3/simploce/pt-cgmd/simulation/src/langevin-leap-frog.cpp">
+			<Option target="simulation"/>
+		</Unit>
+		<Unit filename="/home/andre/wrk3/simploce/pt-cgmd/simulation/src/langevin-velocity-verlet.cpp">
+			<Option target="simulation"/>
+		</Unit>
+		<Unit filename="/home/andre/wrk3/simploce/pt-cgmd/simulation/src/leap-frog.cpp">
+			<Option target="simulation"/>
+		</Unit>
+		<Unit filename="/home/andre/wrk3/simploce/pt-cgmd/simulation/src/lj-coulomb-forces.cpp">
+			<Option target="simulation"/>
+		</Unit>
+		<Unit filename="/home/andre/wrk3/simploce/pt-cgmd/simulation/src/mc.cpp">
+			<Option target="simulation"/>
+		</Unit>
+		<Unit filename="/home/andre/wrk3/simploce/pt-cgmd/simulation/src/no-bc.cpp">
+			<Option target="simulation"/>
+		</Unit>
+		<Unit filename="/home/andre/wrk3/simploce/pt-cgmd/simulation/src/pbc.cpp">
+			<Option target="simulation"/>
+		</Unit>
+		<Unit filename="/home/andre/wrk3/simploce/pt-cgmd/simulation/src/pt-langevin-velocity-verlet.cpp">
+			<Option target="simulation"/>
+		</Unit>
+		<Unit filename="/home/andre/wrk3/simploce/pt-cgmd/simulation/src/pt-pair-list-generator.cpp">
+			<Option target="simulation"/>
+		</Unit>
+		<Unit filename="/home/andre/wrk3/simploce/pt-cgmd/simulation/src/sfactory.cpp">
+			<Option target="simulation"/>
+		</Unit>
+		<Unit filename="/home/andre/wrk3/simploce/pt-cgmd/simulation/src/sim-data.cpp">
+			<Option target="simulation"/>
+		</Unit>
+		<Unit filename="/home/andre/wrk3/simploce/pt-cgmd/simulation/src/sim-model-factory.cpp">
+			<Option target="simulation"/>
+		</Unit>
+		<Unit filename="/home/andre/wrk3/simploce/pt-cgmd/simulation/src/sim-model.cpp">
+			<Option target="simulation"/>
+		</Unit>
+		<Unit filename="/home/andre/wrk3/simploce/pt-cgmd/simulation/src/sim-util.cpp">
+			<Option target="simulation"/>
+		</Unit>
+		<Unit filename="/home/andre/wrk3/simploce/pt-cgmd/simulation/src/simulation.cpp">
+			<Option target="simulation"/>
+		</Unit>
+		<Unit filename="/home/andre/wrk3/simploce/pt-cgmd/simulation/src/velocity-verlet.cpp">
+			<Option target="simulation"/>
+		</Unit>
+		<Unit filename="/home/andre/wrk3/simploce/pt-cgmd/simulation/tests/analyzers-test.cpp">
+			<Option target="analyzers-test"/>
+		</Unit>
+		<Unit filename="/home/andre/wrk3/simploce/pt-cgmd/simulation/tests/displacer-test.cpp">
+			<Option target="displacer-test"/>
+		</Unit>
+		<Unit filename="/home/andre/wrk3/simploce/pt-cgmd/simulation/tests/grid-cells-test.cpp">
+			<Option target="grid-cells-test"/>
+		</Unit>
+		<Unit filename="/home/andre/wrk3/simploce/pt-cgmd/simulation/tests/pair-list-test.cpp">
+			<Option target="pair-list-test"/>
+		</Unit>
+		<Unit filename="/home/andre/wrk3/simploce/pt-cgmd/simulation/tests/pdb-test.cpp">
+			<Option target="pdb-test"/>
+		</Unit>
+		<Unit filename="/home/andre/wrk3/simploce/pt-cgmd/simulation/tests/pt-pairlist-test.cpp">
+			<Option target="pt-pairlist-test"/>
+		</Unit>
+		<Unit filename="/home/andre/wrk3/simploce/pt-cgmd/simulation/tests/simulation-model-factory-test.cpp">
+			<Option target="simulation-model-factory-test"/>
+		</Unit>
+		<Unit filename="/home/andre/wrk3/simploce/pt-cgmd/simulation/tests/simulation-test.cpp">
+			<Option target="simulation-test"/>
+		</Unit>
+		<Unit filename="/home/andre/wrk3/simploce/pt-cgmd/simulation/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\"/>
+		</Unit>
+		<Unit filename="/home/andre/wrk3/simploce/pt-cgmd/simulation/tests/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\tests\"/>
+		</Unit>
+	</Project>
+</CodeBlocks_project_file>

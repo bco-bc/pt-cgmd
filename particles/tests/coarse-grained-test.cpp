@@ -110,14 +110,14 @@ void test1()
     std::clog << "Particle specifications:" << std::endl;
     std::ifstream stream;
     file::open_input(stream, 
-                    "/home/ajuffer/simploce/pt-cgmd/particles/resources/particles-specs.dat");
+                    "resources/particles-specs.dat");
     spec_catalog_ptr_t catalog = ParticleSpecCatalog::create(stream);
     stream.close();
     std::clog << *catalog << std::endl;
     
     std::clog << "Particle model:" << std::endl;
     file::open_input(stream,
-                    "/home/ajuffer/simploce/pt-cgmd/particles/resources/coarse-grained-system.dat");
+                    "resources/coarse-grained-system.dat");
     cg_ptr_t cg2 = CoarseGrained::readFrom(stream, catalog);
     stream.close();
     std::clog << "Number of beads: " << cg2->numberOfParticles() << std::endl; 

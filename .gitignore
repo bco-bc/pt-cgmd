@@ -1,6 +1,1 @@
-/cpputil/dist/
-/cpputil/build/
-/particles/build/
-/particles/dist/
-/simulation/build/
-/simulation/dist/
+*.o

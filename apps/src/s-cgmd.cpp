@@ -1,6 +1,7 @@
-/* 
+/*
+ * Coarse-grained molecular dynamics simulation.
  * File:   s-cgmd.cpp
- * Author: ajuffer
+ * Author: André H. Juffer, Biocenter Oulu, University of Oulu, Finland.
  *
  * Created on September 10, 2019, 2:58 PM
  */
@@ -149,7 +150,7 @@ int main(int argc, char* argv[])
     po::notify(vm);
     
     if ( vm.count("help") || argc == 1) {
-        std::cout << std::endl;
+        std::cout << "Coarse-grained molecular dynamics simulation" << std::endl;
         std::cout << usage << "\n";
         return 0;
     }

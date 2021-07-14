@@ -1,10 +1,4 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
-/* 
  * File:   prot-site-catalog-test.cpp
  * Author: ajuffer
  *
@@ -34,12 +28,12 @@ void test1() {
     
     Atomistic atomistic;
 
-    file::open_input(stream, "/home/ajuffer/simploce//pt-cgmd/particles/resources/protonation-sites.dat");
+    file::open_input(stream, "resources/protonation-sites.dat");
     prot_site_catalog_ptr_t catalog = ProtonationSiteCatalog::create(stream);
     std::cout << *catalog << std::endl;
     stream.close();
     
-    file::open_input(stream, "/home/ajuffer/simploce//pt-cgmd/particles/resources/particles-specs.dat");
+    file::open_input(stream, "resources/particles-specs.dat");
     spec_catalog_ptr_t specs = ParticleSpecCatalog::create(stream);
     std::cout << *specs << std::endl;
     

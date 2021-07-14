@@ -1,0 +1,40 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+../include/simploce/util/cvector_t.hpp
+uconf.hpp
+../include/simploce/util/uconf.hpp
+cmath
+-
+vector
+-
+cassert
+-
+algorithm
+-
+iostream
+-
+iomanip
+-
+array
+-
+
+../include/simploce/util/uconf.hpp
+
+/home/andre/wrk3/simploce/pt-cgmd/cpputil/tests/cvector-test.cpp
+simploce/util/cvector_t.hpp
+/home/andre/wrk3/simploce/pt-cgmd/cpputil/tests/simploce/util/cvector_t.hpp
+cstdlib
+-
+iostream
+-
+cassert
+-
+cmath
+-
+

@@ -1,10 +1,4 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
-/* 
  * File:   read-cg-test.cpp
  * Author: juffer
  *
@@ -27,14 +21,14 @@ void test1() {
     std::cout << "Particle specifications:" << std::endl;
     std::ifstream stream;
     file::open_input(stream, 
-                    "/home/ajuffer/simploce/pt-cgmd/particles/resources/particles-specs.dat");
+                    "resources/particles-specs.dat");
     spec_catalog_ptr_t catalog = ParticleSpecCatalog::create(stream);
     stream.close();
     std::cout << *catalog << std::endl;
     
     std::cout << "Particle model:" << std::endl;
     file::open_input(stream,
-                    "/home/ajuffer/simploce/pt-cgmd/particles/resources/coarse-grained-system.dat");
+                    "resources/coarse-grained-system.dat");
     cg_ptr_t cg = CoarseGrained::readFrom(stream, catalog);
     stream.close();
     std::cout << *cg << std::endl;
