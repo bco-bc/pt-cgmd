@@ -33,7 +33,7 @@
 #define PT_LANGEVIN_VELOCITY_VERLET_HPP
 
 #include "cg-displacer.hpp"
-#include "stypes.hpp"
+#include "s-types.hpp"
 
 namespace simploce {
     
@@ -48,7 +48,7 @@ namespace simploce {
                                              const pt_displacer_ptr_t& displacer);
         
         SimulationData displace(const sim_param_t& param, 
-                                const cg_ptr_t& cg) const override;
+                                const cg_mod_ptr_t& cg) const override;
         
         std::string id() const override;
         

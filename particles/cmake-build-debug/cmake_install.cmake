@@ -2,7 +2,7 @@
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
-  set(CMAKE_INSTALL_PREFIX "/home/andre")
+  set(CMAKE_INSTALL_PREFIX "/localdisk")
 endif()
 string(REGEX REPLACE "/$" "" CMAKE_INSTALL_PREFIX "${CMAKE_INSTALL_PREFIX}")
 
@@ -44,6 +44,11 @@ endif()
 
 if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   # Include the install script for the subdirectory.
+  include("/home/andre/wrk3/simploce/pt-cgmd/particles/cmake-build-debug/apps/cmake_install.cmake")
+endif()
+
+if(NOT CMAKE_INSTALL_LOCAL_ONLY)
+  # Include the install script for the subdirectory.
   include("/home/andre/wrk3/simploce/pt-cgmd/particles/cmake-build-debug/tests/cmake_install.cmake")
 endif()
 
@@ -72,14 +77,14 @@ endif()
 
 if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
   list(APPEND CMAKE_ABSOLUTE_DESTINATION_FILES
-   "/home/andre/resources")
+   "/localdisk/resources")
   if(CMAKE_WARN_ON_ABSOLUTE_INSTALL_DESTINATION)
     message(WARNING "ABSOLUTE path INSTALL DESTINATION : ${CMAKE_ABSOLUTE_DESTINATION_FILES}")
   endif()
   if(CMAKE_ERROR_ON_ABSOLUTE_INSTALL_DESTINATION)
     message(FATAL_ERROR "ABSOLUTE path INSTALL DESTINATION forbidden (by caller): ${CMAKE_ABSOLUTE_DESTINATION_FILES}")
   endif()
-file(INSTALL DESTINATION "/home/andre" TYPE DIRECTORY FILES "/home/andre/wrk3/simploce/pt-cgmd/particles/resources")
+file(INSTALL DESTINATION "/localdisk" TYPE DIRECTORY FILES "/home/andre/wrk3/simploce/pt-cgmd/particles/resources")
 endif()
 
 if(CMAKE_INSTALL_COMPONENT)

@@ -6,7 +6,7 @@
  */
 
 #include "simploce/simulation/pt-pair-list-generator.hpp"
-#include "simploce/simulation/sfactory.hpp"
+#include "simploce/simulation/s-factory.hpp"
 #include <cstdlib>
 #include <iostream>
 #include <memory>

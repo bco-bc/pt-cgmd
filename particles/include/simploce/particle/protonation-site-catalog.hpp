@@ -34,7 +34,7 @@
 
 #include "atomistic.hpp"
 #include "coarse-grained.hpp"
-#include "ptypes.hpp"
+#include "p-types.hpp"
 #include <iostream>
 
 namespace simploce {

@@ -1,4 +1,6 @@
-/home/andre/bin/s-cgmd
-/home/andre/bin/s-dipole-moment
-/home/andre/bin/s-gr
-/home/andre/bin/s-msd
+/localdisk/bin/s-cgmd
+/localdisk/bin/s-dipole-moment
+/localdisk/bin/s-gr
+/localdisk/bin/s-msd
+/localdisk/bin/s-particle-system
+/localdisk/bin/s-validate-particle-system

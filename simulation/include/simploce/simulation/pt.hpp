@@ -33,7 +33,7 @@
 #define PT_HPP
 
 #include "pt-pair-list-generator.hpp"
-#include "stypes.hpp"
+#include "s-types.hpp"
 #include <vector>
 
 namespace simploce {
@@ -59,7 +59,7 @@ namespace simploce {
          * @param pairList Pairs of protonatables possibly involved in proton transfer.
          */
         virtual void transfer(const sim_param_t& param,
-                              const std::vector<cprot_bead_ptr_t>& continuous,
+                              const std::vector<prot_bead_ptr_t>& continuous,
                               const prot_pair_list_t& pairList) const = 0;
     };
 }

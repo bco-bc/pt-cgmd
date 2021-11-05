@@ -1,29 +1,4 @@
 /*
- * The MIT License
- *
- * Copyright 2019 André H. Juffer, Biocenter Oulu
- *
- * Permission is hereby granted, free of charge, to any person obtaining a copy
- * of this software and associated documentation files (the "Software"), to deal
- * in the Software without restriction, including without limitation the rights
- * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- * copies of the Software, and to permit persons to whom the Software is
- * furnished to do so, subject to the following conditions:
- *
- * The above copyright notice and this permission notice shall be included in
- * all copies or substantial portions of the Software.
- *
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
- * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
- * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
- * THE SOFTWARE.
- */
-
-/* 
- * File:   sim-model.cpp
  * Author: André H. Juffer, Biocenter Oulu.
  *
  * Created on September 3, 2019, 12:07 PM
@@ -32,15 +7,14 @@
 #include "simploce/simulation/sim-model.hpp"
 #include "simploce/simulation/interactor.hpp"
 #include "simploce/simulation/pair-list-generator.hpp"
-#include "simploce/simulation/sconf.hpp"
+#include "simploce/simulation/s-conf.hpp"
 #include "simploce/simulation/cg-displacer.hpp"
-#include "simploce/simulation/sfactory.hpp"
-#include "simploce/simulation/sfactory.hpp"
+#include "simploce/simulation/s-factory.hpp"
+#include "simploce/simulation/s-factory.hpp"
 #include "simploce/simulation/no-bc.hpp"
-#include "simploce/particle/coarse-grained.hpp"
+#include "simploce/particle/protonatable-coarse-grained.hpp"
 #include "simploce/particle/bead.hpp"
-#include "simploce/particle/discrete-protonatable-bead.hpp"
-#include "simploce/particle/continuous-protonatable-bead.hpp"
+#include "simploce/particle/protonatable-bead.hpp"
 #include "simploce/util/cube.hpp"
 #include "simploce/simulation/constant-rate-pt.hpp"
 #include <memory>
@@ -55,9 +29,9 @@ namespace simploce {
     {        
     }
 
-    SimulationModel<Bead>::SimulationModel(const cg_ptr_t& cg,
+    SimulationModel<Bead>::SimulationModel(const cg_mod_ptr_t& cg,
                                            const cg_displacer_ptr_t& displacer,                        
-                                           const cg_interactor_ptr_t interactor,
+                                           const cg_interactor_ptr_t& interactor,
                                            const box_ptr_t& box,
                                            const bc_ptr_t& bc) :
        cg_{cg}, displacer_{displacer}, interactor_{interactor}, box_{box}, bc_{bc}
@@ -100,25 +74,24 @@ namespace simploce {
     void 
     SimulationModel<Bead>::saveState(std::ostream& stream)
     {
+        /*
         cg_->doWithAll<void>([&stream] (const std::vector<bead_ptr_t>& beads) {
             for (auto bead: beads) {
                 bead->writeState(stream);
             }
         });
-        cg_->doWithProtBeads<void>([&stream] (const std::vector<dprot_bead_ptr_t>& discrete,
-                                              const std::vector<cprot_bead_ptr_t>& continuous) {
-            for (auto const d : discrete) {
-                d->writeState(stream);
-            }
-            for (auto const c : continuous) {
-                c->writeState(stream);
+        cg_->doWithProtonatableBeads<void>([&stream] (const std::vector<prot_bead_ptr_t>& beads) {
+            for (auto const bead : beads) {
+                bead->writeState(stream);
             }
         });
+         */
     }
     
     void 
     SimulationModel<Bead>::readState(std::istream& stream)
     {
+        /*
          cg_->doWithAll<void>([&stream] (const std::vector<bead_ptr_t>& beads) {
             for (auto bead: beads) {
                 bead->readState(stream);
@@ -132,7 +105,8 @@ namespace simploce {
             for (auto c : continuous) {
                 c->readState(stream);
             }
-        });       
+        });
+         */
     }
     
     void 
@@ -142,7 +116,7 @@ namespace simploce {
         std::string stringBuffer;
         
         // Particles.
-        cg_ = CoarseGrained::readFrom(stream, catalog);
+        cg_ = CoarseGrained::obtainFrom(stream, catalog);
         
         // Simulation box.
         real_t boxSize;

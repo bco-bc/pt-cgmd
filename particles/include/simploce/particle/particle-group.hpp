@@ -1,28 +1,4 @@
 /*
- * The MIT License
- *
- * Copyright 2019 André H. Juffer, Biocenter Oulu
- *
- * Permission is hereby granted, free of charge, to any person obtaining a copy
- * of this software and associated documentation files (the "Software"), to deal
- * in the Software without restriction, including without limitation the rights
- * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- * copies of the Software, and to permit persons to whom the Software is
- * furnished to do so, subject to the following conditions:
- *
- * The above copyright notice and this permission notice shall be included in
- * all copies or substantial portions of the Software.
- *
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
- * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
- * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
- * THE SOFTWARE.
- */
-
-/* 
  * File:   particle-group.hpp
  * Author: André H. Juffer, Biocenter Oulu.
  *
@@ -35,9 +11,10 @@
 #include "bond.hpp"
 #include "particle.hpp"
 #include "particle-group.hpp"
-#include "pproperties.hpp"
-#include "ptypes.hpp"
-#include "pconf.hpp"
+#include "p-properties.hpp"
+#include "p-types.hpp"
+#include "p-conf.hpp"
+#include "simploce/util/util.hpp"
 #include <memory>
 #include <vector>
 #include <set>
@@ -47,10 +24,9 @@
 namespace simploce {
     
   /**
-   * Holds particles that form a logical unit such as a molecule. May include bonds.
-   * Interactions between particles in the same group may be handled separately from 
-   * interactions between particles in different groups.
-   * @param P Particle type.
+   * Holds particles that form a logical unit such as a molecule. May include bonds
+   * between particles.
+   * @tparam P Particle type.
    */
     template <typename P>
     class ParticleGroup {
@@ -67,12 +43,12 @@ namespace simploce {
         using pg_ptr_t = std::shared_ptr<ParticleGroup<P>>;
         
         /**
-         * Particle container type.
+         * Particle pointer container type.
          */
         using p_ptr_cont_t = std::set<p_ptr_t>;
         
         /**
-         * Bond container type.
+         * Bonds container type.
          */
         using bond_cont_t = std::vector<Bond<P>>;
         
@@ -80,24 +56,24 @@ namespace simploce {
          * Constructor. Particles, no bonds.
          * @param particles Constituting particles.
          */
-        ParticleGroup(const p_ptr_cont_t& particles);
+        explicit ParticleGroup(const p_ptr_cont_t& particles);
         
         /**
          * Constructor. Particles and bonds.
          * @param particles Constituting particles.
          * @param bonds Bonds. Particles forming bonds must be constituting particles.
          */
-        ParticleGroup(const p_ptr_cont_t& particles, 
-                      const bond_cont_t& bonds);
+        explicit ParticleGroup(const p_ptr_cont_t& particles,
+                               const bond_cont_t& bonds);
         
         /**
          * Constructor.
          * @param particles Constituting particles.
-         * @param pairs Holds identifiers of particles forming bonds. The 
+         * @param bonds Holds identifiers of particles forming bonds. The
          * particles must be constituting particles.
          */
         ParticleGroup(const std::vector<p_ptr_t>& particles, 
-                      const std::vector<id_pair_t>& pairs);
+                      const std::vector<id_pair_t>& bonds);
         
         // Noncopyable
         ParticleGroup(const ParticleGroup&) = delete;
@@ -109,6 +85,12 @@ namespace simploce {
          * @return Result.
          */
         bool operator == (const ParticleGroup& group) { return id_ == group.id_; }
+
+        /**
+         * Returns group identifier.
+         * @return Identifier.
+         */
+        std::size_t id() const { return id_; }
         
         /**
          * Is the given particle in this group.
@@ -116,17 +98,18 @@ namespace simploce {
          * @return Result.
          */
         bool contains(const p_ptr_t& p) const;
+
         /**
-         * Returns group's charge.
+         * Returns group's total charge.
          * @return Charge.
          */
-        charge_t charge() const { return properties::charge<P>(particles_); }
+        virtual charge_t charge() const { return properties::charge<P>(particles_); }
         
         /**
-         * Returns group's mass.
+         * Returns group's total mass.
          * @return Mass.
          */
-        mass_t mass() const { return properties::mass<P>(particles_); }
+        virtual mass_t mass() const { return properties::mass<P>(particles_); }
         
         /**
          * Returns this group's position.
@@ -146,7 +129,7 @@ namespace simploce {
         const bond_cont_t& bonds() const { return bonds_; }
         
         /**
-         * Create particle group.
+         * Creates a particle group.
          * @param particles Constituting particles.
          * @param bonds Holds identifiers of particles forming bonds. The 
          * particles must be constituting particles.
@@ -156,12 +139,17 @@ namespace simploce {
                              const std::vector<id_pair_t>& bonds);
         
     private:
-        
+
         static std::size_t ID_;
 
         std::size_t id_;
-        
-        p_ptr_t find_(std::size_t id) const;
+
+        /**
+         * Returns particle with given identifier.
+         * @param id Particle identifier.
+         * @return Particle.
+         */
+        p_ptr_t find_(const id_t& id) const;
         
         void validate_() const;
         
@@ -179,20 +167,20 @@ namespace simploce {
     template <typename P>
     ParticleGroup<P>::ParticleGroup(const p_ptr_cont_t& particles,
                                     const bond_cont_t& bonds) :
-        particles_{particles}, bonds_{bonds}
+        id_{++ID_}, particles_{particles}, bonds_{bonds}
     {
         this->validate_();
     }
     
     template <typename P>
     ParticleGroup<P>::ParticleGroup(const std::vector<p_ptr_t>& particles,
-                                    const std::vector<id_pair_t>& pairs) :
-        particles_{}, bonds_{}
+                                    const std::vector<id_pair_t>& bonds) :
+        id_{++ID_}, particles_{}, bonds_{}
     {
         for (auto p : particles) {
             particles_.insert(p);
         }
-        for (auto pair : pairs) {
+        for (auto pair : bonds) {
             auto p1 = this->find_(pair.first);
             auto p2 = this->find_(pair.second);
             if ( p1 == nullptr || p2 == nullptr ) {
@@ -220,7 +208,7 @@ namespace simploce {
         
     template <typename P>
     typename ParticleGroup<P>::p_ptr_t 
-    ParticleGroup<P>::find_(std::size_t id) const { 
+    ParticleGroup<P>::find_(const id_t& id) const {
         return properties::find<P>(id, particles_); 
     }
     
@@ -230,7 +218,7 @@ namespace simploce {
     {
         if (particles_.empty() ) {
             throw std::domain_error(
-                "ParticleGroup: Must consist of at least two particles"
+                "ParticleGroup: Must consist of at least two particles."
             );
         }
         for (auto p : particles_) {
@@ -244,32 +232,31 @@ namespace simploce {
             if ( !this->contains(bond.getParticleOne()) ||
                  !this->contains(bond.getParticleTwo()) ) {
                 throw std::domain_error(
-                    "Particle in bond of particle group is not in the "
-                    "containing particle group."
+                    "Particle in bond of particle group is not in the containing particle group."
                 );
             }
         }
     }
     
     template <typename P>
-    std::size_t ParticleGroup<P>::ID_ = 0;
+    std::size_t
+    ParticleGroup<P>::ID_ = 0;
     
     template <typename P>
     std::ostream& 
     operator << (std::ostream& stream, 
                  const ParticleGroup<P>& group)
     {        
-        const char space = conf::SPACE;
-        
         stream << group.particles().size() << std::endl;
         for (auto p : group.particles() ) {
-            stream << space << p->id();
+            stream << std::setw(conf::ID_WIDTH) << util::toString(p->id());
         }
         stream << std::endl;
         stream << group.bonds().size() << std::endl;
         for (auto bond : group.bonds() ) {
-            stream << space << bond.getParticleOne()->id()
-                   << space << bond.getParticleTwo()->id();
+            std::string id1 = util::toString(bond.getParticleOne()->id());
+            std::string id2 = util::toString(bond.getParticleTwo()->id());
+            stream << std::setw(conf::ID_WIDTH) << id1 << std::setw(conf::ID_WIDTH) << id2;
         }
         
         return stream;

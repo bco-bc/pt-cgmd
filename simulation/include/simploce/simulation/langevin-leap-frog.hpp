@@ -63,7 +63,7 @@ namespace simploce {
          * @return Kinetic, potential energy, and temperature.
          */
         SimulationData displace(const sim_param_t& param, 
-                                const cg_ptr_t& cg) const override;
+                                const cg_mod_ptr_t& cg) const override;
         
     private:
         

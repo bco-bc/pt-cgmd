@@ -6,13 +6,13 @@
  */
 
 #include "simploce/simulation/sim-model-factory.hpp"
-#include "simploce/simulation/sfactory.hpp"
-#include "simploce/simulation/stypes.hpp"
+#include "simploce/simulation/s-factory.hpp"
+#include "simploce/simulation/s-types.hpp"
 #include "simploce/particle/particle-spec-catalog.hpp"
 #include "simploce/particle/coarse-grained.hpp"
 #include "simploce/util/file.hpp"
 #include "simploce/util/cube.hpp"
-#include "simploce/simulation/sconf.hpp"
+#include "simploce/simulation/s-conf.hpp"
 #include <cstdlib>
 #include <iostream>
 #include <fstream>
@@ -28,7 +28,7 @@ void test1()
     std::cout << "simulation-model-factory-test test 1" << std::endl;
     std::string fileName = "resources/particles-specs.dat";
     std::ifstream stream;
-    file::open_input(stream, fileName);
+    util::open_input_file(stream, fileName);
     spec_catalog_ptr_t catalog = factory::particleSpecCatalog(stream);
     std::cout << *catalog << std::endl;
     
@@ -50,7 +50,7 @@ void test2()
     
     std::string fileName = "resources/particles-specs.dat";
     std::ifstream stream;
-    file::open_input(stream, fileName);
+    util::open_input_file(stream, fileName);
     spec_catalog_ptr_t catalog = factory::particleSpecCatalog(stream);
     //std::cout << *catalog << std::endl;
     
@@ -70,7 +70,7 @@ void test3()
     
     std::string fileName = "resources/particles-specs.dat";
     std::ifstream stream;
-    file::open_input(stream, fileName);
+    util::open_input_file(stream, fileName);
     spec_catalog_ptr_t catalog = factory::particleSpecCatalog(stream);
     //std::cout << *catalog << std::endl;
     
@@ -90,7 +90,7 @@ void test4()
     
     std::string fileName = "resources/particles-specs.dat";
     std::ifstream stream;
-    file::open_input(stream, fileName);
+    util::open_input_file(stream, fileName);
     spec_catalog_ptr_t catalog = factory::particleSpecCatalog(stream);
     //std::cout << *catalog << std::endl;
     
@@ -111,7 +111,7 @@ void test5()
     
     std::string fileName = "resources/particles-specs.dat";
     std::ifstream stream;
-    file::open_input(stream, fileName);
+    util::open_input_file(stream, fileName);
     spec_catalog_ptr_t catalog = factory::particleSpecCatalog(stream);
     //std::cout << *catalog << std::endl;
     

@@ -30,8 +30,8 @@
  */
 
 #include "simploce/simulation/pbc.hpp"
-#include "simploce/simulation/stypes.hpp"
-#include "simploce/simulation/sconf.hpp"
+#include "simploce/simulation/s-types.hpp"
+#include "simploce/simulation/s-conf.hpp"
 #include "simploce/util/util.hpp"
 #include <cmath>
 #include <cassert>

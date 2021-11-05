@@ -33,7 +33,7 @@
 #define AT_FORCEFIELD_HPP
 
 #include "forcefield.hpp"
-#include "simploce/particle/ptypes.hpp"
+#include "simploce/particle/p-types.hpp"
 #include <vector>
 
 namespace simploce {

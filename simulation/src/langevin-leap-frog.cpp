@@ -39,7 +39,7 @@ namespace simploce {
         
     SimulationData 
     LangevinLeapFrog<CoarseGrained>::displace(const sim_param_t& param, 
-                                              const cg_ptr_t& cg) const
+                                              const cg_mod_ptr_t& cg) const
     {
         return SimulationData{};
     }

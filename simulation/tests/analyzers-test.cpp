@@ -12,8 +12,8 @@
 #include "simploce/particle/bead.hpp"
 #include "simploce/particle/particle-spec.hpp"
 #include "simploce/particle/coarse-grained.hpp"
-#include "simploce/simulation/sall.hpp"
-#include "simploce/simulation/stypes.hpp"
+#include "simploce/simulation/s-types.hpp"
+#include "simploce/simulation/s-factory.hpp"
 #include <cstdlib>
 #include <iostream>
 #include <memory>
@@ -27,7 +27,7 @@ static std::vector<bead_group_ptr_t> groups_{};
 void setup()
 {
     CoarseGrained cg;
-    auto spec = ParticleSpec::create("DW", 1.0, 10.0,  0.4);
+    auto spec = ParticleSpec::create("DW", 1.0, 10.0,  0.4, "DW");
     auto bead = cg.addBead(1, "DW", position_t{}, spec);
     all_.push_back(bead);
 }

@@ -1,6 +1,6 @@
 /*
- * File:   protonation-site-test.cpp
- * Author: ajuffer
+ * File:   protonation-site-argon.cpp
+ * Author: André H. Juffer, Biocenter Oulu.
  *
  * Created on September 18, 2019, 3:55 PM
  */
@@ -8,7 +8,7 @@
 #include "simploce/particle/protonation-site.hpp"
 #include "simploce/particle/atom.hpp"
 #include "simploce/particle/particle-spec.hpp"
-#include "simploce/particle/ptypes.hpp"
+#include "simploce/particle/p-types.hpp"
 #include "simploce/particle/atomistic.hpp"
 #include <cstdlib>
 #include <iostream>
@@ -20,55 +20,57 @@ using namespace simploce;
  */
 
 void test1() {
-    std::cout << "protonation-site-test test 1" << std::endl;
-    
     Atomistic atomistic;
     
-    // Identical spec names!
-    spec_ptr_t spec1_dp = ParticleSpec::create("pspec1", 0.0, 1.0, 1.0);
-    spec_ptr_t spec1_p = ParticleSpec::create("pspec1", 1.0, 1.0, 1.0);
-    
-    atom_ptr_t atom1 = atomistic.addAtom(1, "test1", position_t{}, spec1_dp);
-    atom_ptr_t atom2 = atomistic.addAtom(11, "test2", position_t{}, spec1_dp);
-    
-    std::vector<atom_ptr_t> atoms{atom1, atom2};    
-    std::vector<spec_ptr_t> deprotonated{spec1_dp, spec1_dp};    
-    std::vector<spec_ptr_t> protonated{spec1_p, spec1_p};
-    
-    ProtonationSite<Atom> site("test", atoms, deprotonated, protonated);
+    // Deprotonated specification
+    spec_ptr_t O_dp =
+            ParticleSpec::create("O", -1.0, 1.0, 1.0, "O deprotonated");
+    spec_ptr_t O_p =
+            ParticleSpec::create("O", -0.5, 1.0, 1.0, "O protonated");
+
+    // Protonated specifications.
+    spec_ptr_t H_dp =
+            ParticleSpec::create("H", 0.0, 1.0, 1.0, "H deprotonated");
+    spec_ptr_t H_p =
+            ParticleSpec::create("H", 0.5, 1.0, 1.0, "H protonated");
+
+    // Atoms.
+    atom_ptr_t atom1 = atomistic.addAtom("O", O_p);
+    atom_ptr_t atom2 = atomistic.addAtom("H", H_p);
+
+    std::vector<atom_ptr_t> atoms{atom1, atom2};
+    std::vector<spec_ptr_t> deprotonated{O_dp, H_dp};
+    std::vector<spec_ptr_t> protonated{O_p, H_p};
+
+    std::vector<id_pair_t> bonds{};
+    id_pair_t pair = std::make_pair(atom1->id(), atom2->id());
+    bonds.push_back(pair);
+    ProtonationSite<Atom> site("argon", atoms, bonds, deprotonated, protonated);
     
     std::cout << "Is protonated: " << site.isProtonated() << std::endl;
-    
+    std::cout << "Total charge: " << site.charge() << std::endl;
+    std::cout << "Protonation state: " << site.protonationState() << std::endl;
+    std::cout << std::endl;
+
     if ( !site.isProtonated() ) {
         site.protonate();
     }
     std::cout << "Is protonated: " << site.isProtonated() << std::endl;
-    if ( site.isProtonated() ) {
+    std::cout << "Total charge: " << site.charge() << std::endl;
+    std::cout << "Protonation state: " << site.protonationState() << std::endl;
+    std::cout << std::endl;
+
+    if (site.isProtonated() ) {
         site.deprotonate();
     }
+
     std::cout << "Is protonated: " << site.isProtonated() << std::endl;
+    std::cout << "Total charge: " << site.charge() << std::endl;
     std::cout << "Protonation state: " << site.protonationState() << std::endl;
 }
 
-void test2() {
-    std::cout << "protonation-site-test test 2" << std::endl;
-    std::cout << "%TEST_FAILED% time=0 testname=test2 (protonation-site-test) message=error message sample" << std::endl;
-}
-
-int main(int argc, char** argv) {
-    std::cout << "%SUITE_STARTING% protonation-site-test" << std::endl;
-    std::cout << "%SUITE_STARTED%" << std::endl;
-
-    std::cout << "%TEST_STARTED% test1 (protonation-site-test)" << std::endl;
+int main() {
     test1();
-    std::cout << "%TEST_FINISHED% time=0 test1 (protonation-site-test)" << std::endl;
-
-    //std::cout << "%TEST_STARTED% test2 (protonation-site-test)\n" << std::endl;
-    //test2();
-    //std::cout << "%TEST_FINISHED% time=0 test2 (protonation-site-test)" << std::endl;
-
-    std::cout << "%SUITE_FINISHED% time=0" << std::endl;
-
     return (EXIT_SUCCESS);
 }
 

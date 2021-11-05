@@ -1,0 +1,4 @@
+Name #1   Name #2   Type  LJ_C12 (kJ nm^12 mol^-1)  LJ_C6 (kJ nm^6 mol^-1)
+CW        CW        lj    1.298e-03                 0.088
+pCW       pCW       lj    1.298e-03                 0.088
+CW        pCW       lj    1.298e-03                 0.088

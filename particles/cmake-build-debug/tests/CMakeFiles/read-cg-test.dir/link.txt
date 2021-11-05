@@ -1,1 +1,1 @@
-/usr/bin/c++ -g CMakeFiles/read-cg-test.dir/read-cg-test.cpp.o -o read-cg-test   -L/home/andre/lib  -Wl,-rpath,/home/andre/wrk3/simploce/pt-cgmd/particles/cmake-build-debug:/home/andre/lib ../libparticles.so -lcpputil 
+/usr/bin/c++ -g CMakeFiles/read-cg-test.dir/read-cg-test.cpp.o -o read-cg-test   -L/localdisk/lib  -Wl,-rpath,/home/andre/wrk3/simploce/pt-cgmd/particles/cmake-build-debug:/localdisk/lib ../libparticles.so -lutil -lcpputil 

@@ -1,28 +1,4 @@
 /*
- * The MIT License
- *
- * Copyright 2019 André H. Juffer, Biocenter Oulu
- *
- * Permission is hereby granted, free of charge, to any person obtaining a copy
- * of this software and associated documentation files (the "Software"), to deal
- * in the Software without restriction, including without limitation the rights
- * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- * copies of the Software, and to permit persons to whom the Software is
- * furnished to do so, subject to the following conditions:
- *
- * The above copyright notice and this permission notice shall be included in
- * all copies or substantial portions of the Software.
- *
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
- * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
- * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
- * THE SOFTWARE.
- */
-
-/* 
  * File:   atomistic.cpp
  * Author: André H. Juffer, Biocenter Oulu.
  *
@@ -31,63 +7,46 @@
 
 #include "simploce/particle/atomistic.hpp"
 #include "simploce/particle/atom.hpp"
-#include "simploce/particle/protonation-site.hpp"
-#include "simploce/particle/ptypes.hpp"
-#include "simploce/particle/protonation-site-catalog.hpp"
+#include "simploce/particle/p-types.hpp"
 #include <memory>
 
 namespace simploce {
-    
-    static std::size_t 
-    indexGenerator_(const Atomistic& at)
-    {
-        return at.numberOfAtoms();
+
+    at_mod_ptr_t
+    Atomistic::obtainFrom(std::istream& stream, const spec_catalog_ptr_t& catalog) {
+        auto atomistic = factory::atomistic();
+        atomistic->parse(stream, catalog);
+        return atomistic;
     }
-    
-    Atomistic::Atomistic() : ParticleModel<Atom,atom_group_t>{}, protonationSites_{}
-    {        
+
+    Atomistic::Atomistic() : ParticleSystem<Atom,atom_group_t>{} {
     }
     
     atom_ptr_t 
-    Atomistic::addAtom(std::size_t id,
-                       const std::string& name,
-                       const position_t& r, 
+    Atomistic::addAtom(const std::string& name,
                        const spec_ptr_t& spec)
     {
-        int index = indexGenerator_(*this);
-        atom_ptr_t atom = Atom::create(id, index, name, spec);
-        atom->position(r);
-        this->addFree(atom);
-        return atom;
+        return this->addParticle(name, spec);
     }
-    
-    void 
-    Atomistic::protonationSites(const prot_site_catalog_ptr_t& catalog)
-    {
-        protonationSites_ = catalog->lookup(*this);
-    }
-    
-    std::size_t 
-    Atomistic::numberOfProtonationSites() const
-    {
-        return protonationSites_.size();
-    }
-    
-    
-    std::size_t 
-    Atomistic::protonationState() const
-    {
-        std::size_t numberOfProtons{0};
-        for (auto ps : protonationSites_) {
-            numberOfProtons += ps->protonationState();
-        }
-        return numberOfProtons;
-    }  
     
     std::size_t
     Atomistic::numberOfAtoms() const
     {
         return this->numberOfParticles();
+    }
+
+    atom_ptr_t
+    Atomistic::createParticle_(const id_t& id,
+                               int index,
+                               const std::string& name,
+                               const spec_ptr_t& spec) {
+        return Atom::create(id, index, name, spec);
+    }
+
+    std::ostream&
+    operator << (std::ostream& stream, const Atomistic& atomistic) {
+        atomistic.write(stream);
+        return stream;
     }
     
 }

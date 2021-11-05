@@ -56,7 +56,7 @@ namespace simploce {
                                    const real_t& gamma);
         
         void transfer(const sim_param_t& param,
-                      const std::vector<cprot_bead_ptr_t>& continuous,
+                      const std::vector<prot_bead_ptr_t>& continuous,
                       const prot_pair_list_t& pairList) const override;
         
     private:

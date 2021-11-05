@@ -1,0 +1,1 @@
+/usr/bin/c++ -fPIC -g -shared -Wl,-soname,libforcefields.so -o libforcefields.so CMakeFiles/forcefields.dir/src/no_bc.cpp.o 

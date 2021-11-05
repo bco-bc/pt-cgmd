@@ -32,7 +32,7 @@
 #ifndef MC_HPP
 #define MC_HPP
 
-#include "stypes.hpp"
+#include "s-types.hpp"
 #include "simploce/particle/bead.hpp"
 #include <iostream>
 

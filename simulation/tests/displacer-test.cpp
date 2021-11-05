@@ -9,8 +9,8 @@
 #include "simploce/simulation/velocity-verlet.hpp"
 #include "simploce/simulation/langevin-velocity-verlet.hpp"
 #include "simploce/simulation/sim-data.hpp"
-#include "simploce/simulation/sfactory.hpp"
-#include "simploce/simulation/stypes.hpp"
+#include "simploce/simulation/s-factory.hpp"
+#include "simploce/simulation/s-types.hpp"
 #include "simploce/particle/bead.hpp"
 #include "simploce/particle/coarse-grained.hpp"
 #include "simploce/particle/particle-spec-catalog.hpp"
@@ -34,7 +34,7 @@ void test1() {
     
     std::string fileName = "resources/particles-specs.dat";
     std::ifstream stream;
-    file::open_input(stream, fileName);
+    util::open_input_file(stream, fileName);
     spec_catalog_ptr_t catalog = ParticleSpecCatalog::create(stream);
 
     sim_param_t param{};
@@ -49,7 +49,7 @@ void test1() {
     bc_ptr_t bc = factory::pbc(box);
 
     particle_model_fact_ptr_t factory = factory::particleModelFactory(catalog);
-    cg_ptr_t cg = factory->polarizableWater(box);
+    CoarseGrained cg = factory->polarizableWater(box);
     cg_interactor_ptr_t interactor = 
             factory::polarizableWaterInteractor(catalog, box, bc);
     
@@ -66,6 +66,7 @@ void test1() {
     data = lvelocityVerlet->displace(param, cg);
     std::cout << data << std::endl;
     */
+    /*
     cg_ptr_t ptcg = factory->formicAcidSolution(box);
     pt_pair_list_gen_ptr_t generator = factory::protonTransferPairListGenerator(bc);
     pt_displacer_ptr_t ptDisplacer = factory::protonTransferDisplacer();
@@ -74,6 +75,7 @@ void test1() {
                                                                           ptDisplacer);
     SimulationData data = pt->displace(param, ptcg);
     std::cout << data << std::endl;
+     */
 }
 
 int main(int argc, char** argv) {

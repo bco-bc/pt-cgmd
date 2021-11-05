@@ -1,28 +1,4 @@
 /*
- * The MIT License
- *
- * Copyright 2019 André H. Juffer, Biocenter Oulu
- *
- * Permission is hereby granted, free of charge, to any person obtaining a copy
- * of this software and associated documentation files (the "Software"), to deal
- * in the Software without restriction, including without limitation the rights
- * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- * copies of the Software, and to permit persons to whom the Software is
- * furnished to do so, subject to the following conditions:
- *
- * The above copyright notice and this permission notice shall be included in
- * all copies or substantial portions of the Software.
- *
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
- * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
- * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
- * THE SOFTWARE.
- */
-
-/* 
  * File:   protonation-site.hpp
  * Author: André H. Juffer, Biocenter Oulu.
  *
@@ -35,7 +11,9 @@
 #include "protonatable.hpp"
 #include "particle.hpp"
 #include "particle-spec.hpp"
+#include "simploce/util/logger.hpp"
 #include <stdexcept>
+#include <utility>
 #include <vector>
 #include <memory>
 #include <cassert>
@@ -43,145 +21,183 @@
 namespace simploce {
     
     /**
-     * A protonatable entity composed of two or more particles. (De)protonation 
-     * results in a redistribution of charge and mass over the constituting particles. 
-     * A maximum of one proton can be bound or released.
+     * A protonatable particle group. (De)protonation results in a redistribution of
+     * charge and mass over the constituting particles. A maximum of one proton
+     * can be bound or released.
      * @param T Particle type.
      */
     template <typename P>
-    class ProtonationSite: public Protonatable {
+    class ProtonationSite: public ParticleGroup<P> {
     public:
-        
         /**
          * Particle pointer type.
          */
-        using p_ptr_t = std::shared_ptr<P>;
-        
-       /**
-         * Constructor. Creates a protonation site, which initially will be deprotonated.
+        using p_ptr_t = typename ParticleGroup<P>::p_ptr_t;
+
+        /**
+         * Constructor. Creates a protonation site in a deprotonated state.
          * @param name Name, e.g. COOH.
-         * @param particles Constituting particles.
-         * @param deprotonated Specification for the deprotonated state. The order of 
-         * specifications must be according to the constituting particles. Not checked!
-         * @param protonated Specifications for the protonated state. The order of 
-         * specifications must be according to the constituting particles. Not checked!
+         * @param particles Constituting particles. Must contain at least two particle.
+         * @param bonds Holds identifiers of particles forming bonds. Particles
+         * forming bonds must be constituting particles.
+         * @param deprotonatedSpecs Specifications for the deprotonatedSpecs state. The
+         * specification names must match those of the given constituting particles.
+         * @param protonatedSpecs Specifications for the protonatedSpecs state. The
+         * specification names must must match those of the given constituting particles.
          */
-        ProtonationSite(const std::string& name,
-                        const std::vector<p_ptr_t> &particles,
-                        const std::vector<spec_ptr_t> &deprotonated,
-                        const std::vector<spec_ptr_t> &protonated);
+        ProtonationSite(std::string name,
+                        const std::vector<p_ptr_t>& particles,
+                        const std::vector<id_pair_t>& bonds,
+                        const std::vector<spec_ptr_t>& deprotonatedSpecs,
+                        const std::vector<spec_ptr_t>& protonatedSpecs);
+
+        virtual ~ProtonationSite();
         
         /**
          * Returns site name.
          * @return Name.
          */
         std::string name() const;
-    
-        void protonate() override;
-        
-        void deprotonate() override;
-        
-        bool isProtonated() const override;
-        
-        std::size_t protonationState() const override;
-        
-        /**
-         * Returns total charge value.
-         * @return Value.
-         */
-        charge_t charge() const;
-        
+
+        void protonate();
+
+        void deprotonate();
+
+        bool isProtonated() const;
+
+        std::size_t protonationState() const;
+
     private:
+
+        static util::Logger logger_;
+
+        void matchSpecs_(const std::vector<spec_ptr_t>& deprotonatedSpecs,
+                         const std::vector<spec_ptr_t>& protonatedSpecs);
         
         std::string name_;
-        std::vector<p_ptr_t> particles_;
-        std::vector<spec_ptr_t> deprotonated_;
-        std::vector<spec_ptr_t> protonated_;
-        bool proton_;
+        std::vector<spec_ptr_t> deprotonatedSpecs_;
+        std::vector<spec_ptr_t> protonatedSpecs_;
+        bool protonated_;
     };
     
     template <typename P>
-    ProtonationSite<P>::ProtonationSite(const std::string& name,
+    ProtonationSite<P>::ProtonationSite(std::string name,
                                         const std::vector<p_ptr_t>& particles,
-                                        const std::vector<spec_ptr_t>& deprotonated,
-                                        const std::vector<spec_ptr_t>& protonated) :
-        name_(name), particles_{particles}, deprotonated_{deprotonated}, 
-        protonated_{protonated}, proton_{true}
-    {
+                                        const std::vector<id_pair_t>& bonds,
+                                        const std::vector<spec_ptr_t>& deprotonatedSpecs,
+                                        const std::vector<spec_ptr_t>& protonatedSpecs) :
+        ParticleGroup<P>(particles, bonds), name_(std::move(name)),
+        deprotonatedSpecs_{}, protonatedSpecs_{}, protonated_{true} {
         if ( name_.empty() ) {
-            throw std::domain_error(
-                "ProtonationSite: Name must be provided."
-            );
+            std::string message = "A name must be provided.";
+            util::logAndThrow(ProtonationSite<P>::logger_, message);
         }
-        std::size_t size = particles_.size();
+        std::size_t size = this->particles().size();
         if ( size <= 1 ) {
-            throw std::domain_error(
-                "ProtonationSite: Must consist of two or more particles."
-            );
+            std::string message = "Must consist of at least two particles.";
+            util::logAndThrow(ProtonationSite<P>::logger_, message);
         }
-        if ( size != deprotonated_.size() || size != protonated_.size() ) {
-            throw std::domain_error(
-                "ProtonationSite: Number of particles is not equal to number of "
-                "particle specifications."
-            );
-        }   
-        
-        // Initial state is the deprotonated.
+        if (deprotonatedSpecs.size() != size || protonatedSpecs.size() != size ) {
+            std::string message =
+                    "Number of particles is not equal to number of particle specifications.";
+            util::logAndThrow(ProtonationSite<P>::logger_, message);
+        }
+        this->matchSpecs_(deprotonatedSpecs, protonatedSpecs);
         this->deprotonate();
     }
-        
+
     template <typename P>
-    std::string ProtonationSite<P>::name() const 
-    {
+    ProtonationSite<P>::~ProtonationSite<P>() = default;
+
+    template <typename P>
+    std::string
+    ProtonationSite<P>::name() const {
         return name_;
     }
     
     template <typename P>
-    void ProtonationSite<P>::protonate()
-    {
+    void
+    ProtonationSite<P>::protonate() {
         assert( !this->isProtonated() );
-        for (std::size_t index = 0; index != particles_.size(); ++index) {
-            auto p = particles_[index];
-            auto spec = protonated_[index];
-            p->reset_(spec);
+        auto particles = this->particles();
+        for (auto particle : particles) {
+            auto spec = particle->spec();
+            bool found = false;
+            for (auto protonatedSpec : protonatedSpecs_) {
+                if (spec->name() == protonatedSpec->name() ) {
+                    particle->resetSpec(protonatedSpec);
+                }
+            }
         }
-        proton_ = true;
+        protonated_ = true;
     }
     
     template <typename P>
-    void ProtonationSite<P>::deprotonate()
-    {
+    void
+    ProtonationSite<P>::deprotonate() {
         assert( this->isProtonated() );
-        for (std::size_t index = 0; index != particles_.size(); ++index) {
-            auto p = particles_[index];
-            auto spec = deprotonated_[index];
-            p->reset_(spec);
+        auto particles = ParticleGroup<P>::particles();
+        for (auto particle : particles) {
+            auto spec = particle->spec();
+            bool found = false;
+            for (auto deprotonatedSpec : deprotonatedSpecs_) {
+                if (spec->name() == deprotonatedSpec->name() ) {
+                    particle->resetSpec(deprotonatedSpec);
+                }
+            }
         }
-        proton_ = false;
+       protonated_ = false;
     }
     
     template <typename P>
-    bool ProtonationSite<P>::isProtonated() const
-    {
-        return proton_;
+    bool
+    ProtonationSite<P>::isProtonated() const {
+        return protonated_;
     }
     
     template <typename P>
-    std::size_t ProtonationSite<P>::protonationState() const
-    {
+    std::size_t
+    ProtonationSite<P>::protonationState() const {
         return (this->isProtonated() ? 1 : 0);
     }
+
+    template <typename P>
+    util::Logger ProtonationSite<P>::logger_("ProtonationSite");
     
     template <typename P>
-    charge_t ProtonationSite<P>::charge() const
-    {
-        const std::vector<spec_ptr_t>& state = 
-            this->isProtonated() ? protonated_ : deprotonated_;
-        charge_t charge{0};
-        for (auto spec : state) {
-            charge += spec->charge();
+    void
+    ProtonationSite<P>::matchSpecs_(const std::vector<spec_ptr_t>& deprotonatedSpecs,
+                                    const std::vector<spec_ptr_t>& protonatedSpecs) {
+        auto particles = this->particles();
+        for (const auto& particle : particles) {
+            auto name = particle->spec()->name();
+            bool found = false;
+            for (const auto& s: deprotonatedSpecs) {
+                if (name == s->name()) {
+                    this->deprotonatedSpecs_.push_back(s);
+                    found = true;
+                }
+            }
+            if ( !found ) {
+                std::string message =
+                        "Missing spec '" + name + "' for deprotonated state " +
+                        "for site '" + name_ + "'.";
+                util::logAndThrow(ProtonationSite<P>::logger_, message);
+            }
+            found = false;
+            for (const auto& s: protonatedSpecs) {
+                if (name == s->name()) {
+                    this->protonatedSpecs_.push_back(s);
+                    found = true;
+                }
+            }
+            if ( !found ) {
+                std::string message =
+                        "Missing spec '" + name + "' for protonated state " +
+                        "for site '" + name_ + "'.";
+                util::logAndThrow(ProtonationSite<P>::logger_, message);
+            }
         }
-        return charge;
     }
      
 }

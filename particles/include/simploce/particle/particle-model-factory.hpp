@@ -1,6 +1,6 @@
 /*
  * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
+ * To protonate this template file, choose Tools | Templates
  * and open the template in the editor.
  */
 
@@ -14,11 +14,13 @@
 #ifndef PARTICLE_MODEL_FACTORY_HPP
 #define PARTICLE_MODEL_FACTORY_HPP
 
-#include "polarizable-water.hpp"
-#include "ptypes.hpp"
+#include "atomistic.hpp"
+#include "coarse-grained.hpp"
+#include "protonatable-coarse-grained.hpp"
+#include "p-types.hpp"
 
 namespace simploce {
-    
+
     /**
      * Create particle model.
      */
@@ -29,81 +31,89 @@ namespace simploce {
          * Constructor
          * @param catalog Particle specifications catalog.
          */
-        ParticleModelFactory(const spec_catalog_ptr_t& catalog);
-        
+        explicit ParticleModelFactory(const spec_catalog_ptr_t& catalog);
+
         /**
-         * Returns coarse-grained (CG) particle model of consisting of a 
-         * single particle group containing one bond whose beads undergo 
-         * harmonic motion. Particles are placed along the z-axis at a distance R0.
-         * @param R0 Distance between particles.
-         * @return Coarse grained particle model.
+         * Create a diatomic molecule consisting of two identical atom type (e.g. O).
+         * @param distance Distance between atoms.
+         * @param spec Particle specification of atoms.
+         * @param temperature Temperature (K). Velocities are assigned to the atoms compatible
+         * with the given temperature.
+         * @return Diatomic molecule.
          */
-        cg_ptr_t harmonic(const length_t R0);
-        
+        Atomistic diatomic(const distance_t& distance,
+                           const spec_ptr_t& spec,
+                           const temperature_t& temperature = 298.15);
+
         /**
-         * Returns coarse grained polarizable water model.
+         * Returns coarse grained polarizable water model. This model is based on
+         * Riniker and van Gunsteren, J. Chem. Phys., 134, 084110, 2011.
          * @param box Box.
-         * @param atDensitySI Requested atomistic density in SI units (kg/m^3). 
+         * @param densitySI Requested atomistic density in SI units (kg/m^3).
          * Default is 997.0479 kg/m^3 at 298.15 K (25 C).
          * @param temperature Requested temperature in SI units (K). Default is 
          * 298.15 K.
-         * @param protonable If true, water will be protonatable. Default is false.
-         * @param nlimit Upper limit for the number of CG waters.
+         * @param nLimit Upper limit for the number of CG waters.
          * @return Coarse grained particle model.
+         * @see <a href="https://aip.scitation.org/doi/10.1063/1.3553378">
+         * Riniker and van Gunsteren</a>
          */
-        cg_pol_water_ptr_t polarizableWater(const box_ptr_t& box,
-                                            const density_t atDensitySI = 997.0479,
-                                            const temperature_t temperature = 298.15,
-                                            bool protonatable = false,
-                                            std::size_t nlimit = 1000000) const;
-        
-        /**
-         * Returns coarse grained model for a formic acid solution.
-         * @param box Box.
-         * @param atDensitySI Requested atomistic water density in SI units (kg/m^3). 
-         * Default is 997.0479 kg/m^3 at 298.15 K (25 C).
-         * @param molarity Requested molarity of formic acid. Default is 0.1 M.
-         * @param temperature Requested temperature in SI units (K). Default is 
-         * 298.15 K.
-         * @param protonatable If true, both water and HCOOH are protonatable, in
-         * which case all HCOOH beads will be protonated initially. If false, no
-         * (de)protonation will occur and all HCOOH beads will be deprotonated.
-         * @return Coarse grained particle model.
-         */
-        cg_ptr_t formicAcidSolution(const box_ptr_t& box,
-                                    const density_t atDensitySI = 997.0479,
-                                    const molarity_t molarity = 0.1,
-                                    const temperature_t temperature = 298.15,
-                                    bool protonatable = true) const;
+        CoarseGrained polarizableWater(const box_ptr_t& box,
+                                       const density_t& densitySI = 997.0479,
+                                       const temperature_t& temperature = 298.15,
+                                       std::size_t nLimit = 1000000);
         
         /**
          * Returns electrolyte solution of given molarity in a box. This model 
          * is loosely based upon the Debye-Huckel theory of electrolytes.
-         * Ions are represented by Na+ and Cl- particles, while water is 
+         * Ions are represented by Na+ and Cl- particles, and water is
          * considered as a background continuum. The Debye-Huckel theory is 
          * valid for low ionic strength only.
          * @param box Particle box
-         * @param molarity Molarity in mol/l (M). Default is 1.0 M. Note 
-         * that physiological salt concentration is about 0.15 mM.
+         * @param molarity Molarity in mol/l (M). Default is 0.1 M. The average
+         * physiological salt concentration is 0.15 mM.
          * @param temperature Requested temperature in K. Default is 298.15 K.
          * @return Coarse grained particle model.
          */
-        cg_ptr_t electrolyte(const box_ptr_t& box,
-                             molarity_t molarity = 1.0,
-                             temperature_t temperature = 298.15);
+        Atomistic simpleElectrolyte(const box_ptr_t& box,
+                                    const molarity_t& molarity = 0.1,
+                                    const temperature_t& temperature = 298.15);
         
         /**
-         * Returns LJ fluid at given density and temperature.
+         * Returns argon at given density and temperature. Defaults values are compatible with liquid argon.
          * @param box Simulation box.
-         * @param atDensitySI Requested atomistic density in SI units (kg/m^3). 
-         * Default is 997.0479 kg/m^3 at 298.15 K (25 C) (water!).
+         * @param densitySI Requested atomistic density in SI units (kg/m^3).
+         * Default is 1.374 g/cm^3 = 1374.0 kg/m^3 (at a pressure of 1 atm).
          * @param temperature Requested temperature in SI units (K). Default is 
-         * 298.15 K.
-         * @return Coarse grained particle model.
+         * 94.4 K.
+         * @return Atomistic particle model.
+         * @see <a href="https://journals.aps.org/pr/abstract/10.1103/PhysRev.136.A405">Argon at Wikipedia</a>
          */
-        cg_ptr_t ljFluid(const box_ptr_t& box,
-                         const density_t atDensitySI = 997.0479,
-                         const temperature_t temperature = 298.15);
+        Atomistic argon(const box_ptr_t& box,
+                        const density_t& densitySI = 1374.0,
+                        const temperature_t& temperature = 94.4);
+
+    protected:
+
+        /**
+         * Returns particle specification catalog.
+         * @return Catalog
+         */
+        spec_catalog_ptr_t catalog();
+
+        /**
+         * Assigns/sets the velocity of the given atom according to the given temperature.
+         * @param atom Atom.
+         * @param temperature Temperature.
+         */
+        void assignVelocity(atom_ptr_t& atom, const temperature_t& temperature);
+
+        /**
+         * Assigns/sets the velocity of the given bead according to the given temperature.
+         * @param bead bead.
+         * @param temperature Temperature.
+         */
+        void assignVelocity(bead_ptr_t& bead, const temperature_t& temperature);
         
     private:
         

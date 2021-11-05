@@ -1,28 +1,4 @@
 /*
- * The MIT License
- *
- * Copyright 2019 André H. Juffer, Biocenter Oulu
- *
- * Permission is hereby granted, free of charge, to any person obtaining a copy
- * of this software and associated documentation files (the "Software"), to deal
- * in the Software without restriction, including without limitation the rights
- * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- * copies of the Software, and to permit persons to whom the Software is
- * furnished to do so, subject to the following conditions:
- *
- * The above copyright notice and this permission notice shall be included in
- * all copies or substantial portions of the Software.
- *
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
- * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
- * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
- * THE SOFTWARE.
- */
-
-/* 
  * File:   protonation-site-catalog.cpp
  * Author: André H. Juffer, Biocenter Oulu.
  *
@@ -31,9 +7,8 @@
 
 #include "simploce/particle/protonation-site-catalog.hpp"
 #include "simploce/particle/protonation-site.hpp"
-#include "simploce/particle/atom.hpp"
 #include "simploce/particle/particle-spec.hpp"
-#include "simploce/particle/pconf.hpp"
+#include "simploce/particle/p-conf.hpp"
 #include <boost/algorithm/string.hpp>
 #include <string>
 #include <map>
@@ -99,7 +74,7 @@ namespace simploce {
                 const std::string& name, 
                 const std::vector<atom_ptr_t>& atoms)
     {        
-        int natoms = atoms.size();
+        int natoms = int(atoms.size());
         
         // Define search window by assuming that all all atoms of protonation 
         // site are near the first identified atom (pointed to by <code>first</code>) 
@@ -161,14 +136,14 @@ namespace simploce {
         spec_ptr_t spec = atom->spec();
         std::string dspecName = "D_" + spec->name();
         charge_t dcharge = site.deprotonated[index].charge;
-        spec_ptr_t dspec = ParticleSpec::createFrom(spec, dspecName, dcharge);
+        spec_ptr_t dspec = ParticleSpec::createFrom(spec, dspecName, dcharge, "Deprotonated.");
         deprotonated.push_back(dspec);  
         
         // Create new specification for protonated state.
         std::string pspecName = "P_" + spec->name();
         charge_t pcharge = site.protonated[index].charge;
         spec_ptr_t pspec = 
-        ParticleSpec::createFrom(spec, pspecName, pcharge);
+        ParticleSpec::createFrom(spec, pspecName, pcharge, "Protonated");
         protonated.push_back(pspec);                                
     }
     
@@ -219,7 +194,7 @@ namespace simploce {
                 protonated.clear();
                 
                 // Add first atom.
-                int first = counter - 1;
+                auto first = counter - 1;
                 atom_ptr_t atom = atoms[first];
                 addAtom_(atom, 0, site, particles, deprotonated, protonated);
                                 
@@ -243,12 +218,14 @@ namespace simploce {
                         );
                     }
                 }
-                
+
+                std::vector<id_pair_t> bonds{};
                 atom_prot_site_ptr_t protonationSite = 
                         std::make_shared<atom_prot_site_t>(site.name, 
-                                                          particles, 
-                                                          deprotonated, 
-                                                          protonated);
+                                                           particles,
+                                                           bonds,
+                                                           deprotonated,
+                                                           protonated);
                 protonationSites.push_back(protonationSite);
                 
                 // Continue.

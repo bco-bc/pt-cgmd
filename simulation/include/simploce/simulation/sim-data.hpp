@@ -32,7 +32,7 @@
 #ifndef SIM_DATA_HPP
 #define SIM_DATA_HPP
 
-#include "stypes.hpp"
+#include "s-types.hpp"
 #include <iostream>
 
 namespace simploce {

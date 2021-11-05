@@ -1,11 +1,12 @@
 /*
- * File:   read-cg-test.cpp
+ * File:   read-cg-argon.cpp
  * Author: juffer
  *
  * Created on 21 September 2019, 14:53
  */
 
-#include "simploce/particle/pall.hpp"
+#include "simploce/particle/particle-spec-catalog.hpp"
+#include "simploce/particle/coarse-grained.hpp"
 #include "simploce/util/file.hpp"
 #include <cstdlib>
 #include <iostream>
@@ -17,34 +18,25 @@ using namespace simploce;
  */
 
 void test1() {
-    std::cout << "read-cg-test test 1" << std::endl;
     std::cout << "Particle specifications:" << std::endl;
     std::ifstream stream;
-    file::open_input(stream, 
-                    "resources/particles-specs.dat");
-    spec_catalog_ptr_t catalog = ParticleSpecCatalog::create(stream);
+    util::open_input_file(stream,
+                    "/localdisk/resources/particles-specs.dat");
+    spec_catalog_ptr_t catalog = ParticleSpecCatalog::obtainFrom(stream);
     stream.close();
     std::cout << *catalog << std::endl;
     
     std::cout << "Particle model:" << std::endl;
-    file::open_input(stream,
-                    "resources/coarse-grained-system.dat");
-    cg_ptr_t cg = CoarseGrained::readFrom(stream, catalog);
+    util::open_input_file(stream,
+                    "/localdisk/resources/coarse-grained-system.dat");
+    cg_mod_ptr_t cg = CoarseGrained::obtainFrom(stream, catalog);
     stream.close();
     std::cout << *cg << std::endl;
 }
 
 
 int main(int argc, char** argv) {
-    std::cout << "%SUITE_STARTING% read-cg-test" << std::endl;
-    std::cout << "%SUITE_STARTED%" << std::endl;
-
-    std::cout << "%TEST_STARTED% test1 (read-cg-test)" << std::endl;
     test1();
-    std::cout << "%TEST_FINISHED% time=0 test1 (read-cg-test)" << std::endl;
-
-    std::cout << "%SUITE_FINISHED% time=0" << std::endl;
-
     return (EXIT_SUCCESS);
 }
 

@@ -25,9 +25,9 @@
 #include "simploce/simulation/mc.hpp"
 #include "simploce/simulation/sim-model.hpp"
 #include "simploce/simulation/sim-data.hpp"
-#include "simploce/simulation/sconf.hpp"
+#include "simploce/simulation/s-conf.hpp"
 #include "simploce/util/util.hpp"
-#include "simploce/util/mu-units.hpp"
+#include "simploce/units/units-mu.hpp"
 #include <stdexcept>
 #include <iostream>
 #include <fstream>
@@ -58,7 +58,7 @@ namespace simploce {
         static std::mt19937 gen(rd());
         static std::uniform_real_distribution<real_t> disCoordinate(0.0, RANGE);
         static std::uniform_real_distribution<real_t> dis01(0.0, 1.0);
-        static const real_t kT = MUUnits<real_t>::KB * temperature();
+        static const real_t kT = units::mu<real_t>::KB * temperature();
         if ( !setup ) {      
             gen.seed(util::seedValue<std::size_t>());
             setup = true;
@@ -160,7 +160,6 @@ namespace simploce {
                       std::ofstream& trajStream,
                       std::ofstream& dataStream)
     {
-        const auto width = conf::WIDTH;
         const auto space = conf::SPACE;
         
         if ( sm_->size() == 0 ) {
@@ -189,7 +188,7 @@ namespace simploce {
             if ( counter % nwrite == 0 ) {
                 data.acceptanceRatio = real_t(numberAccepted)/real_t(counter) * 100.0;
                 data.temperature = temperature;
-                dataStream << std::setw(width) << counter << space << data << std::endl;
+                dataStream << std::setw(conf::INTEGER_WIDTH) << counter << space << data << std::endl;
                 sm_->saveState(trajStream);
                 trajStream.flush();
                 dataStream.flush();

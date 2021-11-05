@@ -37,8 +37,8 @@
 #include "../simulation/sim-util.hpp"
 #include "../simulation/bc.hpp"
 #include "simploce/particle/particle-spec.hpp"
-#include "simploce/util/cvector_t.hpp"
-#include "simploce/util/value_t.hpp"
+#include "simploce/types/cvector_t.hpp"
+#include "simploce/types/value_t.hpp"
 #include "simploce/util/math-constants.hpp"
 #include <memory>
 #include <string>
@@ -219,7 +219,7 @@ namespace simploce {
                         if ( pj->spec()->name() == specName2_ ) {
                             auto rj = pj->position();
                             auto rij = bc_->apply(ri, rj);
-                            auto Rij2 = norm2<real_t>(rij);
+                            auto Rij2 = norm_square<real_t>(rij);
                             if ( Rij2 < rc2) {
                                 auto Rij = std::sqrt(Rij2);
 #if _DEBUG
@@ -311,7 +311,7 @@ namespace simploce {
     {
         std::vector<std::pair<real_t, real_t>> gr{};
         
-        real_t factor = 4.0 * MathConstants<real_t>::PI / 3.0;
+        real_t factor = 4.0 * math::constants<real_t>::PI / 3.0;
 
         // Number density particle of the second specification.
         real_t rho2 = nparticles2_ / volume_();

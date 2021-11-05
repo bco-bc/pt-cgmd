@@ -30,7 +30,7 @@
  */
 
 #include "simploce/simulation/sim-data.hpp"
-#include "simploce/simulation/sconf.hpp"
+#include "simploce/simulation/s-conf.hpp"
 #include <iomanip>
 #include <iostream>
 
@@ -44,23 +44,22 @@ namespace simploce {
         
     std::ostream& operator << (std::ostream& stream, const SimulationData& data)
     {
-        const int width = conf::WIDTH;
         const int precision = conf::PRECISION;
         const char space = conf::SPACE;
         
         stream.setf(std::ios::scientific);
         stream.precision(precision);
         energy_t etot = data.ekin + data.bepot + data.nbepot;
-        stream << std::setw(width) << data.t
-               << space << std::setw(width) << data.ekin
-               << space << std::setw(width) << data.bepot
-               << space << std::setw(width) << data.nbepot
-               << space << std::setw(width) << etot
-               << space << std::setw(width) << data.temperature
-               << space << std::setw(width) << data.pressure
-               << space << std::setw(width) << data.numberOfProtonTransferPairs
+        stream << std::setw(conf::REAL_WIDTH) << data.t
+               << space << std::setw(conf::REAL_WIDTH) << data.ekin
+               << space << std::setw(conf::REAL_WIDTH) << data.bepot
+               << space << std::setw(conf::REAL_WIDTH) << data.nbepot
+               << space << std::setw(conf::REAL_WIDTH) << etot
+               << space << std::setw(conf::REAL_WIDTH) << data.temperature
+               << space << std::setw(conf::REAL_WIDTH) << data.pressure
+               << space << std::setw(conf::REAL_WIDTH) << data.numberOfProtonTransferPairs
                << space << data.accepted
-               << space << std::setw(width) << data.acceptanceRatio;
+               << space << std::setw(conf::REAL_WIDTH) << data.acceptanceRatio;
 #ifdef _DEBUG
         if ( etot() > conf::LARGE ) {
             std::clog << "Total energy: "  << etot << std::endl;

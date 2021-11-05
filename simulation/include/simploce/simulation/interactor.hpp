@@ -34,6 +34,8 @@
 
 #include "sim-data.hpp"
 #include "pair-lists.hpp"
+#include "s-types.hpp"
+#include "simploce/particle/atomistic.hpp"
 #include <memory>
 #include <vector>
 #include <utility>
@@ -73,7 +75,7 @@ namespace simploce {
          */
         std::pair<energy_t, energy_t> 
         interact(const sim_param_t& param, 
-                 const at_ptr_t& at);
+                 const at_mod_ptr_t& at);
         
         /**
          * Calculates interaction energy of given atom with all other particles.
@@ -85,7 +87,7 @@ namespace simploce {
         std::pair<energy_t, energy_t> 
         interact(const atom_ptr_t& atom,
                  const sim_param_t& param, 
-                 const at_ptr_t& at);
+                 const at_mod_ptr_t& at);
         
         /**
          * Returns identifying name.
@@ -96,7 +98,7 @@ namespace simploce {
                 
     private:
         
-        void updatePairLists_(const at_ptr_t& at);
+        void updatePairLists_(const at_mod_ptr_t& at);
         
         at_ff_ptr_t forcefield_;
         at_ppair_list_gen_ptr_t pairListGenerator_;
@@ -127,7 +129,7 @@ namespace simploce {
          */
         std::pair<energy_t, energy_t> 
         interact(const sim_param_t& param, 
-                 const cg_ptr_t& cg);
+                 const cg_mod_ptr_t& cg);
         
         /**
          * Calculates interaction energy of given bead with all other beads.
@@ -139,7 +141,7 @@ namespace simploce {
         std::pair<energy_t, energy_t> 
         interact(const bead_ptr_t& bead,
                  const sim_param_t& param, 
-                 const cg_ptr_t& cg);
+                 const cg_mod_ptr_t& cg);
         /**
          * Returns identifying name.
          * @return Identifying name.
@@ -149,7 +151,7 @@ namespace simploce {
         
     private:
         
-        void updatePairLists_(const cg_ptr_t& cg);
+        void updatePairLists_(const cg_mod_ptr_t& cg);
         
         cg_ff_ptr_t forcefield_;
         cg_ppair_list_gen_ptr_t pairListGenerator_;

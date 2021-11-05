@@ -1,28 +1,4 @@
 /*
- * The MIT License
- *
- * Copyright 2019 André H. Juffer, Biocenter Oulu
- *
- * Permission is hereby granted, free of charge, to any person obtaining a copy
- * of this software and associated documentation files (the "Software"), to deal
- * in the Software without restriction, including without limitation the rights
- * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- * copies of the Software, and to permit persons to whom the Software is
- * furnished to do so, subject to the following conditions:
- *
- * The above copyright notice and this permission notice shall be included in
- * all copies or substantial portions of the Software.
- *
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
- * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
- * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
- * THE SOFTWARE.
- */
-
-/* 
  * File:   atomistic.hpp
  * Author: André H. Juffer, Biocenter Oulu.
  *
@@ -32,44 +8,39 @@
 #ifndef ATOMISTIC_HPP
 #define ATOMISTIC_HPP
 
-#include "particle-model.hpp"
-#include "ptypes.hpp"
+#include "particle-system.hpp"
+#include "p-types.hpp"
 
 namespace simploce {
-    
+
     /**
-     * A physical system composed of atoms.
+     * A physical system composed of atoms and atom-like particles, such as ions.
      */
-    class Atomistic : public ParticleModel<Atom, atom_group_t> {
+    class Atomistic : public ParticleSystem<Atom, atom_group_t> {
     public:
-        
+
         /**
-         * Constructor. No atoms, no protonation sites.
+         * Reads an atomistic particle system from an input stream.
+         * @param stream Input stream.
+         * @param catalog Particle specifications catalog.
+         * @return Atomistic particle model system.
+         */
+        static at_mod_ptr_t obtainFrom(std::istream& stream,
+                                       const spec_catalog_ptr_t& catalog);
+
+        /**
+         * Constructor. Creates empty atomistic particle model.
          */
         Atomistic();
         
         /**
-         * Adds new atom to this physical system.
-         * @param id Unique identifier.
-         * @param name Name.
-         * @param r Position.
+         * Adds new atom to this physical system. All arguments are required.
+         * @param name Name. Not required to be unique.
          * @param spec Specification.
          * @return Newly created atom.
          */
-        atom_ptr_t addAtom(std::size_t id,
-                           const std::string& name,
-                           const position_t& r, 
+        atom_ptr_t addAtom(const std::string& name,
                            const spec_ptr_t& spec);
-        
-        /**
-         * Identify protonation sites.
-         * @param catalog Protonation site catalog.
-         */
-        void protonationSites(const prot_site_catalog_ptr_t& catalog);
-        
-        std::size_t numberOfProtonationSites() const override;
-        
-        std::size_t protonationState() const override;
         
         /**
          * Returns number of atoms.
@@ -77,18 +48,24 @@ namespace simploce {
          */
         std::size_t numberOfAtoms() const;
         
-        /**
-         * Carries out a task with protonation sites.
-         * @param task Task. Must accept protonation sites. May be a lambda expression.
-         * @return Result.
-         */
-        template <typename R, typename T>
-        R doWithProtonationSites(T task) const { return task(protonationSites_); }
-        
     private:
+
+        atom_ptr_t createParticle_(const id_t& id,
+                                   int index,
+                                   const std::string& name,
+                                   const spec_ptr_t& spec) override;
+
+        friend class ParticleModelFactory;
         
-        std::vector<atom_prot_site_ptr_t> protonationSites_;
     };
+
+    /**
+     * Writes atomistic particle system to an output stream.
+     * @param stream Output stream.
+     * @param atomistic Atomistic particle system.
+     * @return Output stream.
+     */
+    std::ostream& operator << (std::ostream& stream, const Atomistic& atomistic);
 }
 
 #endif /* ATOMISTIC_HPP */

@@ -32,7 +32,7 @@
 #ifndef CELL_HPP
 #define CELL_HPP
 
-#include "stypes.hpp"
+#include "s-types.hpp"
 #include "simploce/particle/particle-group.hpp"
 #include <boost/lexical_cast.hpp>
 #include <vector>

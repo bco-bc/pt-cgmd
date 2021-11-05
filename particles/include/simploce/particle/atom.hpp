@@ -9,39 +9,53 @@
 #define ATOM_HPP
 
 #include "particle.hpp"
-#include "ptypes.hpp"
+#include "p-types.hpp"
 #include <string>
 
 namespace simploce {
     
     /**
      * The smallest constituent unit of ordinary matter that has the 
-     * properties of a chemical element.
+     * properties of a chemical element. An atom cannot freely be created.
+     * Each atom belongs to an Atomistic
+     * @see Atomistic
      */
     class Atom: public Particle {
     public:
-        
-        // Noncopyable.
-        Atom(const Atom&) = delete;
-        Atom& operator = (const Atom&) = delete;
-        
-        ~Atom();
-                
-    private:
-        
-        friend class Atomistic;
-        
-        static atom_ptr_t create(std::size_t id,
-                                 std::size_t index, 
-                                 const std::string &name, 
+
+        /**
+         * Creates a new atom. All arguments are required.
+         * @param id Unique atom identifier.
+         * @param index Sequential index.
+         * @param name Atom name.
+         * @param spec Atom specification.
+         * @return
+         */
+        static atom_ptr_t create(const id_t& id,
+                                 std::size_t index,
+                                 const std::string &name,
                                  const spec_ptr_t &spec);
-        
-        Atom(std::size_t id,
-             std::size_t index, 
+
+        /**
+         * Constructor. All arguments are required.
+         * @param id Unique atom identifier.
+         * @param index Sequential index.
+         * @param name Atom name.
+         * @param spec Atom specification.
+         */
+        Atom(const id_t& id,
+             std::size_t index,
              const std::string &name,
-             const spec_ptr_t &spec);        
-        
+             const spec_ptr_t &spec);
+
+        // Noncopyable.
+        Atom(const Atom &) = delete;
+        Atom &operator=(const Atom &) = delete;
+
+        virtual ~Atom();
+
     };
+
 }
 
 #endif /* ATOM_HPP */

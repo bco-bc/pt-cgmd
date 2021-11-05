@@ -34,7 +34,7 @@
 #include "simploce/particle/particle-group.hpp"
 #include "simploce/particle/particle-spec-catalog.hpp"
 #include "simploce/particle/particle-spec.hpp"
-#include "simploce/simulation/sconf.hpp"
+#include "simploce/simulation/s-conf.hpp"
 #include "simploce/util/map2.hpp"
 #include "simploce/util/map.hpp"
 #include <utility>

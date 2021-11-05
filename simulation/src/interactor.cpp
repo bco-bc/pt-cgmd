@@ -73,7 +73,7 @@ namespace simploce {
         
     std::pair<energy_t, energy_t> 
     Interactor<Atom>::interact(const sim_param_t& param, 
-                               const at_ptr_t& at)
+                               const at_mod_ptr_t& at)
     {
         static bool setup = false;
         static std::size_t npairlist = 0;
@@ -106,7 +106,7 @@ namespace simploce {
     std::pair<energy_t, energy_t> 
     Interactor<Atom>::interact(const atom_ptr_t& atom,
                                const sim_param_t& param, 
-                               const at_ptr_t& at)
+                               const at_mod_ptr_t& at)
     {
         throw std::domain_error(
             "Atomistic force field: No interaction energy calculator available."
@@ -114,7 +114,7 @@ namespace simploce {
     }
     
     void 
-    Interactor<Atom>::updatePairLists_(const at_ptr_t& at)
+    Interactor<Atom>::updatePairLists_(const at_mod_ptr_t& at)
     {
         pairLists_ = 
             at->doWithAllFreeGroups<PairLists<Atom>>([this] (const std::vector<atom_ptr_t>& all,
@@ -140,7 +140,7 @@ namespace simploce {
         
     std::pair<energy_t, energy_t>
     Interactor<Bead>::interact(const sim_param_t& param, 
-                               const cg_ptr_t& cg)
+                               const cg_mod_ptr_t& cg)
     {
         static bool setup = false;
         static std::size_t npairlist = 0;
@@ -173,7 +173,7 @@ namespace simploce {
     std::pair<energy_t, energy_t>
     Interactor<Bead>::interact(const bead_ptr_t& bead,
                                const sim_param_t& param, 
-                               const cg_ptr_t& cg)
+                               const cg_mod_ptr_t& cg)
     {
         return cg->doWithAllFreeGroups<tdm_result_t>([this, bead] (const std::vector<bead_ptr_t>& all,
                                                                const std::vector<bead_ptr_t>& free,
@@ -183,7 +183,7 @@ namespace simploce {
     }
     
     void
-    Interactor<Bead>::updatePairLists_(const cg_ptr_t& cg)
+    Interactor<Bead>::updatePairLists_(const cg_mod_ptr_t& cg)
     {
         pairLists_ = 
             cg->doWithAllFreeGroups<PairLists<Bead>>([this] (const std::vector<bead_ptr_t>& all,

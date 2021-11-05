@@ -35,7 +35,7 @@
 #include "cg-displacer.hpp"
 #include "at-displacer.hpp"
 #include "sim-data.hpp"
-#include "stypes.hpp"
+#include "s-types.hpp"
 #include "simploce/particle/atomistic.hpp"
 #include "simploce/particle/coarse-grained.hpp"
 
@@ -64,7 +64,7 @@ namespace simploce {
          */
         SimulationData 
         displace(const sim_param_t& param, 
-                 const at_ptr_t& at) const override;
+                 const at_mod_ptr_t& at) const override;
         
         std::string 
         id() const override;
@@ -86,7 +86,7 @@ namespace simploce {
         
         SimulationData 
         displace(const sim_param_t& param, 
-                 const cg_ptr_t& cg) const override;
+                 const cg_mod_ptr_t& cg) const override;
         
         std::string 
         id() const override;

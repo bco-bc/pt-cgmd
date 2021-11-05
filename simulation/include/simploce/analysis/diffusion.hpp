@@ -11,7 +11,7 @@
 
 #include "analyzer.hpp"
 #include "atypes.hpp"
-#include "simploce/simulation/stypes.hpp"
+#include "simploce/simulation/s-types.hpp"
 #include <memory>
 #include <list>
 #include <vector>
@@ -117,7 +117,7 @@ namespace simploce {
                 for (std::size_t k = 0; k != r_i.size(); ++k) {
                     auto rij = r_j[k] - r_i[k];
                     auto l = jj - ii;
-                    msd_[l] += norm2<real_t>(rij);
+                    msd_[l] += norm_square<real_t>(rij);
                     cmsd_[l] += 1;
                 }
                 jj += 1;

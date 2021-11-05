@@ -1,29 +1,4 @@
 /*
- * The MIT License
- *
- * Copyright 2019 André H. Juffer, Biocenter Oulu
- *
- * Permission is hereby granted, free of charge, to any person obtaining a copy
- * of this software and associated documentation files (the "Software"), to deal
- * in the Software without restriction, including without limitation the rights
- * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- * copies of the Software, and to permit persons to whom the Software is
- * furnished to do so, subject to the following conditions:
- *
- * The above copyright notice and this permission notice shall be included in
- * all copies or substantial portions of the Software.
- *
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
- * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
- * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
- * THE SOFTWARE.
- */
-
-/* 
- * File:   sim-util.hpp
  * Author: André H. Juffer, Biocenter Oulu.
  *
  * Created on October 17, 2019, 1:36 PM
@@ -32,10 +7,10 @@
 #ifndef SIM_UTIL_HPP
 #define SIM_UTIL_HPP
 
-#include "stypes.hpp"
-#include "simploce/util/mu-units.hpp"
+#include "s-types.hpp"
+#include "simploce/units/units-mu.hpp"
 #include "pair-lists.hpp"
-#include "sconf.hpp"
+#include "s-conf.hpp"
 #include <vector>
 #include <set>
 #include <thread>
@@ -56,7 +31,7 @@ namespace simploce {
             std::size_t nparticles = particles.size();
             real_t ndof = 3 * nparticles - 3;  // Assuming total momentum is constant.
             if ( ndof > 3 ) {
-                return 2.0 * ekin() / ( ndof * MUUnits<real_t>::KB );  // In K.
+                return 2.0 * ekin() / ( ndof * units::mu<real_t>::KB );  // In K.
             } else {
                 // No point calculating temperature for a low number of degrees of freedom.
                 return 0.0;
@@ -88,7 +63,7 @@ namespace simploce {
             if ( volume() > 0.0 ) {
                 virial1 /= ( 3.0 * volume() );
                 real_t virial2 = 
-                    nparticles * MUUnits<real_t>::KB * temperature() / volume();
+                    nparticles * units::mu<real_t>::KB * temperature() / volume();
                 pressure = virial2 - virial1; // In kJ/(mol nm^3)    
             } else {
                 pressure = 0.0;
@@ -100,7 +75,7 @@ namespace simploce {
          * Returns cutoff distance.
          * @param box Simulation box.
          * @return Cutoff distance. Always <= 0.5 * box.size().
-         * @see conf::RCUTOFF_DISTANCE
+         * @see conf::CUTOFF_DISTANCE
          */
         length_t cutoffDistance(const box_ptr_t& box);
         

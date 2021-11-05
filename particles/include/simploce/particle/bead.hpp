@@ -1,28 +1,4 @@
 /*
- * The MIT License
- *
- * Copyright 2019 André H. Juffer, Biocenter Oulu
- *
- * Permission is hereby granted, free of charge, to any person obtaining a copy
- * of this software and associated documentation files (the "Software"), to deal
- * in the Software without restriction, including without limitation the rights
- * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- * copies of the Software, and to permit persons to whom the Software is
- * furnished to do so, subject to the following conditions:
- *
- * The above copyright notice and this permission notice shall be included in
- * all copies or substantial portions of the Software.
- *
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
- * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
- * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
- * THE SOFTWARE.
- */
-
-/* 
  * File:   bead.hpp
  * Author: André H. Juffer, Biocenter Oulu.
  *
@@ -33,53 +9,49 @@
 #define BEAD_HPP
 
 #include "particle.hpp"
-#include "ptypes.hpp"
+#include "p-types.hpp"
 
 namespace simploce {
     
     /**
-     * A coarse grained particle representing typically 4 to 6 fine grained 
-     * particles (that is, atoms). A bead is considered to be rigid.
+     * Coarse grained particle. In proteins, it represents typically 4 to 6 atoms,
+     * but for water it may represent several water molecules. A bead cannot freely be created.
+     * Each bead belongs to an CoarseGrained
+     * @see CoarseGrained
      */
     class Bead : public Particle {
     public:
-        
-        // Noncopyable.
-        Bead(const Bead&) = delete;
-        Bead& operator = (const Bead&) = delete;
-        
-        virtual ~Bead();   
-        
-        virtual void write(std::ostream& stream) const;
-        
-        virtual void writeState(std::ostream& stream) const override;
-        
-        virtual void readState(std::istream& stream) override;
-               
-    protected:
-        
-        Bead(std::size_t id,
-             std::size_t index, 
-             const std::string& name,
-             const spec_ptr_t& spec);
-        
-    private:
-        
-        // Owns beads.
-        friend class CoarseGrained;
-        
+
         /**
-         * Creates a new bead.
+         * Creates a new bead. All arguments are required.
          * @param id Unique bead identifier.
          * @param index Sequential index.
          * @param name Bead name.
          * @param spec Bead specification.
          */
-        static bead_ptr_t create(std::size_t id,
+        static bead_ptr_t create(const id_t& id,
                                  std::size_t index,
                                  const std::string& name,
                                  const spec_ptr_t& spec);
+
+        /**
+         * Constructor. All arguments are required.
+         * @param id Unique bead identifier.
+         * @param index Sequential index.
+         * @param name Bead name.
+         * @param spec Bead specification.
+         */
+        Bead(const id_t& id,
+             std::size_t index,
+             const std::string& name,
+             const spec_ptr_t& spec);
+
+        // Noncopyable.
+        Bead(const Bead&) = delete;
+        Bead& operator = (const Bead&) = delete;
         
+        virtual ~Bead();
+
     };
 }
 

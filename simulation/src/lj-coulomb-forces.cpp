@@ -1,43 +1,18 @@
 /*
- * The MIT License
- *
- * Copyright 2019 André H. Juffer, Biocenter Oulu
- *
- * Permission is hereby granted, free of charge, to any person obtaining a copy
- * of this software and associated documentation files (the "Software"), to deal
- * in the Software without restriction, including without limitation the rights
- * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- * copies of the Software, and to permit persons to whom the Software is
- * furnished to do so, subject to the following conditions:
- *
- * The above copyright notice and this permission notice shall be included in
- * all copies or substantial portions of the Software.
- *
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
- * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
- * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
- * THE SOFTWARE.
- */
-
-/* 
- * File:   lj-coulomb-forces.cpp
  * Author: André H. Juffer, Biocenter Oulu.
  *
  * Created on September 17, 2019, 3:43 PM
  */
 
 #include "simploce/simulation/lj-coulomb-forces.hpp"
-#include "simploce/simulation/pair-list-generator.hpp"
 #include "simploce/simulation/bc.hpp"
 #include "simploce/simulation/pair-lists.hpp"
 #include "simploce/particle/particle-spec.hpp"
 #include "simploce/simulation/sim-util.hpp"
-#include "simploce/simulation/sconf.hpp"
+#include "simploce/simulation/s-conf.hpp"
 #include "simploce/util/util.hpp"
-#include "simploce/util/mu-units.hpp"
+#include "simploce/units/units-mu.hpp"
+#include "simploce/types/cvector_t.hpp"
 #include <future>
 #include <utility>
 #include <tuple>
@@ -66,7 +41,7 @@ namespace simploce {
                     const bc_ptr_t& bc,
                     const box_ptr_t& box)
     {
-        static const real_t four_pi_e0 = MUUnits<real_t>::FOUR_PI_E0;
+        static const real_t four_pi_e0 = units::mu<real_t>::FOUR_PI_E0;
         static const length_t rc = util::cutoffDistance(box);
         static const real_t rc2 = rc() * rc();
         
@@ -114,11 +89,11 @@ namespace simploce {
     
     // Returns forces on beads and energy for bead pairs.
     static dm_result_t ppForces_(const bead_pair_list_t ppPairList,
-                              std::size_t nbeads,
-                              const lj_params_t& ljParams,
-                              const el_params_t& elParams,
-                              const bc_ptr_t& bc,
-                              const box_ptr_t& box)
+                                 std::size_t nbeads,
+                                 const lj_params_t& ljParams,
+                                 const el_params_t& elParams,
+                                 const bc_ptr_t& bc,
+                                 const box_ptr_t& box)
     {
         std::vector<force_t> forces(nbeads, force_t{});
         energy_t epot{0.0};
@@ -191,7 +166,7 @@ namespace simploce {
                 // Second particle.
                 position_t rj = pj->position();
                 auto rij = bc->apply(ri, rj);
-                auto Rij2 = norm2<real_t>(rij);
+                auto Rij2 = norm_square<real_t>(rij);
                 if ( Rij2 < rc2 ) {
                     std::string name_j = pj->spec()->name();
                     charge_t qj = pj->charge();
@@ -242,7 +217,7 @@ namespace simploce {
             if ( !g->contains(bead) ) {
                 position_t rj = g->position();
                 auto rij = bc->apply(ri, rj);
-                auto Rij2 = norm2<real_t>(rij);
+                auto Rij2 = norm_square<real_t>(rij);
                 if ( Rij2 < rc2 ) {
                     for (auto pj : g->particles()) {
                         

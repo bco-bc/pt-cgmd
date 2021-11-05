@@ -1,28 +1,4 @@
 /*
- * The MIT License
- *
- * Copyright 2019 André H. Juffer, Biocenter Oulu
- *
- * Permission is hereby granted, free of charge, to any person obtaining a copy
- * of this software and associated documentation files (the "Software"), to deal
- * in the Software without restriction, including without limitation the rights
- * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- * copies of the Software, and to permit persons to whom the Software is
- * furnished to do so, subject to the following conditions:
- *
- * The above copyright notice and this permission notice shall be included in
- * all copies or substantial portions of the Software.
- *
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
- * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
- * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
- * THE SOFTWARE.
- */
-
-/* 
  * File:   particle-spec.hpp
  * Author: André H. Juffer, Biocenter Oulu.
  *
@@ -32,7 +8,7 @@
 #ifndef PARTICLE_SPEC_HPP
 #define PARTICLE_SPEC_HPP
 
-#include "ptypes.hpp"
+#include "p-types.hpp"
 #include <string>
 #include <iostream>
 
@@ -40,11 +16,64 @@ namespace simploce {
     
     /**
      * Defines certain static properties of particles. Multiple particles may 
-     * hold the same specification.
+     * hold or refer to the same specification.
      */
     class ParticleSpec {
     public:
-        
+
+        /**
+         * Creates a non-protonatable particle specification. All arguments are required.
+         * @param name Unique specification name.
+         * @param charge Charge value.
+         * @param mass Mass value. Must be a non-negative number.
+         * @param radius Radius. Must be a non-negative number.
+         * @param description Short description.
+         * @return Specification.
+         */
+        static spec_ptr_t create(const std::string& name,
+                                 const charge_t& charge,
+                                 const mass_t& mass,
+                                 const radius_t& radius,
+                                 const std::string& description);
+
+        /**
+         * Creates a protonatable particle specification.
+         * @param name Unique specification name.
+         * @param charge Charge value. Must represent the -deprotonated- state.
+         * @param mass Mass value. Must be a non-negative number and must represent the -deprotonated- state.
+         * @param radius Radius.  Must be a non-negative number.
+         * @param pKa pKa value. Typically in the range [0.0, 14.0].
+         * @param description Short description. Must be provided.
+         * @return Specification.
+         */
+        static spec_ptr_t create(const std::string& name,
+                                 const charge_t& charge,
+                                 const mass_t& mass,
+                                 const radius_t& radius,
+                                 const pKa_t& pKa,
+                                 const std::string& description);
+
+        /**
+         * Creates a new specification from a given specification, but with
+         * different unique name and charge.
+         * @param spec Specification.
+         * @param name New name.
+         * @param charge New Charge value.
+         * @param description Short description.
+         * @return New specification.
+         */
+        static spec_ptr_t createFrom(const spec_ptr_t& spec,
+                                     const std::string& name,
+                                     charge_t charge,
+                                     const std::string& description);
+
+        // Noncopyable.
+        ParticleSpec(const ParticleSpec&) = delete;
+        ParticleSpec& operator = (const ParticleSpec&) = delete;
+
+        // Compares unique names.
+        bool operator == (const ParticleSpec& particleSpec);
+
         /**
          * Returns unique identifying name.
          * @return Name.
@@ -52,16 +81,16 @@ namespace simploce {
         std::string name() const;
         
         /**
-         * Returns charge. If protonatable, then the value of the 
-         * deprotonated state is returned.
+         * Returns charge. If representing a protonatable specification, then the value
+         * of the deprotonated state is returned.
          * @return Value.
          * @see #isProtonatable()
          */
         charge_t charge() const;
         
         /**
-         * Returns mass. If this specification is for a protonatable, then 
-         * the value of the fully deprotonated state is returned.
+         * Returns mass. If representing a protonatable specification, then the value
+         * of the deprotonated state is returned.
          * @return Value.
          * @see #isProtonatable()
          */
@@ -74,67 +103,28 @@ namespace simploce {
         pKa_t pKa() const;
         
         /**
-         * Particle size.
+         * Returns radius.
          * @return Radius.
          */
         radius_t radius() const;
         
         /**
-         * This specification is for a protonatable particle, either with 
-         * continuously or discretely varying protonation state) ?
+         * Is this specification for a protonatable particle.
          * @return Result.
          */
         bool isProtonatable() const;
         
         /**
-         * This specification is for a protonatable particle with continuously varying 
-         * protonation state.
+         * Is this a specification for an ion.
          * @return Result.
          */
-        bool isContinuousProtonatable() const;
-        
+        bool isIon();
+
         /**
-         * Creates a new specification from a given specification, but with 
-         * different name and charge.
-         * @param spec Specification.
-         * @return New specification.
+         * Returns description.
+         * @return Description.
          */
-        static spec_ptr_t createFrom(const spec_ptr_t& spec, 
-                                     const std::string& name,
-                                     charge_t charge);
-        
-        /**
-         * Creates a non-protonatable particle specification.
-         * @param name Unique specification name.
-         * @param charge Charge value.
-         * @param mass Mass value.
-         * @param radius Radius.
-         * @return Specification.
-         */
-        static spec_ptr_t create(const std::string& name,
-                                 charge_t charge,
-                                 mass_t mass,
-                                 radius_t radius);
-        
-        /**
-         * Creates a protonatable particle specification.
-         * @param name Unique specification name.
-         * @param charge Charge value. This value must be that of the fully 
-         * -deprotonated- state.
-         * @param mass Mass value. This value must be that of the fully 
-         * -deprotonated- state.
-         * @param radius Radius.
-         * @param pKa pKa value. 
-         * @param continuous If true, then this specification is meant for
-         * a protonatable with a continuously varying protonation state.
-         * @return Specification.
-         */
-        static spec_ptr_t create(const std::string& name,
-                                 charge_t charge,
-                                 mass_t mass,
-                                 radius_t radius,
-                                 pKa_t pKa,
-                                 bool continuous);
+        std::string description() const;
         
         /**
          * Writes this specification to an output stream.
@@ -143,22 +133,30 @@ namespace simploce {
         void write(std::ostream& stream) const;
         
     private:
-        
-        ParticleSpec(const std::string& name,
+
+        static spec_ptr_t create_(const std::string& name,
+                                  const charge_t& charge,
+                                  const mass_t& mass,
+                                  const radius_t& radius,
+                                  const pKa_t& pKa,
+                                  bool protonatable,
+                                  const std::string& description);
+
+        ParticleSpec(std::string name,
                      charge_t charge,
                      mass_t mass,
                      radius_t radius,
                      pKa_t pKa,
                      bool protonatable,
-                     bool continuous);
-                
+                     std::string description);
+
         std::string name_;
         charge_t charge_;
         mass_t mass_;
         radius_t radius_;
         pKa_t pKa_;        
         bool protonatable_;
-        bool continuous_;        
+        std::string description_;
     };
 
     /**

@@ -32,7 +32,7 @@
 #include "simploce/simulation/leap-frog.hpp"
 #include "simploce/simulation/interactor.hpp"
 #include "simploce/simulation/sim-util.hpp"
-#include "simploce/simulation/sconf.hpp"
+#include "simploce/simulation/s-conf.hpp"
 #include "simploce/particle/atom.hpp"
 #include "simploce/particle/bead.hpp"
 #include <vector>
@@ -96,7 +96,7 @@ namespace simploce {
     
     SimulationData 
     LeapFrog<Atomistic>::displace(const sim_param_t& param, 
-                                  const at_ptr_t& at) const
+                                  const at_mod_ptr_t& at) const
     {
         static bool setup = false;
         static stime_t dt{0.0};
@@ -137,7 +137,7 @@ namespace simploce {
     
     SimulationData 
     LeapFrog<CoarseGrained>::displace(const sim_param_t& param, 
-                                      const cg_ptr_t& cg) const
+                                      const cg_mod_ptr_t& cg) const
     {
         static bool setup = false;
         static stime_t dt{0.0};

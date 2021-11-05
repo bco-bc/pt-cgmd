@@ -9,7 +9,7 @@
 #include "simploce/simulation/mc.hpp"
 #include "simploce/simulation/sim-model.hpp"
 #include "simploce/simulation/langevin-velocity-verlet.hpp"
-#include "simploce/simulation/sfactory.hpp"
+#include "simploce/simulation/s-factory.hpp"
 #include "simploce/simulation/interactor.hpp"
 #include "simploce/particle/bead.hpp"
 #include "simploce/particle/coarse-grained.hpp"
@@ -69,17 +69,17 @@ void test1() {
     std::cout << "simulation-test test 1" << std::endl;
     
     std::ofstream trajStream, dataStream;
-    file::open_output(trajStream, "tests/trajectory.dat");
-    file::open_output(dataStream, "tests/simulation.dat");
+    util::open_output_file(trajStream, "tests/trajectory.dat");
+    util::open_output_file(dataStream, "tests/simulation.dat");
     
     using simulation_t = Simulation<Bead>;
     //using simulation_t = MC<Bead>;
 
     spec_ptr_t spec1_dp = 
-        ParticleSpec::create("pspec1", 1.0, 1.0, 1.0);
-    spec_ptr_t spec1_p = ParticleSpec::create("dpspec1", 1.0, 1.0, 1.0);
+        ParticleSpec::create("pspec1", 1.0, 1.0, 1.0, "DP");
+    spec_ptr_t spec1_p = ParticleSpec::create("dpspec1", 1.0, 1.0, 1.0, "DP");
     
-    cg_ptr_t cg = factory::coarseGrained();
+    cg_mod_ptr_t cg = factory::coarseGrained();
     cg->addBead(1, "test1", position_t{}, spec1_dp);
     cg->addBead(2, "test2", position_t{}, spec1_p);
     std::cout << "Number of beads: " << cg->numberOfParticles() << std::endl;

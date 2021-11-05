@@ -30,20 +30,20 @@
  */
 
 #include "simploce/simulation/cg-electrolyte.hpp"
-#include "simploce/simulation/sconf.hpp"
+#include "simploce/simulation/s-conf.hpp"
 #include "simploce/simulation/lj-coulomb-forces.hpp"
 #include "simploce/particle/particle-spec-catalog.hpp"
 #include "simploce/particle/particle-spec.hpp"
 #include "simploce/util/map2.hpp"
 #include "simploce/util/map.hpp"
-#include "simploce/util/mu-units.hpp"
+#include "simploce/units/units-mu.hpp"
 
 namespace simploce {
     
     using lj_params_t = ForceField::lj_params_t;
     using el_params_t = ForceField::el_params_t;
     
-    static const real_t KB = MUUnits<real_t>::KB;
+    static const real_t KB = units::mu<real_t>::KB;
 
     // Values are taken from table I, Lenart et al, 2007.
     static const real_t EPS_R = 78.5;                     // Relative permittivity

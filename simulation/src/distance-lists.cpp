@@ -30,7 +30,7 @@
  */
 
 #include "simploce/simulation/distance-lists.hpp"
-#include "simploce/simulation/sconf.hpp"
+#include "simploce/simulation/s-conf.hpp"
 #include "simploce/simulation/bc.hpp"
 #include "simploce/simulation/sim-util.hpp"
 #include <vector>
@@ -67,7 +67,7 @@ namespace simploce {
                 const auto& pj = *iter_j;
                 position_t rj = pj->position();
                 dist_vect_t R = bc->apply(ri, rj);
-                real_t R2 = norm2<real_t>(R);                
+                real_t R2 = norm_square<real_t>(R);
                 if ( R2 <= rc2 ) {
                     // Include this pair.
                     auto pair = std::make_pair(pi, pj);
@@ -107,7 +107,7 @@ namespace simploce {
                 auto gj = *iter_j;
                 auto r_gj = gj->position();
                 auto R = bc->apply(r_gi, r_gj);
-                auto R2 = norm2<real_t>(R);
+                auto R2 = norm_square<real_t>(R);
                 if ( R2 <= rc2 ) {
                     // Include all particle pairs.
                     const auto particles_j = gj->particles();
@@ -151,7 +151,7 @@ namespace simploce {
                     for (auto pj : g->particles()) {
                         auto rj = pj->position();
                         auto R = bc->apply(ri, rj);
-                        real_t R2 = norm2<real_t>(R);
+                        real_t R2 = norm_square<real_t>(R);
                         if ( R2 <= rc2 ) {
                             pp_pair_t pair = std::make_pair(pi, pj);
                             pairList.push_back(pair);

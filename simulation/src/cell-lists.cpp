@@ -25,7 +25,7 @@
 #include "simploce/simulation/cell-lists.hpp"
 #include "simploce/simulation/grid.hpp"
 #include "simploce/simulation/bc.hpp"
-#include "simploce/simulation/sconf.hpp"
+#include "simploce/simulation/s-conf.hpp"
 #include "simploce/simulation/sim-util.hpp"
 #include "simploce/particle/particle-group.hpp"
 #include <memory>
@@ -116,7 +116,7 @@ namespace simploce {
             for (auto& fj : neighbor.free()) {                
                 position_t rj = fj->position();
                 auto R = bc->apply(ri,rj);
-                auto R2 = norm2<real_t>(R);
+                auto R2 = norm_square<real_t>(R);
                 if ( R2 <= rc2 ) {
                     // Include this pair.
                     pp_pair_t pair = std::make_pair(fi, fj);
@@ -126,7 +126,7 @@ namespace simploce {
             for (const auto& pg: neighbor.groups()) {
                 auto rg = pg->position();
                 auto R = bc->apply(ri, rg);
-                auto R2 = norm2<real_t>(R);
+                auto R2 = norm_square<real_t>(R);
                 if ( R2 <= rc2) {
                     // Include all pairs between given free particle and particles
                     // in group.
@@ -205,7 +205,7 @@ namespace simploce {
             for (auto gj: neighbor.groups()) {
                 auto r_gj = gj->position();                
                 auto R = bc->apply(r_gi, r_gj);
-                auto R2 = norm2<real_t>(R);
+                auto R2 = norm_square<real_t>(R);
                 if ( R2 <= rc2) {
                     // Include all particle pairs.
                     auto& particles_j = gj->particles();
@@ -276,7 +276,7 @@ namespace simploce {
             for (auto cell_j = cell_i + 1; cell_j != cells.end(); ++cell_j) {
                 auto rj = cell_j->position();
                 auto R = bc->apply(ri, rj);
-                auto R2 = norm2<real_t>(R);
+                auto R2 = norm_square<real_t>(R);
                 if ( R2 <= rc2 ) {
 #ifdef _DEBUG
                     std::clog << "Cell pair included: (" 

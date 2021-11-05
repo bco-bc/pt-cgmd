@@ -6,8 +6,8 @@
  */
 
 #include "simploce/simulation/pbc.hpp"
-#include "simploce/simulation/sfactory.hpp"
-#include "simploce/util/cvector_t.hpp"
+#include "simploce/simulation/s-factory.hpp"
+#include "simploce/types/cvector_t.hpp"
 #include <cstdlib>
 #include <iostream>
 

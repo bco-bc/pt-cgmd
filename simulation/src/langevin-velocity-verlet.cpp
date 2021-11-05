@@ -32,10 +32,10 @@
 #include "simploce/simulation/langevin-velocity-verlet.hpp"
 #include "simploce/simulation/interactor.hpp"
 #include "simploce/simulation/sim-util.hpp"
-#include "simploce/simulation/sconf.hpp"
+#include "simploce/simulation/s-conf.hpp"
 #include "simploce/particle/atom.hpp"
 #include "simploce/particle/bead.hpp"
-#include "simploce/util/mu-units.hpp"
+#include "simploce/units/units-mu.hpp"
 #include "simploce/util/util.hpp"
 #include <random>
 #include <cmath>
@@ -72,7 +72,7 @@ namespace simploce {
                        real_t gamma,
                        const std::vector<std::shared_ptr<T>>& particles)
     {
-        real_t kT = MUUnits<real_t>::KB * temperature();
+        real_t kT = units::mu<real_t>::KB * temperature();
         std::size_t nparticles = particles.size();
         
         FC_ = std::vector<real_t>(nparticles, 0.0);
@@ -224,7 +224,7 @@ namespace simploce {
         
     SimulationData 
     LangevinVelocityVerlet<Atomistic>::displace(const sim_param_t& param, 
-                                                const at_ptr_t& at) const
+                                                const at_mod_ptr_t& at) const
     {
         static bool setup = false;
 
@@ -282,7 +282,7 @@ namespace simploce {
 
     SimulationData 
     LangevinVelocityVerlet<CoarseGrained>::displace(const sim_param_t& param, 
-                                                    const cg_ptr_t& cg) const
+                                                    const cg_mod_ptr_t& cg) const
     {
         static bool setup = false;
 

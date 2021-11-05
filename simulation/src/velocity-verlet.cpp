@@ -32,7 +32,7 @@
 #include "simploce/simulation/velocity-verlet.hpp"
 #include "simploce/simulation/interactor.hpp"
 #include "simploce/simulation/sim-util.hpp"
-#include "simploce/simulation/sconf.hpp"
+#include "simploce/simulation/s-conf.hpp"
 #include "simploce/particle/atom.hpp"
 #include "simploce/particle/bead.hpp"
 #include <utility>
@@ -135,7 +135,7 @@ namespace simploce {
         
     SimulationData 
     VelocityVerlet<Atomistic>::displace(const sim_param_t& param, 
-                                        const at_ptr_t& at) const
+                                        const at_mod_ptr_t& at) const
     {        
         static std::size_t counter = 0;
         static bool firstTime = true;
@@ -185,7 +185,7 @@ namespace simploce {
         
     SimulationData 
     VelocityVerlet<CoarseGrained>::displace(const sim_param_t& param, 
-                                            const cg_ptr_t& cg) const
+                                            const cg_mod_ptr_t& cg) const
     {        
         static std::size_t counter = 0;
         static bool firstTime = true;

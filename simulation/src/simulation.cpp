@@ -33,7 +33,7 @@
 #include "simploce/simulation/sim-model.hpp"
 #include "simploce/simulation/sim-data.hpp"
 #include "simploce/simulation/sim-util.hpp"
-#include "simploce/simulation/sconf.hpp"
+#include "simploce/simulation/s-conf.hpp"
 #include <stdexcept>
 #include <iostream>
 #include <iomanip>
@@ -49,7 +49,6 @@ namespace simploce {
                                    std::ofstream& trajStream,
                                    std::ofstream& dataStream)
     {
-        const auto width = conf::WIDTH;
         const auto space = conf::SPACE;
         
         if ( sm_->size() == 0 ) {
@@ -77,7 +76,7 @@ namespace simploce {
                                                                        const std::vector<bead_group_ptr_t>& groups) {
                     return util::pressure(all, data.temperature, this->sm_->box());
                 });
-                dataStream << std::setw(width) << counter << space << data << std::endl;
+                dataStream << std::setw(conf::INTEGER_WIDTH) << counter << space << data << std::endl;
                 sm_->saveState(trajStream);
                 trajStream.flush();
                 dataStream.flush();

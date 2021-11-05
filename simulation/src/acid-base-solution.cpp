@@ -30,7 +30,7 @@
  */
 
 #include "simploce/simulation/acid-base-solution.hpp"
-#include "simploce/simulation/sconf.hpp"
+#include "simploce/simulation/s-conf.hpp"
 #include "simploce/simulation/lj-coulomb-forces.hpp"
 #include "simploce/particle/particle-spec-catalog.hpp"
 #include "simploce/particle/particle-spec.hpp"

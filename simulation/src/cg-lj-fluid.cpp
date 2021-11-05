@@ -23,20 +23,20 @@
  */
 
 #include "simploce/simulation/cg-lj-fluid.hpp"
-#include "simploce/simulation/sconf.hpp"
+#include "simploce/simulation/s-conf.hpp"
 #include "simploce/simulation/lj-coulomb-forces.hpp"
 #include "simploce/particle/particle-spec-catalog.hpp"
 #include "simploce/particle/particle-spec.hpp"
 #include "simploce/util/map2.hpp"
 #include "simploce/util/map.hpp"
-#include "simploce/util/mu-units.hpp"
+#include "simploce/units/units-mu.hpp"
 
 namespace simploce {
     
     using lj_params_t = ForceField::lj_params_t;
     using el_params_t = ForceField::el_params_t;
     
-    static const real_t KB = MUUnits<real_t>::KB;
+    static const real_t KB = units::mu<real_t>::KB;
     
     // Values are taken from Marrink et al, J. Phys. Chem. B 2007, 111, 7812-7824
     // used the nonpolar interactions between beads in aliphatic chains

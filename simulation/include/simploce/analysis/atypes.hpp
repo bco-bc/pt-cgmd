@@ -32,7 +32,7 @@
 #ifndef ATYPES_HPP
 #define ATYPES_HPP
 
-#include "../simulation/stypes.hpp"
+#include "../simulation/s-types.hpp"
 #include "simploce/particle/bead.hpp"
 #include <memory>
 

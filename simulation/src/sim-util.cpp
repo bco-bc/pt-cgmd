@@ -30,8 +30,8 @@
  */
 
 #include "simploce/simulation/sim-util.hpp"
-#include "simploce/simulation/sconf.hpp"
-#include "simploce/util/mu-units.hpp"
+#include "simploce/simulation/s-conf.hpp"
+#include "simploce/units/units-mu.hpp"
 
 namespace simploce {
     namespace util {
@@ -39,9 +39,9 @@ namespace simploce {
         length_t cutoffDistance(const box_ptr_t& box)
         {
             length_t rc = 0.5 * box->size();
-            return conf::RCUTOFF_DISTANCE() > rc() ? 
+            return conf::CUTOFF_DISTANCE() > rc() ?
                    rc : 
-                   conf::RCUTOFF_DISTANCE;             
+                   conf::CUTOFF_DISTANCE;
         }
         
         real_t squareCutoffDistance(const box_ptr_t& box)
@@ -54,8 +54,8 @@ namespace simploce {
                         const temperature_t& temperature,
                         const box_ptr_t& box)
         {
-            auto E0 = MUUnits<real_t>::E0;
-            auto kT = MUUnits<real_t>::KB * temperature();
+            auto E0 = units::mu<real_t>::E0;
+            auto kT = units::mu<real_t>::KB * temperature();
             auto volume = box->volume();
             real_t h = 1.0 / (E0 * volume) * aveM2 / (3.0 * kT);
             real_t a = 2;

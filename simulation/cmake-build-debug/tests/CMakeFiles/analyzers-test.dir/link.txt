@@ -1,1 +1,1 @@
-/usr/bin/c++ -g CMakeFiles/analyzers-test.dir/analyzers-test.cpp.o -o analyzers-test   -L/home/andre/lib  -Wl,-rpath,/home/andre/wrk3/simploce/pt-cgmd/simulation/cmake-build-debug:/home/andre/lib ../libsimulation.so -lparticles -lcpputil -lpthread 
+/usr/bin/c++ -g CMakeFiles/analyzers-test.dir/analyzers-test.cpp.o -o analyzers-test   -L/localdisk/lib  -Wl,-rpath,/localdisk/lib:/home/andre/wrk3/simploce/pt-cgmd/simulation/cmake-build-debug ../libsimulation.so -lparticles -lutil -lcpputil -lpthread 

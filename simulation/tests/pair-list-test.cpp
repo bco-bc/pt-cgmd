@@ -8,8 +8,8 @@
 #include "simploce/simulation/cell-lists.hpp"
 #include "simploce/simulation/distance-lists.hpp"
 #include "simploce/simulation/pair-lists.hpp"
-#include "simploce/simulation/sfactory.hpp"
-#include "simploce/simulation/stypes.hpp"
+#include "simploce/simulation/s-factory.hpp"
+#include "simploce/simulation/s-types.hpp"
 #include "simploce/simulation/sim-model-factory.hpp"
 #include "simploce/particle/bead.hpp"
 #include "simploce/particle/particle-spec-catalog.hpp"
@@ -39,7 +39,7 @@ void test1() {
         
     std::string fileName = "resources/particles-specs.dat";
     std::ifstream stream;
-    file::open_input(stream, fileName);
+    util::open_input_file(stream, fileName);
     spec_catalog_ptr_t catalog = ParticleSpecCatalog::create(stream);
     //std::clog << *catalog << std::endl;
     

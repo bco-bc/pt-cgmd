@@ -1,1 +1,0 @@
-/usr/bin/c++ -g CMakeFiles/apps.dir/src/s-cgmd.cpp.o CMakeFiles/apps.dir/src/s-dipole-moment.cpp.o CMakeFiles/apps.dir/src/s-gr.cpp.o CMakeFiles/apps.dir/src/s-msd.cpp.o -o apps 

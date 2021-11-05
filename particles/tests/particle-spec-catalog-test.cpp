@@ -1,5 +1,5 @@
 /*
- * File:   particle-spec-catalog-test.cpp
+ * File:   particle-spec-catalog-argon.cpp
  * Author: ajuffer
  *
  * Created on September 18, 2019, 3:50 PM
@@ -8,7 +8,7 @@
 #include "simploce/util/file.hpp"
 #include "simploce/particle/particle-spec.hpp"
 #include "simploce/particle/particle-spec-catalog.hpp"
-#include "simploce/particle/ptypes.hpp"
+#include "simploce/particle/p-types.hpp"
 #include <cstdlib>
 #include <iostream>
 #include <string>
@@ -20,35 +20,29 @@ using namespace simploce;
  */
 
 void test1() {
-    std::cout << "particle-spec-catalog-test test 1" << std::endl;
-    std::string fileName = "resources/particles-specs.dat";
+    std::cout << "particle-spec-catalog-test argon 1" << std::endl;
+    std::string fileName = "/localdisk/resources/particles-specs.dat";
     std::ifstream stream;
-    file::open_input(stream, fileName);
-    spec_catalog_ptr_t catalog = ParticleSpecCatalog::create(stream);
+    util::open_input_file(stream, fileName);
+    spec_catalog_ptr_t catalog = ParticleSpecCatalog::obtainFrom(stream);
     std::cout << *catalog << std::endl;
+    std::cout << std::endl;
+    std::cout << "Lookup O" << std::endl;
     spec_ptr_t spec = catalog->lookup("O");
-    std::cout << "spec: " << *spec << std::endl;
+    std::cout << *spec << std::endl;
+    std::cout << "Lookup O" << std::endl;
+    spec = catalog->O();
+    std::cout << *spec << std::endl;
+    std::cout << "Lookup C" << std::endl;
+    spec = catalog->C();
+    std::cout << *spec << std::endl;
+    std::cout << "Lookup N" << std::endl;
+    spec = catalog->N();
+    std::cout << *spec << std::endl;
 }
 
-void test2() {
-    std::cout << "particle-spec-catalog-test test 2" << std::endl;
-    std::cout << "%TEST_FAILED% time=0 testname=test2 (particle-spec-catalog-test) message=error message sample" << std::endl;
-}
-
-int main(int argc, char** argv) {
-    std::cout << "%SUITE_STARTING% particle-spec-catalog-test" << std::endl;
-    std::cout << "%SUITE_STARTED%" << std::endl;
-
-    std::cout << "%TEST_STARTED% test1 (particle-spec-catalog-test)" << std::endl;
+int main() {
     test1();
-    std::cout << "%TEST_FINISHED% time=0 test1 (particle-spec-catalog-test)" << std::endl;
-
-    //std::cout << "%TEST_STARTED% test2 (particle-spec-catalog-test)\n" << std::endl;
-    //test2();
-    //std::cout << "%TEST_FINISHED% time=0 test2 (particle-spec-catalog-test)" << std::endl;
-
-    std::cout << "%SUITE_FINISHED% time=0" << std::endl;
-
     return (EXIT_SUCCESS);
 }
 

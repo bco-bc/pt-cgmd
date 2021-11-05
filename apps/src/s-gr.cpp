@@ -6,7 +6,10 @@
  * Created on September 22, 2019, 3:15 PM
  */
 
-#include "simploce/simulation/sall.hpp"
+#include "simploce/simulation/s-types.hpp"
+#include "simploce/simulation/s-conf.hpp"
+#include "simploce/simulation/s-factory.hpp"
+#include "simploce/simulation/sim-model-factory.hpp"
 #include "simploce/analysis/gr.hpp"
 #include "simploce/analysis/analysis.hpp"
 #include "simploce/particle/particle-spec-catalog.hpp"
@@ -28,13 +31,13 @@ int main(int argc, char *argv[]) {
 
     std::string fnParticleSpecCatalog{"particle-spec-catalog.dat"};
     std::string fnTrajectory{"trajectory.dat"};
-    std::string fnInputModel{"in.model"};
+    std::string fnInputModel{"in.ParticleModelSpecification"};
     std::string fnResults{"gr.dat"};
     std::string specName1{"Na+"};
     std::string specName2{"Cl-"};
     real_t dr{0.05};              // Bin size, nm.
     std::size_t nskip = 0;        // Number of states in trajectory to skip
-                                  // before executing analysis.
+    // before executing analysis.
 
     po::options_description usage("Usage");
     usage.add_options()
@@ -44,8 +47,8 @@ int main(int argc, char *argv[]) {
                     "Input file name of particle specifications. Default 'particle-spec-catalog.dat'."
             )
             (
-                    "fn-model", po::value<std::string>(&fnInputModel),
-                    "Input file name model. Default is 'in.model'.")
+                    "fn-ParticleModelSpecification", po::value<std::string>(&fnInputModel),
+                    "Input file name ParticleModelSpecification. Default is 'in.ParticleModelSpecification'.")
             (
                     "fn-trajectory", po::value<std::string>(&fnTrajectory),
                     "Input file name trajectory. Default is 'trajectory.dat'."
@@ -83,8 +86,8 @@ int main(int argc, char *argv[]) {
     if (vm.count("fn-particle-spec-catalog")) {
         fnParticleSpecCatalog = vm["fn-particle-spec-catalog"].as<std::string>();
     }
-    if (vm.count("fn-input-model")) {
-        fnInputModel = vm["fn-input-model"].as<std::string>();
+    if (vm.count("fn-input-ParticleModelSpecification")) {
+        fnInputModel = vm["fn-input-ParticleModelSpecification"].as<std::string>();
     }
 
     if (vm.count("fn-trajectory")) {
@@ -115,7 +118,7 @@ int main(int argc, char *argv[]) {
 
     sim_model_fact_ptr_t simModelFactory = factory::simulationModelFactory(catalog);
     std::ifstream istream;
-    file::open_input(istream, fnInputModel);
+    util::open_input_file(istream, fnInputModel);
     cg_sim_model_ptr_t sm = simModelFactory->readCoarseGrainedFrom(istream);
     istream.close();
     std::clog << *sm << std::endl;
@@ -125,19 +128,19 @@ int main(int argc, char *argv[]) {
     gr_ptr_t gr = gr_t::create(dr, specName1, specName2, box, bc);
 
     analysis_t analysis(sm, gr);
-    file::open_input(istream, fnTrajectory);
+    util::open_input_file(istream, fnTrajectory);
     analysis.perform(param, istream);
     istream.close();
 
     // Write results.
     auto results = gr->results();
     std::ofstream ostream;
-    file::open_output(ostream, fnResults);
+    util::open_output_file(ostream, fnResults);
     ostream.setf(std::ios::scientific);
     ostream.precision(conf::PRECISION);
-    for (auto pair : results) {
-        ostream << std::setw(conf::WIDTH) << pair.first;
-        ostream << conf::SPACE << std::setw(conf::WIDTH) << pair.second << std::endl;
+    for (auto pair: results) {
+        ostream << std::setw(conf::REAL_WIDTH) << pair.first;
+        ostream << conf::SPACE << std::setw(conf::REAL_WIDTH) << pair.second << std::endl;
     }
     ostream.flush();
     ostream.close();

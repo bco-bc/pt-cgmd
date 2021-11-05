@@ -23,7 +23,7 @@
  */
 
 #include "simploce/simulation/cg-hp.hpp"
-#include "simploce/simulation/sconf.hpp"
+#include "simploce/simulation/s-conf.hpp"
 #include <tuple>
 
 namespace simploce {

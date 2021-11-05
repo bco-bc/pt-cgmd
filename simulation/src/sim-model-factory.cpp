@@ -30,7 +30,7 @@
  */
 
 #include "simploce/simulation/sim-model-factory.hpp"
-#include "simploce/simulation/sfactory.hpp"
+#include "simploce/simulation/s-factory.hpp"
 #include "simploce/simulation/interactor.hpp"
 #include "simploce/simulation/langevin-velocity-verlet.hpp"
 #include "simploce/simulation/pt-langevin-velocity-verlet.hpp"
@@ -41,7 +41,7 @@
 #include "simploce/particle/particle-model-factory.hpp"
 #include "simploce/particle/particle-spec-catalog.hpp"
 #include "simploce/particle/particle-spec.hpp"
-#include "simploce/util/mu-units.hpp"
+#include "simploce/units/units-mu.hpp"
 #include <algorithm>
 #include <random>
 #include <cmath>
@@ -60,6 +60,7 @@ namespace simploce {
                                      length_t Rref, 
                                      real_t fc)
     {
+        /*
         std::clog << "Creating coarse grained simulation model for " 
                   << "a single particle group containing one bond whose beads "
                   << "undergo harmonic motion."
@@ -71,7 +72,7 @@ namespace simploce {
         
         std::clog << "Initial distance between particles : " << R0 << " nm." << std::endl;
         std::clog << "Force constant: " << fc << " kJ/(mol nm^2)" << std::endl;
-        real_t period = 2.0 * MathConstants<real_t>::PI * std::sqrt(spec->mass()() / fc);
+        real_t period = 2.0 * math::constants<real_t>::PI * std::sqrt(spec->mass()() / fc);
         std::clog << "Period: " << period << " ps" << std::endl;
         std::clog << "Frequency: " << 1.0 / period << " 1/ps" << std::endl;
                 
@@ -83,7 +84,7 @@ namespace simploce {
         std::clog << "No boundary conditions." << std::endl;
         
         // Two particle model.
-        cg_ptr_t cg = particleModelFactory_->harmonic(R0);
+        Atomistic atomistic = particleModelFactory_->diatomic(R0);
         
         // Interactor.
         cg_interactor_ptr_t interactor = 
@@ -96,6 +97,8 @@ namespace simploce {
         
         // Done.
         return std::make_shared<cg_sim_model_t>(cg, displacer, interactor, box, bc);
+         */
+        return nullptr;
     }
        
         
@@ -105,6 +108,7 @@ namespace simploce {
                                              const temperature_t temperature,
                                              std::size_t nlimit)
     {
+        /**
         std::clog << "Creating coarse grained simulation model for polarizable water." << std::endl;
         
         std::clog.setf(std::ios_base::scientific, std::ios_base::floatfield);
@@ -133,6 +137,8 @@ namespace simploce {
         
         // Done.
         return std::make_shared<cg_sim_model_t>(cg, displacer, interactor, box, bc);
+         */
+         return nullptr;
     }    
     
     cg_sim_model_ptr_t 
@@ -142,6 +148,7 @@ namespace simploce {
                                                const density_t atDensitySI,
                                                const temperature_t temperature)
     {
+        /*
         std::clog << "Creating coarse grained simulation model for formic acid (HCOOH)." 
                   << std::endl;
 
@@ -180,7 +187,8 @@ namespace simploce {
         
         // Done.
         return std::make_shared<cg_sim_model_t>(cg, displacer, interactor, box, bc);
-
+        */
+        return nullptr;
     }
     
     cg_sim_model_ptr_t 
@@ -188,6 +196,7 @@ namespace simploce {
                                         molarity_t molarity,
                                         temperature_t temperature)
     {
+        /*
         std::clog << "Creating coarse grained simulation model for an"
                      " electrolyte solution." << std::endl;
         
@@ -212,7 +221,9 @@ namespace simploce {
         //std::clog << "Using \"Langevin Velocity Verlet\" algorithm." << std::endl;
         
         // Done.
-        return std::make_shared<cg_sim_model_t>(cg, displacer, interactor, box, bc);                
+        return std::make_shared<cg_sim_model_t>(cg, displacer, interactor, box, bc);
+         */
+        return nullptr;
     }
     
     cg_sim_model_ptr_t 
@@ -220,6 +231,7 @@ namespace simploce {
                                     const density_t densitySI,
                                     const temperature_t temperature)
     {
+        /*
         std::clog << "Creating coarse grained simulation model for a"
                   << " LJ fluid." << std::endl;
         
@@ -242,6 +254,8 @@ namespace simploce {
                 
         // Done.
         return std::make_shared<cg_sim_model_t>(cg, displacer, interactor, box, bc);
+         */
+        return nullptr;
     }
     
     cg_sim_model_ptr_t 

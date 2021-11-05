@@ -34,7 +34,7 @@
 
 #include "pair-list-generator.hpp"
 #include "simploce/particle/bead.hpp"
-#include "stypes.hpp"
+#include "s-types.hpp"
 
 namespace simploce {
     

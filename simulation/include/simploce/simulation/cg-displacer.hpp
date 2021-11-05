@@ -34,7 +34,7 @@
 
 #include "displacer.hpp"
 #include "sim-data.hpp"
-#include "stypes.hpp"
+#include "s-types.hpp"
 
 namespace simploce {
     
@@ -52,7 +52,7 @@ namespace simploce {
          * @return Simulation data (e.g. kinetic energy, temperature, etc).
          */
         virtual SimulationData displace(const sim_param_t& param, 
-                                        const cg_ptr_t& cg) const = 0;        
+                                        const cg_mod_ptr_t& cg) const = 0;
         
     };
 }

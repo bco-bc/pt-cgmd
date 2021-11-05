@@ -8,7 +8,7 @@
 #include "simploce/simulation/cell.hpp"
 #include "simploce/simulation/grid.hpp"
 #include "simploce/particle/bead.hpp"
-#include "simploce/simulation/sfactory.hpp"
+#include "simploce/simulation/s-factory.hpp"
 #include "simploce/util/util.hpp"
 #include "simploce/simulation/sim-util.hpp"
 #include <cstdlib>
@@ -58,12 +58,12 @@ void test1() {
     std::clog << "Number of cell along one direction: " << n1 << std::endl;
     std::clog << "Cell positions and locations:" << std::endl;
     std::size_t counter = 0;
-    for (auto& cell : grid->cells()) {
+    for (auto& c : grid->cells()) {
         std::clog << counter;
-        std::clog << " " << cell.position();
-        std::clog << " " << std::get<0>(cell.location())
-                  << " " << std::get<1>(cell.location())
-                  << " " << std::get<2>(cell.location())
+        std::clog << " " << c.position();
+        std::clog << " " << std::get<0>(c.location())
+                  << " " << std::get<1>(c.location())
+                  << " " << std::get<2>(c.location())
                   << std::endl;
         counter += 1;
     }

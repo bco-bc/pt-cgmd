@@ -29,9 +29,11 @@
  * Created on October 4, 2019, 2:16 PM
  */
 
+#include "simploce/simulation/pt-pair-list-generator.hpp"
+#include "simploce/simulation/continuous.hpp"
 #include "simploce/simulation/constant-rate-pt.hpp"
-#include "simploce/simulation/sconf.hpp"
-#include "simploce/particle/continuous-protonatable-bead.hpp"
+#include "simploce/simulation/s-conf.hpp"
+#include "simploce/particle/protonatable-bead.hpp"
 #include "simploce/util/telegraph-process.hpp"
 #include <stdexcept>
 
@@ -72,7 +74,7 @@ namespace simploce {
         
     void 
     ConstantRateProtonTransfer::transfer(const sim_param_t& param,
-                                         const std::vector<cprot_bead_ptr_t>& continuous,
+                                         const std::vector<prot_bead_ptr_t>& continuous,
                                          const prot_pair_list_t& pairList) const
     {
         stime_t dt = param.get<real_t>("timestep");
@@ -88,10 +90,12 @@ namespace simploce {
                 npairs += 1;
                 auto p1 = pair.first;
                 std::size_t index1 = p1->index();
-                int X1 = p1->protonationState();                
+                auto state_1 = p1->protonationState();
+                int X1 = state_1.isProtonated() ? 1 : 0;
                 auto p2 = pair.second;
                 std::size_t index2 = p2->index();
-                int X2 = p2->protonationState();
+                auto state_2 = p2->protonationState();
+                int X2 = state_2.isProtonated() ? 1 : 0;
                 
                 // Transfer only if one of the beads is protonated.
                 int dX1 = 0;
@@ -106,10 +110,10 @@ namespace simploce {
                     X1 += dX1;
                     X2 += dX2;
                     if ( X1 == 0 ) {
-                        p1->deprotonate();
+                        state_1.protonate();
                     }
                     if ( X2 == 1) {
-                        p2->protonate();
+                        state_2.deprotonate();
                     }
                 } else {
                     if ( X1 == 0 && X2 == 1 ) {
@@ -122,10 +126,10 @@ namespace simploce {
                         X1 += dX1;
                         X2 += dX2;
                         if ( X1 == 1 ) {
-                            p1->protonate();
+                            state_1.protonate();
                         }
                         if ( X2 == 0 ) {
-                            p2->deprotonate();
+                            state_2.deprotonate();
                         }
                     }
                 }
@@ -144,7 +148,7 @@ namespace simploce {
             
             mass_t m = p->mass();  // Just before mass transfer.
             
-            // Update state x and current I of protonatable.
+            /* Update state x and current I of protonatable.
             std::size_t index = p->index();
             real_t x = p->state();
             real_t I = p->current();
@@ -164,6 +168,7 @@ namespace simploce {
             }
             v += dv;
             p->velocity(v);
+             */
         }
         
         // Done.

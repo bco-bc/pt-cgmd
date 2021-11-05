@@ -34,7 +34,7 @@
 
 #include "cg-forcefield.hpp"
 #include "sim-data.hpp"
-#include "stypes.hpp"
+#include "s-types.hpp"
 #include <vector>
 
 namespace simploce {

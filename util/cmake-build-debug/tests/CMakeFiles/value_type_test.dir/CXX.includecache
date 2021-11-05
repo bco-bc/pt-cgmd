@@ -1,0 +1,30 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+../include/simploce/conf/u-conf.hpp
+
+../include/simploce/types/value_t.hpp
+simploce/conf/u-conf.hpp
+../include/simploce/types/simploce/conf/u-conf.hpp
+iostream
+-
+iomanip
+-
+algorithm
+-
+cmath
+-
+
+/home/andre/wrk3/simploce/pt-cgmd/util/tests/value-type-test.cpp
+simploce/types/value_t.hpp
+/home/andre/wrk3/simploce/pt-cgmd/util/tests/simploce/types/value_t.hpp
+cstdlib
+-
+iostream
+-
+
