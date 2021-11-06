@@ -1,8 +1,0 @@
-//
-// Created by andre on 15/10/2021.
-//
-
-#ifndef DW_DOUBLEWELLPOTENTIAL_HPP
-#define DW_DOUBLEWELLPOTENTIAL_HPP
-
-#endif //DW_DOUBLEWELLPOTENTIAL_HPP

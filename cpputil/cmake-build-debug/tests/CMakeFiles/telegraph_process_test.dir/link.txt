@@ -1,1 +1,0 @@
-/usr/bin/c++ -g CMakeFiles/telegraph_process_test.dir/telegraph-process-test.cpp.o -o telegraph_process_test  -Wl,-rpath,/home/andre/wrk3/simploce/pt-cgmd/cpputil/cmake-build-debug ../libcpputil.so 

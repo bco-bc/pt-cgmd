@@ -1,3 +1,0 @@
-/home/andre/wrk3/simploce/pt-cgmd/conf/cmake-build-debug/CMakeFiles/rebuild_cache.dir
-/home/andre/wrk3/simploce/pt-cgmd/conf/cmake-build-debug/CMakeFiles/edit_cache.dir
-/home/andre/wrk3/simploce/pt-cgmd/conf/cmake-build-debug/CMakeFiles/conf.dir

@@ -1,5 +1,4 @@
 /*
- * File:   bc.hpp
  * Author: André H. Juffer, Biocenter Oulu.
  *
  * Created on September 4, 2019, 5:49 PM
@@ -15,9 +14,9 @@ namespace simploce {
   /**
    * As applicable to a given molecular simulation for calculating interactions.
    */
-  struct BoundaryCondition {
+  struct boundary_condition {
 
-    virtual ~BoundaryCondition() {}
+    virtual ~boundary_condition() {}
 
     /**
      * Applies the boundary condition.
@@ -29,16 +28,22 @@ namespace simploce {
     
     /**
      * Moves given position to the inside of the simulation box.
-     * @param r Position possibly outside simulation box.
+     * @param r_out Position possibly outside simulation box.
      * @return Position Inside simulation box.
      */
-    virtual position_t placeInside(const position_t& r) const = 0;
+    virtual position_t placeInside(const position_t& r_out) const = 0;
     
     /**
      * Returns an identifying name.
      * @return Identifying name.
      */
     virtual std::string id() const = 0;
+
+    /**
+     * Sets the box.
+     * @param box.
+     */
+    virtual void box(const box_ptr_t& box) {};
 
   };
   

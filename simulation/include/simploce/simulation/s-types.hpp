@@ -15,7 +15,12 @@
 namespace simploce {
     
     // Forward declarations.
-    class BoundaryCondition;
+
+
+
+
+
+    class boundary_condition;
     class CoarseGrainedForceField;
     class CoarseGrainedDisplacer;
     class AtomisticDisplacer;
@@ -76,7 +81,7 @@ namespace simploce {
      */
     using prot_p_mod_factory = std::shared_ptr<ProtonatableParticleModelFactory>;
     
-    using bc_t = BoundaryCondition;
+    using bc_t = boundary_condition;
     
     using bc_ptr_t = std::shared_ptr<bc_t>;
     

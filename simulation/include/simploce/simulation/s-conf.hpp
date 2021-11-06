@@ -13,14 +13,16 @@
 
 namespace simploce {
     namespace conf {
-        
+
+        // Boundary conditions
+        const std::string NO_BC = "no-bc";   // None.
+        const std::string PBC = "pbc";       // Periodic boundary conditions.
+
+        // Algorithm.
         const std::string LEAP_FROG = "lf";
         const std::string LANGEVIN_VELOCITY_VERLET = "lvv";
-        const std::string PT_LANGEVIN_VELOCITY_VERLET = "pt-lvv";
+        const std::string PT_LANGEVIN_VELOCITY_VERLET = "pt-lvv";    // With proton transfer (PT).
         const std::string VELOCITY_VERLET = "vv";
-        
-        const std::string NOBC = "no-bc";
-        const std::string PBC = "pbc";
         
         const std::string POLARIZABLE_WATER = "pol-water";
         const std::string ACID_BASE_SOLUTION = "acid-base-solution";
@@ -40,9 +42,9 @@ namespace simploce {
         static length_t CUTOFF_DISTANCE_PT{0.4};
 
         /**
-         * Minimum value below which a distance is considered to be close.
+         * Value below which a distance is considered to be close.
          */
-        static length_t CLOSE{0.15};
+        static distance_t CLOSE{0.15};
     }
 }
 

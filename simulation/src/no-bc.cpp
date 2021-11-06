@@ -1,5 +1,4 @@
 /*
- * File:   no-bc.cpp
  * Author: André H. Juffer, Biocenter Oulu.
  *
  * Created on September 4, 2019, 5:55 PM
@@ -18,15 +17,15 @@ namespace simploce {
     }
     
     position_t 
-    NoBoundaryCondition::placeInside(const position_t& r) const
+    NoBoundaryCondition::placeInside(const position_t& r_out) const
     {
-        return r;
+        return r_out;
     }
     
     std::string 
     NoBoundaryCondition::id() const
     {
-        return conf::NOBC;
+        return conf::NO_BC;
     }
  
 }

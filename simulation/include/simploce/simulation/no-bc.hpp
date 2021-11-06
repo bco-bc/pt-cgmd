@@ -14,11 +14,11 @@ namespace simploce {
     /**
      * No boundary conditions are applied.
      */
-    struct NoBoundaryCondition : public BoundaryCondition {
+    struct NoBoundaryCondition : public boundary_condition {
 
         dist_vect_t apply(const position_t& r1, const position_t& r2) const override;
         
-        virtual position_t placeInside(const position_t& r) const override;
+        virtual position_t placeInside(const position_t& r_out) const override;
         
         std::string id() const override;
 

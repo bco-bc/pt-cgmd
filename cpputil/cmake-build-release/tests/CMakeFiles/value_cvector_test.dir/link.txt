@@ -1,1 +1,0 @@
-/usr/bin/c++ -O3 -O3 -DNDEBUG CMakeFiles/value_cvector_test.dir/value-cvector-test.cpp.o -o value_cvector_test  -Wl,-rpath,/home/andre/wrk3/simploce/pt-cgmd/cpputil/cmake-build-release ../libcpputil.so 

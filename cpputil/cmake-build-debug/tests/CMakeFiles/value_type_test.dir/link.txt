@@ -1,1 +1,0 @@
-/usr/bin/c++ -g CMakeFiles/value_type_test.dir/value-type-test.cpp.o -o value_type_test  -Wl,-rpath,/home/andre/wrk3/simploce/pt-cgmd/cpputil/cmake-build-debug ../libcpputil.so 

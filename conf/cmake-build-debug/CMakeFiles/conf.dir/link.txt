@@ -1,1 +1,0 @@
-/usr/bin/c++ -fPIC -g -shared -Wl,-soname,libconf.so -o libconf.so CMakeFiles/conf.dir/library.cpp.o 

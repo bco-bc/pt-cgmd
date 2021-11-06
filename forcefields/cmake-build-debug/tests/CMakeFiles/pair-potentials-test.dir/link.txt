@@ -1,1 +1,0 @@
-/usr/bin/c++ -g CMakeFiles/pair-potentials-test.dir/pair-potentials-test.cpp.o -o pair-potentials-test   -L/localdisk/lib  -Wl,-rpath,/localdisk/lib:/wrk3/simploce/pt-cgmd/forcefields/cmake-build-debug ../libforcefields.so -lparticles -lutil -lcpputil 

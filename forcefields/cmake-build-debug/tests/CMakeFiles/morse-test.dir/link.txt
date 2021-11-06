@@ -1,1 +1,0 @@
-/usr/bin/c++ -g CMakeFiles/morse-test.dir/morse-test.cpp.o -o morse-test   -L/localdisk/lib  -Wl,-rpath,/localdisk/lib:/wrk3/simploce/pt-cgmd/forcefields/cmake-build-debug ../libforcefields.so -lparticles -lutil -lcpputil 
