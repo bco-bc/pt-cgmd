@@ -28,13 +28,19 @@ namespace simploce {
         const std::string ACID_BASE_SOLUTION = "acid-base-solution";
         const std::string ELECTROLYTE = "electrolyte";
         const std::string LJ_FLUID = "lj-fluid";
-        const std::string HP = "hp";
+
+        // Interaction type.
+        const std::string LJ = "lj";             // Lennard-Jones
+        const std::string LJ_RF = "lj+rf";       // Lennard-Jones + reaction field.
+        const std::string COULOMB = "coulomb";   // Coulomb.
+        const std::string HP = "hp";             // Harmonic.
+        const std::string HA_QP = "ha-qp";       // Halve-attractive quartic.
         
         // Default cutoff distance for non-bonded interactions.
-        static length_t CUTOFF_DISTANCE{2.6};  // nm.
+        const length_t CUTOFF_DISTANCE{2.6};  // nm.
         
         // Minimum number of particles.
-        const std::size_t MIN_NUMBER_OF_PARTICLES = 1000;    
+        const std::size_t MIN_NUMBER_OF_PARTICLES{500};
         
         /**
          * Default cutoff distance beyond which protonatables cannot transfer protons.

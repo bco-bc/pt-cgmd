@@ -29,7 +29,7 @@ void test1() {
     std::cout << "Particle model:" << std::endl;
     util::open_input_file(stream,
                     "/localdisk/resources/coarse-grained-system.dat");
-    cg_mod_ptr_t cg = CoarseGrained::obtainFrom(stream, catalog);
+    cg_sys_ptr_t cg = CoarseGrained::obtainFrom(stream, catalog);
     stream.close();
     std::cout << *cg << std::endl;
 }

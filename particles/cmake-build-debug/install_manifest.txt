@@ -3,6 +3,7 @@
 /localdisk/include/simploce/particle/protonatable-bead.hpp
 /localdisk/include/simploce/particle/particle-system.hpp
 /localdisk/include/simploce/particle/p-properties.hpp
+/localdisk/include/simploce/particle/particle-system-factory.hpp
 /localdisk/include/simploce/particle/particle-spec.hpp
 /localdisk/include/simploce/particle/protonatable.hpp
 /localdisk/include/simploce/particle/protonation-site.hpp
@@ -12,7 +13,6 @@
 /localdisk/include/simploce/particle/p-conf.hpp
 /localdisk/include/simploce/particle/protonation-site-catalog.hpp
 /localdisk/include/simploce/particle/protonatable-coarse-grained.hpp
-/localdisk/include/simploce/particle/particle-model-factory.hpp
 /localdisk/include/simploce/particle/bond.hpp
 /localdisk/include/simploce/particle/p-factory.hpp
 /localdisk/include/simploce/particle/particle-group.hpp

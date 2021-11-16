@@ -32,7 +32,7 @@
 #ifndef AT_FORCEFIELD_HPP
 #define AT_FORCEFIELD_HPP
 
-#include "forcefield.hpp"
+#include "force-field.hpp"
 #include "simploce/particle/p-types.hpp"
 #include <vector>
 

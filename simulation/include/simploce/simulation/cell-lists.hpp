@@ -50,7 +50,7 @@ namespace simploce {
      * Specialization for atoms.
      */
     template <>
-    class CellLists<Atom> : public ParticlePairListGenerator<Atom> {
+    class CellLists<Atom> : public pair_lists_generator<Atom> {
     public:
         
         
@@ -80,7 +80,7 @@ namespace simploce {
      * Specialization for beads.
      */
     template <>
-    class CellLists<Bead> : public ParticlePairListGenerator<Bead> {
+    class CellLists<Bead> : public pair_lists_generator<Bead> {
     public:
         
         CellLists(const box_ptr_t& box,

@@ -26,7 +26,7 @@
 #include "simploce/simulation/grid.hpp"
 #include "simploce/simulation/bc.hpp"
 #include "simploce/simulation/s-conf.hpp"
-#include "simploce/simulation/sim-util.hpp"
+#include "simploce/simulation/s-properties.hpp"
 #include "simploce/particle/particle-group.hpp"
 #include <memory>
 #include <vector>
@@ -43,19 +43,19 @@ namespace simploce {
     static length_t 
     computeSideLength_(const box_ptr_t& box)
     {
-        return 0.5 * util::cutoffDistance(box);
-        return util::cutoffDistance(box);
+        return 0.5 * properties::cutoffDistance(box);
+        return properties::cutoffDistance(box);
     }
     
     
     // For free particles in a given cells.
     template <typename P>
-    static typename PairLists<P>::pp_list_cont_t
+    static typename PairLists<P>::pp_pair_cont_t
     forFreeInOneCell_(const Cell<P>& cell, 
                       const bc_ptr_t& bc,
                       const box_ptr_t& box)
     {
-        using pp_list_cont_t = typename PairLists<P>::pp_list_cont_t;
+        using pp_list_cont_t = typename PairLists<P>::pp_pair_cont_t;
         using pp_pair_t = typename PairLists<P>::pp_pair_t;
         
         if ( cell.free().empty() ) {
@@ -91,16 +91,16 @@ namespace simploce {
     // Pairs of free particles in the given cell and particles (free and 
     // in groups) in a neighboring cell.
     template <typename P>
-    static typename PairLists<P>::pp_list_cont_t
+    static typename PairLists<P>::pp_pair_cont_t
     forFreeInTwoCells_(const Cell<P>& cell, 
                        const Cell<P>& neighbor,
                        const bc_ptr_t& bc,
                        const box_ptr_t& box)
     {
-        using pp_list_cont_t = typename PairLists<P>::pp_list_cont_t;
+        using pp_list_cont_t = typename PairLists<P>::pp_pair_cont_t;
         using pp_pair_t = typename PairLists<P>::pp_pair_t;
         
-        static real_t rc2 = util::squareCutoffDistance(box);
+        static real_t rc2 = properties::squareCutoffDistance(box);
         
         if ( cell.free().empty() ) {
             return pp_list_cont_t{};
@@ -143,12 +143,12 @@ namespace simploce {
     
     // Pairs of particles in particle groups in a single cell.
     template <typename P>
-    static typename PairLists<P>::pp_list_cont_t
+    static typename PairLists<P>::pp_pair_cont_t
     forGroupsInOneCell_(const Cell<P>& cell,
                         const bc_ptr_t& bc,
                         const box_ptr_t& box)
     {
-        using pp_list_cont_t = typename PairLists<P>::pp_list_cont_t;
+        using pp_list_cont_t = typename PairLists<P>::pp_pair_cont_t;
         using pp_pair_t = typename PairLists<P>::pp_pair_t;
         
         if ( cell.groups().empty() || cell.groups().empty() ) {
@@ -182,16 +182,16 @@ namespace simploce {
 
     // Pairs of particles in particle groups in two -different- cells.
     template <typename P>
-    static typename PairLists<P>::pp_list_cont_t
+    static typename PairLists<P>::pp_pair_cont_t
     forGroupsInTwoCells_(const Cell<P>& cell, 
                          const Cell<P>& neighbor,
                          const bc_ptr_t& bc,
                          const box_ptr_t& box)
     {
-        using pp_list_cont_t = typename PairLists<P>::pp_list_cont_t;
+        using pp_list_cont_t = typename PairLists<P>::pp_pair_cont_t;
         using pp_pair_t = typename PairLists<P>::pp_pair_t;
         
-        static real_t rc2 = util::squareCutoffDistance(box);
+        static real_t rc2 = properties::squareCutoffDistance(box);
         
         if ( cell.groups().empty() || cell.groups().empty() ) {
             return pp_list_cont_t{};  // Empty list.
@@ -233,11 +233,11 @@ namespace simploce {
     {
         using grid_t = Grid<P>;
         using grid_ptr_t = typename grid_t::grid_ptr_t;
-        using pp_list_cont_t = typename PairLists<P>::pp_list_cont_t;
+        using pp_list_cont_t = typename PairLists<P>::pp_pair_cont_t;
             
         static bool firstTime = true;                
         static grid_ptr_t grid = grid_t::make(box, sideLength);
-        static auto rc2 = util::squareCutoffDistance(box);
+        static auto rc2 = properties::squareCutoffDistance(box);
         
         // Display some information.
         if ( firstTime ) {

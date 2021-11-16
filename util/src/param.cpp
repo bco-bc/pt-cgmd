@@ -1,5 +1,4 @@
 /*
- * File:   param.cpp
  * Author: André H. Juffer, Biocenter Oulu.
  *
  * Created on September 19, 2019, 2:14 PM

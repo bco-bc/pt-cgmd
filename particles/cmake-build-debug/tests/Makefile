@@ -176,46 +176,18 @@ particle-spec-catalog-test/fast:
 .PHONY : particle-spec-catalog-test/fast
 
 # Convenience name for target.
-tests/CMakeFiles/particle-model-factory-test.dir/rule:
-	cd /home/andre/wrk3/simploce/pt-cgmd/particles/cmake-build-debug && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 tests/CMakeFiles/particle-model-factory-test.dir/rule
-.PHONY : tests/CMakeFiles/particle-model-factory-test.dir/rule
+tests/CMakeFiles/read-cg-test.dir/rule:
+	cd /home/andre/wrk3/simploce/pt-cgmd/particles/cmake-build-debug && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 tests/CMakeFiles/read-cg-test.dir/rule
+.PHONY : tests/CMakeFiles/read-cg-test.dir/rule
 
 # Convenience name for target.
-particle-model-factory-test: tests/CMakeFiles/particle-model-factory-test.dir/rule
-.PHONY : particle-model-factory-test
+read-cg-test: tests/CMakeFiles/read-cg-test.dir/rule
+.PHONY : read-cg-test
 
 # fast build rule for target.
-particle-model-factory-test/fast:
-	cd /home/andre/wrk3/simploce/pt-cgmd/particles/cmake-build-debug && $(MAKE) $(MAKESILENT) -f tests/CMakeFiles/particle-model-factory-test.dir/build.make tests/CMakeFiles/particle-model-factory-test.dir/build
-.PHONY : particle-model-factory-test/fast
-
-# Convenience name for target.
-tests/CMakeFiles/protonation-site-test.dir/rule:
-	cd /home/andre/wrk3/simploce/pt-cgmd/particles/cmake-build-debug && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 tests/CMakeFiles/protonation-site-test.dir/rule
-.PHONY : tests/CMakeFiles/protonation-site-test.dir/rule
-
-# Convenience name for target.
-protonation-site-test: tests/CMakeFiles/protonation-site-test.dir/rule
-.PHONY : protonation-site-test
-
-# fast build rule for target.
-protonation-site-test/fast:
-	cd /home/andre/wrk3/simploce/pt-cgmd/particles/cmake-build-debug && $(MAKE) $(MAKESILENT) -f tests/CMakeFiles/protonation-site-test.dir/build.make tests/CMakeFiles/protonation-site-test.dir/build
-.PHONY : protonation-site-test/fast
-
-# Convenience name for target.
-tests/CMakeFiles/protonatable-bead-test.dir/rule:
-	cd /home/andre/wrk3/simploce/pt-cgmd/particles/cmake-build-debug && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 tests/CMakeFiles/protonatable-bead-test.dir/rule
-.PHONY : tests/CMakeFiles/protonatable-bead-test.dir/rule
-
-# Convenience name for target.
-protonatable-bead-test: tests/CMakeFiles/protonatable-bead-test.dir/rule
-.PHONY : protonatable-bead-test
-
-# fast build rule for target.
-protonatable-bead-test/fast:
-	cd /home/andre/wrk3/simploce/pt-cgmd/particles/cmake-build-debug && $(MAKE) $(MAKESILENT) -f tests/CMakeFiles/protonatable-bead-test.dir/build.make tests/CMakeFiles/protonatable-bead-test.dir/build
-.PHONY : protonatable-bead-test/fast
+read-cg-test/fast:
+	cd /home/andre/wrk3/simploce/pt-cgmd/particles/cmake-build-debug && $(MAKE) $(MAKESILENT) -f tests/CMakeFiles/read-cg-test.dir/build.make tests/CMakeFiles/read-cg-test.dir/build
+.PHONY : read-cg-test/fast
 
 # Convenience name for target.
 tests/CMakeFiles/particle-test.dir/rule:
@@ -246,6 +218,20 @@ coarse-grained-test/fast:
 .PHONY : coarse-grained-test/fast
 
 # Convenience name for target.
+tests/CMakeFiles/particle-system-factory-test.dir/rule:
+	cd /home/andre/wrk3/simploce/pt-cgmd/particles/cmake-build-debug && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 tests/CMakeFiles/particle-system-factory-test.dir/rule
+.PHONY : tests/CMakeFiles/particle-system-factory-test.dir/rule
+
+# Convenience name for target.
+particle-system-factory-test: tests/CMakeFiles/particle-system-factory-test.dir/rule
+.PHONY : particle-system-factory-test
+
+# fast build rule for target.
+particle-system-factory-test/fast:
+	cd /home/andre/wrk3/simploce/pt-cgmd/particles/cmake-build-debug && $(MAKE) $(MAKESILENT) -f tests/CMakeFiles/particle-system-factory-test.dir/build.make tests/CMakeFiles/particle-system-factory-test.dir/build
+.PHONY : particle-system-factory-test/fast
+
+# Convenience name for target.
 tests/CMakeFiles/prot-site-catalog-test.dir/rule:
 	cd /home/andre/wrk3/simploce/pt-cgmd/particles/cmake-build-debug && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 tests/CMakeFiles/prot-site-catalog-test.dir/rule
 .PHONY : tests/CMakeFiles/prot-site-catalog-test.dir/rule
@@ -260,18 +246,32 @@ prot-site-catalog-test/fast:
 .PHONY : prot-site-catalog-test/fast
 
 # Convenience name for target.
-tests/CMakeFiles/read-cg-test.dir/rule:
-	cd /home/andre/wrk3/simploce/pt-cgmd/particles/cmake-build-debug && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 tests/CMakeFiles/read-cg-test.dir/rule
-.PHONY : tests/CMakeFiles/read-cg-test.dir/rule
+tests/CMakeFiles/protonation-site-test.dir/rule:
+	cd /home/andre/wrk3/simploce/pt-cgmd/particles/cmake-build-debug && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 tests/CMakeFiles/protonation-site-test.dir/rule
+.PHONY : tests/CMakeFiles/protonation-site-test.dir/rule
 
 # Convenience name for target.
-read-cg-test: tests/CMakeFiles/read-cg-test.dir/rule
-.PHONY : read-cg-test
+protonation-site-test: tests/CMakeFiles/protonation-site-test.dir/rule
+.PHONY : protonation-site-test
 
 # fast build rule for target.
-read-cg-test/fast:
-	cd /home/andre/wrk3/simploce/pt-cgmd/particles/cmake-build-debug && $(MAKE) $(MAKESILENT) -f tests/CMakeFiles/read-cg-test.dir/build.make tests/CMakeFiles/read-cg-test.dir/build
-.PHONY : read-cg-test/fast
+protonation-site-test/fast:
+	cd /home/andre/wrk3/simploce/pt-cgmd/particles/cmake-build-debug && $(MAKE) $(MAKESILENT) -f tests/CMakeFiles/protonation-site-test.dir/build.make tests/CMakeFiles/protonation-site-test.dir/build
+.PHONY : protonation-site-test/fast
+
+# Convenience name for target.
+tests/CMakeFiles/protonatable-bead-test.dir/rule:
+	cd /home/andre/wrk3/simploce/pt-cgmd/particles/cmake-build-debug && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 tests/CMakeFiles/protonatable-bead-test.dir/rule
+.PHONY : tests/CMakeFiles/protonatable-bead-test.dir/rule
+
+# Convenience name for target.
+protonatable-bead-test: tests/CMakeFiles/protonatable-bead-test.dir/rule
+.PHONY : protonatable-bead-test
+
+# fast build rule for target.
+protonatable-bead-test/fast:
+	cd /home/andre/wrk3/simploce/pt-cgmd/particles/cmake-build-debug && $(MAKE) $(MAKESILENT) -f tests/CMakeFiles/protonatable-bead-test.dir/build.make tests/CMakeFiles/protonatable-bead-test.dir/build
+.PHONY : protonatable-bead-test/fast
 
 # Convenience name for target.
 tests/CMakeFiles/protonatable-coarse-grained-test.dir/rule:
@@ -311,30 +311,6 @@ coarse-grained-test.cpp.s:
 	cd /home/andre/wrk3/simploce/pt-cgmd/particles/cmake-build-debug && $(MAKE) $(MAKESILENT) -f tests/CMakeFiles/coarse-grained-test.dir/build.make tests/CMakeFiles/coarse-grained-test.dir/coarse-grained-test.cpp.s
 .PHONY : coarse-grained-test.cpp.s
 
-particle-model-factory-test.o: particle-model-factory-test.cpp.o
-.PHONY : particle-model-factory-test.o
-
-# target to build an object file
-particle-model-factory-test.cpp.o:
-	cd /home/andre/wrk3/simploce/pt-cgmd/particles/cmake-build-debug && $(MAKE) $(MAKESILENT) -f tests/CMakeFiles/particle-model-factory-test.dir/build.make tests/CMakeFiles/particle-model-factory-test.dir/particle-model-factory-test.cpp.o
-.PHONY : particle-model-factory-test.cpp.o
-
-particle-model-factory-test.i: particle-model-factory-test.cpp.i
-.PHONY : particle-model-factory-test.i
-
-# target to preprocess a source file
-particle-model-factory-test.cpp.i:
-	cd /home/andre/wrk3/simploce/pt-cgmd/particles/cmake-build-debug && $(MAKE) $(MAKESILENT) -f tests/CMakeFiles/particle-model-factory-test.dir/build.make tests/CMakeFiles/particle-model-factory-test.dir/particle-model-factory-test.cpp.i
-.PHONY : particle-model-factory-test.cpp.i
-
-particle-model-factory-test.s: particle-model-factory-test.cpp.s
-.PHONY : particle-model-factory-test.s
-
-# target to generate assembly for a file
-particle-model-factory-test.cpp.s:
-	cd /home/andre/wrk3/simploce/pt-cgmd/particles/cmake-build-debug && $(MAKE) $(MAKESILENT) -f tests/CMakeFiles/particle-model-factory-test.dir/build.make tests/CMakeFiles/particle-model-factory-test.dir/particle-model-factory-test.cpp.s
-.PHONY : particle-model-factory-test.cpp.s
-
 particle-spec-catalog-test.o: particle-spec-catalog-test.cpp.o
 .PHONY : particle-spec-catalog-test.o
 
@@ -358,6 +334,30 @@ particle-spec-catalog-test.s: particle-spec-catalog-test.cpp.s
 particle-spec-catalog-test.cpp.s:
 	cd /home/andre/wrk3/simploce/pt-cgmd/particles/cmake-build-debug && $(MAKE) $(MAKESILENT) -f tests/CMakeFiles/particle-spec-catalog-test.dir/build.make tests/CMakeFiles/particle-spec-catalog-test.dir/particle-spec-catalog-test.cpp.s
 .PHONY : particle-spec-catalog-test.cpp.s
+
+particle-system-factory-test.o: particle-system-factory-test.cpp.o
+.PHONY : particle-system-factory-test.o
+
+# target to build an object file
+particle-system-factory-test.cpp.o:
+	cd /home/andre/wrk3/simploce/pt-cgmd/particles/cmake-build-debug && $(MAKE) $(MAKESILENT) -f tests/CMakeFiles/particle-system-factory-test.dir/build.make tests/CMakeFiles/particle-system-factory-test.dir/particle-system-factory-test.cpp.o
+.PHONY : particle-system-factory-test.cpp.o
+
+particle-system-factory-test.i: particle-system-factory-test.cpp.i
+.PHONY : particle-system-factory-test.i
+
+# target to preprocess a source file
+particle-system-factory-test.cpp.i:
+	cd /home/andre/wrk3/simploce/pt-cgmd/particles/cmake-build-debug && $(MAKE) $(MAKESILENT) -f tests/CMakeFiles/particle-system-factory-test.dir/build.make tests/CMakeFiles/particle-system-factory-test.dir/particle-system-factory-test.cpp.i
+.PHONY : particle-system-factory-test.cpp.i
+
+particle-system-factory-test.s: particle-system-factory-test.cpp.s
+.PHONY : particle-system-factory-test.s
+
+# target to generate assembly for a file
+particle-system-factory-test.cpp.s:
+	cd /home/andre/wrk3/simploce/pt-cgmd/particles/cmake-build-debug && $(MAKE) $(MAKESILENT) -f tests/CMakeFiles/particle-system-factory-test.dir/build.make tests/CMakeFiles/particle-system-factory-test.dir/particle-system-factory-test.cpp.s
+.PHONY : particle-system-factory-test.cpp.s
 
 particle-test.o: particle-test.cpp.o
 .PHONY : particle-test.o
@@ -516,8 +516,8 @@ help:
 	@echo "... list_install_components"
 	@echo "... rebuild_cache"
 	@echo "... coarse-grained-test"
-	@echo "... particle-model-factory-test"
 	@echo "... particle-spec-catalog-test"
+	@echo "... particle-system-factory-test"
 	@echo "... particle-test"
 	@echo "... prot-site-catalog-test"
 	@echo "... protonatable-bead-test"
@@ -527,12 +527,12 @@ help:
 	@echo "... coarse-grained-test.o"
 	@echo "... coarse-grained-test.i"
 	@echo "... coarse-grained-test.s"
-	@echo "... particle-model-factory-test.o"
-	@echo "... particle-model-factory-test.i"
-	@echo "... particle-model-factory-test.s"
 	@echo "... particle-spec-catalog-test.o"
 	@echo "... particle-spec-catalog-test.i"
 	@echo "... particle-spec-catalog-test.s"
+	@echo "... particle-system-factory-test.o"
+	@echo "... particle-system-factory-test.i"
+	@echo "... particle-system-factory-test.s"
 	@echo "... particle-test.o"
 	@echo "... particle-test.i"
 	@echo "... particle-test.s"

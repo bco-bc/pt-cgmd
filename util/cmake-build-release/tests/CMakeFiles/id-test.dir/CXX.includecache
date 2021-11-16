@@ -49,6 +49,8 @@ cmath
 ../include/simploce/util/util.hpp
 simploce/types/u-types.hpp
 ../include/simploce/util/simploce/types/u-types.hpp
+simploce/util/logger.hpp
+../include/simploce/util/simploce/util/logger.hpp
 boost/lexical_cast.hpp
 -
 boost/uuid/uuid_io.hpp
@@ -84,5 +86,11 @@ simploce/types/u-types.hpp
 simploce/util/util.hpp
 /home/andre/wrk3/simploce/pt-cgmd/util/tests/simploce/util/util.hpp
 cstdlib
+-
+
+/localdisk/include/simploce/util/logger.hpp
+string
+-
+sstream
 -
 

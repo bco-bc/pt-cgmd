@@ -17,9 +17,10 @@ namespace simploce {
                          const charge_t& charge,
                          const mass_t& mass,
                          const radius_t& radius,
+                         bool free,
                          const std::string& description)
     {
-        return ParticleSpec::create_(name, charge, mass, radius, 0.0, false, description);
+        return ParticleSpec::create_(name, charge, mass, radius, 0.0, false, free, description);
     }
 
     spec_ptr_t
@@ -28,18 +29,27 @@ namespace simploce {
                          const mass_t& mass,
                          const radius_t& radius,
                          const pKa_t& pKa,
+                         bool free,
                          const std::string& description)
     {
-        return ParticleSpec::create_(name, charge, mass, radius, pKa, true, description);
+        return ParticleSpec::create_(name, charge, mass, radius, pKa, true, free, description);
     }
 
     spec_ptr_t
     ParticleSpec::createFrom(const spec_ptr_t& spec,
                              const std::string& name,
                              charge_t charge,
+                             bool free,
                              const std::string& description)
     {
-        return ParticleSpec::create_(name, charge, spec->mass(), spec->radius(), spec->pKa(), spec->isProtonatable(), description);
+        return ParticleSpec::create_(name,
+                                     charge,
+                                     spec->mass(),
+                                     spec->radius(),
+                                     spec->pKa(),
+                                     spec->isProtonatable(),
+                                     free,
+                                     description);
     }
 
     bool
@@ -92,6 +102,11 @@ namespace simploce {
         return false;
     }
 
+    bool
+    ParticleSpec::isFree() {
+        return free_;
+    }
+
     std::string
     ParticleSpec::description() const {
         return description_;
@@ -104,6 +119,7 @@ namespace simploce {
         stream.precision(conf::PRECISION);
         stream << std::setw(conf::NAME_WIDTH) << name_;
         stream << conf::SPACE << protonatable_;
+        stream << conf::SPACE << free_;
         stream << std::setw(conf::REAL_WIDTH) << mass_;
         stream << std::setw(conf::REAL_WIDTH) << charge_;
         stream << std::setw(conf::REAL_WIDTH) << radius_;
@@ -118,6 +134,7 @@ namespace simploce {
                           const radius_t& radius,
                           const pKa_t& pKa,
                           bool protonatable,
+                          bool free,
                           const std::string& description) {
         if ( name.empty() ) {
             throw std::domain_error("An unique particle specification name must be provided.");
@@ -132,7 +149,7 @@ namespace simploce {
             throw std::domain_error("A particle specification description must be provided.");
         }
         return spec_ptr_t(
-            new ParticleSpec(name, charge, mass, radius, pKa, protonatable, description)
+            new ParticleSpec(name, charge, mass, radius, pKa, protonatable, free, description)
         );
     }
 
@@ -143,9 +160,10 @@ namespace simploce {
                                radius_t radius,
                                pKa_t pKa, 
                                bool protonatable,
+                               bool free,
                                std::string description) :
         name_{std::move(name)}, charge_{charge}, mass_{mass}, radius_{radius}, pKa_{pKa},
-        protonatable_{protonatable}, description_(std::move(description)) {
+        protonatable_{protonatable}, free_{free}, description_(std::move(description)) {
     }
         
     std::ostream& 

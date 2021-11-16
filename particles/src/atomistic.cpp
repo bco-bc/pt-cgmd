@@ -12,7 +12,7 @@
 
 namespace simploce {
 
-    at_mod_ptr_t
+    at_sys_ptr_t
     Atomistic::obtainFrom(std::istream& stream, const spec_catalog_ptr_t& catalog) {
         auto atomistic = factory::atomistic();
         atomistic->parse(stream, catalog);

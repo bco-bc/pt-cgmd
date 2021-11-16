@@ -1,28 +1,4 @@
 /*
- * The MIT License
- *
- * Copyright 2019 André H. Juffer, Biocenter Oulu
- *
- * Permission is hereby granted, free of charge, to any person obtaining a copy
- * of this software and associated documentation files (the "Software"), to deal
- * in the Software without restriction, including without limitation the rights
- * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- * copies of the Software, and to permit persons to whom the Software is
- * furnished to do so, subject to the following conditions:
- *
- * The above copyright notice and this permission notice shall be included in
- * all copies or substantial portions of the Software.
- *
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
- * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
- * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
- * THE SOFTWARE.
- */
-
-/* 
  * File:   simple-lists.cpp
  * Author: André H. Juffer, Biocenter Oulu.
  *
@@ -32,7 +8,7 @@
 #include "simploce/simulation/distance-lists.hpp"
 #include "simploce/simulation/s-conf.hpp"
 #include "simploce/simulation/bc.hpp"
-#include "simploce/simulation/sim-util.hpp"
+#include "simploce/simulation/s-properties.hpp"
 #include <vector>
 #include <utility>
 #include <thread>
@@ -43,14 +19,14 @@ namespace simploce {
      * For -any- collection of particles.
      */
     template <typename P> 
-    typename PairLists<P>::pp_list_cont_t
+    typename PairLists<P>::pp_pair_cont_t
     forParticles_(const box_ptr_t& box,
                   const bc_ptr_t& bc,
                   const std::vector<std::shared_ptr<P>>& particles)
     {
-        using pp_list_cont_t = typename PairLists<P>::pp_list_cont_t;
+        using pp_list_cont_t = typename PairLists<P>::pp_pair_cont_t;
         
-        static real_t rc2 = util::squareCutoffDistance(box);
+        static real_t rc2 = properties::squareCutoffDistance(box);
         
         if ( particles.empty() ) {
             return pp_list_cont_t{};  // Empty pair list.
@@ -81,15 +57,15 @@ namespace simploce {
     }
     
     template <typename P> 
-    typename PairLists<P>::pp_list_cont_t
+    typename PairLists<P>::pp_pair_cont_t
     forGroups_(const box_ptr_t& box,
                const bc_ptr_t& bc,
                const std::vector<std::shared_ptr<ParticleGroup<P>>>& groups)
     {    
-        using pp_list_cont_t = typename PairLists<P>::pp_list_cont_t;
+        using pp_list_cont_t = typename PairLists<P>::pp_pair_cont_t;
         using pp_pair_t = typename PairLists<P>::pp_pair_t;
         
-        static real_t rc2 =  util::squareCutoffDistance(box);
+        static real_t rc2 =  properties::squareCutoffDistance(box);
 
         if ( groups.empty() ) {
             return pp_list_cont_t{};  // Empty list.
@@ -126,16 +102,16 @@ namespace simploce {
     }
     
     template <typename P> 
-    typename PairLists<P>::pp_list_cont_t
+    typename PairLists<P>::pp_pair_cont_t
     forParticlesAndGroups_(const box_ptr_t& box,
                            const bc_ptr_t& bc,
                            const std::vector<std::shared_ptr<P>>& particles,
                            const std::vector<std::shared_ptr<ParticleGroup<P>>>& groups)
     {
-        using pp_list_cont_t = typename PairLists<P>::pp_list_cont_t;
+        using pp_list_cont_t = typename PairLists<P>::pp_pair_cont_t;
         using pp_pair_t = typename PairLists<P>::pp_pair_t;
         
-        static real_t rc2 =  util::squareCutoffDistance(box);
+        static real_t rc2 =  properties::squareCutoffDistance(box);
 
         if ( particles.empty() || groups.empty() ) {
             return pp_list_cont_t{};  // Empty list.
@@ -177,7 +153,7 @@ namespace simploce {
         if ( firstTime ) {
             std::clog << "Using distance-based particle pair lists." 
                       << std::endl;
-            std::clog << "Cutoff distance: " << util::cutoffDistance(box) << std::endl;
+            std::clog << "Cutoff distance: " << properties::cutoffDistance(box) << std::endl;
         }
         
         // Prepare new particle pair list.        

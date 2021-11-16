@@ -99,13 +99,13 @@ apps/clean: apps/CMakeFiles/total-masses.dir/clean
 
 # Recursive "all" directory target.
 tests/all: tests/CMakeFiles/particle-spec-catalog-test.dir/all
-tests/all: tests/CMakeFiles/particle-model-factory-test.dir/all
-tests/all: tests/CMakeFiles/protonation-site-test.dir/all
-tests/all: tests/CMakeFiles/protonatable-bead-test.dir/all
+tests/all: tests/CMakeFiles/read-cg-test.dir/all
 tests/all: tests/CMakeFiles/particle-test.dir/all
 tests/all: tests/CMakeFiles/coarse-grained-test.dir/all
+tests/all: tests/CMakeFiles/particle-system-factory-test.dir/all
 tests/all: tests/CMakeFiles/prot-site-catalog-test.dir/all
-tests/all: tests/CMakeFiles/read-cg-test.dir/all
+tests/all: tests/CMakeFiles/protonation-site-test.dir/all
+tests/all: tests/CMakeFiles/protonatable-bead-test.dir/all
 tests/all: tests/CMakeFiles/protonatable-coarse-grained-test.dir/all
 .PHONY : tests/all
 
@@ -115,13 +115,13 @@ tests/preinstall:
 
 # Recursive "clean" directory target.
 tests/clean: tests/CMakeFiles/particle-spec-catalog-test.dir/clean
-tests/clean: tests/CMakeFiles/particle-model-factory-test.dir/clean
-tests/clean: tests/CMakeFiles/protonation-site-test.dir/clean
-tests/clean: tests/CMakeFiles/protonatable-bead-test.dir/clean
+tests/clean: tests/CMakeFiles/read-cg-test.dir/clean
 tests/clean: tests/CMakeFiles/particle-test.dir/clean
 tests/clean: tests/CMakeFiles/coarse-grained-test.dir/clean
+tests/clean: tests/CMakeFiles/particle-system-factory-test.dir/clean
 tests/clean: tests/CMakeFiles/prot-site-catalog-test.dir/clean
-tests/clean: tests/CMakeFiles/read-cg-test.dir/clean
+tests/clean: tests/CMakeFiles/protonation-site-test.dir/clean
+tests/clean: tests/CMakeFiles/protonatable-bead-test.dir/clean
 tests/clean: tests/CMakeFiles/protonatable-coarse-grained-test.dir/clean
 .PHONY : tests/clean
 
@@ -184,7 +184,7 @@ apps/CMakeFiles/total-masses.dir/clean:
 tests/CMakeFiles/particle-spec-catalog-test.dir/all: CMakeFiles/particles.dir/all
 	$(MAKE) $(MAKESILENT) -f tests/CMakeFiles/particle-spec-catalog-test.dir/build.make tests/CMakeFiles/particle-spec-catalog-test.dir/depend
 	$(MAKE) $(MAKESILENT) -f tests/CMakeFiles/particle-spec-catalog-test.dir/build.make tests/CMakeFiles/particle-spec-catalog-test.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/andre/wrk3/simploce/pt-cgmd/particles/cmake-build-debug/CMakeFiles --progress-num=5,6 "Built target particle-spec-catalog-test"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/andre/wrk3/simploce/pt-cgmd/particles/cmake-build-debug/CMakeFiles --progress-num=3,4 "Built target particle-spec-catalog-test"
 .PHONY : tests/CMakeFiles/particle-spec-catalog-test.dir/all
 
 # Build rule for subdir invocation for target.
@@ -204,82 +204,30 @@ tests/CMakeFiles/particle-spec-catalog-test.dir/clean:
 .PHONY : tests/CMakeFiles/particle-spec-catalog-test.dir/clean
 
 #=============================================================================
-# Target rules for target tests/CMakeFiles/particle-model-factory-test.dir
+# Target rules for target tests/CMakeFiles/read-cg-test.dir
 
 # All Build rule for target.
-tests/CMakeFiles/particle-model-factory-test.dir/all: CMakeFiles/particles.dir/all
-	$(MAKE) $(MAKESILENT) -f tests/CMakeFiles/particle-model-factory-test.dir/build.make tests/CMakeFiles/particle-model-factory-test.dir/depend
-	$(MAKE) $(MAKESILENT) -f tests/CMakeFiles/particle-model-factory-test.dir/build.make tests/CMakeFiles/particle-model-factory-test.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/andre/wrk3/simploce/pt-cgmd/particles/cmake-build-debug/CMakeFiles --progress-num=3,4 "Built target particle-model-factory-test"
-.PHONY : tests/CMakeFiles/particle-model-factory-test.dir/all
+tests/CMakeFiles/read-cg-test.dir/all: CMakeFiles/particles.dir/all
+	$(MAKE) $(MAKESILENT) -f tests/CMakeFiles/read-cg-test.dir/build.make tests/CMakeFiles/read-cg-test.dir/depend
+	$(MAKE) $(MAKESILENT) -f tests/CMakeFiles/read-cg-test.dir/build.make tests/CMakeFiles/read-cg-test.dir/build
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/andre/wrk3/simploce/pt-cgmd/particles/cmake-build-debug/CMakeFiles --progress-num=28,29 "Built target read-cg-test"
+.PHONY : tests/CMakeFiles/read-cg-test.dir/all
 
 # Build rule for subdir invocation for target.
-tests/CMakeFiles/particle-model-factory-test.dir/rule: cmake_check_build_system
+tests/CMakeFiles/read-cg-test.dir/rule: cmake_check_build_system
 	$(CMAKE_COMMAND) -E cmake_progress_start /home/andre/wrk3/simploce/pt-cgmd/particles/cmake-build-debug/CMakeFiles 13
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 tests/CMakeFiles/particle-model-factory-test.dir/all
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 tests/CMakeFiles/read-cg-test.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /home/andre/wrk3/simploce/pt-cgmd/particles/cmake-build-debug/CMakeFiles 0
-.PHONY : tests/CMakeFiles/particle-model-factory-test.dir/rule
+.PHONY : tests/CMakeFiles/read-cg-test.dir/rule
 
 # Convenience name for target.
-particle-model-factory-test: tests/CMakeFiles/particle-model-factory-test.dir/rule
-.PHONY : particle-model-factory-test
+read-cg-test: tests/CMakeFiles/read-cg-test.dir/rule
+.PHONY : read-cg-test
 
 # clean rule for target.
-tests/CMakeFiles/particle-model-factory-test.dir/clean:
-	$(MAKE) $(MAKESILENT) -f tests/CMakeFiles/particle-model-factory-test.dir/build.make tests/CMakeFiles/particle-model-factory-test.dir/clean
-.PHONY : tests/CMakeFiles/particle-model-factory-test.dir/clean
-
-#=============================================================================
-# Target rules for target tests/CMakeFiles/protonation-site-test.dir
-
-# All Build rule for target.
-tests/CMakeFiles/protonation-site-test.dir/all: CMakeFiles/particles.dir/all
-	$(MAKE) $(MAKESILENT) -f tests/CMakeFiles/protonation-site-test.dir/build.make tests/CMakeFiles/protonation-site-test.dir/depend
-	$(MAKE) $(MAKESILENT) -f tests/CMakeFiles/protonation-site-test.dir/build.make tests/CMakeFiles/protonation-site-test.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/andre/wrk3/simploce/pt-cgmd/particles/cmake-build-debug/CMakeFiles --progress-num=26,27 "Built target protonation-site-test"
-.PHONY : tests/CMakeFiles/protonation-site-test.dir/all
-
-# Build rule for subdir invocation for target.
-tests/CMakeFiles/protonation-site-test.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/andre/wrk3/simploce/pt-cgmd/particles/cmake-build-debug/CMakeFiles 13
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 tests/CMakeFiles/protonation-site-test.dir/all
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/andre/wrk3/simploce/pt-cgmd/particles/cmake-build-debug/CMakeFiles 0
-.PHONY : tests/CMakeFiles/protonation-site-test.dir/rule
-
-# Convenience name for target.
-protonation-site-test: tests/CMakeFiles/protonation-site-test.dir/rule
-.PHONY : protonation-site-test
-
-# clean rule for target.
-tests/CMakeFiles/protonation-site-test.dir/clean:
-	$(MAKE) $(MAKESILENT) -f tests/CMakeFiles/protonation-site-test.dir/build.make tests/CMakeFiles/protonation-site-test.dir/clean
-.PHONY : tests/CMakeFiles/protonation-site-test.dir/clean
-
-#=============================================================================
-# Target rules for target tests/CMakeFiles/protonatable-bead-test.dir
-
-# All Build rule for target.
-tests/CMakeFiles/protonatable-bead-test.dir/all: CMakeFiles/particles.dir/all
-	$(MAKE) $(MAKESILENT) -f tests/CMakeFiles/protonatable-bead-test.dir/build.make tests/CMakeFiles/protonatable-bead-test.dir/depend
-	$(MAKE) $(MAKESILENT) -f tests/CMakeFiles/protonatable-bead-test.dir/build.make tests/CMakeFiles/protonatable-bead-test.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/andre/wrk3/simploce/pt-cgmd/particles/cmake-build-debug/CMakeFiles --progress-num=22,23 "Built target protonatable-bead-test"
-.PHONY : tests/CMakeFiles/protonatable-bead-test.dir/all
-
-# Build rule for subdir invocation for target.
-tests/CMakeFiles/protonatable-bead-test.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/andre/wrk3/simploce/pt-cgmd/particles/cmake-build-debug/CMakeFiles 13
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 tests/CMakeFiles/protonatable-bead-test.dir/all
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/andre/wrk3/simploce/pt-cgmd/particles/cmake-build-debug/CMakeFiles 0
-.PHONY : tests/CMakeFiles/protonatable-bead-test.dir/rule
-
-# Convenience name for target.
-protonatable-bead-test: tests/CMakeFiles/protonatable-bead-test.dir/rule
-.PHONY : protonatable-bead-test
-
-# clean rule for target.
-tests/CMakeFiles/protonatable-bead-test.dir/clean:
-	$(MAKE) $(MAKESILENT) -f tests/CMakeFiles/protonatable-bead-test.dir/build.make tests/CMakeFiles/protonatable-bead-test.dir/clean
-.PHONY : tests/CMakeFiles/protonatable-bead-test.dir/clean
+tests/CMakeFiles/read-cg-test.dir/clean:
+	$(MAKE) $(MAKESILENT) -f tests/CMakeFiles/read-cg-test.dir/build.make tests/CMakeFiles/read-cg-test.dir/clean
+.PHONY : tests/CMakeFiles/read-cg-test.dir/clean
 
 #=============================================================================
 # Target rules for target tests/CMakeFiles/particle-test.dir
@@ -334,6 +282,32 @@ tests/CMakeFiles/coarse-grained-test.dir/clean:
 .PHONY : tests/CMakeFiles/coarse-grained-test.dir/clean
 
 #=============================================================================
+# Target rules for target tests/CMakeFiles/particle-system-factory-test.dir
+
+# All Build rule for target.
+tests/CMakeFiles/particle-system-factory-test.dir/all: CMakeFiles/particles.dir/all
+	$(MAKE) $(MAKESILENT) -f tests/CMakeFiles/particle-system-factory-test.dir/build.make tests/CMakeFiles/particle-system-factory-test.dir/depend
+	$(MAKE) $(MAKESILENT) -f tests/CMakeFiles/particle-system-factory-test.dir/build.make tests/CMakeFiles/particle-system-factory-test.dir/build
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/andre/wrk3/simploce/pt-cgmd/particles/cmake-build-debug/CMakeFiles --progress-num=5,6 "Built target particle-system-factory-test"
+.PHONY : tests/CMakeFiles/particle-system-factory-test.dir/all
+
+# Build rule for subdir invocation for target.
+tests/CMakeFiles/particle-system-factory-test.dir/rule: cmake_check_build_system
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/andre/wrk3/simploce/pt-cgmd/particles/cmake-build-debug/CMakeFiles 13
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 tests/CMakeFiles/particle-system-factory-test.dir/all
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/andre/wrk3/simploce/pt-cgmd/particles/cmake-build-debug/CMakeFiles 0
+.PHONY : tests/CMakeFiles/particle-system-factory-test.dir/rule
+
+# Convenience name for target.
+particle-system-factory-test: tests/CMakeFiles/particle-system-factory-test.dir/rule
+.PHONY : particle-system-factory-test
+
+# clean rule for target.
+tests/CMakeFiles/particle-system-factory-test.dir/clean:
+	$(MAKE) $(MAKESILENT) -f tests/CMakeFiles/particle-system-factory-test.dir/build.make tests/CMakeFiles/particle-system-factory-test.dir/clean
+.PHONY : tests/CMakeFiles/particle-system-factory-test.dir/clean
+
+#=============================================================================
 # Target rules for target tests/CMakeFiles/prot-site-catalog-test.dir
 
 # All Build rule for target.
@@ -360,30 +334,56 @@ tests/CMakeFiles/prot-site-catalog-test.dir/clean:
 .PHONY : tests/CMakeFiles/prot-site-catalog-test.dir/clean
 
 #=============================================================================
-# Target rules for target tests/CMakeFiles/read-cg-test.dir
+# Target rules for target tests/CMakeFiles/protonation-site-test.dir
 
 # All Build rule for target.
-tests/CMakeFiles/read-cg-test.dir/all: CMakeFiles/particles.dir/all
-	$(MAKE) $(MAKESILENT) -f tests/CMakeFiles/read-cg-test.dir/build.make tests/CMakeFiles/read-cg-test.dir/depend
-	$(MAKE) $(MAKESILENT) -f tests/CMakeFiles/read-cg-test.dir/build.make tests/CMakeFiles/read-cg-test.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/andre/wrk3/simploce/pt-cgmd/particles/cmake-build-debug/CMakeFiles --progress-num=28,29 "Built target read-cg-test"
-.PHONY : tests/CMakeFiles/read-cg-test.dir/all
+tests/CMakeFiles/protonation-site-test.dir/all: CMakeFiles/particles.dir/all
+	$(MAKE) $(MAKESILENT) -f tests/CMakeFiles/protonation-site-test.dir/build.make tests/CMakeFiles/protonation-site-test.dir/depend
+	$(MAKE) $(MAKESILENT) -f tests/CMakeFiles/protonation-site-test.dir/build.make tests/CMakeFiles/protonation-site-test.dir/build
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/andre/wrk3/simploce/pt-cgmd/particles/cmake-build-debug/CMakeFiles --progress-num=26,27 "Built target protonation-site-test"
+.PHONY : tests/CMakeFiles/protonation-site-test.dir/all
 
 # Build rule for subdir invocation for target.
-tests/CMakeFiles/read-cg-test.dir/rule: cmake_check_build_system
+tests/CMakeFiles/protonation-site-test.dir/rule: cmake_check_build_system
 	$(CMAKE_COMMAND) -E cmake_progress_start /home/andre/wrk3/simploce/pt-cgmd/particles/cmake-build-debug/CMakeFiles 13
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 tests/CMakeFiles/read-cg-test.dir/all
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 tests/CMakeFiles/protonation-site-test.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /home/andre/wrk3/simploce/pt-cgmd/particles/cmake-build-debug/CMakeFiles 0
-.PHONY : tests/CMakeFiles/read-cg-test.dir/rule
+.PHONY : tests/CMakeFiles/protonation-site-test.dir/rule
 
 # Convenience name for target.
-read-cg-test: tests/CMakeFiles/read-cg-test.dir/rule
-.PHONY : read-cg-test
+protonation-site-test: tests/CMakeFiles/protonation-site-test.dir/rule
+.PHONY : protonation-site-test
 
 # clean rule for target.
-tests/CMakeFiles/read-cg-test.dir/clean:
-	$(MAKE) $(MAKESILENT) -f tests/CMakeFiles/read-cg-test.dir/build.make tests/CMakeFiles/read-cg-test.dir/clean
-.PHONY : tests/CMakeFiles/read-cg-test.dir/clean
+tests/CMakeFiles/protonation-site-test.dir/clean:
+	$(MAKE) $(MAKESILENT) -f tests/CMakeFiles/protonation-site-test.dir/build.make tests/CMakeFiles/protonation-site-test.dir/clean
+.PHONY : tests/CMakeFiles/protonation-site-test.dir/clean
+
+#=============================================================================
+# Target rules for target tests/CMakeFiles/protonatable-bead-test.dir
+
+# All Build rule for target.
+tests/CMakeFiles/protonatable-bead-test.dir/all: CMakeFiles/particles.dir/all
+	$(MAKE) $(MAKESILENT) -f tests/CMakeFiles/protonatable-bead-test.dir/build.make tests/CMakeFiles/protonatable-bead-test.dir/depend
+	$(MAKE) $(MAKESILENT) -f tests/CMakeFiles/protonatable-bead-test.dir/build.make tests/CMakeFiles/protonatable-bead-test.dir/build
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/andre/wrk3/simploce/pt-cgmd/particles/cmake-build-debug/CMakeFiles --progress-num=22,23 "Built target protonatable-bead-test"
+.PHONY : tests/CMakeFiles/protonatable-bead-test.dir/all
+
+# Build rule for subdir invocation for target.
+tests/CMakeFiles/protonatable-bead-test.dir/rule: cmake_check_build_system
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/andre/wrk3/simploce/pt-cgmd/particles/cmake-build-debug/CMakeFiles 13
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 tests/CMakeFiles/protonatable-bead-test.dir/all
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/andre/wrk3/simploce/pt-cgmd/particles/cmake-build-debug/CMakeFiles 0
+.PHONY : tests/CMakeFiles/protonatable-bead-test.dir/rule
+
+# Convenience name for target.
+protonatable-bead-test: tests/CMakeFiles/protonatable-bead-test.dir/rule
+.PHONY : protonatable-bead-test
+
+# clean rule for target.
+tests/CMakeFiles/protonatable-bead-test.dir/clean:
+	$(MAKE) $(MAKESILENT) -f tests/CMakeFiles/protonatable-bead-test.dir/build.make tests/CMakeFiles/protonatable-bead-test.dir/clean
+.PHONY : tests/CMakeFiles/protonatable-bead-test.dir/clean
 
 #=============================================================================
 # Target rules for target tests/CMakeFiles/protonatable-coarse-grained-test.dir

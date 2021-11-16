@@ -1,29 +1,4 @@
 /*
- * The MIT License
- *
- * Copyright 2019 André H. Juffer, Biocenter Oulu
- *
- * Permission is hereby granted, free of charge, to any person obtaining a copy
- * of this software and associated documentation files (the "Software"), to deal
- * in the Software without restriction, including without limitation the rights
- * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- * copies of the Software, and to permit persons to whom the Software is
- * furnished to do so, subject to the following conditions:
- *
- * The above copyright notice and this permission notice shall be included in
- * all copies or substantial portions of the Software.
- *
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
- * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
- * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
- * THE SOFTWARE.
- */
-
-/* 
- * File:   interactor.hpp
  * Author: André H. Juffer, Biocenter Oulu.
  *
  * Created on September 6, 2019, 12:31 PM
@@ -32,132 +7,166 @@
 #ifndef INTERACTOR_HPP
 #define INTERACTOR_HPP
 
+#include "force-field.hpp"
 #include "sim-data.hpp"
 #include "pair-lists.hpp"
 #include "s-types.hpp"
+#include "forces.hpp"
 #include "simploce/particle/atomistic.hpp"
+#include "simploce/particle/coarse-grained.hpp"
+#include "simploce/util/logger.hpp"
 #include <memory>
+#include <utility>
 #include <vector>
 #include <utility>
 #include <string>
 
 namespace simploce {
+
+    /**
+     * Creates atom pair lists.
+     * @param pairListGenerator Pair lists generator.
+     * @param atomistic Atomistic particle system.
+     * @return PairLists.
+     */
+    PairLists<Atom>
+    updatePairLists(const std::shared_ptr<pair_lists_generator<Atom>> &pairListGenerator,
+                    const std::shared_ptr<ParticleSystem<Atom, ParticleGroup<Atom>>> &atomistic);
+
+    /**
+     * Creates bead pair lists.
+     * @param pairListGenerator Pair lists generator.
+     * @param coarseGrained Coarse grained particle system.
+     * @return Pair lists.
+     */
+    PairLists<Bead>
+    updatePairLists(const std::shared_ptr<pair_lists_generator<Bead>> &pairListGenerator,
+                    const std::shared_ptr<ParticleSystem<Bead, ParticleGroup<Bead>>> &coarseGrained);
     
     /**
-     * "One that interacts".
+     * "One that interacts". Its responsibility is ensure that the particle pair list
+     * is (re)evaluated on a regular basis. Its sits in between a simulation and the
+     * force calculation.
      * @param P Particle type.
      */
     template <typename P>
-    class Interactor;
-    
-    /*
-     * Specialization for atomistic particle model.
-     */
-    template <>
-    class Interactor<Atom> {
+    class Interactor {
     public:
-        
+
         /**
-         * Constructor
-         * @param forcefield Coarse grained force field.
-         * @param box SImulation box.
-         * @param bc Boundary condition.
+         * Particle pointer type.
          */
-        Interactor(const at_ff_ptr_t& forcefield,
-                   const at_ppair_list_gen_ptr_t& pairListGenerator);
-        
+        using p_ptr_t = std::shared_ptr<P>;
+
         /**
-         * Computes force on atoms.
-         * @param param Simulation parameters. Must hold "npairlists", number of steps
-         * between updating particle pair lists.
-         * @param at Atomistic particle model.
-         * @return Non-bonded and bonded Potential energy.
+         * Particle group point type.
          */
-        std::pair<energy_t, energy_t> 
-        interact(const sim_param_t& param, 
-                 const at_mod_ptr_t& at);
-        
+         using pg_ptr_t = std::shared_ptr<ParticleGroup<P>>;
+
         /**
-         * Calculates interaction energy of given atom with all other particles.
-         * @param atom Atom.
-         * @param param Simulation parameters.
-         * @param at Atomistic particle model.
-         * @return Bonded and non-bonded interaction (potential) energy.
+         * Particle system pointer type.
          */
-        std::pair<energy_t, energy_t> 
-        interact(const atom_ptr_t& atom,
-                 const sim_param_t& param, 
-                 const at_mod_ptr_t& at);
-        
+        using p_sys_ptr_t = std::shared_ptr<ParticleSystem<P, ParticleGroup<P>>>;
+
         /**
-         * Returns identifying name.
-         * @return Identifying name.
+         * Particle pair list generator pointer type.
          */
-        std::string 
-        id() const;
-                
+        using pair_list_gen_ptr_t = std::shared_ptr<pair_lists_generator<P>>;
+
+        /**
+         * Constructor. All arguments are required.
+         * @param simulationParameters Simulation parameters.
+         * @param forceField Force field.
+         * @param PairListGenerator Particle pair list generator.
+         * @param box Simulation box.
+         */
+        Interactor(sim_param_ptr_t simulationParameters,
+                   ff_ptr_t forceField,
+                   pair_list_gen_ptr_t pairListGenerator,
+                   box_ptr_t box,
+                   bc_ptr_t bc);
+
+        /**
+         * Calculates forces on all particles in the given particle system.
+         * @param simulationParameters Simulation parameters,
+         * @param particleSystem Particle system.
+         * @return Returns non-bonded and bonded potential energy, respectively.
+         */
+        std::pair<energy_t, energy_t> interact(const p_sys_ptr_t &particleSystem);
+
     private:
-        
-        void updatePairLists_(const at_mod_ptr_t& at);
-        
-        at_ff_ptr_t forcefield_;
-        at_ppair_list_gen_ptr_t pairListGenerator_;
-        PairLists<Atom> pairLists_;
+
+        sim_param_ptr_t simulationParameters_;
+        ff_ptr_t forceField_;
+        pair_list_gen_ptr_t pairListsGenerator_;
+        box_ptr_t box_;
+        bc_ptr_t bc_;
+
+        PairLists<P> pairLists_;
+        Forces forces_;
+
     };
-    
-    /**
-     * Specialization for coarse grained model.
-     */
-    template <>
-    class Interactor<Bead> {
-    public:
-        
-        /**
-         * Constructor
-         * @param forcefield Coarse grained force field.
-         * @param box SImulation box.
-         * @param bc Boundary condition.
-         */
-        Interactor(const cg_ff_ptr_t& forcefield,
-                   const cg_ppair_list_gen_ptr_t& pairListGenerator);
-        
-        /**
-         * Computes force on beads.
-         * @param param Simulation parameters.
-         * @param cg Coarse grained particle model.
-         * @return Non-bonded and bonded potential energy.
-         */
-        std::pair<energy_t, energy_t> 
-        interact(const sim_param_t& param, 
-                 const cg_mod_ptr_t& cg);
-        
-        /**
-         * Calculates interaction energy of given bead with all other beads.
-         * @param bead Bead.
-         * @param param Simulation parameters.
-         * @param at Coarse grained particle model.
-         * @return Interaction (potential) energy.
-         */
-        std::pair<energy_t, energy_t> 
-        interact(const bead_ptr_t& bead,
-                 const sim_param_t& param, 
-                 const cg_mod_ptr_t& cg);
-        /**
-         * Returns identifying name.
-         * @return Identifying name.
-         */
-        std::string 
-        id() const;
-        
-    private:
-        
-        void updatePairLists_(const cg_mod_ptr_t& cg);
-        
-        cg_ff_ptr_t forcefield_;
-        cg_ppair_list_gen_ptr_t pairListGenerator_;
-        PairLists<Bead> pairLists_;
-    };
-    
+
+    template <typename P>
+    Interactor<P>::Interactor(sim_param_ptr_t simulationParameters,
+                              ff_ptr_t forceField,
+                              pair_list_gen_ptr_t pairListGenerator,
+                              box_ptr_t box,
+                              bc_ptr_t bc) :
+        simulationParameters_{std::move(simulationParameters)}, forceField_{std::move(forceField)},
+        pairListsGenerator_{std::move(pairListGenerator)}, box_{std::move(box)}, bc_{std::move(bc)},
+        pairLists_{}, forces_{box_, bc_, forceField_} {
+    }
+
+    template <typename P>
+    std::pair<energy_t, energy_t> Interactor<P>::interact(const p_sys_ptr_t &particleSystem) {
+        // Return type.
+        using energies_t = std::pair<energy_t, energy_t>;
+
+        static util::Logger logger("simploce::Interactor<P>::interact");
+
+        static bool setup = false;
+        static std::size_t nUpdatePairLists = 0;
+        static std::size_t counter = 0;
+
+        if ( !setup ) {
+            nUpdatePairLists = simulationParameters_->get<std::size_t>("simulation.npairlists");
+            logger.debug("Number of steps between update of particle pair list: " +
+                          util::toString(nUpdatePairLists));
+            setup = true;
+        }
+
+        // Update particle pair list, if needed.
+        if (counter % nUpdatePairLists == 0 || counter == 0) {
+            logger.trace("Updating particle pair lists...");
+            pairLists_ = updatePairLists(pairListsGenerator_, particleSystem);
+            pairLists_.modified_(true);
+            pairLists_.numberOfParticles(particleSystem->numberOfParticles());
+            logger.trace("Done.");
+        } else {
+            pairLists_.modified_(false);
+        }
+
+        // Calculate all forces and associated energies.
+        particleSystem->resetForces();
+        auto energies =
+                particleSystem->template doWithAllFreeGroups<energies_t>([this] (
+                        const std::vector<p_ptr_t>& all,
+                        const std::vector<p_ptr_t>& free,
+                        const std::vector<pg_ptr_t>& groups) {
+                    auto bonded = this->forces_.bonded(all, groups);
+                    logger.debug("Bonded energy: " + util::toString(bonded));
+                    auto nonBonded = this->forces_.nonBonded(all, this->pairLists_);
+                    logger.debug("Non-bonded energy: " + util::toString(nonBonded));
+                    return std::make_pair(nonBonded, bonded);
+                });
+
+        counter += 1;
+
+        // Done.
+        return energies;
+    }
+
 }
 
 #endif /* INTERACTOR_HPP */

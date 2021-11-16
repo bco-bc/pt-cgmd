@@ -131,18 +131,18 @@ CMakeFiles/particles.dir/src/particle.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/particles.dir/src/particle.cpp.s"
 	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/andre/wrk3/simploce/pt-cgmd/particles/src/particle.cpp -o CMakeFiles/particles.dir/src/particle.cpp.s
 
-CMakeFiles/particles.dir/src/particle-model-factory.cpp.o: CMakeFiles/particles.dir/flags.make
-CMakeFiles/particles.dir/src/particle-model-factory.cpp.o: ../src/particle-model-factory.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/andre/wrk3/simploce/pt-cgmd/particles/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_6) "Building CXX object CMakeFiles/particles.dir/src/particle-model-factory.cpp.o"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/particles.dir/src/particle-model-factory.cpp.o -c /home/andre/wrk3/simploce/pt-cgmd/particles/src/particle-model-factory.cpp
+CMakeFiles/particles.dir/src/particle-system-factory.cpp.o: CMakeFiles/particles.dir/flags.make
+CMakeFiles/particles.dir/src/particle-system-factory.cpp.o: ../src/particle-system-factory.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/andre/wrk3/simploce/pt-cgmd/particles/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_6) "Building CXX object CMakeFiles/particles.dir/src/particle-system-factory.cpp.o"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/particles.dir/src/particle-system-factory.cpp.o -c /home/andre/wrk3/simploce/pt-cgmd/particles/src/particle-system-factory.cpp
 
-CMakeFiles/particles.dir/src/particle-model-factory.cpp.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/particles.dir/src/particle-model-factory.cpp.i"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/andre/wrk3/simploce/pt-cgmd/particles/src/particle-model-factory.cpp > CMakeFiles/particles.dir/src/particle-model-factory.cpp.i
+CMakeFiles/particles.dir/src/particle-system-factory.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/particles.dir/src/particle-system-factory.cpp.i"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/andre/wrk3/simploce/pt-cgmd/particles/src/particle-system-factory.cpp > CMakeFiles/particles.dir/src/particle-system-factory.cpp.i
 
-CMakeFiles/particles.dir/src/particle-model-factory.cpp.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/particles.dir/src/particle-model-factory.cpp.s"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/andre/wrk3/simploce/pt-cgmd/particles/src/particle-model-factory.cpp -o CMakeFiles/particles.dir/src/particle-model-factory.cpp.s
+CMakeFiles/particles.dir/src/particle-system-factory.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/particles.dir/src/particle-system-factory.cpp.s"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/andre/wrk3/simploce/pt-cgmd/particles/src/particle-system-factory.cpp -o CMakeFiles/particles.dir/src/particle-system-factory.cpp.s
 
 CMakeFiles/particles.dir/src/particle-spec.cpp.o: CMakeFiles/particles.dir/flags.make
 CMakeFiles/particles.dir/src/particle-spec.cpp.o: ../src/particle-spec.cpp
@@ -203,7 +203,7 @@ particles_OBJECTS = \
 "CMakeFiles/particles.dir/src/bead.cpp.o" \
 "CMakeFiles/particles.dir/src/coarse-grained.cpp.o" \
 "CMakeFiles/particles.dir/src/particle.cpp.o" \
-"CMakeFiles/particles.dir/src/particle-model-factory.cpp.o" \
+"CMakeFiles/particles.dir/src/particle-system-factory.cpp.o" \
 "CMakeFiles/particles.dir/src/particle-spec.cpp.o" \
 "CMakeFiles/particles.dir/src/particle-spec-catalog.cpp.o" \
 "CMakeFiles/particles.dir/src/p-factory.cpp.o" \
@@ -217,7 +217,7 @@ libparticles.so: CMakeFiles/particles.dir/src/atomistic.cpp.o
 libparticles.so: CMakeFiles/particles.dir/src/bead.cpp.o
 libparticles.so: CMakeFiles/particles.dir/src/coarse-grained.cpp.o
 libparticles.so: CMakeFiles/particles.dir/src/particle.cpp.o
-libparticles.so: CMakeFiles/particles.dir/src/particle-model-factory.cpp.o
+libparticles.so: CMakeFiles/particles.dir/src/particle-system-factory.cpp.o
 libparticles.so: CMakeFiles/particles.dir/src/particle-spec.cpp.o
 libparticles.so: CMakeFiles/particles.dir/src/particle-spec-catalog.cpp.o
 libparticles.so: CMakeFiles/particles.dir/src/p-factory.cpp.o

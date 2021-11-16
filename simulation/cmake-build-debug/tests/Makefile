@@ -65,6 +65,26 @@ CMAKE_BINARY_DIR = /home/andre/wrk3/simploce/pt-cgmd/simulation/cmake-build-debu
 #=============================================================================
 # Targets provided globally by CMake.
 
+# Special rule for the target rebuild_cache
+rebuild_cache:
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Running CMake to regenerate build system..."
+	/home/andre/clion-2021.2.3/bin/cmake/linux/bin/cmake --regenerate-during-build -S$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR)
+.PHONY : rebuild_cache
+
+# Special rule for the target rebuild_cache
+rebuild_cache/fast: rebuild_cache
+.PHONY : rebuild_cache/fast
+
+# Special rule for the target edit_cache
+edit_cache:
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "No interactive CMake dialog available..."
+	/home/andre/clion-2021.2.3/bin/cmake/linux/bin/cmake -E echo No\ interactive\ CMake\ dialog\ available.
+.PHONY : edit_cache
+
+# Special rule for the target edit_cache
+edit_cache/fast: edit_cache
+.PHONY : edit_cache/fast
+
 # Special rule for the target install/strip
 install/strip: preinstall
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Installing the project stripped..."
@@ -77,37 +97,14 @@ install/strip/fast: preinstall/fast
 	/home/andre/clion-2021.2.3/bin/cmake/linux/bin/cmake -DCMAKE_INSTALL_DO_STRIP=1 -P cmake_install.cmake
 .PHONY : install/strip/fast
 
-# Special rule for the target install/local
-install/local: preinstall
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Installing only the local directory..."
-	/home/andre/clion-2021.2.3/bin/cmake/linux/bin/cmake -DCMAKE_INSTALL_LOCAL_ONLY=1 -P cmake_install.cmake
-.PHONY : install/local
+# Special rule for the target list_install_components
+list_install_components:
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Available install components are: \"Unspecified\""
+.PHONY : list_install_components
 
-# Special rule for the target install/local
-install/local/fast: preinstall/fast
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Installing only the local directory..."
-	/home/andre/clion-2021.2.3/bin/cmake/linux/bin/cmake -DCMAKE_INSTALL_LOCAL_ONLY=1 -P cmake_install.cmake
-.PHONY : install/local/fast
-
-# Special rule for the target edit_cache
-edit_cache:
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "No interactive CMake dialog available..."
-	/home/andre/clion-2021.2.3/bin/cmake/linux/bin/cmake -E echo No\ interactive\ CMake\ dialog\ available.
-.PHONY : edit_cache
-
-# Special rule for the target edit_cache
-edit_cache/fast: edit_cache
-.PHONY : edit_cache/fast
-
-# Special rule for the target rebuild_cache
-rebuild_cache:
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Running CMake to regenerate build system..."
-	/home/andre/clion-2021.2.3/bin/cmake/linux/bin/cmake --regenerate-during-build -S$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR)
-.PHONY : rebuild_cache
-
-# Special rule for the target rebuild_cache
-rebuild_cache/fast: rebuild_cache
-.PHONY : rebuild_cache/fast
+# Special rule for the target list_install_components
+list_install_components/fast: list_install_components
+.PHONY : list_install_components/fast
 
 # Special rule for the target install
 install: preinstall
@@ -121,14 +118,17 @@ install/fast: preinstall/fast
 	/home/andre/clion-2021.2.3/bin/cmake/linux/bin/cmake -P cmake_install.cmake
 .PHONY : install/fast
 
-# Special rule for the target list_install_components
-list_install_components:
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Available install components are: \"Unspecified\""
-.PHONY : list_install_components
+# Special rule for the target install/local
+install/local: preinstall
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Installing only the local directory..."
+	/home/andre/clion-2021.2.3/bin/cmake/linux/bin/cmake -DCMAKE_INSTALL_LOCAL_ONLY=1 -P cmake_install.cmake
+.PHONY : install/local
 
-# Special rule for the target list_install_components
-list_install_components/fast: list_install_components
-.PHONY : list_install_components/fast
+# Special rule for the target install/local
+install/local/fast: preinstall/fast
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Installing only the local directory..."
+	/home/andre/clion-2021.2.3/bin/cmake/linux/bin/cmake -DCMAKE_INSTALL_LOCAL_ONLY=1 -P cmake_install.cmake
+.PHONY : install/local/fast
 
 # The main all target
 all: cmake_check_build_system
@@ -162,42 +162,194 @@ depend:
 .PHONY : depend
 
 # Convenience name for target.
-tests/CMakeFiles/protonatable-particle-model-factory-test.dir/rule:
-	cd /home/andre/wrk3/simploce/pt-cgmd/simulation/cmake-build-debug && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 tests/CMakeFiles/protonatable-particle-model-factory-test.dir/rule
-.PHONY : tests/CMakeFiles/protonatable-particle-model-factory-test.dir/rule
+tests/CMakeFiles/forcefield-test.dir/rule:
+	cd /home/andre/wrk3/simploce/pt-cgmd/simulation/cmake-build-debug && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 tests/CMakeFiles/forcefield-test.dir/rule
+.PHONY : tests/CMakeFiles/forcefield-test.dir/rule
 
 # Convenience name for target.
-protonatable-particle-model-factory-test: tests/CMakeFiles/protonatable-particle-model-factory-test.dir/rule
-.PHONY : protonatable-particle-model-factory-test
+forcefield-test: tests/CMakeFiles/forcefield-test.dir/rule
+.PHONY : forcefield-test
 
 # fast build rule for target.
-protonatable-particle-model-factory-test/fast:
-	cd /home/andre/wrk3/simploce/pt-cgmd/simulation/cmake-build-debug && $(MAKE) $(MAKESILENT) -f tests/CMakeFiles/protonatable-particle-model-factory-test.dir/build.make tests/CMakeFiles/protonatable-particle-model-factory-test.dir/build
-.PHONY : protonatable-particle-model-factory-test/fast
+forcefield-test/fast:
+	cd /home/andre/wrk3/simploce/pt-cgmd/simulation/cmake-build-debug && $(MAKE) $(MAKESILENT) -f tests/CMakeFiles/forcefield-test.dir/build.make tests/CMakeFiles/forcefield-test.dir/build
+.PHONY : forcefield-test/fast
 
-protonatable-particle-model-factory-test.o: protonatable-particle-model-factory-test.cpp.o
-.PHONY : protonatable-particle-model-factory-test.o
+# Convenience name for target.
+tests/CMakeFiles/pair-list-test.dir/rule:
+	cd /home/andre/wrk3/simploce/pt-cgmd/simulation/cmake-build-debug && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 tests/CMakeFiles/pair-list-test.dir/rule
+.PHONY : tests/CMakeFiles/pair-list-test.dir/rule
+
+# Convenience name for target.
+pair-list-test: tests/CMakeFiles/pair-list-test.dir/rule
+.PHONY : pair-list-test
+
+# fast build rule for target.
+pair-list-test/fast:
+	cd /home/andre/wrk3/simploce/pt-cgmd/simulation/cmake-build-debug && $(MAKE) $(MAKESILENT) -f tests/CMakeFiles/pair-list-test.dir/build.make tests/CMakeFiles/pair-list-test.dir/build
+.PHONY : pair-list-test/fast
+
+# Convenience name for target.
+tests/CMakeFiles/interactor-test.dir/rule:
+	cd /home/andre/wrk3/simploce/pt-cgmd/simulation/cmake-build-debug && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 tests/CMakeFiles/interactor-test.dir/rule
+.PHONY : tests/CMakeFiles/interactor-test.dir/rule
+
+# Convenience name for target.
+interactor-test: tests/CMakeFiles/interactor-test.dir/rule
+.PHONY : interactor-test
+
+# fast build rule for target.
+interactor-test/fast:
+	cd /home/andre/wrk3/simploce/pt-cgmd/simulation/cmake-build-debug && $(MAKE) $(MAKESILENT) -f tests/CMakeFiles/interactor-test.dir/build.make tests/CMakeFiles/interactor-test.dir/build
+.PHONY : interactor-test/fast
+
+# Convenience name for target.
+tests/CMakeFiles/protonatable-particle-system-factory-test.dir/rule:
+	cd /home/andre/wrk3/simploce/pt-cgmd/simulation/cmake-build-debug && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 tests/CMakeFiles/protonatable-particle-system-factory-test.dir/rule
+.PHONY : tests/CMakeFiles/protonatable-particle-system-factory-test.dir/rule
+
+# Convenience name for target.
+protonatable-particle-system-factory-test: tests/CMakeFiles/protonatable-particle-system-factory-test.dir/rule
+.PHONY : protonatable-particle-system-factory-test
+
+# fast build rule for target.
+protonatable-particle-system-factory-test/fast:
+	cd /home/andre/wrk3/simploce/pt-cgmd/simulation/cmake-build-debug && $(MAKE) $(MAKESILENT) -f tests/CMakeFiles/protonatable-particle-system-factory-test.dir/build.make tests/CMakeFiles/protonatable-particle-system-factory-test.dir/build
+.PHONY : protonatable-particle-system-factory-test/fast
+
+# Convenience name for target.
+tests/CMakeFiles/pair-potential-test.dir/rule:
+	cd /home/andre/wrk3/simploce/pt-cgmd/simulation/cmake-build-debug && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 tests/CMakeFiles/pair-potential-test.dir/rule
+.PHONY : tests/CMakeFiles/pair-potential-test.dir/rule
+
+# Convenience name for target.
+pair-potential-test: tests/CMakeFiles/pair-potential-test.dir/rule
+.PHONY : pair-potential-test
+
+# fast build rule for target.
+pair-potential-test/fast:
+	cd /home/andre/wrk3/simploce/pt-cgmd/simulation/cmake-build-debug && $(MAKE) $(MAKESILENT) -f tests/CMakeFiles/pair-potential-test.dir/build.make tests/CMakeFiles/pair-potential-test.dir/build
+.PHONY : pair-potential-test/fast
+
+forcefield-test.o: forcefield-test.cpp.o
+.PHONY : forcefield-test.o
 
 # target to build an object file
-protonatable-particle-model-factory-test.cpp.o:
-	cd /home/andre/wrk3/simploce/pt-cgmd/simulation/cmake-build-debug && $(MAKE) $(MAKESILENT) -f tests/CMakeFiles/protonatable-particle-model-factory-test.dir/build.make tests/CMakeFiles/protonatable-particle-model-factory-test.dir/protonatable-particle-model-factory-test.cpp.o
-.PHONY : protonatable-particle-model-factory-test.cpp.o
+forcefield-test.cpp.o:
+	cd /home/andre/wrk3/simploce/pt-cgmd/simulation/cmake-build-debug && $(MAKE) $(MAKESILENT) -f tests/CMakeFiles/forcefield-test.dir/build.make tests/CMakeFiles/forcefield-test.dir/forcefield-test.cpp.o
+.PHONY : forcefield-test.cpp.o
 
-protonatable-particle-model-factory-test.i: protonatable-particle-model-factory-test.cpp.i
-.PHONY : protonatable-particle-model-factory-test.i
+forcefield-test.i: forcefield-test.cpp.i
+.PHONY : forcefield-test.i
 
 # target to preprocess a source file
-protonatable-particle-model-factory-test.cpp.i:
-	cd /home/andre/wrk3/simploce/pt-cgmd/simulation/cmake-build-debug && $(MAKE) $(MAKESILENT) -f tests/CMakeFiles/protonatable-particle-model-factory-test.dir/build.make tests/CMakeFiles/protonatable-particle-model-factory-test.dir/protonatable-particle-model-factory-test.cpp.i
-.PHONY : protonatable-particle-model-factory-test.cpp.i
+forcefield-test.cpp.i:
+	cd /home/andre/wrk3/simploce/pt-cgmd/simulation/cmake-build-debug && $(MAKE) $(MAKESILENT) -f tests/CMakeFiles/forcefield-test.dir/build.make tests/CMakeFiles/forcefield-test.dir/forcefield-test.cpp.i
+.PHONY : forcefield-test.cpp.i
 
-protonatable-particle-model-factory-test.s: protonatable-particle-model-factory-test.cpp.s
-.PHONY : protonatable-particle-model-factory-test.s
+forcefield-test.s: forcefield-test.cpp.s
+.PHONY : forcefield-test.s
 
 # target to generate assembly for a file
-protonatable-particle-model-factory-test.cpp.s:
-	cd /home/andre/wrk3/simploce/pt-cgmd/simulation/cmake-build-debug && $(MAKE) $(MAKESILENT) -f tests/CMakeFiles/protonatable-particle-model-factory-test.dir/build.make tests/CMakeFiles/protonatable-particle-model-factory-test.dir/protonatable-particle-model-factory-test.cpp.s
-.PHONY : protonatable-particle-model-factory-test.cpp.s
+forcefield-test.cpp.s:
+	cd /home/andre/wrk3/simploce/pt-cgmd/simulation/cmake-build-debug && $(MAKE) $(MAKESILENT) -f tests/CMakeFiles/forcefield-test.dir/build.make tests/CMakeFiles/forcefield-test.dir/forcefield-test.cpp.s
+.PHONY : forcefield-test.cpp.s
+
+interactor-test.o: interactor-test.cpp.o
+.PHONY : interactor-test.o
+
+# target to build an object file
+interactor-test.cpp.o:
+	cd /home/andre/wrk3/simploce/pt-cgmd/simulation/cmake-build-debug && $(MAKE) $(MAKESILENT) -f tests/CMakeFiles/interactor-test.dir/build.make tests/CMakeFiles/interactor-test.dir/interactor-test.cpp.o
+.PHONY : interactor-test.cpp.o
+
+interactor-test.i: interactor-test.cpp.i
+.PHONY : interactor-test.i
+
+# target to preprocess a source file
+interactor-test.cpp.i:
+	cd /home/andre/wrk3/simploce/pt-cgmd/simulation/cmake-build-debug && $(MAKE) $(MAKESILENT) -f tests/CMakeFiles/interactor-test.dir/build.make tests/CMakeFiles/interactor-test.dir/interactor-test.cpp.i
+.PHONY : interactor-test.cpp.i
+
+interactor-test.s: interactor-test.cpp.s
+.PHONY : interactor-test.s
+
+# target to generate assembly for a file
+interactor-test.cpp.s:
+	cd /home/andre/wrk3/simploce/pt-cgmd/simulation/cmake-build-debug && $(MAKE) $(MAKESILENT) -f tests/CMakeFiles/interactor-test.dir/build.make tests/CMakeFiles/interactor-test.dir/interactor-test.cpp.s
+.PHONY : interactor-test.cpp.s
+
+pair-list-test.o: pair-list-test.cpp.o
+.PHONY : pair-list-test.o
+
+# target to build an object file
+pair-list-test.cpp.o:
+	cd /home/andre/wrk3/simploce/pt-cgmd/simulation/cmake-build-debug && $(MAKE) $(MAKESILENT) -f tests/CMakeFiles/pair-list-test.dir/build.make tests/CMakeFiles/pair-list-test.dir/pair-list-test.cpp.o
+.PHONY : pair-list-test.cpp.o
+
+pair-list-test.i: pair-list-test.cpp.i
+.PHONY : pair-list-test.i
+
+# target to preprocess a source file
+pair-list-test.cpp.i:
+	cd /home/andre/wrk3/simploce/pt-cgmd/simulation/cmake-build-debug && $(MAKE) $(MAKESILENT) -f tests/CMakeFiles/pair-list-test.dir/build.make tests/CMakeFiles/pair-list-test.dir/pair-list-test.cpp.i
+.PHONY : pair-list-test.cpp.i
+
+pair-list-test.s: pair-list-test.cpp.s
+.PHONY : pair-list-test.s
+
+# target to generate assembly for a file
+pair-list-test.cpp.s:
+	cd /home/andre/wrk3/simploce/pt-cgmd/simulation/cmake-build-debug && $(MAKE) $(MAKESILENT) -f tests/CMakeFiles/pair-list-test.dir/build.make tests/CMakeFiles/pair-list-test.dir/pair-list-test.cpp.s
+.PHONY : pair-list-test.cpp.s
+
+pair-potential-test.o: pair-potential-test.cpp.o
+.PHONY : pair-potential-test.o
+
+# target to build an object file
+pair-potential-test.cpp.o:
+	cd /home/andre/wrk3/simploce/pt-cgmd/simulation/cmake-build-debug && $(MAKE) $(MAKESILENT) -f tests/CMakeFiles/pair-potential-test.dir/build.make tests/CMakeFiles/pair-potential-test.dir/pair-potential-test.cpp.o
+.PHONY : pair-potential-test.cpp.o
+
+pair-potential-test.i: pair-potential-test.cpp.i
+.PHONY : pair-potential-test.i
+
+# target to preprocess a source file
+pair-potential-test.cpp.i:
+	cd /home/andre/wrk3/simploce/pt-cgmd/simulation/cmake-build-debug && $(MAKE) $(MAKESILENT) -f tests/CMakeFiles/pair-potential-test.dir/build.make tests/CMakeFiles/pair-potential-test.dir/pair-potential-test.cpp.i
+.PHONY : pair-potential-test.cpp.i
+
+pair-potential-test.s: pair-potential-test.cpp.s
+.PHONY : pair-potential-test.s
+
+# target to generate assembly for a file
+pair-potential-test.cpp.s:
+	cd /home/andre/wrk3/simploce/pt-cgmd/simulation/cmake-build-debug && $(MAKE) $(MAKESILENT) -f tests/CMakeFiles/pair-potential-test.dir/build.make tests/CMakeFiles/pair-potential-test.dir/pair-potential-test.cpp.s
+.PHONY : pair-potential-test.cpp.s
+
+protonatable-particle-system-factory-test.o: protonatable-particle-system-factory-test.cpp.o
+.PHONY : protonatable-particle-system-factory-test.o
+
+# target to build an object file
+protonatable-particle-system-factory-test.cpp.o:
+	cd /home/andre/wrk3/simploce/pt-cgmd/simulation/cmake-build-debug && $(MAKE) $(MAKESILENT) -f tests/CMakeFiles/protonatable-particle-system-factory-test.dir/build.make tests/CMakeFiles/protonatable-particle-system-factory-test.dir/protonatable-particle-system-factory-test.cpp.o
+.PHONY : protonatable-particle-system-factory-test.cpp.o
+
+protonatable-particle-system-factory-test.i: protonatable-particle-system-factory-test.cpp.i
+.PHONY : protonatable-particle-system-factory-test.i
+
+# target to preprocess a source file
+protonatable-particle-system-factory-test.cpp.i:
+	cd /home/andre/wrk3/simploce/pt-cgmd/simulation/cmake-build-debug && $(MAKE) $(MAKESILENT) -f tests/CMakeFiles/protonatable-particle-system-factory-test.dir/build.make tests/CMakeFiles/protonatable-particle-system-factory-test.dir/protonatable-particle-system-factory-test.cpp.i
+.PHONY : protonatable-particle-system-factory-test.cpp.i
+
+protonatable-particle-system-factory-test.s: protonatable-particle-system-factory-test.cpp.s
+.PHONY : protonatable-particle-system-factory-test.s
+
+# target to generate assembly for a file
+protonatable-particle-system-factory-test.cpp.s:
+	cd /home/andre/wrk3/simploce/pt-cgmd/simulation/cmake-build-debug && $(MAKE) $(MAKESILENT) -f tests/CMakeFiles/protonatable-particle-system-factory-test.dir/build.make tests/CMakeFiles/protonatable-particle-system-factory-test.dir/protonatable-particle-system-factory-test.cpp.s
+.PHONY : protonatable-particle-system-factory-test.cpp.s
 
 # Help Target
 help:
@@ -211,10 +363,26 @@ help:
 	@echo "... install/strip"
 	@echo "... list_install_components"
 	@echo "... rebuild_cache"
-	@echo "... protonatable-particle-model-factory-test"
-	@echo "... protonatable-particle-model-factory-test.o"
-	@echo "... protonatable-particle-model-factory-test.i"
-	@echo "... protonatable-particle-model-factory-test.s"
+	@echo "... forcefield-test"
+	@echo "... interactor-test"
+	@echo "... pair-list-test"
+	@echo "... pair-potential-test"
+	@echo "... protonatable-particle-system-factory-test"
+	@echo "... forcefield-test.o"
+	@echo "... forcefield-test.i"
+	@echo "... forcefield-test.s"
+	@echo "... interactor-test.o"
+	@echo "... interactor-test.i"
+	@echo "... interactor-test.s"
+	@echo "... pair-list-test.o"
+	@echo "... pair-list-test.i"
+	@echo "... pair-list-test.s"
+	@echo "... pair-potential-test.o"
+	@echo "... pair-potential-test.i"
+	@echo "... pair-potential-test.s"
+	@echo "... protonatable-particle-system-factory-test.o"
+	@echo "... protonatable-particle-system-factory-test.i"
+	@echo "... protonatable-particle-system-factory-test.s"
 .PHONY : help
 
 

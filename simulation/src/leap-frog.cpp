@@ -1,28 +1,4 @@
 /*
- * The MIT License
- *
- * Copyright 2019 André H. Juffer, Biocenter Oulu
- *
- * Permission is hereby granted, free of charge, to any person obtaining a copy
- * of this software and associated documentation files (the "Software"), to deal
- * in the Software without restriction, including without limitation the rights
- * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- * copies of the Software, and to permit persons to whom the Software is
- * furnished to do so, subject to the following conditions:
- *
- * The above copyright notice and this permission notice shall be included in
- * all copies or substantial portions of the Software.
- *
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
- * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
- * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
- * THE SOFTWARE.
- */
-
-/* 
  * File:   leap-frog.cpp
  * Author: André H. Juffer, Biocenter Oulu.
  *
@@ -31,7 +7,7 @@
 
 #include "simploce/simulation/leap-frog.hpp"
 #include "simploce/simulation/interactor.hpp"
-#include "simploce/simulation/sim-util.hpp"
+#include "simploce/simulation/s-properties.hpp"
 #include "simploce/simulation/s-conf.hpp"
 #include "simploce/particle/atom.hpp"
 #include "simploce/particle/bead.hpp"
@@ -81,7 +57,7 @@ namespace simploce {
         }
         
         // Temperature at t(n).
-        data.temperature = util::temperature<T>(particles, data.ekin);
+        data.temperature = properties::temperature<T>(particles, data.ekin);
         
         // Time.
         data.t = counter * dt;
@@ -89,14 +65,12 @@ namespace simploce {
         return data;        
     }
     
-    LeapFrog<Atomistic>::LeapFrog(const at_interactor_ptr_t& interactor) :
-        interactor_{interactor}
-    {        
+    LeapFrog::LeapFrog(sim_param_ptr_t simulationParameters) :
+        simulationParameters_{std::move(simulationParameters)} {
     }
     
     SimulationData 
-    LeapFrog<Atomistic>::displace(const sim_param_t& param, 
-                                  const at_mod_ptr_t& at) const
+    LeapFrog::displace(std::vector<std::shared_ptr<Particle>> &particles) const
     {
         static bool setup = false;
         static stime_t dt{0.0};

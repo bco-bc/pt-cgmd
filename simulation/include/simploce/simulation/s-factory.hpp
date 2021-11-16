@@ -8,10 +8,52 @@
 #define S_FACTORY_HPP
 
 #include "s-types.hpp"
+#include "force-field.hpp"
 #include "simploce/particle/p-factory.hpp"
+
 
 namespace simploce {
     namespace factory {
+
+        /**
+         * Obtains a force field from an input stream.
+         * @param stream Input stream.
+         * @param catalog Particle specification catalog.
+         * @return Force field.
+         */
+        ff_ptr_t obtainFrom(std::istream& stream, const spec_catalog_ptr_t& catalog);
+
+        /**
+         * Returns current force field.
+         * @return Force field.
+         */
+        ff_ptr_t forceField();
+
+        /**
+         * Returns a default simulation parameters.
+         * @return  Simulation parameters.
+         */
+        sim_param_ptr_t simulationParameters();
+
+        /**
+         * Returns pair lists generator for beads.
+         * @param box Simulation box.
+         * @param bc Boundary condition.
+         * @return Pair lists generator.
+         */
+        bead_pair_lists_gen_ptr_t pairListsGeneratorForBeads(const box_ptr_t &box,
+                                                             const bc_ptr_t &bc);
+
+        /**
+         * Returns pair lists generator for atoms.
+         * @param box Simulation box.
+         * @param bc Boundary condition.
+         * @return Pair lists generator.
+         */
+        atom_pair_lists_gen_ptr_t pairListsGeneratorForAtoms(const box_ptr_t &box,
+                                                             const bc_ptr_t &bc);
+
+
         
         /**
          * Returns coarse grained force field for harmonic potential 
@@ -22,7 +64,7 @@ namespace simploce {
          * @param fc Force constant harmonic potential.
          * @param Rref Reference distance.
          * @return Force field.
-         */
+         *
         cg_ff_ptr_t
         harmonicPotentialForceField(const spec_catalog_ptr_t& catalog,
                                     const bc_ptr_t& bc,
@@ -37,7 +79,7 @@ namespace simploce {
          * @param box Simulation box.
          * @param protonatable If true, water is protonatable.
          * @return Force field.
-         */
+         *
         cg_ff_ptr_t
         polarizableWaterForceField(const spec_catalog_ptr_t& catalog,
                                    const bc_ptr_t& bc,
@@ -51,7 +93,7 @@ namespace simploce {
          * @param box Simulation box.
          * @param water Coarse grained force field for water.
          * @return Force field.
-         */
+         *
         cg_ff_ptr_t 
         formicAcidSolutionForceField(const spec_catalog_ptr_t& catalog,
                                      const bc_ptr_t& bc,
@@ -64,7 +106,7 @@ namespace simploce {
          * @param bc Boundary condition.
          * @param box Simulation box.
          * @return Force field.
-         */
+         *
         cg_ff_ptr_t
         electrolyteForceField(const spec_catalog_ptr_t& catalog,
                               const bc_ptr_t& bc,
@@ -76,46 +118,27 @@ namespace simploce {
          * @param bc Boundary condition.
          * @param box Simulation box.
          * @return  Force field.
-         */
+         *
         cg_ff_ptr_t
         ljFluidForceField(const spec_catalog_ptr_t& catalog,
                           const bc_ptr_t& bc,
                           const box_ptr_t& box);
+         */
 
         /**
          * Returns factory for creating protonatable particle models.
          * @return Factory.
          */
-        prot_p_mod_factory protonatableParticleModelFactory(const spec_catalog_ptr_t& catalog);
+        prot_p_sys_factory protonatableParticleModelFactory(const spec_catalog_ptr_t& catalog);
         
         /**
          * Returns simulation model factory.
          * @param particle_model_fact_ptr_t Particle model factory.
          * @param catalog Particle specifications catalog.
          * @return Model factory.
-         */
+         *
         sim_model_fact_ptr_t 
         simulationModelFactory(const spec_catalog_ptr_t& catalog);
-        
-        /**
-         * Returns particle pair list generator for coarse grained particle models.
-         * @param box Simulation box.
-         * @param bc Boundary condition.
-         * @return Pair list generator.
-         */
-        cg_ppair_list_gen_ptr_t
-        coarseGrainedPairListGenerator(const box_ptr_t& box,
-                                       const bc_ptr_t& bc);
-        
-        /**
-         * Returns particle pair list generator for atomistic particle models.
-         * @param box Simulation box.
-         * @param bc Boundary condition.
-         * @return Pair list generator.
-         */
-        at_ppair_list_gen_ptr_t 
-        atomisticPairListGenerator(const box_ptr_t& box,
-                                   const bc_ptr_t& bc);
         
         /**
          * Returns coarse grained interactor for a harmonic potential force field
@@ -125,7 +148,7 @@ namespace simploce {
          * @param fc Force constant harmonic potential.
          * @param Rref Reference distance.
          * @return Interactor.
-         */
+         *
         cg_interactor_ptr_t
         harmonicPotentialInteractor(const spec_catalog_ptr_t& catalog,
                                     const box_ptr_t& box, 
@@ -142,7 +165,7 @@ namespace simploce {
          * @param protonatable If true, the interactor will assume parameters for 
          * protonatable waters.
          * @return Interactor.
-         */
+         *
         cg_interactor_ptr_t 
         polarizableWaterInteractor(const spec_catalog_ptr_t& catalog,
                                    const box_ptr_t& box, 
@@ -155,7 +178,7 @@ namespace simploce {
          * @param box Simulation box.
          * @param bc Boundary conditions.
          * @return Interactor.
-         */
+         *
         cg_interactor_ptr_t
         formicAcidSolutionInteractor(const spec_catalog_ptr_t& catalog,
                                      const box_ptr_t& box, 
@@ -167,7 +190,7 @@ namespace simploce {
          * @param box Simulation box.
          * @param bc Boundary conditions.
          * @return Interactor.
-         */
+         *
         cg_interactor_ptr_t
         electrolyteInteractor(const spec_catalog_ptr_t& catalog,
                               const box_ptr_t& box, 
@@ -179,7 +202,7 @@ namespace simploce {
          * @param box Simulation box.
          * @param bc Boundary conditions.
          * @return Interactor.
-         */
+         *
         cg_interactor_ptr_t
         ljFluidInteractor(const spec_catalog_ptr_t& catalog,
                               const box_ptr_t& box, 
@@ -189,7 +212,7 @@ namespace simploce {
          * Leap frog algorithm for atomistic particle models.
          * @param interactor Atomistic interactor.
          * @return Algorithm.
-         */
+         *
         at_displacer_ptr_t 
         leapFrog(at_interactor_ptr_t& interactor);
         
@@ -197,7 +220,7 @@ namespace simploce {
          * Leap frog algorithm for coarse grained particle models.
          * @param interactor Coarse grained interactor.
          * @return Algorithm.
-         */
+         *
         cg_displacer_ptr_t 
         leapFrog(cg_interactor_ptr_t& interactor);
         
@@ -205,7 +228,7 @@ namespace simploce {
          * Velocity Verlet algorithm for atomistic particle models.
          * @param interactor Atomistic interactor.
          * @return Algorithm.
-         */
+         *
         at_displacer_ptr_t 
         velocityVerlet(at_interactor_ptr_t& interactor);
         
@@ -213,7 +236,7 @@ namespace simploce {
          * Velocity Verlet algorithm for coarse grained particle models.
          * @param interactor Coarse grained interactor.
          * @return Algorithm.
-         */
+         *
         cg_displacer_ptr_t 
         velocityVerlet(cg_interactor_ptr_t& interactor);
 
@@ -221,7 +244,7 @@ namespace simploce {
          * Langevin Velocity Verlet algorithm for atomistic particle models.
          * @param interactor Atomistic interactor.
          * @return Algorithm.
-         */
+         *
         at_displacer_ptr_t 
         langevinVelocityVerlet(at_interactor_ptr_t& interactor);
         
@@ -229,7 +252,7 @@ namespace simploce {
          * Langevin Velocity Verlet algorithm for coarse grained particle models.
          * @param interactor Coarse grained interactor.
          * @return Algorithm.
-         */
+         *
         cg_displacer_ptr_t 
         langevinVelocityVerlet(cg_interactor_ptr_t& interactor);
         
@@ -240,20 +263,21 @@ namespace simploce {
          * @param generator Protonatable bead pair list generator.
          * @param displacer Proton transfer displacer.
          * @return Displacer.
-         */
+         *
         cg_displacer_ptr_t
         protonTransferlangevinVelocityVerlet(const cg_interactor_ptr_t& interactor,
-                                             const pt_pair_list_gen_ptr_t& generator,
+                                             const prot_pair_list_gen_ptr_t& generator,
                                              const pt_displacer_ptr_t& displacer);
         
         /**
          * Change displacer according to given specification.
          * @param displacerSpec Displacer specification.
          * @param sm Coarse grained simulation model.
-         */
+         *
         void
         changeDisplacer(const std::string& displacerSpec, cg_sim_model_ptr_t& sm);
-        
+        */
+
         /**
          * Returns periodic boundary conditions.
          * @param box Simulation box.
@@ -267,8 +291,8 @@ namespace simploce {
          * transfer.
          * @param bc Boundary condition.
          * @return Generator.
-         */
-        pt_pair_list_gen_ptr_t 
+         *
+        prot_pair_list_gen_ptr_t
         protonTransferPairListGenerator(const bc_ptr_t& bc);
         
         /**
@@ -276,9 +300,10 @@ namespace simploce {
          * @param rate Rate.
          * @param gamma Inverse of time constant of decay.
          * @return PT displacer
-         */
+         *
         pt_displacer_ptr_t 
         protonTransferDisplacer();
+         */
         
     }
 }

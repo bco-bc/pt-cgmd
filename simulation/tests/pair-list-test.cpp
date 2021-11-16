@@ -5,17 +5,21 @@
  * Created on September 4, 2019, 2:55 PM
  */
 
-#include "simploce/simulation/cell-lists.hpp"
-#include "simploce/simulation/distance-lists.hpp"
+// #include "simploce/simulation/cell-lists.hpp"
+// #include "simploce/simulation/distance-lists.hpp"
+#include "simploce/simulation/distance-pair-list-generator.hpp"
 #include "simploce/simulation/pair-lists.hpp"
 #include "simploce/simulation/s-factory.hpp"
-#include "simploce/simulation/s-types.hpp"
-#include "simploce/simulation/sim-model-factory.hpp"
+// #include "simploce/simulation/s-types.hpp"
+// #include "simploce/simulation/sim-model-factory.hpp"
+#include "simploce/particle/coarse-grained.hpp"
+#include "simploce/particle/atomistic.hpp"
+#include "simploce/simulation/protonatable-particle-system-factory.hpp"
 #include "simploce/particle/bead.hpp"
 #include "simploce/particle/particle-spec-catalog.hpp"
 #include "simploce/util/file.hpp"
 #include "simploce/simulation/pbc.hpp"
-#include "simploce/simulation/sim-util.hpp"
+#include "simploce/simulation/s-properties.hpp"
 #include <cstdlib>
 #include <iostream>
 #include <vector>
@@ -27,23 +31,15 @@
 using namespace simploce;
 
 /*
- * Simple C++ Test Suite
- */
-
-void test1() {
+void test1(const spec_catalog_ptr_t &catalog) {
     std::cout << "pair-list-test test 1" << std::endl;
     
     using cell_generator_t = CellLists<Bead>;   
     using dist_generator_t = DistanceLists<Bead>; 
     using pairlists_t = PairLists<Bead>;
         
-    std::string fileName = "resources/particles-specs.dat";
-    std::ifstream stream;
-    util::open_input_file(stream, fileName);
-    spec_catalog_ptr_t catalog = ParticleSpecCatalog::create(stream);
-    //std::clog << *catalog << std::endl;
-    
-    auto box = factory::cube(7.27);
+
+    auto box = factory::box(7.27);
     auto smf = factory::simulationModelFactory(catalog);
     auto sm = smf->polarizableWater(box, 997.0479, 298.15, 2560);
     
@@ -80,16 +76,55 @@ void test1() {
               << std::endl;
     std::clog << std::endl;
 }
+*/
+
+void test2(cg_sys_ptr_t &coarseGrained) {
+    auto box = coarseGrained->box();
+    auto bc = factory::pbc(box);
+    DistancePairListGenerator<Bead> generator(box, bc);
+    auto pairLists =
+            coarseGrained->doWithAllFreeGroups<PairLists<Bead>>([generator] (
+                    const std::vector<bead_ptr_t>& all,
+                    const std::vector<bead_ptr_t>& free,
+                    const std::vector<bead_group_ptr_t>& groups) {
+        return generator.generate(all, free, groups);
+    });
+    auto particlePairs = pairLists.particlePairList();
+    std::cout << "Number of pairs: " << particlePairs.size() << std::endl;
+}
+
+void test3(at_sys_ptr_t & atomistic) {
+    auto box = atomistic->box();
+    auto bc = factory::pbc(box);
+    DistancePairListGenerator<Atom> generator(box, bc);
+    auto pairLists =
+            atomistic->doWithAllFreeGroups<PairLists<Atom>>([generator] (
+                    const std::vector<atom_ptr_t>& all,
+                    const std::vector<atom_ptr_t>& free,
+                    const std::vector<atom_group_ptr_t>& groups) {
+        return generator.generate(all, free, groups);
+    });
+    auto particlePairs = pairLists.particlePairList();
+    std::cout << "Number of pairs: " << particlePairs.size() << std::endl;
+}
 
 int main(int argc, char** argv) {
-    std::cout << "%SUITE_STARTING% pair-list-test" << std::endl;
-    std::cout << "%SUITE_STARTED%" << std::endl;
+    util::Logger::changeLogLevel(util::Logger::LOGTRACE);
 
-    std::cout << "%TEST_STARTED% test1 (pair-list-test)" << std::endl;
-    test1();
-    std::cout << "%TEST_FINISHED% time=0 test1 (pair-list-test)" << std::endl;
+    std::string fileName = "/localdisk/resources/particles-specs.dat";
+    std::ifstream stream;
+    util::open_input_file(stream, fileName);
+    auto catalog = ParticleSpecCatalog::obtainFrom(stream);
+    //std::clog << *catalog << std::endl;
 
-    std::cout << "%SUITE_FINISHED% time=0" << std::endl;
+    //test1(catalog);
+
+    auto factory = factory::protonatableParticleModelFactory(catalog);
+    auto polarizableWater = factory->polarizableWater(factory::box(7.27));
+    test2(polarizableWater);
+
+    auto argon = factory->argon(factory::box(3.47786));
+    test3(argon);
 
     return (EXIT_SUCCESS);
 }

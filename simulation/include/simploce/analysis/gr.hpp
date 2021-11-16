@@ -34,7 +34,7 @@
 
 #include "analyzer.hpp"
 #include "atypes.hpp"
-#include "../simulation/sim-util.hpp"
+#include "../simulation/s-properties.hpp"
 #include "../simulation/bc.hpp"
 #include "simploce/particle/particle-spec.hpp"
 #include "simploce/types/cvector_t.hpp"

@@ -1,0 +1,20 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+../include/simploce/util/param.hpp
+boost/property_tree/ptree.hpp
+-
+iostream
+-
+
+/wrk3/simploce/pt-cgmd/util/tests/param-test.cpp
+simploce/util/param.hpp
+/wrk3/simploce/pt-cgmd/util/tests/simploce/util/param.hpp
+cstdlib
+-
+

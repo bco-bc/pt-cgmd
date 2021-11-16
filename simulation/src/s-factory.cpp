@@ -5,25 +5,26 @@
  */
 
 #include "simploce/simulation/s-factory.hpp"
-#include "simploce/simulation/cg-pol-water.hpp"
-#include "simploce/simulation/acid-base-solution.hpp"
-#include "simploce/simulation/cg-electrolyte.hpp"
-#include "simploce/simulation/cg-lj-fluid.hpp"
+// #include "simploce/simulation/cg-pol-water.hpp"
+// #include "simploce/simulation/acid-base-solution.hpp"
+// #include "simploce/simulation/cg-electrolyte.hpp"
+// #include "simploce/simulation/cg-lj-fluid.hpp"
 // #include "simploce/simulation/pair-list-generator.hpp"
-#include "simploce/simulation/cell-lists.hpp"
+// #include "simploce/simulation/cell-lists.hpp"
 // #include "simploce/simulation/distance-lists.hpp"
+#include "simploce/simulation/distance-pair-list-generator.hpp"
 #include "simploce/simulation/s-types.hpp"
-#include "simploce/simulation/leap-frog.hpp"
-#include "simploce/simulation/velocity-verlet.hpp"
-#include "simploce/simulation/langevin-velocity-verlet.hpp"
+// #include "simploce/simulation/leap-frog.hpp"
+// #include "simploce/simulation/velocity-verlet.hpp"
+// #include "simploce/simulation/langevin-velocity-verlet.hpp"
 #include "simploce/simulation/interactor.hpp"
-#include "simploce/simulation/sim-model-factory.hpp"
-#include "simploce/simulation/pt-pair-list-generator.hpp"
-#include "simploce/simulation/pt-langevin-velocity-verlet.hpp"
-#include "simploce/simulation/protonatable-particle-model-factory.hpp"
+// #include "simploce/simulation/sim-model-factory.hpp"
+// #include "simploce/simulation/pt-pair-list-generator.hpp"
+// #include "simploce/simulation/pt-langevin-velocity-verlet.hpp"
+#include "simploce/simulation/protonatable-particle-system-factory.hpp"
 #include "simploce/simulation/pbc.hpp"
-#include "simploce/simulation/constant-rate-pt.hpp"
-#include "simploce/simulation/cg-hp.hpp"
+// #include "simploce/simulation/constant-rate-pt.hpp"
+//#include "simploce/simulation/cg-hp.hpp"
 #include "simploce/simulation/s-conf.hpp"
 #include "simploce/particle/bead.hpp"
 #include "simploce/particle/atom.hpp"
@@ -35,24 +36,30 @@
 
 namespace simploce {
     namespace factory {
-        
+        /*
         using at_leap_frog_t = LeapFrog<Atomistic>;
         using cg_leap_frog_t = LeapFrog<CoarseGrained>;
         using at_vv_t = VelocityVerlet<Atomistic>;
         using cg_vv_t = VelocityVerlet<CoarseGrained>;
         using at_lvv_t = LangevinVelocityVerlet<Atomistic>;
         using cg_lvv_t = LangevinVelocityVerlet<CoarseGrained>;
+         */
         
         // Force fields.
-        static cg_ff_ptr_t cgPolWaterFF_{};             // Polarizable water.
-        static cg_ff_ptr_t cgFormicAcidSolutionFF_{};   // Formic acid in water.
-        static cg_ff_ptr_t cgElectrolyteFF_{};          // NaCl solution.
-        static cg_ff_ptr_t cgLJFluid_{};                // LJ fluid.
-        static cg_ff_ptr_t cgHPFF_;                      // Harmonic potentials.
+        static ff_ptr_t forceField_{};                   // Force field.
+
+        //static cg_ff_ptr_t cgPolWaterFF_{};             // Polarizable water.
+        //static cg_ff_ptr_t cgFormicAcidSolutionFF_{};   // Formic acid in water.
+        //static cg_ff_ptr_t cgElectrolyteFF_{};          // NaCl solution.
+        //static cg_ff_ptr_t cgLJFluid_{};                // LJ fluid.
+        //static cg_ff_ptr_t cgHPFF_;                      // Harmonic potentials.
         
         // Pair lists generators.
-        static cg_ppair_list_gen_ptr_t  cgPairlistGen_{};
-        static at_ppair_list_gen_ptr_t atPairListGen_{};
+        static bead_pair_lists_gen_ptr_t beadPairlistsGen_{};
+        static atom_pair_lists_gen_ptr_t atomPairListsGen_{};
+
+        // Simulation parameters.
+        static sim_param_ptr_t simulationParameters_{};
         
         // Leap Frog
         static at_displacer_ptr_t atLeapFrog_{};
@@ -70,7 +77,7 @@ namespace simploce {
         static cg_displacer_ptr_t cgPTLVV_{};
 
         // Protonatable particle model factory.
-        static prot_p_mod_factory protonatableParticleModelFactory_{};
+        static prot_p_sys_factory protonatableParticleModelFactory_{};
 
         // Simulation model factory.
         static sim_model_fact_ptr_t simModelFactory_{};
@@ -85,10 +92,54 @@ namespace simploce {
         static std::shared_ptr<Interactor<Bead>> cgLJFluidInteractor_{};
         static std::shared_ptr<Interactor<Bead>> cgHPInteractor_;
         
-        static pt_pair_list_gen_ptr_t ptPairlisGen_{};
+        static prot_pair_list_gen_ptr_t ptPairlisGen_{};
         
         static pt_displacer_ptr_t constantRate_{};
-        
+
+        ff_ptr_t
+        obtainFrom(std::istream& stream, const spec_catalog_ptr_t& catalog) {
+            if ( !forceField_ ) {
+                forceField_ = ForceField::obtainFrom(stream, catalog);
+            }
+            return forceField_;
+        }
+
+        ff_ptr_t forceField() {
+            if ( !forceField_ ) {
+                throw std::domain_error("No force field defined");
+            }
+            return forceField_;
+        }
+
+        sim_param_ptr_t
+        simulationParameters() {
+            if ( !simulationParameters_ ) {
+                simulationParameters_ = std::make_shared<simploce::param::param_t>();
+                simulationParameters_->put("simulation.nsteps", 1000);
+                simulationParameters_->put("simulation.nwrite", "10");
+                simulationParameters_->put("simulation.npairlists", 10);
+                simulationParameters_->put("simulation.temperature", 298.15);
+            }
+            return simulationParameters_;
+        }
+
+        bead_pair_lists_gen_ptr_t pairListsGeneratorForBeads(const box_ptr_t &box,
+                                                             const bc_ptr_t &bc) {
+            if ( !beadPairlistsGen_ ) {
+                beadPairlistsGen_ = std::make_shared<DistancePairListGenerator<Bead>>(box, bc);
+            }
+            return beadPairlistsGen_;
+        }
+
+        atom_pair_lists_gen_ptr_t pairListsGeneratorForAtoms(const box_ptr_t &box,
+                                                             const bc_ptr_t &bc) {
+            if ( !atomPairListsGen_ ) {
+                atomPairListsGen_ = std::make_shared<DistancePairListGenerator<Atom>>(box, bc);
+            }
+            return atomPairListsGen_;
+        }
+
+        /*
         cg_ff_ptr_t
         harmonicPotentialForceField(const spec_catalog_ptr_t& catalog,
                                     const bc_ptr_t& bc,
@@ -156,15 +207,17 @@ namespace simploce {
             }
             return cgLJFluid_;
         }
-       
-        prot_p_mod_factory protonatableParticleModelFactory(const spec_catalog_ptr_t& catalog) {
+        */
+
+        prot_p_sys_factory protonatableParticleModelFactory(const spec_catalog_ptr_t& catalog) {
             if ( !protonatableParticleModelFactory_ ) {
                 protonatableParticleModelFactory_ =
-                        std::make_shared<ProtonatableParticleModelFactory>(catalog);
+                        std::make_shared<ProtonatableParticleSystemFactory>(catalog);
             }
             return protonatableParticleModelFactory_;
         }
 
+        /*
         sim_model_fact_ptr_t 
         simulationModelFactory(const spec_catalog_ptr_t& catalog)
         {
@@ -178,28 +231,6 @@ namespace simploce {
             return simModelFactory_;
         }
         
-        cg_ppair_list_gen_ptr_t 
-        coarseGrainedPairListGenerator(const box_ptr_t& box,
-                                       const bc_ptr_t& bc)
-        {
-            if ( !cgPairlistGen_ ) {
-                //cgPairlistGen_ = std::make_shared<DistanceLists<Bead>>(box, bc);
-                cgPairlistGen_ = std::make_shared<CellLists<Bead>>(box, bc);
-            }
-            return cgPairlistGen_;
-        }
-        
-        at_ppair_list_gen_ptr_t 
-        atomisticPairListGenerator(const box_ptr_t& box,
-                                   const bc_ptr_t& bc)
-        {
-            if ( !atPairListGen_ ) {
-                //atPairlistGen_ = std::make_shared<DistanceLists<Atom>>(box, bc);
-                atPairListGen_ = std::make_shared<CellLists<Atom>>(box, bc);
-            }
-            return atPairListGen_;
-        }
-        
         cg_interactor_ptr_t
         harmonicPotentialInteractor(const spec_catalog_ptr_t& catalog,
                                     const box_ptr_t& box, 
@@ -208,8 +239,8 @@ namespace simploce {
                                     const length_t& Rref)
         {
             if ( !cgHPInteractor_ ) {
-                cg_ppair_list_gen_ptr_t generator = 
-                    factory::coarseGrainedPairListGenerator(box, bc);
+                bead_pair_lists_gen_ptr_t generator =
+                    factory::pairListsGeneratorForBeads(box, bc);
                 cg_ff_ptr_t forcefield = 
                     factory::harmonicPotentialForceField(catalog, bc, box, fc, Rref);
                 cgHPInteractor_ =
@@ -226,8 +257,8 @@ namespace simploce {
                                    bool protonatable)        
         {
             if ( !cgPolWaterInteractor_ ) {
-                cg_ppair_list_gen_ptr_t generator = 
-                    factory::coarseGrainedPairListGenerator(box, bc);
+                bead_pair_lists_gen_ptr_t generator =
+                    factory::pairListsGeneratorForBeads(box, bc);
                 cg_ff_ptr_t forcefield = 
                     polarizableWaterForceField(catalog, bc, box, protonatable);
                 cgPolWaterInteractor_ = 
@@ -242,8 +273,8 @@ namespace simploce {
                                      const bc_ptr_t& bc)
         {
             if ( !cgFormicAcidSolutionInteractor_) {
-                cg_ppair_list_gen_ptr_t generator = 
-                    factory::coarseGrainedPairListGenerator(box, bc);
+                bead_pair_lists_gen_ptr_t generator =
+                    factory::pairListsGeneratorForBeads(box, bc);
                 cg_ff_ptr_t water = 
                     polarizableWaterForceField(catalog, bc, box, true);
                 cg_ff_ptr_t forcefield = 
@@ -260,8 +291,8 @@ namespace simploce {
                               const bc_ptr_t& bc)
         {
             if ( !cgElectrolyteInteractor_) {
-                cg_ppair_list_gen_ptr_t generator = 
-                    factory::coarseGrainedPairListGenerator(box, bc);
+                bead_pair_lists_gen_ptr_t generator =
+                    factory::pairListsGeneratorForBeads(box, bc);
                 cg_ff_ptr_t forcefield =
                     factory::electrolyteForceField(catalog, bc, box);
                 cgElectrolyteInteractor_ = 
@@ -276,8 +307,8 @@ namespace simploce {
                               const bc_ptr_t& bc)        
         {
             if ( !cgLJFluidInteractor_ ) {
-                cg_ppair_list_gen_ptr_t generator = 
-                    factory::coarseGrainedPairListGenerator(box, bc);
+                bead_pair_lists_gen_ptr_t generator =
+                    factory::pairListsGeneratorForBeads(box, bc);
                 cg_ff_ptr_t forcefield =
                     factory::ljFluidForceField(catalog, bc, box);
                 cgLJFluidInteractor_ =
@@ -343,7 +374,7 @@ namespace simploce {
         
         cg_displacer_ptr_t
         protonTransferlangevinVelocityVerlet(const cg_interactor_ptr_t& interactor,
-                                             const pt_pair_list_gen_ptr_t& generator,
+                                             const prot_pair_list_gen_ptr_t& generator,
                                              const pt_displacer_ptr_t& displacer)
         {
             if ( !cgPTLVV_ ) {
@@ -380,7 +411,8 @@ namespace simploce {
                 sm->displacer(displacer);
             }
         }
-        
+        */
+
         bc_ptr_t 
         pbc(const box_ptr_t& box)
         {
@@ -389,8 +421,9 @@ namespace simploce {
             }
             return pbc_;
         }
-        
-        pt_pair_list_gen_ptr_t 
+
+        /*
+        prot_pair_list_gen_ptr_t
         protonTransferPairListGenerator(const bc_ptr_t& bc)
         {
             if ( !ptPairlisGen_) {
@@ -409,6 +442,6 @@ namespace simploce {
             }
             return constantRate_;
         }
-        
+        */
     }
 }

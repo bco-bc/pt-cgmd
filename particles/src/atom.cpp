@@ -6,6 +6,8 @@
  */
 
 #include "simploce/particle/atom.hpp"
+#include "simploce/particle/particle-spec.hpp"
+#include <stdexcept>
 
 namespace simploce {
     
@@ -14,6 +16,9 @@ namespace simploce {
                const std::string& name, 
                const spec_ptr_t& spec) :
         Particle(id, index, name, spec) {
+        if ( spec->isProtonatable() ) {
+            throw std::domain_error("An atom cannot be protonatable.");
+        }
     }
     
     Atom::~Atom() = default;

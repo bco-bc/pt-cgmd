@@ -80,18 +80,18 @@ namespace simploce {
             std::string name = std::string(charBuffer, conf::NAME_WIDTH);
             boost::trim(name);
             real_t charge, mass, radius, pKa;
-            bool protonatable;
-            stream >> protonatable >> mass >> charge >> radius >> pKa;
+            bool protonatable, free;
+            stream >> protonatable >> free >> mass >> charge >> radius >> pKa;
             stringBuffer.clear();
             std::string description;
             std::getline(stream, description);
             boost::trim(description);
             if ( !protonatable ) {
-                auto spec = ParticleSpec::create(name, charge, mass, radius, description);
+                auto spec = ParticleSpec::create(name, charge, mass, radius, free, description);
                 auto pair = std::make_pair(name, spec);
                 specs.insert(pair);
             } else {
-                auto spec = ParticleSpec::create(name, charge, mass, radius, pKa, description);
+                auto spec = ParticleSpec::create(name, charge, mass, radius, pKa, free, description);
                 auto p = std::make_pair(name, spec);
                 specs.insert(p);                
             }
@@ -103,7 +103,7 @@ namespace simploce {
 
         // Log some information.
         std::string nSpecs = boost::lexical_cast<std::string>(specs.size());
-        logger.info("Number of particle specifications: " + nSpecs);
+        logger.debug("Number of particle specifications: " + nSpecs);
 
         return spec_catalog_ptr_t(new ParticleSpecCatalog{specs});
     }

@@ -101,7 +101,7 @@ void test1() {
 
     using cg_t = ProtonatableCoarseGrained<Discrete>;
 
-    auto spec = ParticleSpec::create("AP", 1.0, 1.0, 1.0, "dp");
+    auto spec = ParticleSpec::create("AP", 1.0, 1.0, 1.0, false, "dp");
     Discrete discrete;
     cg_t cg;
     auto protonatableBead = cg.addProtonatableBead("OAP", spec);
@@ -132,7 +132,7 @@ void test2() {
     using prot_cg_t = ProtonatableCoarseGrained<Continuous>;
 
     prot_cg_t cg;
-    auto spec = ParticleSpec::create("AP", 1.0, 1.0, 1.0, "dp");
+    auto spec = ParticleSpec::create("AP", 1.0, 1.0, 1.0, false, "dp");
 
     std::map<std::string, real_t> state{};
 

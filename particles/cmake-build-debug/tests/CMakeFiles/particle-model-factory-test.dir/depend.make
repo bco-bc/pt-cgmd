@@ -12,9 +12,9 @@ tests/CMakeFiles/particle-model-factory-test.dir/particle-model-factory-test.cpp
  ../include/simploce/particle/p-properties.hpp \
  ../include/simploce/particle/p-types.hpp \
  ../include/simploce/particle/particle-group.hpp \
- ../include/simploce/particle/particle-model-factory.hpp \
  ../include/simploce/particle/particle-spec-catalog.hpp \
  ../include/simploce/particle/particle-spec.hpp \
+ ../include/simploce/particle/particle-system-factory.hpp \
  ../include/simploce/particle/particle-system.hpp \
  ../include/simploce/particle/particle.hpp \
  ../include/simploce/particle/protonatable-bead.hpp \

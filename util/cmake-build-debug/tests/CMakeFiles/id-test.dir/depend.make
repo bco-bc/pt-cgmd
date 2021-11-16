@@ -7,4 +7,5 @@ tests/CMakeFiles/id-test.dir/id-test.cpp.o: \
  ../include/simploce/types/u-types.hpp \
  ../include/simploce/types/value_t.hpp \
  ../include/simploce/util/util.hpp \
+ /localdisk/include/simploce/util/logger.hpp \
  ../tests/id-test.cpp

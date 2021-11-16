@@ -24,15 +24,15 @@ void test1() {
     
     // Deprotonated specification
     spec_ptr_t O_dp =
-            ParticleSpec::create("O", -1.0, 1.0, 1.0, "O deprotonated");
+            ParticleSpec::create("O", -1.0, 1.0, 1.0, false, "O deprotonated");
     spec_ptr_t O_p =
-            ParticleSpec::create("O", -0.5, 1.0, 1.0, "O protonated");
+            ParticleSpec::create("O", -0.5, 1.0, 1.0, false, "O protonated");
 
     // Protonated specifications.
     spec_ptr_t H_dp =
-            ParticleSpec::create("H", 0.0, 1.0, 1.0, "H deprotonated");
+            ParticleSpec::create("H", 0.0, 1.0, 1.0, false, "H deprotonated");
     spec_ptr_t H_p =
-            ParticleSpec::create("H", 0.5, 1.0, 1.0, "H protonated");
+            ParticleSpec::create("H", 0.5, 1.0, 1.0, false, "H protonated");
 
     // Atoms.
     atom_ptr_t atom1 = atomistic.addAtom("O", O_p);

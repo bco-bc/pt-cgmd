@@ -32,8 +32,8 @@ void test1()
     position_t r;
 
     spec_ptr_t spec1_dp =
-        ParticleSpec::create("pspec1", 1.0, 1.0, 1.0, "dp");
-    spec_ptr_t spec1_p = ParticleSpec::create("dpspec1", 1.0, 1.0, 1.0, "p");
+        ParticleSpec::create("pspec1", 1.0, 1.0, 1.0, false, "dp");
+    spec_ptr_t spec1_p = ParticleSpec::create("dpspec1", 1.0, 1.0, 1.0, false, "p");
     
     bead_ptr_t bead1 = cg.addBead("argon", spec1_dp);
     bead1->position(r);
@@ -104,7 +104,7 @@ void test1()
     std::cout << "Particle model:" << std::endl;
     util::open_input_file(stream,
                     "/localdisk/resources/coarse-grained-system.dat");
-    cg_mod_ptr_t cg2 = CoarseGrained::obtainFrom(stream, catalog);
+    cg_sys_ptr_t cg2 = CoarseGrained::obtainFrom(stream, catalog);
     stream.close();
     std::cout << "Number of beads: " << cg2->numberOfParticles() << std::endl; 
     std::cout << "State:" << std::endl;

@@ -134,16 +134,17 @@ namespace simploce {
                         
         // Create new specification for deprotonated state.
         spec_ptr_t spec = atom->spec();
+        bool free = spec->isFree();
         std::string dspecName = "D_" + spec->name();
         charge_t dcharge = site.deprotonated[index].charge;
-        spec_ptr_t dspec = ParticleSpec::createFrom(spec, dspecName, dcharge, "Deprotonated.");
+        spec_ptr_t dspec = ParticleSpec::createFrom(spec, dspecName, dcharge, free, "Deprotonated.");
         deprotonated.push_back(dspec);  
         
         // Create new specification for protonated state.
         std::string pspecName = "P_" + spec->name();
         charge_t pcharge = site.protonated[index].charge;
         spec_ptr_t pspec = 
-        ParticleSpec::createFrom(spec, pspecName, pcharge, "Protonated");
+        ParticleSpec::createFrom(spec, pspecName, pcharge, free, "Protonated");
         protonated.push_back(pspec);                                
     }
     

@@ -1,5 +1,4 @@
 /*
- * File:   stypes.hpp
  * Author: André H. Juffer, Biocenter Oulu.
  *
  * Created on August 16, 2019, 12:39 PM
@@ -15,55 +14,79 @@
 namespace simploce {
     
     // Forward declarations.
-
-
-
-
-
     class boundary_condition;
-    class CoarseGrainedForceField;
-    class CoarseGrainedDisplacer;
-    class AtomisticDisplacer;
-    class AtomisticForceField;
-    class SimulationModelFactory;
-    class ProtonTransferPairListGenerator;
-    class ProtonTransfer;
-
-    class ProtonatableParticleModelFactory;
+    class ForceField;
+    class ProtonatableParticleSystemFactory;
     class Continuous;
     class Discrete;
-    
-    // P is particle type, e.g. Atom or Bead.
-    template <typename P>
-    class ParticlePairListGenerator;
-    
-    // P is particle type, e.g. Atom or Bead.
-    template <typename P>
-    class Interactor;
-    
-    // P is particle type, e.g. Atom or Bead.
-    template <typename P>
-    class SimulationModel;
 
-    // S is protonation state type.
+    // P is particle type, e.g. Atom or Bead.
+    template <typename P>
+    class pair_lists_generator;
+
+    // S is protonation state type, e.g. Discrete or Continuous.
     template <typename S>
     class ProtonatableBead;
 
-    // S is protonation state type.
+    // S is protonation state type, e.g. Discrete or Continuous.
     template <typename S>
     class ProtonatableCoarseGrained;
 
-    /**
-     * Protonatable coarse grained particle model. Uses continuously changing
-     * protonation states.
+    // P is particle type, e.g. Atom or Bead.
+    template <typename P>
+    class Interactor;
+
+    template <typename P>
+    class PairLists;
+
+    // Types.
+
+    /*
+     * Boundary condition.
      */
-    using prot_cg_mod = ProtonatableCoarseGrained<Continuous>;
-    // using prot_cg_mod = ProtonatableCoarseGrained<Discrete>;
+    using bc_t = boundary_condition;
 
     /**
-     * Protonatable coarse grained particle model pointer.
+     * Boundary condition pointer type.
      */
-    using prot_cg_mod_ptr_t = std::shared_ptr<prot_cg_mod>;
+    using bc_ptr_t = std::shared_ptr<bc_t>;
+
+    /**
+     * Force field pointer type.
+     */
+    using ff_ptr_t = std::shared_ptr<ForceField>;
+
+    /**
+     * Type for holding simulation parameters, such as values for the time step
+     * and the requested number of steps.
+     */
+    using sim_param_t = param::param_t;
+
+    /**
+     * Simulation parameters pointer type.
+     */
+    using sim_param_ptr_t = std::shared_ptr<sim_param_t>;
+
+    /**
+     * Atom pair lists generator pointer type.
+     */
+    using atom_pair_lists_gen_ptr_t = std::shared_ptr<pair_lists_generator<Atom>>;
+
+    /**
+     * Bead pair lists generator pointer type.
+     */
+    using bead_pair_lists_gen_ptr_t = std::shared_ptr<pair_lists_generator<Bead>>;
+
+    /**
+     * Protonatable coarse grained particle system.
+    */
+    using prot_cg_sys = ProtonatableCoarseGrained<Continuous>;
+    // using prot_cg_sys = ProtonatableCoarseGrained<Discrete>;
+
+    /**
+     * Protonatable coarse grained particle system pointer.
+     */
+    using prot_cg_mod_ptr_t = std::shared_ptr<prot_cg_sys>;
 
     /**
      * Protonatable bead type.
@@ -77,50 +100,60 @@ namespace simploce {
     using prot_bead_ptr_t = std::shared_ptr<prot_bead_t>;
 
     /**
-     * Protonatable particle model factory pointer type.
+     * Protonatable particle system factory pointer type.
      */
-    using prot_p_mod_factory = std::shared_ptr<ProtonatableParticleModelFactory>;
-    
-    using bc_t = boundary_condition;
-    
-    using bc_ptr_t = std::shared_ptr<bc_t>;
-    
+    using prot_p_sys_factory = std::shared_ptr<ProtonatableParticleSystemFactory>;
+
+
+
+
+
+    // OLD
+
+    //class CoarseGrainedForceField;
+    class CoarseGrainedDisplacer;
+    class AtomisticDisplacer;
+    class AtomisticForceField;
+    class SimulationModelFactory;
+    class ProtonTransferPairListGenerator;
+    class ProtonTransfer;
+
+
+    // P is particle type, e.g. Atom or Bead.
+    template <typename P>
+    class SimulationModel;
+
+
+
+
+
+
+
+
+
     using cg_displacer_ptr_t = std::shared_ptr<CoarseGrainedDisplacer>;
     
     using at_displacer_ptr_t = std::shared_ptr<AtomisticDisplacer>;
     
     using at_ff_ptr_t = std::shared_ptr<AtomisticForceField>;
     
-    using cg_ff_ptr_t = std::shared_ptr<CoarseGrainedForceField>;
+    //using cg_ff_ptr_t = std::shared_ptr<CoarseGrainedForceField>;
     
-    using at_interactor_t = Interactor<Atom>;
+    //using at_interactor_t = Interactor<Atom>;
         
-    using at_interactor_ptr_t = std::shared_ptr<at_interactor_t>;
+    //using at_interactor_ptr_t = std::shared_ptr<at_interactor_t>;
 
-    using cg_interactor_t = Interactor<Bead>;
+    //using cg_interactor_t = Interactor<Bead>;
         
-    using cg_interactor_ptr_t = std::shared_ptr<cg_interactor_t>;
+    //using cg_interactor_ptr_t = std::shared_ptr<cg_interactor_t>;
     
-    /**
-     * Bead pair lists generator type.
-     */
-    using cg_ppair_list_gen_t = ParticlePairListGenerator<Bead>;
-    
-    /**
-     * Bead pair lists generator pointer type.
-     */
-    using cg_ppair_list_gen_ptr_t = std::shared_ptr<cg_ppair_list_gen_t>;
-    
+
     /**
      * Atom pair list generator type.
      */
-    using at_ppair_list_gen_t = ParticlePairListGenerator<Atom>;
+    using at_ppair_list_gen_t = pair_lists_generator<Atom>;
     
-    /**
-     * Atom pair lists generator pointer type.
-     */
-    using at_ppair_list_gen_ptr_t = std::shared_ptr<at_ppair_list_gen_t>;
-    
+
     /**
      * Coarse grained simulation model type.
      */
@@ -133,12 +166,7 @@ namespace simploce {
     
     using sim_model_fact_ptr_t = std::shared_ptr<SimulationModelFactory>;
             
-    /**
-     * Type for holding simulation parameters, such as values for the time step 
-     * and the requested number of steps.
-     */
-    using sim_param_t = param::param_t;
-    
+
     /**
      * Defines a range of something in a given indexed collection to forms pairs between 
      * elements of the collection.
@@ -147,12 +175,12 @@ namespace simploce {
      * t.get<1> is the end index.
      * t.get<2> is the number of pairs.
      */
-    using range_t = std::tuple<std::size_t, std::size_t, std::size_t>;
+    //using range_t = std::tuple<std::size_t, std::size_t, std::size_t>;
     
     /**
      * Protonatable beads pair list generator pointer type.
      */
-    using pt_pair_list_gen_ptr_t = std::shared_ptr<ProtonTransferPairListGenerator>;
+    using prot_pair_list_gen_ptr_t = std::shared_ptr<ProtonTransferPairListGenerator>;
     
     /**
      * Proton transfer displacer pointer type.

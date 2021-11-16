@@ -1,0 +1,14 @@
+# non-bonded
+# Type    Name #1    Name #2
+5
+lj+rf     CW         CW        1.298e-03                 0.088  # C12 (kJ nm^12 mol^-1), C6 (kJ nm^6 mol^-1)
+lj+rf     pCW        pCW       1.298e-03                 0.088
+lj+rf     CW         pCW       1.298e-03                 0.088
+lj+rf     DP         DP        0.0                       0.0
+lj        Ar         Ar        1.0                       1.0   # C12 (kJ nm^12 mol^-1), C6 (kJ nm^6 mol^-1).
+# Bonded
+# Type    Name #1    Name #2
+3
+hp        O          O         0.1208      2.092e+05 # r0 (nm), fc (kJ/mol nm^2).
+ha-qp     CW         DP        0.2         2.0e+06   # r0 (nm), fc ( kJ/(mol nm^4).
+ha-qp     pCW        DP        0.2         2.0e+06   # r0 (nm), fc ( kJ/(mol nm^4).

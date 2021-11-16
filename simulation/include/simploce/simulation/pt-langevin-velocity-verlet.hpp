@@ -44,7 +44,7 @@ namespace simploce {
     public:
         
         ProtonTransferLangevinVelocityVerlet(const cg_interactor_ptr_t& interactor,
-                                             const pt_pair_list_gen_ptr_t& generator,
+                                             const prot_pair_list_gen_ptr_t& generator,
                                              const pt_displacer_ptr_t& displacer);
         
         SimulationData displace(const sim_param_t& param, 
@@ -55,7 +55,7 @@ namespace simploce {
     private:
         
         cg_interactor_ptr_t interactor_;
-        pt_pair_list_gen_ptr_t generator_;
+        prot_pair_list_gen_ptr_t generator_;
         pt_displacer_ptr_t displacer_;
     };
 }

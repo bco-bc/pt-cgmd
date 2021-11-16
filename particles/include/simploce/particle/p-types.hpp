@@ -16,11 +16,13 @@
 namespace simploce {
     
     // Forward declarations.
-
     class Atom;
     class Bead;
+    class Atomistic;
+    class CoarseGrained;
     class ParticleSpec;
     class ParticleSpecCatalog;
+    class ParticleSystemFactory;
 
     template <typename P>
     class ParticleGroup;
@@ -39,6 +41,16 @@ namespace simploce {
     using bead_ptr_t = std::shared_ptr<Bead>;
 
     /**
+     * Atomistic particle model pointer type.
+     */
+    using at_sys_ptr_t = std::shared_ptr<Atomistic>;
+
+    /**
+     * Coarse grained particle model pointer type.
+     */
+    using cg_sys_ptr_t = std::shared_ptr<CoarseGrained>;
+
+    /**
      * Particle specification pointer type.
      */
     using spec_ptr_t = std::shared_ptr<ParticleSpec>;
@@ -48,44 +60,56 @@ namespace simploce {
      */
     using spec_catalog_ptr_t = std::shared_ptr<ParticleSpecCatalog>;
 
-
-
-    class ProtonationSiteCatalog;
-    class Atomistic;
-    class CoarseGrained;
-    class PolarizableWater;
-    class ParticleModelFactory;
-
-
-    template <typename P>
-    class ProtonationSite;
-
-
     /**
      * Particle box type.
      */
     using box_t = Cube<real_t>;
-    
+
     /**
      * Particle box pointer type.
      */
     using box_ptr_t = std::shared_ptr<box_t>;
 
     /**
-     * Atomistic particle model pointer type.
+     * Atom group type.
      */
-    using at_mod_ptr_t = std::shared_ptr<Atomistic>;
+    using atom_group_t = ParticleGroup<Atom>;
 
     /**
-     * Coarse grained particle model pointer type.
+     * Atom group pointer type.
      */
-    using cg_mod_ptr_t = std::shared_ptr<CoarseGrained>;
-    
+    using atom_group_ptr_t = std::shared_ptr<atom_group_t>;
+
     /**
-     * Coarse grained polarizable particle model pointer type.
+     * Bead group type.
      */
-    using cg_pol_water_ptr_t = std::shared_ptr<PolarizableWater>;
-    
+    using bead_group_t = ParticleGroup<Bead>;
+
+    /**
+     * Bead group pointer type.
+     */
+    using bead_group_ptr_t = std::shared_ptr<bead_group_t>;
+
+    /**
+     * Pair of particle identifiers type.
+     */
+    using id_pair_t = std::pair<id_t, id_t>;
+
+    /**
+     * Particle model factory pointer type.
+     */
+    using particle_system_fact_ptr_t = std::shared_ptr<ParticleSystemFactory>;
+
+
+
+
+
+    // OLD
+
+    class ProtonationSiteCatalog;
+
+    template <typename P>
+    class ProtonationSite;
 
     /**
      * Atom-based protonation site.
@@ -111,37 +135,7 @@ namespace simploce {
      * Protonation sites catalog pointer type.
      */
     using prot_site_catalog_ptr_t = std::shared_ptr<ProtonationSiteCatalog>;
-    
-    /**
-     * Atom group type.
-     */
-    using atom_group_t = ParticleGroup<Atom>;
-            
-    /**
-     * Atom group pointer type.
-     */
-    using atom_group_ptr_t = std::shared_ptr<atom_group_t>;
-    
-    /**
-     * Bead group type.
-     */
-    using bead_group_t = ParticleGroup<Bead>;
-            
-    /**
-     * Bead group pointer type.
-     */
-    using bead_group_ptr_t = std::shared_ptr<bead_group_t>;
-    
-    /**
-     * Pair of particle identifiers type.
-     */
-    using id_pair_t = std::pair<id_t, id_t>;
-    
-    /**
-     * Particle model factory pointer type.
-     */
-    using particle_model_fact_ptr_t = std::shared_ptr<ParticleModelFactory>;
-    
+
 }
 
 #endif /* P_TYPES_HPP */

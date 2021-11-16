@@ -32,15 +32,16 @@ namespace simploce {
         
         /**
          * Returns unique particle identifier. This uniquely identifies a given 
-         * particle in some particle collection. Once assigned, the particle's ID will never
+         * particle in a given particle collection. Once assigned, the particle's ID will never
          * change.
          * @return Identifier.
          */
         id_t id() const;
         
         /**
-         * Returns particle sequential index.
-         * @return Index, always >= 0. May be reassigned, e.g., when particles are removed.
+         * Returns particle sequential index. Must -not- be used as an particle identifier.
+         * @return Index, always >= 0. This index may change, e.g., if particles are removed.
+         * @see #id()
          */
         std::size_t index() const;
         

@@ -69,8 +69,8 @@ void test1() {
     std::cout << "simulation-test test 1" << std::endl;
     
     std::ofstream trajStream, dataStream;
-    util::open_output_file(trajStream, "tests/trajectory.dat");
-    util::open_output_file(dataStream, "tests/simulation.dat");
+    util::open_output_file(trajStream, "/localdisk/tests/trajectory.dat");
+    util::open_output_file(dataStream, "/localdisk/tests/simulation.dat");
     
     using simulation_t = Simulation<Bead>;
     //using simulation_t = MC<Bead>;

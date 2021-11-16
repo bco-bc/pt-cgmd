@@ -1,5 +1,5 @@
 add_executable(coarse-grained-test coarse-grained-test.cpp)
-add_executable(particle-model-factory-test particle-model-factory-test.cpp)
+add_executable(particle-system-factory-test particle-system-factory-test.cpp)
 add_executable(particle-spec-catalog-test particle-spec-catalog-test.cpp)
 add_executable(particle-test particle-test.cpp)
 add_executable(prot-site-catalog-test prot-site-catalog-test.cpp)
@@ -10,8 +10,8 @@ add_executable(protonatable-coarse-grained-test protonatable-coarse-grained-test
 
 target_link_directories(coarse-grained-test PUBLIC ${CMAKE_INSTALL_PREFIX}/lib)
 target_link_libraries(coarse-grained-test particles util cpputil)
-target_link_directories(particle-model-factory-test PUBLIC ${CMAKE_INSTALL_PREFIX}/lib)
-target_link_libraries(particle-model-factory-test particles util cpputil)
+target_link_directories(particle-system-factory-test PUBLIC ${CMAKE_INSTALL_PREFIX}/lib)
+target_link_libraries(particle-system-factory-test particles util cpputil)
 target_link_directories(particle-spec-catalog-test PUBLIC ${CMAKE_INSTALL_PREFIX}/lib)
 target_link_libraries(particle-spec-catalog-test particles util cpputil)
 target_link_directories(particle-test PUBLIC ${CMAKE_INSTALL_PREFIX}/lib)

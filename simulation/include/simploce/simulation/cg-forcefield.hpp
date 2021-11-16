@@ -7,7 +7,7 @@
 #ifndef CG_FORCEFIELD_HPP
 #define CG_FORCEFIELD_HPP
 
-#include "forcefield.hpp"
+#include "force-field.hpp"
 #include "pair-lists.hpp"
 #include "s-types.hpp"
 #include <utility>

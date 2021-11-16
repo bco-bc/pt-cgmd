@@ -12,6 +12,18 @@ simploce/particle/protonatable.hpp
 iostream
 -
 
+../include/simploce/simulation/force-field.hpp
+s-types.hpp
+../include/simploce/simulation/s-types.hpp
+simploce/util/map2.hpp
+../include/simploce/simulation/simploce/util/map2.hpp
+string
+-
+utility
+-
+iostream
+-
+
 ../include/simploce/simulation/protonatable-particle-model-factory.hpp
 s-types.hpp
 ../include/simploce/simulation/s-types.hpp
@@ -21,6 +33,8 @@ simploce/particle/particle-model-factory.hpp
 ../include/simploce/simulation/s-factory.hpp
 s-types.hpp
 ../include/simploce/simulation/s-types.hpp
+force-field.hpp
+../include/simploce/simulation/force-field.hpp
 simploce/particle/p-factory.hpp
 ../include/simploce/simulation/simploce/particle/p-factory.hpp
 
@@ -318,6 +332,26 @@ box.hpp
 string
 -
 sstream
+-
+
+/localdisk/include/simploce/util/map.hpp
+map
+-
+iostream
+-
+
+/localdisk/include/simploce/util/map2.hpp
+map.hpp
+/localdisk/include/simploce/util/map.hpp
+boost/lexical_cast.hpp
+-
+map
+-
+vector
+-
+iostream
+-
+string
 -
 
 /localdisk/include/simploce/util/param.hpp

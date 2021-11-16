@@ -18,10 +18,10 @@ using namespace simploce;
  * Simple C++ Test Suite
  */
 
-void testContinuous() {
+void test0() {
     std::cout << "particle-test argon 1" << std::endl;
     Atomistic atomistic;
-    auto spec = ParticleSpec::create("spec_123",1.0, 2.0, 3.0, "argon");
+    auto spec = ParticleSpec::create("spec_123",1.0, 2.0, 3.0, true, "argon");
     auto atom = atomistic.addAtom("C", spec);
     force_t f{1.0, 2.0, 3.0};
     atom->force(f);
@@ -35,7 +35,7 @@ void test2() {
     std::cout << "particle-test argon 2" << std::endl;
     CoarseGrained coarseGrained;
     std::cout << "particle-test argon 2" << std::endl;
-    auto spec = ParticleSpec::create("spec_456", 2.0, 3.0, 4.0, "test2");
+    auto spec = ParticleSpec::create("spec_456", 2.0, 3.0, 4.0, true, "test2");
     auto bead = coarseGrained.addBead("bead1", spec);
     std::cout << *bead << std::endl;
     
@@ -78,11 +78,34 @@ void test4()
     });
 }
 
+void test5() {
+    CoarseGrained coarseGrained;
+    auto spec =
+        ParticleSpec::create("NH4", 0.0, 5.0, 2.0, 10.0, "argon");
+    auto bead = coarseGrained.addBead("NH4", spec);
+
+    Atomistic atomistic;
+    spec = ParticleSpec::create("spec_123",1.0, 2.0, 3.0, true, "argon");
+    auto atom = atomistic.addAtom("C", spec);
+
+    std::vector<std::shared_ptr<Particle>> particles;
+    particles.emplace_back(std::move(bead));
+    particles.emplace_back(std::move(atom));
+    for (auto& p : particles) {
+        std::cout << "Particle: "  << *p << std::endl;
+    }
+    std::cout << "Atom empty: " << (atom.get() == nullptr) << std::endl;
+    std::cout << "Bead empty: " << (bead.get() == nullptr) << std::endl;
+
+    particles.emplace_back(atom);
+}
+
 int main() {
-    testContinuous();
+    test0();
     test2();
     test3();
     test4();
+    test5();
     return (EXIT_SUCCESS);
 }
 

@@ -111,6 +111,16 @@ namespace simploce {
              */
             static const V nm_to_m;
 
+            /**
+             * Conversion factor from cal to J, according to thermodynamics.
+             */
+            static const V cal_to_J;
+
+            /**
+             * Conversion factor from kcal/(mol Å^2) to kJ/(mol nm^2).
+             */
+            static const V kcal_mol_A2_to_kJ_mol_nm2;
+
         };
 
         template<typename V>
@@ -162,6 +172,12 @@ namespace simploce {
 
         template<typename V>
         const V mu<V>::e_nm_to_D = si<V>::E * mu<V>::nm_to_m * 2.9979245817809e+29;
+
+        template <typename V>
+        const V mu<V>::cal_to_J = 4.184000;
+
+        template <typename V>
+        const V mu<V>::kcal_mol_A2_to_kJ_mol_nm2 = mu<V>::cal_to_J / (mu<V>::Angstrom_to_nm * mu<V>::Angstrom_to_nm);
 
     }
 }

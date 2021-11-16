@@ -213,7 +213,7 @@ namespace simploce {
         void remove(const p_ptr_t& particle);
 
         /**
-         * Reassigns sequential index to all particles.
+         * Reassigns a sequential index to all particles.
          */
         void resetIndex();
         
@@ -341,9 +341,9 @@ namespace simploce {
     ParticleSystem<P,PG>::addParticle(const std::string& name,
                                       const spec_ptr_t& spec) {
         id_t id = this->generateParticleId();
-        int index = int(this->numberOfParticles()) + 1;
+        int index = int(this->numberOfParticles());   // Starts with 0.
         auto particle = this->createParticle_(id, index, name, spec);
-        if ( spec->isIon() ) {
+        if ( spec->isFree() ) {
             this->addFree(particle);
         } else {
             this->add(particle);
@@ -419,13 +419,15 @@ namespace simploce {
 
         if ( this->contains(particle->id()) ) {
             std::string msg =
-                    util::toString(particle->id()) + ": Particle ID already in use in particle system.";
+                    util::toString(particle->id()) +
+                    ": Particle ID already in use in particle system.";
             util::logAndThrow(logger, msg);
         }
         auto iter = std::find(all_.begin(), all_.end(), particle);
         if ( iter != all_.end() ) {
             std::string msg =
-                    util::toString(particle->id()) + ": Already added to particle system.";
+                    util::toString(particle->id()) +
+                    ": Already added to particle system.";
             util::logAndThrow(logger, msg);
         }
         all_.push_back(particle);
@@ -448,7 +450,7 @@ namespace simploce {
 
     template <typename P, typename PG>
     void ParticleSystem<P,PG>::resetIndex() {
-        int index = 1;
+        int index = 0;
         for (auto& p : all_) {
             p->index(index);
             index += 1;
@@ -615,12 +617,10 @@ namespace simploce {
     template <typename P, typename PG>
     id_t
     ParticleSystem<P,PG>::generateParticleId() {
-        static std::set<id_t> ids;
         id_t id = util::generateId();
-        while ( ids.find(id) != ids.end() ) {
+        while ( this->contains(id) ) {
             id = util::generateId();
         }
-        ids.insert(id);
         return id;
     }
 

@@ -25,7 +25,7 @@ namespace simploce {
          * @param catalog Particle specifications catalog.
          * @return Atomistic particle model system.
          */
-        static at_mod_ptr_t obtainFrom(std::istream& stream,
+        static at_sys_ptr_t obtainFrom(std::istream& stream,
                                        const spec_catalog_ptr_t& catalog);
 
         /**
@@ -55,7 +55,7 @@ namespace simploce {
                                    const std::string& name,
                                    const spec_ptr_t& spec) override;
 
-        friend class ParticleModelFactory;
+        friend class ParticleSystemFactory;
         
     };
 

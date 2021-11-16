@@ -15,7 +15,7 @@
 
 namespace simploce {
 
-    cg_mod_ptr_t
+    cg_sys_ptr_t
     CoarseGrained::obtainFrom(std::istream& stream,
                               const spec_catalog_ptr_t& catalog) {
         auto coarseGrained = factory::coarseGrained();

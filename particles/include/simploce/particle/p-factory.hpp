@@ -17,12 +17,12 @@ namespace simploce {
     namespace factory {
         
         /**
-         * Creates a cubic box.
+         * Creates a -cubic- box.
          * @param side Side length.
          * @return Box. Always new instance.
          */
         box_ptr_t box(const length_t& side);
-        
+
         /**
          * Obtains a particle specification catalog from a file.
          * @param fileName Input file name.
@@ -42,19 +42,19 @@ namespace simploce {
          * @param catalog Particle specification catalog.
          * @return Particle model factory.
          */
-        particle_model_fact_ptr_t particleModelFactory(const spec_catalog_ptr_t& catalog);
+        particle_system_fact_ptr_t particleModelFactory(const spec_catalog_ptr_t& catalog);
         
         /**
          * Returns an empty atomistic particle model.
          * @return Particle model.
          */
-        at_mod_ptr_t atomistic();
+        at_sys_ptr_t atomistic();
         
         /**
          * Returns an empty coarse grained particle model.
          * @return Particle model.
          */
-        cg_mod_ptr_t coarseGrained();
+        cg_sys_ptr_t coarseGrained();
         
     }
 }

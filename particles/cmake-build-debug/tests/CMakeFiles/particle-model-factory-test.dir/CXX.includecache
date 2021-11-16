@@ -98,16 +98,6 @@ stdexcept
 iostream
 -
 
-../include/simploce/particle/particle-model-factory.hpp
-atomistic.hpp
-../include/simploce/particle/atomistic.hpp
-coarse-grained.hpp
-../include/simploce/particle/coarse-grained.hpp
-protonatable-coarse-grained.hpp
-../include/simploce/particle/protonatable-coarse-grained.hpp
-p-types.hpp
-../include/simploce/particle/p-types.hpp
-
 ../include/simploce/particle/particle-spec-catalog.hpp
 p-types.hpp
 ../include/simploce/particle/p-types.hpp
@@ -125,6 +115,16 @@ string
 -
 iostream
 -
+
+../include/simploce/particle/particle-system-factory.hpp
+atomistic.hpp
+../include/simploce/particle/atomistic.hpp
+coarse-grained.hpp
+../include/simploce/particle/coarse-grained.hpp
+protonatable-coarse-grained.hpp
+../include/simploce/particle/protonatable-coarse-grained.hpp
+p-types.hpp
+../include/simploce/particle/p-types.hpp
 
 ../include/simploce/particle/particle-system.hpp
 particle-group.hpp
@@ -209,8 +209,8 @@ utility
 -
 
 /home/andre/wrk3/simploce/pt-cgmd/particles/tests/particle-model-factory-test.cpp
-simploce/particle/particle-model-factory.hpp
-/home/andre/wrk3/simploce/pt-cgmd/particles/tests/simploce/particle/particle-model-factory.hpp
+simploce/particle/particle-system-factory.hpp
+/home/andre/wrk3/simploce/pt-cgmd/particles/tests/simploce/particle/particle-system-factory.hpp
 simploce/particle/particle-spec-catalog.hpp
 /home/andre/wrk3/simploce/pt-cgmd/particles/tests/simploce/particle/particle-spec-catalog.hpp
 simploce/particle/coarse-grained.hpp

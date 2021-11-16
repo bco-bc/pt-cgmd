@@ -8,7 +8,7 @@
 #include "simploce/simulation/bc.hpp"
 #include "simploce/simulation/pair-lists.hpp"
 #include "simploce/particle/particle-spec.hpp"
-#include "simploce/simulation/sim-util.hpp"
+#include "simploce/simulation/s-properties.hpp"
 #include "simploce/simulation/s-conf.hpp"
 #include "simploce/util/util.hpp"
 #include "simploce/units/units-mu.hpp"
@@ -23,7 +23,7 @@ namespace simploce {
     using lj_params_t = ForceField::lj_params_t;
     using el_params_t = ForceField::el_params_t;
     using dm_result_t = std::pair<energy_t, std::vector<force_t>>;
-    using bead_pair_list_t = PairLists<Bead>::pp_list_cont_t;
+    using bead_pair_list_t = PairLists<Bead>::pp_pair_cont_t;
     
     /**
      * Returns interaction potential energy and force on particle i. The Coulomb
@@ -42,7 +42,7 @@ namespace simploce {
                     const box_ptr_t& box)
     {
         static const real_t four_pi_e0 = units::mu<real_t>::FOUR_PI_E0;
-        static const length_t rc = util::cutoffDistance(box);
+        static const length_t rc = properties::cutoffDistance(box);
         static const real_t rc2 = rc() * rc();
         
         // Apply boundary condition.
@@ -87,7 +87,7 @@ namespace simploce {
         return std::make_tuple(epot, f, Rij);
     }
     
-    // Returns forces on beads and energy for bead pairs.
+    // Returns force on beads and energy for bead pairs.
     static dm_result_t ppForces_(const bead_pair_list_t ppPairList,
                                  std::size_t nbeads,
                                  const lj_params_t& ljParams,
@@ -148,7 +148,7 @@ namespace simploce {
         // Electrostatic parameters.
         static const real_t eps_r = elParams.at("eps_r");
 
-        length_t rc = util::cutoffDistance(box);
+        length_t rc = properties::cutoffDistance(box);
         real_t rc2 = rc * rc;
         energy_t epot{0.0};
         
@@ -203,7 +203,7 @@ namespace simploce {
         // Electrostatic parameters.
         static const real_t eps_r = elParams.at("eps_r");
 
-        length_t rc = util::cutoffDistance(box);
+        length_t rc = properties::cutoffDistance(box);
         real_t rc2 = rc * rc;
         energy_t epot{0.0};
                 
@@ -262,7 +262,7 @@ namespace simploce {
                                     const std::vector<bead_group_ptr_t>& groups,
                                     const PairLists<Bead>& pairLists)
     {         
-        static std::vector<PairLists<Bead>::pp_list_cont_t> subPairLists{};
+        static std::vector<PairLists<Bead>::pp_pair_cont_t> subPairLists{};
         static bool firstTime = true;
         
         // Holds all force calculation results.

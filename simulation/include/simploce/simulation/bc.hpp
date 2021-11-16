@@ -34,13 +34,13 @@ namespace simploce {
     virtual position_t placeInside(const position_t& r_out) const = 0;
     
     /**
-     * Returns an identifying name.
-     * @return Identifying name.
+     * Returns an identifier.
+     * @return Identifier.
      */
     virtual std::string id() const = 0;
 
     /**
-     * Sets the box.
+     * Sets or updates the box.
      * @param box.
      */
     virtual void box(const box_ptr_t& box) {};

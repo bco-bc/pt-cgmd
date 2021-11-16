@@ -31,7 +31,7 @@
 
 #include "simploce/simulation/langevin-velocity-verlet.hpp"
 #include "simploce/simulation/interactor.hpp"
-#include "simploce/simulation/sim-util.hpp"
+#include "simploce/simulation/s-properties.hpp"
 #include "simploce/simulation/s-conf.hpp"
 #include "simploce/particle/atom.hpp"
 #include "simploce/particle/bead.hpp"
@@ -210,7 +210,7 @@ namespace simploce {
         }
         
         // Instantaneous temperature at t(n+1).
-        data.temperature = util::temperature<T>(particles, data.ekin);
+        data.temperature = properties::temperature<T>(particles, data.ekin);
 
         // Done.
         return data;        

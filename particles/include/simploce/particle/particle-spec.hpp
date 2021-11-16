@@ -27,6 +27,7 @@ namespace simploce {
          * @param charge Charge value.
          * @param mass Mass value. Must be a non-negative number.
          * @param radius Radius. Must be a non-negative number.
+         * @param free Specification is for a free particle.
          * @param description Short description.
          * @return Specification.
          */
@@ -34,6 +35,7 @@ namespace simploce {
                                  const charge_t& charge,
                                  const mass_t& mass,
                                  const radius_t& radius,
+                                 bool free,
                                  const std::string& description);
 
         /**
@@ -43,6 +45,7 @@ namespace simploce {
          * @param mass Mass value. Must be a non-negative number and must represent the -deprotonated- state.
          * @param radius Radius.  Must be a non-negative number.
          * @param pKa pKa value. Typically in the range [0.0, 14.0].
+         * @param free Specification is for a free particle.
          * @param description Short description. Must be provided.
          * @return Specification.
          */
@@ -51,6 +54,7 @@ namespace simploce {
                                  const mass_t& mass,
                                  const radius_t& radius,
                                  const pKa_t& pKa,
+                                 bool free,
                                  const std::string& description);
 
         /**
@@ -59,12 +63,14 @@ namespace simploce {
          * @param spec Specification.
          * @param name New name.
          * @param charge New Charge value.
+         * @param free New specification is for a free particle.
          * @param description Short description.
          * @return New specification.
          */
         static spec_ptr_t createFrom(const spec_ptr_t& spec,
                                      const std::string& name,
                                      charge_t charge,
+                                     bool free,
                                      const std::string& description);
 
         // Noncopyable.
@@ -121,6 +127,12 @@ namespace simploce {
         bool isIon();
 
         /**
+         * Is this specification for a free particle.
+         * @return
+         */
+        bool isFree();
+
+        /**
          * Returns description.
          * @return Description.
          */
@@ -140,6 +152,7 @@ namespace simploce {
                                   const radius_t& radius,
                                   const pKa_t& pKa,
                                   bool protonatable,
+                                  bool free,
                                   const std::string& description);
 
         ParticleSpec(std::string name,
@@ -148,6 +161,7 @@ namespace simploce {
                      radius_t radius,
                      pKa_t pKa,
                      bool protonatable,
+                     bool free,
                      std::string description);
 
         std::string name_;
@@ -156,6 +170,7 @@ namespace simploce {
         radius_t radius_;
         pKa_t pKa_;        
         bool protonatable_;
+        bool free_;
         std::string description_;
     };
 

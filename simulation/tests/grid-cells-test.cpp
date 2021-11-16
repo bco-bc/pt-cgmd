@@ -10,7 +10,7 @@
 #include "simploce/particle/bead.hpp"
 #include "simploce/simulation/s-factory.hpp"
 #include "simploce/util/util.hpp"
-#include "simploce/simulation/sim-util.hpp"
+#include "simploce/simulation/s-properties.hpp"
 #include <cstdlib>
 #include <iostream>
 #include <utility>

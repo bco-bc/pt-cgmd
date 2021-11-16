@@ -9,6 +9,7 @@
 #define UTIL_HPP
 
 #include "simploce/types/u-types.hpp"
+#include "simploce/util/logger.hpp"
 #include <boost/lexical_cast.hpp>
 #include <boost/uuid/uuid_io.hpp>
 #include <ctime>
@@ -117,15 +118,17 @@ namespace simploce {
         makeSubLists(const CONT<T>& items) {
             using sublists_t = std::vector<std::vector<T>>;
             
-            if ( items.empty() ) {
-                throw std::domain_error("Empty list of items. Cannot create sublists.");
+            static util::Logger logger{"util::makeSubLists"};
+           if ( items.empty() ) {
+               util::logAndThrow(logger, "Empty list of items. Cannot create sublists.");
             }            
             
-            // Sub lists.
+            // Sublists.
             sublists_t subLists{};
             
             std::size_t counter = 0;      
-            static const std::size_t nsublists = std::thread::hardware_concurrency();        
+            static const std::size_t nsublists = std::thread::hardware_concurrency();
+            logger.debug("Number of available threads: " + util::toString(nsublists));
             std::size_t numberOfItemsPerSubList = items.size() / nsublists;                                                              
             for (std::size_t k = 0; k != nsublists; ++k) {
                 std::vector<T> single{};  // A single sublist of items.

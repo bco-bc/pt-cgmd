@@ -9,6 +9,8 @@ if(PREFIX)
 endif()
 
 include_directories(include)
+include_directories(${CMAKE_INSTALL_PREFIX}/include SYSTEM)
+
 add_library(util SHARED
         src/param.cpp src/poisson-process.cpp src/telegraph-process.cpp
         src/util.cpp)

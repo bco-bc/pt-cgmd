@@ -8,6 +8,7 @@ add_executable(seed_value_test seed-value-test.cpp)
 add_executable(value_cvector_test value-cvector-test.cpp)
 add_executable(value_type_test value-type-test.cpp)
 add_executable(id-test id-test.cpp)
+add_executable(param-test param-test.cpp)
 
 target_link_libraries(mu_units_test util)
 target_link_libraries(box-cube-test util)
@@ -19,3 +20,5 @@ target_link_libraries(seed_value_test util)
 target_link_libraries(value_cvector_test util)
 target_link_libraries(value_type_test util)
 target_link_libraries(id-test util)
+target_link_libraries(param-test util)
+
