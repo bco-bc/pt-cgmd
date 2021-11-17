@@ -16,7 +16,7 @@ namespace simploce {
     /**
      * A physical system composed of atoms and atom-like particles, such as ions.
      */
-    class Atomistic : public ParticleSystem<Atom, atom_group_t> {
+    class Atomistic : public ParticleSystem {
     public:
 
         /**
@@ -39,8 +39,8 @@ namespace simploce {
          * @param spec Specification.
          * @return Newly created atom.
          */
-        atom_ptr_t addAtom(const std::string& name,
-                           const spec_ptr_t& spec);
+        p_ptr_t addAtom(const std::string& name,
+                        const spec_ptr_t& spec);
         
         /**
          * Returns number of atoms.
@@ -50,10 +50,10 @@ namespace simploce {
         
     private:
 
-        atom_ptr_t createParticle_(const id_t& id,
-                                   int index,
-                                   const std::string& name,
-                                   const spec_ptr_t& spec) override;
+        p_ptr_t createParticle_(const id_t& id,
+                                int index,
+                                const std::string& name,
+                                const spec_ptr_t& spec) override;
 
         friend class ParticleSystemFactory;
         

@@ -4,20 +4,13 @@
 tests/CMakeFiles/protonation-site-test.dir/protonation-site-test.cpp.o
  ../include/simploce/particle/atom.hpp
  ../include/simploce/particle/atomistic.hpp
- ../include/simploce/particle/bead.hpp
- ../include/simploce/particle/bond.hpp
- ../include/simploce/particle/p-conf.hpp
- ../include/simploce/particle/p-factory.hpp
- ../include/simploce/particle/p-properties.hpp
  ../include/simploce/particle/p-types.hpp
  ../include/simploce/particle/particle-group.hpp
- ../include/simploce/particle/particle-spec-catalog.hpp
  ../include/simploce/particle/particle-spec.hpp
  ../include/simploce/particle/particle-system.hpp
  ../include/simploce/particle/particle.hpp
  ../include/simploce/particle/protonatable.hpp
  ../include/simploce/particle/protonation-site.hpp
- /home/andre/wrk3/simploce/pt-cgmd/particles/tests/protonation-site-test.cpp
  /localdisk/include/simploce/conf/u-conf.hpp
  /localdisk/include/simploce/types/cvector_t.hpp
  /localdisk/include/simploce/types/u-types.hpp
@@ -25,4 +18,4 @@ tests/CMakeFiles/protonation-site-test.dir/protonation-site-test.cpp.o
  /localdisk/include/simploce/util/box.hpp
  /localdisk/include/simploce/util/cube.hpp
  /localdisk/include/simploce/util/logger.hpp
- /localdisk/include/simploce/util/util.hpp
+ /wrk3/simploce/pt-cgmd/particles/tests/protonation-site-test.cpp

@@ -17,7 +17,7 @@ namespace simploce {
     namespace factory {
         
         static spec_catalog_ptr_t catalog_{};
-        static particle_system_fact_ptr_t particleModelFactory_{};
+        static p_system_fact_ptr_t particleModelFactory_{};
 
         box_ptr_t box(const length_t& side)
         {
@@ -45,7 +45,7 @@ namespace simploce {
             return catalog_;
         }
         
-        particle_system_fact_ptr_t
+        p_system_fact_ptr_t
         particleModelFactory(const spec_catalog_ptr_t& catalog)
         {
             if ( !particleModelFactory_ ) {
@@ -56,12 +56,18 @@ namespace simploce {
         
         at_sys_ptr_t atomistic()
         {
-            return std::make_shared<Atomistic>();
+            auto atomistic = std::make_shared<Atomistic>();
+            auto box = factory::box(0.0);
+            atomistic->box(box);
+            return atomistic;
         }
         
         cg_sys_ptr_t coarseGrained()
         {
-            return std::make_shared<CoarseGrained>();
+            auto cg = std::make_shared<CoarseGrained>();
+            auto box = factory::box(0.0);
+            cg->box(box);
+            return cg;
         }
         
     }

@@ -9,6 +9,7 @@
 #include "simploce/particle/coarse-grained.hpp"
 #include "simploce/particle/particle-spec.hpp"
 #include "simploce/particle/atomistic.hpp"
+#include "simploce/particle/particle.hpp"
 #include <cstdlib>
 #include <iostream>
 
@@ -39,7 +40,7 @@ void test2() {
     auto bead = coarseGrained.addBead("bead1", spec);
     std::cout << *bead << std::endl;
     
-    coarseGrained.doWithAll<void>([] (const std::vector<bead_ptr_t>& beads) {
+    coarseGrained.doWithAll<void>([] (const std::vector<p_ptr_t>& beads) {
         for (const auto& bead : beads) {
             std::cout << *bead << std::endl;   
         }
@@ -56,7 +57,7 @@ void test3()
     std::cout << "Charge: " << bead->charge() << std::endl;
     std::cout << "Charge: " << bead->charge() << std::endl;
     
-    coarseGrained.doWithAll<void>([] (const std::vector<bead_ptr_t>& beads) {
+    coarseGrained.doWithAll<void>([] (const std::vector<p_ptr_t>& beads) {
         for (const auto& bead : beads) {
             std::cout << *bead << std::endl;   
         }
@@ -70,7 +71,7 @@ void test4()
     auto spec =
         ParticleSpec::create("NH4", 0.0, 5.0, 2.0, 10.0, "argon");
     coarseGrained.addBead("NH4", spec);
-    coarseGrained.doWithAll<void>([] (const std::vector<bead_ptr_t>& beads) {
+    coarseGrained.doWithAll<void>([] (const std::vector<p_ptr_t>& beads) {
         for (const auto& bead : beads) {
             std::cout << *bead << std::endl;
             std::cout << "Is ion? " << bead->isIon() << std::endl;

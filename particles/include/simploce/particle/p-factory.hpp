@@ -42,7 +42,7 @@ namespace simploce {
          * @param catalog Particle specification catalog.
          * @return Particle model factory.
          */
-        particle_system_fact_ptr_t particleModelFactory(const spec_catalog_ptr_t& catalog);
+        p_system_fact_ptr_t particleModelFactory(const spec_catalog_ptr_t& catalog);
         
         /**
          * Returns an empty atomistic particle model.

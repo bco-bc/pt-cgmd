@@ -5,11 +5,14 @@
  */
 
 #include "simploce/particle/particle-system-factory.hpp"
+#include "simploce/particle/particle-spec.hpp"
+#include "simploce/particle/particle-spec-catalog.hpp"
+#include "simploce/particle/particle-group.hpp"
 #include "simploce/particle/atomistic.hpp"
 #include "simploce/particle/coarse-grained.hpp"
 #include "simploce/particle/bead.hpp"
-#include "simploce/particle/atom.hpp"
 #include "simploce/particle/p-factory.hpp"
+#include "simploce/particle/p-util.hpp"
 #include "simploce/util/util.hpp"
 #include "simploce/units/units-mu.hpp"
 #include "simploce/util/logger.hpp"
@@ -19,34 +22,8 @@
 
 namespace simploce {
 
-    // From Maxwell velocity distribution.
-    // https://en.wikipedia.org/wiki/Maxwell%E2%80%93Boltzmann_distribution
-    template <typename P>
-    static void assignVelocity_(std::shared_ptr<P>& particle, const temperature_t& temperature)
-    {
-        static real_t KB = units::mu<real_t>::KB;
-        static std::random_device rd{};
-        static std::mt19937 gen{rd()};
-        static bool init = false;
-        if ( !init ) {
-            gen.seed(util::seedValue<std::size_t>());  // seed() From util.hpp
-            init = true;
-        }
-
-        // For each velocity component, take its value from a Gaussian density for velocity with
-        // standard deviation 'sigma' and zero average.
-        real_t sigma = std::sqrt(KB * temperature / particle->mass());
-        std::normal_distribution<real_t> gaussian{0.0, sigma};  // Zero average.
-        velocity_t v{};
-            for (std::size_t k = 0; k != 3; ++k) {
-                v[k] = gaussian(gen);
-        }
-        particle->velocity(v);
-    }
-
-
-    ParticleSystemFactory::ParticleSystemFactory(const spec_catalog_ptr_t& catalog) :
-        catalog_{catalog}
+    ParticleSystemFactory::ParticleSystemFactory(spec_catalog_ptr_t  catalog) :
+        catalog_{std::move(catalog)}
     {
         if ( !catalog_ ) {
             util::Logger logger("simploce::ParticleSystemFactory::ParticleSystemFactory");
@@ -59,26 +36,26 @@ namespace simploce {
     ParticleSystemFactory::diatomic(const distance_t& distance,
                                     const spec_ptr_t& spec,
                                     const temperature_t& temperature) {
-        util::Logger logger{"ParticleSystemFactory::diatomic"};
+        util::Logger logger{"simploce::ParticleSystemFactory::diatomic"};
 
         auto atomistic = factory::atomistic();
-        std::vector<atom_ptr_t> atoms{};
+        std::vector<p_ptr_t> atoms{};
         position_t r1{-0.5 * distance(), 0.0, 0.0};
         std::string name1 = spec->name() + "1";
         auto atom_1 = atomistic->addAtom(name1, spec);
         atom_1->position(r1);
-        assignVelocity(atom_1, temperature);
-        atoms.push_back(atom_1);
+        util::assignVelocity(atom_1, temperature);
+        atoms.emplace_back(atom_1);
         position_t r2{0.5 * distance(), 0.0, 0.0};
         std::string name2 = spec->name() + "2";
         auto atom_2 = atomistic->addAtom(name2, spec);
         atom_2->position(r2);
-        assignVelocity(atom_2, temperature);
-        atoms.push_back(atom_2);
+        util::assignVelocity(atom_2, temperature);
+        atoms.emplace_back(atom_2);
         id_pair_t bond = std::make_pair(atom_1->id(), atom_2->id());
         std::vector<id_pair_t> bonds{bond};
-        auto atomGroup = ParticleGroup<Atom>::make(atoms, bonds);
-        atomistic->addGroup(atomGroup);
+        auto atomGroup = ParticleGroup::make(atoms, bonds);
+        atomistic->addParticleGroup(atomGroup);
         box_ptr_t box(new Cube<real_t>{0.0});
         atomistic->box(box);
         return std::move(atomistic);
@@ -168,7 +145,7 @@ namespace simploce {
                     real_t z = z0 + k * spacing();
 
                     // Single water group.
-                    std::vector<bead_ptr_t> beads{};
+                    std::vector<p_ptr_t> beads{};
                     std::vector<id_pair_t> bonds{};
 
                     position_t r1{x,y,z};
@@ -176,8 +153,8 @@ namespace simploce {
                     std::string name = "CW" + index;
                     auto cwBead = coarseGrained->addBead(name, cwSpec);
                     cwBead->position(r1);
-                    assignVelocity(cwBead, temperature);
-                    beads.push_back(cwBead);
+                    util::assignVelocity(cwBead, temperature);
+                    beads.emplace_back(cwBead);
 
                     // Place the DP parallel to one of the 3 coordinate axes.
                     position_t r2{};
@@ -202,13 +179,13 @@ namespace simploce {
                     name = "DP" + index;
                     auto dpBead = coarseGrained->addBead(name, dpSpec);
                     dpBead->position(r2);
-                    assignVelocity(dpBead, temperature);
-                    beads.push_back(dpBead);
+                    util::assignVelocity(dpBead, temperature);
+                    beads.emplace_back(dpBead);
 
                     id_pair_t pair = std::make_pair(cwBead->id(), dpBead->id());
                     bonds.emplace_back(pair);
 
-                    coarseGrained->addBeadGroup(beads, bonds);
+                    coarseGrained->addParticleGroup(beads, bonds);
 
                     counter += 1;
                     k += 1;
@@ -290,13 +267,13 @@ namespace simploce {
                         std::string name = NA->name() + util::toString(counter + 1 );
                         auto ion = atomistic->addAtom(name, NA);
                         ion->position(r);
-                        assignVelocity(ion, temperature);
+                        util::assignVelocity(ion, temperature);
                     } else {
                         // Cl-
                         std::string name = CL->name() + util::toString(counter + 1);
                         auto ion = atomistic->addAtom(name, CL);
                         ion->position(r);
-                        assignVelocity(ion, temperature);
+                        util::assignVelocity(ion, temperature);
                     }
 
                     counter += 1;
@@ -381,7 +358,7 @@ namespace simploce {
                     std::string name = spec->name() + util::toString(counter + 1);
                     auto atom = atomistic->addAtom(name, spec);
                     atom->position(r);
-                    assignVelocity(atom, temperature);
+                    util::assignVelocity(atom, temperature);
                     counter += 1;
                     k += 1;
                 }
@@ -397,18 +374,9 @@ namespace simploce {
         return std::move(atomistic);
     }
 
-    spec_catalog_ptr_t
+    spec_catalog_ptr_t&
     ParticleSystemFactory::catalog() {
         return catalog_;
     }
 
-    void
-    ParticleSystemFactory::assignVelocity(atom_ptr_t& atom, const temperature_t& temperature) {
-        assignVelocity_(atom, temperature);
-    }
-
-    void
-    ParticleSystemFactory::assignVelocity(bead_ptr_t& bead, const temperature_t& temperature) {
-        assignVelocity_(bead, temperature);
-    }
 }

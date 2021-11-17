@@ -31,7 +31,7 @@ namespace simploce {
          * @see <a href="https://aip.scitation.org/doi/10.1063/1.3553378">
          * Riniker and van Gunsteren</a>
          */
-        prot_cg_sys
+        prot_cg_sys_ptr_t
         protonatablePolarizableWater(const box_ptr_t& box,
                                      const density_t& densitySI = 997.0479,
                                      const temperature_t& temperature = 298.15,
@@ -48,10 +48,10 @@ namespace simploce {
          * 298.15 K.
          * @return Protonatable coarse grained particle model.
          */
-        prot_cg_sys formicAcid(const box_ptr_t& box,
-                               const density_t& densitySI = 997.0479,
-                               const molarity_t& molarity = 0.1,
-                               const temperature_t& temperature = 298.15);
+        prot_cg_sys_ptr_t formicAcid(const box_ptr_t& box,
+                                     const density_t& densitySI = 997.0479,
+                                     const molarity_t& molarity = 0.1,
+                                     const temperature_t& temperature = 298.15);
 
 
     };

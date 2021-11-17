@@ -41,7 +41,7 @@ namespace simploce {
          * @param cg Coarse grained particle model.
          * @return List of pairs of beads possibly involved in proton transfer.
          */
-        prot_pair_list_t generate(const prot_cg_mod_ptr_t& cg) const;
+        prot_pair_list_t generate(const prot_cg_sys_ptr_t& cg) const;
         
     private:
         

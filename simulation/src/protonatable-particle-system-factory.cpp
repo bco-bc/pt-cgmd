@@ -6,10 +6,11 @@
 
 #include "simploce/simulation/protonatable-particle-system-factory.hpp"
 #include "simploce/simulation/continuous.hpp"
+#include "simploce/simulation/s-factory.hpp"
 #include "simploce/units/units-mu.hpp"
-#include "simploce/particle/particle-spec-catalog.hpp"
 #include "simploce/particle/particle-system-factory.hpp"
 #include "simploce/particle/protonatable-coarse-grained.hpp"
+#include "simploce/particle/p-util.hpp"
 #include "simploce/util/logger.hpp"
 #include <vector>
 
@@ -19,7 +20,7 @@ namespace simploce {
             ParticleSystemFactory(catalog) {
     }
 
-    prot_cg_sys
+    prot_cg_sys_ptr_t
     ProtonatableParticleSystemFactory::protonatablePolarizableWater(const box_ptr_t& box,
                                                                     const density_t& densitySI,
                                                                     const temperature_t& temperature,
@@ -30,28 +31,28 @@ namespace simploce {
         auto pWater = this->polarizableWater(box, densitySI, temperature, nLimit);
 
         // / Protonatable polarizable Water.
-        prot_cg_sys ppWater;
+        prot_cg_sys_ptr_t ppWater = factory::protonatableCoarseGrained();
 
         // Take beads in groups from pWater to create new beads in ppWater.
         auto catalog = this->catalog();
         pWater->doWithAllFreeGroups<void>([&ppWater, catalog, &logger] (
-                std::vector<bead_ptr_t>& all,
-                std::vector<bead_ptr_t>& free,
-                std::vector<bead_group_ptr_t>& groups) {
+                std::vector<p_ptr_t>& all,
+                std::vector<p_ptr_t>& free,
+                std::vector<pg_ptr_t>& groups) {
             const std::string CW = "CW";
             const std::string DP = "DP";
             for (const auto& g : groups) {
                 // Each water group consists of two beads, each of specifications CW and DP.
                 auto beads = g->particles();
                 std::vector<id_pair_t> bonds;
-                std::vector<bead_ptr_t> newBeads;
+                std::vector<p_ptr_t> newBeads;
                 id_t idCW, idDP;
                 for (const auto& bead : beads) {
                     auto spec = bead->spec();
                     if ( spec->name() == CW) {
                         auto sp = catalog->lookup("pCW");
                         std::string name = "pCW" + boost::lexical_cast<std::string>(all.size());
-                        auto pCW = ppWater.addProtonatableBead(name, sp);
+                        auto pCW = ppWater->addProtonatableBead(name, sp);
                         pCW->position(bead->position());
                         pCW->velocity(bead->velocity());
                         newBeads.emplace_back(pCW);
@@ -59,7 +60,7 @@ namespace simploce {
                     } else if ( spec->name() == DP) {
                         auto sp = catalog->lookup("DP");
                         std::string name = "DP" + boost::lexical_cast<std::string>(all.size());
-                        auto pDP = ppWater.addBead(name, sp);
+                        auto pDP = ppWater->addBead(name, sp);
                         pDP->position(bead->position());
                         pDP->velocity(bead->velocity());
                         newBeads.emplace_back(pDP);
@@ -69,18 +70,18 @@ namespace simploce {
                     }
                 }
                 bonds.emplace_back(std::make_pair(idCW, idDP));
-                ppWater.addBeadGroup(newBeads, bonds);
+                ppWater->addParticleGroup(newBeads, bonds);
             }
         });
-        ppWater.box(box);
+        ppWater->box(box);
 
         logger.info("Number of protonatable beads: " +
-                    boost::lexical_cast<std::string>(ppWater.numberProtonatableBeads()));
+                    boost::lexical_cast<std::string>(ppWater->numberProtonatableBeads()));
 
         return std::move(ppWater);
     }
 
-    prot_cg_sys
+    prot_cg_sys_ptr_t
     ProtonatableParticleSystemFactory::formicAcid(const box_ptr_t& box,
                                                   const density_t& densitySI,
                                                   const molarity_t& molarity,
@@ -106,9 +107,14 @@ namespace simploce {
         auto spec = this->catalog()->lookup("HCOOH");
         logger.debug("HCOOH specification:");
         util::log(logger, *spec);
-        ppModel.replaceGroupsByParticles(spec, nHCOOH);
-        logger.info("Number of HCOOH: " + boost::lexical_cast<std::string>(ppModel.numberOfSpecifications(spec)));
-        logger.info("Number of pCW: " + boost::lexical_cast<std::string>(ppModel.numberOfSpecifications(catalog->lookup("pCW"))));
+        ppModel->replaceGroupsByParticles(spec, nHCOOH);
+        ppModel->doWithAll<void>([temperature] (const std::vector<p_ptr_t>& all) {
+            for (auto p : all) {
+                util::assignVelocity(p, temperature);
+            }
+        });
+        logger.info("Number of HCOOH: " + boost::lexical_cast<std::string>(ppModel->numberOfSpecifications(spec)));
+        logger.info("Number of pCW: " + boost::lexical_cast<std::string>(ppModel->numberOfSpecifications(catalog->lookup("pCW"))));
         return std::move(ppModel);
     }
 }

@@ -18,17 +18,28 @@ namespace simploce {
     // Forward declarations.
     class Atom;
     class Bead;
+    class Particle;
     class Atomistic;
     class CoarseGrained;
+    class ParticleSystem;
     class ParticleSpec;
     class ParticleSpecCatalog;
     class ParticleSystemFactory;
-
-    template <typename P>
     class ParticleGroup;
+    class Bond;
 
 
     // Type definitions.
+
+    /**
+     * Particle pointer type.
+     */
+     using p_ptr_t = std::shared_ptr<Particle>;
+
+    /**
+     * Particle group pointer type.
+     */
+    using pg_ptr_t = std::shared_ptr<ParticleGroup>;
 
     /**
      * Atom pointer type.
@@ -41,12 +52,17 @@ namespace simploce {
     using bead_ptr_t = std::shared_ptr<Bead>;
 
     /**
-     * Atomistic particle model pointer type.
+     * Particle system pointer type.
+     */
+    using p_system_ptr_t = std::shared_ptr<ParticleSystem>;
+
+    /**
+     * Atomistic particle system pointer type.
      */
     using at_sys_ptr_t = std::shared_ptr<Atomistic>;
 
     /**
-     * Coarse grained particle model pointer type.
+     * Coarse grained particle system pointer type.
      */
     using cg_sys_ptr_t = std::shared_ptr<CoarseGrained>;
 
@@ -71,34 +87,14 @@ namespace simploce {
     using box_ptr_t = std::shared_ptr<box_t>;
 
     /**
-     * Atom group type.
-     */
-    using atom_group_t = ParticleGroup<Atom>;
-
-    /**
-     * Atom group pointer type.
-     */
-    using atom_group_ptr_t = std::shared_ptr<atom_group_t>;
-
-    /**
-     * Bead group type.
-     */
-    using bead_group_t = ParticleGroup<Bead>;
-
-    /**
-     * Bead group pointer type.
-     */
-    using bead_group_ptr_t = std::shared_ptr<bead_group_t>;
-
-    /**
      * Pair of particle identifiers type.
      */
     using id_pair_t = std::pair<id_t, id_t>;
 
     /**
-     * Particle model factory pointer type.
+     * Particle system factory pointer type.
      */
-    using particle_system_fact_ptr_t = std::shared_ptr<ParticleSystemFactory>;
+    using p_system_fact_ptr_t = std::shared_ptr<ParticleSystemFactory>;
 
 
 

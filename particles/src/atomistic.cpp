@@ -7,8 +7,7 @@
 
 #include "simploce/particle/atomistic.hpp"
 #include "simploce/particle/atom.hpp"
-#include "simploce/particle/p-types.hpp"
-#include <memory>
+#include "simploce/particle/p-factory.hpp"
 
 namespace simploce {
 
@@ -19,10 +18,10 @@ namespace simploce {
         return atomistic;
     }
 
-    Atomistic::Atomistic() : ParticleSystem<Atom,atom_group_t>{} {
+    Atomistic::Atomistic() : ParticleSystem{} {
     }
     
-    atom_ptr_t 
+    p_ptr_t
     Atomistic::addAtom(const std::string& name,
                        const spec_ptr_t& spec)
     {
@@ -35,7 +34,7 @@ namespace simploce {
         return this->numberOfParticles();
     }
 
-    atom_ptr_t
+    p_ptr_t
     Atomistic::createParticle_(const id_t& id,
                                int index,
                                const std::string& name,

@@ -13,6 +13,7 @@
 #include "s-conf.hpp"
 #include "simploce/particle/p-properties.hpp"
 #include "simploce/util/logger.hpp"
+#include "simploce/util/util.hpp"
 #include <vector>
 #include <set>
 #include <thread>

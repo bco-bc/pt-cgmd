@@ -201,6 +201,19 @@ particle-spec-catalog-test/fast:
 .PHONY : particle-spec-catalog-test/fast
 
 #=============================================================================
+# Target rules for targets named particle-system-factory-test
+
+# Build rule for target.
+particle-system-factory-test: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 particle-system-factory-test
+.PHONY : particle-system-factory-test
+
+# fast build rule for target.
+particle-system-factory-test/fast:
+	$(MAKE) $(MAKESILENT) -f tests/CMakeFiles/particle-system-factory-test.dir/build.make tests/CMakeFiles/particle-system-factory-test.dir/build
+.PHONY : particle-system-factory-test/fast
+
+#=============================================================================
 # Target rules for targets named read-cg-test
 
 # Build rule for target.
@@ -238,45 +251,6 @@ coarse-grained-test: cmake_check_build_system
 coarse-grained-test/fast:
 	$(MAKE) $(MAKESILENT) -f tests/CMakeFiles/coarse-grained-test.dir/build.make tests/CMakeFiles/coarse-grained-test.dir/build
 .PHONY : coarse-grained-test/fast
-
-#=============================================================================
-# Target rules for targets named particle-system-factory-test
-
-# Build rule for target.
-particle-system-factory-test: cmake_check_build_system
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 particle-system-factory-test
-.PHONY : particle-system-factory-test
-
-# fast build rule for target.
-particle-system-factory-test/fast:
-	$(MAKE) $(MAKESILENT) -f tests/CMakeFiles/particle-system-factory-test.dir/build.make tests/CMakeFiles/particle-system-factory-test.dir/build
-.PHONY : particle-system-factory-test/fast
-
-#=============================================================================
-# Target rules for targets named prot-site-catalog-test
-
-# Build rule for target.
-prot-site-catalog-test: cmake_check_build_system
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 prot-site-catalog-test
-.PHONY : prot-site-catalog-test
-
-# fast build rule for target.
-prot-site-catalog-test/fast:
-	$(MAKE) $(MAKESILENT) -f tests/CMakeFiles/prot-site-catalog-test.dir/build.make tests/CMakeFiles/prot-site-catalog-test.dir/build
-.PHONY : prot-site-catalog-test/fast
-
-#=============================================================================
-# Target rules for targets named protonation-site-test
-
-# Build rule for target.
-protonation-site-test: cmake_check_build_system
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 protonation-site-test
-.PHONY : protonation-site-test
-
-# fast build rule for target.
-protonation-site-test/fast:
-	$(MAKE) $(MAKESILENT) -f tests/CMakeFiles/protonation-site-test.dir/build.make tests/CMakeFiles/protonation-site-test.dir/build
-.PHONY : protonation-site-test/fast
 
 #=============================================================================
 # Target rules for targets named protonatable-bead-test
@@ -376,6 +350,30 @@ src/bead.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/particles.dir/build.make CMakeFiles/particles.dir/src/bead.cpp.s
 .PHONY : src/bead.cpp.s
 
+src/bond.o: src/bond.cpp.o
+.PHONY : src/bond.o
+
+# target to build an object file
+src/bond.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/particles.dir/build.make CMakeFiles/particles.dir/src/bond.cpp.o
+.PHONY : src/bond.cpp.o
+
+src/bond.i: src/bond.cpp.i
+.PHONY : src/bond.i
+
+# target to preprocess a source file
+src/bond.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/particles.dir/build.make CMakeFiles/particles.dir/src/bond.cpp.i
+.PHONY : src/bond.cpp.i
+
+src/bond.s: src/bond.cpp.s
+.PHONY : src/bond.s
+
+# target to generate assembly for a file
+src/bond.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/particles.dir/build.make CMakeFiles/particles.dir/src/bond.cpp.s
+.PHONY : src/bond.cpp.s
+
 src/coarse-grained.o: src/coarse-grained.cpp.o
 .PHONY : src/coarse-grained.o
 
@@ -423,6 +421,54 @@ src/p-factory.s: src/p-factory.cpp.s
 src/p-factory.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/particles.dir/build.make CMakeFiles/particles.dir/src/p-factory.cpp.s
 .PHONY : src/p-factory.cpp.s
+
+src/p-util.o: src/p-util.cpp.o
+.PHONY : src/p-util.o
+
+# target to build an object file
+src/p-util.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/particles.dir/build.make CMakeFiles/particles.dir/src/p-util.cpp.o
+.PHONY : src/p-util.cpp.o
+
+src/p-util.i: src/p-util.cpp.i
+.PHONY : src/p-util.i
+
+# target to preprocess a source file
+src/p-util.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/particles.dir/build.make CMakeFiles/particles.dir/src/p-util.cpp.i
+.PHONY : src/p-util.cpp.i
+
+src/p-util.s: src/p-util.cpp.s
+.PHONY : src/p-util.s
+
+# target to generate assembly for a file
+src/p-util.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/particles.dir/build.make CMakeFiles/particles.dir/src/p-util.cpp.s
+.PHONY : src/p-util.cpp.s
+
+src/particle-group.o: src/particle-group.cpp.o
+.PHONY : src/particle-group.o
+
+# target to build an object file
+src/particle-group.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/particles.dir/build.make CMakeFiles/particles.dir/src/particle-group.cpp.o
+.PHONY : src/particle-group.cpp.o
+
+src/particle-group.i: src/particle-group.cpp.i
+.PHONY : src/particle-group.i
+
+# target to preprocess a source file
+src/particle-group.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/particles.dir/build.make CMakeFiles/particles.dir/src/particle-group.cpp.i
+.PHONY : src/particle-group.cpp.i
+
+src/particle-group.s: src/particle-group.cpp.s
+.PHONY : src/particle-group.s
+
+# target to generate assembly for a file
+src/particle-group.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/particles.dir/build.make CMakeFiles/particles.dir/src/particle-group.cpp.s
+.PHONY : src/particle-group.cpp.s
 
 src/particle-spec-catalog.o: src/particle-spec-catalog.cpp.o
 .PHONY : src/particle-spec-catalog.o
@@ -496,6 +542,30 @@ src/particle-system-factory.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/particles.dir/build.make CMakeFiles/particles.dir/src/particle-system-factory.cpp.s
 .PHONY : src/particle-system-factory.cpp.s
 
+src/particle-system.o: src/particle-system.cpp.o
+.PHONY : src/particle-system.o
+
+# target to build an object file
+src/particle-system.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/particles.dir/build.make CMakeFiles/particles.dir/src/particle-system.cpp.o
+.PHONY : src/particle-system.cpp.o
+
+src/particle-system.i: src/particle-system.cpp.i
+.PHONY : src/particle-system.i
+
+# target to preprocess a source file
+src/particle-system.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/particles.dir/build.make CMakeFiles/particles.dir/src/particle-system.cpp.i
+.PHONY : src/particle-system.cpp.i
+
+src/particle-system.s: src/particle-system.cpp.s
+.PHONY : src/particle-system.s
+
+# target to generate assembly for a file
+src/particle-system.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/particles.dir/build.make CMakeFiles/particles.dir/src/particle-system.cpp.s
+.PHONY : src/particle-system.cpp.s
+
 src/particle.o: src/particle.cpp.o
 .PHONY : src/particle.o
 
@@ -520,30 +590,6 @@ src/particle.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/particles.dir/build.make CMakeFiles/particles.dir/src/particle.cpp.s
 .PHONY : src/particle.cpp.s
 
-src/protonation-site-catalog.o: src/protonation-site-catalog.cpp.o
-.PHONY : src/protonation-site-catalog.o
-
-# target to build an object file
-src/protonation-site-catalog.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/particles.dir/build.make CMakeFiles/particles.dir/src/protonation-site-catalog.cpp.o
-.PHONY : src/protonation-site-catalog.cpp.o
-
-src/protonation-site-catalog.i: src/protonation-site-catalog.cpp.i
-.PHONY : src/protonation-site-catalog.i
-
-# target to preprocess a source file
-src/protonation-site-catalog.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/particles.dir/build.make CMakeFiles/particles.dir/src/protonation-site-catalog.cpp.i
-.PHONY : src/protonation-site-catalog.cpp.i
-
-src/protonation-site-catalog.s: src/protonation-site-catalog.cpp.s
-.PHONY : src/protonation-site-catalog.s
-
-# target to generate assembly for a file
-src/protonation-site-catalog.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/particles.dir/build.make CMakeFiles/particles.dir/src/protonation-site-catalog.cpp.s
-.PHONY : src/protonation-site-catalog.cpp.s
-
 # Help Target
 help:
 	@echo "The following are some of the valid targets for this Makefile:"
@@ -561,10 +607,8 @@ help:
 	@echo "... particle-system-factory-test"
 	@echo "... particle-test"
 	@echo "... particles"
-	@echo "... prot-site-catalog-test"
 	@echo "... protonatable-bead-test"
 	@echo "... protonatable-coarse-grained-test"
-	@echo "... protonation-site-test"
 	@echo "... read-cg-test"
 	@echo "... total-masses"
 	@echo "... src/atom.o"
@@ -576,12 +620,21 @@ help:
 	@echo "... src/bead.o"
 	@echo "... src/bead.i"
 	@echo "... src/bead.s"
+	@echo "... src/bond.o"
+	@echo "... src/bond.i"
+	@echo "... src/bond.s"
 	@echo "... src/coarse-grained.o"
 	@echo "... src/coarse-grained.i"
 	@echo "... src/coarse-grained.s"
 	@echo "... src/p-factory.o"
 	@echo "... src/p-factory.i"
 	@echo "... src/p-factory.s"
+	@echo "... src/p-util.o"
+	@echo "... src/p-util.i"
+	@echo "... src/p-util.s"
+	@echo "... src/particle-group.o"
+	@echo "... src/particle-group.i"
+	@echo "... src/particle-group.s"
 	@echo "... src/particle-spec-catalog.o"
 	@echo "... src/particle-spec-catalog.i"
 	@echo "... src/particle-spec-catalog.s"
@@ -591,12 +644,12 @@ help:
 	@echo "... src/particle-system-factory.o"
 	@echo "... src/particle-system-factory.i"
 	@echo "... src/particle-system-factory.s"
+	@echo "... src/particle-system.o"
+	@echo "... src/particle-system.i"
+	@echo "... src/particle-system.s"
 	@echo "... src/particle.o"
 	@echo "... src/particle.i"
 	@echo "... src/particle.s"
-	@echo "... src/protonation-site-catalog.o"
-	@echo "... src/protonation-site-catalog.i"
-	@echo "... src/protonation-site-catalog.s"
 .PHONY : help
 
 

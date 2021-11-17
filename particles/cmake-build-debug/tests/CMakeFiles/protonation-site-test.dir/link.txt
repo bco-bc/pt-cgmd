@@ -1,1 +1,1 @@
-/usr/bin/c++ -g CMakeFiles/protonation-site-test.dir/protonation-site-test.cpp.o -o protonation-site-test   -L/localdisk/lib  -Wl,-rpath,/home/andre/wrk3/simploce/pt-cgmd/particles/cmake-build-debug:/localdisk/lib ../libparticles.so -lutil -lcpputil 
+/usr/bin/c++ -g CMakeFiles/protonation-site-test.dir/protonation-site-test.cpp.o -o protonation-site-test   -L/localdisk/lib  -Wl,-rpath,/wrk3/simploce/pt-cgmd/particles/cmake-build-debug:/localdisk/lib ../libparticles.so -lutil -lcpputil 

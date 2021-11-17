@@ -1,5 +1,6 @@
 /localdisk/bin/total-masses
 /localdisk/lib/libparticles.so
+/localdisk/include/simploce/particle/p-util.hpp
 /localdisk/include/simploce/particle/protonatable-bead.hpp
 /localdisk/include/simploce/particle/particle-system.hpp
 /localdisk/include/simploce/particle/p-properties.hpp

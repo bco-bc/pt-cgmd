@@ -40,7 +40,6 @@ CMakeFiles/simulation.dir/src/distance-pair-list-generator.cpp.o
  /localdisk/include/simploce/conf/u-conf.hpp
  /localdisk/include/simploce/particle/atom.hpp
  /localdisk/include/simploce/particle/bead.hpp
- /localdisk/include/simploce/particle/bond.hpp
  /localdisk/include/simploce/particle/p-conf.hpp
  /localdisk/include/simploce/particle/p-properties.hpp
  /localdisk/include/simploce/particle/p-types.hpp
@@ -64,16 +63,11 @@ CMakeFiles/simulation.dir/src/force-field.cpp.o
  ../include/simploce/simulation/s-types.hpp
  /home/andre/wrk3/simploce/pt-cgmd/simulation/src/force-field.cpp
  /localdisk/include/simploce/conf/u-conf.hpp
- /localdisk/include/simploce/particle/atom.hpp
- /localdisk/include/simploce/particle/bead.hpp
- /localdisk/include/simploce/particle/bond.hpp
  /localdisk/include/simploce/particle/p-conf.hpp
- /localdisk/include/simploce/particle/p-properties.hpp
  /localdisk/include/simploce/particle/p-types.hpp
  /localdisk/include/simploce/particle/particle-group.hpp
  /localdisk/include/simploce/particle/particle-spec-catalog.hpp
  /localdisk/include/simploce/particle/particle-spec.hpp
- /localdisk/include/simploce/particle/particle.hpp
  /localdisk/include/simploce/types/cvector_t.hpp
  /localdisk/include/simploce/types/u-types.hpp
  /localdisk/include/simploce/types/value_t.hpp
@@ -85,7 +79,6 @@ CMakeFiles/simulation.dir/src/force-field.cpp.o
  /localdisk/include/simploce/util/param.hpp
  /localdisk/include/simploce/util/util.hpp
 CMakeFiles/simulation.dir/src/forces.cpp.o
- ../include/simploce/simulation/bc.hpp
  ../include/simploce/simulation/force-field.hpp
  ../include/simploce/simulation/forces.hpp
  ../include/simploce/simulation/halve-attractive-qp.hpp
@@ -121,29 +114,69 @@ CMakeFiles/simulation.dir/src/forces.cpp.o
  /localdisk/include/simploce/util/math-constants.hpp
  /localdisk/include/simploce/util/param.hpp
  /localdisk/include/simploce/util/util.hpp
+CMakeFiles/simulation.dir/src/halve-attractive-qp.cpp.o
+ ../include/simploce/simulation/bc.hpp
+ ../include/simploce/simulation/force-field.hpp
+ ../include/simploce/simulation/halve-attractive-qp.hpp
+ ../include/simploce/simulation/pair-lists.hpp
+ ../include/simploce/simulation/pair-potential.hpp
+ ../include/simploce/simulation/s-types.hpp
+ /home/andre/wrk3/simploce/pt-cgmd/simulation/src/halve-attractive-qp.cpp
+ /localdisk/include/simploce/conf/u-conf.hpp
+ /localdisk/include/simploce/particle/p-types.hpp
+ /localdisk/include/simploce/particle/particle-group.hpp
+ /localdisk/include/simploce/particle/particle.hpp
+ /localdisk/include/simploce/types/cvector_t.hpp
+ /localdisk/include/simploce/types/u-types.hpp
+ /localdisk/include/simploce/types/value_t.hpp
+ /localdisk/include/simploce/util/box.hpp
+ /localdisk/include/simploce/util/cube.hpp
+ /localdisk/include/simploce/util/map.hpp
+ /localdisk/include/simploce/util/map2.hpp
+ /localdisk/include/simploce/util/param.hpp
+CMakeFiles/simulation.dir/src/hp.cpp.o
+ ../include/simploce/simulation/bc.hpp
+ ../include/simploce/simulation/force-field.hpp
+ ../include/simploce/simulation/hp.hpp
+ ../include/simploce/simulation/pair-lists.hpp
+ ../include/simploce/simulation/pair-potential.hpp
+ ../include/simploce/simulation/s-conf.hpp
+ ../include/simploce/simulation/s-properties.hpp
+ ../include/simploce/simulation/s-types.hpp
+ /home/andre/wrk3/simploce/pt-cgmd/simulation/src/hp.cpp
+ /localdisk/include/simploce/conf/u-conf.hpp
+ /localdisk/include/simploce/particle/atom.hpp
+ /localdisk/include/simploce/particle/bead.hpp
+ /localdisk/include/simploce/particle/p-conf.hpp
+ /localdisk/include/simploce/particle/p-properties.hpp
+ /localdisk/include/simploce/particle/p-types.hpp
+ /localdisk/include/simploce/particle/particle-group.hpp
+ /localdisk/include/simploce/particle/particle.hpp
+ /localdisk/include/simploce/types/cvector_t.hpp
+ /localdisk/include/simploce/types/u-types.hpp
+ /localdisk/include/simploce/types/value_t.hpp
+ /localdisk/include/simploce/units/units-mu.hpp
+ /localdisk/include/simploce/units/units-si.hpp
+ /localdisk/include/simploce/util/box.hpp
+ /localdisk/include/simploce/util/cube.hpp
+ /localdisk/include/simploce/util/logger.hpp
+ /localdisk/include/simploce/util/map.hpp
+ /localdisk/include/simploce/util/map2.hpp
+ /localdisk/include/simploce/util/math-constants.hpp
+ /localdisk/include/simploce/util/param.hpp
+ /localdisk/include/simploce/util/util.hpp
 CMakeFiles/simulation.dir/src/interactor.cpp.o
  ../include/simploce/simulation/force-field.hpp
  ../include/simploce/simulation/forces.hpp
  ../include/simploce/simulation/interactor.hpp
  ../include/simploce/simulation/pair-list-generator.hpp
  ../include/simploce/simulation/pair-lists.hpp
- ../include/simploce/simulation/pair-potential.hpp
  ../include/simploce/simulation/s-types.hpp
  ../include/simploce/simulation/sim-data.hpp
  /home/andre/wrk3/simploce/pt-cgmd/simulation/src/interactor.cpp
  /localdisk/include/simploce/conf/u-conf.hpp
- /localdisk/include/simploce/particle/atom.hpp
- /localdisk/include/simploce/particle/atomistic.hpp
- /localdisk/include/simploce/particle/bead.hpp
- /localdisk/include/simploce/particle/bond.hpp
- /localdisk/include/simploce/particle/coarse-grained.hpp
- /localdisk/include/simploce/particle/p-conf.hpp
- /localdisk/include/simploce/particle/p-factory.hpp
- /localdisk/include/simploce/particle/p-properties.hpp
  /localdisk/include/simploce/particle/p-types.hpp
  /localdisk/include/simploce/particle/particle-group.hpp
- /localdisk/include/simploce/particle/particle-spec-catalog.hpp
- /localdisk/include/simploce/particle/particle-spec.hpp
  /localdisk/include/simploce/particle/particle-system.hpp
  /localdisk/include/simploce/particle/particle.hpp
  /localdisk/include/simploce/types/cvector_t.hpp
@@ -154,6 +187,68 @@ CMakeFiles/simulation.dir/src/interactor.cpp.o
  /localdisk/include/simploce/util/logger.hpp
  /localdisk/include/simploce/util/map.hpp
  /localdisk/include/simploce/util/map2.hpp
+ /localdisk/include/simploce/util/param.hpp
+ /localdisk/include/simploce/util/util.hpp
+CMakeFiles/simulation.dir/src/lj-rf.cpp.o
+ ../include/simploce/simulation/bc.hpp
+ ../include/simploce/simulation/force-field.hpp
+ ../include/simploce/simulation/lj-rf.hpp
+ ../include/simploce/simulation/pair-lists.hpp
+ ../include/simploce/simulation/pair-potential.hpp
+ ../include/simploce/simulation/s-conf.hpp
+ ../include/simploce/simulation/s-properties.hpp
+ ../include/simploce/simulation/s-types.hpp
+ /home/andre/wrk3/simploce/pt-cgmd/simulation/src/lj-rf.cpp
+ /localdisk/include/simploce/conf/u-conf.hpp
+ /localdisk/include/simploce/particle/atom.hpp
+ /localdisk/include/simploce/particle/bead.hpp
+ /localdisk/include/simploce/particle/p-conf.hpp
+ /localdisk/include/simploce/particle/p-properties.hpp
+ /localdisk/include/simploce/particle/p-types.hpp
+ /localdisk/include/simploce/particle/particle-group.hpp
+ /localdisk/include/simploce/particle/particle.hpp
+ /localdisk/include/simploce/types/cvector_t.hpp
+ /localdisk/include/simploce/types/u-types.hpp
+ /localdisk/include/simploce/types/value_t.hpp
+ /localdisk/include/simploce/units/units-mu.hpp
+ /localdisk/include/simploce/units/units-si.hpp
+ /localdisk/include/simploce/util/box.hpp
+ /localdisk/include/simploce/util/cube.hpp
+ /localdisk/include/simploce/util/logger.hpp
+ /localdisk/include/simploce/util/map.hpp
+ /localdisk/include/simploce/util/map2.hpp
+ /localdisk/include/simploce/util/math-constants.hpp
+ /localdisk/include/simploce/util/param.hpp
+ /localdisk/include/simploce/util/util.hpp
+CMakeFiles/simulation.dir/src/lj.cpp.o
+ ../include/simploce/simulation/bc.hpp
+ ../include/simploce/simulation/force-field.hpp
+ ../include/simploce/simulation/lj.hpp
+ ../include/simploce/simulation/pair-lists.hpp
+ ../include/simploce/simulation/pair-potential.hpp
+ ../include/simploce/simulation/s-conf.hpp
+ ../include/simploce/simulation/s-properties.hpp
+ ../include/simploce/simulation/s-types.hpp
+ /home/andre/wrk3/simploce/pt-cgmd/simulation/src/lj.cpp
+ /localdisk/include/simploce/conf/u-conf.hpp
+ /localdisk/include/simploce/particle/atom.hpp
+ /localdisk/include/simploce/particle/bead.hpp
+ /localdisk/include/simploce/particle/p-conf.hpp
+ /localdisk/include/simploce/particle/p-properties.hpp
+ /localdisk/include/simploce/particle/p-types.hpp
+ /localdisk/include/simploce/particle/particle-group.hpp
+ /localdisk/include/simploce/particle/particle.hpp
+ /localdisk/include/simploce/types/cvector_t.hpp
+ /localdisk/include/simploce/types/u-types.hpp
+ /localdisk/include/simploce/types/value_t.hpp
+ /localdisk/include/simploce/units/units-mu.hpp
+ /localdisk/include/simploce/units/units-si.hpp
+ /localdisk/include/simploce/util/box.hpp
+ /localdisk/include/simploce/util/cube.hpp
+ /localdisk/include/simploce/util/logger.hpp
+ /localdisk/include/simploce/util/map.hpp
+ /localdisk/include/simploce/util/map2.hpp
+ /localdisk/include/simploce/util/math-constants.hpp
  /localdisk/include/simploce/util/param.hpp
  /localdisk/include/simploce/util/util.hpp
 CMakeFiles/simulation.dir/src/no-bc.cpp.o
@@ -171,49 +266,51 @@ CMakeFiles/simulation.dir/src/no-bc.cpp.o
  /localdisk/include/simploce/util/box.hpp
  /localdisk/include/simploce/util/cube.hpp
  /localdisk/include/simploce/util/param.hpp
+CMakeFiles/simulation.dir/src/pair-lists.cpp.o
+ ../include/simploce/simulation/pair-lists.hpp
+ /home/andre/wrk3/simploce/pt-cgmd/simulation/src/pair-lists.cpp
+ /localdisk/include/simploce/conf/u-conf.hpp
+ /localdisk/include/simploce/particle/p-types.hpp
+ /localdisk/include/simploce/particle/particle-group.hpp
+ /localdisk/include/simploce/types/cvector_t.hpp
+ /localdisk/include/simploce/types/u-types.hpp
+ /localdisk/include/simploce/types/value_t.hpp
+ /localdisk/include/simploce/util/box.hpp
+ /localdisk/include/simploce/util/cube.hpp
 CMakeFiles/simulation.dir/src/pbc.cpp.o
  ../include/simploce/simulation/bc.hpp
- ../include/simploce/simulation/force-field.hpp
- ../include/simploce/simulation/pair-lists.hpp
  ../include/simploce/simulation/pbc.hpp
  ../include/simploce/simulation/s-conf.hpp
  ../include/simploce/simulation/s-factory.hpp
  ../include/simploce/simulation/s-types.hpp
  /home/andre/wrk3/simploce/pt-cgmd/simulation/src/pbc.cpp
  /localdisk/include/simploce/conf/u-conf.hpp
- /localdisk/include/simploce/particle/atom.hpp
- /localdisk/include/simploce/particle/bead.hpp
- /localdisk/include/simploce/particle/bond.hpp
  /localdisk/include/simploce/particle/p-conf.hpp
  /localdisk/include/simploce/particle/p-factory.hpp
- /localdisk/include/simploce/particle/p-properties.hpp
  /localdisk/include/simploce/particle/p-types.hpp
- /localdisk/include/simploce/particle/particle-group.hpp
- /localdisk/include/simploce/particle/particle.hpp
  /localdisk/include/simploce/types/cvector_t.hpp
  /localdisk/include/simploce/types/u-types.hpp
  /localdisk/include/simploce/types/value_t.hpp
  /localdisk/include/simploce/util/box.hpp
  /localdisk/include/simploce/util/cube.hpp
  /localdisk/include/simploce/util/logger.hpp
- /localdisk/include/simploce/util/map.hpp
- /localdisk/include/simploce/util/map2.hpp
  /localdisk/include/simploce/util/param.hpp
  /localdisk/include/simploce/util/util.hpp
 CMakeFiles/simulation.dir/src/protonatable-particle-system-factory.cpp.o
  ../include/simploce/simulation/continuous.hpp
  ../include/simploce/simulation/protonatable-particle-system-factory.hpp
+ ../include/simploce/simulation/s-factory.hpp
  ../include/simploce/simulation/s-types.hpp
  /home/andre/wrk3/simploce/pt-cgmd/simulation/src/protonatable-particle-system-factory.cpp
  /localdisk/include/simploce/conf/u-conf.hpp
  /localdisk/include/simploce/particle/atom.hpp
  /localdisk/include/simploce/particle/bead.hpp
- /localdisk/include/simploce/particle/bond.hpp
  /localdisk/include/simploce/particle/coarse-grained.hpp
  /localdisk/include/simploce/particle/p-conf.hpp
  /localdisk/include/simploce/particle/p-factory.hpp
  /localdisk/include/simploce/particle/p-properties.hpp
  /localdisk/include/simploce/particle/p-types.hpp
+ /localdisk/include/simploce/particle/p-util.hpp
  /localdisk/include/simploce/particle/particle-group.hpp
  /localdisk/include/simploce/particle/particle-spec-catalog.hpp
  /localdisk/include/simploce/particle/particle-spec.hpp
@@ -236,25 +333,23 @@ CMakeFiles/simulation.dir/src/protonatable-particle-system-factory.cpp.o
  /localdisk/include/simploce/util/util.hpp
 CMakeFiles/simulation.dir/src/s-factory.cpp.o
  ../include/simploce/simulation/bc.hpp
+ ../include/simploce/simulation/continuous.hpp
  ../include/simploce/simulation/distance-pair-list-generator.hpp
  ../include/simploce/simulation/force-field.hpp
  ../include/simploce/simulation/forces.hpp
  ../include/simploce/simulation/interactor.hpp
  ../include/simploce/simulation/pair-list-generator.hpp
  ../include/simploce/simulation/pair-lists.hpp
- ../include/simploce/simulation/pair-potential.hpp
  ../include/simploce/simulation/pbc.hpp
  ../include/simploce/simulation/protonatable-particle-system-factory.hpp
  ../include/simploce/simulation/s-conf.hpp
  ../include/simploce/simulation/s-factory.hpp
  ../include/simploce/simulation/s-types.hpp
- ../include/simploce/simulation/sim-data.hpp
  /home/andre/wrk3/simploce/pt-cgmd/simulation/src/s-factory.cpp
  /localdisk/include/simploce/conf/u-conf.hpp
  /localdisk/include/simploce/particle/atom.hpp
  /localdisk/include/simploce/particle/atomistic.hpp
  /localdisk/include/simploce/particle/bead.hpp
- /localdisk/include/simploce/particle/bond.hpp
  /localdisk/include/simploce/particle/coarse-grained.hpp
  /localdisk/include/simploce/particle/p-conf.hpp
  /localdisk/include/simploce/particle/p-factory.hpp
@@ -266,6 +361,9 @@ CMakeFiles/simulation.dir/src/s-factory.cpp.o
  /localdisk/include/simploce/particle/particle-system-factory.hpp
  /localdisk/include/simploce/particle/particle-system.hpp
  /localdisk/include/simploce/particle/particle.hpp
+ /localdisk/include/simploce/particle/protonatable-bead.hpp
+ /localdisk/include/simploce/particle/protonatable-coarse-grained.hpp
+ /localdisk/include/simploce/particle/protonatable.hpp
  /localdisk/include/simploce/types/cvector_t.hpp
  /localdisk/include/simploce/types/u-types.hpp
  /localdisk/include/simploce/types/value_t.hpp
@@ -285,7 +383,6 @@ CMakeFiles/simulation.dir/src/s-properties.cpp.o
  /localdisk/include/simploce/conf/u-conf.hpp
  /localdisk/include/simploce/particle/atom.hpp
  /localdisk/include/simploce/particle/bead.hpp
- /localdisk/include/simploce/particle/bond.hpp
  /localdisk/include/simploce/particle/p-conf.hpp
  /localdisk/include/simploce/particle/p-properties.hpp
  /localdisk/include/simploce/particle/p-types.hpp

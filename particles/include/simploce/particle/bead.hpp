@@ -27,7 +27,8 @@ namespace simploce {
          * @param id Unique bead identifier.
          * @param index Sequential index.
          * @param name Bead name.
-         * @param spec Bead specification.
+         * @param spec Bead specification. Must -not- refer to a protonatable.
+         * @return Bead.
          */
         static bead_ptr_t create(const id_t& id,
                                  std::size_t index,
@@ -39,7 +40,7 @@ namespace simploce {
          * @param id Unique bead identifier.
          * @param index Sequential index.
          * @param name Bead name.
-         * @param spec Bead specification.
+         * @param spec Bead specification. Must -not- refer to a protonatable.
          */
         Bead(const id_t& id,
              std::size_t index,

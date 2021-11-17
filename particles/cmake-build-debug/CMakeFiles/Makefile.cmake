@@ -53,12 +53,10 @@ set(CMAKE_DEPEND_INFO_FILES
   "CMakeFiles/particles.dir/DependInfo.cmake"
   "apps/CMakeFiles/total-masses.dir/DependInfo.cmake"
   "tests/CMakeFiles/particle-spec-catalog-test.dir/DependInfo.cmake"
+  "tests/CMakeFiles/particle-system-factory-test.dir/DependInfo.cmake"
   "tests/CMakeFiles/read-cg-test.dir/DependInfo.cmake"
   "tests/CMakeFiles/particle-test.dir/DependInfo.cmake"
   "tests/CMakeFiles/coarse-grained-test.dir/DependInfo.cmake"
-  "tests/CMakeFiles/particle-system-factory-test.dir/DependInfo.cmake"
-  "tests/CMakeFiles/prot-site-catalog-test.dir/DependInfo.cmake"
-  "tests/CMakeFiles/protonation-site-test.dir/DependInfo.cmake"
   "tests/CMakeFiles/protonatable-bead-test.dir/DependInfo.cmake"
   "tests/CMakeFiles/protonatable-coarse-grained-test.dir/DependInfo.cmake"
   )

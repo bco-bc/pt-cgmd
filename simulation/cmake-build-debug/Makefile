@@ -359,6 +359,54 @@ src/forces.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/simulation.dir/build.make CMakeFiles/simulation.dir/src/forces.cpp.s
 .PHONY : src/forces.cpp.s
 
+src/halve-attractive-qp.o: src/halve-attractive-qp.cpp.o
+.PHONY : src/halve-attractive-qp.o
+
+# target to build an object file
+src/halve-attractive-qp.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/simulation.dir/build.make CMakeFiles/simulation.dir/src/halve-attractive-qp.cpp.o
+.PHONY : src/halve-attractive-qp.cpp.o
+
+src/halve-attractive-qp.i: src/halve-attractive-qp.cpp.i
+.PHONY : src/halve-attractive-qp.i
+
+# target to preprocess a source file
+src/halve-attractive-qp.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/simulation.dir/build.make CMakeFiles/simulation.dir/src/halve-attractive-qp.cpp.i
+.PHONY : src/halve-attractive-qp.cpp.i
+
+src/halve-attractive-qp.s: src/halve-attractive-qp.cpp.s
+.PHONY : src/halve-attractive-qp.s
+
+# target to generate assembly for a file
+src/halve-attractive-qp.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/simulation.dir/build.make CMakeFiles/simulation.dir/src/halve-attractive-qp.cpp.s
+.PHONY : src/halve-attractive-qp.cpp.s
+
+src/hp.o: src/hp.cpp.o
+.PHONY : src/hp.o
+
+# target to build an object file
+src/hp.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/simulation.dir/build.make CMakeFiles/simulation.dir/src/hp.cpp.o
+.PHONY : src/hp.cpp.o
+
+src/hp.i: src/hp.cpp.i
+.PHONY : src/hp.i
+
+# target to preprocess a source file
+src/hp.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/simulation.dir/build.make CMakeFiles/simulation.dir/src/hp.cpp.i
+.PHONY : src/hp.cpp.i
+
+src/hp.s: src/hp.cpp.s
+.PHONY : src/hp.s
+
+# target to generate assembly for a file
+src/hp.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/simulation.dir/build.make CMakeFiles/simulation.dir/src/hp.cpp.s
+.PHONY : src/hp.cpp.s
+
 src/interactor.o: src/interactor.cpp.o
 .PHONY : src/interactor.o
 
@@ -383,6 +431,54 @@ src/interactor.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/simulation.dir/build.make CMakeFiles/simulation.dir/src/interactor.cpp.s
 .PHONY : src/interactor.cpp.s
 
+src/lj-rf.o: src/lj-rf.cpp.o
+.PHONY : src/lj-rf.o
+
+# target to build an object file
+src/lj-rf.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/simulation.dir/build.make CMakeFiles/simulation.dir/src/lj-rf.cpp.o
+.PHONY : src/lj-rf.cpp.o
+
+src/lj-rf.i: src/lj-rf.cpp.i
+.PHONY : src/lj-rf.i
+
+# target to preprocess a source file
+src/lj-rf.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/simulation.dir/build.make CMakeFiles/simulation.dir/src/lj-rf.cpp.i
+.PHONY : src/lj-rf.cpp.i
+
+src/lj-rf.s: src/lj-rf.cpp.s
+.PHONY : src/lj-rf.s
+
+# target to generate assembly for a file
+src/lj-rf.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/simulation.dir/build.make CMakeFiles/simulation.dir/src/lj-rf.cpp.s
+.PHONY : src/lj-rf.cpp.s
+
+src/lj.o: src/lj.cpp.o
+.PHONY : src/lj.o
+
+# target to build an object file
+src/lj.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/simulation.dir/build.make CMakeFiles/simulation.dir/src/lj.cpp.o
+.PHONY : src/lj.cpp.o
+
+src/lj.i: src/lj.cpp.i
+.PHONY : src/lj.i
+
+# target to preprocess a source file
+src/lj.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/simulation.dir/build.make CMakeFiles/simulation.dir/src/lj.cpp.i
+.PHONY : src/lj.cpp.i
+
+src/lj.s: src/lj.cpp.s
+.PHONY : src/lj.s
+
+# target to generate assembly for a file
+src/lj.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/simulation.dir/build.make CMakeFiles/simulation.dir/src/lj.cpp.s
+.PHONY : src/lj.cpp.s
+
 src/no-bc.o: src/no-bc.cpp.o
 .PHONY : src/no-bc.o
 
@@ -406,6 +502,30 @@ src/no-bc.s: src/no-bc.cpp.s
 src/no-bc.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/simulation.dir/build.make CMakeFiles/simulation.dir/src/no-bc.cpp.s
 .PHONY : src/no-bc.cpp.s
+
+src/pair-lists.o: src/pair-lists.cpp.o
+.PHONY : src/pair-lists.o
+
+# target to build an object file
+src/pair-lists.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/simulation.dir/build.make CMakeFiles/simulation.dir/src/pair-lists.cpp.o
+.PHONY : src/pair-lists.cpp.o
+
+src/pair-lists.i: src/pair-lists.cpp.i
+.PHONY : src/pair-lists.i
+
+# target to preprocess a source file
+src/pair-lists.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/simulation.dir/build.make CMakeFiles/simulation.dir/src/pair-lists.cpp.i
+.PHONY : src/pair-lists.cpp.i
+
+src/pair-lists.s: src/pair-lists.cpp.s
+.PHONY : src/pair-lists.s
+
+# target to generate assembly for a file
+src/pair-lists.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/simulation.dir/build.make CMakeFiles/simulation.dir/src/pair-lists.cpp.s
+.PHONY : src/pair-lists.cpp.s
 
 src/pbc.o: src/pbc.cpp.o
 .PHONY : src/pbc.o
@@ -536,12 +656,27 @@ help:
 	@echo "... src/forces.o"
 	@echo "... src/forces.i"
 	@echo "... src/forces.s"
+	@echo "... src/halve-attractive-qp.o"
+	@echo "... src/halve-attractive-qp.i"
+	@echo "... src/halve-attractive-qp.s"
+	@echo "... src/hp.o"
+	@echo "... src/hp.i"
+	@echo "... src/hp.s"
 	@echo "... src/interactor.o"
 	@echo "... src/interactor.i"
 	@echo "... src/interactor.s"
+	@echo "... src/lj-rf.o"
+	@echo "... src/lj-rf.i"
+	@echo "... src/lj-rf.s"
+	@echo "... src/lj.o"
+	@echo "... src/lj.i"
+	@echo "... src/lj.s"
 	@echo "... src/no-bc.o"
 	@echo "... src/no-bc.i"
 	@echo "... src/no-bc.s"
+	@echo "... src/pair-lists.o"
+	@echo "... src/pair-lists.i"
+	@echo "... src/pair-lists.s"
 	@echo "... src/pbc.o"
 	@echo "... src/pbc.i"
 	@echo "... src/pbc.s"

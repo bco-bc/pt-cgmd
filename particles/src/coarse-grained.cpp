@@ -9,6 +9,8 @@
 #include "simploce/particle/bead.hpp"
 #include "simploce/particle/p-conf.hpp"
 #include "simploce/particle/particle-group.hpp"
+#include "simploce/particle/p-factory.hpp"
+#include "simploce/particle/bond.hpp"
 #include <vector>
 #include <utility>
 #include <memory>
@@ -24,32 +26,24 @@ namespace simploce {
     }
 
     CoarseGrained::CoarseGrained() :
-            ParticleSystem<Bead,bead_group_t>{} {
+        ParticleSystem{} {
     }
     
-    bead_ptr_t 
+    p_ptr_t
     CoarseGrained::addBead(const std::string& name,
                            const spec_ptr_t& spec) {
         return this->addParticle(name, spec);
     }
 
-    bead_group_ptr_t 
-    CoarseGrained::addBeadGroup(const std::vector<bead_ptr_t>& beads, 
-                                const std::vector<id_pair_t>& bonds) {
-        bead_group_ptr_t group = std::make_shared<ParticleGroup<Bead>>(beads, bonds);
-        this->addGroup(group);
-        return group;
-    }
-
-    std::size_t 
+    std::size_t
     CoarseGrained::numberOfBeads() const {
         return this->numberOfParticles();
     }
 
-    bead_ptr_t CoarseGrained::createParticle_(const id_t& id,
-                                              int index,
-                                              const std::string& name,
-                                              const spec_ptr_t& spec) {
+    p_ptr_t CoarseGrained::createParticle_(const id_t& id,
+                                           int index,
+                                           const std::string& name,
+                                           const spec_ptr_t& spec) {
         return Bead::create(id, index, name, spec);
     }
 

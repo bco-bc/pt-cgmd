@@ -16,19 +16,19 @@ using namespace simploce;
 
 void protonatableWater(const spec_catalog_ptr_t& catalog) {
     std::cout << "Creating coarse grained protonatable polarizable water model:" << std::endl;
-    auto factory = factory::protonatableParticleModelFactory(catalog);
+    auto factory = factory::protonatableParticleSystemFactory(catalog);
     box_ptr_t box = factory::box(length_t{7.27});
     auto cg = factory->protonatablePolarizableWater(box);
-    std::cout << cg << std::endl;
+    std::cout << *cg << std::endl;
     std::cout << std::endl;
 }
 
 void formicAcid(const spec_catalog_ptr_t& catalog) {
     std::cout << "Creating coarse grained HCOOH solution:" << std::endl;
-    auto factory = factory::protonatableParticleModelFactory(catalog);
+    auto factory = factory::protonatableParticleSystemFactory(catalog);
     box_ptr_t box = factory::box(length_t{7.27});
     auto cg = factory->formicAcid(box);
-    std::cout << cg << std::endl;
+    std::cout << *cg << std::endl;
     std::cout << std::endl;
 }
 

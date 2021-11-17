@@ -19,10 +19,11 @@ namespace simploce {
     class ProtonatableParticleSystemFactory;
     class Continuous;
     class Discrete;
-
-    // P is particle type, e.g. Atom or Bead.
-    template <typename P>
     class pair_lists_generator;
+    class Interactor;
+    class PairLists;
+    class pair_potential;
+    class Forces;
 
     // S is protonation state type, e.g. Discrete or Continuous.
     template <typename S>
@@ -31,13 +32,6 @@ namespace simploce {
     // S is protonation state type, e.g. Discrete or Continuous.
     template <typename S>
     class ProtonatableCoarseGrained;
-
-    // P is particle type, e.g. Atom or Bead.
-    template <typename P>
-    class Interactor;
-
-    template <typename P>
-    class PairLists;
 
     // Types.
 
@@ -68,16 +62,6 @@ namespace simploce {
     using sim_param_ptr_t = std::shared_ptr<sim_param_t>;
 
     /**
-     * Atom pair lists generator pointer type.
-     */
-    using atom_pair_lists_gen_ptr_t = std::shared_ptr<pair_lists_generator<Atom>>;
-
-    /**
-     * Bead pair lists generator pointer type.
-     */
-    using bead_pair_lists_gen_ptr_t = std::shared_ptr<pair_lists_generator<Bead>>;
-
-    /**
      * Protonatable coarse grained particle system.
     */
     using prot_cg_sys = ProtonatableCoarseGrained<Continuous>;
@@ -86,7 +70,7 @@ namespace simploce {
     /**
      * Protonatable coarse grained particle system pointer.
      */
-    using prot_cg_mod_ptr_t = std::shared_ptr<prot_cg_sys>;
+    using prot_cg_sys_ptr_t = std::shared_ptr<prot_cg_sys>;
 
     /**
      * Protonatable bead type.
@@ -104,16 +88,33 @@ namespace simploce {
      */
     using prot_p_sys_factory = std::shared_ptr<ProtonatableParticleSystemFactory>;
 
+    /**
+     * Pair list generator type.
+     */
+    using pair_list_gen_ptr_t = std::shared_ptr<pair_lists_generator>;
 
+    /**
+     * Force calculation pointer type.
+     */
+    using forces_ptr_t = std::shared_ptr<Forces>;
 
+    /**
+     * Pair potential pointer type.
+     */
+    using pair_potential_ptr_t = std::shared_ptr<pair_potential>;
 
+    /**
+     * Interactor pointer type.
+     */
+    using interactor_ptr_t = std::shared_ptr<Interactor>;
 
     // OLD
 
     //class CoarseGrainedForceField;
-    class CoarseGrainedDisplacer;
-    class AtomisticDisplacer;
-    class AtomisticForceField;
+    //class CoarseGrainedDisplacer;
+    //class AtomisticDisplacer;
+    //class AtomisticForceField;
+
     class SimulationModelFactory;
     class ProtonTransferPairListGenerator;
     class ProtonTransfer;
@@ -131,11 +132,11 @@ namespace simploce {
 
 
 
-    using cg_displacer_ptr_t = std::shared_ptr<CoarseGrainedDisplacer>;
+    //using cg_displacer_ptr_t = std::shared_ptr<CoarseGrainedDisplacer>;
     
-    using at_displacer_ptr_t = std::shared_ptr<AtomisticDisplacer>;
+    //using at_displacer_ptr_t = std::shared_ptr<AtomisticDisplacer>;
     
-    using at_ff_ptr_t = std::shared_ptr<AtomisticForceField>;
+    //using at_ff_ptr_t = std::shared_ptr<AtomisticForceField>;
     
     //using cg_ff_ptr_t = std::shared_ptr<CoarseGrainedForceField>;
     
@@ -146,12 +147,6 @@ namespace simploce {
     //using cg_interactor_t = Interactor<Bead>;
         
     //using cg_interactor_ptr_t = std::shared_ptr<cg_interactor_t>;
-    
-
-    /**
-     * Atom pair list generator type.
-     */
-    using at_ppair_list_gen_t = pair_lists_generator<Atom>;
     
 
     /**

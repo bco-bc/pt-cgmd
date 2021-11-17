@@ -10,6 +10,7 @@
 #include "simploce/particle/atomistic.hpp"
 #include "simploce/particle/p-factory.hpp"
 #include "simploce/particle/p-types.hpp"
+#include "simploce/util/util.hpp"
 #include <cstdlib>
 #include <iostream>
 #include <string>
@@ -22,8 +23,8 @@ using namespace simploce;
 
 void argon(const spec_catalog_ptr_t& catalog) {
     std::cout << "Creating liquid argon:" << std::endl;
-    particle_system_fact_ptr_t factory = factory::particleModelFactory(catalog);
-    box_ptr_t box = factory::box(length_t{3.47786});
+    auto factory = factory::particleModelFactory(catalog);
+    auto box = factory::box(length_t{3.47786});
     auto argon = factory->argon(box);
     std::cout << *argon << std::endl;
     std::cout << std::endl;
@@ -40,7 +41,7 @@ void diatomic(const spec_catalog_ptr_t& catalog) {
 
 void coarseGrainedPolarizableWater(const spec_catalog_ptr_t& catalog) {
     std::cout << "Creating coarse grained polarizable water model:" << std::endl;
-    particle_system_fact_ptr_t factory = factory::particleModelFactory(catalog);
+    auto factory = factory::particleModelFactory(catalog);
     box_ptr_t box = factory::box(length_t{7.27});
     auto coarseGrained = factory->polarizableWater(box);
     std::cout << *coarseGrained << std::endl;
@@ -54,7 +55,7 @@ void electrolyteSolution(const spec_catalog_ptr_t& catalog) {
     auto electrolyte = factory->simpleElectrolyte(box);
     std::cout << *electrolyte << std::endl;
     std::cout << "Number of Na+: ";
-    std::cout << boost::lexical_cast<std::string>(electrolyte->numberOfSpecifications(catalog->lookup("Na+")));
+    std::cout << util::toString(electrolyte->numberOfSpecifications(catalog->lookup("Na+")));
     std::cout << std::endl;
 }
 
@@ -67,8 +68,8 @@ int main() {
 
     //diatomic(catalog);
     //argon(catalog);
-    //electrolyteSolution(catalog);
-    coarseGrainedPolarizableWater(catalog);
+    electrolyteSolution(catalog);
+    //coarseGrainedPolarizableWater(catalog);
 
     return (EXIT_SUCCESS);
 }

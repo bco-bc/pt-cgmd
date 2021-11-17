@@ -35,10 +35,10 @@ void test1() {
             ParticleSpec::create("H", 0.5, 1.0, 1.0, false, "H protonated");
 
     // Atoms.
-    atom_ptr_t atom1 = atomistic.addAtom("O", O_p);
-    atom_ptr_t atom2 = atomistic.addAtom("H", H_p);
+    auto atom1 = atomistic.addAtom("O", O_p);
+    auto atom2 = atomistic.addAtom("H", H_p);
 
-    std::vector<atom_ptr_t> atoms{atom1, atom2};
+    std::vector<p_ptr_t> atoms{atom1, atom2};
     std::vector<spec_ptr_t> deprotonated{O_dp, H_dp};
     std::vector<spec_ptr_t> protonated{O_p, H_p};
 

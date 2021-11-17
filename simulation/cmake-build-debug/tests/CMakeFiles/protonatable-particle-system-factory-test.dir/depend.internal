@@ -3,8 +3,6 @@
 
 tests/CMakeFiles/protonatable-particle-system-factory-test.dir/protonatable-particle-system-factory-test.cpp.o
  ../include/simploce/simulation/continuous.hpp
- ../include/simploce/simulation/force-field.hpp
- ../include/simploce/simulation/pair-lists.hpp
  ../include/simploce/simulation/protonatable-particle-system-factory.hpp
  ../include/simploce/simulation/s-factory.hpp
  ../include/simploce/simulation/s-types.hpp
@@ -12,7 +10,6 @@ tests/CMakeFiles/protonatable-particle-system-factory-test.dir/protonatable-part
  /localdisk/include/simploce/conf/u-conf.hpp
  /localdisk/include/simploce/particle/atom.hpp
  /localdisk/include/simploce/particle/bead.hpp
- /localdisk/include/simploce/particle/bond.hpp
  /localdisk/include/simploce/particle/coarse-grained.hpp
  /localdisk/include/simploce/particle/p-conf.hpp
  /localdisk/include/simploce/particle/p-factory.hpp
@@ -33,7 +30,5 @@ tests/CMakeFiles/protonatable-particle-system-factory-test.dir/protonatable-part
  /localdisk/include/simploce/util/box.hpp
  /localdisk/include/simploce/util/cube.hpp
  /localdisk/include/simploce/util/logger.hpp
- /localdisk/include/simploce/util/map.hpp
- /localdisk/include/simploce/util/map2.hpp
  /localdisk/include/simploce/util/param.hpp
  /localdisk/include/simploce/util/util.hpp

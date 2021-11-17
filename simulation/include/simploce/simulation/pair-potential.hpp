@@ -8,7 +8,6 @@
 #define SIMULATION_PAIR_POTENTIAL_HPP
 
 #include "s-types.hpp"
-#include <memory>
 
 namespace simploce {
 
@@ -16,10 +15,7 @@ namespace simploce {
      * Interaction potential between two particles.
      * @tparam P Particle type.
      */
-    template <typename P>
     struct pair_potential {
-
-        using p_ptr_t = std::shared_ptr<P>;
 
         /**
          * Returns potential energy and the force due to an interaction between two particles.

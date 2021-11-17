@@ -21,7 +21,7 @@ namespace simploce {
          * Constructor
          * @param catalog Particle specifications catalog.
          */
-        explicit ParticleSystemFactory(const spec_catalog_ptr_t& catalog);
+        explicit ParticleSystemFactory(spec_catalog_ptr_t  catalog);
 
         /**
          * Create a diatomic molecule consisting of two identical atom type (e.g. O).
@@ -85,26 +85,14 @@ namespace simploce {
 
     protected:
 
+        velocity_t generateVelocity_(const temperature_t& temperature);
+
         /**
          * Returns particle specification catalog.
          * @return Catalog
          */
-        spec_catalog_ptr_t catalog();
+        spec_catalog_ptr_t& catalog();
 
-        /**
-         * Assigns/sets the velocity of the given atom according to the given temperature.
-         * @param atom Atom.
-         * @param temperature Temperature.
-         */
-        static void assignVelocity(atom_ptr_t& atom, const temperature_t& temperature);
-
-        /**
-         * Assigns/sets the velocity of the given bead according to the given temperature.
-         * @param bead bead.
-         * @param temperature Temperature.
-         */
-        static void assignVelocity(bead_ptr_t& bead, const temperature_t& temperature);
-        
     private:
         
         spec_catalog_ptr_t catalog_;

@@ -13,9 +13,10 @@ include_directories(${CMAKE_INSTALL_PREFIX}/include SYSTEM)
 
 add_library(particles SHARED
         src/atom.cpp src/atomistic.cpp src/bead.cpp src/coarse-grained.cpp
-        src/particle.cpp src/particle-system-factory.cpp src/particle-spec.cpp
-        src/particle-spec-catalog.cpp src/p-factory.cpp
-        src/protonation-site-catalog.cpp)
+        src/particle.cpp src/particle-system.cpp src/particle-group.cpp src/bond.cpp
+        src/particle-system-factory.cpp src/p-factory.cpp
+        src/particle-spec.cpp src/particle-spec-catalog.cpp
+        src/p-util.cpp)
 
 add_subdirectory(apps)
 add_subdirectory(tests)

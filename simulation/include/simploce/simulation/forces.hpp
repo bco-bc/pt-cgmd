@@ -8,12 +8,11 @@
 #define SIMULATION_FORCES_HPP
 
 #include "s-types.hpp"
-#include "pair-potential.hpp"
 
 namespace simploce {
 
     /**
-     * Computes forces on particles.
+     * Force calculator. Computes forces on particles.
      */
     class Forces {
     public:
@@ -26,17 +25,11 @@ namespace simploce {
          */
         Forces(box_ptr_t box, bc_ptr_t bc, ff_ptr_t forceField);
 
-        energy_t nonBonded(const std::vector<atom_ptr_t> &all,
-                           const PairLists<Atom> &pairLists);
+        energy_t nonBonded(const std::vector<p_ptr_t> &all,
+                           const PairLists &pairLists);
 
-        energy_t bonded(const std::vector<atom_ptr_t> &all,
-                        const std::vector<std::shared_ptr<ParticleGroup<Atom>>> &groups);
-
-        energy_t nonBonded(const std::vector<bead_ptr_t> &all,
-                           const PairLists<Bead> &pairLists);
-
-        energy_t bonded(const std::vector<bead_ptr_t> &all,
-                        const std::vector<std::shared_ptr<ParticleGroup<Bead>>> &groups);
+        energy_t bonded(const std::vector<p_ptr_t> &all,
+                        const std::vector<pg_ptr_t> &groups);
 
     private:
 

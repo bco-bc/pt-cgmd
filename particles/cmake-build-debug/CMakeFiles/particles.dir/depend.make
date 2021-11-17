@@ -16,15 +16,8 @@ CMakeFiles/particles.dir/src/atom.cpp.o: \
 CMakeFiles/particles.dir/src/atomistic.cpp.o: \
  ../include/simploce/particle/atom.hpp \
  ../include/simploce/particle/atomistic.hpp \
- ../include/simploce/particle/bead.hpp \
- ../include/simploce/particle/bond.hpp \
- ../include/simploce/particle/p-conf.hpp \
  ../include/simploce/particle/p-factory.hpp \
- ../include/simploce/particle/p-properties.hpp \
  ../include/simploce/particle/p-types.hpp \
- ../include/simploce/particle/particle-group.hpp \
- ../include/simploce/particle/particle-spec-catalog.hpp \
- ../include/simploce/particle/particle-spec.hpp \
  ../include/simploce/particle/particle-system.hpp \
  ../include/simploce/particle/particle.hpp \
  ../src/atomistic.cpp \
@@ -33,12 +26,11 @@ CMakeFiles/particles.dir/src/atomistic.cpp.o: \
  /localdisk/include/simploce/types/u-types.hpp \
  /localdisk/include/simploce/types/value_t.hpp \
  /localdisk/include/simploce/util/box.hpp \
- /localdisk/include/simploce/util/cube.hpp \
- /localdisk/include/simploce/util/logger.hpp \
- /localdisk/include/simploce/util/util.hpp
+ /localdisk/include/simploce/util/cube.hpp
 CMakeFiles/particles.dir/src/bead.cpp.o: \
  ../include/simploce/particle/bead.hpp \
  ../include/simploce/particle/p-types.hpp \
+ ../include/simploce/particle/particle-spec.hpp \
  ../include/simploce/particle/particle.hpp \
  ../src/bead.cpp \
  /localdisk/include/simploce/conf/u-conf.hpp \
@@ -46,19 +38,28 @@ CMakeFiles/particles.dir/src/bead.cpp.o: \
  /localdisk/include/simploce/types/u-types.hpp \
  /localdisk/include/simploce/types/value_t.hpp \
  /localdisk/include/simploce/util/box.hpp \
+ /localdisk/include/simploce/util/cube.hpp \
+ /localdisk/include/simploce/util/logger.hpp \
+ /localdisk/include/simploce/util/util.hpp
+CMakeFiles/particles.dir/src/bond.cpp.o: \
+ ../include/simploce/particle/bond.hpp \
+ ../include/simploce/particle/p-types.hpp \
+ ../include/simploce/particle/particle.hpp \
+ ../src/bond.cpp \
+ /localdisk/include/simploce/conf/u-conf.hpp \
+ /localdisk/include/simploce/types/cvector_t.hpp \
+ /localdisk/include/simploce/types/u-types.hpp \
+ /localdisk/include/simploce/types/value_t.hpp \
+ /localdisk/include/simploce/util/box.hpp \
  /localdisk/include/simploce/util/cube.hpp
 CMakeFiles/particles.dir/src/coarse-grained.cpp.o: \
- ../include/simploce/particle/atom.hpp \
  ../include/simploce/particle/bead.hpp \
  ../include/simploce/particle/bond.hpp \
  ../include/simploce/particle/coarse-grained.hpp \
  ../include/simploce/particle/p-conf.hpp \
  ../include/simploce/particle/p-factory.hpp \
- ../include/simploce/particle/p-properties.hpp \
  ../include/simploce/particle/p-types.hpp \
  ../include/simploce/particle/particle-group.hpp \
- ../include/simploce/particle/particle-spec-catalog.hpp \
- ../include/simploce/particle/particle-spec.hpp \
  ../include/simploce/particle/particle-system.hpp \
  ../include/simploce/particle/particle.hpp \
  ../src/coarse-grained.cpp \
@@ -67,25 +68,15 @@ CMakeFiles/particles.dir/src/coarse-grained.cpp.o: \
  /localdisk/include/simploce/types/u-types.hpp \
  /localdisk/include/simploce/types/value_t.hpp \
  /localdisk/include/simploce/util/box.hpp \
- /localdisk/include/simploce/util/cube.hpp \
- /localdisk/include/simploce/util/logger.hpp \
- /localdisk/include/simploce/util/util.hpp
+ /localdisk/include/simploce/util/cube.hpp
 CMakeFiles/particles.dir/src/p-factory.cpp.o: \
- ../include/simploce/particle/atom.hpp \
  ../include/simploce/particle/atomistic.hpp \
- ../include/simploce/particle/bead.hpp \
- ../include/simploce/particle/bond.hpp \
  ../include/simploce/particle/coarse-grained.hpp \
- ../include/simploce/particle/p-conf.hpp \
  ../include/simploce/particle/p-factory.hpp \
- ../include/simploce/particle/p-properties.hpp \
  ../include/simploce/particle/p-types.hpp \
- ../include/simploce/particle/particle-group.hpp \
  ../include/simploce/particle/particle-spec-catalog.hpp \
- ../include/simploce/particle/particle-spec.hpp \
  ../include/simploce/particle/particle-system-factory.hpp \
  ../include/simploce/particle/particle-system.hpp \
- ../include/simploce/particle/particle.hpp \
  ../src/p-factory.cpp \
  /localdisk/include/simploce/conf/u-conf.hpp \
  /localdisk/include/simploce/types/cvector_t.hpp \
@@ -93,7 +84,38 @@ CMakeFiles/particles.dir/src/p-factory.cpp.o: \
  /localdisk/include/simploce/types/value_t.hpp \
  /localdisk/include/simploce/util/box.hpp \
  /localdisk/include/simploce/util/cube.hpp \
- /localdisk/include/simploce/util/file.hpp \
+ /localdisk/include/simploce/util/file.hpp
+CMakeFiles/particles.dir/src/p-util.cpp.o: \
+ ../include/simploce/particle/p-types.hpp \
+ ../include/simploce/particle/p-util.hpp \
+ ../include/simploce/particle/particle.hpp \
+ ../src/p-util.cpp \
+ /localdisk/include/simploce/conf/u-conf.hpp \
+ /localdisk/include/simploce/types/cvector_t.hpp \
+ /localdisk/include/simploce/types/u-types.hpp \
+ /localdisk/include/simploce/types/value_t.hpp \
+ /localdisk/include/simploce/units/units-mu.hpp \
+ /localdisk/include/simploce/units/units-si.hpp \
+ /localdisk/include/simploce/util/box.hpp \
+ /localdisk/include/simploce/util/cube.hpp \
+ /localdisk/include/simploce/util/logger.hpp \
+ /localdisk/include/simploce/util/math-constants.hpp \
+ /localdisk/include/simploce/util/util.hpp
+CMakeFiles/particles.dir/src/particle-group.cpp.o: \
+ ../include/simploce/particle/atom.hpp \
+ ../include/simploce/particle/bead.hpp \
+ ../include/simploce/particle/bond.hpp \
+ ../include/simploce/particle/p-properties.hpp \
+ ../include/simploce/particle/p-types.hpp \
+ ../include/simploce/particle/particle-group.hpp \
+ ../include/simploce/particle/particle.hpp \
+ ../src/particle-group.cpp \
+ /localdisk/include/simploce/conf/u-conf.hpp \
+ /localdisk/include/simploce/types/cvector_t.hpp \
+ /localdisk/include/simploce/types/u-types.hpp \
+ /localdisk/include/simploce/types/value_t.hpp \
+ /localdisk/include/simploce/util/box.hpp \
+ /localdisk/include/simploce/util/cube.hpp \
  /localdisk/include/simploce/util/logger.hpp \
  /localdisk/include/simploce/util/util.hpp
 CMakeFiles/particles.dir/src/particle-spec-catalog.cpp.o: \
@@ -121,15 +143,12 @@ CMakeFiles/particles.dir/src/particle-spec.cpp.o: \
  /localdisk/include/simploce/util/box.hpp \
  /localdisk/include/simploce/util/cube.hpp
 CMakeFiles/particles.dir/src/particle-system-factory.cpp.o: \
- ../include/simploce/particle/atom.hpp \
  ../include/simploce/particle/atomistic.hpp \
  ../include/simploce/particle/bead.hpp \
- ../include/simploce/particle/bond.hpp \
  ../include/simploce/particle/coarse-grained.hpp \
- ../include/simploce/particle/p-conf.hpp \
  ../include/simploce/particle/p-factory.hpp \
- ../include/simploce/particle/p-properties.hpp \
  ../include/simploce/particle/p-types.hpp \
+ ../include/simploce/particle/p-util.hpp \
  ../include/simploce/particle/particle-group.hpp \
  ../include/simploce/particle/particle-spec-catalog.hpp \
  ../include/simploce/particle/particle-spec.hpp \
@@ -148,26 +167,9 @@ CMakeFiles/particles.dir/src/particle-system-factory.cpp.o: \
  /localdisk/include/simploce/util/logger.hpp \
  /localdisk/include/simploce/util/math-constants.hpp \
  /localdisk/include/simploce/util/util.hpp
-CMakeFiles/particles.dir/src/particle.cpp.o: \
- ../include/simploce/particle/p-conf.hpp \
- ../include/simploce/particle/p-types.hpp \
- ../include/simploce/particle/particle-spec.hpp \
- ../include/simploce/particle/particle.hpp \
- ../src/particle.cpp \
- /localdisk/include/simploce/conf/u-conf.hpp \
- /localdisk/include/simploce/types/cvector_t.hpp \
- /localdisk/include/simploce/types/u-types.hpp \
- /localdisk/include/simploce/types/value_t.hpp \
- /localdisk/include/simploce/util/box.hpp \
- /localdisk/include/simploce/util/cube.hpp \
- /localdisk/include/simploce/util/logger.hpp \
- /localdisk/include/simploce/util/util.hpp
-CMakeFiles/particles.dir/src/protonation-site-catalog.cpp.o: \
+CMakeFiles/particles.dir/src/particle-system.cpp.o: \
  ../include/simploce/particle/atom.hpp \
- ../include/simploce/particle/atomistic.hpp \
  ../include/simploce/particle/bead.hpp \
- ../include/simploce/particle/bond.hpp \
- ../include/simploce/particle/coarse-grained.hpp \
  ../include/simploce/particle/p-conf.hpp \
  ../include/simploce/particle/p-factory.hpp \
  ../include/simploce/particle/p-properties.hpp \
@@ -177,10 +179,21 @@ CMakeFiles/particles.dir/src/protonation-site-catalog.cpp.o: \
  ../include/simploce/particle/particle-spec.hpp \
  ../include/simploce/particle/particle-system.hpp \
  ../include/simploce/particle/particle.hpp \
- ../include/simploce/particle/protonatable.hpp \
- ../include/simploce/particle/protonation-site-catalog.hpp \
- ../include/simploce/particle/protonation-site.hpp \
- ../src/protonation-site-catalog.cpp \
+ ../src/particle-system.cpp \
+ /localdisk/include/simploce/conf/u-conf.hpp \
+ /localdisk/include/simploce/types/cvector_t.hpp \
+ /localdisk/include/simploce/types/u-types.hpp \
+ /localdisk/include/simploce/types/value_t.hpp \
+ /localdisk/include/simploce/util/box.hpp \
+ /localdisk/include/simploce/util/cube.hpp \
+ /localdisk/include/simploce/util/logger.hpp \
+ /localdisk/include/simploce/util/util.hpp
+CMakeFiles/particles.dir/src/particle.cpp.o: \
+ ../include/simploce/particle/p-conf.hpp \
+ ../include/simploce/particle/p-types.hpp \
+ ../include/simploce/particle/particle-spec.hpp \
+ ../include/simploce/particle/particle.hpp \
+ ../src/particle.cpp \
  /localdisk/include/simploce/conf/u-conf.hpp \
  /localdisk/include/simploce/types/cvector_t.hpp \
  /localdisk/include/simploce/types/u-types.hpp \

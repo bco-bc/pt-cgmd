@@ -8,7 +8,6 @@
 #define S_FACTORY_HPP
 
 #include "s-types.hpp"
-#include "force-field.hpp"
 #include "simploce/particle/p-factory.hpp"
 
 
@@ -36,25 +35,14 @@ namespace simploce {
         sim_param_ptr_t simulationParameters();
 
         /**
-         * Returns pair lists generator for beads.
+         * Returns pair lists generator.
          * @param box Simulation box.
          * @param bc Boundary condition.
          * @return Pair lists generator.
          */
-        bead_pair_lists_gen_ptr_t pairListsGeneratorForBeads(const box_ptr_t &box,
-                                                             const bc_ptr_t &bc);
+        pair_list_gen_ptr_t pairListsGenerator(const box_ptr_t &box,
+                                               const bc_ptr_t &bc);
 
-        /**
-         * Returns pair lists generator for atoms.
-         * @param box Simulation box.
-         * @param bc Boundary condition.
-         * @return Pair lists generator.
-         */
-        atom_pair_lists_gen_ptr_t pairListsGeneratorForAtoms(const box_ptr_t &box,
-                                                             const bc_ptr_t &bc);
-
-
-        
         /**
          * Returns coarse grained force field for harmonic potential 
          * applicable to bonds between beads. 
@@ -126,10 +114,19 @@ namespace simploce {
          */
 
         /**
-         * Returns factory for creating protonatable particle models.
+         * Returns factory for creating protonatable particle systems.
          * @return Factory.
          */
-        prot_p_sys_factory protonatableParticleModelFactory(const spec_catalog_ptr_t& catalog);
+        prot_p_sys_factory protonatableParticleSystemFactory(const spec_catalog_ptr_t& catalog);
+
+        /**
+         * Returns an interactor.
+         * @return Interactor.
+         */
+        interactor_ptr_t interactor(const sim_param_ptr_t& simulationParameters,
+                                    const ff_ptr_t& forceField,
+                                    const box_ptr_t &box,
+                                    const bc_ptr_t &bc);
         
         /**
          * Returns simulation model factory.
@@ -304,6 +301,21 @@ namespace simploce {
         pt_displacer_ptr_t 
         protonTransferDisplacer();
          */
+
+        /**
+         * Returns a protonatable coarse-grained particle system
+         * @return Particle system.
+         */
+        prot_cg_sys_ptr_t protonatableCoarseGrained();
+
+        /**
+         * Returns force calculator.
+         * @param box Simulation box.
+         * @param bc Boundary condition.
+         * @param forceField Force field.
+         * @return Force calculator.
+         */
+        forces_ptr_t forces(const box_ptr_t& box, const bc_ptr_t& bc, const ff_ptr_t& forceField);
         
     }
 }

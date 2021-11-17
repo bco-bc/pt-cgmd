@@ -1,5 +1,4 @@
 /*
- * File:   coarse-grained.hpp
  * Author: André H. Juffer, Biocenter Oulu.
  *
  * Created on August 7, 2019, 2:34 PM
@@ -16,7 +15,7 @@ namespace simploce {
     /**
      * A particle system composed of regular non-protonatable beads.
      */
-    class CoarseGrained : public ParticleSystem<Bead, bead_group_t> {
+    class CoarseGrained : public ParticleSystem {
     public:
 
         /**
@@ -40,19 +39,9 @@ namespace simploce {
          * @param spec Bead specification.
          * @return Newly created bead.
          */
-        bead_ptr_t addBead(const std::string& name,
-                           const spec_ptr_t& spec);
+        p_ptr_t addBead(const std::string& name,
+                        const spec_ptr_t& spec);
 
-        /**
-         * Adds a bead group with bonds to this physical system. All arguments are required.
-         * @param beads Beads forming a bead group. Each of these beads must already
-         * be present in this particle model.
-         * @param bonds Bonds between beads, given as pairs of bead identifiers.
-         * @return Bead group added.
-         */
-        bead_group_ptr_t addBeadGroup(const std::vector<bead_ptr_t>& beads, 
-                                      const std::vector<id_pair_t>& bonds);
-        
         /**
          * Returns number of beads.
          * @return Number.
@@ -61,10 +50,10 @@ namespace simploce {
 
     private:
 
-        bead_ptr_t createParticle_(const id_t& id,
-                                   int index,
-                                   const std::string& name,
-                                   const spec_ptr_t& spec) override;
+        p_ptr_t createParticle_(const id_t& id,
+                                int index,
+                                const std::string& name,
+                                const spec_ptr_t& spec) override;
 
         friend class ParticleSystemFactory;
 

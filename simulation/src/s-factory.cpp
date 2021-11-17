@@ -5,6 +5,9 @@
  */
 
 #include "simploce/simulation/s-factory.hpp"
+#include "simploce/simulation/continuous.hpp"
+#include "simploce/simulation/force-field.hpp"
+#include "simploce/simulation/forces.hpp"
 // #include "simploce/simulation/cg-pol-water.hpp"
 // #include "simploce/simulation/acid-base-solution.hpp"
 // #include "simploce/simulation/cg-electrolyte.hpp"
@@ -31,6 +34,8 @@
 #include "simploce/particle/atomistic.hpp"
 #include "simploce/particle/coarse-grained.hpp"
 #include "simploce/particle/p-factory.hpp"
+#include "simploce/particle/protonatable-coarse-grained.hpp"
+
 #include <memory>
 #include <stdexcept>
 
@@ -46,7 +51,10 @@ namespace simploce {
          */
         
         // Force fields.
-        static ff_ptr_t forceField_{};                   // Force field.
+        static ff_ptr_t forceField_{};
+
+        // Force calculator.
+        static forces_ptr_t forces_{};
 
         //static cg_ff_ptr_t cgPolWaterFF_{};             // Polarizable water.
         //static cg_ff_ptr_t cgFormicAcidSolutionFF_{};   // Formic acid in water.
@@ -55,26 +63,27 @@ namespace simploce {
         //static cg_ff_ptr_t cgHPFF_;                      // Harmonic potentials.
         
         // Pair lists generators.
-        static bead_pair_lists_gen_ptr_t beadPairlistsGen_{};
-        static atom_pair_lists_gen_ptr_t atomPairListsGen_{};
+        //static bead_pair_lists_gen_ptr_t beadPairlistsGen_{};
+        // static atom_pair_lists_gen_ptr_t atomPairListsGen_{};
+        static pair_list_gen_ptr_t pairListsGenerator_{};
 
         // Simulation parameters.
         static sim_param_ptr_t simulationParameters_{};
         
         // Leap Frog
-        static at_displacer_ptr_t atLeapFrog_{};
-        static cg_displacer_ptr_t cgLeapFrog_{};
+        //static at_displacer_ptr_t atLeapFrog_{};
+        //static cg_displacer_ptr_t cgLeapFrog_{};
         
         // Velocity Verlet
-        static at_displacer_ptr_t atVV_{};
-        static cg_displacer_ptr_t cgVV_{};
+        //static at_displacer_ptr_t atVV_{};
+        //static cg_displacer_ptr_t cgVV_{};
         
         // Langevin Velocity Verlet
-        static at_displacer_ptr_t atLVV_{};
-        static cg_displacer_ptr_t cgLVV_{};
+        //static at_displacer_ptr_t atLVV_{};
+        //static cg_displacer_ptr_t cgLVV_{};
         
         // Langevin Proton Transfer Langevin Velocity Verlet
-        static cg_displacer_ptr_t cgPTLVV_{};
+        //static cg_displacer_ptr_t cgPTLVV_{};
 
         // Protonatable particle model factory.
         static prot_p_sys_factory protonatableParticleModelFactory_{};
@@ -85,12 +94,13 @@ namespace simploce {
         // Boundary conditions.
         static bc_ptr_t pbc_{};
         
-        // Interactors.
-        static std::shared_ptr<Interactor<Bead>> cgPolWaterInteractor_{};
-        static std::shared_ptr<Interactor<Bead>> cgFormicAcidSolutionInteractor_{};
-        static std::shared_ptr<Interactor<Bead>> cgElectrolyteInteractor_{};
-        static std::shared_ptr<Interactor<Bead>> cgLJFluidInteractor_{};
-        static std::shared_ptr<Interactor<Bead>> cgHPInteractor_;
+        // Interactor.
+        static interactor_ptr_t interactor_{};
+        //static std::shared_ptr<Interactor<Bead>> cgPolWaterInteractor_{};
+        //static std::shared_ptr<Interactor<Bead>> cgFormicAcidSolutionInteractor_{};
+        //static std::shared_ptr<Interactor<Bead>> cgElectrolyteInteractor_{};
+        //static std::shared_ptr<Interactor<Bead>> cgLJFluidInteractor_{};
+        //static std::shared_ptr<Interactor<Bead>> cgHPInteractor_;
         
         static prot_pair_list_gen_ptr_t ptPairlisGen_{};
         
@@ -123,20 +133,12 @@ namespace simploce {
             return simulationParameters_;
         }
 
-        bead_pair_lists_gen_ptr_t pairListsGeneratorForBeads(const box_ptr_t &box,
-                                                             const bc_ptr_t &bc) {
-            if ( !beadPairlistsGen_ ) {
-                beadPairlistsGen_ = std::make_shared<DistancePairListGenerator<Bead>>(box, bc);
+        pair_list_gen_ptr_t pairListsGenerator(const box_ptr_t &box,
+                                                const bc_ptr_t &bc) {
+            if ( !pairListsGenerator_ ) {
+                pairListsGenerator_ = std::make_shared<DistancePairListGenerator>(box, bc);
             }
-            return beadPairlistsGen_;
-        }
-
-        atom_pair_lists_gen_ptr_t pairListsGeneratorForAtoms(const box_ptr_t &box,
-                                                             const bc_ptr_t &bc) {
-            if ( !atomPairListsGen_ ) {
-                atomPairListsGen_ = std::make_shared<DistancePairListGenerator<Atom>>(box, bc);
-            }
-            return atomPairListsGen_;
+            return pairListsGenerator_;
         }
 
         /*
@@ -209,13 +211,14 @@ namespace simploce {
         }
         */
 
-        prot_p_sys_factory protonatableParticleModelFactory(const spec_catalog_ptr_t& catalog) {
+        prot_p_sys_factory protonatableParticleSystemFactory(const spec_catalog_ptr_t& catalog) {
             if ( !protonatableParticleModelFactory_ ) {
                 protonatableParticleModelFactory_ =
                         std::make_shared<ProtonatableParticleSystemFactory>(catalog);
             }
             return protonatableParticleModelFactory_;
         }
+
 
         /*
         sim_model_fact_ptr_t 
@@ -308,7 +311,7 @@ namespace simploce {
         {
             if ( !cgLJFluidInteractor_ ) {
                 bead_pair_lists_gen_ptr_t generator =
-                    factory::pairListsGeneratorForBeads(box, bc);
+                    factory::pairListsGenerator(box, bc);
                 cg_ff_ptr_t forcefield =
                     factory::ljFluidForceField(catalog, bc, box);
                 cgLJFluidInteractor_ =
@@ -443,5 +446,33 @@ namespace simploce {
             return constantRate_;
         }
         */
+        interactor_ptr_t interactor(const sim_param_ptr_t& simulationParameters,
+                                    const ff_ptr_t& forceField,
+                                    const box_ptr_t &box,
+                                    const bc_ptr_t &bc) {
+            if ( !interactor_ ) {
+                auto pairListGenerator = factory::pairListsGenerator(box, bc);
+                auto forces = factory::forces(box, bc, forceField);
+                interactor_ = std::make_shared<Interactor>(simulationParameters,
+                                                           forceField,
+                                                           pairListGenerator,
+                                                           forces,
+                                                           box,
+                                                           bc);
+            }
+            return interactor_;
+        }
+
+
+        prot_cg_sys_ptr_t protonatableCoarseGrained() {
+            return std::make_shared<prot_cg_sys>();
+        }
+
+        forces_ptr_t forces(const box_ptr_t& box, const bc_ptr_t& bc, const ff_ptr_t& forceField) {
+            if ( !forces_ ) {
+                forces_ = std::make_shared<Forces>(box, bc, forceField);
+            }
+            return forces_;
+        }
     }
 }

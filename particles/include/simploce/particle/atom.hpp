@@ -28,8 +28,8 @@ namespace simploce {
          * @param id Unique atom identifier.
          * @param index Sequential index.
          * @param name Atom name.
-         * @param spec Atom specification.
-         * @return
+         * @param spec Atom specification. Must -not- refer to a protonatable.
+         * @return Atom.
          */
         static atom_ptr_t create(const id_t& id,
                                  std::size_t index,
@@ -41,7 +41,7 @@ namespace simploce {
          * @param id Unique atom identifier.
          * @param index Sequential index.
          * @param name Atom name.
-         * @param spec Atom specification.
+         * @param spec Atom specification. Must -not- refer to a protonatable.
          */
         Atom(const id_t& id,
              std::size_t index,

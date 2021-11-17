@@ -23,7 +23,7 @@ void test1() {
     Atomistic atomistic;
 
     util::open_input_file(stream, "/localdisk/resources/protonation-sites.dat");
-    prot_site_catalog_ptr_t catalog = ProtonationSiteCatalog::create(stream);
+    auto catalog = ProtonationSiteCatalog::create(stream);
     std::cout << *catalog << std::endl;
     stream.close();
     
@@ -38,17 +38,17 @@ void test1() {
 
     
     // COOH
-    atom_ptr_t C = atomistic.addAtom("C", specC);
-    atom_ptr_t O1 = atomistic.addAtom("O1", specO);
-    atom_ptr_t O2 = atomistic.addAtom("O2", specO);
-    atom_ptr_t H = atomistic.addAtom("H", specH);
+    auto C = atomistic.addAtom("C", specC);
+    auto O1 = atomistic.addAtom("O1", specO);
+    auto O2 = atomistic.addAtom("O2", specO);
+    auto H = atomistic.addAtom("H", specH);
     
     // NH4
-    atom_ptr_t N = atomistic.addAtom("N", specN);
-    atom_ptr_t H1 = atomistic.addAtom("H1", specH);
-    atom_ptr_t H2 = atomistic.addAtom("H2", specH);
-    atom_ptr_t H3 = atomistic.addAtom("H3", specH);
-    atom_ptr_t H4 = atomistic.addAtom("H4", specH);
+    auto N = atomistic.addAtom("N", specN);
+    auto H1 = atomistic.addAtom("H1", specH);
+    auto H2 = atomistic.addAtom("H2", specH);
+    auto H3 = atomistic.addAtom("H3", specH);
+    auto H4 = atomistic.addAtom("H4", specH);
 
     std::cout << "Number of atoms: " << atomistic.numberOfParticles() << std::endl;
     

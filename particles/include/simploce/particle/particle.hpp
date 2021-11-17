@@ -155,8 +155,7 @@ namespace simploce {
         void index(size_t index) { index_ = index; }
                         
     private:
-        
-        template <typename P, typename PG>
+
         friend class ParticleSystem;
 
         template <typename P>

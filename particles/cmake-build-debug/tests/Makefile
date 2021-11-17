@@ -77,6 +77,28 @@ install/local/fast: preinstall/fast
 	/home/andre/clion-2021.2.3/bin/cmake/linux/bin/cmake -DCMAKE_INSTALL_LOCAL_ONLY=1 -P cmake_install.cmake
 .PHONY : install/local/fast
 
+# Special rule for the target install
+install: preinstall
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Install the project..."
+	/home/andre/clion-2021.2.3/bin/cmake/linux/bin/cmake -P cmake_install.cmake
+.PHONY : install
+
+# Special rule for the target install
+install/fast: preinstall/fast
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Install the project..."
+	/home/andre/clion-2021.2.3/bin/cmake/linux/bin/cmake -P cmake_install.cmake
+.PHONY : install/fast
+
+# Special rule for the target rebuild_cache
+rebuild_cache:
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Running CMake to regenerate build system..."
+	/home/andre/clion-2021.2.3/bin/cmake/linux/bin/cmake --regenerate-during-build -S$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR)
+.PHONY : rebuild_cache
+
+# Special rule for the target rebuild_cache
+rebuild_cache/fast: rebuild_cache
+.PHONY : rebuild_cache/fast
+
 # Special rule for the target install/strip
 install/strip: preinstall
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Installing the project stripped..."
@@ -97,28 +119,6 @@ list_install_components:
 # Special rule for the target list_install_components
 list_install_components/fast: list_install_components
 .PHONY : list_install_components/fast
-
-# Special rule for the target rebuild_cache
-rebuild_cache:
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Running CMake to regenerate build system..."
-	/home/andre/clion-2021.2.3/bin/cmake/linux/bin/cmake --regenerate-during-build -S$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR)
-.PHONY : rebuild_cache
-
-# Special rule for the target rebuild_cache
-rebuild_cache/fast: rebuild_cache
-.PHONY : rebuild_cache/fast
-
-# Special rule for the target install
-install: preinstall
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Install the project..."
-	/home/andre/clion-2021.2.3/bin/cmake/linux/bin/cmake -P cmake_install.cmake
-.PHONY : install
-
-# Special rule for the target install
-install/fast: preinstall/fast
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Install the project..."
-	/home/andre/clion-2021.2.3/bin/cmake/linux/bin/cmake -P cmake_install.cmake
-.PHONY : install/fast
 
 # Special rule for the target edit_cache
 edit_cache:
@@ -176,6 +176,20 @@ particle-spec-catalog-test/fast:
 .PHONY : particle-spec-catalog-test/fast
 
 # Convenience name for target.
+tests/CMakeFiles/particle-system-factory-test.dir/rule:
+	cd /home/andre/wrk3/simploce/pt-cgmd/particles/cmake-build-debug && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 tests/CMakeFiles/particle-system-factory-test.dir/rule
+.PHONY : tests/CMakeFiles/particle-system-factory-test.dir/rule
+
+# Convenience name for target.
+particle-system-factory-test: tests/CMakeFiles/particle-system-factory-test.dir/rule
+.PHONY : particle-system-factory-test
+
+# fast build rule for target.
+particle-system-factory-test/fast:
+	cd /home/andre/wrk3/simploce/pt-cgmd/particles/cmake-build-debug && $(MAKE) $(MAKESILENT) -f tests/CMakeFiles/particle-system-factory-test.dir/build.make tests/CMakeFiles/particle-system-factory-test.dir/build
+.PHONY : particle-system-factory-test/fast
+
+# Convenience name for target.
 tests/CMakeFiles/read-cg-test.dir/rule:
 	cd /home/andre/wrk3/simploce/pt-cgmd/particles/cmake-build-debug && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 tests/CMakeFiles/read-cg-test.dir/rule
 .PHONY : tests/CMakeFiles/read-cg-test.dir/rule
@@ -216,48 +230,6 @@ coarse-grained-test: tests/CMakeFiles/coarse-grained-test.dir/rule
 coarse-grained-test/fast:
 	cd /home/andre/wrk3/simploce/pt-cgmd/particles/cmake-build-debug && $(MAKE) $(MAKESILENT) -f tests/CMakeFiles/coarse-grained-test.dir/build.make tests/CMakeFiles/coarse-grained-test.dir/build
 .PHONY : coarse-grained-test/fast
-
-# Convenience name for target.
-tests/CMakeFiles/particle-system-factory-test.dir/rule:
-	cd /home/andre/wrk3/simploce/pt-cgmd/particles/cmake-build-debug && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 tests/CMakeFiles/particle-system-factory-test.dir/rule
-.PHONY : tests/CMakeFiles/particle-system-factory-test.dir/rule
-
-# Convenience name for target.
-particle-system-factory-test: tests/CMakeFiles/particle-system-factory-test.dir/rule
-.PHONY : particle-system-factory-test
-
-# fast build rule for target.
-particle-system-factory-test/fast:
-	cd /home/andre/wrk3/simploce/pt-cgmd/particles/cmake-build-debug && $(MAKE) $(MAKESILENT) -f tests/CMakeFiles/particle-system-factory-test.dir/build.make tests/CMakeFiles/particle-system-factory-test.dir/build
-.PHONY : particle-system-factory-test/fast
-
-# Convenience name for target.
-tests/CMakeFiles/prot-site-catalog-test.dir/rule:
-	cd /home/andre/wrk3/simploce/pt-cgmd/particles/cmake-build-debug && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 tests/CMakeFiles/prot-site-catalog-test.dir/rule
-.PHONY : tests/CMakeFiles/prot-site-catalog-test.dir/rule
-
-# Convenience name for target.
-prot-site-catalog-test: tests/CMakeFiles/prot-site-catalog-test.dir/rule
-.PHONY : prot-site-catalog-test
-
-# fast build rule for target.
-prot-site-catalog-test/fast:
-	cd /home/andre/wrk3/simploce/pt-cgmd/particles/cmake-build-debug && $(MAKE) $(MAKESILENT) -f tests/CMakeFiles/prot-site-catalog-test.dir/build.make tests/CMakeFiles/prot-site-catalog-test.dir/build
-.PHONY : prot-site-catalog-test/fast
-
-# Convenience name for target.
-tests/CMakeFiles/protonation-site-test.dir/rule:
-	cd /home/andre/wrk3/simploce/pt-cgmd/particles/cmake-build-debug && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 tests/CMakeFiles/protonation-site-test.dir/rule
-.PHONY : tests/CMakeFiles/protonation-site-test.dir/rule
-
-# Convenience name for target.
-protonation-site-test: tests/CMakeFiles/protonation-site-test.dir/rule
-.PHONY : protonation-site-test
-
-# fast build rule for target.
-protonation-site-test/fast:
-	cd /home/andre/wrk3/simploce/pt-cgmd/particles/cmake-build-debug && $(MAKE) $(MAKESILENT) -f tests/CMakeFiles/protonation-site-test.dir/build.make tests/CMakeFiles/protonation-site-test.dir/build
-.PHONY : protonation-site-test/fast
 
 # Convenience name for target.
 tests/CMakeFiles/protonatable-bead-test.dir/rule:
@@ -383,30 +355,6 @@ particle-test.cpp.s:
 	cd /home/andre/wrk3/simploce/pt-cgmd/particles/cmake-build-debug && $(MAKE) $(MAKESILENT) -f tests/CMakeFiles/particle-test.dir/build.make tests/CMakeFiles/particle-test.dir/particle-test.cpp.s
 .PHONY : particle-test.cpp.s
 
-prot-site-catalog-test.o: prot-site-catalog-test.cpp.o
-.PHONY : prot-site-catalog-test.o
-
-# target to build an object file
-prot-site-catalog-test.cpp.o:
-	cd /home/andre/wrk3/simploce/pt-cgmd/particles/cmake-build-debug && $(MAKE) $(MAKESILENT) -f tests/CMakeFiles/prot-site-catalog-test.dir/build.make tests/CMakeFiles/prot-site-catalog-test.dir/prot-site-catalog-test.cpp.o
-.PHONY : prot-site-catalog-test.cpp.o
-
-prot-site-catalog-test.i: prot-site-catalog-test.cpp.i
-.PHONY : prot-site-catalog-test.i
-
-# target to preprocess a source file
-prot-site-catalog-test.cpp.i:
-	cd /home/andre/wrk3/simploce/pt-cgmd/particles/cmake-build-debug && $(MAKE) $(MAKESILENT) -f tests/CMakeFiles/prot-site-catalog-test.dir/build.make tests/CMakeFiles/prot-site-catalog-test.dir/prot-site-catalog-test.cpp.i
-.PHONY : prot-site-catalog-test.cpp.i
-
-prot-site-catalog-test.s: prot-site-catalog-test.cpp.s
-.PHONY : prot-site-catalog-test.s
-
-# target to generate assembly for a file
-prot-site-catalog-test.cpp.s:
-	cd /home/andre/wrk3/simploce/pt-cgmd/particles/cmake-build-debug && $(MAKE) $(MAKESILENT) -f tests/CMakeFiles/prot-site-catalog-test.dir/build.make tests/CMakeFiles/prot-site-catalog-test.dir/prot-site-catalog-test.cpp.s
-.PHONY : prot-site-catalog-test.cpp.s
-
 protonatable-bead-test.o: protonatable-bead-test.cpp.o
 .PHONY : protonatable-bead-test.o
 
@@ -455,30 +403,6 @@ protonatable-coarse-grained-test.cpp.s:
 	cd /home/andre/wrk3/simploce/pt-cgmd/particles/cmake-build-debug && $(MAKE) $(MAKESILENT) -f tests/CMakeFiles/protonatable-coarse-grained-test.dir/build.make tests/CMakeFiles/protonatable-coarse-grained-test.dir/protonatable-coarse-grained-test.cpp.s
 .PHONY : protonatable-coarse-grained-test.cpp.s
 
-protonation-site-test.o: protonation-site-test.cpp.o
-.PHONY : protonation-site-test.o
-
-# target to build an object file
-protonation-site-test.cpp.o:
-	cd /home/andre/wrk3/simploce/pt-cgmd/particles/cmake-build-debug && $(MAKE) $(MAKESILENT) -f tests/CMakeFiles/protonation-site-test.dir/build.make tests/CMakeFiles/protonation-site-test.dir/protonation-site-test.cpp.o
-.PHONY : protonation-site-test.cpp.o
-
-protonation-site-test.i: protonation-site-test.cpp.i
-.PHONY : protonation-site-test.i
-
-# target to preprocess a source file
-protonation-site-test.cpp.i:
-	cd /home/andre/wrk3/simploce/pt-cgmd/particles/cmake-build-debug && $(MAKE) $(MAKESILENT) -f tests/CMakeFiles/protonation-site-test.dir/build.make tests/CMakeFiles/protonation-site-test.dir/protonation-site-test.cpp.i
-.PHONY : protonation-site-test.cpp.i
-
-protonation-site-test.s: protonation-site-test.cpp.s
-.PHONY : protonation-site-test.s
-
-# target to generate assembly for a file
-protonation-site-test.cpp.s:
-	cd /home/andre/wrk3/simploce/pt-cgmd/particles/cmake-build-debug && $(MAKE) $(MAKESILENT) -f tests/CMakeFiles/protonation-site-test.dir/build.make tests/CMakeFiles/protonation-site-test.dir/protonation-site-test.cpp.s
-.PHONY : protonation-site-test.cpp.s
-
 read-cg-test.o: read-cg-test.cpp.o
 .PHONY : read-cg-test.o
 
@@ -519,10 +443,8 @@ help:
 	@echo "... particle-spec-catalog-test"
 	@echo "... particle-system-factory-test"
 	@echo "... particle-test"
-	@echo "... prot-site-catalog-test"
 	@echo "... protonatable-bead-test"
 	@echo "... protonatable-coarse-grained-test"
-	@echo "... protonation-site-test"
 	@echo "... read-cg-test"
 	@echo "... coarse-grained-test.o"
 	@echo "... coarse-grained-test.i"
@@ -536,18 +458,12 @@ help:
 	@echo "... particle-test.o"
 	@echo "... particle-test.i"
 	@echo "... particle-test.s"
-	@echo "... prot-site-catalog-test.o"
-	@echo "... prot-site-catalog-test.i"
-	@echo "... prot-site-catalog-test.s"
 	@echo "... protonatable-bead-test.o"
 	@echo "... protonatable-bead-test.i"
 	@echo "... protonatable-bead-test.s"
 	@echo "... protonatable-coarse-grained-test.o"
 	@echo "... protonatable-coarse-grained-test.i"
 	@echo "... protonatable-coarse-grained-test.s"
-	@echo "... protonation-site-test.o"
-	@echo "... protonation-site-test.i"
-	@echo "... protonation-site-test.s"
 	@echo "... read-cg-test.o"
 	@echo "... read-cg-test.i"
 	@echo "... read-cg-test.s"

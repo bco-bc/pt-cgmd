@@ -8,6 +8,7 @@
 #ifndef PROTONATION_SITE_HPP
 #define PROTONATION_SITE_HPP
 
+#include "particle-group.hpp"
 #include "protonatable.hpp"
 #include "particle.hpp"
 #include "particle-spec.hpp"
@@ -27,12 +28,8 @@ namespace simploce {
      * @param T Particle type.
      */
     template <typename P>
-    class ProtonationSite: public ParticleGroup<P> {
+    class ProtonationSite: public ParticleGroup {
     public:
-        /**
-         * Particle pointer type.
-         */
-        using p_ptr_t = typename ParticleGroup<P>::p_ptr_t;
 
         /**
          * Constructor. Creates a protonation site in a deprotonated state.
@@ -86,7 +83,7 @@ namespace simploce {
                                         const std::vector<id_pair_t>& bonds,
                                         const std::vector<spec_ptr_t>& deprotonatedSpecs,
                                         const std::vector<spec_ptr_t>& protonatedSpecs) :
-        ParticleGroup<P>(particles, bonds), name_(std::move(name)),
+        ParticleGroup(particles, bonds), name_(std::move(name)),
         deprotonatedSpecs_{}, protonatedSpecs_{}, protonated_{true} {
         if ( name_.empty() ) {
             std::string message = "A name must be provided.";
@@ -136,7 +133,7 @@ namespace simploce {
     void
     ProtonationSite<P>::deprotonate() {
         assert( this->isProtonated() );
-        auto particles = ParticleGroup<P>::particles();
+        auto particles = ParticleGroup::particles();
         for (auto particle : particles) {
             auto spec = particle->spec();
             bool found = false;

@@ -22,7 +22,8 @@ include_directories(${CMAKE_INSTALL_PREFIX}/include SYSTEM)
 ]]
 
 add_library(simulation SHARED
-        src/interactor.cpp src/forces.cpp
+        src/interactor.cpp src/forces.cpp src/lj.cpp src/lj-rf.cpp src/hp.cpp src/halve-attractive-qp.cpp
+        src/pair-lists.cpp
         src/no-bc.cpp src/pbc.cpp
         src/s-factory.cpp
         src/s-properties.cpp src/protonatable-particle-system-factory.cpp

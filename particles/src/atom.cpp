@@ -1,5 +1,4 @@
 /*
- * File:   atom.cpp
  * Author: André H. Juffer, Biocenter Oulu.
  *
  * Created on August 5, 2019, 2:58 PM
@@ -28,6 +27,6 @@ namespace simploce {
                  std::size_t index, 
                  const std::string &name, 
                  const spec_ptr_t &spec) {
-        return atom_ptr_t(new Atom(id, index, name, spec));
+        return std::make_shared<Atom>(id, index, name, spec);
     }
 }

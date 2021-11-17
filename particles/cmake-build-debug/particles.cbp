@@ -221,6 +221,54 @@
 					<DistClean command="/usr/bin/make -j6 -f &quot;/home/andre/wrk3/simploce/pt-cgmd/particles/cmake-build-debug/tests/Makefile&quot;  VERBOSE=1 clean"/>
 				</MakeCommands>
 			</Target>
+			<Target title="particle-system-factory-test">
+				<Option output="/home/andre/wrk3/simploce/pt-cgmd/particles/cmake-build-debug/tests/particle-system-factory-test" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/home/andre/wrk3/simploce/pt-cgmd/particles/cmake-build-debug/tests"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add directory="/home/andre/wrk3/simploce/pt-cgmd/particles/include"/>
+					<Add directory="/localdisk/include"/>
+					<Add directory="/usr/include/c++/9"/>
+					<Add directory="/usr/include/x86_64-linux-gnu/c++/9"/>
+					<Add directory="/usr/include/c++/9/backward"/>
+					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/9/include"/>
+					<Add directory="/usr/local/include"/>
+					<Add directory="/usr/include/x86_64-linux-gnu"/>
+					<Add directory="/usr/include"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j6 -f &quot;/home/andre/wrk3/simploce/pt-cgmd/particles/cmake-build-debug/tests/Makefile&quot;  VERBOSE=1 particle-system-factory-test"/>
+					<CompileFile command="/usr/bin/make -j6 -f &quot;/home/andre/wrk3/simploce/pt-cgmd/particles/cmake-build-debug/tests/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j6 -f &quot;/home/andre/wrk3/simploce/pt-cgmd/particles/cmake-build-debug/tests/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j6 -f &quot;/home/andre/wrk3/simploce/pt-cgmd/particles/cmake-build-debug/tests/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="particle-system-factory-test/fast">
+				<Option output="/home/andre/wrk3/simploce/pt-cgmd/particles/cmake-build-debug/tests/particle-system-factory-test" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/home/andre/wrk3/simploce/pt-cgmd/particles/cmake-build-debug/tests"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add directory="/home/andre/wrk3/simploce/pt-cgmd/particles/include"/>
+					<Add directory="/localdisk/include"/>
+					<Add directory="/usr/include/c++/9"/>
+					<Add directory="/usr/include/x86_64-linux-gnu/c++/9"/>
+					<Add directory="/usr/include/c++/9/backward"/>
+					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/9/include"/>
+					<Add directory="/usr/local/include"/>
+					<Add directory="/usr/include/x86_64-linux-gnu"/>
+					<Add directory="/usr/include"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j6 -f &quot;/home/andre/wrk3/simploce/pt-cgmd/particles/cmake-build-debug/tests/Makefile&quot;  VERBOSE=1 particle-system-factory-test/fast"/>
+					<CompileFile command="/usr/bin/make -j6 -f &quot;/home/andre/wrk3/simploce/pt-cgmd/particles/cmake-build-debug/tests/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j6 -f &quot;/home/andre/wrk3/simploce/pt-cgmd/particles/cmake-build-debug/tests/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j6 -f &quot;/home/andre/wrk3/simploce/pt-cgmd/particles/cmake-build-debug/tests/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
 			<Target title="read-cg-test">
 				<Option output="/home/andre/wrk3/simploce/pt-cgmd/particles/cmake-build-debug/tests/read-cg-test" prefix_auto="0" extension_auto="0"/>
 				<Option working_dir="/home/andre/wrk3/simploce/pt-cgmd/particles/cmake-build-debug/tests"/>
@@ -365,150 +413,6 @@
 					<DistClean command="/usr/bin/make -j6 -f &quot;/home/andre/wrk3/simploce/pt-cgmd/particles/cmake-build-debug/tests/Makefile&quot;  VERBOSE=1 clean"/>
 				</MakeCommands>
 			</Target>
-			<Target title="particle-system-factory-test">
-				<Option output="/home/andre/wrk3/simploce/pt-cgmd/particles/cmake-build-debug/tests/particle-system-factory-test" prefix_auto="0" extension_auto="0"/>
-				<Option working_dir="/home/andre/wrk3/simploce/pt-cgmd/particles/cmake-build-debug/tests"/>
-				<Option object_output="./"/>
-				<Option type="1"/>
-				<Option compiler="gcc"/>
-				<Compiler>
-					<Add directory="/home/andre/wrk3/simploce/pt-cgmd/particles/include"/>
-					<Add directory="/localdisk/include"/>
-					<Add directory="/usr/include/c++/9"/>
-					<Add directory="/usr/include/x86_64-linux-gnu/c++/9"/>
-					<Add directory="/usr/include/c++/9/backward"/>
-					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/9/include"/>
-					<Add directory="/usr/local/include"/>
-					<Add directory="/usr/include/x86_64-linux-gnu"/>
-					<Add directory="/usr/include"/>
-				</Compiler>
-				<MakeCommands>
-					<Build command="/usr/bin/make -j6 -f &quot;/home/andre/wrk3/simploce/pt-cgmd/particles/cmake-build-debug/tests/Makefile&quot;  VERBOSE=1 particle-system-factory-test"/>
-					<CompileFile command="/usr/bin/make -j6 -f &quot;/home/andre/wrk3/simploce/pt-cgmd/particles/cmake-build-debug/tests/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
-					<Clean command="/usr/bin/make -j6 -f &quot;/home/andre/wrk3/simploce/pt-cgmd/particles/cmake-build-debug/tests/Makefile&quot;  VERBOSE=1 clean"/>
-					<DistClean command="/usr/bin/make -j6 -f &quot;/home/andre/wrk3/simploce/pt-cgmd/particles/cmake-build-debug/tests/Makefile&quot;  VERBOSE=1 clean"/>
-				</MakeCommands>
-			</Target>
-			<Target title="particle-system-factory-test/fast">
-				<Option output="/home/andre/wrk3/simploce/pt-cgmd/particles/cmake-build-debug/tests/particle-system-factory-test" prefix_auto="0" extension_auto="0"/>
-				<Option working_dir="/home/andre/wrk3/simploce/pt-cgmd/particles/cmake-build-debug/tests"/>
-				<Option object_output="./"/>
-				<Option type="1"/>
-				<Option compiler="gcc"/>
-				<Compiler>
-					<Add directory="/home/andre/wrk3/simploce/pt-cgmd/particles/include"/>
-					<Add directory="/localdisk/include"/>
-					<Add directory="/usr/include/c++/9"/>
-					<Add directory="/usr/include/x86_64-linux-gnu/c++/9"/>
-					<Add directory="/usr/include/c++/9/backward"/>
-					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/9/include"/>
-					<Add directory="/usr/local/include"/>
-					<Add directory="/usr/include/x86_64-linux-gnu"/>
-					<Add directory="/usr/include"/>
-				</Compiler>
-				<MakeCommands>
-					<Build command="/usr/bin/make -j6 -f &quot;/home/andre/wrk3/simploce/pt-cgmd/particles/cmake-build-debug/tests/Makefile&quot;  VERBOSE=1 particle-system-factory-test/fast"/>
-					<CompileFile command="/usr/bin/make -j6 -f &quot;/home/andre/wrk3/simploce/pt-cgmd/particles/cmake-build-debug/tests/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
-					<Clean command="/usr/bin/make -j6 -f &quot;/home/andre/wrk3/simploce/pt-cgmd/particles/cmake-build-debug/tests/Makefile&quot;  VERBOSE=1 clean"/>
-					<DistClean command="/usr/bin/make -j6 -f &quot;/home/andre/wrk3/simploce/pt-cgmd/particles/cmake-build-debug/tests/Makefile&quot;  VERBOSE=1 clean"/>
-				</MakeCommands>
-			</Target>
-			<Target title="prot-site-catalog-test">
-				<Option output="/home/andre/wrk3/simploce/pt-cgmd/particles/cmake-build-debug/tests/prot-site-catalog-test" prefix_auto="0" extension_auto="0"/>
-				<Option working_dir="/home/andre/wrk3/simploce/pt-cgmd/particles/cmake-build-debug/tests"/>
-				<Option object_output="./"/>
-				<Option type="1"/>
-				<Option compiler="gcc"/>
-				<Compiler>
-					<Add directory="/home/andre/wrk3/simploce/pt-cgmd/particles/include"/>
-					<Add directory="/localdisk/include"/>
-					<Add directory="/usr/include/c++/9"/>
-					<Add directory="/usr/include/x86_64-linux-gnu/c++/9"/>
-					<Add directory="/usr/include/c++/9/backward"/>
-					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/9/include"/>
-					<Add directory="/usr/local/include"/>
-					<Add directory="/usr/include/x86_64-linux-gnu"/>
-					<Add directory="/usr/include"/>
-				</Compiler>
-				<MakeCommands>
-					<Build command="/usr/bin/make -j6 -f &quot;/home/andre/wrk3/simploce/pt-cgmd/particles/cmake-build-debug/tests/Makefile&quot;  VERBOSE=1 prot-site-catalog-test"/>
-					<CompileFile command="/usr/bin/make -j6 -f &quot;/home/andre/wrk3/simploce/pt-cgmd/particles/cmake-build-debug/tests/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
-					<Clean command="/usr/bin/make -j6 -f &quot;/home/andre/wrk3/simploce/pt-cgmd/particles/cmake-build-debug/tests/Makefile&quot;  VERBOSE=1 clean"/>
-					<DistClean command="/usr/bin/make -j6 -f &quot;/home/andre/wrk3/simploce/pt-cgmd/particles/cmake-build-debug/tests/Makefile&quot;  VERBOSE=1 clean"/>
-				</MakeCommands>
-			</Target>
-			<Target title="prot-site-catalog-test/fast">
-				<Option output="/home/andre/wrk3/simploce/pt-cgmd/particles/cmake-build-debug/tests/prot-site-catalog-test" prefix_auto="0" extension_auto="0"/>
-				<Option working_dir="/home/andre/wrk3/simploce/pt-cgmd/particles/cmake-build-debug/tests"/>
-				<Option object_output="./"/>
-				<Option type="1"/>
-				<Option compiler="gcc"/>
-				<Compiler>
-					<Add directory="/home/andre/wrk3/simploce/pt-cgmd/particles/include"/>
-					<Add directory="/localdisk/include"/>
-					<Add directory="/usr/include/c++/9"/>
-					<Add directory="/usr/include/x86_64-linux-gnu/c++/9"/>
-					<Add directory="/usr/include/c++/9/backward"/>
-					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/9/include"/>
-					<Add directory="/usr/local/include"/>
-					<Add directory="/usr/include/x86_64-linux-gnu"/>
-					<Add directory="/usr/include"/>
-				</Compiler>
-				<MakeCommands>
-					<Build command="/usr/bin/make -j6 -f &quot;/home/andre/wrk3/simploce/pt-cgmd/particles/cmake-build-debug/tests/Makefile&quot;  VERBOSE=1 prot-site-catalog-test/fast"/>
-					<CompileFile command="/usr/bin/make -j6 -f &quot;/home/andre/wrk3/simploce/pt-cgmd/particles/cmake-build-debug/tests/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
-					<Clean command="/usr/bin/make -j6 -f &quot;/home/andre/wrk3/simploce/pt-cgmd/particles/cmake-build-debug/tests/Makefile&quot;  VERBOSE=1 clean"/>
-					<DistClean command="/usr/bin/make -j6 -f &quot;/home/andre/wrk3/simploce/pt-cgmd/particles/cmake-build-debug/tests/Makefile&quot;  VERBOSE=1 clean"/>
-				</MakeCommands>
-			</Target>
-			<Target title="protonation-site-test">
-				<Option output="/home/andre/wrk3/simploce/pt-cgmd/particles/cmake-build-debug/tests/protonation-site-test" prefix_auto="0" extension_auto="0"/>
-				<Option working_dir="/home/andre/wrk3/simploce/pt-cgmd/particles/cmake-build-debug/tests"/>
-				<Option object_output="./"/>
-				<Option type="1"/>
-				<Option compiler="gcc"/>
-				<Compiler>
-					<Add directory="/home/andre/wrk3/simploce/pt-cgmd/particles/include"/>
-					<Add directory="/localdisk/include"/>
-					<Add directory="/usr/include/c++/9"/>
-					<Add directory="/usr/include/x86_64-linux-gnu/c++/9"/>
-					<Add directory="/usr/include/c++/9/backward"/>
-					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/9/include"/>
-					<Add directory="/usr/local/include"/>
-					<Add directory="/usr/include/x86_64-linux-gnu"/>
-					<Add directory="/usr/include"/>
-				</Compiler>
-				<MakeCommands>
-					<Build command="/usr/bin/make -j6 -f &quot;/home/andre/wrk3/simploce/pt-cgmd/particles/cmake-build-debug/tests/Makefile&quot;  VERBOSE=1 protonation-site-test"/>
-					<CompileFile command="/usr/bin/make -j6 -f &quot;/home/andre/wrk3/simploce/pt-cgmd/particles/cmake-build-debug/tests/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
-					<Clean command="/usr/bin/make -j6 -f &quot;/home/andre/wrk3/simploce/pt-cgmd/particles/cmake-build-debug/tests/Makefile&quot;  VERBOSE=1 clean"/>
-					<DistClean command="/usr/bin/make -j6 -f &quot;/home/andre/wrk3/simploce/pt-cgmd/particles/cmake-build-debug/tests/Makefile&quot;  VERBOSE=1 clean"/>
-				</MakeCommands>
-			</Target>
-			<Target title="protonation-site-test/fast">
-				<Option output="/home/andre/wrk3/simploce/pt-cgmd/particles/cmake-build-debug/tests/protonation-site-test" prefix_auto="0" extension_auto="0"/>
-				<Option working_dir="/home/andre/wrk3/simploce/pt-cgmd/particles/cmake-build-debug/tests"/>
-				<Option object_output="./"/>
-				<Option type="1"/>
-				<Option compiler="gcc"/>
-				<Compiler>
-					<Add directory="/home/andre/wrk3/simploce/pt-cgmd/particles/include"/>
-					<Add directory="/localdisk/include"/>
-					<Add directory="/usr/include/c++/9"/>
-					<Add directory="/usr/include/x86_64-linux-gnu/c++/9"/>
-					<Add directory="/usr/include/c++/9/backward"/>
-					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/9/include"/>
-					<Add directory="/usr/local/include"/>
-					<Add directory="/usr/include/x86_64-linux-gnu"/>
-					<Add directory="/usr/include"/>
-				</Compiler>
-				<MakeCommands>
-					<Build command="/usr/bin/make -j6 -f &quot;/home/andre/wrk3/simploce/pt-cgmd/particles/cmake-build-debug/tests/Makefile&quot;  VERBOSE=1 protonation-site-test/fast"/>
-					<CompileFile command="/usr/bin/make -j6 -f &quot;/home/andre/wrk3/simploce/pt-cgmd/particles/cmake-build-debug/tests/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
-					<Clean command="/usr/bin/make -j6 -f &quot;/home/andre/wrk3/simploce/pt-cgmd/particles/cmake-build-debug/tests/Makefile&quot;  VERBOSE=1 clean"/>
-					<DistClean command="/usr/bin/make -j6 -f &quot;/home/andre/wrk3/simploce/pt-cgmd/particles/cmake-build-debug/tests/Makefile&quot;  VERBOSE=1 clean"/>
-				</MakeCommands>
-			</Target>
 			<Target title="protonatable-bead-test">
 				<Option output="/home/andre/wrk3/simploce/pt-cgmd/particles/cmake-build-debug/tests/protonatable-bead-test" prefix_auto="0" extension_auto="0"/>
 				<Option working_dir="/home/andre/wrk3/simploce/pt-cgmd/particles/cmake-build-debug/tests"/>
@@ -618,10 +522,19 @@
 		<Unit filename="/home/andre/wrk3/simploce/pt-cgmd/particles/src/bead.cpp">
 			<Option target="particles"/>
 		</Unit>
+		<Unit filename="/home/andre/wrk3/simploce/pt-cgmd/particles/src/bond.cpp">
+			<Option target="particles"/>
+		</Unit>
 		<Unit filename="/home/andre/wrk3/simploce/pt-cgmd/particles/src/coarse-grained.cpp">
 			<Option target="particles"/>
 		</Unit>
 		<Unit filename="/home/andre/wrk3/simploce/pt-cgmd/particles/src/p-factory.cpp">
+			<Option target="particles"/>
+		</Unit>
+		<Unit filename="/home/andre/wrk3/simploce/pt-cgmd/particles/src/p-util.cpp">
+			<Option target="particles"/>
+		</Unit>
+		<Unit filename="/home/andre/wrk3/simploce/pt-cgmd/particles/src/particle-group.cpp">
 			<Option target="particles"/>
 		</Unit>
 		<Unit filename="/home/andre/wrk3/simploce/pt-cgmd/particles/src/particle-spec-catalog.cpp">
@@ -633,10 +546,10 @@
 		<Unit filename="/home/andre/wrk3/simploce/pt-cgmd/particles/src/particle-system-factory.cpp">
 			<Option target="particles"/>
 		</Unit>
-		<Unit filename="/home/andre/wrk3/simploce/pt-cgmd/particles/src/particle.cpp">
+		<Unit filename="/home/andre/wrk3/simploce/pt-cgmd/particles/src/particle-system.cpp">
 			<Option target="particles"/>
 		</Unit>
-		<Unit filename="/home/andre/wrk3/simploce/pt-cgmd/particles/src/protonation-site-catalog.cpp">
+		<Unit filename="/home/andre/wrk3/simploce/pt-cgmd/particles/src/particle.cpp">
 			<Option target="particles"/>
 		</Unit>
 		<Unit filename="/home/andre/wrk3/simploce/pt-cgmd/particles/tests/coarse-grained-test.cpp">
@@ -651,17 +564,11 @@
 		<Unit filename="/home/andre/wrk3/simploce/pt-cgmd/particles/tests/particle-test.cpp">
 			<Option target="particle-test"/>
 		</Unit>
-		<Unit filename="/home/andre/wrk3/simploce/pt-cgmd/particles/tests/prot-site-catalog-test.cpp">
-			<Option target="prot-site-catalog-test"/>
-		</Unit>
 		<Unit filename="/home/andre/wrk3/simploce/pt-cgmd/particles/tests/protonatable-bead-test.cpp">
 			<Option target="protonatable-bead-test"/>
 		</Unit>
 		<Unit filename="/home/andre/wrk3/simploce/pt-cgmd/particles/tests/protonatable-coarse-grained-test.cpp">
 			<Option target="protonatable-coarse-grained-test"/>
-		</Unit>
-		<Unit filename="/home/andre/wrk3/simploce/pt-cgmd/particles/tests/protonation-site-test.cpp">
-			<Option target="protonation-site-test"/>
 		</Unit>
 		<Unit filename="/home/andre/wrk3/simploce/pt-cgmd/particles/tests/read-cg-test.cpp">
 			<Option target="read-cg-test"/>

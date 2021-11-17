@@ -381,10 +381,25 @@
 		<Unit filename="/home/andre/wrk3/simploce/pt-cgmd/simulation/src/forces.cpp">
 			<Option target="simulation"/>
 		</Unit>
+		<Unit filename="/home/andre/wrk3/simploce/pt-cgmd/simulation/src/halve-attractive-qp.cpp">
+			<Option target="simulation"/>
+		</Unit>
+		<Unit filename="/home/andre/wrk3/simploce/pt-cgmd/simulation/src/hp.cpp">
+			<Option target="simulation"/>
+		</Unit>
 		<Unit filename="/home/andre/wrk3/simploce/pt-cgmd/simulation/src/interactor.cpp">
 			<Option target="simulation"/>
 		</Unit>
+		<Unit filename="/home/andre/wrk3/simploce/pt-cgmd/simulation/src/lj-rf.cpp">
+			<Option target="simulation"/>
+		</Unit>
+		<Unit filename="/home/andre/wrk3/simploce/pt-cgmd/simulation/src/lj.cpp">
+			<Option target="simulation"/>
+		</Unit>
 		<Unit filename="/home/andre/wrk3/simploce/pt-cgmd/simulation/src/no-bc.cpp">
+			<Option target="simulation"/>
+		</Unit>
+		<Unit filename="/home/andre/wrk3/simploce/pt-cgmd/simulation/src/pair-lists.cpp">
 			<Option target="simulation"/>
 		</Unit>
 		<Unit filename="/home/andre/wrk3/simploce/pt-cgmd/simulation/src/pbc.cpp">

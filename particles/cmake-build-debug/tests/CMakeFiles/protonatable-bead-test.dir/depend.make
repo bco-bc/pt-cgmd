@@ -4,7 +4,6 @@
 tests/CMakeFiles/protonatable-bead-test.dir/protonatable-bead-test.cpp.o: \
  ../include/simploce/particle/atom.hpp \
  ../include/simploce/particle/bead.hpp \
- ../include/simploce/particle/bond.hpp \
  ../include/simploce/particle/coarse-grained.hpp \
  ../include/simploce/particle/p-conf.hpp \
  ../include/simploce/particle/p-factory.hpp \

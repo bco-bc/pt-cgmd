@@ -5,8 +5,11 @@
  */
 
 #include "simploce/simulation/distance-pair-list-generator.hpp"
+
+#include <utility>
 #include "simploce/simulation/s-properties.hpp"
 #include "simploce/simulation/bc.hpp"
+#include "simploce/particle/particle.hpp"
 
 namespace simploce {
 
@@ -16,13 +19,12 @@ namespace simploce {
      * @param bc Boundary condition.
      * @return Particle pairs.
      */
-    template <typename P>
-    static typename PairLists<P>::pp_pair_cont_t
+    static typename PairLists::pp_pair_cont_t
     forParticles_(const box_ptr_t& box,
                   const bc_ptr_t& bc,
-                  const std::vector<std::shared_ptr<P>>& particles)
+                  const std::vector<p_ptr_t>& particles)
     {
-        using pp_pair_cont_t = typename PairLists<P>::pp_pair_cont_t;
+        using pp_pair_cont_t = typename PairLists::pp_pair_cont_t;
 
         static real_t rc2 = properties::squareCutoffDistance(box);
 
@@ -62,14 +64,13 @@ namespace simploce {
      * @param groups
      * @return Particle group pairs.
      */
-    template <typename P>
-    static typename PairLists<P>::pp_pair_cont_t
+    static typename PairLists::pp_pair_cont_t
     forGroups_(const box_ptr_t& box,
                const bc_ptr_t& bc,
-               const std::vector<std::shared_ptr<ParticleGroup<P>>>& groups)
+               const std::vector<pg_ptr_t>& groups)
     {
-        using pp_pair_cont_t = typename PairLists<P>::pp_pair_cont_t;
-        using pp_pair_t = typename PairLists<P>::pp_pair_t;
+        using pp_pair_cont_t = typename PairLists::pp_pair_cont_t;
+        using pp_pair_t = typename PairLists::pp_pair_t;
 
         static real_t rc2 =  properties::squareCutoffDistance(box);
 
@@ -107,15 +108,14 @@ namespace simploce {
         return std::move(particlePairs);
     }
 
-    template <typename P>
-    static typename PairLists<P>::pp_pair_cont_t
+    static typename PairLists::pp_pair_cont_t
     forParticlesAndGroups_(const box_ptr_t& box,
                            const bc_ptr_t& bc,
-                           const std::vector<std::shared_ptr<P>>& particles,
-                           const std::vector<std::shared_ptr<ParticleGroup<P>>>& groups)
+                           const std::vector<p_ptr_t>& particles,
+                           const std::vector<pg_ptr_t>& groups)
     {
-        using pp_pair_cont_t = typename PairLists<P>::pp_pair_cont_t;
-        using pp_pair_t = typename PairLists<P>::pp_pair_t;
+        using pp_pair_cont_t = typename PairLists::pp_pair_cont_t;
+        using pp_pair_t = typename PairLists::pp_pair_t;
 
         static real_t rc2 =  properties::squareCutoffDistance(box);
 
@@ -157,13 +157,12 @@ namespace simploce {
      * @param groups Particle groups.
      * @return Particle pair lists.
      */
-    template <typename P>
-    static PairLists<P>
+    static PairLists
     makePairLists_(const box_ptr_t& box,
                    const bc_ptr_t& bc,
-                   const std::vector<std::shared_ptr<P>>& all,
-                   const std::vector<std::shared_ptr<P>>& free,
-                   const std::vector<std::shared_ptr<ParticleGroup<P>>>& groups)
+                   const std::vector<p_ptr_t> &all,
+                   const std::vector<p_ptr_t> &free,
+                   const std::vector<pg_ptr_t> &groups)
     {
         static util::Logger logger("simploce:: makePairLists_()");
         static bool firstTime = true;
@@ -173,12 +172,12 @@ namespace simploce {
         }
 
         // Prepare new particle pair list.
-        auto particlePairs = forParticles_<P>(box, bc, free);
+        auto particlePairs = forParticles_(box, bc, free);
         auto ppSize = particlePairs.size();
-        auto fgParticlePairs = forParticlesAndGroups_<P>(box, bc, free, groups);
+        auto fgParticlePairs = forParticlesAndGroups_(box, bc, free, groups);
         auto fgSize = fgParticlePairs.size();
         particlePairs.insert(particlePairs.end(), fgParticlePairs.begin(), fgParticlePairs.end());
-        auto ggParticlePairs = forGroups_<P>(box, bc, groups);
+        auto ggParticlePairs = forGroups_(box, bc, groups);
         auto ggSize = ggParticlePairs.size();
         particlePairs.insert(particlePairs.end(), ggParticlePairs.begin(), ggParticlePairs.end());
 
@@ -190,15 +189,16 @@ namespace simploce {
             auto total = all.size() * (all.size() - 1) / 2;
             logger.debug("Total number of POSSIBLE particle pairs: " + util::toString(total));
             logger.debug("Fraction (%) of total number of possible particle pairs: " +
-                          util::toString(real_t(particlePairs.size()) * 100.0 / total));
+                          util::toString(real_t(particlePairs.size()) * 100.0 / real_t(total)));
             firstTime = false;
         }
 
         // Done.
-        return std::move(PairLists<P>(all.size(), particlePairs));
+        return std::move(PairLists(all.size(), particlePairs));
     }
 
 
+    /*
     PairLists<Atom>
     createPairLists(const box_ptr_t& box,
                     const bc_ptr_t& bc,
@@ -208,14 +208,29 @@ namespace simploce {
         return std::move(makePairLists_<Atom>(box, bc, all, free, groups));
     }
 
-    PairLists<Bead>
+
+    PairLists
     createPairLists(const box_ptr_t& box,
                     const bc_ptr_t& bc,
                     const std::vector<bead_ptr_t>& all,
                     const std::vector<bead_ptr_t>& free,
-                    const std::vector<bead_group_ptr_t>& groups) {
+                    const std::vector<pg_ptr_t>& groups) {
         return std::move(makePairLists_<Bead>(box, bc, all, free, groups));
     }
+     */
 
+    DistancePairListGenerator::DistancePairListGenerator(box_ptr_t box,
+                                                         bc_ptr_t bc) :
+        pair_lists_generator{}, box_{std::move(box)}, bc_{std::move(bc)} {
+    }
+
+    DistancePairListGenerator::~DistancePairListGenerator() = default;
+
+    PairLists
+    DistancePairListGenerator::generate(const std::vector<p_ptr_t>& all,
+                                        const std::vector<p_ptr_t>& free,
+                                        const std::vector<pg_ptr_t>& groups) const {
+         return std::move(makePairLists_(box_, bc_, all, free, groups));
+    }
 
 }

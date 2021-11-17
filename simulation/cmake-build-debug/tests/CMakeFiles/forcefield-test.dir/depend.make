@@ -8,15 +8,9 @@ tests/CMakeFiles/forcefield-test.dir/forcefield-test.cpp.o: \
  ../include/simploce/simulation/s-types.hpp \
  ../tests/forcefield-test.cpp \
  /localdisk/include/simploce/conf/u-conf.hpp \
- /localdisk/include/simploce/particle/atom.hpp \
- /localdisk/include/simploce/particle/bead.hpp \
- /localdisk/include/simploce/particle/bond.hpp \
- /localdisk/include/simploce/particle/p-conf.hpp \
  /localdisk/include/simploce/particle/p-factory.hpp \
- /localdisk/include/simploce/particle/p-properties.hpp \
  /localdisk/include/simploce/particle/p-types.hpp \
  /localdisk/include/simploce/particle/particle-group.hpp \
- /localdisk/include/simploce/particle/particle.hpp \
  /localdisk/include/simploce/types/cvector_t.hpp \
  /localdisk/include/simploce/types/u-types.hpp \
  /localdisk/include/simploce/types/value_t.hpp \
@@ -26,5 +20,4 @@ tests/CMakeFiles/forcefield-test.dir/forcefield-test.cpp.o: \
  /localdisk/include/simploce/util/logger.hpp \
  /localdisk/include/simploce/util/map.hpp \
  /localdisk/include/simploce/util/map2.hpp \
- /localdisk/include/simploce/util/param.hpp \
- /localdisk/include/simploce/util/util.hpp
+ /localdisk/include/simploce/util/param.hpp

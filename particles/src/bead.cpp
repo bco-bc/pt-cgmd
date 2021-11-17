@@ -6,7 +6,6 @@
  */
 
 #include "simploce/particle/bead.hpp"
-#include "simploce/particle/particle.hpp"
 
 namespace simploce {
     

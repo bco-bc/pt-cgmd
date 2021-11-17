@@ -9,6 +9,7 @@
 #define PARTICLES_PROTONATABLE_BEAD_HPP
 
 #include "simploce/particle/p-types.hpp"
+#include "simploce/particle/p-conf.hpp"
 #include "bead.hpp"
 #include <type_traits>
 #include <iostream>
@@ -33,7 +34,7 @@ namespace simploce {
            * Creates new protonatable bead. All arguments are required.
            * @param id Unique bead identifier.
            * @param index Bead sequential index.
-           * @param name Bead name (does not need to be unique).
+           * @param name Bead name.
            * @param spec Protonatable Bead specification.
            * @return Protonatable bead.
            */
@@ -46,7 +47,7 @@ namespace simploce {
           * Constructor. All arguments are required.
           * @param id Unique bead identifier.
           * @param index Bead sequential index.
-          * @param name Bead name (does not need to be unique).
+          * @param name Bead name.
           * @param spec  Protonatable bead specification.
           */
          ProtonatableBead(const id_t& id,

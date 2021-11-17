@@ -8,15 +8,14 @@
 #include "simploce/simulation/pair-lists.hpp"
 #include "simploce/simulation/s-conf.hpp"
 #include "simploce/simulation/pair-potential.hpp"
+#include "simploce/simulation/force-field.hpp"
 #include "simploce/simulation/lj.hpp"
 #include "simploce/simulation/hp.hpp"
 #include "simploce/simulation/halve-attractive-qp.hpp"
 #include "simploce/simulation/lj-rf.hpp"
 #include "simploce/simulation/s-properties.hpp"
 #include "simploce/particle/particle-spec.hpp"
-#include "simploce/particle/atom.hpp"
-#include "simploce/particle/bead.hpp"
-#include "simploce/particle/particle-group.hpp"
+#include "simploce/particle/bond.hpp"
 #include "simploce/util/util.hpp"
 #include <utility>
 #include <memory>
@@ -25,10 +24,9 @@
 namespace simploce {
 
      using result_t = std::pair<energy_t, std::vector<force_t>>;
+     using pp_map_t = std::map<std::string, pair_potential_ptr_t>;
 
-     static std::map<std::string, std::shared_ptr<pair_potential<Atom>>> aaPairPotentials{};
-
-     static std::map<std::string, std::shared_ptr<pair_potential<Bead>>> bbPairPotentials{};
+     static pp_map_t pairPotentials_{};
 
      /**
       * Associates pair potential with pair of particle specifications.
@@ -38,23 +36,20 @@ namespace simploce {
       * @param bc Boundary condition.
       * @return Associated pair potentials.
       */
-     template <typename P>
-     static std::map<std::string, std::shared_ptr<pair_potential<P>>>
-     associatePairPotentials_(const std::vector<std::shared_ptr<P>>& all,
+     static pp_map_t
+     associatePairPotentials_(const std::vector<p_ptr_t>& all,
                               const ff_ptr_t &forceField,
                               const box_ptr_t &box,
                               const bc_ptr_t &bc) {
-         using pair_pot_ptr_t = std::shared_ptr<pair_potential<P>>;
-
          static util::Logger logger("simploce::associatePairPotentials_()");
 
-         std::map<std::string, pair_pot_ptr_t> pairPotentials{};
+         std::map<std::string, pair_potential_ptr_t> pairPotentials{};
          auto& interactionParameters = forceField->interactionSpecifications();
          for (auto& ip : interactionParameters) {
              std::string type = ip.type;
              if (type == conf::LJ) {
                  std::string key1 = ip.spec1->name() + "-" + ip.spec2->name();
-                 auto lj = std::make_shared<LJ<P>>(forceField, box, bc);
+                 auto lj = std::make_shared<LJ>(forceField, box, bc);
                  auto pair1 = std::make_pair(key1, lj);
                  pairPotentials.emplace(pair1);
                  if ( ip.spec1 != ip.spec2 ) {
@@ -65,7 +60,7 @@ namespace simploce {
              } else if (type == conf::LJ_RF) {
                  std::string key1 = ip.spec1->name() + "-" + ip.spec2->name();
                  real_t kappa = properties::kappa(all);
-                 auto lj_rf = std::make_shared<LJ_RF<P>>(kappa, forceField, box, bc);
+                 auto lj_rf = std::make_shared<LJ_RF>(kappa, forceField, box, bc);
                  auto pair1 = std::make_pair(key1, lj_rf);
                  pairPotentials.emplace(pair1);
                  if ( ip.spec1 != ip.spec2 ) {
@@ -76,7 +71,7 @@ namespace simploce {
              }
              else if (type == conf::HP ) {
                  std::string key1 = ip.spec1->name() + "-" + ip.spec2->name();
-                 auto hp = std::make_shared<HP<P>>(forceField, bc);
+                 auto hp = std::make_shared<HP>(forceField, bc);
                  auto pair1 = std::make_pair(key1, hp);
                  pairPotentials.emplace(pair1);
                  if ( ip.spec1 != ip.spec2 ) {
@@ -86,7 +81,7 @@ namespace simploce {
                  }
              } else if ( type == conf::HA_QP ) {
                  std::string key1 = ip.spec1->name() + "-" + ip.spec2->name();
-                 auto ha_qp = std::make_shared<HalveAttractiveQP<P>>(forceField, bc);
+                 auto ha_qp = std::make_shared<HalveAttractiveQP>(forceField, bc);
                  auto pair1 = std::make_pair(key1, ha_qp);
                  pairPotentials.emplace(pair1);
                  if ( ip.spec1 != ip.spec2 ) {
@@ -106,14 +101,10 @@ namespace simploce {
     /**
      * Returns (non-bonded) interaction forces for given pairs of particles.
      */
-    template <typename P>
     static std::pair<energy_t, std::vector<force_t>>
-    computeParticlePairForces_(const typename PairLists<P>::pp_pair_cont_t &particlePairs,
-                               const std::map<std::string, std::shared_ptr<pair_potential<P>>> &pairPotentials,
+    computeParticlePairForces_(const PairLists::pp_pair_cont_t &particlePairs,
+                               const std::map<std::string, std::shared_ptr<pair_potential>> &pairPotentials,
                                int numberOfParticles) {
-        // Particle pointer type.
-        using p_ptr_t = std::shared_ptr<P>;
-
         // Compute interactions for all particle pairs.
         std::vector<force_t> forces(numberOfParticles, force_t{0.0, 0.0, 0.0});
         energy_t energy{0.0};
@@ -134,7 +125,7 @@ namespace simploce {
 
             // Call pair potential.
             std::string key = pi->spec()->name() + "-" + pj->spec()->name();
-            pair_potential<P>& pairPotential = *pairPotentials.at(key);
+            pair_potential &pairPotential = *pairPotentials.at(key);
             std::pair<energy_t, force_t> ef = pairPotential(pi, pj);
 
             // Store results.
@@ -150,23 +141,22 @@ namespace simploce {
     /**
      * Computes non-bonded forces and associated potential energies.
      */
-    template <typename P>
     static energy_t
-    computeNonBondedForces_(const std::vector<std::shared_ptr<P>> &all,
-                            const PairLists<P> &pairLists,
-                            const std::map<std::string, std::shared_ptr<pair_potential<P>>> &pairPotentials,
+    computeNonBondedForces_(const std::vector<p_ptr_t> &all,
+                            const PairLists &pairLists,
+                            const std::map<std::string, std::shared_ptr<pair_potential>> &pairPotentials,
                             const box_ptr_t &box,
                             const bc_ptr_t &bc) {
 
-            using pp_pair_cont_t = typename PairLists<P>::pp_pair_cont_t;
-
-            if ( pairLists.isEmpty() ) {
-                return 0.0;
-            }
+            using pp_pair_cont_t = PairLists::pp_pair_cont_t;
 
             static util::Logger logger("simploce::forces::computeNonBondedForces_()");
             static std::vector<pp_pair_cont_t> subPairLists;
             static bool firstTime = true;
+
+            if ( pairLists.isEmpty() ) {
+                return 0.0;
+            }
 
             auto numberOfParticles = pairLists.numberOfParticles();
             std::vector<result_t> results{};
@@ -189,7 +179,7 @@ namespace simploce {
                         futures.push_back(
                                 std::async(
                                         std::launch::async,
-                                        computeParticlePairForces_<P>,
+                                        computeParticlePairForces_,
                                         std::ref(single),
                                         std::ref(pairPotentials),
                                         numberOfParticles
@@ -203,7 +193,7 @@ namespace simploce {
                 // by the current thread.
                 const pp_pair_cont_t &single = *(subPairLists.end() - 1);
                 if ( !single.empty() ) {
-                    auto result = computeParticlePairForces_<P>(single, pairPotentials, numberOfParticles);
+                    auto result = computeParticlePairForces_(single, pairPotentials, int(numberOfParticles));
                     results.push_back(result);
                 }
             } else {
@@ -212,8 +202,9 @@ namespace simploce {
                 if ( firstTime ) {
                     logger.debug("Lennard-Jones and electrostatic forces and energies are computed sequentially.");
                 }
-                auto result = computeParticlePairForces_<P>(pairLists.particlePairList(), pairPotentials,
-                                                            numberOfParticles);
+                auto result = computeParticlePairForces_(pairLists.particlePairList(),
+                                                         pairPotentials,
+                                                         int(numberOfParticles));
                 results.push_back(result);
             }
 
@@ -238,22 +229,19 @@ namespace simploce {
     /**
      * Computes bonded forces and associated potential energies.
      */
-    template <typename P>
     static energy_t
-    computeBondedForces(const std::vector<std::shared_ptr<ParticleGroup<P>>> &groups,
-                        const std::map<std::string, std::shared_ptr<pair_potential<P>>> &pairPotentials) {
+    computeBondedForces(const std::vector<pg_ptr_t> &groups,
+                        const std::map<std::string, std::shared_ptr<pair_potential>> &pairPotentials) {
         energy_t energy{0.0};
         for (auto &group : groups) {
             for (auto &bond : group->bonds() ) {
                 // Get bonded particles.
-                auto& p1 = bond.getParticleOne();
-                auto index_1 = p1->index();
-                auto& p2 = bond.getParticleTwo();
-                auto index_2 = p2->index();
+                auto p1 = bond.getParticleOne();
+                auto p2 = bond.getParticleTwo();
 
                 // Call pair potential.
                 std::string key = p1->spec()->name() + "-" + p2->spec()->name();
-                pair_potential<P>& pairPotential = *pairPotentials.at(key);
+                pair_potential& pairPotential = *pairPotentials.at(key);
                 std::pair<energy_t, force_t> ef = pairPotential(p1, p2);
 
                 // Store results.
@@ -274,35 +262,22 @@ namespace simploce {
         box_{std::move(box)}, bc_{std::move(bc)}, forceField_{std::move(forceField)} {
     }
 
-    energy_t Forces::nonBonded(const std::vector<atom_ptr_t> &all,
-                               const PairLists<Atom> &pairLists) {
-        if ( aaPairPotentials.empty() ) {
-            aaPairPotentials = associatePairPotentials_<Atom>(all, forceField_, box_, bc_);
+    energy_t
+    Forces::nonBonded(const std::vector<p_ptr_t> &all,
+                      const PairLists &pairLists) {
+        if ( pairPotentials_.empty() ) {
+            pairPotentials_ = associatePairPotentials_(all, forceField_, box_, bc_);
         }
-        return computeNonBondedForces_<Atom>(all, pairLists, aaPairPotentials, box_, bc_);
+        return computeNonBondedForces_(all, pairLists, pairPotentials_, box_, bc_);
     }
 
-    energy_t Forces::bonded(const std::vector<atom_ptr_t> &all,
-                            const std::vector<std::shared_ptr<ParticleGroup<Atom>>> &groups) {
-        if ( aaPairPotentials.empty() ) {
-            aaPairPotentials = associatePairPotentials_<Atom>(all, forceField_, box_, bc_);
+    energy_t
+    Forces::bonded(const std::vector<p_ptr_t> &all,
+                   const std::vector<pg_ptr_t> &groups) {
+        if ( pairPotentials_.empty() ) {
+            pairPotentials_ = associatePairPotentials_(all, forceField_, box_, bc_);
         }
-        return computeBondedForces<Atom>(groups, aaPairPotentials);
+        return computeBondedForces(groups, pairPotentials_);
     }
 
-    energy_t Forces::nonBonded(const std::vector<bead_ptr_t> &all,
-                               const PairLists<Bead> &pairLists) {
-        if ( bbPairPotentials.empty() ) {
-            bbPairPotentials = associatePairPotentials_<Bead>(all, forceField_, box_, bc_);
-        }
-        return computeNonBondedForces_<Bead>(all, pairLists, bbPairPotentials, box_, bc_);
-    }
-
-    energy_t Forces::bonded(const std::vector<bead_ptr_t> &all,
-                            const std::vector<std::shared_ptr<ParticleGroup<Bead>>> &groups) {
-        if ( bbPairPotentials.empty() ) {
-            bbPairPotentials = associatePairPotentials_<Bead>(all, forceField_, box_, bc_);
-        }
-        return computeBondedForces<Bead>(groups, bbPairPotentials);
-    }
 }

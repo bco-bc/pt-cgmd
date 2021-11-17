@@ -16,6 +16,7 @@
 #include "simploce/util/logger.hpp"
 #include "simploce/util/box.hpp"
 #include "simploce/util/util.hpp"
+#include "simploce/particle/p-properties.hpp"
 #include <boost/algorithm/string.hpp>
 #include <vector>
 #include <memory>
@@ -119,10 +120,10 @@ namespace simploce {
 
     private:
 
-        bead_ptr_t createParticle_(const id_t& id,
-                                   int index,
-                                   const std::string& name,
-                                   const spec_ptr_t& spec) override;
+        p_ptr_t createParticle_(const id_t& id,
+                                int index,
+                                const std::string& name,
+                                const spec_ptr_t& spec) override;
 
         std::vector<prot_bead_ptr_t> protonatableBeads_;
     };
@@ -187,8 +188,9 @@ namespace simploce {
         util::Logger logger{"simploce::ProtonatableCoarseGrained<S>::addProtonatableBead"};
         if ( !spec->isProtonatable() ) {
             util::logAndThrow(logger,
-                              spec->name() + ": Not a protonatable particle specification. "  +
-                              "Use method addBead(...) instead.");
+                              spec->name() +
+                              ": Not a protonatable particle specification for particle '"  +
+                              name + "'. Use method addBead(...) instead.");
         }
         auto bead = this->addParticle(name, spec);
         return this->findProtonatable(bead->id());
@@ -244,7 +246,7 @@ namespace simploce {
     }
 
     template<typename S>
-    bead_ptr_t
+    p_ptr_t
     ProtonatableCoarseGrained<S>::createParticle_(const id_t& id,
                                                   int index,
                                                   const std::string& name,

@@ -8,25 +8,15 @@
 #ifndef BOND_HPP
 #define BOND_HPP
 
-#include <stdexcept>
-#include <memory>
+#include "p-types.hpp"
 
 namespace simploce {
     
     /**
-     * A link between any two particles of any type.
-     * @param P Particle type.
+     * A link between any two particles.
      */
-    template <typename P>
     class Bond  {
     public:
-        
-        /**
-         * Particle pointer type.
-         */
-        using p_ptr_t = std::shared_ptr<P>;
-        
-        virtual ~Bond() {}
     
         /**
          * Creates bond between two particles.
@@ -41,13 +31,13 @@ namespace simploce {
          * Returns particle "1" involved in this bond.
          * @return Particle "1".
          */
-        const p_ptr_t getParticleOne() const { return p1_; }
+        p_ptr_t getParticleOne() const;
     
         /**
          * Returns particle "2" involved in this bond.
          * @return Particle "2".
          */
-        const p_ptr_t getParticleTwo() const { return p2_; }
+        p_ptr_t getParticleTwo() const;
     
         /**
          * Is given particle part of this bond.
@@ -58,43 +48,14 @@ namespace simploce {
     
     private:
     
-        Bond(const p_ptr_t& p1, 
-             const p_ptr_t& p2) ;
+        Bond(p_ptr_t  p1, p_ptr_t  p2) ;
     
         p_ptr_t p1_;
         p_ptr_t p2_;
     
   };
   
-  template <typename P>
-  Bond<P> 
-  Bond<P>::makeBond(const p_ptr_t& p1, 
-                    const p_ptr_t& p2)
-  {
-     return Bond{p1, p2};
-  }
-  
-  template <typename P>
-  bool 
-  Bond<P>::contains(const p_ptr_t& particle) const
-  {
-      return particle == p1_ || particle == p2_;
-  }
-  
-  template <typename P>
-  Bond<P>::Bond(const p_ptr_t& p1, 
-                const p_ptr_t& p2) :
-      p1_{p1}, p2_{p2}
-  {      
-     if ( !p1_ || !p2_ ) {
-         throw std::domain_error("Bond: Two particles must be provided.");
-     }
-     if ( p1_ == p2_ || p1_->id() == p2_->id() ) {
-         throw std::domain_error("Bond: Particles must be different.");
-     }
-          
-  }
-    
+
 }
 
 

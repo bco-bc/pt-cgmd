@@ -81,13 +81,13 @@ void test1(const spec_catalog_ptr_t &catalog) {
 void test2(cg_sys_ptr_t &coarseGrained) {
     auto box = coarseGrained->box();
     auto bc = factory::pbc(box);
-    DistancePairListGenerator<Bead> generator(box, bc);
+    pair_list_gen_ptr_t generator = factory::pairListsGenerator(box, bc);
     auto pairLists =
-            coarseGrained->doWithAllFreeGroups<PairLists<Bead>>([generator] (
-                    const std::vector<bead_ptr_t>& all,
-                    const std::vector<bead_ptr_t>& free,
-                    const std::vector<bead_group_ptr_t>& groups) {
-        return generator.generate(all, free, groups);
+            coarseGrained->doWithAllFreeGroups<PairLists>([generator] (
+                    const std::vector<p_ptr_t>& all,
+                    const std::vector<p_ptr_t>& free,
+                    const std::vector<pg_ptr_t>& groups) {
+        return generator->generate(all, free, groups);
     });
     auto particlePairs = pairLists.particlePairList();
     std::cout << "Number of pairs: " << particlePairs.size() << std::endl;
@@ -96,13 +96,13 @@ void test2(cg_sys_ptr_t &coarseGrained) {
 void test3(at_sys_ptr_t & atomistic) {
     auto box = atomistic->box();
     auto bc = factory::pbc(box);
-    DistancePairListGenerator<Atom> generator(box, bc);
+    pair_list_gen_ptr_t generator = factory::pairListsGenerator(box, bc);
     auto pairLists =
-            atomistic->doWithAllFreeGroups<PairLists<Atom>>([generator] (
-                    const std::vector<atom_ptr_t>& all,
-                    const std::vector<atom_ptr_t>& free,
-                    const std::vector<atom_group_ptr_t>& groups) {
-        return generator.generate(all, free, groups);
+            atomistic->doWithAllFreeGroups<PairLists>([generator] (
+                    const std::vector<p_ptr_t>& all,
+                    const std::vector<p_ptr_t>& free,
+                    const std::vector<pg_ptr_t>& groups) {
+        return generator->generate(all, free, groups);
     });
     auto particlePairs = pairLists.particlePairList();
     std::cout << "Number of pairs: " << particlePairs.size() << std::endl;
@@ -119,7 +119,7 @@ int main(int argc, char** argv) {
 
     //test1(catalog);
 
-    auto factory = factory::protonatableParticleModelFactory(catalog);
+    auto factory = factory::protonatableParticleSystemFactory(catalog);
     auto polarizableWater = factory->polarizableWater(factory::box(7.27));
     test2(polarizableWater);
 
