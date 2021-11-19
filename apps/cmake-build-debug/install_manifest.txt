@@ -1,6 +1,3 @@
-/localdisk/bin/s-cgmd
-/localdisk/bin/s-dipole-moment
-/localdisk/bin/s-gr
-/localdisk/bin/s-msd
 /localdisk/bin/s-particle-system
-/localdisk/bin/s-validate-particle-system
+/localdisk/bin/s-validate
+/localdisk/bin/s-simulate

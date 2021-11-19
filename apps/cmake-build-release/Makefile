@@ -65,38 +65,6 @@ CMAKE_BINARY_DIR = /home/andre/wrk3/simploce/pt-cgmd/apps/cmake-build-release
 #=============================================================================
 # Targets provided globally by CMake.
 
-# Special rule for the target install/local
-install/local: preinstall
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Installing only the local directory..."
-	/home/andre/clion-2021.2.3/bin/cmake/linux/bin/cmake -DCMAKE_INSTALL_LOCAL_ONLY=1 -P cmake_install.cmake
-.PHONY : install/local
-
-# Special rule for the target install/local
-install/local/fast: preinstall/fast
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Installing only the local directory..."
-	/home/andre/clion-2021.2.3/bin/cmake/linux/bin/cmake -DCMAKE_INSTALL_LOCAL_ONLY=1 -P cmake_install.cmake
-.PHONY : install/local/fast
-
-# Special rule for the target edit_cache
-edit_cache:
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "No interactive CMake dialog available..."
-	/home/andre/clion-2021.2.3/bin/cmake/linux/bin/cmake -E echo No\ interactive\ CMake\ dialog\ available.
-.PHONY : edit_cache
-
-# Special rule for the target edit_cache
-edit_cache/fast: edit_cache
-.PHONY : edit_cache/fast
-
-# Special rule for the target rebuild_cache
-rebuild_cache:
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Running CMake to regenerate build system..."
-	/home/andre/clion-2021.2.3/bin/cmake/linux/bin/cmake --regenerate-during-build -S$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR)
-.PHONY : rebuild_cache
-
-# Special rule for the target rebuild_cache
-rebuild_cache/fast: rebuild_cache
-.PHONY : rebuild_cache/fast
-
 # Special rule for the target install/strip
 install/strip: preinstall
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Installing the project stripped..."
@@ -109,14 +77,17 @@ install/strip/fast: preinstall/fast
 	/home/andre/clion-2021.2.3/bin/cmake/linux/bin/cmake -DCMAKE_INSTALL_DO_STRIP=1 -P cmake_install.cmake
 .PHONY : install/strip/fast
 
-# Special rule for the target list_install_components
-list_install_components:
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Available install components are: \"Unspecified\""
-.PHONY : list_install_components
+# Special rule for the target install/local
+install/local: preinstall
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Installing only the local directory..."
+	/home/andre/clion-2021.2.3/bin/cmake/linux/bin/cmake -DCMAKE_INSTALL_LOCAL_ONLY=1 -P cmake_install.cmake
+.PHONY : install/local
 
-# Special rule for the target list_install_components
-list_install_components/fast: list_install_components
-.PHONY : list_install_components/fast
+# Special rule for the target install/local
+install/local/fast: preinstall/fast
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Installing only the local directory..."
+	/home/andre/clion-2021.2.3/bin/cmake/linux/bin/cmake -DCMAKE_INSTALL_LOCAL_ONLY=1 -P cmake_install.cmake
+.PHONY : install/local/fast
 
 # Special rule for the target install
 install: preinstall
@@ -129,6 +100,35 @@ install/fast: preinstall/fast
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Install the project..."
 	/home/andre/clion-2021.2.3/bin/cmake/linux/bin/cmake -P cmake_install.cmake
 .PHONY : install/fast
+
+# Special rule for the target list_install_components
+list_install_components:
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Available install components are: \"Unspecified\""
+.PHONY : list_install_components
+
+# Special rule for the target list_install_components
+list_install_components/fast: list_install_components
+.PHONY : list_install_components/fast
+
+# Special rule for the target rebuild_cache
+rebuild_cache:
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Running CMake to regenerate build system..."
+	/home/andre/clion-2021.2.3/bin/cmake/linux/bin/cmake --regenerate-during-build -S$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR)
+.PHONY : rebuild_cache
+
+# Special rule for the target rebuild_cache
+rebuild_cache/fast: rebuild_cache
+.PHONY : rebuild_cache/fast
+
+# Special rule for the target edit_cache
+edit_cache:
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "No interactive CMake dialog available..."
+	/home/andre/clion-2021.2.3/bin/cmake/linux/bin/cmake -E echo No\ interactive\ CMake\ dialog\ available.
+.PHONY : edit_cache
+
+# Special rule for the target edit_cache
+edit_cache/fast: edit_cache
+.PHONY : edit_cache/fast
 
 # The main all target
 all: cmake_check_build_system
@@ -162,19 +162,6 @@ depend:
 .PHONY : depend
 
 #=============================================================================
-# Target rules for targets named s-msd
-
-# Build rule for target.
-s-msd: cmake_check_build_system
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 s-msd
-.PHONY : s-msd
-
-# fast build rule for target.
-s-msd/fast:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/s-msd.dir/build.make CMakeFiles/s-msd.dir/build
-.PHONY : s-msd/fast
-
-#=============================================================================
 # Target rules for targets named s-particle-system
 
 # Build rule for target.
@@ -188,152 +175,30 @@ s-particle-system/fast:
 .PHONY : s-particle-system/fast
 
 #=============================================================================
-# Target rules for targets named s-gr
+# Target rules for targets named s-validate
 
 # Build rule for target.
-s-gr: cmake_check_build_system
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 s-gr
-.PHONY : s-gr
+s-validate: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 s-validate
+.PHONY : s-validate
 
 # fast build rule for target.
-s-gr/fast:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/s-gr.dir/build.make CMakeFiles/s-gr.dir/build
-.PHONY : s-gr/fast
+s-validate/fast:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/s-validate.dir/build.make CMakeFiles/s-validate.dir/build
+.PHONY : s-validate/fast
 
 #=============================================================================
-# Target rules for targets named s-cgmd
+# Target rules for targets named s-simulate
 
 # Build rule for target.
-s-cgmd: cmake_check_build_system
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 s-cgmd
-.PHONY : s-cgmd
+s-simulate: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 s-simulate
+.PHONY : s-simulate
 
 # fast build rule for target.
-s-cgmd/fast:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/s-cgmd.dir/build.make CMakeFiles/s-cgmd.dir/build
-.PHONY : s-cgmd/fast
-
-#=============================================================================
-# Target rules for targets named s-validate-particle-system
-
-# Build rule for target.
-s-validate-particle-system: cmake_check_build_system
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 s-validate-particle-system
-.PHONY : s-validate-particle-system
-
-# fast build rule for target.
-s-validate-particle-system/fast:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/s-validate-particle-system.dir/build.make CMakeFiles/s-validate-particle-system.dir/build
-.PHONY : s-validate-particle-system/fast
-
-#=============================================================================
-# Target rules for targets named s-dipole-moment
-
-# Build rule for target.
-s-dipole-moment: cmake_check_build_system
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 s-dipole-moment
-.PHONY : s-dipole-moment
-
-# fast build rule for target.
-s-dipole-moment/fast:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/s-dipole-moment.dir/build.make CMakeFiles/s-dipole-moment.dir/build
-.PHONY : s-dipole-moment/fast
-
-src/s-cgmd.o: src/s-cgmd.cpp.o
-.PHONY : src/s-cgmd.o
-
-# target to build an object file
-src/s-cgmd.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/s-cgmd.dir/build.make CMakeFiles/s-cgmd.dir/src/s-cgmd.cpp.o
-.PHONY : src/s-cgmd.cpp.o
-
-src/s-cgmd.i: src/s-cgmd.cpp.i
-.PHONY : src/s-cgmd.i
-
-# target to preprocess a source file
-src/s-cgmd.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/s-cgmd.dir/build.make CMakeFiles/s-cgmd.dir/src/s-cgmd.cpp.i
-.PHONY : src/s-cgmd.cpp.i
-
-src/s-cgmd.s: src/s-cgmd.cpp.s
-.PHONY : src/s-cgmd.s
-
-# target to generate assembly for a file
-src/s-cgmd.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/s-cgmd.dir/build.make CMakeFiles/s-cgmd.dir/src/s-cgmd.cpp.s
-.PHONY : src/s-cgmd.cpp.s
-
-src/s-dipole-moment.o: src/s-dipole-moment.cpp.o
-.PHONY : src/s-dipole-moment.o
-
-# target to build an object file
-src/s-dipole-moment.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/s-dipole-moment.dir/build.make CMakeFiles/s-dipole-moment.dir/src/s-dipole-moment.cpp.o
-.PHONY : src/s-dipole-moment.cpp.o
-
-src/s-dipole-moment.i: src/s-dipole-moment.cpp.i
-.PHONY : src/s-dipole-moment.i
-
-# target to preprocess a source file
-src/s-dipole-moment.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/s-dipole-moment.dir/build.make CMakeFiles/s-dipole-moment.dir/src/s-dipole-moment.cpp.i
-.PHONY : src/s-dipole-moment.cpp.i
-
-src/s-dipole-moment.s: src/s-dipole-moment.cpp.s
-.PHONY : src/s-dipole-moment.s
-
-# target to generate assembly for a file
-src/s-dipole-moment.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/s-dipole-moment.dir/build.make CMakeFiles/s-dipole-moment.dir/src/s-dipole-moment.cpp.s
-.PHONY : src/s-dipole-moment.cpp.s
-
-src/s-gr.o: src/s-gr.cpp.o
-.PHONY : src/s-gr.o
-
-# target to build an object file
-src/s-gr.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/s-gr.dir/build.make CMakeFiles/s-gr.dir/src/s-gr.cpp.o
-.PHONY : src/s-gr.cpp.o
-
-src/s-gr.i: src/s-gr.cpp.i
-.PHONY : src/s-gr.i
-
-# target to preprocess a source file
-src/s-gr.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/s-gr.dir/build.make CMakeFiles/s-gr.dir/src/s-gr.cpp.i
-.PHONY : src/s-gr.cpp.i
-
-src/s-gr.s: src/s-gr.cpp.s
-.PHONY : src/s-gr.s
-
-# target to generate assembly for a file
-src/s-gr.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/s-gr.dir/build.make CMakeFiles/s-gr.dir/src/s-gr.cpp.s
-.PHONY : src/s-gr.cpp.s
-
-src/s-msd.o: src/s-msd.cpp.o
-.PHONY : src/s-msd.o
-
-# target to build an object file
-src/s-msd.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/s-msd.dir/build.make CMakeFiles/s-msd.dir/src/s-msd.cpp.o
-.PHONY : src/s-msd.cpp.o
-
-src/s-msd.i: src/s-msd.cpp.i
-.PHONY : src/s-msd.i
-
-# target to preprocess a source file
-src/s-msd.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/s-msd.dir/build.make CMakeFiles/s-msd.dir/src/s-msd.cpp.i
-.PHONY : src/s-msd.cpp.i
-
-src/s-msd.s: src/s-msd.cpp.s
-.PHONY : src/s-msd.s
-
-# target to generate assembly for a file
-src/s-msd.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/s-msd.dir/build.make CMakeFiles/s-msd.dir/src/s-msd.cpp.s
-.PHONY : src/s-msd.cpp.s
+s-simulate/fast:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/s-simulate.dir/build.make CMakeFiles/s-simulate.dir/build
+.PHONY : s-simulate/fast
 
 src/s-particle-system.o: src/s-particle-system.cpp.o
 .PHONY : src/s-particle-system.o
@@ -359,29 +224,53 @@ src/s-particle-system.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/s-particle-system.dir/build.make CMakeFiles/s-particle-system.dir/src/s-particle-system.cpp.s
 .PHONY : src/s-particle-system.cpp.s
 
-src/s-validate-particle-system.o: src/s-validate-particle-system.cpp.o
-.PHONY : src/s-validate-particle-system.o
+src/s-simulate.o: src/s-simulate.cpp.o
+.PHONY : src/s-simulate.o
 
 # target to build an object file
-src/s-validate-particle-system.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/s-validate-particle-system.dir/build.make CMakeFiles/s-validate-particle-system.dir/src/s-validate-particle-system.cpp.o
-.PHONY : src/s-validate-particle-system.cpp.o
+src/s-simulate.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/s-simulate.dir/build.make CMakeFiles/s-simulate.dir/src/s-simulate.cpp.o
+.PHONY : src/s-simulate.cpp.o
 
-src/s-validate-particle-system.i: src/s-validate-particle-system.cpp.i
-.PHONY : src/s-validate-particle-system.i
+src/s-simulate.i: src/s-simulate.cpp.i
+.PHONY : src/s-simulate.i
 
 # target to preprocess a source file
-src/s-validate-particle-system.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/s-validate-particle-system.dir/build.make CMakeFiles/s-validate-particle-system.dir/src/s-validate-particle-system.cpp.i
-.PHONY : src/s-validate-particle-system.cpp.i
+src/s-simulate.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/s-simulate.dir/build.make CMakeFiles/s-simulate.dir/src/s-simulate.cpp.i
+.PHONY : src/s-simulate.cpp.i
 
-src/s-validate-particle-system.s: src/s-validate-particle-system.cpp.s
-.PHONY : src/s-validate-particle-system.s
+src/s-simulate.s: src/s-simulate.cpp.s
+.PHONY : src/s-simulate.s
 
 # target to generate assembly for a file
-src/s-validate-particle-system.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/s-validate-particle-system.dir/build.make CMakeFiles/s-validate-particle-system.dir/src/s-validate-particle-system.cpp.s
-.PHONY : src/s-validate-particle-system.cpp.s
+src/s-simulate.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/s-simulate.dir/build.make CMakeFiles/s-simulate.dir/src/s-simulate.cpp.s
+.PHONY : src/s-simulate.cpp.s
+
+src/s-validate.o: src/s-validate.cpp.o
+.PHONY : src/s-validate.o
+
+# target to build an object file
+src/s-validate.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/s-validate.dir/build.make CMakeFiles/s-validate.dir/src/s-validate.cpp.o
+.PHONY : src/s-validate.cpp.o
+
+src/s-validate.i: src/s-validate.cpp.i
+.PHONY : src/s-validate.i
+
+# target to preprocess a source file
+src/s-validate.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/s-validate.dir/build.make CMakeFiles/s-validate.dir/src/s-validate.cpp.i
+.PHONY : src/s-validate.cpp.i
+
+src/s-validate.s: src/s-validate.cpp.s
+.PHONY : src/s-validate.s
+
+# target to generate assembly for a file
+src/s-validate.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/s-validate.dir/build.make CMakeFiles/s-validate.dir/src/s-validate.cpp.s
+.PHONY : src/s-validate.cpp.s
 
 # Help Target
 help:
@@ -395,30 +284,18 @@ help:
 	@echo "... install/strip"
 	@echo "... list_install_components"
 	@echo "... rebuild_cache"
-	@echo "... s-cgmd"
-	@echo "... s-dipole-moment"
-	@echo "... s-gr"
-	@echo "... s-msd"
 	@echo "... s-particle-system"
-	@echo "... s-validate-particle-system"
-	@echo "... src/s-cgmd.o"
-	@echo "... src/s-cgmd.i"
-	@echo "... src/s-cgmd.s"
-	@echo "... src/s-dipole-moment.o"
-	@echo "... src/s-dipole-moment.i"
-	@echo "... src/s-dipole-moment.s"
-	@echo "... src/s-gr.o"
-	@echo "... src/s-gr.i"
-	@echo "... src/s-gr.s"
-	@echo "... src/s-msd.o"
-	@echo "... src/s-msd.i"
-	@echo "... src/s-msd.s"
+	@echo "... s-simulate"
+	@echo "... s-validate"
 	@echo "... src/s-particle-system.o"
 	@echo "... src/s-particle-system.i"
 	@echo "... src/s-particle-system.s"
-	@echo "... src/s-validate-particle-system.o"
-	@echo "... src/s-validate-particle-system.i"
-	@echo "... src/s-validate-particle-system.s"
+	@echo "... src/s-simulate.o"
+	@echo "... src/s-simulate.i"
+	@echo "... src/s-simulate.s"
+	@echo "... src/s-validate.o"
+	@echo "... src/s-validate.i"
+	@echo "... src/s-validate.s"
 .PHONY : help
 
 

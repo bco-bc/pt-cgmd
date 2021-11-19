@@ -10,7 +10,6 @@
 #include "simploce/simulation/s-factory.hpp"
 #include "simploce/simulation/sim-model.hpp"
 #include "simploce/simulation/sim-model-factory.hpp"
-#include "simploce/simulation/sim-util.hpp"
 #include "simploce/particle/particle-spec-catalog.hpp"
 #include "simploce/util/file.hpp"
 #include "simploce/units/units-mu.hpp"

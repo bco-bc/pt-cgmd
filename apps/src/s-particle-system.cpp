@@ -7,7 +7,9 @@
  */
 
 #include "simploce/simulation/s-factory.hpp"
-#include "simploce/simulation/protonatable-particle-model-factory.hpp"
+#include "simploce/simulation/protonatable-particle-system-factory.hpp"
+#include "simploce/particle/particle-spec-catalog.hpp"
+#include "simploce/particle/particle-system.hpp"
 #include "simploce/util/logger.hpp"
 #include "simploce/util/file.hpp"
 #include "simploce/util/specification.hpp"
@@ -28,26 +30,29 @@ int main(int argc, char *argv[]) {
         std::string fnParticleSpecCatalog{"particle-spec-catalog.dat"};
         std::string fnParticleModel{"particle.system"};
         util::Specification specification = DIATOMIC;
-        std::string selectFrom = "Model selection. Choose one from '" +
-                DIATOMIC.spec() + "' (molecular oxygen), '" +
-                ARGON.spec() + "' (liquid), '" +
-                POLARIZABLE_WATER.spec() + "' (coarse grained).";
+        std::string selectFrom = "Particle system selection. Choose one from '" +
+                DIATOMIC.spec() + "' (molecular oxygen, atomistic), '" +
+                ARGON.spec() + "' (atomistic), '" +
+                POLARIZABLE_WATER.spec() + "' (coarse grained). Default is 'diatomic'.";
 
         po::options_description usage("Usage");
         usage.add_options() (
-                "fn-particle-spec-catalog",
+                "fn-particle-spec-catalog,s",
                 po::value<std::string>(&fnParticleSpecCatalog),
                 "Input file name of particle specifications. Default 'particle-spec-catalog.dat'."
         )(
-                "particle-model-spec",
+                "particle-system-spec,p",
                 po::value<util::Specification>(&specification),
                 selectFrom.c_str()
         )(
-                "fn-particle-model",
+                "fn-particle-model,o",
                 po::value<std::string>(&fnParticleModel),
-                "Output file name for newly created particle model. Default is 'particle.model'."
+                "Output file name for newly created particle system. Default is 'particle.system'."
         )(
-                "help", "This help message"
+                "verbose,v",
+                "Verbose"
+        )(
+                "help,h", "This help message"
         );
 
         po::variables_map vm;
@@ -62,20 +67,20 @@ int main(int argc, char *argv[]) {
         logger.info("Selected particle system: " + specification.spec());
 
         auto catalog = factory::particleSpecCatalog(fnParticleSpecCatalog);
-        auto factory = factory::protonatableParticleModelFactory(catalog);
+        auto factory = factory::protonatableParticleSystemFactory(catalog);
         std::ofstream stream;
         util::open_output_file(stream, fnParticleModel);
         if ( specification == DIATOMIC ) {
             auto diatomic = factory->diatomic(distance_t{0.12}, catalog->O());
-            stream << diatomic << std::endl;
+            stream << *diatomic << std::endl;
         } else if ( specification == POLARIZABLE_WATER ) {
             auto box = factory::box(length_t{7.27});
             auto pWater = factory->polarizableWater(box);
-            stream << pWater << std::endl;
+            stream << *pWater << std::endl;
         } else if ( specification == ARGON) {
             auto box = factory::box(length_t{3.47786});
             auto argon = factory->argon(box, density_t{1374.0}, temperature_t{94.4});
-            stream << argon << std::endl;
+            stream << *argon << std::endl;
         } else {
             util::logAndThrow(logger, specification.spec() + ": No such particle model available.");
         }

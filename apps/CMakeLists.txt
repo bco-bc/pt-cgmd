@@ -22,24 +22,28 @@ find_package(Boost REQUIRED COMPONENTS program_options)
 include_directories(${CMAKE_INSTALL_PREFIX}/include)
 include_directories(${Boost_INCLUDE_DIR})
 
-add_executable(s-cgmd src/s-cgmd.cpp)
+#[[
 add_executable(s-dipole-moment src/s-dipole-moment.cpp)
 add_executable(s-gr src/s-gr.cpp)
-add_executable(s-msd src/s-msd.cpp)
+add_executable(s-msd src/s-msd.cpp)]]
 add_executable(s-particle-system src/s-particle-system.cpp)
-add_executable(s-validate-particle-system src/s-validate-particle-system.cpp)
+add_executable(s-validate src/s-validate.cpp)
+add_executable(s-simulate src/s-simulate.cpp)
 
-target_link_directories(s-cgmd PUBLIC ${CMAKE_INSTALL_PREFIX}/lib)
+#[[target_link_directories(s-cgmd PUBLIC ${CMAKE_INSTALL_PREFIX}/lib)
 target_link_libraries(s-cgmd simulation particles util cpputil pthread ${Boost_LIBRARIES})
 target_link_directories(s-dipole-moment PUBLIC ${CMAKE_INSTALL_PREFIX}/lib)
 target_link_libraries(s-dipole-moment simulation particles util cpputil pthread ${Boost_LIBRARIES})
 target_link_directories(s-gr PUBLIC ${CMAKE_INSTALL_PREFIX}/lib)
 target_link_libraries(s-gr simulation particles util cpputil pthread ${Boost_LIBRARIES})
 target_link_directories(s-msd PUBLIC ${CMAKE_INSTALL_PREFIX}/lib)
-target_link_libraries(s-msd simulation particles util cpputil pthread ${Boost_LIBRARIES})
+target_link_libraries(s-msd simulation particles util cpputil pthread ${Boost_LIBRARIES})]]
 target_link_directories(s-particle-system PUBLIC ${CMAKE_INSTALL_PREFIX}/lib)
 target_link_libraries(s-particle-system simulation particles util cpputil pthread ${Boost_LIBRARIES})
-target_link_directories(s-validate-particle-system PUBLIC ${CMAKE_INSTALL_PREFIX}/lib)
-target_link_libraries(s-validate-particle-system simulation particles util cpputil pthread ${Boost_LIBRARIES})
+target_link_directories(s-validate PUBLIC ${CMAKE_INSTALL_PREFIX}/lib)
+target_link_libraries(s-validate simulation particles util cpputil pthread ${Boost_LIBRARIES})
+target_link_directories(s-simulate PUBLIC ${CMAKE_INSTALL_PREFIX}/lib)
+target_link_libraries(s-simulate simulation particles util cpputil pthread ${Boost_LIBRARIES})
 
-install(TARGETS s-cgmd s-dipole-moment s-gr s-msd s-particle-system s-validate-particle-system DESTINATION bin)
+#[[install(TARGETS s-cgmd s-dipole-moment s-gr s-msd s-particle-system DESTINATION bin)]]
+install(TARGETS s-particle-system s-validate s-simulate DESTINATION bin)

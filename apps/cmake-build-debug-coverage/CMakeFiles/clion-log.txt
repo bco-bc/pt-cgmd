@@ -1,0 +1,4 @@
+/home/andre/clion-2021.2.3/bin/cmake/linux/bin/cmake -DCMAKE_BUILD_TYPE=Debug -DCMAKE_CXX_FLAGS=--coverage -DCMAKE_C_FLAGS=--coverage -DCMAKE_DEPENDS_USE_COMPILER=FALSE -G "CodeBlocks - Unix Makefiles" /home/andre/wrk3/simploce/pt-cgmd/apps
+-- Configuring done
+-- Generating done
+-- Build files have been written to: /home/andre/wrk3/simploce/pt-cgmd/apps/cmake-build-debug-coverage
