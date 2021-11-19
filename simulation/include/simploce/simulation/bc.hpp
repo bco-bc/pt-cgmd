@@ -16,7 +16,7 @@ namespace simploce {
    */
   struct boundary_condition {
 
-    virtual ~boundary_condition() {}
+    virtual ~boundary_condition() = default;
 
     /**
      * Applies the boundary condition.

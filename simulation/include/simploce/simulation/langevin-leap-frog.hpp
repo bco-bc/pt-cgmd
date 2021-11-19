@@ -1,39 +1,14 @@
 /*
- * The MIT License
+ * Author: André H. Juffer, Biocenter Oulu.
  *
- * Copyright 2019 juffer.
- *
- * Permission is hereby granted, free of charge, to any person obtaining a copy
- * of this software and associated documentation files (the "Software"), to deal
- * in the Software without restriction, including without limitation the rights
- * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- * copies of the Software, and to permit persons to whom the Software is
- * furnished to do so, subject to the following conditions:
- *
- * The above copyright notice and this permission notice shall be included in
- * all copies or substantial portions of the Software.
- *
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
- * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
- * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
- * THE SOFTWARE.
- */
-
-/* 
- * File:   langevin-leap-frog.hpp
- * Author: juffer
- *
- * Created on 16 November 2019, 15:23
+ * Created on November 16, 2019, 5:39 PM
  */
 
 #ifndef LANGEVIN_LEAP_FROG_HPP
 #define LANGEVIN_LEAP_FROG_HPP
 
-#include "cg-displacer.hpp"
-#include "simploce/particle/coarse-grained.hpp"
+#include "displacer.hpp"
+#include "s-types.hpp"
 
 namespace simploce {
     
@@ -44,30 +19,24 @@ namespace simploce {
      *  Goga et al, J. Chem. Theory Comput. 2012, 8, 3637−3649.
      * </a>
      */
-    template <typename M>
-    class LangevinLeapFrog;
-    
-    /**
-     * Specialization for a coarse grained particle model.
-     */
-    template <>
-    class LangevinLeapFrog<CoarseGrained> : public CoarseGrainedDisplacer {
+    class LangevinLeapFrog: public Displacer {
     public:
-        
-        LangevinLeapFrog(const cg_interactor_ptr_t& interactor);
-        
+
         /**
-         * Returns beads of a coarse grained particle model.
-         * @param param Simulation parameters.
-         * @param cg Coarse grained particle model.
-         * @return Kinetic, potential energy, and temperature.
+         * Constructor. All arguments are required.
+         * @param simulationParameters Simulation parameters.
+         * @param interactor Interactor.
          */
-        SimulationData displace(const sim_param_t& param, 
-                                const cg_mod_ptr_t& cg) const override;
+        LangevinLeapFrog(sim_param_ptr_t simulationParameters,
+                         interactor_ptr_t interactor);
+        
+
+        SimulationData displace(const p_system_ptr_t& particleSystem) const override;
         
     private:
-        
-        cg_interactor_ptr_t interactor_;
+
+        sim_param_ptr_t simulationParameters_;
+        interactor_ptr_t interactor_;
     };
 }
 

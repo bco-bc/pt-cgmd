@@ -11,13 +11,15 @@
 #include "simploce/simulation/sim-data.hpp"
 #include "simploce/simulation/s-factory.hpp"
 #include "simploce/simulation/s-types.hpp"
+#include "simploce/simulation/s-conf.hpp"
+#include "simploce/simulation/interactor.hpp"
 #include "simploce/particle/bead.hpp"
 #include "simploce/particle/coarse-grained.hpp"
 #include "simploce/particle/particle-spec-catalog.hpp"
-#include "simploce/particle/particle-model-factory.hpp"
+#include "simploce/particle/particle-system-factory.hpp"
 #include "simploce/util/file.hpp"
+#include "simploce/util/logger.hpp"
 #include "simploce/util/param.hpp"
-#include "simploce/simulation/sim-model-factory.hpp"
 #include <fstream>
 #include <cstdlib>
 #include <iostream>
@@ -29,65 +31,47 @@ using namespace simploce::param;
  * Simple C++ Test Suite
  */
 
-void test1() {
+void test1(const spec_catalog_ptr_t& catalog, const ff_ptr_t& forceField) {
     std::cout << "displacer-test test 1" << std::endl;
-    
-    std::string fileName = "resources/particles-specs.dat";
-    std::ifstream stream;
-    util::open_input_file(stream, fileName);
-    spec_catalog_ptr_t catalog = ParticleSpecCatalog::create(stream);
 
-    sim_param_t param{};
-    param.add<std::size_t>("nsteps", 1000);
-    param.add<real_t>("timestep", 0.001);
-    param.add<real_t>("npairlists", 10);
-    param.add<real_t>("temperature", 300);
-    param.add<real_t>("gamma", 0.5);
-    std::cout << param << std::endl;
+    auto simulationParameters = factory::simulationParameters();
+    std::cout << *simulationParameters << std::endl;
     
-    box_ptr_t box = factory::cube(length_t{5.0});
+    box_ptr_t box = factory::box(length_t{5.0});
     bc_ptr_t bc = factory::pbc(box);
 
-    particle_model_fact_ptr_t factory = factory::particleModelFactory(catalog);
-    CoarseGrained cg = factory->polarizableWater(box);
-    cg_interactor_ptr_t interactor = 
-            factory::polarizableWaterInteractor(catalog, box, bc);
-    
-    /*
-    cg_displacer_ptr_t leapFrog = factory::leapFrog(interactor);    
-    SimulationData data = leapFrog->displace(param, cg);
-    
-    cg_displacer_ptr_t velocityVerlet = factory::velocityVerlet(interactor);
-    
-    data = velocityVerlet->displace(param, cg);
-    std::cout << data << std::endl;
-          
-    cg_displacer_ptr_t lvelocityVerlet = factory::langevinVelocityVerlet(interactor);
-    data = lvelocityVerlet->displace(param, cg);
-    std::cout << data << std::endl;
-    */
-    /*
-    cg_ptr_t ptcg = factory->formicAcidSolution(box);
-    pt_pair_list_gen_ptr_t generator = factory::protonTransferPairListGenerator(bc);
-    pt_displacer_ptr_t ptDisplacer = factory::protonTransferDisplacer();
-    cg_displacer_ptr_t pt = factory::protonTransferlangevinVelocityVerlet(interactor,
-                                                                          generator,
-                                                                          ptDisplacer);
-    SimulationData data = pt->displace(param, ptcg);
-    std::cout << data << std::endl;
-     */
+    auto factory = factory::particleSystemFactory(catalog);
+    p_system_ptr_t particleSystem = factory->diatomic(0.12, catalog->O());
+    auto interactor =
+            factory::interactor(simulationParameters, forceField, bc);
+    auto displacer = factory::displacer(conf::MONTE_CARLO, simulationParameters, interactor);
+    auto result = interactor->interact(particleSystem);
+    std::cout << "BEFORE: Non-bonded: " << result.first << ", bonded: " << result.second << std::endl;
+    std::cout << "Displacing particle system..." << std::endl;
+    for (int k = 0; k != 100; ++k) {
+        displacer->displace(particleSystem);
+    }
+    std::cout << "Done." << std::endl;
+    result = interactor->interact(particleSystem);
+    std::cout << "BEFORE: Non-bonded: " << result.first << ", bonded: " << result.second << std::endl;
 }
 
-int main(int argc, char** argv) {
-    std::cout << "%SUITE_STARTING% displacer-test" << std::endl;
-    std::cout << "%SUITE_STARTED%" << std::endl;
+int main() {
+    util::Logger::changeLogLevel(util::Logger::LOGTRACE);
 
-    std::cout << "%TEST_STARTED% test1 (displacer-test)" << std::endl;
-    test1();
-    std::cout << "%TEST_FINISHED% time=0 test1 (displacer-test)" << std::endl;
+    std::string fileName = "/localdisk/resources/particles-specs.dat";
+    std::ifstream stream;
+    util::open_input_file(stream, fileName);
+    spec_catalog_ptr_t catalog = ParticleSpecCatalog::obtainFrom(stream);
+    stream.close();
+    std::cout << *catalog << std::endl;
 
-    std::cout << "%SUITE_FINISHED% time=0" << std::endl;
-    
+    fileName = "/localdisk/resources/interaction-parameters.dat";
+    util::open_input_file(stream, fileName);
+    auto forceField = factory::forceField(stream, catalog);
+    stream.close();
+
+    test1(catalog, forceField);
+
     return (EXIT_SUCCESS);
 }
-

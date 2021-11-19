@@ -44,7 +44,7 @@ int main() {
 
     std::string fnInteractions = "/localdisk/resources/interaction-parameters.dat";
     util::open_input_file(stream, fnInteractions);
-    auto forceField = factory::obtainFrom(stream, catalog);
+    auto forceField = factory::forceField(stream, catalog);
     stream.close();
 
     test1(catalog, forceField);

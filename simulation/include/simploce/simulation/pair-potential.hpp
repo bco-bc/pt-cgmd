@@ -17,6 +17,8 @@ namespace simploce {
      */
     struct pair_potential {
 
+        virtual ~pair_potential() = default;
+
         /**
          * Returns potential energy and the force due to an interaction between two particles.
          * @param p1 Particle #1.

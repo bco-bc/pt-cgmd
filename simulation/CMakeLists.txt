@@ -22,16 +22,20 @@ include_directories(${CMAKE_INSTALL_PREFIX}/include SYSTEM)
 ]]
 
 add_library(simulation SHARED
-        src/interactor.cpp src/forces.cpp src/lj.cpp src/lj-rf.cpp src/hp.cpp src/halve-attractive-qp.cpp
-        src/pair-lists.cpp
-        src/no-bc.cpp src/pbc.cpp
-        src/s-factory.cpp
+        src/interactor.cpp src/forces.cpp src/lj.cpp src/lj-rf.cpp src/hp.cpp
+        src/halve-attractive-qp.cpp src/pair-lists.cpp src/simulation.cpp src/sim-data.cpp
+        src/no-bc.cpp src/pbc.cpp src/s-factory.cpp
         src/s-properties.cpp src/protonatable-particle-system-factory.cpp
-        src/continuous.cpp src/discrete.cpp src/force-field.cpp src/distance-pair-list-generator.cpp)
+        src/continuous.cpp src/discrete.cpp src/force-field.cpp
+        src/distance-pair-list-generator.cpp src/leap-frog.cpp src/velocity-verlet.cpp
+        src/langevin-leap-frog.cpp src/langevin-velocity-verlet.cpp
+        src/mc.cpp)
 
 
 add_subdirectory(tests)
+add_subdirectory(apps)
 
 install(TARGETS simulation DESTINATION lib)
 install(DIRECTORY include/simploce DESTINATION include)
 install(DIRECTORY resources DESTINATION ${CMAKE_INSTALL_PREFIX})
+install(TARGETS lj-parameters DESTINATION bin)

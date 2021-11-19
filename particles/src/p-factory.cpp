@@ -46,7 +46,7 @@ namespace simploce {
         }
         
         p_system_fact_ptr_t
-        particleModelFactory(const spec_catalog_ptr_t& catalog)
+        particleSystemFactory(const spec_catalog_ptr_t& catalog)
         {
             if ( !particleModelFactory_ ) {
                 particleModelFactory_ = std::make_shared<ParticleSystemFactory>(catalog);

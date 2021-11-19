@@ -1,0 +1,8 @@
+{
+  "simulation" : {
+    "nsteps" : 1000,
+    "nwrite" : 10,
+    "npairlists" : 10,
+    "temperature" : 298.15
+  }
+}

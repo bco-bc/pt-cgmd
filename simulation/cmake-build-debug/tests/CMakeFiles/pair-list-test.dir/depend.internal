@@ -3,6 +3,7 @@
 
 tests/CMakeFiles/pair-list-test.dir/pair-list-test.cpp.o
  ../include/simploce/simulation/bc.hpp
+ ../include/simploce/simulation/continuous.hpp
  ../include/simploce/simulation/distance-pair-list-generator.hpp
  ../include/simploce/simulation/pair-list-generator.hpp
  ../include/simploce/simulation/pair-lists.hpp
@@ -17,7 +18,6 @@ tests/CMakeFiles/pair-list-test.dir/pair-list-test.cpp.o
  /localdisk/include/simploce/particle/atom.hpp
  /localdisk/include/simploce/particle/atomistic.hpp
  /localdisk/include/simploce/particle/bead.hpp
- /localdisk/include/simploce/particle/coarse-grained.hpp
  /localdisk/include/simploce/particle/p-conf.hpp
  /localdisk/include/simploce/particle/p-factory.hpp
  /localdisk/include/simploce/particle/p-properties.hpp
@@ -27,6 +27,7 @@ tests/CMakeFiles/pair-list-test.dir/pair-list-test.cpp.o
  /localdisk/include/simploce/particle/particle-system-factory.hpp
  /localdisk/include/simploce/particle/particle-system.hpp
  /localdisk/include/simploce/particle/particle.hpp
+ /localdisk/include/simploce/particle/protonatable.hpp
  /localdisk/include/simploce/types/cvector_t.hpp
  /localdisk/include/simploce/types/u-types.hpp
  /localdisk/include/simploce/types/value_t.hpp

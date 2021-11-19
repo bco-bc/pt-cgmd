@@ -26,10 +26,10 @@ void test1(const spec_catalog_ptr_t &catalog, const ff_ptr_t &forceField) {
     auto simulationParameters = factory::simulationParameters();
     param::write(std::cout, *simulationParameters);
     auto bc = factory::pbc(atomistic->box());
-    auto pairListGenerator = factory::pairListsGenerator(box, bc);
+    auto pairListGenerator = factory::pairListsGenerator(bc);
 
-    auto forces = factory::forces(box, bc, forceField);
-    auto interactor = factory::interactor(simulationParameters, forceField, box, bc);
+    auto forces = factory::forces(bc, forceField);
+    auto interactor = factory::interactor(simulationParameters, forceField, bc);
     auto result = interactor->interact(atomistic);
     std::cout << "Non-bonded potential energy: " << result.first << std::endl;
     std::cout << "Bonded potential energy: " << result.second << std::endl;
@@ -46,9 +46,9 @@ void test2(const spec_catalog_ptr_t &catalog, const ff_ptr_t &forceField) {
     param::write(std::cout, *simulationParameters);
     auto box = diatomic->box();
     auto bc = factory::pbc(box);
-    auto pairListGenerator = factory::pairListsGenerator(box, bc);
+    auto pairListGenerator = factory::pairListsGenerator(bc);
 
-    auto interactor = factory::interactor(simulationParameters, forceField, box, bc);
+    auto interactor = factory::interactor(simulationParameters, forceField, bc);
     auto result = interactor->interact(diatomic);
     std::cout << "Non-bonded potential energy: " << result.second << std::endl;
     std::cout << "Bonded potential energy: " << result.first << std::endl;
@@ -61,11 +61,11 @@ void test3 (const spec_catalog_ptr_t &catalog, const ff_ptr_t &forceField) {
     auto box = factory::box(7.27);
     auto bc = factory::pbc(box);
     auto polarizableWater = factory->polarizableWater(box);
-    auto pairListGenerator = factory::pairListsGenerator(box, bc);
+    auto pairListGenerator = factory::pairListsGenerator(bc);
     auto simulationParameters = factory::simulationParameters();
 
-    auto interactor = factory::interactor(simulationParameters, forceField, box, bc);
-    for (int k = 0; k != 100; ++k) {
+    auto interactor = factory::interactor(simulationParameters, forceField, bc);
+    for (int k = 0; k != 11; ++k) {
         std::cout << "Step #" << k << std::endl;
         auto result = interactor->interact(polarizableWater);
         std::cout << "Non-bonded potential energy: " << result.first << std::endl;
@@ -85,7 +85,7 @@ int main() {
 
     std::string fnInteractions = "/localdisk/resources/interaction-parameters.dat";
     util::open_input_file(stream, fnInteractions);
-    auto forceField = factory::obtainFrom(stream, catalog);
+    auto forceField = factory::forceField(stream, catalog);
     stream.close();
 
     //test1(catalog, forceField);

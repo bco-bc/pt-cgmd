@@ -1,29 +1,4 @@
 /*
- * The MIT License
- *
- * Copyright 2019 André H. Juffer, Biocenter Oulu
- *
- * Permission is hereby granted, free of charge, to any person obtaining a copy
- * of this software and associated documentation files (the "Software"), to deal
- * in the Software without restriction, including without limitation the rights
- * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- * copies of the Software, and to permit persons to whom the Software is
- * furnished to do so, subject to the following conditions:
- *
- * The above copyright notice and this permission notice shall be included in
- * all copies or substantial portions of the Software.
- *
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
- * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
- * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
- * THE SOFTWARE.
- */
-
-/* 
- * File:   sim-data.cpp
  * Author: André H. Juffer, Biocenter Oulu.
  *
  * Created on August 16, 2019, 12:56 PM
@@ -37,32 +12,30 @@
 namespace simploce {
     
     SimulationData::SimulationData() :
-        t{0.0}, ekin{0.0}, bepot{0.0}, nbepot{0.0}, temperature{0.0}, pressure{0.0},
-        numberOfProtonTransferPairs{0}, accepted{false}, acceptanceRatio{0.0}
-    {            
+        t{0.0}, kinetic{0.0}, bonded{0.0}, nonBonded{0.0}, temperature{0.0},
+        pressure{0.0}, numberOfProtonTransferPairs{0}, accepted{false}, acceptanceRatio{0.0} {
     }
         
-    std::ostream& operator << (std::ostream& stream, const SimulationData& data)
-    {
+    std::ostream& operator << (std::ostream& stream, const SimulationData& data) {
         const int precision = conf::PRECISION;
         const char space = conf::SPACE;
         
         stream.setf(std::ios::scientific);
         stream.precision(precision);
-        energy_t etot = data.ekin + data.bepot + data.nbepot;
+        energy_t total = data.kinetic + data.bonded + data.nonBonded;
         stream << std::setw(conf::REAL_WIDTH) << data.t
-               << space << std::setw(conf::REAL_WIDTH) << data.ekin
-               << space << std::setw(conf::REAL_WIDTH) << data.bepot
-               << space << std::setw(conf::REAL_WIDTH) << data.nbepot
-               << space << std::setw(conf::REAL_WIDTH) << etot
+               << space << std::setw(conf::REAL_WIDTH) << data.kinetic
+               << space << std::setw(conf::REAL_WIDTH) << data.bonded
+               << space << std::setw(conf::REAL_WIDTH) << data.nonBonded
+               << space << std::setw(conf::REAL_WIDTH) << total
                << space << std::setw(conf::REAL_WIDTH) << data.temperature
                << space << std::setw(conf::REAL_WIDTH) << data.pressure
                << space << std::setw(conf::REAL_WIDTH) << data.numberOfProtonTransferPairs
                << space << data.accepted
                << space << std::setw(conf::REAL_WIDTH) << data.acceptanceRatio;
 #ifdef _DEBUG
-        if ( etot() > conf::LARGE ) {
-            std::clog << "Total energy: "  << etot << std::endl;
+        if ( total() > conf::LARGE ) {
+            std::clog << "Total energy: "  << total << std::endl;
             throw std::domain_error("Very high total energy.");
         }
 #endif

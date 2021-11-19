@@ -23,7 +23,7 @@ using namespace simploce;
 
 void argon(const spec_catalog_ptr_t& catalog) {
     std::cout << "Creating liquid argon:" << std::endl;
-    auto factory = factory::particleModelFactory(catalog);
+    auto factory = factory::particleSystemFactory(catalog);
     auto box = factory::box(length_t{3.47786});
     auto argon = factory->argon(box);
     std::cout << *argon << std::endl;
@@ -33,7 +33,7 @@ void argon(const spec_catalog_ptr_t& catalog) {
 void diatomic(const spec_catalog_ptr_t& catalog) {
     std::cout << "Creating molecular oxygen:" << std::endl;
     auto spec = catalog->O();
-    auto factory = factory::particleModelFactory(catalog);
+    auto factory = factory::particleSystemFactory(catalog);
     auto diatomic = factory->diatomic(0.12, spec);
     std::cout << *diatomic << std::endl;
     std::cout << std::endl;
@@ -41,7 +41,7 @@ void diatomic(const spec_catalog_ptr_t& catalog) {
 
 void coarseGrainedPolarizableWater(const spec_catalog_ptr_t& catalog) {
     std::cout << "Creating coarse grained polarizable water model:" << std::endl;
-    auto factory = factory::particleModelFactory(catalog);
+    auto factory = factory::particleSystemFactory(catalog);
     box_ptr_t box = factory::box(length_t{7.27});
     auto coarseGrained = factory->polarizableWater(box);
     std::cout << *coarseGrained << std::endl;
@@ -50,7 +50,7 @@ void coarseGrainedPolarizableWater(const spec_catalog_ptr_t& catalog) {
 
 void electrolyteSolution(const spec_catalog_ptr_t& catalog) {
     std::cout << "Creating simple electrolyte solution: " << std::endl;
-    auto factory = factory::particleModelFactory(catalog);
+    auto factory = factory::particleSystemFactory(catalog);
     box_ptr_t box = factory::box(length_t{7.0});
     auto electrolyte = factory->simpleElectrolyte(box);
     std::cout << *electrolyte << std::endl;
@@ -68,8 +68,8 @@ int main() {
 
     //diatomic(catalog);
     //argon(catalog);
-    electrolyteSolution(catalog);
-    //coarseGrainedPolarizableWater(catalog);
+    //electrolyteSolution(catalog);
+    coarseGrainedPolarizableWater(catalog);
 
     return (EXIT_SUCCESS);
 }

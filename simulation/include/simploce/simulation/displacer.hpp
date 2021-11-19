@@ -8,7 +8,8 @@
 #ifndef DISPLACER_HPP
 #define DISPLACER_HPP
 
-#include <string>
+#include "s-types.hpp"
+#include "sim-data.hpp"
 
 namespace simploce {
     
@@ -17,13 +18,16 @@ namespace simploce {
      */
     struct Displacer {
         
-        virtual ~Displacer() {}
-        
+        virtual ~Displacer() = default;
+
         /**
-         * Returns identifying name.
-         * @return Identifying name.
+         * Displaces particle system.
+         * @param simulationData Simulation parameters.
+         * @param particleSystem
+         * @return Simulation data.
          */
-        virtual std::string id() const = 0;
+        virtual SimulationData displace(const p_system_ptr_t& particleSystem) const = 0;
+        
     };
 }
 

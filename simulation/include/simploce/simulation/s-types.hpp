@@ -7,6 +7,7 @@
 #ifndef S_TYPES_HPP
 #define S_TYPES_HPP
 
+#include "continuous.hpp"
 #include "simploce/particle/p-types.hpp"
 #include "simploce/util/param.hpp"
 #include <tuple>
@@ -24,6 +25,7 @@ namespace simploce {
     class PairLists;
     class pair_potential;
     class Forces;
+    class Displacer;
 
     // S is protonation state type, e.g. Discrete or Continuous.
     template <typename S>
@@ -64,13 +66,13 @@ namespace simploce {
     /**
      * Protonatable coarse grained particle system.
     */
-    using prot_cg_sys = ProtonatableCoarseGrained<Continuous>;
-    // using prot_cg_sys = ProtonatableCoarseGrained<Discrete>;
+    using prot_cg_sys_t = ProtonatableCoarseGrained<Continuous>;
+    // using prot_cg_sys_t = ProtonatableCoarseGrained<Discrete>;
 
     /**
      * Protonatable coarse grained particle system pointer.
      */
-    using prot_cg_sys_ptr_t = std::shared_ptr<prot_cg_sys>;
+    using prot_cg_sys_ptr_t = std::shared_ptr<prot_cg_sys_t>;
 
     /**
      * Protonatable bead type.
@@ -107,6 +109,12 @@ namespace simploce {
      * Interactor pointer type.
      */
     using interactor_ptr_t = std::shared_ptr<Interactor>;
+
+    /**
+     * Displacer pointer type.
+     */
+    using displacer_ptr_t = std::shared_ptr<Displacer>;
+
 
     // OLD
 

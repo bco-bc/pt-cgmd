@@ -8,7 +8,6 @@
 #define INTERACTOR_HPP
 
 #include "pair-lists.hpp"
-#include "forces.hpp"
 #include "s-types.hpp"
 
 namespace simploce {
@@ -29,11 +28,8 @@ namespace simploce {
          * @param box Simulation box.
          */
         Interactor(sim_param_ptr_t simulationParameters,
-                   ff_ptr_t forceField,
                    pair_list_gen_ptr_t pairListGenerator,
-                   forces_ptr_t forces,
-                   box_ptr_t box,
-                   bc_ptr_t bc);
+                   forces_ptr_t forces);
 
         /**
          * Calculates forces on all particles in the given particle system.
@@ -43,14 +39,21 @@ namespace simploce {
          */
         std::pair<energy_t, energy_t> interact(const p_system_ptr_t &particleSystem);
 
+        /**
+         * Returns the interaction energy of one particle with all other particles.
+         * @param particle Particle.
+         * @param particleSystem Particle system.
+         * @return Returns TOTAL potential energy (sum of all interaction energies) in pair.first,
+         * while pair.second is always 0.0.
+         */
+        std::pair<energy_t, energy_t> interact(const p_ptr_t& particle,
+                                               const p_system_ptr_t &particleSystem);
+
     private:
 
         sim_param_ptr_t simulationParameters_;
-        ff_ptr_t forceField_;
         pair_list_gen_ptr_t pairListsGenerator_;
         forces_ptr_t forces_;
-        box_ptr_t box_;
-        bc_ptr_t bc_;
 
         PairLists pairLists_;
 

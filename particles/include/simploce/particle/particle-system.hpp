@@ -176,6 +176,12 @@ namespace simploce {
          * @param stream Output stream.
          */
         void writeState(std::ostream& stream) const;
+
+        /**
+         * Read the current state from an input stream.
+         * @param stream Input stream.
+         */
+        void readState(std::istream& stream);
         
     protected:
         
@@ -302,6 +308,14 @@ namespace simploce {
         // Particle box.
         box_ptr_t box_;
     };
+
+    /**
+     * Write particle system to an output stream.
+     * @param stream Output stream.
+     * @param particleSystem Particle system.
+     * @return Output stream.
+     */
+    std::ostream& operator << (std::ostream& stream, const ParticleSystem& particleSystem);
 
 
 }

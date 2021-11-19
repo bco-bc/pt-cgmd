@@ -31,9 +31,9 @@ namespace simploce {
          * with the given temperature.
          * @return Diatomic molecule.
          */
-        at_sys_ptr_t diatomic(const distance_t& distance,
-                              const spec_ptr_t& spec,
-                              const temperature_t& temperature = 298.15);
+        p_system_ptr_t diatomic(const distance_t& distance,
+                                const spec_ptr_t& spec,
+                                const temperature_t& temperature = 298.15);
 
         /**
          * Returns coarse grained polarizable water model. This model is based on
@@ -48,10 +48,10 @@ namespace simploce {
          * @see <a href="https://aip.scitation.org/doi/10.1063/1.3553378">
          * Riniker and van Gunsteren</a>
          */
-        cg_sys_ptr_t polarizableWater(const box_ptr_t& box,
-                                      const density_t& densitySI = 997.0479,
-                                      const temperature_t& temperature = 298.15,
-                                      std::size_t nLimit = 1000000);
+        p_system_ptr_t polarizableWater(const box_ptr_t& box,
+                                        const density_t& densitySI = 997.0479,
+                                        const temperature_t& temperature = 298.15,
+                                        std::size_t nLimit = 1000000);
 
         /**
          * Returns electrolyte solution of given molarity in a box. This model
@@ -65,9 +65,9 @@ namespace simploce {
          * @param temperature Requested temperature in K. Default is 298.15 K.
          * @return Ionic solution.
          */
-        at_sys_ptr_t simpleElectrolyte(const box_ptr_t& box,
-                                       const molarity_t& molarity = 0.1,
-                                       const temperature_t& temperature = 298.15);
+        p_system_ptr_t simpleElectrolyte(const box_ptr_t& box,
+                                         const molarity_t& molarity = 0.1,
+                                         const temperature_t& temperature = 298.15);
 
         /**
          * Returns argon at given density and temperature. Defaults values are compatible with liquid argon.
@@ -79,9 +79,9 @@ namespace simploce {
          * @return Atomistic particle model.
          * @see <a href="https://journals.aps.org/pr/abstract/10.1103/PhysRev.136.A405">Argon at Wikipedia</a>
          */
-        at_sys_ptr_t argon(const box_ptr_t& box,
-                           const density_t& densitySI = 1374.0,
-                           const temperature_t& temperature = 94.4);
+        p_system_ptr_t argon(const box_ptr_t& box,
+                             const density_t& densitySI = 1374.0,
+                             const temperature_t& temperature = 94.4);
 
     protected:
 

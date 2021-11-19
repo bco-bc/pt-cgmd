@@ -20,7 +20,7 @@ using namespace simploce;
 void test1() {
     std::cout << "pdb-test test 1" << std::endl;
     
-    box_ptr_t box = factory::cube(2.0);
+    box_ptr_t box = factory::box(2.0);
     std::cout << "Box size: " << box->size() << std::endl;
     bc_ptr_t bc = factory::pbc(box);
     
@@ -42,7 +42,7 @@ void test1() {
 void test2() {
     std::cout << "pdb-test test 2" << std::endl;
     
-    box_ptr_t box = factory::cube(2.0);
+    box_ptr_t box = factory::box(2.0);
     std::cout << "Box size: " << box->size() << std::endl;
     bc_ptr_t bc = factory::pbc(box);
     
@@ -61,19 +61,8 @@ void test2() {
 
 
 int main(int argc, char** argv) {
-    std::cout << "%SUITE_STARTING% pdb-test" << std::endl;
-    std::cout << "%SUITE_STARTED%" << std::endl;
-
-    std::cout << "%TEST_STARTED% test1 (pdb-test)" << std::endl;
     test1();
-    std::cout << "%TEST_FINISHED% time=0 test1 (pdb-test)" << std::endl;
-
-    std::cout << "%TEST_STARTED% test2 (pdb-test)" << std::endl;
     test2();
-    std::cout << "%TEST_FINISHED% time=0 test2 (pdb-test)" << std::endl;
-    
-    std::cout << "%SUITE_FINISHED% time=0" << std::endl;
-
     return (EXIT_SUCCESS);
 }
 

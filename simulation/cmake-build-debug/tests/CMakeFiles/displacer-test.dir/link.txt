@@ -1,1 +1,1 @@
-/usr/bin/c++ -g CMakeFiles/displacer-test.dir/displacer-test.cpp.o -o displacer-test   -L/localdisk/lib  -Wl,-rpath,/localdisk/lib:/home/andre/wrk3/simploce/pt-cgmd/simulation/cmake-build-debug ../libsimulation.so -lparticles -lutil -lcpputil -lpthread 
+/usr/bin/c++ -g CMakeFiles/displacer-test.dir/displacer-test.cpp.o -o displacer-test   -L/localdisk/lib  -Wl,-rpath,/home/andre/wrk3/simploce/pt-cgmd/simulation/cmake-build-debug:/localdisk/lib ../libsimulation.so -lparticles -lutil -lcpputil -lpthread 

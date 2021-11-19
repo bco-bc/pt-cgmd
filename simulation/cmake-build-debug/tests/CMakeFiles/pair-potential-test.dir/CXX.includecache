@@ -6,6 +6,12 @@
 
 #IncludeRegexTransform: 
 
+../include/simploce/simulation/continuous.hpp
+simploce/particle/protonatable.hpp
+../include/simploce/simulation/simploce/particle/protonatable.hpp
+iostream
+-
+
 ../include/simploce/simulation/lj.hpp
 pair-potential.hpp
 ../include/simploce/simulation/pair-potential.hpp
@@ -25,6 +31,8 @@ simploce/particle/p-factory.hpp
 ../include/simploce/simulation/simploce/particle/p-factory.hpp
 
 ../include/simploce/simulation/s-types.hpp
+continuous.hpp
+../include/simploce/simulation/continuous.hpp
 simploce/particle/p-types.hpp
 ../include/simploce/simulation/simploce/particle/p-types.hpp
 simploce/util/param.hpp
@@ -47,8 +55,6 @@ simploce/particle/particle-spec-catalog.hpp
 /home/andre/wrk3/simploce/pt-cgmd/simulation/tests/simploce/particle/particle-spec-catalog.hpp
 simploce/particle/particle-spec.hpp
 /home/andre/wrk3/simploce/pt-cgmd/simulation/tests/simploce/particle/particle-spec.hpp
-iostream
--
 cstdlib
 -
 map
@@ -108,6 +114,14 @@ p-types.hpp
 memory
 -
 string
+-
+
+/localdisk/include/simploce/particle/protonatable.hpp
+simploce/types/u-types.hpp
+/localdisk/include/simploce/particle/simploce/types/u-types.hpp
+cstdlib
+-
+map
 -
 
 /localdisk/include/simploce/types/cvector_t.hpp

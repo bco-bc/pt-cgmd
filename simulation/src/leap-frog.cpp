@@ -8,9 +8,7 @@
 #include "simploce/simulation/leap-frog.hpp"
 #include "simploce/simulation/interactor.hpp"
 #include "simploce/simulation/s-properties.hpp"
-#include "simploce/simulation/s-conf.hpp"
-#include "simploce/particle/atom.hpp"
-#include "simploce/particle/bead.hpp"
+#include "simploce/particle/particle-system.hpp"
 #include <vector>
 
 namespace simploce {
@@ -21,21 +19,18 @@ namespace simploce {
      * @param particles Particles.
      * @return Kinetic energy, temperature.
      */
-    template <typename T>
     static SimulationData 
     displace_(const stime_t dt, 
-              const std::vector<std::shared_ptr<T>>& particles)
+              const std::vector<p_ptr_t>& particles)
     {
         static std::size_t counter = 0;
         
         // Assume current step n-1/2 at time t(n-1/2).
-
-        counter += 1;
         
         // Compute linear momentum and position, plus kinetic energy.
         SimulationData data;
         for (auto ptr : particles) {
-            T &particle = *ptr;
+            auto &particle = *ptr;
             mass_t mass = particle.mass();             // In u.
             const force_t &f = particle.force();       // Force (kJ/(mol nm) at time t(n-1/2).
             velocity_t vi = particle.velocity();       // velocity (nm/ps) at time t(n-1/2).
@@ -53,94 +48,44 @@ namespace simploce {
 
             // Kinetic energy
             velocity_t va = 0.5 * (vi + vf);           // Average velocity at time t(n).
-            data.ekin += 0.5 * mass() * inner<real_t>(va, va);
+            data.kinetic += 0.5 * mass() * inner<real_t>(va, va);
         }
         
         // Temperature at t(n).
-        data.temperature = properties::temperature<T>(particles, data.ekin);
+        data.temperature = properties::temperature(particles, data.kinetic);
         
-        // Time.
-        data.t = counter * dt;
-        
-        return data;        
+        return std::move(data);
     }
     
-    LeapFrog::LeapFrog(sim_param_ptr_t simulationParameters) :
-        simulationParameters_{std::move(simulationParameters)} {
+    LeapFrog::LeapFrog(sim_param_ptr_t simulationParameters,
+                       interactor_ptr_t interactor) :
+        simulationParameters_{std::move(simulationParameters)}, interactor_{interactor} {
     }
     
     SimulationData 
-    LeapFrog::displace(std::vector<std::shared_ptr<Particle>> &particles) const
+    LeapFrog::displace(const p_system_ptr_t& particleSystem) const
     {
-        static bool setup = false;
-        static stime_t dt{0.0};
+        static stime_t dt = simulationParameters_->get<real_t>("simulation.timestep");
         static std::size_t counter = 0.0;
         
         counter += 1;
         
-        if ( !setup ) {
-            dt = param.get<real_t>("timestep");        
-        }
-        
         // Forces and energies.
-        auto result = interactor_->interact(param, at);
+        auto result = interactor_->interact(particleSystem);
         
         // Displace.
-        SimulationData data = at->doWithAll<SimulationData>([] (const std::vector<atom_ptr_t>& atoms) {
-            return displace_<Atom>(dt, atoms);
+        SimulationData data =
+                particleSystem->doWithAll<SimulationData>([] (const std::vector<p_ptr_t>& all) {
+            return std::move(displace_(dt, all));
         });
         
         // Save simulation data.
-        data.bepot = result.first;
-        data.nbepot = result.second;
+        data.bonded = result.first;
+        data.nonBonded = result.second;
         data.t = counter * dt;
         
         return data;
     }
     
-    std::string 
-    LeapFrog<Atomistic>::id() const
-    {
-        return conf::LEAP_FROG;
-    }
-    
-    LeapFrog<CoarseGrained>::LeapFrog(const cg_interactor_ptr_t& interactor) : 
-        interactor_{interactor}
-    {        
-    }
-    
-    SimulationData 
-    LeapFrog<CoarseGrained>::displace(const sim_param_t& param, 
-                                      const cg_mod_ptr_t& cg) const
-    {
-        static bool setup = false;
-        static stime_t dt{0.0};
-        static std::size_t counter = 0.0;
-        
-        counter += 1;
-        
-        if ( !setup ) {
-            dt = param.get<real_t>("timestep");        
-        }
-        
-        // Forces and energies.
-        auto result = interactor_->interact(param, cg);
-        SimulationData data = cg->doWithAll<SimulationData>([] (const std::vector<bead_ptr_t>& beads) {
-            return displace_<Bead>(dt, beads);
-        });
-        
-        // Save simulation data.
-        data.bepot = result.first;
-        data.nbepot = result.second;
-        data.t = counter * dt;
-        
-        return data;
-    }
-    
-    std::string 
-    LeapFrog<CoarseGrained>::id() const
-    {
-        return conf::LEAP_FROG;
-    }
 }
 

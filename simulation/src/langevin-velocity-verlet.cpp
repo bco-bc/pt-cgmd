@@ -1,29 +1,4 @@
 /*
- * The MIT License
- *
- * Copyright 2019 André H. Juffer, Biocenter Oulu
- *
- * Permission is hereby granted, free of charge, to any person obtaining a copy
- * of this software and associated documentation files (the "Software"), to deal
- * in the Software without restriction, including without limitation the rights
- * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- * copies of the Software, and to permit persons to whom the Software is
- * furnished to do so, subject to the following conditions:
- *
- * The above copyright notice and this permission notice shall be included in
- * all copies or substantial portions of the Software.
- *
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
- * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
- * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
- * THE SOFTWARE.
- */
-
-/* 
- * File:   langevin-velocity-verlet.cpp
  * Author: André H. Juffer, Biocenter Oulu.
  *
  * Created on September 3, 2019, 9:47 AM
@@ -32,11 +7,10 @@
 #include "simploce/simulation/langevin-velocity-verlet.hpp"
 #include "simploce/simulation/interactor.hpp"
 #include "simploce/simulation/s-properties.hpp"
-#include "simploce/simulation/s-conf.hpp"
-#include "simploce/particle/atom.hpp"
-#include "simploce/particle/bead.hpp"
+#include "simploce/particle/particle-system.hpp"
 #include "simploce/units/units-mu.hpp"
 #include "simploce/util/util.hpp"
+#include "simploce/util/logger.hpp"
 #include <random>
 #include <cmath>
 #include <array>
@@ -62,17 +36,18 @@ namespace simploce {
     
     /**
      * Calculation of helper values.
-     * @param T Particle type.
      * @param dt Time step.
      * @param particles Particles.
      */
-    template <typename T>
-    void setupHelpers_(const stime_t& dt,
-                       const temperature_t& temperature,
-                       real_t gamma,
-                       const std::vector<std::shared_ptr<T>>& particles)
+    static void
+    setupHelpers_(const stime_t& dt,
+                  const temperature_t& temperature,
+                  real_t gamma,
+                  const std::vector<p_ptr_t>& particles)
     {
-        real_t kT = units::mu<real_t>::KB * temperature();
+        static util::Logger logger("simploce::LangevinVelocityVerlet::setupHelpers_");
+
+        static real_t kT = units::mu<real_t>::KB * temperature();
         std::size_t nparticles = particles.size();
         
         FC_ = std::vector<real_t>(nparticles, 0.0);
@@ -111,23 +86,20 @@ namespace simploce {
             // Validate.
             real_t f1 = fc * a1;
             if ( f1 > 1) {
-                std::clog << "WARNING: " << std::endl;
-                std::clog << "Langevin Velocity Verlet: " << std::endl;
-                std::clog << "factor = fc * dt / (2.0 * m) = " << f1 
-                          << " > 1 may represent an unphysical regime." << std::endl;
+                logger.warn("Factor = fc * dt / (2.0 * m) = " + util::toString(f1) +
+                            " > 1 may represent an unphysical regime.");
             }
         }                
     }
 
     /**
      * Displace particle position.
-     * @param T Particle type.
      * @param dt Time step.
      * @param particles Particles.
      */
-    template <typename T>
-    void displacePosition_(const stime_t& dt,
-                           const std::vector<std::shared_ptr<T>>& particles)
+    static void
+    displacePosition_(const stime_t& dt,
+                      const std::vector<p_ptr_t>& particles)
     {        
         for (auto& p : particles) {
             auto& particle = *p;
@@ -163,14 +135,13 @@ namespace simploce {
             particle.position(rf);        
         }
     }
-    
-    template <typename T>
-    SimulationData displaceVelocity_(const std::vector<std::shared_ptr<T>>& particles)
-    {
+
+    static SimulationData
+    displaceVelocity_(const std::vector<p_ptr_t>& particles) {
         SimulationData data;
         
         // Kinetic energy at t(n+1).
-        data.ekin = 0.0;
+        data.kinetic = 0.0;
         
         // Displace particles: momenta.
         for (auto& p : particles) {
@@ -206,133 +177,62 @@ namespace simploce {
             particle.velocity(vf);
       
             // Kinetic energy at time t(n+1)..
-            data.ekin += 0.5 * mass() * inner<real_t>(vf, vf);
+            data.kinetic += 0.5 * mass() * inner<real_t>(vf, vf);
         }
         
         // Instantaneous temperature at t(n+1).
-        data.temperature = properties::temperature<T>(particles, data.ekin);
+        data.temperature = properties::temperature(particles, data.kinetic);
 
         // Done.
         return data;        
         
     }
     
-    LangevinVelocityVerlet<Atomistic>::LangevinVelocityVerlet(const at_interactor_ptr_t& interactor) :
-        AtomisticDisplacer{}, interactor_{interactor}
-    {       
+    LangevinVelocityVerlet::LangevinVelocityVerlet(sim_param_ptr_t simulationParameters,
+                                                   interactor_ptr_t interactor) :
+        simulationParameters_(std::move(simulationParameters)), interactor_{std::move(interactor)} {
     }
         
     SimulationData 
-    LangevinVelocityVerlet<Atomistic>::displace(const sim_param_t& param, 
-                                                const at_mod_ptr_t& at) const
+    LangevinVelocityVerlet::displace(const p_system_ptr_t& particleSystem) const
     {
         static bool setup = false;
 
-        static stime_t dt{0.0};
-        static temperature_t temperature{0.0};
-        static real_t gamma{0.0};
+        static stime_t dt = simulationParameters_->get<real_t>("timestep");
+        static temperature_t temperature = simulationParameters_->get<real_t>("temperature", 298.15);
+        static real_t gamma = simulationParameters_->get<real_t>("gamma", 0.5);
         static std::size_t counter = 0;
 
         if ( !setup ) {            
-            dt = param.get<real_t>("timestep");
-            temperature = param.get<real_t>("temperature", 298.15);
-            gamma = param.get<real_t>("gamma", 0.5);
-
-            at->doWithAll<void>([] (const std::vector<atom_ptr_t>& atoms) {
-                setupHelpers_<Atom>(dt, temperature, gamma, atoms);
+            particleSystem->doWithAll<void>([] (const std::vector<p_ptr_t>& atoms) {
+                setupHelpers_(dt, temperature, gamma, atoms);
             });
-            
-            interactor_->interact(param, at);  // Initial forces.
-            
+            interactor_->interact(particleSystem);  // Initial forces.
             setup = true;
         }
         
         counter += 1;
                 
         // Displace atom positions.
-        at->doWithAll<void>([] (const std::vector<atom_ptr_t>& atoms) {
-            displacePosition_<Atom>(dt, atoms);
+        particleSystem->doWithAll<void>([] (const std::vector<p_ptr_t>& all) {
+            displacePosition_(dt, all);
         });
         
         // Compute forces and potential energy at t(n+1) using positions at t(n+1).
-        auto result = interactor_->interact(param, at);
+        auto result = interactor_->interact(particleSystem);
         
         // Displace atom velocities.
-        SimulationData data = at->doWithAll<SimulationData>([] (const std::vector<atom_ptr_t>& atoms) {
-            return displaceVelocity_<Atom>(atoms);
+        SimulationData data = particleSystem->doWithAll<SimulationData>([] (const std::vector<p_ptr_t>& particles) {
+            return std::move(displaceVelocity_(particles));
         });
         
         // Save simulation data
-        data.bepot = result.first;
-        data.nbepot = result.second;        
+        data.bonded = result.first;
+        data.nonBonded = result.second;
         data.t = counter * dt;
         
         return data;
     }    
-    
-    std::string LangevinVelocityVerlet<Atomistic>::id() const
-    {
-        return conf::LANGEVIN_VELOCITY_VERLET;
-    }
-
-    LangevinVelocityVerlet<CoarseGrained>::LangevinVelocityVerlet(const cg_interactor_ptr_t& interactor) :
-        CoarseGrainedDisplacer{}, interactor_{interactor}     
-    {       
-    }
-
-    SimulationData 
-    LangevinVelocityVerlet<CoarseGrained>::displace(const sim_param_t& param, 
-                                                    const cg_mod_ptr_t& cg) const
-    {
-        static bool setup = false;
-
-        static stime_t dt{0.0};
-        static temperature_t temperature{0.0};
-        static real_t gamma{0.0};
-        static std::size_t counter = 0.0;
-        
-        counter += 1;
-        
-        if ( !setup ) {            
-            dt = param.get<real_t>("timestep");
-            temperature = param.get<real_t>("temperature");
-            gamma = param.get<real_t>("gamma");
-            
-            cg->doWithAll<void>([] (const std::vector<bead_ptr_t>& beads) {
-                setupHelpers_<Bead>(dt, temperature, gamma, beads);
-            });
-            
-            interactor_->interact(param, cg); // Initial forces.
-            
-            setup = true;
-        }
-        
-        // Displace bead positions.
-        cg->doWithAll<void>([] (const std::vector<bead_ptr_t>& beads) {
-            displacePosition_<Bead>(dt, beads);
-        });
-        
-        // Compute forces and potential energy at t(n+1) using positions at t(n+1).
-        auto result = interactor_->interact(param, cg);
-        
-        // Displace bead velocities.
-        SimulationData data = cg->doWithAll<SimulationData>([] (const std::vector<bead_ptr_t>& beads) {
-            return displaceVelocity_<Bead>(beads);
-        });
-        
-        // Save simulation data.
-        data.bepot = result.first;
-        data.nbepot = result.second;                
-        data.t = counter * dt;
-
-        return data;
-    }    
-
-    std::string 
-    LangevinVelocityVerlet<CoarseGrained>::id() const
-    {
-        return conf::LANGEVIN_VELOCITY_VERLET;
-    }
 
 }
 

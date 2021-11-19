@@ -101,7 +101,7 @@ namespace simploce {
     
     void 
     Particle::resetForce() {
-        f_ = force_t{}; 
+        f_ = force_t{0.0, 0.0, 0.0};
     }
 
     bool

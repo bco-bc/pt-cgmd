@@ -168,6 +168,13 @@ namespace simploce {
     }
 
     void
+    ParticleSystem::readState(std::istream& stream) {
+        for (auto& p: all_) {
+            p->readState(stream);
+        }
+    }
+
+    void
     ParticleSystem::add(const p_ptr_t& particle)
     {
         util::Logger logger{"simploce::ParticleSystem<P,PG>::add()"};
@@ -447,6 +454,12 @@ namespace simploce {
         logger.debug("Number of free particles: " + util::toString(this->numberOfFreeParticles()));
         logger.debug("Number of particle groups: " + util::toString(this->numberOfParticleGroups()));
 
+    }
+
+    std::ostream&
+    operator << (std::ostream& stream, const ParticleSystem& particleSystem) {
+        particleSystem.write(stream);
+        return stream;
     }
 
 }

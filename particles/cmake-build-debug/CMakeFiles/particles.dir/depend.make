@@ -30,7 +30,6 @@ CMakeFiles/particles.dir/src/atomistic.cpp.o: \
 CMakeFiles/particles.dir/src/bead.cpp.o: \
  ../include/simploce/particle/bead.hpp \
  ../include/simploce/particle/p-types.hpp \
- ../include/simploce/particle/particle-spec.hpp \
  ../include/simploce/particle/particle.hpp \
  ../src/bead.cpp \
  /localdisk/include/simploce/conf/u-conf.hpp \
@@ -38,9 +37,7 @@ CMakeFiles/particles.dir/src/bead.cpp.o: \
  /localdisk/include/simploce/types/u-types.hpp \
  /localdisk/include/simploce/types/value_t.hpp \
  /localdisk/include/simploce/util/box.hpp \
- /localdisk/include/simploce/util/cube.hpp \
- /localdisk/include/simploce/util/logger.hpp \
- /localdisk/include/simploce/util/util.hpp
+ /localdisk/include/simploce/util/cube.hpp
 CMakeFiles/particles.dir/src/bond.cpp.o: \
  ../include/simploce/particle/bond.hpp \
  ../include/simploce/particle/p-types.hpp \

@@ -6,6 +6,12 @@
 
 #IncludeRegexTransform: 
 
+../include/simploce/simulation/continuous.hpp
+simploce/particle/protonatable.hpp
+../include/simploce/simulation/simploce/particle/protonatable.hpp
+iostream
+-
+
 ../include/simploce/simulation/force-field.hpp
 pair-lists.hpp
 ../include/simploce/simulation/pair-lists.hpp
@@ -31,6 +37,8 @@ simploce/particle/p-factory.hpp
 ../include/simploce/simulation/simploce/particle/p-factory.hpp
 
 ../include/simploce/simulation/s-types.hpp
+continuous.hpp
+../include/simploce/simulation/continuous.hpp
 simploce/particle/p-types.hpp
 ../include/simploce/simulation/simploce/particle/p-types.hpp
 simploce/util/param.hpp
@@ -84,6 +92,14 @@ set
 vector
 -
 iostream
+-
+
+/localdisk/include/simploce/particle/protonatable.hpp
+simploce/types/u-types.hpp
+/localdisk/include/simploce/particle/simploce/types/u-types.hpp
+cstdlib
+-
+map
 -
 
 /localdisk/include/simploce/types/cvector_t.hpp

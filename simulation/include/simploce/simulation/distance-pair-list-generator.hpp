@@ -11,40 +11,22 @@
 
 namespace simploce {
 
-
     /**
-     * Creates atom pair lists.
-     * @param box Simulation box.
-     * @param bc Boundary condition.
-     * @param all All atoms.
-     * @param free Free atoms.
-     * @param groups Atom groups.
-     * @return Atom pair lists.
-     *
-    PairLists
-    createPairLists(const box_ptr_t& box,
-                    const bc_ptr_t& bc,
-                    const std::vector<p_ptr_t>& all,
-                    const std::vector<p_ptr_t>& free,
-                    const std::vector<pg_ptr_t>& groups);
-                    */
-
-    /**
-     * Generates pair lists on the basis of distances between particle and particle groups.
-     * @tparam P Particle type.
+     * Generates pair lists on the basis of distances between particle and particle groups.e.
      */
     class DistancePairListGenerator : public pair_lists_generator {
     public:
 
-        DistancePairListGenerator(box_ptr_t box,
-                                  bc_ptr_t bc);
-
-        ~DistancePairListGenerator();
+        /**
+         * Constructor.
+         * @param box Simulation box.
+         * @param bc Boundary condition.
+         */
+        DistancePairListGenerator(bc_ptr_t bc);
 
         PairLists
-        generate(const std::vector<p_ptr_t>& all,
-                 const std::vector<p_ptr_t>& free,
-                 const std::vector<pg_ptr_t>& groups) const override;
+        generate(const p_system_ptr_t& particleSystem) const;
+
     private:
 
         box_ptr_t box_;

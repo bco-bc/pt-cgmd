@@ -7,35 +7,30 @@
 #ifndef LEAP_FROG_HPP
 #define LEAP_FROG_HPP
 
-#include "cg-displacer.hpp"
-#include "at-displacer.hpp"
-#include "sim-data.hpp"
-#include "s-types.hpp"
-#include "simploce/particle/atomistic.hpp"
-#include "simploce/particle/coarse-grained.hpp"
+#include "displacer.hpp"
 
 namespace simploce {        
     
     /**
      * Standard leap frog algorithm for MD simulations.
-     * @param M Particle model type.
      */
-    class LeapFrog {
+    class LeapFrog : public Displacer {
     public:    
         
-        LeapFrog(sim_param_ptr_t simulationParameters);
+        LeapFrog(sim_param_ptr_t simulationParameters,
+                 interactor_ptr_t interactor);
                 
         /**
          * Displaces atoms of an atomistic model.
-         * @param at Atomistic model.
+         * @param particleSystem Particle system.
          * @return Kinetic energy, temperature.
          */
-        SimulationData 
-        displace(std::vector<std::shared_ptr<Particle>> &particles) const;
+        SimulationData displace(const p_system_ptr_t& particleSystem) const override;
         
     private:
 
         sim_param_ptr_t simulationParameters_;
+        interactor_ptr_t interactor_;
     };
     
 

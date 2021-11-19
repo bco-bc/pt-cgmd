@@ -32,7 +32,7 @@ namespace simploce {
         }
     }
 
-    at_sys_ptr_t
+    p_system_ptr_t
     ParticleSystemFactory::diatomic(const distance_t& distance,
                                     const spec_ptr_t& spec,
                                     const temperature_t& temperature) {
@@ -61,7 +61,7 @@ namespace simploce {
         return std::move(atomistic);
     }
 
-    cg_sys_ptr_t
+    p_system_ptr_t
     ParticleSystemFactory::polarizableWater(const box_ptr_t& box,
                                             const density_t& densitySI,
                                             const temperature_t& temperature,
@@ -205,7 +205,7 @@ namespace simploce {
         return std::move(coarseGrained);
     }
 
-    at_sys_ptr_t
+    p_system_ptr_t
     ParticleSystemFactory::simpleElectrolyte(const box_ptr_t& box,
                                              const molarity_t& molarity,
                                              const temperature_t& temperature)
@@ -294,7 +294,7 @@ namespace simploce {
         return std::move(atomistic);
     }
 
-    at_sys_ptr_t
+    p_system_ptr_t
     ParticleSystemFactory::argon(const box_ptr_t& box,
                                  const density_t& densitySI,
                                  const temperature_t& temperature)

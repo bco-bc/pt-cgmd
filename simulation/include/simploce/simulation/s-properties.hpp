@@ -125,7 +125,7 @@ namespace simploce {
                  const std::tuple<energy_t, force_t, length_t>& ef)
         {
             static util::Logger logger("simploce::properties::tooClose");
-            static length_t rMin = conf::CLOSE;
+            static length_t rMin = conf::SHORT;
         
             auto Rij = std::get<2>(ef);
             if (Rij() < rMin() ) {

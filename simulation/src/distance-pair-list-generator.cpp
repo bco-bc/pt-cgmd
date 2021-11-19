@@ -10,6 +10,7 @@
 #include "simploce/simulation/s-properties.hpp"
 #include "simploce/simulation/bc.hpp"
 #include "simploce/particle/particle.hpp"
+#include "simploce/particle/particle-system.hpp"
 
 namespace simploce {
 
@@ -164,7 +165,7 @@ namespace simploce {
                    const std::vector<p_ptr_t> &free,
                    const std::vector<pg_ptr_t> &groups)
     {
-        static util::Logger logger("simploce:: makePairLists_()");
+        static util::Logger logger("simploce::makePairLists_()");
         static bool firstTime = true;
         if ( firstTime ) {
             logger.info("Creating distance-based particle pair lists.");
@@ -197,40 +198,19 @@ namespace simploce {
         return std::move(PairLists(all.size(), particlePairs));
     }
 
-
-    /*
-    PairLists<Atom>
-    createPairLists(const box_ptr_t& box,
-                    const bc_ptr_t& bc,
-                    const std::vector<atom_ptr_t>& all,
-                    const std::vector<atom_ptr_t>& free,
-                    const std::vector<atom_group_ptr_t>& groups) {
-        return std::move(makePairLists_<Atom>(box, bc, all, free, groups));
+    DistancePairListGenerator::DistancePairListGenerator(bc_ptr_t bc) :
+        pair_lists_generator{}, bc_{std::move(bc)} {
     }
-
 
     PairLists
-    createPairLists(const box_ptr_t& box,
-                    const bc_ptr_t& bc,
-                    const std::vector<bead_ptr_t>& all,
-                    const std::vector<bead_ptr_t>& free,
-                    const std::vector<pg_ptr_t>& groups) {
-        return std::move(makePairLists_<Bead>(box, bc, all, free, groups));
-    }
-     */
-
-    DistancePairListGenerator::DistancePairListGenerator(box_ptr_t box,
-                                                         bc_ptr_t bc) :
-        pair_lists_generator{}, box_{std::move(box)}, bc_{std::move(bc)} {
-    }
-
-    DistancePairListGenerator::~DistancePairListGenerator() = default;
-
-    PairLists
-    DistancePairListGenerator::generate(const std::vector<p_ptr_t>& all,
-                                        const std::vector<p_ptr_t>& free,
-                                        const std::vector<pg_ptr_t>& groups) const {
-         return std::move(makePairLists_(box_, bc_, all, free, groups));
+    DistancePairListGenerator::generate(const p_system_ptr_t& particleSystem) const {
+        auto box = particleSystem->box();
+        return particleSystem->doWithAllFreeGroups<PairLists>([this, box] (
+                const std::vector<p_ptr_t>& all,
+                const std::vector<p_ptr_t>& free,
+                const std::vector<pg_ptr_t>& groups) {
+            return std::move(makePairLists_(box, this->bc_, all, free, groups));
+        });
     }
 
 }

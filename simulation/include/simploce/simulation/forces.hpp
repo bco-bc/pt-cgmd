@@ -23,17 +23,35 @@ namespace simploce {
          * @param bc Boundary conditions.
          * @param forceField Force field.
          */
-        Forces(box_ptr_t box, bc_ptr_t bc, ff_ptr_t forceField);
+        Forces(bc_ptr_t bc, ff_ptr_t forceField);
 
-        energy_t nonBonded(const std::vector<p_ptr_t> &all,
+        /**
+         * Calculates forces on particles due to non-bonded interactions.
+         * @param particleSystem Particle system.
+         * @param pairLists Particle pair lists.
+         * @return Potential energy.
+         */
+        energy_t nonBonded(const p_system_ptr_t& particleSystem,
                            const PairLists &pairLists);
 
-        energy_t bonded(const std::vector<p_ptr_t> &all,
-                        const std::vector<pg_ptr_t> &groups);
+        /**
+         * Calculates forces on particles due to non-bonded interactions.
+         * @param particleSystem Particle system.
+         * @return Potential energy.
+         */
+        energy_t bonded(const p_system_ptr_t& particleSystem);
+
+        /**
+         * Returns interaction energy of one given particle with all other particles.
+         * @param particle Particle.
+         * @param particleSystem Particle system.
+         * @return Interaction energy.
+         */
+        energy_t interaction(const p_ptr_t& particle,
+                             const p_system_ptr_t& particleSystem);
 
     private:
 
-        box_ptr_t box_;
         bc_ptr_t bc_;
         ff_ptr_t forceField_;
 

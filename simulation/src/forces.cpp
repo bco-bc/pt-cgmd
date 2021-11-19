@@ -14,6 +14,7 @@
 #include "simploce/simulation/halve-attractive-qp.hpp"
 #include "simploce/simulation/lj-rf.hpp"
 #include "simploce/simulation/s-properties.hpp"
+#include "simploce/particle/particle-system.hpp"
 #include "simploce/particle/particle-spec.hpp"
 #include "simploce/particle/bond.hpp"
 #include "simploce/util/util.hpp"
@@ -230,8 +231,8 @@ namespace simploce {
      * Computes bonded forces and associated potential energies.
      */
     static energy_t
-    computeBondedForces(const std::vector<pg_ptr_t> &groups,
-                        const std::map<std::string, std::shared_ptr<pair_potential>> &pairPotentials) {
+    computeBondedForces_(const std::vector<pg_ptr_t> &groups,
+                         const std::map<std::string, std::shared_ptr<pair_potential>> &pairPotentials) {
         energy_t energy{0.0};
         for (auto &group : groups) {
             for (auto &bond : group->bonds() ) {
@@ -258,26 +259,91 @@ namespace simploce {
         return energy;
     }
 
-    Forces::Forces(box_ptr_t box, bc_ptr_t bc, ff_ptr_t forceField) :
-        box_{std::move(box)}, bc_{std::move(bc)}, forceField_{std::move(forceField)} {
+    /**
+     * Returns interaction energy of given particle with all other particles.
+     * @param particle Particle.
+     * @param all -All- particles.
+     * @param pairPotentials Pair potentials.
+     * @return Potential energy.
+     */
+    static energy_t
+    interactionEnergyOfOneParticle(const p_ptr_t& particle,
+                                   const std::vector<p_ptr_t>& all,
+                                   const pp_map_t& pairPotentials) {
+        energy_t energy{0.0};
+        auto name = particle->spec()->name();
+        auto id = particle->id();
+        for (auto p: all) {
+            if ( p->id() != id) {
+                std::string key = name + "-" + p->spec()->name();
+                auto &pairPotential = *pairPotentials.at(key);
+                std::pair<energy_t, force_t> ef = pairPotential(particle, p);
+                energy += std::get<0>(ef);
+            }
+        }
+        return energy;
+    }
+
+    Forces::Forces(bc_ptr_t bc, ff_ptr_t forceField) :
+        bc_{std::move(bc)}, forceField_{std::move(forceField)} {
+    }
+
+    energy_t Forces::nonBonded(const p_system_ptr_t& particleSystem,
+                            const PairLists &pairLists) {
+        if ( pairPotentials_.empty() ) {
+            auto box = particleSystem->box();
+            particleSystem->doWithAll<void>([this, box] (const std::vector<p_ptr_t>& all) {
+                pairPotentials_ = associatePairPotentials_(all,
+                                                           this->forceField_,
+                                                           box,
+                                                           this->bc_);
+            });
+        }
+        auto box = particleSystem->box();
+        return particleSystem->doWithAll<energy_t>([this, pairLists, box] (std::vector<p_ptr_t>& all) {
+            return computeNonBondedForces_(all,
+                                           pairLists,
+                                           pairPotentials_,
+                                           box,
+                                           this->bc_);
+        });
     }
 
     energy_t
-    Forces::nonBonded(const std::vector<p_ptr_t> &all,
-                      const PairLists &pairLists) {
+    Forces::bonded(const p_system_ptr_t& particleSystem) {
         if ( pairPotentials_.empty() ) {
-            pairPotentials_ = associatePairPotentials_(all, forceField_, box_, bc_);
+            auto box = particleSystem->box();
+            particleSystem->doWithAll<void>([this, box] (const std::vector<p_ptr_t>& all) {
+                pairPotentials_ = associatePairPotentials_(all,
+                                                           this->forceField_,
+                                                           box,
+                                                           this->bc_);
+            });
         }
-        return computeNonBondedForces_(all, pairLists, pairPotentials_, box_, bc_);
+        return particleSystem->doWithAllFreeGroups<energy_t>([this] (
+                const std::vector<p_ptr_t>& all,
+                const std::vector<p_ptr_t>& free,
+                const std::vector<pg_ptr_t>& groups
+                ) {
+            return computeBondedForces_(groups, pairPotentials_);
+        });
     }
 
     energy_t
-    Forces::bonded(const std::vector<p_ptr_t> &all,
-                   const std::vector<pg_ptr_t> &groups) {
+    Forces::interaction(const p_ptr_t& particle,
+                        const p_system_ptr_t& particleSystem) {
         if ( pairPotentials_.empty() ) {
-            pairPotentials_ = associatePairPotentials_(all, forceField_, box_, bc_);
+            auto box = particleSystem->box();
+            particleSystem->doWithAll<void>([this, box] (const std::vector<p_ptr_t>& all) {
+                pairPotentials_ = associatePairPotentials_(all,
+                                                           this->forceField_,
+                                                           box,
+                                                           this->bc_);
+            });
         }
-        return computeBondedForces(groups, pairPotentials_);
+        return particleSystem->doWithAll<energy_t>([particle] (const std::vector<p_ptr_t>& all) {
+            return interactionEnergyOfOneParticle(particle, all, pairPotentials_);
+        });
     }
 
 }

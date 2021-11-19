@@ -25,6 +25,8 @@ simploce/particle/p-factory.hpp
 ../include/simploce/simulation/simploce/particle/p-factory.hpp
 
 ../include/simploce/simulation/s-types.hpp
+continuous.hpp
+../include/simploce/simulation/continuous.hpp
 simploce/particle/p-types.hpp
 ../include/simploce/simulation/simploce/particle/p-types.hpp
 simploce/util/param.hpp

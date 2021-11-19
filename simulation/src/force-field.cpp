@@ -21,7 +21,7 @@ namespace simploce {
     ff_ptr_t
     ForceField::obtainFrom(std::istream &stream,
                            const spec_catalog_ptr_t &catalog) {
-        util::Logger logger("simploce::ForceField::obtainFrom");
+        util::Logger logger("simploce::ForceField::forceField");
 
         ff_ptr_t forceField = std::make_shared<ForceField>();
         char charBuffer[100];

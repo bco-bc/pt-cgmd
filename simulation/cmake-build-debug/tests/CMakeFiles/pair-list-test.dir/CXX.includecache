@@ -10,6 +10,12 @@
 s-types.hpp
 ../include/simploce/simulation/s-types.hpp
 
+../include/simploce/simulation/continuous.hpp
+simploce/particle/protonatable.hpp
+../include/simploce/simulation/simploce/particle/protonatable.hpp
+iostream
+-
+
 ../include/simploce/simulation/distance-pair-list-generator.hpp
 pair-list-generator.hpp
 ../include/simploce/simulation/pair-list-generator.hpp
@@ -69,6 +75,8 @@ thread
 -
 
 ../include/simploce/simulation/s-types.hpp
+continuous.hpp
+../include/simploce/simulation/continuous.hpp
 simploce/particle/p-types.hpp
 ../include/simploce/simulation/simploce/particle/p-types.hpp
 simploce/util/param.hpp
@@ -79,18 +87,12 @@ tuple
 /home/andre/wrk3/simploce/pt-cgmd/simulation/tests/pair-list-test.cpp
 simploce/simulation/distance-pair-list-generator.hpp
 /home/andre/wrk3/simploce/pt-cgmd/simulation/tests/simploce/simulation/distance-pair-list-generator.hpp
-simploce/simulation/pair-lists.hpp
-/home/andre/wrk3/simploce/pt-cgmd/simulation/tests/simploce/simulation/pair-lists.hpp
 simploce/simulation/s-factory.hpp
 /home/andre/wrk3/simploce/pt-cgmd/simulation/tests/simploce/simulation/s-factory.hpp
-simploce/particle/coarse-grained.hpp
-/home/andre/wrk3/simploce/pt-cgmd/simulation/tests/simploce/particle/coarse-grained.hpp
 simploce/particle/atomistic.hpp
 /home/andre/wrk3/simploce/pt-cgmd/simulation/tests/simploce/particle/atomistic.hpp
 simploce/simulation/protonatable-particle-system-factory.hpp
 /home/andre/wrk3/simploce/pt-cgmd/simulation/tests/simploce/simulation/protonatable-particle-system-factory.hpp
-simploce/particle/bead.hpp
-/home/andre/wrk3/simploce/pt-cgmd/simulation/tests/simploce/particle/bead.hpp
 simploce/particle/particle-spec-catalog.hpp
 /home/andre/wrk3/simploce/pt-cgmd/simulation/tests/simploce/particle/particle-spec-catalog.hpp
 simploce/util/file.hpp
@@ -103,15 +105,7 @@ cstdlib
 -
 iostream
 -
-vector
--
 string
--
-fstream
--
-chrono
--
-ctime
 -
 
 /localdisk/include/simploce/conf/u-conf.hpp
@@ -133,12 +127,6 @@ p-types.hpp
 /localdisk/include/simploce/particle/bead.hpp
 particle.hpp
 /localdisk/include/simploce/particle/particle.hpp
-p-types.hpp
-/localdisk/include/simploce/particle/p-types.hpp
-
-/localdisk/include/simploce/particle/coarse-grained.hpp
-particle-system.hpp
-/localdisk/include/simploce/particle/particle-system.hpp
 p-types.hpp
 /localdisk/include/simploce/particle/p-types.hpp
 
@@ -210,6 +198,14 @@ p-types.hpp
 memory
 -
 string
+-
+
+/localdisk/include/simploce/particle/protonatable.hpp
+simploce/types/u-types.hpp
+/localdisk/include/simploce/particle/simploce/types/u-types.hpp
+cstdlib
+-
+map
 -
 
 /localdisk/include/simploce/types/cvector_t.hpp

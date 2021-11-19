@@ -32,12 +32,7 @@
 #ifndef LANGEVIN_VELOCITY_VERLET_HPP
 #define LANGEVIN_VELOCITY_VERLET_HPP
 
-#include "cg-displacer.hpp"
-#include "at-displacer.hpp"
-#include "sim-data.hpp"
-#include "s-types.hpp"
-#include "simploce/particle/atomistic.hpp"
-#include "simploce/particle/coarse-grained.hpp"
+#include "displacer.hpp"
 
 namespace simploce {
     
@@ -51,63 +46,21 @@ namespace simploce {
      * </a>
      * @param M Particle model type.
     */
-    template <typename M>
-    class LangevinVelocityVerlet;
-    
-    /**
-     * Specialization for atomistic particle model.
-     */
-    template <>
-    class LangevinVelocityVerlet<Atomistic> : public AtomisticDisplacer {
+    class LangevinVelocityVerlet : public Displacer {
     public:
  
-        LangevinVelocityVerlet(const at_interactor_ptr_t& interactor);
-        
-        
-        /**
-         * Displaces atoms of an atomistic particle model.
-         * @param param Simulation parameters.
-         * @param at Atomistic particle model.
-         * @return kinetic, potential energy, and temperature.
-         */
-        SimulationData displace(const sim_param_t& param, 
-                                const at_mod_ptr_t& at) const override;
-        
-        std::string id() const override;
-                
+        LangevinVelocityVerlet(sim_param_ptr_t simulationParameters,
+                               interactor_ptr_t interactor);
+
+        SimulationData displace(const p_system_ptr_t& particles) const override;
+
     private:
-        
-        at_interactor_ptr_t interactor_;
+
+        sim_param_ptr_t simulationParameters_;
+        interactor_ptr_t interactor_;
         
     };
-    
-    
-    /**
-     * Specialization for coarse grained particle model.
-     */
-    template <>
-    class LangevinVelocityVerlet<CoarseGrained> : public CoarseGrainedDisplacer {
-    public:
-        
-        LangevinVelocityVerlet(const cg_interactor_ptr_t& interactor);
-        
-        
-        /**
-         * Displaces atoms of an atomistic model.
-         * @param cg Coarse grained particle model.
-         * @return kinetic, potential energy, and temperature.
-         */
-        SimulationData displace(const sim_param_t& param, 
-                                const cg_mod_ptr_t& cg) const override;
-        
-        std::string id() const override;
-                
-    private:
-        
-        cg_interactor_ptr_t interactor_;
-        
-    };
-    
+
 }
 
 #endif /* LANGEVIN_VELOCITY_VERLET_HPP */
