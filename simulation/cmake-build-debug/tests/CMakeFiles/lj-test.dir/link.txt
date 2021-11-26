@@ -1,0 +1,1 @@
+/usr/bin/c++ -g CMakeFiles/lj-test.dir/lj-test.cpp.o -o lj-test   -L/localdisk/lib  -Wl,-rpath,/home/andre/wrk3/simploce/pt-cgmd/simulation/cmake-build-debug:/localdisk/lib ../libsimulation.so -lparticles -lutil -lcpputil -lpthread 

@@ -22,7 +22,7 @@ namespace simploce {
      * Constructor.
      * @param box Orthogonal simulation box (container, unit cell). 
      */
-    PeriodicBoundaryCondition(const box_ptr_t& box);
+    PeriodicBoundaryCondition(box_ptr_t box);
 
     dist_vect_t apply(const position_t& r1, const position_t& r2) const override;
     

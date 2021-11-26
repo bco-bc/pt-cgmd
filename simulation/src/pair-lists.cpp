@@ -15,8 +15,8 @@ namespace simploce {
     }
 
     PairLists::PairLists(std::size_t numberOfParticles,
-                            std::vector<pp_pair_t> pairList) :
-        numberOfParticles_{numberOfParticles}, ppPairs_{std::move(pairList)}, updated_{true} {
+                            std::vector<pp_pair_t> ppPairs) :
+            numberOfParticles_{numberOfParticles}, ppPairs_{std::move(ppPairs)}, updated_{true} {
     }
 
     const PairLists::pp_pair_cont_t&

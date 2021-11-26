@@ -27,6 +27,7 @@ namespace simploce {
          */
         virtual PairLists
         generate(const p_system_ptr_t& particleSystem) const = 0;
+
     };
     
 }

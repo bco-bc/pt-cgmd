@@ -22,13 +22,13 @@ namespace simploce {
 
     prot_cg_sys_ptr_t
     ProtonatableParticleSystemFactory::protonatablePolarizableWater(const box_ptr_t& box,
+                                                                    std::size_t nLimit,
                                                                     const density_t& densitySI,
-                                                                    const temperature_t& temperature,
-                                                                    std::size_t nLimit) {
+                                                                    const temperature_t& temperature) {
         util::Logger logger("ProtonatableParticleSystemFactory::protonatablePolarizableWater");
 
         // Polarizable water.
-        auto pWater = this->polarizableWater(box, densitySI, temperature, nLimit);
+        auto pWater = this->polarizableWater(box, nLimit, densitySI, temperature);
 
         // / Protonatable polarizable Water.
         prot_cg_sys_ptr_t ppWater = factory::protonatableCoarseGrained();
@@ -83,6 +83,7 @@ namespace simploce {
 
     prot_cg_sys_ptr_t
     ProtonatableParticleSystemFactory::formicAcid(const box_ptr_t& box,
+                                                  std::size_t nLimitWater,
                                                   const density_t& densitySI,
                                                   const molarity_t& molarity,
                                                   const temperature_t& temperature) {
@@ -95,7 +96,7 @@ namespace simploce {
         logger.info("Requested molarity: " + boost::lexical_cast<std::string>(molarity));
 
         // Create CG protonatable polarizable water particle model.
-        auto ppModel = this->protonatablePolarizableWater(box, densitySI, temperature);
+        auto ppModel = this->protonatablePolarizableWater(box, nLimitWater, densitySI, temperature);
 
         // Molarity to number of HCOOH molecules.
         volume_t volume = box->volume();

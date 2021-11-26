@@ -5,22 +5,22 @@ The CXX compiler identification could not be found in "/home/andre/wrk3/simploce
 Performing C SOURCE FILE Test CMAKE_HAVE_LIBC_PTHREAD failed with the following output:
 Change Dir: /home/andre/wrk3/simploce/pt-cgmd/apps/cmake-build-debug-coverage/CMakeFiles/CMakeTmp
 
-Run Build Command(s):/usr/bin/make -f Makefile cmTC_8622d/fast && /usr/bin/make  -f CMakeFiles/cmTC_8622d.dir/build.make CMakeFiles/cmTC_8622d.dir/build
+Run Build Command(s):/usr/bin/make -f Makefile cmTC_51dba/fast && /usr/bin/make  -f CMakeFiles/cmTC_51dba.dir/build.make CMakeFiles/cmTC_51dba.dir/build
 make[1]: Entering directory '/home/andre/wrk3/simploce/pt-cgmd/apps/cmake-build-debug-coverage/CMakeFiles/CMakeTmp'
-Building C object CMakeFiles/cmTC_8622d.dir/src.c.o
-/usr/bin/cc -DCMAKE_HAVE_LIBC_PTHREAD  --coverage  -o CMakeFiles/cmTC_8622d.dir/src.c.o -c /home/andre/wrk3/simploce/pt-cgmd/apps/cmake-build-debug-coverage/CMakeFiles/CMakeTmp/src.c
-Linking C executable cmTC_8622d
-/home/andre/clion-2021.2.3/bin/cmake/linux/bin/cmake -E cmake_link_script CMakeFiles/cmTC_8622d.dir/link.txt --verbose=1
-/usr/bin/cc --coverage  CMakeFiles/cmTC_8622d.dir/src.c.o -o cmTC_8622d 
-/usr/bin/ld: CMakeFiles/cmTC_8622d.dir/src.c.o: in function `main':
+Building C object CMakeFiles/cmTC_51dba.dir/src.c.o
+/usr/bin/cc -DCMAKE_HAVE_LIBC_PTHREAD  --coverage  -o CMakeFiles/cmTC_51dba.dir/src.c.o -c /home/andre/wrk3/simploce/pt-cgmd/apps/cmake-build-debug-coverage/CMakeFiles/CMakeTmp/src.c
+Linking C executable cmTC_51dba
+/home/andre/clion-2021.2.3/bin/cmake/linux/bin/cmake -E cmake_link_script CMakeFiles/cmTC_51dba.dir/link.txt --verbose=1
+/usr/bin/cc --coverage  CMakeFiles/cmTC_51dba.dir/src.c.o -o cmTC_51dba 
+/usr/bin/ld: CMakeFiles/cmTC_51dba.dir/src.c.o: in function `main':
 src.c:(.text+0x6a): undefined reference to `pthread_create'
 /usr/bin/ld: src.c:(.text+0x88): undefined reference to `pthread_detach'
 /usr/bin/ld: src.c:(.text+0xa6): undefined reference to `pthread_cancel'
 /usr/bin/ld: src.c:(.text+0xc9): undefined reference to `pthread_join'
 collect2: error: ld returned 1 exit status
-make[1]: *** [CMakeFiles/cmTC_8622d.dir/build.make:99: cmTC_8622d] Error 1
+make[1]: *** [CMakeFiles/cmTC_51dba.dir/build.make:99: cmTC_51dba] Error 1
 make[1]: Leaving directory '/home/andre/wrk3/simploce/pt-cgmd/apps/cmake-build-debug-coverage/CMakeFiles/CMakeTmp'
-make: *** [Makefile:127: cmTC_8622d/fast] Error 2
+make: *** [Makefile:127: cmTC_51dba/fast] Error 2
 
 
 Source file was:

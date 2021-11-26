@@ -35,7 +35,7 @@ namespace simploce {
          * Calculates forces on all particles in the given particle system.
          * @param simulationParameters Simulation parameters,
          * @param particleSystem Particle system.
-         * @return Returns non-bonded and bonded potential energy, respectively.
+         * @return Returns bonded and non-bonded potential energy, respectively.
          */
         std::pair<energy_t, energy_t> interact(const p_system_ptr_t &particleSystem);
 
@@ -43,8 +43,7 @@ namespace simploce {
          * Returns the interaction energy of one particle with all other particles.
          * @param particle Particle.
          * @param particleSystem Particle system.
-         * @return Returns TOTAL potential energy (sum of all interaction energies) in pair.first,
-         * while pair.second is always 0.0.
+         * @return Returns bonded and non-bonded interaction (potential) energy, respectively.
          */
         std::pair<energy_t, energy_t> interact(const p_ptr_t& particle,
                                                const p_system_ptr_t &particleSystem);

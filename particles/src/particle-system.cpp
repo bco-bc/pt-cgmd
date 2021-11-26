@@ -401,7 +401,7 @@ namespace simploce {
         int nParticles, protonatable;
         stream >> nParticles >> protonatable;
         if ( protonatable == conf::PROTONATABLE ) {
-            logger.debug("Particle model may contain titrating sites.");
+            logger.debug("Particle model may be protonatable.");
         }
         std::string stringBuffer;
         std::getline(stream, stringBuffer);  // Read EOL.
@@ -437,7 +437,6 @@ namespace simploce {
 
             // Position, velocity.
             particle->readState(stream);
-            real_t x, y, z, vx, vy, vz;
 
             // Done, next.
             std::getline(stream, stringBuffer);  // Read EOL.

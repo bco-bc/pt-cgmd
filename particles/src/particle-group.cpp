@@ -16,17 +16,19 @@
 
 namespace simploce {
 
-    ParticleGroup::ParticleGroup(p_ptr_cont_t  particles) :
-            id_{++ID_}, particles_{std::move(particles)}, bonds_{}
+    ParticleGroup::ParticleGroup(p_ptr_cont_t particles) :
+            id_{++ID_}, particles_{std::move(particles)}, bonds_{}, nonBonded_{}
     {
         this->validate_();
+        this->defineNonBonded_();
     }
 
     ParticleGroup::ParticleGroup(p_ptr_cont_t particles,
                                  bond_cont_t  bonds) :
-            id_{++ID_}, particles_{std::move(particles)}, bonds_{std::move(bonds)}
+            id_{++ID_}, particles_{std::move(particles)}, bonds_{std::move(bonds)}, nonBonded_{}
     {
         this->validate_();
+        this->defineNonBonded_();
     }
 
     ParticleGroup::ParticleGroup(const std::vector<p_ptr_t>& particles,
@@ -46,6 +48,7 @@ namespace simploce {
             bonds_.push_back(bond);
         }
         this->validate_();
+        this->defineNonBonded_();
     }
 
     bool
@@ -121,6 +124,33 @@ namespace simploce {
                 throw std::domain_error(
                         "Particle in bond of particle group is not in the containing particle group."
                 );
+            }
+        }
+    }
+
+    const std::vector<std::pair<p_ptr_t, p_ptr_t>>&
+    ParticleGroup::nonBondedParticlePairs() {
+        return nonBonded_;
+    }
+
+    void
+    ParticleGroup::defineNonBonded_() {
+        nonBonded_.clear();
+        for (auto pi: particles_) {
+            for (auto pj: particles_ ) {
+                if (pi != pj) {
+                    bool notInvolved{true};
+                    // Check bonds.
+                    for (auto b: bonds_) {
+                        if (b.contains(pi) || b.contains(pj)) {
+                            notInvolved = false;
+                        }
+                    }
+                    // Check more here...
+                    if ( notInvolved ) {
+                        nonBonded_.emplace_back(std::make_pair(pi, pj));
+                    }
+                }
             }
         }
     }

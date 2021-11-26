@@ -63,9 +63,9 @@ namespace simploce {
 
     p_system_ptr_t
     ParticleSystemFactory::polarizableWater(const box_ptr_t& box,
+                                            std::size_t nLimit,
                                             const density_t& densitySI,
-                                            const temperature_t& temperature,
-                                            std::size_t nLimit) {
+                                            const temperature_t& temperature) {
         const distance_t DISTANCE_CW_DP = 0.2; // nm.
 
         util::Logger logger{"ParticleSystemFactory::polarizableWater"};
@@ -99,7 +99,11 @@ namespace simploce {
         number_density_t atNumberDensity = density / h2oSpec->mass();
         int natWaters = int(atNumberDensity * volume);
         int ncgWaters = int(real_t(natWaters) / 5.0);
-        ncgWaters = int(ncgWaters > nLimit ? nLimit : ncgWaters);
+        if ( ncgWaters > nLimit ) {
+            ncgWaters = nLimit;
+            logger.warn("Number of requested CG waters is higher than the maximum number of CG water allowed.");
+        }
+        logger.info("Generating " + util::toString(ncgWaters) + " CG water.");
         number_density_t cgNumberDensity = real_t(ncgWaters) / volume();
         std::size_t nOneDirection = int(std::pow(ncgWaters, 1.0/3.0));
         density_t cgDensity = cgNumberDensity * (cwSpec->mass() + dpSpec->mass());
@@ -112,7 +116,8 @@ namespace simploce {
         logger.info("CG: Requested number of water water groups: " + boost::lexical_cast<std::string>(ncgWaters));
 
         // Spacing between DW water beads.
-        const length_t spacing{0.53};  // Roughly the location of the first peak of g(r), in nm.
+        const length_t spacing{0.53};  // Roughly the location of the first peak of g(r),
+                                          // in nm, Figure 5 in Riniker et al.
         logger.debug("Spacing between CW beads: " + boost::lexical_cast<std::string>(spacing));
 
         std::size_t nx = util::nint(Lx / spacing);
@@ -296,12 +301,13 @@ namespace simploce {
 
     p_system_ptr_t
     ParticleSystemFactory::argon(const box_ptr_t& box,
+                                 std::size_t nLimit,
                                  const density_t& densitySI,
                                  const temperature_t& temperature)
     {
-        util::Logger logger{"ParticleSystemFactory:::argon"};
+        util::Logger logger{"simploce::ParticleSystemFactory:::argon"};
 
-        logger.info("Creating atomistic particle model for liquid argon.");
+        logger.info("Creating atomistic particle model for argon.");
         logger.info("Requested temperature: " + util::toString(temperature()));
 
         // Conversion of kg/m^3 to u/nm^3.
@@ -319,7 +325,7 @@ namespace simploce {
 
         // Spacing between argon atoms.
         const length_t spacing{0.3};
-        logger.debug("Spacing between LJ beads: " + util::toString(spacing));
+        logger.debug("Spacing between LJ atoms: " + util::toString(spacing));
 
         // Box dimensions.
         length_t Lx = box->lengthX();
@@ -331,6 +337,11 @@ namespace simploce {
 
         int nAtoms = int(numberDensity() * volume());
         logger.info("Requested number of argon atoms: " + util::toString(nAtoms));
+        if (nAtoms > nLimit) {
+            logger.warn("Number of requested atoms is higher that maximum number of atoms allowed.");
+            nAtoms = nLimit;
+        }
+        logger.info("Generating " + util::toString(nAtoms) + " argon atoms.");
 
         int nx = util::nint(Lx / spacing);
         int ny = util::nint(Ly / spacing);
@@ -370,7 +381,12 @@ namespace simploce {
         }
         atomistic->box(box);
         logger.info("Number of Argon atoms generated: " + util::toString(atomistic->numberOfAtoms()));
-        logger.info("Density (u/nm3): " + util::toString(spec->mass() * atomistic->numberOfAtoms() / volume()));
+        numberDensity = real_t(atomistic->numberOfAtoms()) / volume();
+        logger.info("Number density (1/nm^3): " + util::toString(numberDensity));
+        density = spec->mass()() * numberDensity();
+        logger.info("Density (u/nm3): " + util::toString(density));
+        density_t densSI = density() * units::si<real_t>::MU * 1.0e+27;
+        logger.info("Density (kg/m^3): " + util::toString(densSI));
         return std::move(atomistic);
     }
 

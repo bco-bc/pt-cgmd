@@ -45,7 +45,7 @@ namespace simploce {
     struct ProtonTransfer {
         
         /**
-         * Protonatable bead pair list type.
+         * Protonatable bead pair list typeName.
          */
         using prot_pair_list_t = ProtonTransferPairListGenerator::prot_pair_list_t;
         

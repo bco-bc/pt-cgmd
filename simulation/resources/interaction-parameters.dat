@@ -1,14 +1,21 @@
-# non-bonded
-# Type    Name #1    Name #2
-5
-lj+rf     CW         CW        1.298e-03                 0.088  # C12 (kJ nm^12 mol^-1), C6 (kJ nm^6 mol^-1)
-lj+rf     pCW        pCW       1.298e-03                 0.088
-lj+rf     CW         pCW       1.298e-03                 0.088
-lj+rf     DP         DP        0.0                       0.0
-lj        Ar         Ar        9.52407e-06               0.00616522  # C12 (kJ nm^12 mol^-1), C6 (kJ nm^6 mol^-1).
+# Non-bonded
+# Type    Name #1    Name #2   Parameters                       Description
+12
+lj+rf     CW         CW        1.298e-03   0.088       2.5 78.5 # C12, C6, eps_in_rc, eps_out_rc
+lj+rf     pCW        pCW       1.298e-03   0.088       2.5 78.5 #
+lj+rf     CW         pCW       1.298e-03   0.088       2.5 78.5 #
+rf        DP         DP                                2.5 78.5 # Reaction field only.
+rf        CW         DP                                2.5 78.5 #
+rf        pCW        DP                                2.5 78.5 #
+lj        Ar         Ar        9.52407e-06 0.00616522           # C12 (kJ nm^12 mol^-1), C6 (kJ nm^6 mol^-1).
+hs+sc     Na+        Cl-                               78.5     # eps_inside_rc
+hs+sc     Na+        Na+                               78.5     #
+hs+sc     Cl-        Cl-                               78.5     #
+lj        T1         T1        1.298e-03   0.088                # Test interaction
+rf        T1         T2                                2.5 78.5 # Test interaction.
 # Bonded
-# Type    Name #1    Name #2
+# Type    Name #1    Name #2   Parameters                       Description
 3
-hp        O          O         0.1208      2.092e+05 # r0 (nm), fc (kJ/mol nm^2).
-ha-qp     CW         DP        0.2         2.0e+06   # r0 (nm), fc ( kJ/(mol nm^4).
-ha-qp     pCW        DP        0.2         2.0e+06   # r0 (nm), fc ( kJ/(mol nm^4).
+hp        O          O         0.1208      2.092e+05            # r0, fc
+ha-qp     CW         DP        0.2         2.0e+06              # r0, fc
+ha-qp     pCW        DP        0.2         2.0e+06              # r0, fc

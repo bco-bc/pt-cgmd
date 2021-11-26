@@ -20,7 +20,7 @@ namespace simploce {
     std::pair<energy_t, force_t>
     HP::operator () (const p_ptr_t &p1, const p_ptr_t &p2) {
         // Get r0 and fc parameters.
-        auto params = forceField_->harmonicParameters(p1->spec(), p2->spec());
+        auto params = forceField_->harmonic(p1->spec(), p2->spec());
         auto r0 = params.first;
         auto fc = params.second;
 

@@ -33,8 +33,5 @@ int main() {
     std::cout << *forceField << std::endl;
     std::cout << std::endl;
 
-    forceField->relativePermittivityInsideCutoff(4.0);
-    std::cout << "Relative permittivity: " << forceField->relativePermittivityInsideCutoff() << std::endl;
-
     return EXIT_SUCCESS;
 }

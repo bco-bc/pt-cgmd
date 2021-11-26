@@ -35,7 +35,7 @@ namespace simploce {
                            const PairLists &pairLists);
 
         /**
-         * Calculates forces on particles due to non-bonded interactions.
+         * Calculates forces on particles due to bonded interactions.
          * @param particleSystem Particle system.
          * @return Potential energy.
          */
@@ -45,10 +45,10 @@ namespace simploce {
          * Returns interaction energy of one given particle with all other particles.
          * @param particle Particle.
          * @param particleSystem Particle system.
-         * @return Interaction energy.
+         * @return Bonded and non-bonded interaction (potential) energy.
          */
-        energy_t interaction(const p_ptr_t& particle,
-                             const p_system_ptr_t& particleSystem);
+        std::pair<energy_t, energy_t> interaction(const p_ptr_t& particle,
+                                                  const p_system_ptr_t& particleSystem);
 
     private:
 

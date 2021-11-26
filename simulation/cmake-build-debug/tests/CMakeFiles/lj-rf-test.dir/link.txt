@@ -1,0 +1,1 @@
+/usr/bin/c++ -g CMakeFiles/lj-rf-test.dir/rf-test.cpp.o -o lj-rf-test   -L/localdisk/lib  -Wl,-rpath,/wrk3/simploce/pt-cgmd/simulation/cmake-build-debug:/localdisk/lib ../libsimulation.so -lparticles -lutil -lcpputil -lpthread 

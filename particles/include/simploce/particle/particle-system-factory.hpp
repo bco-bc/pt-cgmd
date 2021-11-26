@@ -8,6 +8,7 @@
 #define PARTICLE_SYSTEM_FACTORY_HPP
 
 #include "p-types.hpp"
+#include "p-factory.hpp"
 
 namespace simploce {
 
@@ -38,20 +39,21 @@ namespace simploce {
         /**
          * Returns coarse grained polarizable water model. This model is based on
          * Riniker and van Gunsteren, J. Chem. Phys., 134, 084110, 2011.
-         * @param box Box.
+         * @param box Box. Default side length is 7.27 nm.
+         * @param nLimit Upper limit for the number of CG waters. One CG water consists of two water
+         * beads, CW and DP.
          * @param densitySI Requested atomistic density in SI units (kg/m^3).
          * Default is 997.0479 kg/m^3 at 298.15 K (25 C).
          * @param temperature Requested temperature in SI units (K). Default is
          * 298.15 K.
-         * @param nLimit Upper limit for the number of CG waters.
          * @return Polarizable water.
          * @see <a href="https://aip.scitation.org/doi/10.1063/1.3553378">
          * Riniker and van Gunsteren</a>
          */
-        p_system_ptr_t polarizableWater(const box_ptr_t& box,
+        p_system_ptr_t polarizableWater(const box_ptr_t& box = factory::box(7.27),
+                                        std::size_t nLimit = 2560,
                                         const density_t& densitySI = 997.0479,
-                                        const temperature_t& temperature = 298.15,
-                                        std::size_t nLimit = 1000000);
+                                        const temperature_t& temperature = 298.15);
 
         /**
          * Returns electrolyte solution of given molarity in a box. This model
@@ -65,21 +67,24 @@ namespace simploce {
          * @param temperature Requested temperature in K. Default is 298.15 K.
          * @return Ionic solution.
          */
-        p_system_ptr_t simpleElectrolyte(const box_ptr_t& box,
+        p_system_ptr_t simpleElectrolyte(const box_ptr_t& box = factory::box(6.30),
                                          const molarity_t& molarity = 0.1,
                                          const temperature_t& temperature = 298.15);
 
         /**
-         * Returns argon at given density and temperature. Defaults values are compatible with liquid argon.
+         * Returns argon at given density and temperature. The defaults values are
+         * compatible with liquid argon as employed by Rahman in 1964.
          * @param box Simulation box.
+         * @param nLimit Maximal number of atoms allowed.
          * @param densitySI Requested atomistic density in SI units (kg/m^3).
          * Default is 1.374 g/cm^3 = 1374.0 kg/m^3 (at a pressure of 1 atm).
          * @param temperature Requested temperature in SI units (K). Default is
          * 94.4 K.
          * @return Atomistic particle model.
-         * @see <a href="https://journals.aps.org/pr/abstract/10.1103/PhysRev.136.A405">Argon at Wikipedia</a>
+         * @see <a href="https://journals.aps.org/pr/abstract/10.1103/PhysRev.136.A405">Rahman</a>
          */
-        p_system_ptr_t argon(const box_ptr_t& box,
+        p_system_ptr_t argon(const box_ptr_t& box = factory::box(3.47786),
+                             std::size_t nLimit = 864,
                              const density_t& densitySI = 1374.0,
                              const temperature_t& temperature = 94.4);
 

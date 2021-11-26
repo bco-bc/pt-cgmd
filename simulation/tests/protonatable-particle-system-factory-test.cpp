@@ -40,7 +40,7 @@ int main() {
     spec_catalog_ptr_t catalog = factory::particleSpecCatalog(fileName);
     std::cout << *catalog << std::endl << std::endl;
 
-    // protonatableWater(catalog);
+    //protonatableWater(catalog);
     formicAcid(catalog);
 
     return (EXIT_SUCCESS);

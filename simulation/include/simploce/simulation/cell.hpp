@@ -47,19 +47,19 @@ namespace simploce {
     /**
      * An element of a grid. Holds a list of free particles and particle groups
      * located in this cell.
-     * @param P Particle type.
+     * @param P Particle typeName.
      */
     template <typename P>
     class Cell {
     public:
         
         /**
-         * Particle pointer type.
+         * Particle pointer typeName.
          */
         using p_ptr_t = std::shared_ptr<P>;
         
         /**
-         * Particle group pointer type.
+         * Particle group pointer typeName.
          */
         using pg_ptr_t = std::shared_ptr<ParticleGroup<P>>;
         

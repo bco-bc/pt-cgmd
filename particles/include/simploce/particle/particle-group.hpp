@@ -16,8 +16,8 @@
 namespace simploce {
     
   /**
-   * Holds particles that form a logical unit such as a molecule. May include bonds
-   * between particles.
+   * Holds particles that form a logical unit such as a molecule. May specify bonds
+   * between two particles, define bond angles for three particles, etc.
    */
     class ParticleGroup {
     public:
@@ -36,15 +36,15 @@ namespace simploce {
          * Constructor. Particles, no bonds.
          * @param particles Constituting particles.
          */
-        explicit ParticleGroup(p_ptr_cont_t  particles);
+        explicit ParticleGroup(p_ptr_cont_t particles);
         
         /**
          * Constructor. Particles and bonds.
          * @param particles Constituting particles.
          * @param bonds Bonds. Particles forming bonds must be constituting particles.
          */
-        explicit ParticleGroup(p_ptr_cont_t  particles,
-                               bond_cont_t  bonds);
+        explicit ParticleGroup(p_ptr_cont_t particles,
+                               bond_cont_t bonds);
         
         /**
          * Constructor.
@@ -117,6 +117,13 @@ namespace simploce {
          */
         static pg_ptr_t make(const std::vector<p_ptr_t>& particles, 
                              const std::vector<id_pair_t>& bonds);
+
+        /**
+         * Returns pairs of particles in this group not forming a bond with each other,
+         * are both involved in the same angle definition, etc.
+         * @return Particle pairs.
+         */
+        const std::vector<std::pair<p_ptr_t, p_ptr_t>>& nonBondedParticlePairs();
         
     private:
 
@@ -132,9 +139,16 @@ namespace simploce {
         p_ptr_t find_(const id_t& id) const;
         
         void validate_() const;
+
+        /**
+         * Defines pairs of particles in this group not forming a bond with each other,
+         * are both involved in the same angle definition, etc.
+         */
+        void defineNonBonded_();
         
         p_ptr_cont_t particles_;
         bond_cont_t bonds_;
+        std::vector<std::pair<p_ptr_t, p_ptr_t>> nonBonded_;
     };
     
     std::ostream& operator << (std::ostream &stream, const ParticleGroup &group);

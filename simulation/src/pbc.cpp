@@ -14,8 +14,8 @@
 
 namespace simploce {
 
-    PeriodicBoundaryCondition::PeriodicBoundaryCondition(const box_ptr_t& box) :
-            boundary_condition{}, box_{factory::box(box->edgeLength())} {
+    PeriodicBoundaryCondition::PeriodicBoundaryCondition(box_ptr_t box) :
+            boundary_condition{}, box_{std::move(box)} {
     }
 
     dist_vect_t 

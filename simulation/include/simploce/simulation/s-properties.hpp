@@ -23,7 +23,7 @@ namespace simploce {
 
         /**
          * Returns inverse Debye screening length, in nm^-1.
-         * @tparam T Particle type.
+         * @tparam T Particle typeName.
          * @param particles Particles.
          * @return Kappa.
          */

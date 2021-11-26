@@ -6,15 +6,17 @@
  * Created on September 22, 2019, 3:15 PM
  */
 
+#include "simploce/analysis/gr.hpp"
+#include "simploce/analysis/a-types.hpp"
+#include "simploce/analysis/analysis.hpp"
 #include "simploce/simulation/s-types.hpp"
 #include "simploce/simulation/s-conf.hpp"
 #include "simploce/simulation/s-factory.hpp"
-#include "simploce/simulation/sim-model-factory.hpp"
-#include "simploce/analysis/gr.hpp"
-#include "simploce/analysis/analysis.hpp"
 #include "simploce/particle/particle-spec-catalog.hpp"
-#include "simploce/particle/bead.hpp"
+#include "simploce/particle/particle-system.hpp"
 #include "simploce/util/file.hpp"
+#include "simploce/util/logger.hpp"
+#include "simploce/util/param.hpp"
 #include <boost/program_options.hpp>
 #include <string>
 #include <iostream>
@@ -22,56 +24,58 @@
 
 namespace po = boost::program_options;
 using namespace simploce;
-
+using namespace simploce::param;
 
 int main(int argc, char *argv[]) {
-    using gr_t = Gr<Bead>;
-    using gr_ptr_t = std::shared_ptr<gr_t>;
-    using analysis_t = Analysis<Bead>;
+    util::Logger logger{"simploce::s-gr::main"};
 
     std::string fnParticleSpecCatalog{"particle-spec-catalog.dat"};
     std::string fnTrajectory{"trajectory.dat"};
-    std::string fnInputModel{"in.ParticleModelSpecification"};
+    std::string fnInputParticleSystem{"in.ps"};
     std::string fnResults{"gr.dat"};
     std::string specName1{"Na+"};
     std::string specName2{"Cl-"};
-    real_t dr{0.05};              // Bin size, nm.
-    std::size_t nskip = 0;        // Number of states in trajectory to skip
-    // before executing analysis.
+    real_t dr{0.01};              // Bin size, nm.
+    std::size_t nSkip = 0;        // Number of states in trajectory to skip
+                                  // before executing analysis.
+    bool isCoarseGrained{false};
 
     po::options_description usage("Usage");
-    usage.add_options()
-            (
-                    "fn-particle-spec-catalog",
-                    po::value<std::string>(&fnParticleSpecCatalog),
-                    "Input file name of particle specifications. Default 'particle-spec-catalog.dat'."
-            )
-            (
-                    "fn-ParticleModelSpecification", po::value<std::string>(&fnInputModel),
-                    "Input file name ParticleModelSpecification. Default is 'in.ParticleModelSpecification'.")
-            (
-                    "fn-trajectory", po::value<std::string>(&fnTrajectory),
-                    "Input file name trajectory. Default is 'trajectory.dat'."
-            )
-            (
-                    "spec-name-1", po::value<std::string>(&specName1),
-                    "First of two particle specifications names"
-            )
-            (
-                    "spec-name-2", po::value<std::string>(&specName2),
-                    "Second of two particle specifications names"
-            )
-            (
-                    "bin-size", po::value<real_t>(&dr),
-                    "Bin size of g(r). Default is 0.05 nm."
-            )
-            (
-                    "skip-number-of-states", po::value<std::size_t>(&nskip),
-                    "Number of states in trajectory to skip before executing analysis"
-            )
-            (
-                    "help", "Help message"
-            );
+    usage.add_options() (
+        "fn-particle-spec-catalog,s",
+        po::value<std::string>(&fnParticleSpecCatalog),
+        "Input file name of particle specifications. Default 'particle-spec-catalog.dat'."
+    )(
+        "fn-input-particle-system,i", po::value<std::string>(&fnInputParticleSystem),
+        "Input file name particle system. Default is 'in.ps'."
+    )(
+        "fn-trajectory",
+        po::value<std::string>(&fnTrajectory),
+        "Input file name trajectory. Default is 'trajectory.dat'."
+    )(
+        "spec-name-1,1",
+        po::value<std::string>(&specName1),
+        "First of two particle specifications names"
+    )(
+        "spec-name-2,2", po::value<std::string>(&specName2),
+        "Second of two particle specifications names"
+    )(
+        "bin-size,b", po::value<real_t>(&dr),
+        "Bin size of g(r). Default is 0.01 nm."
+    )(
+        "coarse-grained,c",
+        "Input is a coarse-grained description."
+    )(
+        "skip-number-of-states,k",
+        po::value<std::size_t>(&nSkip),
+        "Number of states in trajectory to skip before executing analysis"
+    )(
+            "verbose,v",
+            "Verbose"
+    )(
+    "help,h",
+    "Help message"
+    );
 
     po::variables_map vm;
     po::store(po::parse_command_line(argc, argv, usage), vm);
@@ -86,8 +90,11 @@ int main(int argc, char *argv[]) {
     if (vm.count("fn-particle-spec-catalog")) {
         fnParticleSpecCatalog = vm["fn-particle-spec-catalog"].as<std::string>();
     }
-    if (vm.count("fn-input-ParticleModelSpecification")) {
-        fnInputModel = vm["fn-input-ParticleModelSpecification"].as<std::string>();
+    if (vm.count("fn-input-particle-system")) {
+        fnInputParticleSystem = vm["fn-input-particle-system"].as<std::string>();
+    }
+    if (vm.count("coarse-grained") ) {
+        isCoarseGrained = true;
     }
 
     if (vm.count("fn-trajectory")) {
@@ -104,33 +111,35 @@ int main(int argc, char *argv[]) {
         dr = vm["bin-size"].as<real_t>();
     }
     if (vm.count("skip-number-of-states")) {
-        nskip = vm["skip-number-of-states"].as<std::size_t>();
+        nSkip = vm["skip-number-of-states"].as<std::size_t>();
+    }
+    if (vm.count("verbose") ) {
+        logger.changeLogLevel(util::Logger::LOGTRACE);
     }
 
-    // Simulation parameters
-    sim_param_t param;
-    param.add<std::size_t>("nskip", nskip);
+    // Analysis parameters
+    a_param_ptr_t analysisParameters = factory::simulationParameters();
+    analysisParameters->add<std::size_t>("analysis.trajectory.nskip", nSkip);
+    logger.info("Analysis parameters:");
+    std::cout << *analysisParameters << std::endl;
 
     // Read particle specifications.
     spec_catalog_ptr_t catalog = factory::particleSpecCatalog(fnParticleSpecCatalog);
-    std::clog << "Particle specifications: " << std::endl;
-    std::clog << *catalog << std::endl;
 
-    sim_model_fact_ptr_t simModelFactory = factory::simulationModelFactory(catalog);
-    std::ifstream istream;
-    util::open_input_file(istream, fnInputModel);
-    cg_sim_model_ptr_t sm = simModelFactory->readCoarseGrainedFrom(istream);
-    istream.close();
-    std::clog << *sm << std::endl;
+    // Read particle system.
+    auto particleSystem = factory::particleSystem(fnInputParticleSystem, catalog, isCoarseGrained);
+    logger.info("Read particle system from '" + fnInputParticleSystem + "'.");
 
-    box_ptr_t box = sm->box();
-    bc_ptr_t bc = sm->boundaryCondition();
-    gr_ptr_t gr = gr_t::create(dr, specName1, specName2, box, bc);
+    // Analyzer.
+    bc_ptr_t bc = factory::boundaryCondition(particleSystem->box());
+    gr_ptr_t gr = Gr::create(dr, specName1, specName2, bc);
 
-    analysis_t analysis(sm, gr);
-    util::open_input_file(istream, fnTrajectory);
-    analysis.perform(param, istream);
-    istream.close();
+    // Perform the analysis.
+    Analysis analysis(particleSystem, analysisParameters, gr);
+    std::ifstream trajectory;
+    util::open_input_file(trajectory, fnTrajectory);
+    analysis.perform(trajectory);
+    trajectory.close();
 
     // Write results.
     auto results = gr->results();
@@ -144,9 +153,8 @@ int main(int argc, char *argv[]) {
     }
     ostream.flush();
     ostream.close();
+    logger.info("g(r) written to '" + fnResults + "'.");
 
-    std::clog << std::endl;
-    std::clog << "g(r) written to '" << fnResults << "'." << std::endl;
-
+    // Done.
     return 0;
 }

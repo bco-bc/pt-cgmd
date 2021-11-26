@@ -24,8 +24,8 @@ using namespace simploce;
 void argon(const spec_catalog_ptr_t& catalog) {
     std::cout << "Creating liquid argon:" << std::endl;
     auto factory = factory::particleSystemFactory(catalog);
-    auto box = factory::box(length_t{3.47786});
-    auto argon = factory->argon(box);
+    // auto box = factory::box(length_t{3.47786});
+    auto argon = factory->argon();
     std::cout << *argon << std::endl;
     std::cout << std::endl;
 }
@@ -42,8 +42,7 @@ void diatomic(const spec_catalog_ptr_t& catalog) {
 void coarseGrainedPolarizableWater(const spec_catalog_ptr_t& catalog) {
     std::cout << "Creating coarse grained polarizable water model:" << std::endl;
     auto factory = factory::particleSystemFactory(catalog);
-    box_ptr_t box = factory::box(length_t{7.27});
-    auto coarseGrained = factory->polarizableWater(box);
+    auto coarseGrained = factory->polarizableWater();
     std::cout << *coarseGrained << std::endl;
     std::cout << std::endl;
 }

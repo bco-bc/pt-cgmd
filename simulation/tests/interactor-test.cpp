@@ -25,7 +25,7 @@ void test1(const spec_catalog_ptr_t &catalog, const ff_ptr_t &forceField) {
 
     auto simulationParameters = factory::simulationParameters();
     param::write(std::cout, *simulationParameters);
-    auto bc = factory::pbc(atomistic->box());
+    auto bc = factory::boundaryCondition(atomistic->box());
     auto pairListGenerator = factory::pairListsGenerator(bc);
 
     auto forces = factory::forces(bc, forceField);
@@ -45,7 +45,7 @@ void test2(const spec_catalog_ptr_t &catalog, const ff_ptr_t &forceField) {
     auto simulationParameters = factory::simulationParameters();
     param::write(std::cout, *simulationParameters);
     auto box = diatomic->box();
-    auto bc = factory::pbc(box);
+    auto bc = factory::boundaryCondition(box);
     auto pairListGenerator = factory::pairListsGenerator(bc);
 
     auto interactor = factory::interactor(simulationParameters, forceField, bc);
@@ -59,23 +59,21 @@ void test3 (const spec_catalog_ptr_t &catalog, const ff_ptr_t &forceField) {
     std::cout << "Polarizable water:" << std::endl;
     auto factory = factory::protonatableParticleSystemFactory(catalog);
     auto box = factory::box(7.27);
-    auto bc = factory::pbc(box);
+    auto bc = factory::boundaryCondition(box);
     auto polarizableWater = factory->polarizableWater(box);
     auto pairListGenerator = factory::pairListsGenerator(bc);
     auto simulationParameters = factory::simulationParameters();
 
     auto interactor = factory::interactor(simulationParameters, forceField, bc);
-    for (int k = 0; k != 11; ++k) {
-        std::cout << "Step #" << k << std::endl;
-        auto result = interactor->interact(polarizableWater);
-        std::cout << "Non-bonded potential energy: " << result.first << std::endl;
-        std::cout << "Bonded potential energy: " << result.second << std::endl;
-    }
+    auto result = interactor->interact(polarizableWater);
+    std::cout << "Non-bonded potential energy: " << result.first << std::endl;
+    std::cout << "Bonded potential energy: " << result.second << std::endl;
+
     std::cout << std::endl;
 }
 
 int main() {
-    util::Logger::changeLogLevel(util::Logger::LOGTRACE);
+    //util::Logger::changeLogLevel(util::Logger::LOGTRACE);
 
     std::string fnSpecs = "/localdisk/resources/particles-specs.dat";
     std::ifstream stream;

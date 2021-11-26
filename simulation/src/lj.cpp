@@ -12,18 +12,14 @@
 
 namespace simploce {
 
-    LJ::LJ(ff_ptr_t forceField, box_ptr_t box, bc_ptr_t bc) :
-        forceField_(std::move(forceField)), box_{std::move(box)}, bc_{std::move(bc)} {
+    LJ::LJ(ff_ptr_t forceField, bc_ptr_t bc) :
+        forceField_(std::move(forceField)), bc_{std::move(bc)} {
     }
 
     std::pair<energy_t, force_t>
     LJ::operator () (const p_ptr_t &p1, const p_ptr_t &p2) {
-        // Initialize.
-        static const distance_t rc = properties::cutoffDistance(box_);
-        static const real_t rc2 = rc() * rc();
-
         // Get C12 and C6 parameters.
-        auto params = forceField_->lennardJonesParameters(p1->spec(), p2->spec());
+        auto params = forceField_->lennardJones(p1->spec(), p2->spec());
         auto C12 = params.first;
         auto C6 = params.second;
 
@@ -34,9 +30,19 @@ namespace simploce {
         // Apply boundary condition.
         dist_vect_t rij = bc_->apply(r1, r2);
         auto Rij = norm<real_t>(rij);
-
-        // Potential/interaction energy, kJ/mol.
         real_t Rij2 = Rij * Rij;
+
+        // Forces and energy.
+        return std::move(this->forceAndEnergy(rij, Rij, Rij2, C12, C6));
+    }
+
+    std::pair<energy_t, force_t>
+    LJ::forceAndEnergy(const dist_vect_t& rij,
+                       real_t Rij,
+                       real_t Rij2,
+                       real_t C12,
+                       real_t C6) {
+        // Potential/interaction energy, kJ/mol.
         real_t Rij6 = Rij2 * Rij2 * Rij2;
         real_t Rij12 = Rij6 * Rij6;
         real_t t1 = C12 / Rij12;
@@ -53,6 +59,7 @@ namespace simploce {
 
         // Done.
         return std::move(std::make_pair(energy, f));
+
     }
 
 }

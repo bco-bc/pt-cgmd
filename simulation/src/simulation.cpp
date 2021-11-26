@@ -30,8 +30,8 @@ namespace simploce {
         auto box = particleSystem_->box();
         auto nSteps = simulationParameters_->get<int>("simulation.nsteps", 10000);
         auto nWrite = simulationParameters_->get<int>("simulation.nwrite", 10);
-        for (int counter = 1; counter != nSteps; ++counter) {
-            logger.debug("Step #: " + util::toString(counter));
+        for (int counter = 1; counter <= nSteps; ++counter) {
+            logger.trace("Step #: " + util::toString(counter));
             SimulationData data = displacer_->displace(particleSystem_);
             if ( data.accepted ) {
                 numberAccepted += 1;

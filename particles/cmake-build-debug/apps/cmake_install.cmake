@@ -1,4 +1,4 @@
-# Install script for directory: /home/andre/wrk3/simploce/pt-cgmd/particles/apps
+# Install script for directory: /wrk3/simploce/pt-cgmd/particles/apps
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
@@ -49,12 +49,12 @@ if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_
          FILE "$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/bin/total-masses"
          RPATH "")
   endif()
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/bin" TYPE EXECUTABLE FILES "/home/andre/wrk3/simploce/pt-cgmd/particles/cmake-build-debug/apps/total-masses")
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/bin" TYPE EXECUTABLE FILES "/wrk3/simploce/pt-cgmd/particles/cmake-build-debug/apps/total-masses")
   if(EXISTS "$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/bin/total-masses" AND
      NOT IS_SYMLINK "$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/bin/total-masses")
     file(RPATH_CHANGE
          FILE "$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/bin/total-masses"
-         OLD_RPATH "/home/andre/wrk3/simploce/pt-cgmd/particles/cmake-build-debug:/localdisk/lib:"
+         OLD_RPATH "/wrk3/simploce/pt-cgmd/particles/cmake-build-debug:/localdisk/lib:"
          NEW_RPATH "")
     if(CMAKE_INSTALL_DO_STRIP)
       execute_process(COMMAND "/usr/bin/strip" "$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/bin/total-masses")

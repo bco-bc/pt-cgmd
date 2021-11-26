@@ -200,6 +200,43 @@ s-simulate/fast:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/s-simulate.dir/build.make CMakeFiles/s-simulate.dir/build
 .PHONY : s-simulate/fast
 
+#=============================================================================
+# Target rules for targets named s-gr
+
+# Build rule for target.
+s-gr: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 s-gr
+.PHONY : s-gr
+
+# fast build rule for target.
+s-gr/fast:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/s-gr.dir/build.make CMakeFiles/s-gr.dir/build
+.PHONY : s-gr/fast
+
+src/s-gr.o: src/s-gr.cpp.o
+.PHONY : src/s-gr.o
+
+# target to build an object file
+src/s-gr.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/s-gr.dir/build.make CMakeFiles/s-gr.dir/src/s-gr.cpp.o
+.PHONY : src/s-gr.cpp.o
+
+src/s-gr.i: src/s-gr.cpp.i
+.PHONY : src/s-gr.i
+
+# target to preprocess a source file
+src/s-gr.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/s-gr.dir/build.make CMakeFiles/s-gr.dir/src/s-gr.cpp.i
+.PHONY : src/s-gr.cpp.i
+
+src/s-gr.s: src/s-gr.cpp.s
+.PHONY : src/s-gr.s
+
+# target to generate assembly for a file
+src/s-gr.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/s-gr.dir/build.make CMakeFiles/s-gr.dir/src/s-gr.cpp.s
+.PHONY : src/s-gr.cpp.s
+
 src/s-particle-system.o: src/s-particle-system.cpp.o
 .PHONY : src/s-particle-system.o
 
@@ -284,9 +321,13 @@ help:
 	@echo "... install/strip"
 	@echo "... list_install_components"
 	@echo "... rebuild_cache"
+	@echo "... s-gr"
 	@echo "... s-particle-system"
 	@echo "... s-simulate"
 	@echo "... s-validate"
+	@echo "... src/s-gr.o"
+	@echo "... src/s-gr.i"
+	@echo "... src/s-gr.s"
 	@echo "... src/s-particle-system.o"
 	@echo "... src/s-particle-system.i"
 	@echo "... src/s-particle-system.s"

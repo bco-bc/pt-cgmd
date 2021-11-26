@@ -13,11 +13,14 @@
 #include "simploce/simulation/interactor.hpp"
 #include "simploce/simulation/leap-frog.hpp"
 #include "simploce/simulation/mc.hpp"
+#include "simploce/simulation/velocity-verlet.hpp"
+#include "simploce/simulation/langevin-velocity-verlet.hpp"
 #include "simploce/simulation/protonatable-particle-system-factory.hpp"
 #include "simploce/simulation/pbc.hpp"
 #include "simploce/simulation/s-conf.hpp"
 #include "simploce/particle/p-factory.hpp"
 #include "simploce/particle/protonatable-coarse-grained.hpp"
+#include "simploce/particle/atomistic.hpp"
 #include "simploce/util/file.hpp"
 #include <memory>
 #include <stdexcept>
@@ -88,7 +91,7 @@ namespace simploce {
                 simulationParameters_->put("simulation.nwrite", "10");
                 simulationParameters_->put("simulation.npairlists", 10);
                 simulationParameters_->put("simulation.temperature", 298.15);
-                simulationParameters_->put("simulation.timestep", 0.001);  // 1 fs.
+                simulationParameters_->put("simulation.timestep", 0.020);  // 20 fs.
             }
             return simulationParameters_;
         }
@@ -117,8 +120,14 @@ namespace simploce {
                 logger.debug("Creating LeapFrog displacer.");
                 return std::make_shared<LeapFrog>(simulationParameters, interactor);
             } else if ( displacerType == conf::MONTE_CARLO ) {
-                 logger.debug("Creating MonteCarlo displacer.");
+                 logger.debug("Creating Monte Carlo displacer.");
                 return std::make_shared<MonteCarlo>(simulationParameters, interactor);
+            } else if ( displacerType == conf::LANGEVIN_VELOCITY_VERLET ) {
+                logger.debug("Creating Langevin Velocity Verlet displacer.");
+                return std::make_shared<LangevinVelocityVerlet>(simulationParameters, interactor);
+            } else if ( displacerType == conf::VELOCITY_VERLET ) {
+                logger.debug("Creating Velocity Verlet displacer.");
+                return std::make_shared<VelocityVerlet>(simulationParameters, interactor);
             } else {
                 util::logAndThrow(logger, displacerType + ": No such displacer.");
                 return nullptr;
@@ -154,7 +163,7 @@ namespace simploce {
         */
 
         bc_ptr_t 
-        pbc(const box_ptr_t& box)
+        boundaryCondition(const box_ptr_t& box)
         {
             if ( !pbc_ ) {
                 pbc_ = std::make_shared<PeriodicBoundaryCondition>(box);
@@ -206,6 +215,22 @@ namespace simploce {
                 forces_ = std::make_shared<Forces>(bc, forceField);
             }
             return forces_;
+        }
+
+        p_system_ptr_t particleSystem(std::string fileName,
+                                      const spec_catalog_ptr_t& catalog,
+                                      bool isCoarseGrained) {
+            std::ifstream stream;
+            util::open_input_file(stream, fileName);
+            p_system_ptr_t particleSystem;
+            if ( isCoarseGrained ) {
+                particleSystem = prot_cg_sys_t::obtainFrom(stream, catalog);
+            } else {
+                auto ps = Atomistic::obtainFrom(stream, catalog);
+                particleSystem = ps;
+            }
+            stream.close();
+            return particleSystem;
         }
     }
 }

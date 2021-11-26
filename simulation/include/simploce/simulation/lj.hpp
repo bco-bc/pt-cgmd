@@ -25,14 +25,21 @@ namespace simploce {
          * @param box Simulation box.
          * @param bc Boundary condition.
          */
-        LJ(ff_ptr_t forceField, box_ptr_t box, bc_ptr_t bc);
+        LJ(ff_ptr_t forceField, bc_ptr_t bc);
 
         std::pair<energy_t, force_t> operator () (const p_ptr_t &p1, const p_ptr_t &p2) override;
 
     private:
 
+        friend class LJ_RF;
+
+        static std::pair<energy_t, force_t> forceAndEnergy(const dist_vect_t& rij,
+                                                           real_t Rij,
+                                                           real_t Rij2,
+                                                           real_t C12,
+                                                           real_t C6);
+
         ff_ptr_t forceField_;
-        box_ptr_t box_;
         bc_ptr_t bc_;
     };
 

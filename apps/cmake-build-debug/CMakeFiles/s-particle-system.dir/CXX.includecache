@@ -59,6 +59,8 @@ map
 /localdisk/include/simploce/particle/particle-system-factory.hpp
 p-types.hpp
 /localdisk/include/simploce/particle/p-types.hpp
+p-factory.hpp
+/localdisk/include/simploce/particle/p-factory.hpp
 
 /localdisk/include/simploce/particle/particle-system.hpp
 p-types.hpp
@@ -81,6 +83,8 @@ iostream
 /localdisk/include/simploce/simulation/protonatable-particle-system-factory.hpp
 s-types.hpp
 /localdisk/include/simploce/simulation/s-types.hpp
+s-factory.hpp
+/localdisk/include/simploce/simulation/s-factory.hpp
 simploce/particle/particle-system-factory.hpp
 /localdisk/include/simploce/simulation/simploce/particle/particle-system-factory.hpp
 

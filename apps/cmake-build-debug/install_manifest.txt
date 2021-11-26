@@ -1,3 +1,4 @@
 /localdisk/bin/s-particle-system
 /localdisk/bin/s-validate
 /localdisk/bin/s-simulate
+/localdisk/bin/s-gr

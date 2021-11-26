@@ -82,7 +82,7 @@ namespace simploce {
          * @return Boundary condition.
          */
         bc_ptr_t 
-        pbc(const box_ptr_t& box);
+        boundaryCondition(const box_ptr_t& box);
         
         /**
          * Returns generator of pairs of protonatable beads possibly involved in proton
@@ -117,6 +117,17 @@ namespace simploce {
          * @return Force calculator.
          */
         forces_ptr_t forces(const bc_ptr_t& bc, const ff_ptr_t& forceField);
+
+        /**
+         * Reads a particle system from an input file.
+         * @param fileName File name.
+         * @param catalog Particle specifications catalog.
+         * @param isCoarseGrained Specifies whether the input file holds a coarse-grained particle system.
+         * @return Particle system.
+         */
+        p_system_ptr_t particleSystem(std::string fileName,
+                                      const spec_catalog_ptr_t& catalog,
+                                      bool isCoarseGrained);
 
     }
 }

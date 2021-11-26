@@ -14,7 +14,7 @@
 namespace simploce {
     
     /*
-     * @param T particle pointer type.
+     * @param T particle pointer typeName.
      * @param dt Time step. 
      * @param particles Particles.
      * @return Kinetic energy, temperature.

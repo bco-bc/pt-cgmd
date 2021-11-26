@@ -26,7 +26,6 @@ namespace simploce {
         ff_ptr_t forceField = std::make_shared<ForceField>();
         char charBuffer[100];
         std::string stringBuffer;
-        std::size_t numberOfInteractionTypes{0};
 
         // Skip two headers.
         std::getline(stream, stringBuffer);
@@ -37,12 +36,12 @@ namespace simploce {
         stream >> nNonBonded;
         std::getline(stream, stringBuffer);
         for (int k = 0; k != nNonBonded; ++k) {
-            // Read interaction type.
+            // Read interaction specification type name.
             stream.read(charBuffer, conf::NAME_WIDTH);
-            std::string interactionType = std::string(charBuffer, conf::NAME_WIDTH);
-            boost::trim(interactionType);
+            std::string typeName = std::string(charBuffer, conf::NAME_WIDTH);
+            boost::trim(typeName);
 
-            // Read particle specifications.
+            // Get two particle specifications.
             stream.read(charBuffer, conf::NAME_WIDTH);
             std::string specName1 = std::string(charBuffer, conf::NAME_WIDTH);
             boost::trim(specName1);
@@ -53,20 +52,28 @@ namespace simploce {
             auto spec2 = catalog->lookup(specName2);
 
             // Read interaction parameters.
-            if ( interactionType == conf::LJ || interactionType == conf::LJ_RF ) {
-                real_t C12, C6;
-                stream >> C12 >> C6;
-                int_spec_t spec;
-                spec.type = interactionType;
-                spec.spec1 = spec1;
-                spec.spec2 = spec2;
-                spec.C12 = C12;
-                spec.C6 = C6;
-                forceField->addInteractionSpecification(spec);
-                numberOfInteractionTypes += 1;
+            int_spec_t spec;
+            spec.spec1 = spec1;
+            spec.spec2 = spec2;
+            if (typeName == conf::LJ) {
+                spec.typeName = typeName;
+                stream >> spec.C12 >> spec.C6;
+            } else if (typeName == conf::LJ_RF) {
+                spec.typeName = typeName;
+                stream >> spec.C12 >> spec.C6 >> spec.eps_inside_rc >> spec.eps_outside_rc;
+            } else if (typeName == conf::RF) {
+                spec.typeName = typeName;
+                stream >> spec.eps_inside_rc >> spec.eps_outside_rc;
+            } else if (typeName == conf::HS_SF || typeName == conf::SF ||
+                       typeName == conf::HS_SC || typeName == conf::SC) {
+                spec.typeName = typeName;
+                stream >> spec.eps_inside_rc;
             } else {
-                logger.warn("Skipping interaction type '" + interactionType + "'.");
+                util::logAndThrow(logger, "'" + typeName + "': No such interaction type.");
             }
+            forceField->addNonBondedSpecification(spec);
+
+            // Read and ignore description.
             std::getline(stream, stringBuffer);
         }
 
@@ -78,12 +85,12 @@ namespace simploce {
         stream >> nBonded;
         std::getline(stream, stringBuffer);
         for (int k = 0; k != nBonded; ++k) {
-            // Read interaction type.
+            // Read interaction specification type name.
             stream.read(charBuffer, conf::NAME_WIDTH);
-            std::string interactionType = std::string(charBuffer, conf::NAME_WIDTH);
-            boost::trim(interactionType);
+            std::string typeName = std::string(charBuffer, conf::NAME_WIDTH);
+            boost::trim(typeName);
 
-            // Read particle specifications.
+            // Get two particle specifications.
             stream.read(charBuffer, conf::NAME_WIDTH);
             std::string specName1 = std::string(charBuffer, conf::NAME_WIDTH);
             boost::trim(specName1);
@@ -93,66 +100,75 @@ namespace simploce {
             boost::trim(specName2);
             auto spec2 = catalog->lookup(specName2);
 
-            if ( interactionType == conf::HP || interactionType == conf::HA_QP ) {
-                real_t r0, fc;
-                stream >> r0 >> fc;
-                int_spec_t spec;
-                spec.type = interactionType;
-                spec.spec1 = spec1;
-                spec.spec2 = spec2;
-                spec.r0 = r0;
-                spec.fc = fc;
-                forceField->addInteractionSpecification(spec);
-                numberOfInteractionTypes += 1;
+            int_spec_t spec;
+            spec.spec1 = spec1;
+            spec.spec2 = spec2;
+            if (typeName == conf::HP || typeName == conf::HA_QP ) {
+                spec.typeName = typeName;
+                stream >> spec.r0 >> spec.fc;
             } else {
-                    logger.warn("Skipping interaction type '" + interactionType + "'.");
+                util::logAndThrow(logger, "'" + typeName + "': No such interaction type.");
             }
+            forceField->addBondedSpecification(spec);
+
+            // Read and ignore description.
             std::getline(stream, stringBuffer);
         }
 
         // Log some information.
-        logger.debug("Number of interaction types: " + util::toString(numberOfInteractionTypes));
+        std::size_t numberNonBonded = forceField->nonBondedSpecifications().size();
+        std::size_t numberBonded = forceField->bondedSpecifications().size();
+        logger.debug("Number of non-bonded interaction types: " + util::toString(numberNonBonded));
+        logger.debug("Number of bonded interaction types: " + util::toString(numberBonded));
 
         return std::move(forceField);
     }
 
-    ForceField::ForceField() : eps_inside_rc_{2.5}, eps_beyond_rc_{78.5}, interactionsSpecs_{} {
+    ForceField::ForceField() : bondedSpecs_{}, nonBondedSpecs_{} {
     }
 
     ForceField::~ForceField() = default;
 
     ForceField::ForceField(ForceField&& forceField)  noexcept {
-        eps_inside_rc_ = forceField.eps_inside_rc_;
-        eps_beyond_rc_ = forceField.eps_beyond_rc_;
-        interactionsSpecs_ = std::move(forceField.interactionsSpecs_);
+        bondedSpecs_ = std::move(forceField.bondedSpecs_);
+        nonBondedSpecs_ = std::move(forceField.nonBondedSpecs_);
     }
 
     ForceField&
     ForceField::operator = (ForceField&& forceField) noexcept {
-        eps_inside_rc_ = forceField.eps_inside_rc_;
-        eps_beyond_rc_ = forceField.eps_beyond_rc_;
-        interactionsSpecs_ = std::move(forceField.interactionsSpecs_);
+        bondedSpecs_ = std::move(forceField.bondedSpecs_);
+        nonBondedSpecs_ = std::move(forceField.nonBondedSpecs_);
         return *this;
     }
 
     void
-    ForceField::addInteractionSpecification(const int_spec_t &spec) {
-        interactionsSpecs_.emplace_back(spec);
+    ForceField::addNonBondedSpecification(const int_spec_t &spec) {
+        nonBondedSpecs_.emplace_back(spec);
     }
 
-    const
-    std::vector<ForceField::int_spec_t> &ForceField::interactionSpecifications() const {
-        return interactionsSpecs_;
+    void
+    ForceField::addBondedSpecification(const int_spec_t &spec) {
+        bondedSpecs_.emplace_back(spec);
+    }
+
+    const std::vector<ForceField::int_spec_t>&
+    ForceField::nonBondedSpecifications() const {
+        return nonBondedSpecs_;
+    }
+
+    const std::vector<ForceField::int_spec_t>&
+    ForceField::bondedSpecifications() const {
+        return bondedSpecs_;
     }
 
     std::pair<real_t, real_t>
-    ForceField::lennardJonesParameters(const spec_ptr_t &spec1,
-                                       const spec_ptr_t &spec2) const
+    ForceField::lennardJones(const spec_ptr_t &spec1,
+                             const spec_ptr_t &spec2) const
     {
-        static util::Logger logger("simploce::ForceField::lennardJonesParameters()");
+        static util::Logger logger("simploce::ForceField::lennardJones()");
 
-        for (auto& spec : this->interactionsSpecs_) {
-            if ( spec.type == conf::LJ ) {
+        for (auto& spec : this->nonBondedSpecs_) {
+            if (spec.typeName == conf::LJ ) {
                 if ( (spec.spec1 == spec1 && spec.spec2 == spec2) ||
                      (spec.spec1 == spec2 && spec.spec2 == spec1) ) {
                     return std::move(std::make_pair(spec.C12, spec.C6));
@@ -160,17 +176,94 @@ namespace simploce {
             }
         }
         // Not found.
-        logger.warn("(" + spec1->name() + ", " + spec2->name() +
-                    "): No 'non-bonded Lennard-Jones' interaction parameters for this particle specifications pair.");
-        return std::make_pair(0.0, 0.0);
+        util::logAndThrow(logger,
+                          "(" + spec1->name() + ", " + spec2->name() +
+                          "): No interaction parameters for this particle specifications pair.");
+        return std::move(std::make_pair(0.0, 0.0));
     }
 
     std::pair<real_t, real_t>
-    ForceField::harmonicParameters(const spec_ptr_t &spec1,
-                                   const spec_ptr_t &spec2) const {
-        static util::Logger logger("simploce::ForceField::harmonicParameters()");
-        for (auto& spec : this->interactionsSpecs_) {
-            if ( spec.type == conf::HP ) {
+    ForceField::reactionField(const spec_ptr_t &spec1,
+                              const spec_ptr_t &spec2) const {
+        static util::Logger logger("simploce::ForceField::reactionField()");
+
+        for (auto& spec : this->nonBondedSpecs_) {
+            if (spec.typeName == conf::RF || spec.typeName == conf::HS_RF) {
+                if ( (spec.spec1 == spec1 && spec.spec2 == spec2) ||
+                     (spec.spec1 == spec2 && spec.spec2 == spec1) ) {
+                    return std::move(std::make_pair(spec.eps_inside_rc, spec.eps_outside_rc));
+                }
+            }
+        }
+        // Not found.
+        util::logAndThrow(logger,
+                          "(" + spec1->name() + ", " + spec2->name() +
+                          "): No interaction parameters for this particle specifications pair.");
+        return std::move(std::make_pair(0.0, 0.0));
+    }
+
+    std::pair<real_t, real_t>
+    ForceField::hardSphereReactionField(const spec_ptr_t &spec1,
+                                        const spec_ptr_t &spec2) const {
+        return std::move(this->reactionField(spec1, spec2));
+    }
+
+    real_t
+    ForceField::screenedCoulomb(const spec_ptr_t &spec1,
+                                const spec_ptr_t &spec2) const {
+        static util::Logger logger("simploce::ForceField::screenedCoulomb()");
+        for (auto& spec : this->nonBondedSpecs_) {
+            if (spec.typeName == conf::SC || spec.typeName == conf::HS_SC) {
+                if ( (spec.spec1 == spec1 && spec.spec2 == spec2) ||
+                     (spec.spec1 == spec2 && spec.spec2 == spec1) ) {
+                    return spec.eps_inside_rc;
+                }
+            }
+        }
+        // Not found.
+        util::logAndThrow(logger,
+                          "(" + spec1->name() + ", " + spec2->name() +
+                          "): No interaction parameters for this particle specifications pair.");
+        return 0.0;
+    }
+
+    real_t
+    ForceField::hardSphereScreenedCoulomb(const spec_ptr_t &spec1,
+                                          const spec_ptr_t &spec2) const {
+        return this->screenedCoulomb(spec1, spec2);
+    }
+
+    real_t
+    ForceField::shiftedForce(const spec_ptr_t &spec1,
+                             const spec_ptr_t &spec2) const {
+        static util::Logger logger("simploce::ForceField::shiftedForce()");
+        for (auto& spec : this->nonBondedSpecs_) {
+            if (spec.typeName == conf::SF || spec.typeName == conf::HS_SF) {
+                if ( (spec.spec1 == spec1 && spec.spec2 == spec2) ||
+                     (spec.spec1 == spec2 && spec.spec2 == spec1) ) {
+                    return spec.eps_inside_rc;
+                }
+            }
+        }
+        // Not found.
+        util::logAndThrow(logger,
+                          "(" + spec1->name() + ", " + spec2->name() +
+                          "): No interaction parameters for this particle specifications pair.");
+        return 0.0;
+    }
+
+    real_t
+    ForceField::hardSphereShiftedForce(const spec_ptr_t &spec1,
+                                       const spec_ptr_t &spec2) const {
+        return this->shiftedForce(spec1, spec2);
+    }
+
+    std::pair<real_t, real_t>
+    ForceField::harmonic(const spec_ptr_t &spec1,
+                         const spec_ptr_t &spec2) const {
+        static util::Logger logger("simploce::ForceField::harmonic()");
+        for (auto& spec : this->bondedSpecs_) {
+            if (spec.typeName == conf::HP ) {
                 if ( (spec.spec1 == spec1 && spec.spec2 == spec2) ||
                      (spec.spec1 == spec2 && spec.spec2 == spec1) ) {
                     return std::move(std::make_pair(spec.r0, spec.fc));
@@ -178,17 +271,18 @@ namespace simploce {
             }
         }
         // Not found.
-        logger.warn("(" + spec1->name() + ", " + spec2->name() +
-                    "): No 'harmonic bond' interaction parameters for this particle specifications pair.");
+        util::logAndThrow(logger,
+                          "(" + spec1->name() + ", " + spec2->name() +
+                          "): No interaction parameters for this particle specifications pair.");
         return std::make_pair(0.0, 0.0);
     }
 
     std::pair<real_t, real_t>
-    ForceField::halveAttractiveQuarticParameters(const spec_ptr_t &spec1,
-                                                 const spec_ptr_t &spec2) const {
-        static util::Logger logger("simploce::ForceField::halveAttractiveQuarticParameters()");
-        for (auto& spec : this->interactionsSpecs_) {
-            if ( spec.type == conf::HA_QP ) {
+    ForceField::halveAttractiveQuartic(const spec_ptr_t &spec1,
+                                       const spec_ptr_t &spec2) const {
+        static util::Logger logger("simploce::ForceField::halveAttractiveQuartic()");
+        for (auto& spec : this->bondedSpecs_) {
+            if (spec.typeName == conf::HA_QP ) {
                 if ((spec.spec1 == spec1 && spec.spec2 == spec2) ||
                     (spec.spec1 == spec2 && spec.spec2 == spec1) ) {
                     return std::move(std::make_pair(spec.r0, spec.fc));
@@ -197,48 +291,27 @@ namespace simploce {
         }
         // Not found.
         logger.warn("(" + spec1->name() + ", " + spec2->name() +
-                    "): No 'halve attractive quartic bond' interaction for this particle specifications pair.");
+                    "): No interaction for this particle specifications pair.");
         return std::make_pair(0.0, 0.0);
     }
 
     std::tuple<real_t, real_t, real_t, real_t>
-    ForceField::lennardJonesReactionFieldParameters(const spec_ptr_t &spec1,
-                                                   const spec_ptr_t &spec2) const {
-        static util::Logger logger("simploce::ForceField::lennardJonesReactionFieldParameters()");
-        for (auto& spec : this->interactionsSpecs_) {
-            if ( spec.type == conf::LJ_RF ) {
-                if ( (spec.spec1 == spec1 && spec.spec2 == spec2) ||
-                     (spec.spec1 == spec2 && spec.spec2 == spec1) ) {
-                    return std::move(std::make_tuple(spec.C12, spec.C6, eps_inside_rc_, eps_beyond_rc_));
+    ForceField::lennardJonesReactionField(const spec_ptr_t &spec1,
+                                          const spec_ptr_t &spec2) const {
+        static util::Logger logger("simploce::ForceField::lennardJonesReactionField()");
+        for (auto& spec : this->nonBondedSpecs_) {
+            if (spec.typeName == conf::LJ_RF ) {
+                if ( (*(spec.spec1) == *spec1 && *(spec.spec2) == *spec2) ||
+                     (*(spec.spec1) == *spec2 && *(spec.spec2) == *spec1) ) {
+                    return std::move(std::make_tuple(spec.C12, spec.C6, spec.eps_inside_rc, spec.eps_outside_rc));
                 }
             }
         }
         // Not found.
         logger.warn("(" + spec1->name() + ", " + spec2->name() +
-                    "): No 'non-bonded Lennard-Jones + Reaction Field' interaction parameters " +
-                    "for this particle specifications pair.");
-        return std::make_tuple(0.0, 0.0, 0.0, 0.0);
+                    "): No interaction parameters for this particle specifications pair.");
+        return std::move(std::make_tuple(0.0, 0.0, 0.0, 0.0));
 
-    }
-
-    void
-    ForceField::relativePermittivityInsideCutoff(real_t eps) {
-        eps_inside_rc_ = eps;
-    }
-
-    real_t
-    ForceField::relativePermittivityInsideCutoff() const {
-        return eps_inside_rc_;
-    }
-
-    real_t
-    ForceField::relativePermittivityBeyondCutoff() const {
-        return eps_beyond_rc_;
-    }
-
-   void
-   ForceField::relativePermittivityBeyondCutoff(real_t eps) {
-        eps_beyond_rc_ = eps;
     }
 
     std::ostream&
@@ -246,31 +319,56 @@ namespace simploce {
                  const ForceField& forceField) {
         stream.setf(std::ios::scientific);
         stream.precision(conf::PRECISION);
-        const auto specs = forceField.interactionSpecifications();
+        const auto& nbSpecs = forceField.nonBondedSpecifications();
         stream << "# Non-bonded" << std::endl;
         stream << "#     Type   Name #1   Name #2" << std::endl;
-        for (auto& spec : specs) {
-            if ( spec.type == conf::LJ ) {
-                stream << std::setw(conf::NAME_WIDTH) << spec.type;
+        for (auto& spec : nbSpecs) {
+            if (spec.typeName == conf::LJ ) {
+                stream << std::setw(conf::NAME_WIDTH) << spec.typeName;
                 stream << std::setw(conf::NAME_WIDTH) << spec.spec1->name();
                 stream << std::setw(conf::NAME_WIDTH) << spec.spec2->name();
                 stream << std::setw(conf::REAL_WIDTH) << spec.C12;
                 stream << std::setw(conf::REAL_WIDTH) << spec.C6;
-                stream << conf::SPACE << "# C12 (kJ nm^12 mol^-1), C6 (kJ nm^6 mol^-1).";
+                stream << conf::SPACE << "# C12, C6";
+                stream << std::endl;
+            } else if (spec.typeName == conf::LJ_RF) {
+                stream << std::setw(conf::NAME_WIDTH) << spec.typeName;
+                stream << std::setw(conf::NAME_WIDTH) << spec.spec1->name();
+                stream << std::setw(conf::NAME_WIDTH) << spec.spec2->name();
+                stream << std::setw(conf::REAL_WIDTH) << spec.C12;
+                stream << std::setw(conf::REAL_WIDTH) << spec.C6;
+                stream << std::setw(conf::REAL_WIDTH) << spec.eps_inside_rc;
+                stream << std::setw(conf::REAL_WIDTH) << spec.eps_outside_rc;
+                stream << conf::SPACE << "# C12, C6, eps_inside_rc, eps_outside_rc";
+                stream << std::endl;
+            } else if (spec.typeName == conf::SC || spec.typeName == conf::HS_SC) {
+                stream << std::setw(conf::NAME_WIDTH) << spec.typeName;
+                stream << std::setw(conf::NAME_WIDTH) << spec.spec1->name();
+                stream << std::setw(conf::NAME_WIDTH) << spec.spec2->name();
+                stream << std::setw(conf::REAL_WIDTH) << spec.eps_inside_rc;
+                stream << conf::SPACE << "# eps_inside_rc";
+                stream << std::endl;
+            } else if (spec.typeName == conf::RF || spec.typeName == conf::HS_RF) {
+                stream << std::setw(conf::NAME_WIDTH) << spec.typeName;
+                stream << std::setw(conf::NAME_WIDTH) << spec.spec1->name();
+                stream << std::setw(conf::NAME_WIDTH) << spec.spec2->name();
+                stream << std::setw(conf::REAL_WIDTH) << spec.eps_inside_rc;
+                stream << std::setw(conf::REAL_WIDTH) << spec.eps_outside_rc;
+                stream << conf::SPACE << "# eps_inside_rc, eps_outside_rc";
                 stream << std::endl;
             }
-            // MORE HERE.
         }
+        const auto& bSpecs = forceField.bondedSpecifications();
         stream << "# Bonded" << std::endl;
         stream << "#     Type   Name #1   Name #2" << std::endl;
-        for (auto& spec : specs) {
-            if ( spec.type == conf::HP ) {
-                stream << std::setw(conf::NAME_WIDTH) << spec.type;
+        for (auto& spec : bSpecs) {
+            if (spec.typeName == conf::HP || spec.typeName == conf::HA_QP ) {
+                stream << std::setw(conf::NAME_WIDTH) << spec.typeName;
                 stream << std::setw(conf::NAME_WIDTH) << spec.spec1->name();
                 stream << std::setw(conf::NAME_WIDTH) << spec.spec2->name();
                 stream << std::setw(conf::REAL_WIDTH) << spec.r0;
                 stream << std::setw(conf::REAL_WIDTH) << spec.fc;
-                stream << conf::SPACE << "# r0 (nm), fc (kJ/mol nm^2).";
+                stream << conf::SPACE << "# r0, fc";
                 stream << std::endl;
             }
             // MORE HERE

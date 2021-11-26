@@ -35,7 +35,7 @@ void test1(const spec_catalog_ptr_t& catalog, const ff_ptr_t& forceField) {
     auto simulationParameters = factory::simulationParameters();
     auto factory = factory::particleSystemFactory(catalog);
     auto particleSystem = factory->diatomic(0.12, catalog->O());
-    auto bc = factory::pbc(particleSystem->box());
+    auto bc = factory::boundaryCondition(particleSystem->box());
     auto interactor = factory::interactor(simulationParameters, forceField, bc);
     auto displacer = factory::displacer(conf::MONTE_CARLO, simulationParameters, interactor);
     Simulation simulation{simulationParameters, particleSystem, displacer};

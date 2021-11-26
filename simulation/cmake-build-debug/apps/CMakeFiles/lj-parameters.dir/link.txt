@@ -1,0 +1,1 @@
+/usr/bin/c++ -g CMakeFiles/lj-parameters.dir/lj-parameters.cpp.o -o lj-parameters   -L/localdisk/lib  -Wl,-rpath,/home/andre/wrk3/simploce/pt-cgmd/simulation/cmake-build-debug:/localdisk/lib: ../libsimulation.so -lparticles -lutil -lcpputil -lpthread 

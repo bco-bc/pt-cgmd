@@ -9,7 +9,6 @@ tests/CMakeFiles/particle-system-factory-test.dir/particle-system-factory-test.c
  ../include/simploce/particle/particle-spec-catalog.hpp \
  ../include/simploce/particle/particle-system-factory.hpp \
  ../include/simploce/particle/particle-system.hpp \
- ../tests/particle-system-factory-test.cpp \
  /localdisk/include/simploce/conf/u-conf.hpp \
  /localdisk/include/simploce/types/cvector_t.hpp \
  /localdisk/include/simploce/types/u-types.hpp \
@@ -17,4 +16,5 @@ tests/CMakeFiles/particle-system-factory-test.dir/particle-system-factory-test.c
  /localdisk/include/simploce/util/box.hpp \
  /localdisk/include/simploce/util/cube.hpp \
  /localdisk/include/simploce/util/logger.hpp \
- /localdisk/include/simploce/util/util.hpp
+ /localdisk/include/simploce/util/util.hpp \
+ ../tests/particle-system-factory-test.cpp

@@ -13,7 +13,7 @@ namespace simploce {
 
     /**
      * Interaction potential between two particles.
-     * @tparam P Particle type.
+     * @tparam P Particle typeName.
      */
     struct pair_potential {
 
@@ -23,7 +23,7 @@ namespace simploce {
          * Returns potential energy and the force due to an interaction between two particles.
          * @param p1 Particle #1.
          * @param p2 Particle #2.
-         * @return Potential energy and force on particle 1.
+         * @return Potential energy and force on particle 1. Not assigned.
          */
         virtual std::pair<energy_t, force_t> operator () (const p_ptr_t &p1, const p_ptr_t &p2) = 0;
     };

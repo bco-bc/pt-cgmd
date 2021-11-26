@@ -45,29 +45,29 @@ namespace simploce {
     /**
      * Grid, consists of cells. For creating particle based pair lists based on 
      * cell lists. The grid and its elements are always cubically shaped. 
-     * @param P Particle type.
+     * @param P Particle typeName.
      */
     template <typename P>
     class Grid {
     public:
         
         /**
-         * Grid pointer type.
+         * Grid pointer typeName.
          */
         using grid_ptr_t = std::shared_ptr<Grid<P>>;
     
         /**
-         * Particle pointer type.
+         * Particle pointer typeName.
          */
         using p_ptr_t = std::shared_ptr<P>;
         
         /**
-         * Particle group pointer type.
+         * Particle group pointer typeName.
          */
         using pg_ptr_t = std::shared_ptr<ParticleGroup<P>>;
         
         /**
-         * Cell type.
+         * Cell typeName.
          */
         using cell_t = Cell<P>;
         

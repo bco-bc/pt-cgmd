@@ -26,13 +26,15 @@ namespace simploce {
          * Holds parameters for an interaction.
          */
         using int_spec_t = struct {
-            std::string type;
-            spec_ptr_t spec1;
-            spec_ptr_t spec2;
-            real_t C12;
-            real_t C6;
-            real_t fc;     // Force constant.
-            real_t r0;     // Equilibrium distance.
+            std::string typeName;   // Type name.
+            spec_ptr_t spec1;       // First particle specification.
+            spec_ptr_t spec2;       // Second particle specification.
+            real_t C12;             // C12 Lennard-Jones interaction.
+            real_t C6;              // C6 Lennard-Jones interaction.
+            real_t fc;              // Force constant.
+            real_t r0;              // Equilibrium distance.
+            real_t eps_inside_rc;   // Relative permittivity inside cutoff distance.
+            real_t eps_outside_rc;  // Relative permittivity outside cutoff distance.
         };
 
         /**
@@ -56,88 +58,137 @@ namespace simploce {
         ForceField& operator = (ForceField&& forceField) noexcept ;
 
         /**
-         * Adds interaction specification to force field.
+         * Adds a non-bonded interaction specification to force field.
          * @param spec Interaction specification.
          */
-        void addInteractionSpecification(const int_spec_t &spec);
+        void addNonBondedSpecification(const int_spec_t& spec);
 
         /**
-         * Returns interaction parameter set.
-         * @return Interaction parameters.
+         * Adds a bonded interaction specification to force field.
+         * @param spec Interaction specification.
          */
-        const std::vector<int_spec_t> &interactionSpecifications() const;
+        void addBondedSpecification(const int_spec_t& spec);
 
         /**
-         * Returns Lennard-Jones interaction parameters for the given pair of
+         * Returns non-bonded interaction specifications.
+         * @return Specifications.
+         */
+        const std::vector<int_spec_t>& nonBondedSpecifications() const;
+
+        /**
+         * Returns bonded interaction specifications.
+         * @return Specifications.
+         */
+        const std::vector<int_spec_t>& bondedSpecifications() const;
+
+        /**
+         * Returns non-bonded Lennard-Jones interaction parameters for the given pair of
          * particle specifications.
          * @param spec1 Particle specification #1.
          * @param spec2 Particle specification #2.
          * @return C12, C6 respectively.
          */
-        std::pair<real_t, real_t> lennardJonesParameters(const spec_ptr_t &spec1,
-                                                         const spec_ptr_t &spec2) const;
+        std::pair<real_t, real_t> lennardJones(const spec_ptr_t &spec1,
+                                               const spec_ptr_t &spec2) const;
 
         /**
-         * Returns Lennard-Jones plus Reaction Field electrostatic interaction parameters.
+         * Returns non-bonded reaction field electrostatic interaction parameters for the given pair of
+         * particle specifications.
          * @param spec1 Particle specification #1.
          * @param spec2 Particle specification #2.
-         * @return C12, C6, eps_inside_rc, eps_outside_rc, respectively. (eps = relative permittivity,
-         * rc = cutoff distance.)
+         * @return eps_inside_rc, eps_outside_rc, respectively.
+         * (eps = relative permittivity, rc = cutoff distance.)
          */
-        std::tuple<real_t, real_t, real_t, real_t>
-        lennardJonesReactionFieldParameters(const spec_ptr_t &spec1,
-                                           const spec_ptr_t &spec2) const;
+        std::pair<real_t, real_t> reactionField(const spec_ptr_t &spec1,
+                                                const spec_ptr_t &spec2) const;
+
 
         /**
-         * Returns harmonic bond interaction parameters for the given pair of
+         * Returns non-bonded hard sphere reaction field electrostatic interaction parameters for the given pair of
+         * particle specifications.
+         * @param spec1 Particle specification #1.
+         * @param spec2 Particle specification #2.
+         * @return eps_inside_rc, eps_outside_rc, respectively.
+         * (eps = relative permittivity, rc = cutoff distance.)
+         */
+        std::pair<real_t, real_t> hardSphereReactionField(const spec_ptr_t &spec1,
+                                                          const spec_ptr_t &spec2) const;
+        /**
+         * Returns non-bonded screened Coulomb electrostatic interaction parameters for the given pair of
+         * particle specifications.
+         * @param spec1 Particle specification #1.
+         * @param spec2 Particle specification #2.
+         * @return eps_inside_rc (eps = relative permittivity, rc = cutoff distance.)
+         */
+        real_t screenedCoulomb(const spec_ptr_t &spec1,
+                               const spec_ptr_t &spec2) const;
+
+        /**
+         * Returns hard-sphere screened Coulomb electrostatic interaction parameters for the given pair of
+         * particle specifications.
+         * @param spec1 Particle specification #1.
+         * @param spec2 Particle specification #2.
+         * @return eps_inside_rc (eps = relative permittivity, rc = cutoff distance.)
+         */
+        real_t hardSphereScreenedCoulomb(const spec_ptr_t &spec1,
+                                         const spec_ptr_t &spec2) const;
+
+        /**
+         * Returns shifted force electrostatic interaction parameters for the given pair of
+         * particle specifications.
+         * @param spec1 Particle specification #1.
+         * @param spec2 Particle specification #2.
+         * @return eps_inside_rc (eps = relative permittivity, rc = cutoff distance.)
+         */
+        real_t shiftedForce(const spec_ptr_t &spec1,
+                            const spec_ptr_t &spec2) const;
+
+        /**
+         * Returns hard-sphere shifted force electrostatic interaction parameters for the given pair of
+         * particle specifications.
+         * @param spec1 Particle specification #1.
+         * @param spec2 Particle specification #2.
+         * @return eps_inside_rc (eps = relative permittivity, rc = cutoff distance.)
+         */
+        real_t hardSphereShiftedForce(const spec_ptr_t &spec1,
+                                      const spec_ptr_t &spec2) const;
+
+
+        /**
+         * Returns non-bonded Lennard-Jones plus Reaction Field electrostatic interaction parameters.
+         * @param spec1 Particle specification #1.
+         * @param spec2 Particle specification #2.
+         * @return C12, C6, eps_inside_rc, eps_outside_rc, respectively.
+         * (eps = relative permittivity, rc = cutoff distance.)
+         */
+        std::tuple<real_t, real_t, real_t, real_t>
+        lennardJonesReactionField(const spec_ptr_t &spec1,
+                                  const spec_ptr_t &spec2) const;
+
+        /**
+         * Returns bonded harmonic interaction parameters for the given pair of
          * particle specifications
          * @param spec1 Particle specification #1.
          * @param spec2 Particle specification #2.
          * @return Equilibrium distance (r0) and force constant (fc).
          */
-        std::pair<real_t, real_t> harmonicParameters(const spec_ptr_t &spec1,
-                                                     const spec_ptr_t &spec2) const;
+        std::pair<real_t, real_t> harmonic(const spec_ptr_t &spec1,
+                                           const spec_ptr_t &spec2) const;
 
         /**
-         * Returns halve attractive quartic bond interaction parameters for the given pair of
+         * Returns bonded halve attractive quartic interaction parameters for the given pair of
          * particle specifications.
          * @param spec1 Particle specification #1.
          * @param spec2 Particle specification #2.
          * @return Equilibrium distance (r0) and force constant (fc).
          */
-        std::pair<real_t, real_t> halveAttractiveQuarticParameters(const spec_ptr_t &spec1,
-                                                                   const spec_ptr_t &spec2) const;
-
-        /**
-         * Sets value for the relative permittivity inside cutoff distance.
-         * @param eps Relative permittivity.
-         */
-        void relativePermittivityInsideCutoff(real_t eps);
-
-        /**
-         * Returns value of inside relative permittivity. Its default value is 2.5.
-         * @return Relative permittivity.
-         */
-        real_t relativePermittivityInsideCutoff() const;
-
-        /**
-         * Relative permittivity outside (beyond) cutoff distance. Its default value
-         * is 78.5.
-         * @return Relative permittivity.
-         */
-        real_t relativePermittivityBeyondCutoff() const;
-
-        /**
-         * Sets relative permittivity outside (beyond) cutoff distance.
-         * @param eps Relative permittivity.
-         */
-        void relativePermittivityBeyondCutoff(real_t eps);
+        std::pair<real_t, real_t> halveAttractiveQuartic(const spec_ptr_t &spec1,
+                                                         const spec_ptr_t &spec2) const;
 
     private:
 
-        real_t eps_inside_rc_;
-        real_t eps_beyond_rc_;
-        std::vector<int_spec_t> interactionsSpecs_;
+        std::vector<int_spec_t> nonBondedSpecs_;
+        std::vector<int_spec_t> bondedSpecs_;
 
     };
 

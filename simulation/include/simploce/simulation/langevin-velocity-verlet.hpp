@@ -38,13 +38,13 @@ namespace simploce {
     
     
     /**
-     * Displaces particles according a stochastic Verlet-type algorithm applicable to 
+     * Displaces particles according a stochastic Verlet-typeName algorithm applicable to
      * an Langevin equation. Provides for a canonical ensemble (NVT constant) simulation. 
      * Requires force field, temperature, time step and damping rate.
      * @see <a href="http://dx.doi.org/10.1080/00268976.2012.760055">
      *   Grønbech-Jensen and Oded Farago, Molec Phys,111, 983-991, 2013
      * </a>
-     * @param M Particle model type.
+     * @param M Particle model typeName.
     */
     class LangevinVelocityVerlet : public Displacer {
     public:

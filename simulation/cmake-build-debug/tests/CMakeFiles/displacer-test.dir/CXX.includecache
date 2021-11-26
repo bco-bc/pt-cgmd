@@ -169,6 +169,8 @@ map
 /localdisk/include/simploce/particle/particle-system-factory.hpp
 p-types.hpp
 /localdisk/include/simploce/particle/p-types.hpp
+p-factory.hpp
+/localdisk/include/simploce/particle/p-factory.hpp
 
 /localdisk/include/simploce/particle/particle-system.hpp
 p-types.hpp

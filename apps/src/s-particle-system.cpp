@@ -26,6 +26,7 @@ int main(int argc, char *argv[]) {
         const util::Specification DIATOMIC{"diatomic"};
         const util::Specification ARGON{"argon"};
         const util::Specification POLARIZABLE_WATER{"polarizable-water"};
+        const util::Specification ELECTROLYTE{"electrolyte"};
 
         std::string fnParticleSpecCatalog{"particle-spec-catalog.dat"};
         std::string fnParticleModel{"particle.system"};
@@ -33,6 +34,7 @@ int main(int argc, char *argv[]) {
         std::string selectFrom = "Particle system selection. Choose one from '" +
                 DIATOMIC.spec() + "' (molecular oxygen, atomistic), '" +
                 ARGON.spec() + "' (atomistic), '" +
+                ELECTROLYTE.spec() + "' (electrolyte), '" +
                 POLARIZABLE_WATER.spec() + "' (coarse grained). Default is 'diatomic'.";
 
         po::options_description usage("Usage");
@@ -45,7 +47,7 @@ int main(int argc, char *argv[]) {
                 po::value<util::Specification>(&specification),
                 selectFrom.c_str()
         )(
-                "fn-particle-model,o",
+                "fn-particle-system,o",
                 po::value<std::string>(&fnParticleModel),
                 "Output file name for newly created particle system. Default is 'particle.system'."
         )(
@@ -63,6 +65,9 @@ int main(int argc, char *argv[]) {
             std::cout << usage << "\n";
             return 0;
         }
+        if (vm.count("verbose") ) {
+            logger.changeLogLevel(util::Logger::LOGTRACE);
+        }
 
         logger.info("Selected particle system: " + specification.spec());
 
@@ -74,13 +79,14 @@ int main(int argc, char *argv[]) {
             auto diatomic = factory->diatomic(distance_t{0.12}, catalog->O());
             stream << *diatomic << std::endl;
         } else if ( specification == POLARIZABLE_WATER ) {
-            auto box = factory::box(length_t{7.27});
-            auto pWater = factory->polarizableWater(box);
+            auto pWater = factory->polarizableWater();
             stream << *pWater << std::endl;
         } else if ( specification == ARGON) {
-            auto box = factory::box(length_t{3.47786});
-            auto argon = factory->argon(box, density_t{1374.0}, temperature_t{94.4});
+            auto argon = factory->argon();
             stream << *argon << std::endl;
+        } else if ( specification == ELECTROLYTE) {
+            auto electrolyte = factory->simpleElectrolyte();
+            stream << *electrolyte << std::endl;
         } else {
             util::logAndThrow(logger, specification.spec() + ": No such particle model available.");
         }

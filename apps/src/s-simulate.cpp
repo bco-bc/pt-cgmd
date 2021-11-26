@@ -28,7 +28,7 @@ using namespace simploce::param;
  * Coarse grained molecular dynamics.
  */
 int main(int argc, char *argv[]) {
-    util::Logger logger("s-cgmd::main");
+    util::Logger logger("simploce::s-cgmd::main");
 
     std::ofstream trajectory, data;
     try {
@@ -47,7 +47,6 @@ int main(int argc, char *argv[]) {
         real_t timestep{0.020};                          // 0.001 ps = 1 fs. Default is 20 fs.
         real_t temperature{298.15};                      // in K.
         real_t gamma{1.0};                               // in ps^-1
-        std::size_t nmaxPolWaters = 1000000;             // Maximum number of polarizable waters (groups).
         std::string displacerType =
                 conf::LANGEVIN_VELOCITY_VERLET;          // Displacer.
 
@@ -100,14 +99,11 @@ int main(int argc, char *argv[]) {
             "Other choices are 'mc' (Monte Carlo), 'lf' (leapFrog), 'vv' (Velocity Verlet), and "
             "'pt-lvv' (Langevin Velocity Verlet with Proton Transfer)"
         )(
-            "max-number-of-water-groups", po::value<std::size_t>(&nmaxPolWaters),
-            "Maximum number of water groups. Default is 1000000."
-        )(
             "verbose,v",
             "Verbose"
         )(
-        "help,h",
-        "This help message"
+            "help,h",
+            "This help message"
         );
 
         po::variables_map vm;
@@ -162,8 +158,8 @@ int main(int argc, char *argv[]) {
         if (vm.count("displacer")) {
             displacerType = vm["displacer"].as<std::string>();
         }
-        if (vm.count("max-number-of-water-groups")) {
-            nmaxPolWaters = vm["max-number-of-water-groups"].as<std::size_t>();
+        if (vm.count("verbose") ) {
+            logger.changeLogLevel(util::Logger::LOGTRACE);
         }
 
         // Simulation parameters
@@ -172,51 +168,46 @@ int main(int argc, char *argv[]) {
         simulationParameters->put<std::size_t>("simulation.nwrite", nWrite);
         simulationParameters->put<real_t>("simulation.temperature", temperature);
         simulationParameters->put<real_t>("simulation.timestep", timestep);
-        simulationParameters->put<real_t>("gamma", gamma);
-        simulationParameters->put<std::size_t>("npairlists", nPairLists);
-
+        simulationParameters->put<real_t>("simulation.gamma", gamma);
+        simulationParameters->put<std::size_t>("simulation.npairlists", nPairLists);
         logger.info("Simulation parameters:");
         std::cout << *simulationParameters << std::endl;
 
         // Read particle specifications.
         spec_catalog_ptr_t catalog = factory::particleSpecCatalog(fnParticleSpecCatalog);
-        std::cout << "Particle specifications: " << std::endl;
-        std::cout << *catalog << std::endl;
 
         // Read particle system.
-        std::ifstream stream;
-        util::open_input_file(stream, fnInputParticleSystem);
-        p_system_ptr_t particleSystem;
-        if ( isCoarseGrained ) {
-            particleSystem = prot_cg_sys_t::obtainFrom(stream, catalog);
-        } else {
-            auto ps = Atomistic::obtainFrom(stream, catalog);
-            particleSystem = ps;
-        }
-        stream.close();
+        auto particleSystem = factory::particleSystem(fnInputParticleSystem, catalog, isCoarseGrained);
+        logger.info("Read particle system from '" + fnInputParticleSystem + "'.");
 
         // Force field
         auto forceField = factory::forceField(fnForceField, catalog);
 
         // Interactor
-        auto bc = factory::pbc(particleSystem->box());
+        auto bc = factory::boundaryCondition(particleSystem->box());
         auto interactor = factory::interactor(simulationParameters, forceField, bc);
 
         // Get the displacer.
         auto displacer = factory::displacer(displacerType, simulationParameters, interactor);
 
-        // Set up simulation.
+        // Simulate
         Simulation simulation(simulationParameters, particleSystem, displacer);
-
-        // Simulate.
+        logger.info("Simulation ongoing...");
         util::open_output_file(trajectory, fnTrajectory);
         util::open_output_file(data, fnSimulationData);
-
         simulation.perform(trajectory, data);
-
         trajectory.close();
         data.close();
+        logger.info("Done.");
 
+        // Write output particle system.
+        std::ofstream stream;
+        util::open_output_file(stream, fnOutputParticleSystem);
+        stream << *particleSystem << std::endl;
+        stream.close();
+        logger.info("Output particle system written to '" + fnOutputParticleSystem + "'.");
+
+        // Done.
         return 0;
     } catch (std::exception &exception) {
         trajectory.flush();

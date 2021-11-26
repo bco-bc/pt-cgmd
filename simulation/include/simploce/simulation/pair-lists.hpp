@@ -19,12 +19,12 @@ namespace simploce {
     public:
         
         /**
-         * Particle pair type.
+         * Particle pair typeName.
          */
         using pp_pair_t = std::pair<p_ptr_t, p_ptr_t>;
 
         /**
-         * Particle pairs container type.
+         * Particle pairs container typeName.
          */
         using pp_pair_cont_t = std::vector<pp_pair_t>;
         
@@ -36,10 +36,11 @@ namespace simploce {
         /**
          * Constructor.
          * @param numberOfParticles Total number of particles.
-         * @param Particle/particle pair list.
+         * @param ppPairs Particle/particle pair list.
+         * @param particlePairList Pair list for one particle.
          */
         PairLists(std::size_t numberOfParticles,
-                  pp_pair_cont_t pairList);
+                  pp_pair_cont_t ppPairs);
         
         /**
          * Returns particle/particle pairs.
@@ -78,7 +79,7 @@ namespace simploce {
         void numberOfParticles(std::size_t numberOfParticles);
 
         std::size_t numberOfParticles_;
-        pp_pair_cont_t ppPairs_;
+        pp_pair_cont_t ppPairs_;   // All particle pairs.
         bool updated_;
     };
     

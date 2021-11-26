@@ -13,6 +13,13 @@
 #include "simploce/simulation/hp.hpp"
 #include "simploce/simulation/halve-attractive-qp.hpp"
 #include "simploce/simulation/lj-rf.hpp"
+#include "simploce/simulation/rf.hpp"
+#include "simploce/simulation/sf.hpp"
+#include "simploce/simulation/sc.hpp"
+#include "simploce/simulation/hs-sf.hpp"
+#include "simploce/simulation/hs-sc.hpp"
+#include "simploce/simulation/no-pair-potential.hpp"
+#include "simploce/simulation/bc.hpp"
 #include "simploce/simulation/s-properties.hpp"
 #include "simploce/particle/particle-system.hpp"
 #include "simploce/particle/particle-spec.hpp"
@@ -27,85 +34,148 @@ namespace simploce {
      using result_t = std::pair<energy_t, std::vector<force_t>>;
      using pp_map_t = std::map<std::string, pair_potential_ptr_t>;
 
-     static pp_map_t pairPotentials_{};
+     static bool ASSOCIATED{false};
+
+     static pp_map_t nonBondedPairPotentials_{};
+     static pp_map_t bondedPairPotentials_{};
+
+     static pair_potential_ptr_t NONE = std::make_shared<NoPairPotential>();
+
+     pair_potential_ptr_t findPairPotential_(const std::string& key, const pp_map_t& pairPotential) {
+         auto iter = pairPotential.find(key);
+         if (iter == pairPotential.end() ) {
+             return NONE;
+         } else {
+             return iter->second;
+         }
+     }
 
      /**
       * Associates pair potential with pair of particle specifications.
-      * @tparam P Particle type.
+      * @tparam P Particle typeName.
       * @param forceField Force field.
       * @param box Simulation box.
       * @param bc Boundary condition.
       * @return Associated pair potentials.
       */
-     static pp_map_t
+     static void
      associatePairPotentials_(const std::vector<p_ptr_t>& all,
                               const ff_ptr_t &forceField,
                               const box_ptr_t &box,
                               const bc_ptr_t &bc) {
          static util::Logger logger("simploce::associatePairPotentials_()");
 
-         std::map<std::string, pair_potential_ptr_t> pairPotentials{};
-         auto& interactionParameters = forceField->interactionSpecifications();
+         // Non-bonded pair potentials.
+         nonBondedPairPotentials_.clear();
+         auto interactionParameters = forceField->nonBondedSpecifications();
          for (auto& ip : interactionParameters) {
-             std::string type = ip.type;
+             std::string type = ip.typeName;
              if (type == conf::LJ) {
                  std::string key1 = ip.spec1->name() + "-" + ip.spec2->name();
-                 auto lj = std::make_shared<LJ>(forceField, box, bc);
+                 auto lj = std::make_shared<LJ>(forceField, bc);
                  auto pair1 = std::make_pair(key1, lj);
-                 pairPotentials.emplace(pair1);
+                 nonBondedPairPotentials_.emplace(pair1);
                  if ( ip.spec1 != ip.spec2 ) {
                      std::string key2 = ip.spec2->name() + "-" + ip.spec1->name();
                      auto pair2 = std::make_pair(key2, lj);
-                     pairPotentials.emplace(pair2);
+                     nonBondedPairPotentials_.emplace(pair2);
                  }
              } else if (type == conf::LJ_RF) {
                  std::string key1 = ip.spec1->name() + "-" + ip.spec2->name();
                  real_t kappa = properties::kappa(all);
-                 auto lj_rf = std::make_shared<LJ_RF>(kappa, forceField, box, bc);
+                 auto rf = std::make_shared<RF>(kappa, forceField, box, bc);
+                 auto lj_rf = std::make_shared<LJ_RF>(kappa, forceField, box, bc, rf);
                  auto pair1 = std::make_pair(key1, lj_rf);
-                 pairPotentials.emplace(pair1);
+                 nonBondedPairPotentials_.emplace(pair1);
                  if ( ip.spec1 != ip.spec2 ) {
                      std::string key2 = ip.spec2->name() + "-" + ip.spec1->name();
                      auto pair2 = std::make_pair(key2, lj_rf);
-                     pairPotentials.emplace(pair2);
+                     nonBondedPairPotentials_.emplace(pair2);
                  }
+             } else if (type == conf::RF) {
+                 std::string key1 = ip.spec1->name() + "-" + ip.spec2->name();
+                 real_t kappa = properties::kappa(all);
+                 auto rf = std::make_shared<RF>(kappa, forceField, box, bc);
+                 auto pair1 = std::make_pair(key1, rf);
+                 nonBondedPairPotentials_.emplace(pair1);
+                 if ( ip.spec1 != ip.spec2 ) {
+                     std::string key2 = ip.spec2->name() + "-" + ip.spec1->name();
+                     auto pair2 = std::make_pair(key2, rf);
+                     nonBondedPairPotentials_.emplace(pair2);
+                 }
+             } else if ( type == conf::HS_SF ) {
+                std::string key1 = ip.spec1->name() + "-" + ip.spec2->name();
+                auto sf = std::make_shared<SF>(forceField, box, bc);
+                auto hs_sf = std::make_shared<HS_SF>(forceField, bc, sf);
+                auto pair1 = std::make_pair(key1, hs_sf);
+                nonBondedPairPotentials_.emplace(pair1);
+                if ( ip.spec1 != ip.spec2 ) {
+                     std::string key2 = ip.spec2->name() + "-" + ip.spec1->name();
+                     auto pair2 = std::make_pair(key2, hs_sf);
+                     nonBondedPairPotentials_.emplace(pair2);
+                 }
+             } else if ( type == conf::HS_SC) {
+                 std::string key1 = ip.spec1->name() + "-" + ip.spec2->name();
+                 auto hs_sc = std::make_shared<HS_SC>(forceField, bc);
+                 auto pair1 = std::make_pair(key1, hs_sc);
+                 nonBondedPairPotentials_.emplace(pair1);
+                 if ( ip.spec1 != ip.spec2 ) {
+                     std::string key2 = ip.spec2->name() + "-" + ip.spec1->name();
+                     auto pair2 = std::make_pair(key2, hs_sc);
+                     nonBondedPairPotentials_.emplace(pair2);
+                 }
+             } else {
+                 util::logAndThrow(logger,"Pair potential '" + type + "' is not available.");
              }
-             else if (type == conf::HP ) {
+         }
+
+         // Bonded pair potentials.
+         bondedPairPotentials_.clear();
+         interactionParameters = forceField->bondedSpecifications();
+         for (auto& ip : interactionParameters) {
+             std::string type = ip.typeName;
+             if (type == conf::HP ) {
                  std::string key1 = ip.spec1->name() + "-" + ip.spec2->name();
                  auto hp = std::make_shared<HP>(forceField, bc);
                  auto pair1 = std::make_pair(key1, hp);
-                 pairPotentials.emplace(pair1);
+                 bondedPairPotentials_.emplace(pair1);
                  if ( ip.spec1 != ip.spec2 ) {
                      std::string key2 = ip.spec2->name() + "-" + ip.spec1->name();
                      auto pair2 = std::make_pair(key2, hp);
-                     pairPotentials.emplace(pair2);
+                     bondedPairPotentials_.emplace(pair2);
                  }
              } else if ( type == conf::HA_QP ) {
                  std::string key1 = ip.spec1->name() + "-" + ip.spec2->name();
                  auto ha_qp = std::make_shared<HalveAttractiveQP>(forceField, bc);
                  auto pair1 = std::make_pair(key1, ha_qp);
-                 pairPotentials.emplace(pair1);
-                 if ( ip.spec1 != ip.spec2 ) {
+                 bondedPairPotentials_.emplace(pair1);
+                 if (ip.spec1 != ip.spec2) {
                      std::string key2 = ip.spec2->name() + "-" + ip.spec1->name();
                      auto pair2 = std::make_pair(key2, ha_qp);
-                     pairPotentials.emplace(pair2);
+                     bondedPairPotentials_.emplace(pair2);
                  }
+             } else {
+                 util::logAndThrow(logger,"Pair potential '" + type + "' is not available.");
              }
          }
 
-         // Log some info.
-         logger.debug("Number of assigned pair potentials: " + util::toString(pairPotentials.size()));
 
-         return std::move(pairPotentials);
+         // Log some info.
+         logger.debug("Number of associated non-bonded pair potentials: " +
+                       util::toString(nonBondedPairPotentials_.size()));
+         logger.debug("Number of associated bonded pair potentials: " +
+                       util::toString(bondedPairPotentials_.size()));
      }
 
     /**
-     * Returns (non-bonded) interaction forces for given pairs of particles.
+     * Returns non-bonded potential energy forces for given pairs of particles due to interactions
+     * between these particles.
+     * @return Potential energy and forces on particles.
      */
     static std::pair<energy_t, std::vector<force_t>>
-    computeParticlePairForces_(const PairLists::pp_pair_cont_t &particlePairs,
-                               const std::map<std::string, std::shared_ptr<pair_potential>> &pairPotentials,
-                               int numberOfParticles) {
+    computeNonBondedForcesParticlePairs_(const PairLists::pp_pair_cont_t &particlePairs,
+                                         const pp_map_t &nonBondedPairPotentials,
+                                         int numberOfParticles) {
         // Compute interactions for all particle pairs.
         std::vector<force_t> forces(numberOfParticles, force_t{0.0, 0.0, 0.0});
         energy_t energy{0.0};
@@ -126,7 +196,7 @@ namespace simploce {
 
             // Call pair potential.
             std::string key = pi->spec()->name() + "-" + pj->spec()->name();
-            pair_potential &pairPotential = *pairPotentials.at(key);
+            pair_potential &pairPotential = *findPairPotential_(key, nonBondedPairPotentials);
             std::pair<energy_t, force_t> ef = pairPotential(pi, pj);
 
             // Store results.
@@ -140,12 +210,13 @@ namespace simploce {
     }
 
     /**
-     * Computes non-bonded forces and associated potential energies.
+     * Computes non-bonded forces and associated interaction potential energies.
+     * @return Non-bonded potential energy.
      */
     static energy_t
     computeNonBondedForces_(const std::vector<p_ptr_t> &all,
                             const PairLists &pairLists,
-                            const std::map<std::string, std::shared_ptr<pair_potential>> &pairPotentials,
+                            const pp_map_t &nonBondedPairPotentials,
                             const box_ptr_t &box,
                             const bc_ptr_t &bc) {
 
@@ -180,9 +251,9 @@ namespace simploce {
                         futures.push_back(
                                 std::async(
                                         std::launch::async,
-                                        computeParticlePairForces_,
+                                        computeNonBondedForcesParticlePairs_,
                                         std::ref(single),
-                                        std::ref(pairPotentials),
+                                        std::ref(nonBondedPairPotentials),
                                         numberOfParticles
                                 )
                         );
@@ -194,7 +265,8 @@ namespace simploce {
                 // by the current thread.
                 const pp_pair_cont_t &single = *(subPairLists.end() - 1);
                 if ( !single.empty() ) {
-                    auto result = computeParticlePairForces_(single, pairPotentials, int(numberOfParticles));
+                    auto result = computeNonBondedForcesParticlePairs_(single, nonBondedPairPotentials,
+                                                                       int(numberOfParticles));
                     results.push_back(result);
                 }
             } else {
@@ -203,9 +275,9 @@ namespace simploce {
                 if ( firstTime ) {
                     logger.debug("Lennard-Jones and electrostatic forces and energies are computed sequentially.");
                 }
-                auto result = computeParticlePairForces_(pairLists.particlePairList(),
-                                                         pairPotentials,
-                                                         int(numberOfParticles));
+                auto result = computeNonBondedForcesParticlePairs_(pairLists.particlePairList(),
+                                                                   nonBondedPairPotentials,
+                                                                   int(numberOfParticles));
                 results.push_back(result);
             }
 
@@ -228,11 +300,12 @@ namespace simploce {
 
 
     /**
-     * Computes bonded forces and associated potential energies.
+     * Computes bonded forces and associated potential energies. Forces are added to particles.
+     * @return Bonded interaction potential energy.
      */
     static energy_t
     computeBondedForces_(const std::vector<pg_ptr_t> &groups,
-                         const std::map<std::string, std::shared_ptr<pair_potential>> &pairPotentials) {
+                         const pp_map_t &bondedPairPotentials) {
         energy_t energy{0.0};
         for (auto &group : groups) {
             for (auto &bond : group->bonds() ) {
@@ -242,7 +315,7 @@ namespace simploce {
 
                 // Call pair potential.
                 std::string key = p1->spec()->name() + "-" + p2->spec()->name();
-                pair_potential& pairPotential = *pairPotentials.at(key);
+                pair_potential& pairPotential = *findPairPotential_(key, bondedPairPotentials);
                 std::pair<energy_t, force_t> ef = pairPotential(p1, p2);
 
                 // Store results.
@@ -260,28 +333,76 @@ namespace simploce {
     }
 
     /**
-     * Returns interaction energy of given particle with all other particles.
+     * Returns interaction energy of a given particle with all other particles (except with itself)
+     * within the cutoff distance.
      * @param particle Particle.
      * @param all -All- particles.
-     * @param pairPotentials Pair potentials.
-     * @return Potential energy.
+     * @param nonBondedPairPotentials Pair potentials.
+     * @return Bonded and non-bonded potential energy.
      */
-    static energy_t
-    interactionEnergyOfOneParticle(const p_ptr_t& particle,
-                                   const std::vector<p_ptr_t>& all,
-                                   const pp_map_t& pairPotentials) {
-        energy_t energy{0.0};
+    static std::pair<energy_t, energy_t>
+    interactionEnergyOfOneParticle_(const p_ptr_t& particle,
+                                    const std::vector<p_ptr_t>& free,
+                                    const std::vector<pg_ptr_t>& groups,
+                                    const pp_map_t& nonBondedPairPotentials,
+                                    const pp_map_t& bondedPairPotentials,
+                                    const box_ptr_t& box,
+                                    const bc_ptr_t& bc) {
+        static auto rc2 = properties::squareCutoffDistance(box);
+
+        energy_t nonBonded{0.0}, bonded{0.0};
         auto name = particle->spec()->name();
         auto id = particle->id();
-        for (auto p: all) {
+        auto pr = particle->position();
+
+        // Non-bonded interaction with free particles.
+        for (const auto& p: free) {
             if ( p->id() != id) {
-                std::string key = name + "-" + p->spec()->name();
-                auto &pairPotential = *pairPotentials.at(key);
-                std::pair<energy_t, force_t> ef = pairPotential(particle, p);
-                energy += std::get<0>(ef);
+                auto r = p->position();
+                dist_vect_t R = bc->apply(pr, r);
+                auto R2 = norm_square<real_t>(R);
+                if ( R2 <= rc2 ) {
+                    std::string key = name + "-" + p->spec()->name();
+                    auto &pairPotential = *nonBondedPairPotentials.at(key);
+                    // Force is ignored.
+                    std::pair<energy_t, force_t> ef = pairPotential(particle, p);
+                    nonBonded += std::get<0>(ef);
+                }
             }
         }
-        return energy;
+
+        // Interaction with and within groups.
+        for (const auto& g: groups) {
+            if (!g->contains(particle)) {
+                auto particles = g->particles();
+                for (const auto& p: particles) {
+                    auto r = p->position();
+                    dist_vect_t R = bc->apply(pr, r);
+                    auto R2 = norm_square<real_t>(R);
+                    if ( R2 <= rc2 ) {
+                        std::string key = name + "-" + p->spec()->name();
+                        auto &pairPotential = *nonBondedPairPotentials.at(key);
+                        // Force is ignored.
+                        std::pair<energy_t, force_t> ef = pairPotential(particle, p);
+                        nonBonded += std::get<0>(ef);
+                    }
+                }
+            } else {
+                auto particles = g->particles();
+                for (const auto& p: particles) {
+                    if (particle->id() != p->id() ) {
+                        auto r = p->position();
+                        dist_vect_t R = bc->apply(pr, r);
+                        std::string key = name + "-" + p->spec()->name();
+                        auto &pairPotential = *bondedPairPotentials.at(key);
+                        // Force is ignored.
+                        std::pair<energy_t, force_t> ef = pairPotential(particle, p);
+                        bonded += std::get<0>(ef);
+                    }
+                }
+            }
+        }
+        return std::move(std::make_pair(bonded, nonBonded));
     }
 
     Forces::Forces(bc_ptr_t bc, ff_ptr_t forceField) :
@@ -289,21 +410,19 @@ namespace simploce {
     }
 
     energy_t Forces::nonBonded(const p_system_ptr_t& particleSystem,
-                            const PairLists &pairLists) {
-        if ( pairPotentials_.empty() ) {
+                               const PairLists &pairLists) {
+        if ( !ASSOCIATED ) {
             auto box = particleSystem->box();
             particleSystem->doWithAll<void>([this, box] (const std::vector<p_ptr_t>& all) {
-                pairPotentials_ = associatePairPotentials_(all,
-                                                           this->forceField_,
-                                                           box,
-                                                           this->bc_);
+                associatePairPotentials_(all, this->forceField_, box, this->bc_);
             });
+            ASSOCIATED = true;
         }
         auto box = particleSystem->box();
         return particleSystem->doWithAll<energy_t>([this, pairLists, box] (std::vector<p_ptr_t>& all) {
             return computeNonBondedForces_(all,
                                            pairLists,
-                                           pairPotentials_,
+                                           nonBondedPairPotentials_,
                                            box,
                                            this->bc_);
         });
@@ -311,38 +430,44 @@ namespace simploce {
 
     energy_t
     Forces::bonded(const p_system_ptr_t& particleSystem) {
-        if ( pairPotentials_.empty() ) {
+        if ( !ASSOCIATED ) {
             auto box = particleSystem->box();
             particleSystem->doWithAll<void>([this, box] (const std::vector<p_ptr_t>& all) {
-                pairPotentials_ = associatePairPotentials_(all,
-                                                           this->forceField_,
-                                                           box,
-                                                           this->bc_);
+                associatePairPotentials_(all, this->forceField_, box, this->bc_);
             });
+            ASSOCIATED = true;
         }
-        return particleSystem->doWithAllFreeGroups<energy_t>([this] (
+        return particleSystem->doWithAllFreeGroups<energy_t>([] (
                 const std::vector<p_ptr_t>& all,
                 const std::vector<p_ptr_t>& free,
                 const std::vector<pg_ptr_t>& groups
                 ) {
-            return computeBondedForces_(groups, pairPotentials_);
+            return computeBondedForces_(groups, nonBondedPairPotentials_);
         });
     }
 
-    energy_t
+    std::pair<energy_t, energy_t>
     Forces::interaction(const p_ptr_t& particle,
                         const p_system_ptr_t& particleSystem) {
-        if ( pairPotentials_.empty() ) {
+        if ( !ASSOCIATED ) {
             auto box = particleSystem->box();
             particleSystem->doWithAll<void>([this, box] (const std::vector<p_ptr_t>& all) {
-                pairPotentials_ = associatePairPotentials_(all,
-                                                           this->forceField_,
-                                                           box,
-                                                           this->bc_);
+                associatePairPotentials_(all, this->forceField_, box, this->bc_);
             });
+            ASSOCIATED = true;
         }
-        return particleSystem->doWithAll<energy_t>([particle] (const std::vector<p_ptr_t>& all) {
-            return interactionEnergyOfOneParticle(particle, all, pairPotentials_);
+        auto box = particleSystem->box();
+        return particleSystem->doWithAllFreeGroups<std::pair<energy_t, energy_t>>([this, particle, box] (
+                const std::vector<p_ptr_t>& all,
+                const std::vector<p_ptr_t>& free,
+                const std::vector<pg_ptr_t>& groups) {
+            return interactionEnergyOfOneParticle_(particle,
+                                                   free,
+                                                   groups,
+                                                   nonBondedPairPotentials_,
+                                                   bondedPairPotentials_,
+                                                   box,
+                                                   this->bc_);
         });
     }
 

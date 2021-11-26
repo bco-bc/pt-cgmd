@@ -31,7 +31,7 @@ int main(int argc, char *argv[]) {
 
     std::string fnParticleSpecCatalog{"particle-spec-catalog.dat"};
     std::string fnTrajectory{"trajectory.dat"};
-    std::string fnInputModel{"in.ParticleModelSpecification"};
+    std::string fnInputModel{"in.ps"};
     std::string fnResultsM{"dipole-moment.dat"};
     std::string fnResultsFM{"f-dipole-moment.dat"};
     real_t dt{10 * 0.02};         // Time interval between successive states in trajectory.
@@ -43,40 +43,39 @@ int main(int argc, char *argv[]) {
     real_t m_max = 1.0;
 
     po::options_description usage("Usage");
-    usage.add_options()
-            (
-                    "fn-particle-spec-catalog",
-                    po::value<std::string>(&fnParticleSpecCatalog),
-                    "Input file name of particle specifications. Default 'particle-spec-catalog.dat'."
-            )
-            (
-                    "fn-ParticleModelSpecification", po::value<std::string>(&fnInputModel),
-                    "Input file name ParticleModelSpecification. Default is 'in.ParticleModelSpecification'.")
-            (
-                    "fn-trajectory", po::value<std::string>(&fnTrajectory),
-                    "Input file name trajectory. Default is 'trajectory.dat'."
-            )
-            (
-                    "time-interval", po::value<real_t>(&dt),
-                    "Time interval between successive states in trajectory."
-                    "Default is 0.2 ps."
-            )
-            (
-                    "start-time", po::value<real_t>(&t0),
-                    "Start time. Default is 0. If a number of states in the trajectory must be skipped, "
-                    "then the start time would change accordingly."
-            )
-            (
-                    "skip-number-of-states", po::value<std::size_t>(&nSkip),
-                    "Number of states in trajectory to skip before executing analysis"
-            )
-            (
-                    "temperature", po::value<real_t>(&temperature),
-                    "Temperature. Default is 298.15 K."
-            )
-            (
-                    "help", "Help message"
-            );
+    usage.add_options() (
+        "fn-particle-spec-catalog,s",
+        po::value<std::string>(&fnParticleSpecCatalog),
+        "Input file name of particle specifications. Default 'particle-spec-catalog.dat'."
+    )(
+        "fn-input-particle-system,i", po::value<std::string>(&fnInputModel),
+        "Input file name particle system. Default is 'in.ps'."
+    )(
+        "coarse-grained,c",
+        "Input is a coarse-grained description."
+    )(
+        "fn-trajectory", po::value<std::string>(&fnTrajectory),
+        "Input file name trajectory. Default is 'trajectory.dat'."
+    )(
+        "time-interval,t", po::value<real_t>(&dt),
+        "Time interval between successive states in trajectory."
+        "Default is 0.2 ps."
+    )(
+        "start-time,0", po::value<real_t>(&t0),
+        "Start time. Default is 0. If a number of states in the trajectory must be skipped, "
+        "then the start time would change accordingly."
+    )(
+        "skip-number-of-states,k", po::value<std::size_t>(&nSkip),
+        "Number of states in trajectory to skip before executing analysis"
+    )(
+        "temperature,T", po::value<real_t>(&temperature),
+        "Temperature. Default is 298.15 K."
+   )(
+        "verbose,v",
+        "Verbose"
+   )(
+  "help,h", "Help message"
+   );
 
     po::variables_map vm;
     po::store(po::parse_command_line(argc, argv, usage), vm);

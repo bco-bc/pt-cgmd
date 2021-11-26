@@ -59,14 +59,13 @@ namespace simploce {
         counter += 1;
 
         // Done.
-        return std::move(std::make_pair(nonBonded, bonded));
+        return std::move(std::make_pair(bonded, nonBonded));
     }
 
     std::pair<energy_t, energy_t>
     Interactor::interact(const p_ptr_t& particle,
                          const p_system_ptr_t &particleSystem) {
-        auto energy = this->forces_->interaction(particle, particleSystem);
-        return std::make_pair(energy, 0.0);
+        return std::move(this->forces_->interaction(particle, particleSystem));
     }
 
 }

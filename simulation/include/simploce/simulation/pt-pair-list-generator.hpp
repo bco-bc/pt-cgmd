@@ -21,12 +21,12 @@ namespace simploce {
     public:
                 
         /**
-         * Protonatable beads pair type.
+         * Protonatable beads pair typeName.
          */
         using prot_pair_t = std::pair<prot_bead_ptr_t, prot_bead_ptr_t>;
         
         /**
-         * Protonatable bead pair list type.
+         * Protonatable bead pair list typeName.
          */
         using prot_pair_list_t = std::vector<prot_pair_t>;
         

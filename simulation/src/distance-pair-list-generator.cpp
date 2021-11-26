@@ -30,7 +30,7 @@ namespace simploce {
         static real_t rc2 = properties::squareCutoffDistance(box);
 
         if ( particles.empty() ) {
-            return pp_pair_cont_t{};  // Empty pair list.
+            return std::move(pp_pair_cont_t{});  // Empty pair list.
         }
 
         // Particle/particle pair list.
@@ -48,7 +48,7 @@ namespace simploce {
                 if ( R2 <= rc2 ) {
                     // Include this pair.
                     auto pair = std::make_pair(pi, pj);
-                    particlePairs.push_back(pair);
+                    particlePairs.emplace_back(pair);
                 }
             }
         }
@@ -58,17 +58,17 @@ namespace simploce {
     }
 
     /**
-     * Particle group pair list.
-     * @tparam P Particle type.
+     * Returns particle pair list for particles in -different- groups.
+     * @tparam P Particle typeName.
      * @param box Simulation box.
      * @param bc Boundary condition.
      * @param groups
      * @return Particle group pairs.
      */
     static typename PairLists::pp_pair_cont_t
-    forGroups_(const box_ptr_t& box,
-               const bc_ptr_t& bc,
-               const std::vector<pg_ptr_t>& groups)
+    forBetweenGroups_(const box_ptr_t& box,
+                      const bc_ptr_t& bc,
+                      const std::vector<pg_ptr_t>& groups)
     {
         using pp_pair_cont_t = typename PairLists::pp_pair_cont_t;
         using pp_pair_t = typename PairLists::pp_pair_t;
@@ -76,13 +76,13 @@ namespace simploce {
         static real_t rc2 =  properties::squareCutoffDistance(box);
 
         if ( groups.empty() ) {
-            return pp_pair_cont_t{};  // Empty list.
+            return std::move(pp_pair_cont_t{});  // Empty list.
         }
 
         // Pair list.
         pp_pair_cont_t particlePairs{};
 
-        // For all particle group pairs.
+        // For all different particle group pairs.
         for (auto iter_i = groups.begin(); iter_i != groups.end() - 1; ++iter_i) {
             const auto gi = *iter_i;
             auto r_gi = gi->position();
@@ -121,7 +121,7 @@ namespace simploce {
         static real_t rc2 =  properties::squareCutoffDistance(box);
 
         if ( particles.empty() || groups.empty() ) {
-            return pp_pair_cont_t{};  // Empty list.
+            return std::move(pp_pair_cont_t{});  // Empty list.
         }
 
         // Pair list.
@@ -149,8 +149,39 @@ namespace simploce {
     }
 
     /**
+     * Returns particle pair list for non-bonded particle pairs
+     * @return Particle pairs.
+     */
+    static typename PairLists::pp_pair_cont_t
+    forParticlesInGroups(const box_ptr_t& box,
+                         const bc_ptr_t& bc,
+                         const std::vector<pg_ptr_t>& groups) {
+        using pp_pair_cont_t = typename PairLists::pp_pair_cont_t;
+        using pp_pair_t = typename PairLists::pp_pair_t;
+
+        static real_t rc2 =  properties::squareCutoffDistance(box);
+
+        if ( groups.empty() ) {
+            return std::move(pp_pair_cont_t{});  // Empty list.
+        }
+
+        // Pair list.
+        pp_pair_cont_t particlePairs{};
+
+        for (auto g: groups) {
+            auto pairs = g->nonBondedParticlePairs();
+            for (auto pair: pairs ) {
+                pp_pair_t pp = std::make_pair(pair.first, pair.second);
+                particlePairs.emplace_back(pp);
+            }
+        }
+
+        return std::move(particlePairs);
+    }
+
+    /**
      * Make the particle pair lists.
-     * @tparam P Particle type.
+     * @tparam P Particle typeName.
      * @param box Simulation box.
      * @param bc Boundary condition.
      * @param all All particles.
@@ -178,14 +209,19 @@ namespace simploce {
         auto fgParticlePairs = forParticlesAndGroups_(box, bc, free, groups);
         auto fgSize = fgParticlePairs.size();
         particlePairs.insert(particlePairs.end(), fgParticlePairs.begin(), fgParticlePairs.end());
-        auto ggParticlePairs = forGroups_(box, bc, groups);
+        auto ggParticlePairs = forBetweenGroups_(box, bc, groups);
         auto ggSize = ggParticlePairs.size();
         particlePairs.insert(particlePairs.end(), ggParticlePairs.begin(), ggParticlePairs.end());
+        auto inGparticlePairs = forParticlesInGroups(box, bc, groups);
+        auto ingSize = inGparticlePairs.size();
+        particlePairs.insert(particlePairs.end(), inGparticlePairs.begin(), inGparticlePairs.end());
 
         if ( firstTime ) {
+            logger.debug("Non-bonded particle pair list:");
             logger.debug("Number of free-particle/free-particle pairs: " + util::toString(ppSize));
             logger.debug("Number of free-particle/particle-in-group pairs: " + util::toString(fgSize));
-            logger.debug("Number of particle-in-group/particle-in-group pairs: " + util::toString(ggSize));
+            logger.debug("Number of particle-in-group/particle-in-other-group pairs: " + util::toString(ggSize));
+            logger.debug("Number of particle-in-group/particle-in-same-group: " + util::toString(ingSize));
             logger.debug("Total number of particle pairs: " + util::toString(particlePairs.size()));
             auto total = all.size() * (all.size() - 1) / 2;
             logger.debug("Total number of POSSIBLE particle pairs: " + util::toString(total));

@@ -10,7 +10,7 @@
 #define DIFFUSION_HPP
 
 #include "analyzer.hpp"
-#include "atypes.hpp"
+#include "a-types.hpp"
 #include "simploce/simulation/s-types.hpp"
 #include <memory>
 #include <list>
@@ -27,12 +27,12 @@ namespace simploce {
     public:
     
         /**
-         * Particle pointer type.
+         * Particle pointer typeName.
          */
         using p_ptr_t = typename Analyzer<P>::p_ptr_t;
         
         /**
-         * Particle group pointer type.
+         * Particle group pointer typeName.
          */
         using pg_ptr_t = typename Analyzer<P>::pg_ptr_t;
         

@@ -19,6 +19,7 @@ namespace simploce {
          * @param temperature Temperature.
          */
         void assignVelocity(p_ptr_t &particle, const temperature_t& temperature);
+
     }
 }
 

@@ -65,18 +65,6 @@ CMAKE_BINARY_DIR = /home/andre/wrk3/simploce/pt-cgmd/simulation/cmake-build-debu
 #=============================================================================
 # Targets provided globally by CMake.
 
-# Special rule for the target install/local
-install/local: preinstall
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Installing only the local directory..."
-	/home/andre/clion-2021.2.3/bin/cmake/linux/bin/cmake -DCMAKE_INSTALL_LOCAL_ONLY=1 -P cmake_install.cmake
-.PHONY : install/local
-
-# Special rule for the target install/local
-install/local/fast: preinstall/fast
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Installing only the local directory..."
-	/home/andre/clion-2021.2.3/bin/cmake/linux/bin/cmake -DCMAKE_INSTALL_LOCAL_ONLY=1 -P cmake_install.cmake
-.PHONY : install/local/fast
-
 # Special rule for the target install
 install: preinstall
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Install the project..."
@@ -129,6 +117,18 @@ edit_cache:
 # Special rule for the target edit_cache
 edit_cache/fast: edit_cache
 .PHONY : edit_cache/fast
+
+# Special rule for the target install/local
+install/local: preinstall
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Installing only the local directory..."
+	/home/andre/clion-2021.2.3/bin/cmake/linux/bin/cmake -DCMAKE_INSTALL_LOCAL_ONLY=1 -P cmake_install.cmake
+.PHONY : install/local
+
+# Special rule for the target install/local
+install/local/fast: preinstall/fast
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Installing only the local directory..."
+	/home/andre/clion-2021.2.3/bin/cmake/linux/bin/cmake -DCMAKE_INSTALL_LOCAL_ONLY=1 -P cmake_install.cmake
+.PHONY : install/local/fast
 
 # The main all target
 all: cmake_check_build_system
@@ -246,6 +246,20 @@ pair-potential-test/fast:
 .PHONY : pair-potential-test/fast
 
 # Convenience name for target.
+tests/CMakeFiles/pdb-test.dir/rule:
+	cd /home/andre/wrk3/simploce/pt-cgmd/simulation/cmake-build-debug && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 tests/CMakeFiles/pdb-test.dir/rule
+.PHONY : tests/CMakeFiles/pdb-test.dir/rule
+
+# Convenience name for target.
+pdb-test: tests/CMakeFiles/pdb-test.dir/rule
+.PHONY : pdb-test
+
+# fast build rule for target.
+pdb-test/fast:
+	cd /home/andre/wrk3/simploce/pt-cgmd/simulation/cmake-build-debug && $(MAKE) $(MAKESILENT) -f tests/CMakeFiles/pdb-test.dir/build.make tests/CMakeFiles/pdb-test.dir/build
+.PHONY : pdb-test/fast
+
+# Convenience name for target.
 tests/CMakeFiles/simulation-test.dir/rule:
 	cd /home/andre/wrk3/simploce/pt-cgmd/simulation/cmake-build-debug && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 tests/CMakeFiles/simulation-test.dir/rule
 .PHONY : tests/CMakeFiles/simulation-test.dir/rule
@@ -260,18 +274,32 @@ simulation-test/fast:
 .PHONY : simulation-test/fast
 
 # Convenience name for target.
-tests/CMakeFiles/pdb-test.dir/rule:
-	cd /home/andre/wrk3/simploce/pt-cgmd/simulation/cmake-build-debug && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 tests/CMakeFiles/pdb-test.dir/rule
-.PHONY : tests/CMakeFiles/pdb-test.dir/rule
+tests/CMakeFiles/rf-test.dir/rule:
+	cd /home/andre/wrk3/simploce/pt-cgmd/simulation/cmake-build-debug && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 tests/CMakeFiles/rf-test.dir/rule
+.PHONY : tests/CMakeFiles/rf-test.dir/rule
 
 # Convenience name for target.
-pdb-test: tests/CMakeFiles/pdb-test.dir/rule
-.PHONY : pdb-test
+rf-test: tests/CMakeFiles/rf-test.dir/rule
+.PHONY : rf-test
 
 # fast build rule for target.
-pdb-test/fast:
-	cd /home/andre/wrk3/simploce/pt-cgmd/simulation/cmake-build-debug && $(MAKE) $(MAKESILENT) -f tests/CMakeFiles/pdb-test.dir/build.make tests/CMakeFiles/pdb-test.dir/build
-.PHONY : pdb-test/fast
+rf-test/fast:
+	cd /home/andre/wrk3/simploce/pt-cgmd/simulation/cmake-build-debug && $(MAKE) $(MAKESILENT) -f tests/CMakeFiles/rf-test.dir/build.make tests/CMakeFiles/rf-test.dir/build
+.PHONY : rf-test/fast
+
+# Convenience name for target.
+tests/CMakeFiles/lj-test.dir/rule:
+	cd /home/andre/wrk3/simploce/pt-cgmd/simulation/cmake-build-debug && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 tests/CMakeFiles/lj-test.dir/rule
+.PHONY : tests/CMakeFiles/lj-test.dir/rule
+
+# Convenience name for target.
+lj-test: tests/CMakeFiles/lj-test.dir/rule
+.PHONY : lj-test
+
+# fast build rule for target.
+lj-test/fast:
+	cd /home/andre/wrk3/simploce/pt-cgmd/simulation/cmake-build-debug && $(MAKE) $(MAKESILENT) -f tests/CMakeFiles/lj-test.dir/build.make tests/CMakeFiles/lj-test.dir/build
+.PHONY : lj-test/fast
 
 displacer-test.o: displacer-test.cpp.o
 .PHONY : displacer-test.o
@@ -344,6 +372,30 @@ interactor-test.s: interactor-test.cpp.s
 interactor-test.cpp.s:
 	cd /home/andre/wrk3/simploce/pt-cgmd/simulation/cmake-build-debug && $(MAKE) $(MAKESILENT) -f tests/CMakeFiles/interactor-test.dir/build.make tests/CMakeFiles/interactor-test.dir/interactor-test.cpp.s
 .PHONY : interactor-test.cpp.s
+
+lj-test.o: lj-test.cpp.o
+.PHONY : lj-test.o
+
+# target to build an object file
+lj-test.cpp.o:
+	cd /home/andre/wrk3/simploce/pt-cgmd/simulation/cmake-build-debug && $(MAKE) $(MAKESILENT) -f tests/CMakeFiles/lj-test.dir/build.make tests/CMakeFiles/lj-test.dir/lj-test.cpp.o
+.PHONY : lj-test.cpp.o
+
+lj-test.i: lj-test.cpp.i
+.PHONY : lj-test.i
+
+# target to preprocess a source file
+lj-test.cpp.i:
+	cd /home/andre/wrk3/simploce/pt-cgmd/simulation/cmake-build-debug && $(MAKE) $(MAKESILENT) -f tests/CMakeFiles/lj-test.dir/build.make tests/CMakeFiles/lj-test.dir/lj-test.cpp.i
+.PHONY : lj-test.cpp.i
+
+lj-test.s: lj-test.cpp.s
+.PHONY : lj-test.s
+
+# target to generate assembly for a file
+lj-test.cpp.s:
+	cd /home/andre/wrk3/simploce/pt-cgmd/simulation/cmake-build-debug && $(MAKE) $(MAKESILENT) -f tests/CMakeFiles/lj-test.dir/build.make tests/CMakeFiles/lj-test.dir/lj-test.cpp.s
+.PHONY : lj-test.cpp.s
 
 pair-list-test.o: pair-list-test.cpp.o
 .PHONY : pair-list-test.o
@@ -441,6 +493,30 @@ protonatable-particle-system-factory-test.cpp.s:
 	cd /home/andre/wrk3/simploce/pt-cgmd/simulation/cmake-build-debug && $(MAKE) $(MAKESILENT) -f tests/CMakeFiles/protonatable-particle-system-factory-test.dir/build.make tests/CMakeFiles/protonatable-particle-system-factory-test.dir/protonatable-particle-system-factory-test.cpp.s
 .PHONY : protonatable-particle-system-factory-test.cpp.s
 
+rf-test.o: rf-test.cpp.o
+.PHONY : rf-test.o
+
+# target to build an object file
+rf-test.cpp.o:
+	cd /home/andre/wrk3/simploce/pt-cgmd/simulation/cmake-build-debug && $(MAKE) $(MAKESILENT) -f tests/CMakeFiles/rf-test.dir/build.make tests/CMakeFiles/rf-test.dir/rf-test.cpp.o
+.PHONY : rf-test.cpp.o
+
+rf-test.i: rf-test.cpp.i
+.PHONY : rf-test.i
+
+# target to preprocess a source file
+rf-test.cpp.i:
+	cd /home/andre/wrk3/simploce/pt-cgmd/simulation/cmake-build-debug && $(MAKE) $(MAKESILENT) -f tests/CMakeFiles/rf-test.dir/build.make tests/CMakeFiles/rf-test.dir/rf-test.cpp.i
+.PHONY : rf-test.cpp.i
+
+rf-test.s: rf-test.cpp.s
+.PHONY : rf-test.s
+
+# target to generate assembly for a file
+rf-test.cpp.s:
+	cd /home/andre/wrk3/simploce/pt-cgmd/simulation/cmake-build-debug && $(MAKE) $(MAKESILENT) -f tests/CMakeFiles/rf-test.dir/build.make tests/CMakeFiles/rf-test.dir/rf-test.cpp.s
+.PHONY : rf-test.cpp.s
+
 simulation-test.o: simulation-test.cpp.o
 .PHONY : simulation-test.o
 
@@ -480,10 +556,12 @@ help:
 	@echo "... displacer-test"
 	@echo "... forcefield-test"
 	@echo "... interactor-test"
+	@echo "... lj-test"
 	@echo "... pair-list-test"
 	@echo "... pair-potential-test"
 	@echo "... pdb-test"
 	@echo "... protonatable-particle-system-factory-test"
+	@echo "... rf-test"
 	@echo "... simulation-test"
 	@echo "... displacer-test.o"
 	@echo "... displacer-test.i"
@@ -494,6 +572,9 @@ help:
 	@echo "... interactor-test.o"
 	@echo "... interactor-test.i"
 	@echo "... interactor-test.s"
+	@echo "... lj-test.o"
+	@echo "... lj-test.i"
+	@echo "... lj-test.s"
 	@echo "... pair-list-test.o"
 	@echo "... pair-list-test.i"
 	@echo "... pair-list-test.s"
@@ -506,6 +587,9 @@ help:
 	@echo "... protonatable-particle-system-factory-test.o"
 	@echo "... protonatable-particle-system-factory-test.i"
 	@echo "... protonatable-particle-system-factory-test.s"
+	@echo "... rf-test.o"
+	@echo "... rf-test.i"
+	@echo "... rf-test.s"
 	@echo "... simulation-test.o"
 	@echo "... simulation-test.i"
 	@echo "... simulation-test.s"

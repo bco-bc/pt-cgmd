@@ -22,7 +22,7 @@ void test1() {
     
     box_ptr_t box = factory::box(2.0);
     std::cout << "Box size: " << box->size() << std::endl;
-    bc_ptr_t bc = factory::pbc(box);
+    bc_ptr_t bc = factory::boundaryCondition(box);
     
     position_t r1{0,0,0}; 
     real_t dz = 0.1;
@@ -44,7 +44,7 @@ void test2() {
     
     box_ptr_t box = factory::box(2.0);
     std::cout << "Box size: " << box->size() << std::endl;
-    bc_ptr_t bc = factory::pbc(box);
+    bc_ptr_t bc = factory::boundaryCondition(box);
     
     real_t z0 = -0.5;
     real_t dz = 0.1;

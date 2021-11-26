@@ -67,6 +67,16 @@
 					<DistClean command="/usr/bin/make -j6 -f &quot;/home/andre/wrk3/simploce/pt-cgmd/apps/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
 				</MakeCommands>
 			</Target>
+			<Target title="edit_cache">
+				<Option working_dir="/home/andre/wrk3/simploce/pt-cgmd/apps/cmake-build-debug"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j6 -f &quot;/home/andre/wrk3/simploce/pt-cgmd/apps/cmake-build-debug/Makefile&quot;  VERBOSE=1 edit_cache"/>
+					<CompileFile command="/usr/bin/make -j6 -f &quot;/home/andre/wrk3/simploce/pt-cgmd/apps/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j6 -f &quot;/home/andre/wrk3/simploce/pt-cgmd/apps/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j6 -f &quot;/home/andre/wrk3/simploce/pt-cgmd/apps/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
 			<Target title="s-particle-system">
 				<Option output="/home/andre/wrk3/simploce/pt-cgmd/apps/cmake-build-debug/s-particle-system" prefix_auto="0" extension_auto="0"/>
 				<Option working_dir="/home/andre/wrk3/simploce/pt-cgmd/apps/cmake-build-debug"/>
@@ -217,17 +227,60 @@
 					<DistClean command="/usr/bin/make -j6 -f &quot;/home/andre/wrk3/simploce/pt-cgmd/apps/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
 				</MakeCommands>
 			</Target>
-			<Target title="edit_cache">
+			<Target title="s-gr">
+				<Option output="/home/andre/wrk3/simploce/pt-cgmd/apps/cmake-build-debug/s-gr" prefix_auto="0" extension_auto="0"/>
 				<Option working_dir="/home/andre/wrk3/simploce/pt-cgmd/apps/cmake-build-debug"/>
-				<Option type="4"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add option="-DBOOST_PROGRAM_OPTIONS_DYN_LINK"/>
+					<Add option="-DBOOST_ALL_NO_LIB"/>
+					<Add directory="/localdisk/include"/>
+					<Add directory="/usr/include/c++/9"/>
+					<Add directory="/usr/include/x86_64-linux-gnu/c++/9"/>
+					<Add directory="/usr/include/c++/9/backward"/>
+					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/9/include"/>
+					<Add directory="/usr/local/include"/>
+					<Add directory="/usr/include/x86_64-linux-gnu"/>
+					<Add directory="/usr/include"/>
+				</Compiler>
 				<MakeCommands>
-					<Build command="/usr/bin/make -j6 -f &quot;/home/andre/wrk3/simploce/pt-cgmd/apps/cmake-build-debug/Makefile&quot;  VERBOSE=1 edit_cache"/>
+					<Build command="/usr/bin/make -j6 -f &quot;/home/andre/wrk3/simploce/pt-cgmd/apps/cmake-build-debug/Makefile&quot;  VERBOSE=1 s-gr"/>
+					<CompileFile command="/usr/bin/make -j6 -f &quot;/home/andre/wrk3/simploce/pt-cgmd/apps/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j6 -f &quot;/home/andre/wrk3/simploce/pt-cgmd/apps/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j6 -f &quot;/home/andre/wrk3/simploce/pt-cgmd/apps/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="s-gr/fast">
+				<Option output="/home/andre/wrk3/simploce/pt-cgmd/apps/cmake-build-debug/s-gr" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/home/andre/wrk3/simploce/pt-cgmd/apps/cmake-build-debug"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add option="-DBOOST_PROGRAM_OPTIONS_DYN_LINK"/>
+					<Add option="-DBOOST_ALL_NO_LIB"/>
+					<Add directory="/localdisk/include"/>
+					<Add directory="/usr/include/c++/9"/>
+					<Add directory="/usr/include/x86_64-linux-gnu/c++/9"/>
+					<Add directory="/usr/include/c++/9/backward"/>
+					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/9/include"/>
+					<Add directory="/usr/local/include"/>
+					<Add directory="/usr/include/x86_64-linux-gnu"/>
+					<Add directory="/usr/include"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j6 -f &quot;/home/andre/wrk3/simploce/pt-cgmd/apps/cmake-build-debug/Makefile&quot;  VERBOSE=1 s-gr/fast"/>
 					<CompileFile command="/usr/bin/make -j6 -f &quot;/home/andre/wrk3/simploce/pt-cgmd/apps/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
 					<Clean command="/usr/bin/make -j6 -f &quot;/home/andre/wrk3/simploce/pt-cgmd/apps/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
 					<DistClean command="/usr/bin/make -j6 -f &quot;/home/andre/wrk3/simploce/pt-cgmd/apps/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
 				</MakeCommands>
 			</Target>
 		</Build>
+		<Unit filename="/home/andre/wrk3/simploce/pt-cgmd/apps/src/s-gr.cpp">
+			<Option target="s-gr"/>
+		</Unit>
 		<Unit filename="/home/andre/wrk3/simploce/pt-cgmd/apps/src/s-particle-system.cpp">
 			<Option target="s-particle-system"/>
 		</Unit>
