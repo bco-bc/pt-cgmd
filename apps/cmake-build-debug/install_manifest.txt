@@ -2,3 +2,4 @@
 /localdisk/bin/s-validate
 /localdisk/bin/s-simulate
 /localdisk/bin/s-gr
+/localdisk/bin/s-distance

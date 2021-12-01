@@ -16,9 +16,9 @@ namespace simploce {
     /**
      * Performs an analysis on a collection of particles.
      */
-    struct Analyzer {
+    struct analyzer {
         
-        virtual ~Analyzer() = default;
+        virtual ~analyzer() = default;
         
         /**
          * Carries out the analysis.

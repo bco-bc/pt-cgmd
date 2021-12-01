@@ -16,18 +16,17 @@ namespace simploce {
     /**
      * Velocity Verlet algorithm for MD simulations.
      */
-    class VelocityVerlet: public Displacer {
+    class VelocityVerlet: public displacer {
     public:
         
         VelocityVerlet(sim_param_ptr_t simulationParameters,
                        interactor_ptr_t interactor);
         
         /**
-         * Displaces beads of an atomistic model.
          * @param at Atomistic model.
          * @return kinetic, potential energy, and temperature.
          */
-        SimulationData displace(const p_system_ptr_t& particleSystem) const override;
+        SimulationData displace(const p_system_ptr_t& all) const override;
         
     private:
         

@@ -101,7 +101,8 @@ namespace simploce {
                          const interactor_ptr_t& interactor,
                          const sim_param_ptr_t& param)
     {
-        
+        static util::Logger logger("simploce::displaceOneParticle_");
+
         // Set up.
         static bool setup = false;
         temperature_t temperature = param->get<real_t>("simulation.temperature", 298.15);
@@ -118,6 +119,7 @@ namespace simploce {
         // Randomly select one particle.
         auto index = dis(gen);
         auto particle = all[index];
+        logger.debug("Selected particle with id '" + particle->id() + "'.");
 
         // Displace selected particle.
         auto result = displaceParticle_(particle, particleSystem, interactor, param);

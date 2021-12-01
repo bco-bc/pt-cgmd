@@ -6,7 +6,9 @@
  */
 
 #include "simploce/particle/p-util.hpp"
+#include "simploce/particle/particle-system.hpp"
 #include "simploce/particle/particle.hpp"
+#include "simploce/particle/p-properties.hpp"
 #include "simploce/units/units-mu.hpp"
 #include "simploce/util/util.hpp"
 #include <random>
@@ -35,6 +37,27 @@ namespace simploce {
                 v[k] = gaussian(gen);
             }
             particle->velocity(v);
+        }
+
+        void removeOverallLinearMomentum(const p_system_ptr_t& particleSystem) {
+            particleSystem->doWithAll<void>([] (const std::vector<p_ptr_t>& all) {
+                util::Logger logger("simploce::removeOverallLinearMomentum");
+                auto P = properties::linearMomentum(all);
+                logger.debug("TOTAL linear momentum before:");
+                util::log(logger, P, util::Logger::LOGDEBUG);
+                P /= all.size();
+                for (auto p : all) {
+                    auto mass = p->mass();
+                    velocity_t v = p->velocity();
+                    for (int k = 0; k !=3; ++k) {
+                        v[k] -= P[k] / mass();
+                    }
+                    p->velocity(v);
+                }
+                P = properties::linearMomentum(all);
+                logger.debug("TOTAL linear momentum afterwards:");
+                util::log(logger, P, util::Logger::LOGDEBUG);
+            });
         }
     }
 }

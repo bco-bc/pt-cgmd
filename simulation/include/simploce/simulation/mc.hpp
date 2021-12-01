@@ -16,7 +16,7 @@ namespace simploce {
     /**
      * Monte Carlo (MC)
      */
-    class MonteCarlo : public Displacer {
+    class MonteCarlo : public displacer {
     public:
                 
         /**

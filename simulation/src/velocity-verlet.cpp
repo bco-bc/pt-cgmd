@@ -23,8 +23,8 @@ namespace simploce {
     displacePosition_(const stime_t& dt,
                       const std::vector<p_ptr_t>& particles)
     {
-        // Initial forces (forces at time t(n).
-        std::vector<force_t> fis(particles.size(), force_t{});
+        // Initial forces, forces at time t(n).
+        std::vector<force_t> fis(particles.size(), force_t{0.0, 0.0, 0.0});
         
         // Displace particles: Positions.
         for (std::size_t index = 0; index != particles.size(); ++index) {
@@ -58,7 +58,7 @@ namespace simploce {
      * @return Kinetic, potential energy, and temperature.
      */
     static SimulationData
-    displaceMomentum_(const stime_t& dt,
+    displaceVelocity_(const stime_t& dt,
                       const std::vector<force_t>& fis,
                       const std::vector<p_ptr_t>& particles)
     {
@@ -94,41 +94,53 @@ namespace simploce {
         // Instantaneous temperature at t(n+1).
         data.temperature = properties::temperature(particles, data.kinetic);
         
-        return std::move(data);
+        return data;
     }
        
     VelocityVerlet::VelocityVerlet(sim_param_ptr_t simulationParameters,
                                    interactor_ptr_t interactor) :
         simulationParameters_{std::move(simulationParameters)}, interactor_{std::move(interactor)} {
+        if (!simulationParameters_) {
+            throw std::domain_error("VelocityVerlet: Missing simulation parameters.");
+        }
+        if (!interactor_) {
+            throw std::domain_error("VelocityVerlet: Missing interactor.");
+        }
     }
         
     SimulationData 
     VelocityVerlet::displace(const p_system_ptr_t& particleSystem) const
     {        
         static std::size_t counter = 0;
-        
-        static stime_t dt =  simulationParameters_->get<real_t>("timestep");
+        static stime_t dt =  simulationParameters_->get<real_t>("simulation.timestep");
         static std::vector<force_t> fis{};
         
         counter += 1;
+        if ( counter == 1) {
+            interactor_->interact(particleSystem);  // Initial forces at t(n).
+        }
         
-        // Displace atom positions.
-        particleSystem->doWithAll<void>([] (const std::vector<p_ptr_t>& atoms) {
-            fis = displacePosition_(dt, atoms);
+        // Displace particle positions.
+        particleSystem->doWithAll<void>([] (const std::vector<p_ptr_t>& all) {
+            fis = displacePosition_(dt, all);
         });
         
         // Compute forces and potential energy at t(n+1) using positions at t(n+1).
         auto result = interactor_->interact(particleSystem);
         
-        // Displace atom momenta.
-        SimulationData data = particleSystem->doWithAll<SimulationData>([] (const std::vector<p_ptr_t>& atoms) {
-            return std::move(displaceMomentum_(dt, fis, atoms));
+        // Displace particle momenta.
+        SimulationData data = particleSystem->doWithAll<SimulationData>([] (const std::vector<p_ptr_t>& all) {
+            auto data = displaceVelocity_(dt, fis, all);
+            data.totalMomentum = norm<real_t>(properties::linearMomentum(all));
+            return std::move(data);
         });
         
-        // Save simulation data.
-        data.bonded = result.first;
-        data.nonBonded = result.second;
+        // Save simulation data at t(n+1).
+        data.bonded = std::get<0>(result);
+        data.nonBonded = std::get<1>(result);
+        data.external = std::get<2>(result);
         data.t = counter * dt;
+        data.accepted = true;
         
         return data;
     }

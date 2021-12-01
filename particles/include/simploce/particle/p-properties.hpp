@@ -9,6 +9,7 @@
 #define P_PROPERTIES_HPP
 
 #include "p-types.hpp"
+#include "particle.hpp"
 #include "atom.hpp"
 #include "bead.hpp"
 #include <vector>
@@ -18,23 +19,6 @@ namespace simploce {
      * Properties of a collection of particles.
      */
     namespace properties {
-        
-        /**
-         * Finds particle in a given particle collection.
-         * @param id Particle identifier.
-         * @param particles Particles.
-         * @return Particle or nullptr if the particle cannot be identified.
-         */
-        template <typename P, template<typename, typename ...> class CONT = std::vector>
-        std::shared_ptr<P> find(simploce::id_t id, const CONT<std::shared_ptr<P>>& particles)
-        {
-            for (auto p : particles) {
-                if ( p->id() == id ) {
-                    return p;
-                }
-            }
-            return nullptr;
-        }                    
         
         /**
          * Returns total mass of a collection of particles.
@@ -87,6 +71,26 @@ namespace simploce {
                 cm += p->mass()() * p->position();
             }
             return position_t{cm / total};
+        }
+
+        /**
+         * Returns total linear momentum of a collection of particles.
+         * @tparam P Particle type.
+         * @tparam CONT Container type.
+         * @param particles Particles.
+         * @return Total linear momentum.
+         */
+        template <typename P, template <typename, typename...> class CONT = std::vector>
+        momentum_t linearMomentum(const CONT<std::shared_ptr<P>>& particles) {
+            momentum_t p{0.0, 0.0, 0.0};
+            for (auto& particle : particles) {
+                auto mass = particle->mass();
+                auto v = particle->velocity();
+                for (int k = 0; k != 3; ++k) {
+                    p[k] += mass() * v[k];
+                }
+            }
+            return std::move(p);
         }
     }
 }

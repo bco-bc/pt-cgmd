@@ -4,10 +4,7 @@ find_package(Threads REQUIRED)
 
 #[[
 add_executable(grid-cells-test grid-cells-test.cpp)
-add_executable(pair-list-test pair-list-test.cpp)
-add_executable(pt-pairlist-test pt-pairlist-test.cpp)
-add_executable(simulation-model-factory-test simulation-model-factory-test.cpp)
-add_executable(analyzers-test analyzers-test.cpp)
+
 ]]
 
 add_executable(protonatable-particle-system-factory-test protonatable-particle-system-factory-test.cpp)
@@ -20,16 +17,13 @@ add_executable(displacer-test displacer-test.cpp)
 add_executable(simulation-test simulation-test.cpp)
 add_executable(rf-test rf-test.cpp)
 add_executable(lj-test lj-test.cpp)
+add_executable(elec-pot-difference-test elec-pot-difference-test.cpp)
 
 #[[
 target_link_directories(grid-cells-test PUBLIC ${CMAKE_INSTALL_PREFIX}/lib)
 target_link_libraries(grid-cells-test simulation particles util cpputil pthread)
 target_link_directories(pt-pairlist-test PUBLIC ${CMAKE_INSTALL_PREFIX}/lib)
 target_link_libraries(pt-pairlist-test simulation particles util cpputil pthread)
-target_link_directories(simulation-model-factory-test PUBLIC ${CMAKE_INSTALL_PREFIX}/lib)
-target_link_libraries(simulation-model-factory-test simulation particles util cpputil pthread)
-target_link_directories(analyzers-test PUBLIC ${CMAKE_INSTALL_PREFIX}/lib)
-target_link_libraries(analyzers-test simulation particles util cpputil pthread)
 ]]
 
 target_link_directories(protonatable-particle-system-factory-test PUBLIC ${CMAKE_INSTALL_PREFIX}/lib)
@@ -52,3 +46,6 @@ target_link_directories(rf-test PUBLIC ${CMAKE_INSTALL_PREFIX}/lib)
 target_link_libraries(rf-test simulation particles util cpputil pthread)
 target_link_directories(lj-test PUBLIC ${CMAKE_INSTALL_PREFIX}/lib)
 target_link_libraries(lj-test simulation particles util cpputil pthread)
+target_link_directories(elec-pot-difference-test PUBLIC ${CMAKE_INSTALL_PREFIX}/lib)
+target_link_libraries(elec-pot-difference-test simulation particles util cpputil pthread)
+

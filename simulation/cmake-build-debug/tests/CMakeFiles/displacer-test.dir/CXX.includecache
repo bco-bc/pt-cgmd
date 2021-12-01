@@ -6,6 +6,8 @@
 
 #IncludeRegexTransform: 
 
+../include/simploce/potentials/sp-conf.hpp
+
 ../include/simploce/simulation/continuous.hpp
 simploce/particle/protonatable.hpp
 ../include/simploce/simulation/simploce/particle/protonatable.hpp
@@ -39,6 +41,8 @@ simploce/particle/particle-group.hpp
 ../include/simploce/simulation/s-conf.hpp
 simploce/particle/p-conf.hpp
 ../include/simploce/simulation/simploce/particle/p-conf.hpp
+../potentials/sp-conf.hpp
+../include/simploce/potentials/sp-conf.hpp
 
 ../include/simploce/simulation/s-factory.hpp
 s-types.hpp

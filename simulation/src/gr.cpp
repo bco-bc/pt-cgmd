@@ -11,6 +11,10 @@
 #include "simploce/particle/particle-system.hpp"
 #include "simploce/particle/particle.hpp"
 #include "simploce/particle/particle-spec.hpp"
+#include "simploce/particle/particle-group.hpp"
+#include "simploce/util/logger.hpp"
+#include "simploce/util/util.hpp"
+#include "simploce/util/math-constants.hpp"
 #include <utility>
 #include <cmath>
 

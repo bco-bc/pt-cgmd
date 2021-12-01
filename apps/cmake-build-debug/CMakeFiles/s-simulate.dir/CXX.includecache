@@ -6,36 +6,6 @@
 
 #IncludeRegexTransform: 
 
-/home/andre/wrk3/simploce/pt-cgmd/apps/src/s-simulate.cpp
-simploce/simulation/s-types.hpp
-/home/andre/wrk3/simploce/pt-cgmd/apps/src/simploce/simulation/s-types.hpp
-simploce/simulation/s-conf.hpp
-/home/andre/wrk3/simploce/pt-cgmd/apps/src/simploce/simulation/s-conf.hpp
-simploce/simulation/s-factory.hpp
-/home/andre/wrk3/simploce/pt-cgmd/apps/src/simploce/simulation/s-factory.hpp
-simploce/simulation/simulation.hpp
-/home/andre/wrk3/simploce/pt-cgmd/apps/src/simploce/simulation/simulation.hpp
-simploce/particle/particle-spec-catalog.hpp
-/home/andre/wrk3/simploce/pt-cgmd/apps/src/simploce/particle/particle-spec-catalog.hpp
-simploce/particle/protonatable-coarse-grained.hpp
-/home/andre/wrk3/simploce/pt-cgmd/apps/src/simploce/particle/protonatable-coarse-grained.hpp
-simploce/particle/atomistic.hpp
-/home/andre/wrk3/simploce/pt-cgmd/apps/src/simploce/particle/atomistic.hpp
-simploce/util/file.hpp
-/home/andre/wrk3/simploce/pt-cgmd/apps/src/simploce/util/file.hpp
-simploce/util/param.hpp
-/home/andre/wrk3/simploce/pt-cgmd/apps/src/simploce/util/param.hpp
-simploce/util/logger.hpp
-/home/andre/wrk3/simploce/pt-cgmd/apps/src/simploce/util/logger.hpp
-boost/program_options.hpp
--
-cstdlib
--
-string
--
-iostream
--
-
 /localdisk/include/simploce/conf/u-conf.hpp
 
 /localdisk/include/simploce/particle/atom.hpp
@@ -190,6 +160,8 @@ cstdlib
 map
 -
 
+/localdisk/include/simploce/potentials/sp-conf.hpp
+
 /localdisk/include/simploce/simulation/continuous.hpp
 simploce/particle/protonatable.hpp
 /localdisk/include/simploce/simulation/simploce/particle/protonatable.hpp
@@ -199,6 +171,8 @@ iostream
 /localdisk/include/simploce/simulation/s-conf.hpp
 simploce/particle/p-conf.hpp
 /localdisk/include/simploce/simulation/simploce/particle/p-conf.hpp
+../potentials/sp-conf.hpp
+/localdisk/include/simploce/potentials/sp-conf.hpp
 
 /localdisk/include/simploce/simulation/s-factory.hpp
 s-types.hpp
@@ -328,5 +302,35 @@ utility
 cassert
 -
 stdexcept
+-
+
+/wrk3/simploce/pt-cgmd/apps/src/s-simulate.cpp
+simploce/simulation/s-types.hpp
+/wrk3/simploce/pt-cgmd/apps/src/simploce/simulation/s-types.hpp
+simploce/simulation/s-conf.hpp
+/wrk3/simploce/pt-cgmd/apps/src/simploce/simulation/s-conf.hpp
+simploce/simulation/s-factory.hpp
+/wrk3/simploce/pt-cgmd/apps/src/simploce/simulation/s-factory.hpp
+simploce/simulation/simulation.hpp
+/wrk3/simploce/pt-cgmd/apps/src/simploce/simulation/simulation.hpp
+simploce/particle/particle-spec-catalog.hpp
+/wrk3/simploce/pt-cgmd/apps/src/simploce/particle/particle-spec-catalog.hpp
+simploce/particle/protonatable-coarse-grained.hpp
+/wrk3/simploce/pt-cgmd/apps/src/simploce/particle/protonatable-coarse-grained.hpp
+simploce/particle/atomistic.hpp
+/wrk3/simploce/pt-cgmd/apps/src/simploce/particle/atomistic.hpp
+simploce/util/file.hpp
+/wrk3/simploce/pt-cgmd/apps/src/simploce/util/file.hpp
+simploce/util/param.hpp
+/wrk3/simploce/pt-cgmd/apps/src/simploce/util/param.hpp
+simploce/util/logger.hpp
+/wrk3/simploce/pt-cgmd/apps/src/simploce/util/logger.hpp
+boost/program_options.hpp
+-
+cstdlib
+-
+string
+-
+iostream
 -
 

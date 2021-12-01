@@ -20,7 +20,7 @@ namespace simploce {
      * Computes the total dipole moment M and M*M at given times, as well as
      * the probability density function f(m) of the group dipole m.
      */
-    class DipoleMoment : public Analyzer {
+    class DipoleMoment : public analyzer {
     public:
 
         /**
@@ -68,7 +68,7 @@ namespace simploce {
          * @param maxGroupStrength Maximum value of strength m for f(m) (units are e nm). Default is
          * 10 e nm.
          * @param t0 Start time. Default is 0.
-         * @return Analyzer.
+         * @return analyzer.
          */
         static dm_ptr_t
         create(const stime_t& dt,

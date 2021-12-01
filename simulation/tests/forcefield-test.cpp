@@ -5,7 +5,7 @@
  */
 
 #include "simploce/simulation/s-factory.hpp"
-#include "simploce/simulation/force-field.hpp"
+#include "simploce/potentials/force-field.hpp"
 #include "simploce/util/file.hpp"
 #include "simploce/util/logger.hpp"
 #include <cstdlib>

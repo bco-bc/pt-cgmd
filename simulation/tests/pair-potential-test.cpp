@@ -4,11 +4,11 @@
  * Created on 11/12/21.
  */
 
-#include "simploce/simulation/lj.hpp"
-#include "simploce/simulation/halve-attractive-qp.hpp"
+#include "simploce/potentials/lj.hpp"
+#include "simploce/potentials/halve-attractive-qp.hpp"
 #include "simploce/simulation/s-factory.hpp"
 #include "simploce/simulation/s-conf.hpp"
-#include "simploce/simulation/force-field.hpp"
+#include "simploce/potentials/force-field.hpp"
 #include "simploce/simulation/s-properties.hpp"
 #include "simploce/particle/bead.hpp"
 #include "simploce/util/file.hpp"
@@ -50,7 +50,7 @@ void testHAQP(const spec_catalog_ptr_t &catalog, const ff_ptr_t &forceField) {
     // Calculate potential.
     // Calculate potential.
     real_t dz = 0.01;
-    distance_t rc = properties::cutoffDistance(box);
+    dist_t rc = properties::cutoffDistance(box);
     std::cout << "Cutoff distance: " << rc << std::endl;
 
     p2->position(position_t{0.0, 0.0, 0.51});

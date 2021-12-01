@@ -4,8 +4,8 @@
  * Created on 11/16/21.
  */
 
-#include "simploce/simulation/lj.hpp"
-#include "simploce/simulation/force-field.hpp"
+#include "simploce/potentials/lj.hpp"
+#include "simploce/potentials/force-field.hpp"
 #include "simploce/simulation/bc.hpp"
 #include "simploce/simulation/s-properties.hpp"
 #include "simploce/particle/particle.hpp"

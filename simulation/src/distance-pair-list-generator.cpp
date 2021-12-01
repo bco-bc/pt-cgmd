@@ -5,12 +5,13 @@
  */
 
 #include "simploce/simulation/distance-pair-list-generator.hpp"
-
-#include <utility>
 #include "simploce/simulation/s-properties.hpp"
 #include "simploce/simulation/bc.hpp"
 #include "simploce/particle/particle.hpp"
 #include "simploce/particle/particle-system.hpp"
+#include "simploce/util/logger.hpp"
+#include "simploce/util/util.hpp"
+#include <utility>
 
 namespace simploce {
 
@@ -37,7 +38,7 @@ namespace simploce {
         pp_pair_cont_t particlePairs{};
 
         // For all pairs in the set.
-        for (auto iter_i = particles.begin(); iter_i != particles.end() - 1; ++iter_i) {
+        for (auto iter_i = particles.begin(); iter_i != (particles.end() - 1); ++iter_i) {
             const auto& pi = *iter_i;
             position_t ri = pi->position();
             for (auto iter_j = iter_i + 1; iter_j != particles.end(); ++iter_j) {

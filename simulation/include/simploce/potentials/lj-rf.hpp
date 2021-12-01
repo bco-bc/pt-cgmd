@@ -8,9 +8,9 @@
 #ifndef SIMULATION_LJ_RF_HPP
 #define SIMULATION_LJ_RF_HPP
 
-#include "pair-potential.hpp"
-#include "rf.hpp"
-#include "s-types.hpp"
+#include "simploce/potentials/pair-potential.hpp"
+#include "simploce/simulation/rf.hpp"
+#include "simploce/simulation/s-types.hpp"
 #include <utility>
 
 namespace simploce {
@@ -33,7 +33,7 @@ namespace simploce {
          * @param box Simulation box.
          * @param bc Boundary condition.
          */
-        LJ_RF(real_t kappa, ff_ptr_t forceField, box_ptr_t box, bc_ptr_t bc, rf_ptr_t  rf);
+        LJ_RF(real_t kappa, ff_ptr_t forceField, box_ptr_t box, bc_ptr_t bc, rf_ptr_t rf);
 
         std::pair<energy_t, force_t> operator () (const p_ptr_t &p1, const p_ptr_t &p2) override;
 

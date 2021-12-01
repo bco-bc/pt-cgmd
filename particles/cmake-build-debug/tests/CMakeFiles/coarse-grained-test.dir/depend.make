@@ -11,11 +11,11 @@ tests/CMakeFiles/coarse-grained-test.dir/coarse-grained-test.cpp.o: \
  ../include/simploce/particle/particle-spec.hpp \
  ../include/simploce/particle/particle-system.hpp \
  ../include/simploce/particle/particle.hpp \
+ ../tests/coarse-grained-test.cpp \
  /localdisk/include/simploce/conf/u-conf.hpp \
  /localdisk/include/simploce/types/cvector_t.hpp \
  /localdisk/include/simploce/types/u-types.hpp \
  /localdisk/include/simploce/types/value_t.hpp \
  /localdisk/include/simploce/util/box.hpp \
  /localdisk/include/simploce/util/cube.hpp \
- /localdisk/include/simploce/util/file.hpp \
- ../tests/coarse-grained-test.cpp
+ /localdisk/include/simploce/util/file.hpp

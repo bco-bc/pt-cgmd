@@ -6,23 +6,23 @@
 
 #IncludeRegexTransform: 
 
-../include/simploce/simulation/continuous.hpp
-simploce/particle/protonatable.hpp
-../include/simploce/simulation/simploce/particle/protonatable.hpp
-iostream
--
-
-../include/simploce/simulation/force-field.hpp
-pair-lists.hpp
-../include/simploce/simulation/pair-lists.hpp
-s-types.hpp
-../include/simploce/simulation/s-types.hpp
+../include/simploce/potentials/force-field.hpp
+simploce/simulation/pair-lists.hpp
+../include/simploce/potentials/simploce/simulation/pair-lists.hpp
+simploce/simulation/s-types.hpp
+../include/simploce/potentials/simploce/simulation/s-types.hpp
 simploce/util/map2.hpp
-../include/simploce/simulation/simploce/util/map2.hpp
+../include/simploce/potentials/simploce/util/map2.hpp
 string
 -
 utility
 -
+iostream
+-
+
+../include/simploce/simulation/continuous.hpp
+simploce/particle/protonatable.hpp
+../include/simploce/simulation/simploce/particle/protonatable.hpp
 iostream
 -
 
@@ -49,8 +49,8 @@ tuple
 /home/andre/wrk3/simploce/pt-cgmd/simulation/tests/forcefield-test.cpp
 simploce/simulation/s-factory.hpp
 /home/andre/wrk3/simploce/pt-cgmd/simulation/tests/simploce/simulation/s-factory.hpp
-simploce/simulation/force-field.hpp
-/home/andre/wrk3/simploce/pt-cgmd/simulation/tests/simploce/simulation/force-field.hpp
+simploce/potentials/force-field.hpp
+/home/andre/wrk3/simploce/pt-cgmd/simulation/tests/simploce/potentials/force-field.hpp
 simploce/util/file.hpp
 /home/andre/wrk3/simploce/pt-cgmd/simulation/tests/simploce/util/file.hpp
 simploce/util/logger.hpp

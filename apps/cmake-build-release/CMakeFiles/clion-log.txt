@@ -1,6 +1,6 @@
-/home/andre/clion-2021.2.3/bin/cmake/linux/bin/cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_CXX_FLAGS=-O3 -DCMAKE_DEPENDS_USE_COMPILER=FALSE -G "CodeBlocks - Unix Makefiles" /home/andre/wrk3/simploce/pt-cgmd/apps
--- The C compiler identification is GNU 9.3.0
--- The CXX compiler identification is GNU 9.3.0
+/localdisk/clion-2021.2.3/bin/cmake/linux/bin/cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_CXX_FLAGS=-O3 -DCMAKE_DEPENDS_USE_COMPILER=FALSE -G "CodeBlocks - Unix Makefiles" /wrk3/simploce/pt-cgmd/apps
+-- The C compiler identification is GNU 7.5.0
+-- The CXX compiler identification is GNU 7.5.0
 -- Detecting C compiler ABI info
 -- Detecting C compiler ABI info - done
 -- Check for working C compiler: /usr/bin/cc - skipped
@@ -18,7 +18,7 @@
 -- Check if compiler accepts -pthread
 -- Check if compiler accepts -pthread - yes
 -- Found Threads: TRUE  
--- Found Boost: /usr/lib/x86_64-linux-gnu/cmake/Boost-1.71.0/BoostConfig.cmake (found version "1.71.0") found components: program_options 
+-- Found Boost: /usr/include (found version "1.65.1") found components: program_options 
 -- Configuring done
 -- Generating done
--- Build files have been written to: /home/andre/wrk3/simploce/pt-cgmd/apps/cmake-build-release
+-- Build files have been written to: /wrk3/simploce/pt-cgmd/apps/cmake-build-release

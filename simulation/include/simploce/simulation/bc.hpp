@@ -20,11 +20,11 @@ namespace simploce {
 
     /**
      * Applies the boundary condition.
-     * @param r1 Position.
-     * @param r2 Position.
-     * @return Difference r1-r2 under the given boundary condition.
+     * @param ri Position.
+     * @param rj Position.
+     * @return Difference ri-rj under the given boundary condition.
      */
-    virtual dist_vect_t apply(const position_t& r1, const position_t& r2) const = 0;
+    virtual dist_vect_t apply(const position_t& ri, const position_t& rj) const = 0;
     
     /**
      * Moves given position to the inside of the simulation box.

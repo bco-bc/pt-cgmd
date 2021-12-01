@@ -8,15 +8,8 @@
 #define S_UTIL_HPP
 
 #include "s-types.hpp"
-#include "simploce/units/units-mu.hpp"
-#include "pair-lists.hpp"
-#include "s-conf.hpp"
 #include "simploce/particle/p-properties.hpp"
-#include "simploce/util/logger.hpp"
-#include "simploce/util/util.hpp"
 #include <vector>
-#include <set>
-#include <thread>
 
 namespace simploce {
     namespace properties {
@@ -27,10 +20,7 @@ namespace simploce {
          * @param particles Particles.
          * @return Kappa.
          */
-        template <typename T>
-        real_t kappa(const std::vector<std::shared_ptr<T>>& particles) {
-            return 0.0;
-        }
+        real_t kappa(const std::vector<p_ptr_t>& particles);
         
         /**
          * Calculates instantaneous temperature for a collection of particles.
@@ -38,19 +28,8 @@ namespace simploce {
          * @param eKin Kinetic energy.
          * @return Instantaneous temperature.
          */
-        template <typename T>
-        temperature_t temperature(const std::vector<std::shared_ptr<T>>& particles, 
-                                  const energy_t& eKin)
-        {
-            std::size_t nParticles = particles.size();
-            real_t nDof = 3.0 * real_t(nParticles) - 3.0;  // Assuming total momentum is constant.
-            if (nDof > 3 ) {
-                return 2.0 * eKin() / (nDof * units::mu<real_t>::KB );  // In K.
-            } else {
-                // No point calculating temperature for a low number of degrees of freedom.
-                return 0.0;
-            }        
-        }
+        temperature_t temperature(const std::vector<p_ptr_t>& particles,
+                                  const energy_t& eKin);
         
         /**
          * Returns pressure. Calculated from Virial Theorem.
@@ -59,31 +38,9 @@ namespace simploce {
          * @param box Simulation box.
          * @return Pressure.
          */
-        template <typename T>
-        pressure_t pressure(const std::vector<std::shared_ptr<T>>& particles,
+        pressure_t pressure(const std::vector<p_ptr_t>& particles,
                             const temperature_t& temperature,
-                            const box_ptr_t& box)
-        {
-            volume_t volume = box->volume();
-            real_t virial1 = 0.0;
-            pressure_t pressure{};
-
-            std::size_t nParticles = particles.size();
-            for (const auto& particle : particles) {
-                position_t r = particle->position();
-                force_t f = particle->force();
-                virial1 += inner<real_t>(f,r);
-            }
-            if ( volume() > 0.0 ) {
-                virial1 /= ( 3.0 * volume() );
-                real_t virial2 =
-                        real_t(nParticles) * units::mu<real_t>::KB * temperature() / volume();
-                pressure = virial2 - virial1; // In kJ/(mol nm^3)    
-            } else {
-                pressure = 0.0;
-            }
-            return pressure;            
-        }
+                            const box_ptr_t& box);
         
         /**
          * Returns cutoff distance.
@@ -113,34 +70,16 @@ namespace simploce {
                         const box_ptr_t& box);
         
         /**
-         * Writes a warning to std::clog if particles are too close.
+         * Writes a warning if particles are too close.
          * @param pi Particle 1
          * @param pj Particle 2
-         * @param ef Holds energy and forces.
+         * @param efl Holds energy, forces, and distance between particles 1 and 2.
          */
-        template <typename P>
         static void 
-        tooClose(const std::shared_ptr<P>& pi, 
-                 const std::shared_ptr<P>& pj, 
-                 const std::tuple<energy_t, force_t, length_t>& ef)
-        {
-            static util::Logger logger("simploce::properties::tooClose");
-            static length_t rMin = conf::SHORT;
-        
-            auto Rij = std::get<2>(ef);
-            if (Rij() < rMin() ) {
-                std::string message =
-                        "WARNING: Rij < " + util::toString(rMin()) +
-                        ", Rij = " + util::toString(Rij) +
-                        ", pi = " + pi->name() + ", index = " + util::toString(pi->index()) +
-                        ", id = " + util::toString(pi->id()) +
-                        ", pj = " + pj->name() << ", index = " + util::toString(pj->index()) +
-                        ", id = " + util::toString(pj->id()) +
-                        ", energy: " + util::toString(std::get<0>(ef));
-                logger.warn(message);
-            }
-        }
-        
+        tooClose(const p_ptr_t& pi,
+                 const p_ptr_t& pj,
+                 const std::tuple<energy_t, force_t, length_t>& efl);
+
     }
 }
 

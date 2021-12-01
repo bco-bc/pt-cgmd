@@ -5,10 +5,10 @@
  */
 
 #include "simploce/simulation/interactor.hpp"
-#include "simploce/simulation/force-field.hpp"
+#include "simploce/potentials/force-field.hpp"
 #include "simploce/simulation/sim-data.hpp"
 #include "simploce/simulation/pair-list-generator.hpp"
-#include "simploce/simulation/forces.hpp"
+#include "simploce/potentials/forces.hpp"
 #include "simploce/particle/particle.hpp"
 #include "simploce/particle/particle-system.hpp"
 #include "simploce/util/util.hpp"
@@ -25,22 +25,18 @@ namespace simploce {
         pairLists_{} {
     }
 
-    std::pair<energy_t, energy_t>
+    std::tuple<energy_t, energy_t, energy_t>
     Interactor::interact(const p_system_ptr_t &particleSystem) {
         static util::Logger logger("simploce::Interactor::interact");
-        static bool setup = false;
-        static std::size_t nUpdatePairLists = 0;
-        static std::size_t counter = 0;
 
-        if ( !setup ) {
-            nUpdatePairLists = simulationParameters_->get<std::size_t>("simulation.npairlists");
-            logger.debug("Number of steps between update of particle pair list: " +
-                          util::toString(nUpdatePairLists));
-            setup = true;
-        }
+        static auto nUpdatePairLists = simulationParameters_->get<std::size_t>("simulation.npairlists");
+        static auto includeExternal = simulationParameters_->get<bool>("simulation.include-external");
+        static std::size_t counter = 0;
 
         // Update particle pair list, if needed.
         if (counter % nUpdatePairLists == 0 || counter == 0) {
+            logger.debug("Number of steps between update of particle pair list: " +
+                          util::toString(nUpdatePairLists));
             logger.trace("Updating particle pair lists...");
             pairLists_ = pairListsGenerator_->generate(particleSystem);
             pairLists_.modified_(true);
@@ -54,12 +50,16 @@ namespace simploce {
         particleSystem->resetForces();
         auto bonded = this->forces_->bonded(particleSystem);
         auto nonBonded = this->forces_->nonBonded(particleSystem, pairLists_);
+        energy_t external{0};
+        if (includeExternal) {
+            external = this->forces_->external(particleSystem);
+        }
 
         // Update counter.
         counter += 1;
 
         // Done.
-        return std::move(std::make_pair(bonded, nonBonded));
+        return std::move(std::tuple<energy_t, energy_t, energy_t>{bonded, nonBonded, external});
     }
 
     std::pair<energy_t, energy_t>

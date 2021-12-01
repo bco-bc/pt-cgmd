@@ -8,7 +8,7 @@
 #ifndef SIMULATION_RF_HPP
 #define SIMULATION_RF_HPP
 
-#include "pair-potential.hpp"
+#include "simploce/potentials/pair-potential.hpp"
 
 namespace simploce {
 
@@ -46,7 +46,7 @@ namespace simploce {
                                                     real_t eps_inside_rc,
                                                     real_t eps_outside_rc);
 
-        real_t compute_C_rf_(const distance_t& rc, real_t eps_inside_rc, real_t eps_outside_rc);
+        real_t compute_C_rf_(const dist_t& rc, real_t eps_inside_rc, real_t eps_outside_rc);
 
         real_t kappa_;
         ff_ptr_t forceField_;

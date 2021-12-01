@@ -5,8 +5,8 @@
  * Copyright (c) 2021 Biocenter Oulu, University of Oulu, Finland. All rights reserved.
  */
 
-#include "simploce/simulation/sc.hpp"
-#include "simploce/simulation/force-field.hpp"
+#include "simploce/potentials/sc.hpp"
+#include "simploce/potentials/force-field.hpp"
 #include "simploce/simulation/bc.hpp"
 #include "simploce/particle/particle-spec.hpp"
 #include "simploce/particle/particle.hpp"

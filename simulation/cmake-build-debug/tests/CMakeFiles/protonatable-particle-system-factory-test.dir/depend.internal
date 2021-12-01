@@ -15,6 +15,7 @@ tests/CMakeFiles/protonatable-particle-system-factory-test.dir/protonatable-part
  /localdisk/include/simploce/particle/p-factory.hpp
  /localdisk/include/simploce/particle/p-properties.hpp
  /localdisk/include/simploce/particle/p-types.hpp
+ /localdisk/include/simploce/particle/p-util.hpp
  /localdisk/include/simploce/particle/particle-group.hpp
  /localdisk/include/simploce/particle/particle-spec-catalog.hpp
  /localdisk/include/simploce/particle/particle-spec.hpp

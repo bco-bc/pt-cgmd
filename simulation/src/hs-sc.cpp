@@ -5,13 +5,13 @@
  * Copyright (c) 2021 Biocenter Oulu, University of Oulu, Finland. All rights reserved.
  */
 
-#include "simploce/simulation/hs-sc.hpp"
-#include "simploce/simulation/sc.hpp"
+#include "simploce/potentials/hs-sc.hpp"
+#include "simploce/potentials/sc.hpp"
 #include "simploce/simulation/bc.hpp"
-#include "simploce/simulation/s-properties.hpp"
-#include "simploce/simulation/force-field.hpp"
+#include "simploce/potentials/force-field.hpp"
 #include "simploce/particle/particle.hpp"
 #include "simploce/particle/particle-spec.hpp"
+#include "simploce/simulation/s-conf.hpp"
 #include <utility>
 
 namespace simploce {

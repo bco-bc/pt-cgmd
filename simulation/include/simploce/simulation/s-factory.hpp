@@ -69,7 +69,7 @@ namespace simploce {
         /**
          * Returns an algorithm (a displacer) to displace a particle system (to change
          * the system's state).
-         * @param displacerType Displacer identifier.
+         * @param displacerType displacer identifier.
          * @return Algorithm.
          */
         displacer_ptr_t displacer(std::string displacerType,
@@ -125,7 +125,7 @@ namespace simploce {
          * @param isCoarseGrained Specifies whether the input file holds a coarse-grained particle system.
          * @return Particle system.
          */
-        p_system_ptr_t particleSystem(std::string fileName,
+        p_system_ptr_t particleSystem(const std::string& fileName,
                                       const spec_catalog_ptr_t& catalog,
                                       bool isCoarseGrained);
 

@@ -9,6 +9,7 @@ tests/CMakeFiles/protonatable-bead-test.dir/protonatable-bead-test.cpp.o
  ../include/simploce/particle/p-factory.hpp
  ../include/simploce/particle/p-properties.hpp
  ../include/simploce/particle/p-types.hpp
+ ../include/simploce/particle/p-util.hpp
  ../include/simploce/particle/particle-group.hpp
  ../include/simploce/particle/particle-spec-catalog.hpp
  ../include/simploce/particle/particle-spec.hpp
@@ -17,6 +18,7 @@ tests/CMakeFiles/protonatable-bead-test.dir/protonatable-bead-test.cpp.o
  ../include/simploce/particle/protonatable-bead.hpp
  ../include/simploce/particle/protonatable-coarse-grained.hpp
  ../include/simploce/particle/protonatable.hpp
+ /home/andre/wrk3/simploce/pt-cgmd/particles/tests/protonatable-bead-test.cpp
  /localdisk/include/simploce/conf/u-conf.hpp
  /localdisk/include/simploce/types/cvector_t.hpp
  /localdisk/include/simploce/types/u-types.hpp
@@ -28,4 +30,3 @@ tests/CMakeFiles/protonatable-bead-test.dir/protonatable-bead-test.cpp.o
  /localdisk/include/simploce/util/logger.hpp
  /localdisk/include/simploce/util/math-constants.hpp
  /localdisk/include/simploce/util/util.hpp
- /wrk3/simploce/pt-cgmd/particles/tests/protonatable-bead-test.cpp

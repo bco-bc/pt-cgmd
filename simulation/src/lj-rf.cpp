@@ -5,9 +5,9 @@
  * Copyright (c) 2021 Biocenter Oulu, University of Oulu, Finland. All rights reserved.
  */
 
-#include "simploce/simulation/lj-rf.hpp"
-#include "simploce/simulation/lj.hpp"
-#include "simploce/simulation/force-field.hpp"
+#include "simploce/potentials/lj-rf.hpp"
+#include "simploce/potentials/lj.hpp"
+#include "simploce/potentials/force-field.hpp"
 #include "simploce/simulation/bc.hpp"
 #include "simploce/particle/particle.hpp"
 #include "simploce/units/units-mu.hpp"

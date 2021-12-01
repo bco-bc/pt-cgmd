@@ -9,7 +9,7 @@
 #define SCONF_HPP
 
 #include "simploce/particle/p-conf.hpp"
-
+#include "../potentials/sp-conf.hpp"
 
 namespace simploce {
     namespace conf {
@@ -25,23 +25,8 @@ namespace simploce {
         const std::string VELOCITY_VERLET = "vv";
         const std::string MONTE_CARLO = "mc";
 
-        // Interaction types.
-        const std::string LJ = "lj";            // Lennard-Jones
-        const std::string LJ_RF = "lj+rf";      // Lennard-Jones + reaction field electrostatics.
-        const std::string RF = "rf";            // Reaction field electrostatics.
-        const std::string HS_SF = "hs+sf";      // Hard sphere potential + shifted force electrostatics
-                                                // Must only be used in combination with Monte Carlo.
-        const std::string HS_SC = "hs+sc";      // Hard sphere potential + screened Coulomb electrostatics
-                                                // Must only be used in combination with Monte Carlo.
-        const std::string HS_RF = "hs+rf";      // Hard sphere potential + reaction field electrostatics.
-                                                // Must only be used in combination with Monte Carlo.
-        const std::string SC = "sc";            // Screened Coulomb electrostatics.
-        const std::string SF = "sf";            // Shifted force electrostatics.
-        const std::string HP = "hp";            // Harmonic.
-        const std::string HA_QP = "ha-qp";      // Halve-attractive quartic.
-
         // Default cutoff distance for non-bonded interactions, in nm.
-        const distance_t CUTOFF_DISTANCE{2.6};
+        const dist_t CUTOFF_DISTANCE{2.6};
         
         // Minimum number of particles.
         const std::size_t MIN_NUMBER_OF_PARTICLES{500};
@@ -54,12 +39,17 @@ namespace simploce {
         /**
          * Value below which a distance is considered to be "short".
          */
-        const distance_t SHORT{0.15};
+        const dist_t SHORT{0.15};
 
         /**
          * A very large larger positive number.
          */
         const real_t LARGE = 1.0e+30;
+
+        /**
+         * A small positive real number.
+         */
+        const real_t SMALL = 1.0e-10;
     }
 }
 

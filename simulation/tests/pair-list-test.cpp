@@ -48,11 +48,17 @@ int main() {
 
     auto factory = factory::protonatableParticleSystemFactory(catalog);
 
-    auto polarizableWater = factory->polarizableWater(factory::box(7.27));
-    test2(polarizableWater);
+    //auto polarizableWater = factory->polarizableWater(factory::box(7.27));
+    //test2(polarizableWater);
 
     //auto argon = factory->argon(factory::box(3.47786));
     //test3(argon);
+
+    //auto electrolyte = factory->simpleElectrolyte();
+    auto electrolyte= factory::particleSystem("/home/andre/simulations/electrolyte/electrolyte-mc-3.ps",
+                                              catalog,
+                                              false);
+    test3(electrolyte);
 
     return (EXIT_SUCCESS);
 }

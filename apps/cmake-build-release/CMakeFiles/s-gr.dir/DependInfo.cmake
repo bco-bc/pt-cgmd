@@ -8,7 +8,7 @@ set(CMAKE_DEPENDS_LANGUAGES
   )
 # The set of files for implicit dependencies of each language:
 set(CMAKE_DEPENDS_CHECK_CXX
-  "/home/andre/wrk3/simploce/pt-cgmd/apps/src/s-gr.cpp" "/home/andre/wrk3/simploce/pt-cgmd/apps/cmake-build-release/CMakeFiles/s-gr.dir/src/s-gr.cpp.o"
+  "/wrk3/simploce/pt-cgmd/apps/src/s-gr.cpp" "/wrk3/simploce/pt-cgmd/apps/cmake-build-release/CMakeFiles/s-gr.dir/src/s-gr.cpp.o"
   )
 set(CMAKE_CXX_COMPILER_ID "GNU")
 

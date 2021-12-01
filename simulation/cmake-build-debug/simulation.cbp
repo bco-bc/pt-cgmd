@@ -125,6 +125,54 @@
 					<DistClean command="/usr/bin/make -j6 -f &quot;/home/andre/wrk3/simploce/pt-cgmd/simulation/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
 				</MakeCommands>
 			</Target>
+			<Target title="elec-pot-difference-test">
+				<Option output="/home/andre/wrk3/simploce/pt-cgmd/simulation/cmake-build-debug/tests/elec-pot-difference-test" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/home/andre/wrk3/simploce/pt-cgmd/simulation/cmake-build-debug/tests"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add directory="/home/andre/wrk3/simploce/pt-cgmd/simulation/include"/>
+					<Add directory="/localdisk/include"/>
+					<Add directory="/usr/include/c++/9"/>
+					<Add directory="/usr/include/x86_64-linux-gnu/c++/9"/>
+					<Add directory="/usr/include/c++/9/backward"/>
+					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/9/include"/>
+					<Add directory="/usr/local/include"/>
+					<Add directory="/usr/include/x86_64-linux-gnu"/>
+					<Add directory="/usr/include"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j6 -f &quot;/home/andre/wrk3/simploce/pt-cgmd/simulation/cmake-build-debug/tests/Makefile&quot;  VERBOSE=1 elec-pot-difference-test"/>
+					<CompileFile command="/usr/bin/make -j6 -f &quot;/home/andre/wrk3/simploce/pt-cgmd/simulation/cmake-build-debug/tests/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j6 -f &quot;/home/andre/wrk3/simploce/pt-cgmd/simulation/cmake-build-debug/tests/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j6 -f &quot;/home/andre/wrk3/simploce/pt-cgmd/simulation/cmake-build-debug/tests/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="elec-pot-difference-test/fast">
+				<Option output="/home/andre/wrk3/simploce/pt-cgmd/simulation/cmake-build-debug/tests/elec-pot-difference-test" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/home/andre/wrk3/simploce/pt-cgmd/simulation/cmake-build-debug/tests"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add directory="/home/andre/wrk3/simploce/pt-cgmd/simulation/include"/>
+					<Add directory="/localdisk/include"/>
+					<Add directory="/usr/include/c++/9"/>
+					<Add directory="/usr/include/x86_64-linux-gnu/c++/9"/>
+					<Add directory="/usr/include/c++/9/backward"/>
+					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/9/include"/>
+					<Add directory="/usr/local/include"/>
+					<Add directory="/usr/include/x86_64-linux-gnu"/>
+					<Add directory="/usr/include"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j6 -f &quot;/home/andre/wrk3/simploce/pt-cgmd/simulation/cmake-build-debug/tests/Makefile&quot;  VERBOSE=1 elec-pot-difference-test/fast"/>
+					<CompileFile command="/usr/bin/make -j6 -f &quot;/home/andre/wrk3/simploce/pt-cgmd/simulation/cmake-build-debug/tests/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j6 -f &quot;/home/andre/wrk3/simploce/pt-cgmd/simulation/cmake-build-debug/tests/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j6 -f &quot;/home/andre/wrk3/simploce/pt-cgmd/simulation/cmake-build-debug/tests/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
 			<Target title="forcefield-test">
 				<Option output="/home/andre/wrk3/simploce/pt-cgmd/simulation/cmake-build-debug/tests/forcefield-test" prefix_auto="0" extension_auto="0"/>
 				<Option working_dir="/home/andre/wrk3/simploce/pt-cgmd/simulation/cmake-build-debug/tests"/>
@@ -660,6 +708,9 @@
 		<Unit filename="/home/andre/wrk3/simploce/pt-cgmd/simulation/src/analysis.cpp">
 			<Option target="simulation"/>
 		</Unit>
+		<Unit filename="/home/andre/wrk3/simploce/pt-cgmd/simulation/src/const-surface-charge-density.cpp">
+			<Option target="simulation"/>
+		</Unit>
 		<Unit filename="/home/andre/wrk3/simploce/pt-cgmd/simulation/src/continuous.cpp">
 			<Option target="simulation"/>
 		</Unit>
@@ -670,6 +721,12 @@
 			<Option target="simulation"/>
 		</Unit>
 		<Unit filename="/home/andre/wrk3/simploce/pt-cgmd/simulation/src/distance-pair-list-generator.cpp">
+			<Option target="simulation"/>
+		</Unit>
+		<Unit filename="/home/andre/wrk3/simploce/pt-cgmd/simulation/src/distance.cpp">
+			<Option target="simulation"/>
+		</Unit>
+		<Unit filename="/home/andre/wrk3/simploce/pt-cgmd/simulation/src/elec-pot-difference.cpp">
 			<Option target="simulation"/>
 		</Unit>
 		<Unit filename="/home/andre/wrk3/simploce/pt-cgmd/simulation/src/force-field.cpp">
@@ -706,6 +763,9 @@
 			<Option target="simulation"/>
 		</Unit>
 		<Unit filename="/home/andre/wrk3/simploce/pt-cgmd/simulation/src/lj-rf.cpp">
+			<Option target="simulation"/>
+		</Unit>
+		<Unit filename="/home/andre/wrk3/simploce/pt-cgmd/simulation/src/lj-sf.cpp">
 			<Option target="simulation"/>
 		</Unit>
 		<Unit filename="/home/andre/wrk3/simploce/pt-cgmd/simulation/src/lj.cpp">
@@ -755,6 +815,9 @@
 		</Unit>
 		<Unit filename="/home/andre/wrk3/simploce/pt-cgmd/simulation/tests/displacer-test.cpp">
 			<Option target="displacer-test"/>
+		</Unit>
+		<Unit filename="/home/andre/wrk3/simploce/pt-cgmd/simulation/tests/elec-pot-difference-test.cpp">
+			<Option target="elec-pot-difference-test"/>
 		</Unit>
 		<Unit filename="/home/andre/wrk3/simploce/pt-cgmd/simulation/tests/forcefield-test.cpp">
 			<Option target="forcefield-test"/>

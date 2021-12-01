@@ -10,7 +10,6 @@
 #include "simploce/analysis/a-types.hpp"
 #include "simploce/analysis/analysis.hpp"
 #include "simploce/simulation/s-types.hpp"
-#include "simploce/simulation/s-conf.hpp"
 #include "simploce/simulation/s-factory.hpp"
 #include "simploce/particle/particle-spec-catalog.hpp"
 #include "simploce/particle/particle-system.hpp"
@@ -20,7 +19,6 @@
 #include <boost/program_options.hpp>
 #include <string>
 #include <iostream>
-#include <memory>
 
 namespace po = boost::program_options;
 using namespace simploce;
@@ -114,7 +112,7 @@ int main(int argc, char *argv[]) {
         nSkip = vm["skip-number-of-states"].as<std::size_t>();
     }
     if (vm.count("verbose") ) {
-        logger.changeLogLevel(util::Logger::LOGTRACE);
+        util::Logger::changeLogLevel(util::Logger::LOGDEBUG);
     }
 
     // Analysis parameters

@@ -31,8 +31,9 @@ void test1(const spec_catalog_ptr_t &catalog, const ff_ptr_t &forceField) {
     auto forces = factory::forces(bc, forceField);
     auto interactor = factory::interactor(simulationParameters, forceField, bc);
     auto result = interactor->interact(atomistic);
-    std::cout << "Non-bonded potential energy: " << result.first << std::endl;
-    std::cout << "Bonded potential energy: " << result.second << std::endl;
+    std::cout << "Bonded potential energy: " << std::get<0>(result) << std::endl;
+    std::cout << "Non-bonded potential energy: " << std::get<1>(result)<< std::endl;
+    std::cout << "External potential energy: " << std::get<2>(result)<< std::endl;
     std::cout << std::endl;
 }
 
@@ -50,8 +51,9 @@ void test2(const spec_catalog_ptr_t &catalog, const ff_ptr_t &forceField) {
 
     auto interactor = factory::interactor(simulationParameters, forceField, bc);
     auto result = interactor->interact(diatomic);
-    std::cout << "Non-bonded potential energy: " << result.second << std::endl;
-    std::cout << "Bonded potential energy: " << result.first << std::endl;
+    std::cout << "Bonded potential energy: " << std::get<0>(result) << std::endl;
+    std::cout << "Non-bonded potential energy: " << std::get<1>(result)<< std::endl;
+    std::cout << "External potential energy: " << std::get<2>(result)<< std::endl;
     std::cout << std::endl;
 }
 
@@ -66,8 +68,9 @@ void test3 (const spec_catalog_ptr_t &catalog, const ff_ptr_t &forceField) {
 
     auto interactor = factory::interactor(simulationParameters, forceField, bc);
     auto result = interactor->interact(polarizableWater);
-    std::cout << "Non-bonded potential energy: " << result.first << std::endl;
-    std::cout << "Bonded potential energy: " << result.second << std::endl;
+    std::cout << "Bonded potential energy: " << std::get<0>(result) << std::endl;
+    std::cout << "Non-bonded potential energy: " << std::get<1>(result)<< std::endl;
+    std::cout << "External potential energy: " << std::get<2>(result)<< std::endl;
 
     std::cout << std::endl;
 }

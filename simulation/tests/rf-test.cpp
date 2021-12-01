@@ -39,7 +39,7 @@ int main() {
 
     // Calculate potential.
     real_t dz = 0.1;
-    distance_t rc = properties::cutoffDistance(box);
+    dist_t rc = properties::cutoffDistance(box);
     int n = util::nint(rc()/dz);
     for (int i = 1; i <= n; ++i) {
         real_t z = i * dz;

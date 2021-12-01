@@ -7,7 +7,7 @@
 #ifndef SIMULATION_FORCES_HPP
 #define SIMULATION_FORCES_HPP
 
-#include "s-types.hpp"
+#include "../simulation/s-types.hpp"
 
 namespace simploce {
 
@@ -33,6 +33,13 @@ namespace simploce {
          */
         energy_t nonBonded(const p_system_ptr_t& particleSystem,
                            const PairLists &pairLists);
+
+        /**
+         * Calculates forces on particles to due external potentials.
+         * @param particleSystem Particle system.
+         * @return Potential energy.
+         */
+        energy_t external(const p_system_ptr_t& particleSystem);
 
         /**
          * Calculates forces on particles due to bonded interactions.

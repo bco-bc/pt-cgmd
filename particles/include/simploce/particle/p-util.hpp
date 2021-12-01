@@ -9,6 +9,7 @@
 #define PARTICLES_P_UTIL_HPP
 
 #include "p-types.hpp"
+#include "simploce/util/util.hpp"
 
 namespace simploce {
     namespace util {
@@ -20,6 +21,28 @@ namespace simploce {
          */
         void assignVelocity(p_ptr_t &particle, const temperature_t& temperature);
 
+        /**
+         * Finds particle in a given particle collection.
+         * @param id Particle identifier.
+         * @param particles Particles.
+         * @return Particle or nullptr if the particle cannot be identified.
+         */
+        template <typename P, template<typename, typename ...> class CONT = std::vector>
+        std::shared_ptr<P> find(simploce::id_t id, const CONT<std::shared_ptr<P>>& particles)
+        {
+            for (auto p : particles) {
+                if ( p->id() == id ) {
+                    return p;
+                }
+            }
+            return nullptr;
+        }
+
+        /**
+         * Ensure that the total linear moment of the given particle system adds up to zero.
+         * @param particleSystem Particle system.
+         */
+        void removeOverallLinearMomentum(const p_system_ptr_t& particleSystem);
     }
 }
 

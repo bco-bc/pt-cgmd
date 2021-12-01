@@ -89,6 +89,8 @@ iostream
 /localdisk/include/simploce/particle/p-properties.hpp
 p-types.hpp
 /localdisk/include/simploce/particle/p-types.hpp
+particle.hpp
+/localdisk/include/simploce/particle/particle.hpp
 atom.hpp
 /localdisk/include/simploce/particle/atom.hpp
 bead.hpp
@@ -105,6 +107,12 @@ memory
 -
 utility
 -
+
+/localdisk/include/simploce/particle/p-util.hpp
+p-types.hpp
+/localdisk/include/simploce/particle/p-types.hpp
+simploce/util/util.hpp
+/localdisk/include/simploce/particle/simploce/util/util.hpp
 
 /localdisk/include/simploce/particle/particle-group.hpp
 p-types.hpp
@@ -177,12 +185,12 @@ particle-group.hpp
 /localdisk/include/simploce/particle/particle-group.hpp
 p-factory.hpp
 /localdisk/include/simploce/particle/p-factory.hpp
+p-util.hpp
+/localdisk/include/simploce/particle/p-util.hpp
 simploce/util/logger.hpp
 /localdisk/include/simploce/particle/simploce/util/logger.hpp
 simploce/util/box.hpp
 /localdisk/include/simploce/particle/simploce/util/box.hpp
-simploce/util/util.hpp
-/localdisk/include/simploce/particle/simploce/util/util.hpp
 simploce/particle/p-properties.hpp
 /localdisk/include/simploce/particle/simploce/particle/p-properties.hpp
 boost/algorithm/string.hpp

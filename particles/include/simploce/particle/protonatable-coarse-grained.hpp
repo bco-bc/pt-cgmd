@@ -13,9 +13,9 @@
 #include "particle-spec-catalog.hpp"
 #include "particle-group.hpp"
 #include "p-factory.hpp"
+#include "p-util.hpp"
 #include "simploce/util/logger.hpp"
 #include "simploce/util/box.hpp"
-#include "simploce/util/util.hpp"
 #include "simploce/particle/p-properties.hpp"
 #include <boost/algorithm/string.hpp>
 #include <vector>
@@ -242,7 +242,7 @@ namespace simploce {
     template<typename S>
     typename ProtonatableCoarseGrained<S>::prot_bead_ptr_t
     ProtonatableCoarseGrained<S>::findProtonatable(const id_t& id) {
-        return properties::find(id, protonatableBeads_);
+        return util::find(id, protonatableBeads_);
     }
 
     template<typename S>

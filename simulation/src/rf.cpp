@@ -8,8 +8,10 @@
 #include "simploce/simulation/rf.hpp"
 #include "simploce/simulation/s-properties.hpp"
 #include "simploce/units/units-mu.hpp"
-#include "simploce/simulation/force-field.hpp"
+#include "simploce/potentials/force-field.hpp"
 #include "simploce/simulation/bc.hpp"
+#include "simploce/util/logger.hpp"
+#include "simploce/util/util.hpp"
 #include <utility>
 
 namespace simploce {
@@ -49,7 +51,7 @@ namespace simploce {
                        charge_t q2,
                        real_t eps_inside_rc,
                        real_t eps_outside_rc) {
-        static const distance_t rc = properties::cutoffDistance(box_);
+        static const dist_t rc = properties::cutoffDistance(box_);
         static const real_t rf = rc();
         static const real_t rf3 = rf * rf * rf;
 
@@ -72,7 +74,7 @@ namespace simploce {
     }
 
     real_t
-    RF::compute_C_rf_(const distance_t& rc, real_t eps_inside_rc, real_t eps_outside_rc) {
+    RF::compute_C_rf_(const dist_t& rc, real_t eps_inside_rc, real_t eps_outside_rc) {
         util::Logger logger("simploce::RF::operator ()");
         real_t kappa_rc = kappa_ * rc();
         real_t kappa_rc_2 = kappa_rc * kappa_rc;

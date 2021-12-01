@@ -10,10 +10,10 @@
 namespace simploce {
 
     dist_vect_t 
-    NoBoundaryCondition::apply(const position_t& r1, 
-                               const position_t& r2) const 
+    NoBoundaryCondition::apply(const position_t& ri,
+                               const position_t& rj) const
     {
-        return std::move(dist_vect_t{r1 - r2});
+        return std::move(dist_vect_t{ri - rj});
     }
     
     position_t 

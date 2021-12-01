@@ -1,1 +1,1 @@
-/usr/bin/c++ -g CMakeFiles/param-test.dir/param-test.cpp.o -o param-test  -Wl,-rpath,/wrk3/simploce/pt-cgmd/util/cmake-build-debug ../libutil.so 
+/usr/bin/c++ -g CMakeFiles/param-test.dir/param-test.cpp.o -o param-test  -Wl,-rpath,/home/andre/wrk3/simploce/pt-cgmd/util/cmake-build-debug ../libutil.so 

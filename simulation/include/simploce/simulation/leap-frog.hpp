@@ -14,16 +14,14 @@ namespace simploce {
     /**
      * Standard leap frog algorithm for MD simulations.
      */
-    class LeapFrog : public Displacer {
+    class LeapFrog : public displacer {
     public:    
         
         LeapFrog(sim_param_ptr_t simulationParameters,
                  interactor_ptr_t interactor);
                 
         /**
-         * Displaces atoms of an atomistic model.
-         * @param particleSystem Particle system.
-         * @return Kinetic energy, temperature.
+         * @return Time, potential energy (bonded, non-bonded), kinetic energy, temperature.
          */
         SimulationData displace(const p_system_ptr_t& particleSystem) const override;
         

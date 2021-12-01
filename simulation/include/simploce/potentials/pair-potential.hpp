@@ -7,7 +7,7 @@
 #ifndef SIMULATION_PAIR_POTENTIAL_HPP
 #define SIMULATION_PAIR_POTENTIAL_HPP
 
-#include "s-types.hpp"
+#include "simploce/simulation/s-types.hpp"
 
 namespace simploce {
 
@@ -21,11 +21,11 @@ namespace simploce {
 
         /**
          * Returns potential energy and the force due to an interaction between two particles.
-         * @param p1 Particle #1.
-         * @param p2 Particle #2.
-         * @return Potential energy and force on particle 1. Not assigned.
+         * @param pi Particle.
+         * @param pj Particle.
+         * @return Potential energy and force on particle i. -Not- assigned.
          */
-        virtual std::pair<energy_t, force_t> operator () (const p_ptr_t &p1, const p_ptr_t &p2) = 0;
+        virtual std::pair<energy_t, force_t> operator () (const p_ptr_t &pi, const p_ptr_t &pj) = 0;
     };
 }
 

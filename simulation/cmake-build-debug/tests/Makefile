@@ -162,6 +162,20 @@ depend:
 .PHONY : depend
 
 # Convenience name for target.
+tests/CMakeFiles/elec-pot-difference-test.dir/rule:
+	cd /home/andre/wrk3/simploce/pt-cgmd/simulation/cmake-build-debug && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 tests/CMakeFiles/elec-pot-difference-test.dir/rule
+.PHONY : tests/CMakeFiles/elec-pot-difference-test.dir/rule
+
+# Convenience name for target.
+elec-pot-difference-test: tests/CMakeFiles/elec-pot-difference-test.dir/rule
+.PHONY : elec-pot-difference-test
+
+# fast build rule for target.
+elec-pot-difference-test/fast:
+	cd /home/andre/wrk3/simploce/pt-cgmd/simulation/cmake-build-debug && $(MAKE) $(MAKESILENT) -f tests/CMakeFiles/elec-pot-difference-test.dir/build.make tests/CMakeFiles/elec-pot-difference-test.dir/build
+.PHONY : elec-pot-difference-test/fast
+
+# Convenience name for target.
 tests/CMakeFiles/forcefield-test.dir/rule:
 	cd /home/andre/wrk3/simploce/pt-cgmd/simulation/cmake-build-debug && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 tests/CMakeFiles/forcefield-test.dir/rule
 .PHONY : tests/CMakeFiles/forcefield-test.dir/rule
@@ -324,6 +338,30 @@ displacer-test.s: displacer-test.cpp.s
 displacer-test.cpp.s:
 	cd /home/andre/wrk3/simploce/pt-cgmd/simulation/cmake-build-debug && $(MAKE) $(MAKESILENT) -f tests/CMakeFiles/displacer-test.dir/build.make tests/CMakeFiles/displacer-test.dir/displacer-test.cpp.s
 .PHONY : displacer-test.cpp.s
+
+elec-pot-difference-test.o: elec-pot-difference-test.cpp.o
+.PHONY : elec-pot-difference-test.o
+
+# target to build an object file
+elec-pot-difference-test.cpp.o:
+	cd /home/andre/wrk3/simploce/pt-cgmd/simulation/cmake-build-debug && $(MAKE) $(MAKESILENT) -f tests/CMakeFiles/elec-pot-difference-test.dir/build.make tests/CMakeFiles/elec-pot-difference-test.dir/elec-pot-difference-test.cpp.o
+.PHONY : elec-pot-difference-test.cpp.o
+
+elec-pot-difference-test.i: elec-pot-difference-test.cpp.i
+.PHONY : elec-pot-difference-test.i
+
+# target to preprocess a source file
+elec-pot-difference-test.cpp.i:
+	cd /home/andre/wrk3/simploce/pt-cgmd/simulation/cmake-build-debug && $(MAKE) $(MAKESILENT) -f tests/CMakeFiles/elec-pot-difference-test.dir/build.make tests/CMakeFiles/elec-pot-difference-test.dir/elec-pot-difference-test.cpp.i
+.PHONY : elec-pot-difference-test.cpp.i
+
+elec-pot-difference-test.s: elec-pot-difference-test.cpp.s
+.PHONY : elec-pot-difference-test.s
+
+# target to generate assembly for a file
+elec-pot-difference-test.cpp.s:
+	cd /home/andre/wrk3/simploce/pt-cgmd/simulation/cmake-build-debug && $(MAKE) $(MAKESILENT) -f tests/CMakeFiles/elec-pot-difference-test.dir/build.make tests/CMakeFiles/elec-pot-difference-test.dir/elec-pot-difference-test.cpp.s
+.PHONY : elec-pot-difference-test.cpp.s
 
 forcefield-test.o: forcefield-test.cpp.o
 .PHONY : forcefield-test.o
@@ -554,6 +592,7 @@ help:
 	@echo "... list_install_components"
 	@echo "... rebuild_cache"
 	@echo "... displacer-test"
+	@echo "... elec-pot-difference-test"
 	@echo "... forcefield-test"
 	@echo "... interactor-test"
 	@echo "... lj-test"
@@ -566,6 +605,9 @@ help:
 	@echo "... displacer-test.o"
 	@echo "... displacer-test.i"
 	@echo "... displacer-test.s"
+	@echo "... elec-pot-difference-test.o"
+	@echo "... elec-pot-difference-test.i"
+	@echo "... elec-pot-difference-test.s"
 	@echo "... forcefield-test.o"
 	@echo "... forcefield-test.i"
 	@echo "... forcefield-test.s"

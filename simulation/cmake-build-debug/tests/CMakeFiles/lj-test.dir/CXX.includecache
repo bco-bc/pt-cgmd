@@ -6,31 +6,31 @@
 
 #IncludeRegexTransform: 
 
+../include/simploce/potentials/lj.hpp
+simploce/potentials/pair-potential.hpp
+../include/simploce/potentials/simploce/potentials/pair-potential.hpp
+simploce/simulation/s-types.hpp
+../include/simploce/potentials/simploce/simulation/s-types.hpp
+utility
+-
+
+../include/simploce/potentials/pair-potential.hpp
+simploce/simulation/s-types.hpp
+../include/simploce/potentials/simploce/simulation/s-types.hpp
+
+../include/simploce/potentials/sp-conf.hpp
+
 ../include/simploce/simulation/continuous.hpp
 simploce/particle/protonatable.hpp
 ../include/simploce/simulation/simploce/particle/protonatable.hpp
 iostream
 -
 
-../include/simploce/simulation/lj.hpp
-pair-potential.hpp
-../include/simploce/simulation/pair-potential.hpp
-s-types.hpp
-../include/simploce/simulation/s-types.hpp
-utility
--
-
-../include/simploce/simulation/pair-lists.hpp
-simploce/particle/particle-group.hpp
-../include/simploce/simulation/simploce/particle/particle-group.hpp
-
-../include/simploce/simulation/pair-potential.hpp
-s-types.hpp
-../include/simploce/simulation/s-types.hpp
-
 ../include/simploce/simulation/s-conf.hpp
 simploce/particle/p-conf.hpp
 ../include/simploce/simulation/simploce/particle/p-conf.hpp
+../potentials/sp-conf.hpp
+../include/simploce/potentials/sp-conf.hpp
 
 ../include/simploce/simulation/s-factory.hpp
 s-types.hpp
@@ -41,23 +41,9 @@ simploce/particle/p-factory.hpp
 ../include/simploce/simulation/s-properties.hpp
 s-types.hpp
 ../include/simploce/simulation/s-types.hpp
-simploce/units/units-mu.hpp
-../include/simploce/simulation/simploce/units/units-mu.hpp
-pair-lists.hpp
-../include/simploce/simulation/pair-lists.hpp
-s-conf.hpp
-../include/simploce/simulation/s-conf.hpp
 simploce/particle/p-properties.hpp
 ../include/simploce/simulation/simploce/particle/p-properties.hpp
-simploce/util/logger.hpp
-../include/simploce/simulation/simploce/util/logger.hpp
-simploce/util/util.hpp
-../include/simploce/simulation/simploce/util/util.hpp
 vector
--
-set
--
-thread
 -
 
 ../include/simploce/simulation/s-types.hpp
@@ -71,8 +57,8 @@ tuple
 -
 
 /home/andre/wrk3/simploce/pt-cgmd/simulation/tests/lj-test.cpp
-simploce/simulation/lj.hpp
-/home/andre/wrk3/simploce/pt-cgmd/simulation/tests/simploce/simulation/lj.hpp
+simploce/potentials/lj.hpp
+/home/andre/wrk3/simploce/pt-cgmd/simulation/tests/simploce/potentials/lj.hpp
 simploce/simulation/s-factory.hpp
 /home/andre/wrk3/simploce/pt-cgmd/simulation/tests/simploce/simulation/s-factory.hpp
 simploce/simulation/s-conf.hpp
@@ -125,6 +111,8 @@ iostream
 /localdisk/include/simploce/particle/p-properties.hpp
 p-types.hpp
 /localdisk/include/simploce/particle/p-types.hpp
+particle.hpp
+/localdisk/include/simploce/particle/particle.hpp
 atom.hpp
 /localdisk/include/simploce/particle/atom.hpp
 bead.hpp
@@ -140,16 +128,6 @@ simploce/util/cube.hpp
 memory
 -
 utility
--
-
-/localdisk/include/simploce/particle/particle-group.hpp
-p-types.hpp
-/localdisk/include/simploce/particle/p-types.hpp
-set
--
-vector
--
-iostream
 -
 
 /localdisk/include/simploce/particle/particle-spec-catalog.hpp
@@ -224,14 +202,6 @@ algorithm
 cmath
 -
 
-/localdisk/include/simploce/units/units-mu.hpp
-units-si.hpp
-/localdisk/include/simploce/units/units-si.hpp
-
-/localdisk/include/simploce/units/units-si.hpp
-simploce/util/math-constants.hpp
-/localdisk/include/simploce/units/simploce/util/math-constants.hpp
-
 /localdisk/include/simploce/util/box.hpp
 simploce/conf/u-conf.hpp
 /localdisk/include/simploce/util/simploce/conf/u-conf.hpp
@@ -256,12 +226,6 @@ box.hpp
 string
 -
 sstream
--
-
-/localdisk/include/simploce/util/math-constants.hpp
-cmath
--
-limits
 -
 
 /localdisk/include/simploce/util/param.hpp

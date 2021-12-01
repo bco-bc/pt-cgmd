@@ -74,7 +74,7 @@ namespace simploce {
      * Length or distance.
      */
     using length_t = value_t<real_t, -10>;
-    using distance_t = length_t;
+    using dist_t = length_t;
 
     /**
      * Volume.
@@ -111,6 +111,17 @@ namespace simploce {
      * 1 kg or 1000 g of solvent.
      */
     using molality_t = value_t<real_t, -17>;
+
+    /**
+     * Electric potential.
+     */
+    using el_pot = value_t<real_t, -18>;
+
+    /**
+     * Electric potential difference.
+     */
+    using el_pot_diff = el_pot;
+    using voltage = el_pot_diff;
 
     /**
      * Position.

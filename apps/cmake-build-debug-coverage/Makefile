@@ -57,13 +57,33 @@ RM = /home/andre/clion-2021.2.3/bin/cmake/linux/bin/cmake -E rm -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /home/andre/wrk3/simploce/pt-cgmd/apps
+CMAKE_SOURCE_DIR = /wrk3/simploce/pt-cgmd/apps
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /home/andre/wrk3/simploce/pt-cgmd/apps/cmake-build-debug-coverage
+CMAKE_BINARY_DIR = /wrk3/simploce/pt-cgmd/apps/cmake-build-debug-coverage
 
 #=============================================================================
 # Targets provided globally by CMake.
+
+# Special rule for the target edit_cache
+edit_cache:
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "No interactive CMake dialog available..."
+	/home/andre/clion-2021.2.3/bin/cmake/linux/bin/cmake -E echo No\ interactive\ CMake\ dialog\ available.
+.PHONY : edit_cache
+
+# Special rule for the target edit_cache
+edit_cache/fast: edit_cache
+.PHONY : edit_cache/fast
+
+# Special rule for the target rebuild_cache
+rebuild_cache:
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Running CMake to regenerate build system..."
+	/home/andre/clion-2021.2.3/bin/cmake/linux/bin/cmake --regenerate-during-build -S$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR)
+.PHONY : rebuild_cache
+
+# Special rule for the target rebuild_cache
+rebuild_cache/fast: rebuild_cache
+.PHONY : rebuild_cache/fast
 
 # Special rule for the target install/strip
 install/strip: preinstall
@@ -77,17 +97,14 @@ install/strip/fast: preinstall/fast
 	/home/andre/clion-2021.2.3/bin/cmake/linux/bin/cmake -DCMAKE_INSTALL_DO_STRIP=1 -P cmake_install.cmake
 .PHONY : install/strip/fast
 
-# Special rule for the target install/local
-install/local: preinstall
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Installing only the local directory..."
-	/home/andre/clion-2021.2.3/bin/cmake/linux/bin/cmake -DCMAKE_INSTALL_LOCAL_ONLY=1 -P cmake_install.cmake
-.PHONY : install/local
+# Special rule for the target list_install_components
+list_install_components:
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Available install components are: \"Unspecified\""
+.PHONY : list_install_components
 
-# Special rule for the target install/local
-install/local/fast: preinstall/fast
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Installing only the local directory..."
-	/home/andre/clion-2021.2.3/bin/cmake/linux/bin/cmake -DCMAKE_INSTALL_LOCAL_ONLY=1 -P cmake_install.cmake
-.PHONY : install/local/fast
+# Special rule for the target list_install_components
+list_install_components/fast: list_install_components
+.PHONY : list_install_components/fast
 
 # Special rule for the target install
 install: preinstall
@@ -101,40 +118,23 @@ install/fast: preinstall/fast
 	/home/andre/clion-2021.2.3/bin/cmake/linux/bin/cmake -P cmake_install.cmake
 .PHONY : install/fast
 
-# Special rule for the target list_install_components
-list_install_components:
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Available install components are: \"Unspecified\""
-.PHONY : list_install_components
+# Special rule for the target install/local
+install/local: preinstall
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Installing only the local directory..."
+	/home/andre/clion-2021.2.3/bin/cmake/linux/bin/cmake -DCMAKE_INSTALL_LOCAL_ONLY=1 -P cmake_install.cmake
+.PHONY : install/local
 
-# Special rule for the target list_install_components
-list_install_components/fast: list_install_components
-.PHONY : list_install_components/fast
-
-# Special rule for the target rebuild_cache
-rebuild_cache:
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Running CMake to regenerate build system..."
-	/home/andre/clion-2021.2.3/bin/cmake/linux/bin/cmake --regenerate-during-build -S$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR)
-.PHONY : rebuild_cache
-
-# Special rule for the target rebuild_cache
-rebuild_cache/fast: rebuild_cache
-.PHONY : rebuild_cache/fast
-
-# Special rule for the target edit_cache
-edit_cache:
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "No interactive CMake dialog available..."
-	/home/andre/clion-2021.2.3/bin/cmake/linux/bin/cmake -E echo No\ interactive\ CMake\ dialog\ available.
-.PHONY : edit_cache
-
-# Special rule for the target edit_cache
-edit_cache/fast: edit_cache
-.PHONY : edit_cache/fast
+# Special rule for the target install/local
+install/local/fast: preinstall/fast
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Installing only the local directory..."
+	/home/andre/clion-2021.2.3/bin/cmake/linux/bin/cmake -DCMAKE_INSTALL_LOCAL_ONLY=1 -P cmake_install.cmake
+.PHONY : install/local/fast
 
 # The main all target
 all: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/andre/wrk3/simploce/pt-cgmd/apps/cmake-build-debug-coverage/CMakeFiles /home/andre/wrk3/simploce/pt-cgmd/apps/cmake-build-debug-coverage//CMakeFiles/progress.marks
+	$(CMAKE_COMMAND) -E cmake_progress_start /wrk3/simploce/pt-cgmd/apps/cmake-build-debug-coverage/CMakeFiles /wrk3/simploce/pt-cgmd/apps/cmake-build-debug-coverage//CMakeFiles/progress.marks
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 all
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/andre/wrk3/simploce/pt-cgmd/apps/cmake-build-debug-coverage/CMakeFiles 0
+	$(CMAKE_COMMAND) -E cmake_progress_start /wrk3/simploce/pt-cgmd/apps/cmake-build-debug-coverage/CMakeFiles 0
 .PHONY : all
 
 # The main clean target
@@ -162,17 +162,17 @@ depend:
 .PHONY : depend
 
 #=============================================================================
-# Target rules for targets named s-particle-system
+# Target rules for targets named s-gr
 
 # Build rule for target.
-s-particle-system: cmake_check_build_system
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 s-particle-system
-.PHONY : s-particle-system
+s-gr: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 s-gr
+.PHONY : s-gr
 
 # fast build rule for target.
-s-particle-system/fast:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/s-particle-system.dir/build.make CMakeFiles/s-particle-system.dir/build
-.PHONY : s-particle-system/fast
+s-gr/fast:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/s-gr.dir/build.make CMakeFiles/s-gr.dir/build
+.PHONY : s-gr/fast
 
 #=============================================================================
 # Target rules for targets named s-validate
@@ -188,6 +188,32 @@ s-validate/fast:
 .PHONY : s-validate/fast
 
 #=============================================================================
+# Target rules for targets named s-particle-system
+
+# Build rule for target.
+s-particle-system: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 s-particle-system
+.PHONY : s-particle-system
+
+# fast build rule for target.
+s-particle-system/fast:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/s-particle-system.dir/build.make CMakeFiles/s-particle-system.dir/build
+.PHONY : s-particle-system/fast
+
+#=============================================================================
+# Target rules for targets named s-distance
+
+# Build rule for target.
+s-distance: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 s-distance
+.PHONY : s-distance
+
+# fast build rule for target.
+s-distance/fast:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/s-distance.dir/build.make CMakeFiles/s-distance.dir/build
+.PHONY : s-distance/fast
+
+#=============================================================================
 # Target rules for targets named s-simulate
 
 # Build rule for target.
@@ -200,18 +226,29 @@ s-simulate/fast:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/s-simulate.dir/build.make CMakeFiles/s-simulate.dir/build
 .PHONY : s-simulate/fast
 
-#=============================================================================
-# Target rules for targets named s-gr
+src/s-distance.o: src/s-distance.cpp.o
+.PHONY : src/s-distance.o
 
-# Build rule for target.
-s-gr: cmake_check_build_system
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 s-gr
-.PHONY : s-gr
+# target to build an object file
+src/s-distance.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/s-distance.dir/build.make CMakeFiles/s-distance.dir/src/s-distance.cpp.o
+.PHONY : src/s-distance.cpp.o
 
-# fast build rule for target.
-s-gr/fast:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/s-gr.dir/build.make CMakeFiles/s-gr.dir/build
-.PHONY : s-gr/fast
+src/s-distance.i: src/s-distance.cpp.i
+.PHONY : src/s-distance.i
+
+# target to preprocess a source file
+src/s-distance.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/s-distance.dir/build.make CMakeFiles/s-distance.dir/src/s-distance.cpp.i
+.PHONY : src/s-distance.cpp.i
+
+src/s-distance.s: src/s-distance.cpp.s
+.PHONY : src/s-distance.s
+
+# target to generate assembly for a file
+src/s-distance.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/s-distance.dir/build.make CMakeFiles/s-distance.dir/src/s-distance.cpp.s
+.PHONY : src/s-distance.cpp.s
 
 src/s-gr.o: src/s-gr.cpp.o
 .PHONY : src/s-gr.o
@@ -321,10 +358,14 @@ help:
 	@echo "... install/strip"
 	@echo "... list_install_components"
 	@echo "... rebuild_cache"
+	@echo "... s-distance"
 	@echo "... s-gr"
 	@echo "... s-particle-system"
 	@echo "... s-simulate"
 	@echo "... s-validate"
+	@echo "... src/s-distance.o"
+	@echo "... src/s-distance.i"
+	@echo "... src/s-distance.s"
 	@echo "... src/s-gr.o"
 	@echo "... src/s-gr.i"
 	@echo "... src/s-gr.s"

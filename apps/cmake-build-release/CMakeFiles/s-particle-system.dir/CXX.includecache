@@ -6,26 +6,6 @@
 
 #IncludeRegexTransform: 
 
-/home/andre/wrk3/simploce/pt-cgmd/apps/src/s-particle-system.cpp
-simploce/simulation/s-factory.hpp
-/home/andre/wrk3/simploce/pt-cgmd/apps/src/simploce/simulation/s-factory.hpp
-simploce/simulation/protonatable-particle-system-factory.hpp
-/home/andre/wrk3/simploce/pt-cgmd/apps/src/simploce/simulation/protonatable-particle-system-factory.hpp
-simploce/particle/particle-spec-catalog.hpp
-/home/andre/wrk3/simploce/pt-cgmd/apps/src/simploce/particle/particle-spec-catalog.hpp
-simploce/particle/particle-system.hpp
-/home/andre/wrk3/simploce/pt-cgmd/apps/src/simploce/particle/particle-system.hpp
-simploce/util/logger.hpp
-/home/andre/wrk3/simploce/pt-cgmd/apps/src/simploce/util/logger.hpp
-simploce/util/file.hpp
-/home/andre/wrk3/simploce/pt-cgmd/apps/src/simploce/util/file.hpp
-simploce/util/specification.hpp
-/home/andre/wrk3/simploce/pt-cgmd/apps/src/simploce/util/specification.hpp
-boost/program_options.hpp
--
-iostream
--
-
 /localdisk/include/simploce/conf/u-conf.hpp
 
 /localdisk/include/simploce/particle/p-factory.hpp
@@ -182,5 +162,25 @@ iostream
 iostream
 -
 string
+-
+
+/wrk3/simploce/pt-cgmd/apps/src/s-particle-system.cpp
+simploce/simulation/s-factory.hpp
+/wrk3/simploce/pt-cgmd/apps/src/simploce/simulation/s-factory.hpp
+simploce/simulation/protonatable-particle-system-factory.hpp
+/wrk3/simploce/pt-cgmd/apps/src/simploce/simulation/protonatable-particle-system-factory.hpp
+simploce/particle/particle-spec-catalog.hpp
+/wrk3/simploce/pt-cgmd/apps/src/simploce/particle/particle-spec-catalog.hpp
+simploce/particle/particle-system.hpp
+/wrk3/simploce/pt-cgmd/apps/src/simploce/particle/particle-system.hpp
+simploce/util/logger.hpp
+/wrk3/simploce/pt-cgmd/apps/src/simploce/util/logger.hpp
+simploce/util/file.hpp
+/wrk3/simploce/pt-cgmd/apps/src/simploce/util/file.hpp
+simploce/util/specification.hpp
+/wrk3/simploce/pt-cgmd/apps/src/simploce/util/specification.hpp
+boost/program_options.hpp
+-
+iostream
 -
 

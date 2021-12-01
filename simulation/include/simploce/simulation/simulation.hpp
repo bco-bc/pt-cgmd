@@ -23,7 +23,7 @@ namespace simploce {
          * Constructor. All arguments are required.
          * @param simulationParams Simulation parameters.
          * @param particleSystem Particular system.
-         * @param displacer Displacer.
+         * @param displacer displacer.
          */
         Simulation(sim_param_ptr_t simulationParams,
                    p_system_ptr_t particleSystem,

@@ -23,18 +23,18 @@ namespace simploce {
      * Calculates group mean square deviation (msd).
      */
     template <typename P>
-    class Diffusion : public Analyzer<P> {
+    class Diffusion : public analyzer<P> {
     public:
     
         /**
          * Particle pointer typeName.
          */
-        using p_ptr_t = typename Analyzer<P>::p_ptr_t;
+        using p_ptr_t = typename analyzer<P>::p_ptr_t;
         
         /**
          * Particle group pointer typeName.
          */
-        using pg_ptr_t = typename Analyzer<P>::pg_ptr_t;
+        using pg_ptr_t = typename analyzer<P>::pg_ptr_t;
         
         /**
          * Constructor

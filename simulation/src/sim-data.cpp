@@ -12,8 +12,9 @@
 namespace simploce {
     
     SimulationData::SimulationData() :
-        t{0.0}, kinetic{0.0}, bonded{0.0}, nonBonded{0.0}, temperature{0.0},
-        pressure{0.0}, numberOfProtonTransferPairs{0}, accepted{false}, acceptanceRatio{0.0} {
+        t{0.0}, kinetic{0.0}, bonded{0.0}, nonBonded{0.0}, external{0.0},
+        totalMomentum{0.0}, temperature{0.0}, pressure{0.0},
+        numberOfProtonTransferPairs{0}, accepted{false}, acceptanceRatio{0.0} {
     }
         
     std::ostream& operator << (std::ostream& stream, const SimulationData& data) {
@@ -22,12 +23,14 @@ namespace simploce {
         
         stream.setf(std::ios::scientific);
         stream.precision(precision);
-        energy_t total = data.kinetic + data.bonded + data.nonBonded;
+        energy_t total = data.kinetic + data.bonded + data.nonBonded + data.external;
         stream << std::setw(conf::REAL_WIDTH) << data.t
                << space << std::setw(conf::REAL_WIDTH) << data.kinetic
                << space << std::setw(conf::REAL_WIDTH) << data.bonded
                << space << std::setw(conf::REAL_WIDTH) << data.nonBonded
+               << space << std::setw(conf::REAL_WIDTH) << data.external
                << space << std::setw(conf::REAL_WIDTH) << total
+               << space << std::setw(conf::REAL_WIDTH) << data.totalMomentum
                << space << std::setw(conf::REAL_WIDTH) << data.temperature
                << space << std::setw(conf::REAL_WIDTH) << data.pressure
                << space << std::setw(conf::REAL_WIDTH) << data.numberOfProtonTransferPairs

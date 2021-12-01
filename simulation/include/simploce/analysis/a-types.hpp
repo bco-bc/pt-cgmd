@@ -12,24 +12,30 @@
 
 namespace simploce {
 
-    class Analyzer;
+    class analyzer;
     class Gr;
     class DipoleMoment;
+    class Distance;
 
     /**
-     * Analyzer pointer typeName.
+     * Analyzer pointer type.
      */
-    using a_ptr_t = std::shared_ptr<Analyzer>;
+    using a_ptr_t = std::shared_ptr<analyzer>;
 
     /**
-     * Dipole moment analyzer pointer typeName.
+     * Dipole moment analyzer pointer type.
      */
     using dm_ptr_t = std::shared_ptr<DipoleMoment>;
 
     /**
-     * Gr pointer typeName.
+     * g(r) analyzer pointer type.
      */
     using gr_ptr_t = std::shared_ptr<Gr>;
+
+    /**
+     * Distance analyzer pointer type.
+     */
+    using d_ptr_t = std::shared_ptr<Distance>;
 
     /**
      * Analysis parameters.

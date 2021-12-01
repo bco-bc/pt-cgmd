@@ -8,7 +8,7 @@
 #include "simploce/particle/bond.hpp"
 #include "simploce/particle/p-properties.hpp"
 #include "simploce/particle/p-types.hpp"
-#include "simploce/util/util.hpp"
+#include "simploce/particle/p-util.hpp"
 #include <boost/algorithm/string.hpp>
 #include <memory>
 #include <stdexcept>
@@ -100,7 +100,7 @@ namespace simploce {
 
     p_ptr_t
     ParticleGroup::find_(const id_t& id) const {
-        return properties::find(id, particles_);
+        return util::find(id, particles_);
     }
 
     void

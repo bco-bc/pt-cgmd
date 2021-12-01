@@ -19,20 +19,20 @@ namespace simploce {
     }
 
     dist_vect_t 
-    PeriodicBoundaryCondition::apply(const position_t& r1, 
-                                     const position_t& r2) const 
+    PeriodicBoundaryCondition::apply(const position_t& ri,
+                                     const position_t& rj) const
     {        
         const box_t& box = *box_;
     
-        dist_vect_t r12{};
+        dist_vect_t rij{};
         for (std::size_t k = 0; k != 3; ++k) {
             real_t boxk = box[k];
-            real_t dr = r1[k] - r2[k];
+            real_t dr = ri[k] - rj[k];
             real_t ratio = dr/boxk;
             real_t n = util::nint(ratio);
-            r12[k] = dr - n * boxk;
+            rij[k] = dr - n * boxk;
         }
-        return r12;  
+        return rij;
     }
     
     position_t 

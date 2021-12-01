@@ -35,6 +35,16 @@ namespace simploce {
          * Non bonded potential energy.
          */
         energy_t nonBonded;
+
+        /**
+         * Energy due to external potentials.
+         */
+        energy_t external;
+
+        /**
+         * Total momentum (norm of the vector).
+         */
+        real_t totalMomentum;
         
         /**
          * Temperature.

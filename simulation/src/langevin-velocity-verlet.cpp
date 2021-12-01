@@ -28,7 +28,7 @@ namespace simploce {
     static std::vector<force_t> fis_{};      // Forces at time t(n).
     static std::vector<position_t> ris_{};   // Positions at time t(n).
     
-    // Random vector W, each element is a array of size 3.
+    // Random vector W, each element is an array of size 3.
     static std::random_device rd_{};
     static std::mt19937 gen_(rd_());
     static std::normal_distribution<real_t> dis_{0.0, 1.0}; // Standard Wiener/Brownian
@@ -48,22 +48,22 @@ namespace simploce {
         static util::Logger logger("simploce::LangevinVelocityVerlet::setupHelpers_");
 
         static real_t kT = units::mu<real_t>::KB * temperature();
-        std::size_t nparticles = particles.size();
+        std::size_t nParticles = particles.size();
         
-        FC_ = std::vector<real_t>(nparticles, 0.0);
-        B_ = std::vector<real_t>(nparticles, 0.0);
-        A1_ = std::vector<real_t>(nparticles, 0.0);
-        A2_ = std::vector<real_t>(nparticles, 0.0);
-        strengths_ = std::vector<real_t>(nparticles, 0.0);
+        FC_ = std::vector<real_t>(nParticles, 0.0);
+        B_ = std::vector<real_t>(nParticles, 0.0);
+        A1_ = std::vector<real_t>(nParticles, 0.0);
+        A2_ = std::vector<real_t>(nParticles, 0.0);
+        strengths_ = std::vector<real_t>(nParticles, 0.0);
         
-        fis_ = std::vector<force_t>(nparticles, force_t{});
-        ris_ = std::vector<position_t>(nparticles, position_t{});
+        fis_ = std::vector<force_t>(nParticles, force_t{});
+        ris_ = std::vector<position_t>(nParticles, position_t{});
         
-        W_ = std::vector<std::array<real_t, 3>>(nparticles, std::array<real_t, 3>{0.0, 0.0, 0.0});
+        W_ = std::vector<std::array<real_t, 3>>(nParticles, std::array<real_t, 3>{0.0, 0.0, 0.0});
         auto value = util::seedValue<std::size_t>();
         gen_.seed(value);
     
-        for (auto p : particles) {
+        for (const auto& p : particles) {
             auto& particle = *p;
             
             auto index = particle.index();
@@ -101,7 +101,7 @@ namespace simploce {
     displacePosition_(const stime_t& dt,
                       const std::vector<p_ptr_t>& particles)
     {        
-        for (auto& p : particles) {
+        for (const auto& p : particles) {
             auto& particle = *p;
             
             auto index = particle.index();
@@ -196,22 +196,19 @@ namespace simploce {
     SimulationData 
     LangevinVelocityVerlet::displace(const p_system_ptr_t& particleSystem) const
     {
-        static bool setup = false;
-
-        static stime_t dt = simulationParameters_->get<real_t>("timestep");
-        static temperature_t temperature = simulationParameters_->get<real_t>("temperature", 298.15);
-        static real_t gamma = simulationParameters_->get<real_t>("gamma", 0.5);
+        static stime_t dt = simulationParameters_->get<real_t>("simulation.timestep");
+        static temperature_t temperature = simulationParameters_->get<real_t>("simulation.temperature", 298.15);
+        static real_t gamma = simulationParameters_->get<real_t>("simulation.gamma", 0.5);
         static std::size_t counter = 0;
 
-        if ( !setup ) {            
+        counter += 1;
+
+        if ( counter == 1 ) {
             particleSystem->doWithAll<void>([] (const std::vector<p_ptr_t>& atoms) {
                 setupHelpers_(dt, temperature, gamma, atoms);
             });
             interactor_->interact(particleSystem);  // Initial forces.
-            setup = true;
         }
-        
-        counter += 1;
                 
         // Displace atom positions.
         particleSystem->doWithAll<void>([] (const std::vector<p_ptr_t>& all) {
@@ -222,14 +219,18 @@ namespace simploce {
         auto result = interactor_->interact(particleSystem);
         
         // Displace atom velocities.
-        SimulationData data = particleSystem->doWithAll<SimulationData>([] (const std::vector<p_ptr_t>& particles) {
-            return std::move(displaceVelocity_(particles));
+        SimulationData data = particleSystem->doWithAll<SimulationData>([] (const std::vector<p_ptr_t>& all) {
+            auto data = displaceVelocity_(all);
+            data.totalMomentum = norm<real_t>(properties::linearMomentum(all));
+            return std::move(data);
         });
         
         // Save simulation data
-        data.bonded = result.first;
-        data.nonBonded = result.second;
+        data.bonded = std::get<0>(result);
+        data.nonBonded = std::get<1>(result);
+        data.external = std::get<2>(result);
         data.t = counter * dt;
+        data.accepted = true;
         
         return data;
     }    

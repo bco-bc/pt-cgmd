@@ -8,7 +8,7 @@
 #ifndef SIMULATION_SF_HPP
 #define SIMULATION_SF_HPP
 
-#include "pair-potential.hpp"
+#include "simploce/potentials/pair-potential.hpp"
 
 namespace simploce {
 
@@ -32,6 +32,7 @@ namespace simploce {
     private:
 
         friend class HS_SF;
+        friend class LJ_SF;
 
         std::pair<energy_t, force_t> forceAndEnergy(const dist_vect_t& rij,
                                                     real_t Rij,

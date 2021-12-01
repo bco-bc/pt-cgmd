@@ -76,7 +76,7 @@ int main(int argc, char *argv[]) {
         std::ofstream stream;
         util::open_output_file(stream, fnParticleModel);
         if ( specification == DIATOMIC ) {
-            auto diatomic = factory->diatomic(distance_t{0.12}, catalog->O());
+            auto diatomic = factory->diatomic(dist_t{0.12}, catalog->O());
             stream << *diatomic << std::endl;
         } else if ( specification == POLARIZABLE_WATER ) {
             auto pWater = factory->polarizableWater();

@@ -7,6 +7,7 @@
 /home/andre/wrk3/simploce/pt-cgmd/simulation/cmake-build-debug/CMakeFiles/list_install_components.dir
 /home/andre/wrk3/simploce/pt-cgmd/simulation/cmake-build-debug/tests/CMakeFiles/install.dir
 /home/andre/wrk3/simploce/pt-cgmd/simulation/cmake-build-debug/tests/CMakeFiles/rebuild_cache.dir
+/home/andre/wrk3/simploce/pt-cgmd/simulation/cmake-build-debug/tests/CMakeFiles/elec-pot-difference-test.dir
 /home/andre/wrk3/simploce/pt-cgmd/simulation/cmake-build-debug/tests/CMakeFiles/forcefield-test.dir
 /home/andre/wrk3/simploce/pt-cgmd/simulation/cmake-build-debug/tests/CMakeFiles/pair-list-test.dir
 /home/andre/wrk3/simploce/pt-cgmd/simulation/cmake-build-debug/tests/CMakeFiles/interactor-test.dir

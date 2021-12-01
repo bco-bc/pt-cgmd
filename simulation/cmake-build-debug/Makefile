@@ -175,6 +175,19 @@ simulation/fast:
 .PHONY : simulation/fast
 
 #=============================================================================
+# Target rules for targets named elec-pot-difference-test
+
+# Build rule for target.
+elec-pot-difference-test: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 elec-pot-difference-test
+.PHONY : elec-pot-difference-test
+
+# fast build rule for target.
+elec-pot-difference-test/fast:
+	$(MAKE) $(MAKESILENT) -f tests/CMakeFiles/elec-pot-difference-test.dir/build.make tests/CMakeFiles/elec-pot-difference-test.dir/build
+.PHONY : elec-pot-difference-test/fast
+
+#=============================================================================
 # Target rules for targets named forcefield-test
 
 # Build rule for target.
@@ -341,6 +354,30 @@ src/analysis.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/simulation.dir/build.make CMakeFiles/simulation.dir/src/analysis.cpp.s
 .PHONY : src/analysis.cpp.s
 
+src/const-surface-charge-density.o: src/const-surface-charge-density.cpp.o
+.PHONY : src/const-surface-charge-density.o
+
+# target to build an object file
+src/const-surface-charge-density.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/simulation.dir/build.make CMakeFiles/simulation.dir/src/const-surface-charge-density.cpp.o
+.PHONY : src/const-surface-charge-density.cpp.o
+
+src/const-surface-charge-density.i: src/const-surface-charge-density.cpp.i
+.PHONY : src/const-surface-charge-density.i
+
+# target to preprocess a source file
+src/const-surface-charge-density.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/simulation.dir/build.make CMakeFiles/simulation.dir/src/const-surface-charge-density.cpp.i
+.PHONY : src/const-surface-charge-density.cpp.i
+
+src/const-surface-charge-density.s: src/const-surface-charge-density.cpp.s
+.PHONY : src/const-surface-charge-density.s
+
+# target to generate assembly for a file
+src/const-surface-charge-density.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/simulation.dir/build.make CMakeFiles/simulation.dir/src/const-surface-charge-density.cpp.s
+.PHONY : src/const-surface-charge-density.cpp.s
+
 src/continuous.o: src/continuous.cpp.o
 .PHONY : src/continuous.o
 
@@ -436,6 +473,54 @@ src/distance-pair-list-generator.s: src/distance-pair-list-generator.cpp.s
 src/distance-pair-list-generator.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/simulation.dir/build.make CMakeFiles/simulation.dir/src/distance-pair-list-generator.cpp.s
 .PHONY : src/distance-pair-list-generator.cpp.s
+
+src/distance.o: src/distance.cpp.o
+.PHONY : src/distance.o
+
+# target to build an object file
+src/distance.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/simulation.dir/build.make CMakeFiles/simulation.dir/src/distance.cpp.o
+.PHONY : src/distance.cpp.o
+
+src/distance.i: src/distance.cpp.i
+.PHONY : src/distance.i
+
+# target to preprocess a source file
+src/distance.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/simulation.dir/build.make CMakeFiles/simulation.dir/src/distance.cpp.i
+.PHONY : src/distance.cpp.i
+
+src/distance.s: src/distance.cpp.s
+.PHONY : src/distance.s
+
+# target to generate assembly for a file
+src/distance.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/simulation.dir/build.make CMakeFiles/simulation.dir/src/distance.cpp.s
+.PHONY : src/distance.cpp.s
+
+src/elec-pot-difference.o: src/elec-pot-difference.cpp.o
+.PHONY : src/elec-pot-difference.o
+
+# target to build an object file
+src/elec-pot-difference.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/simulation.dir/build.make CMakeFiles/simulation.dir/src/elec-pot-difference.cpp.o
+.PHONY : src/elec-pot-difference.cpp.o
+
+src/elec-pot-difference.i: src/elec-pot-difference.cpp.i
+.PHONY : src/elec-pot-difference.i
+
+# target to preprocess a source file
+src/elec-pot-difference.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/simulation.dir/build.make CMakeFiles/simulation.dir/src/elec-pot-difference.cpp.i
+.PHONY : src/elec-pot-difference.cpp.i
+
+src/elec-pot-difference.s: src/elec-pot-difference.cpp.s
+.PHONY : src/elec-pot-difference.s
+
+# target to generate assembly for a file
+src/elec-pot-difference.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/simulation.dir/build.make CMakeFiles/simulation.dir/src/elec-pot-difference.cpp.s
+.PHONY : src/elec-pot-difference.cpp.s
 
 src/force-field.o: src/force-field.cpp.o
 .PHONY : src/force-field.o
@@ -724,6 +809,30 @@ src/lj-rf.s: src/lj-rf.cpp.s
 src/lj-rf.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/simulation.dir/build.make CMakeFiles/simulation.dir/src/lj-rf.cpp.s
 .PHONY : src/lj-rf.cpp.s
+
+src/lj-sf.o: src/lj-sf.cpp.o
+.PHONY : src/lj-sf.o
+
+# target to build an object file
+src/lj-sf.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/simulation.dir/build.make CMakeFiles/simulation.dir/src/lj-sf.cpp.o
+.PHONY : src/lj-sf.cpp.o
+
+src/lj-sf.i: src/lj-sf.cpp.i
+.PHONY : src/lj-sf.i
+
+# target to preprocess a source file
+src/lj-sf.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/simulation.dir/build.make CMakeFiles/simulation.dir/src/lj-sf.cpp.i
+.PHONY : src/lj-sf.cpp.i
+
+src/lj-sf.s: src/lj-sf.cpp.s
+.PHONY : src/lj-sf.s
+
+# target to generate assembly for a file
+src/lj-sf.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/simulation.dir/build.make CMakeFiles/simulation.dir/src/lj-sf.cpp.s
+.PHONY : src/lj-sf.cpp.s
 
 src/lj.o: src/lj.cpp.o
 .PHONY : src/lj.o
@@ -1098,6 +1207,7 @@ help:
 	@echo "... list_install_components"
 	@echo "... rebuild_cache"
 	@echo "... displacer-test"
+	@echo "... elec-pot-difference-test"
 	@echo "... forcefield-test"
 	@echo "... interactor-test"
 	@echo "... lj-parameters"
@@ -1112,6 +1222,9 @@ help:
 	@echo "... src/analysis.o"
 	@echo "... src/analysis.i"
 	@echo "... src/analysis.s"
+	@echo "... src/const-surface-charge-density.o"
+	@echo "... src/const-surface-charge-density.i"
+	@echo "... src/const-surface-charge-density.s"
 	@echo "... src/continuous.o"
 	@echo "... src/continuous.i"
 	@echo "... src/continuous.s"
@@ -1124,6 +1237,12 @@ help:
 	@echo "... src/distance-pair-list-generator.o"
 	@echo "... src/distance-pair-list-generator.i"
 	@echo "... src/distance-pair-list-generator.s"
+	@echo "... src/distance.o"
+	@echo "... src/distance.i"
+	@echo "... src/distance.s"
+	@echo "... src/elec-pot-difference.o"
+	@echo "... src/elec-pot-difference.i"
+	@echo "... src/elec-pot-difference.s"
 	@echo "... src/force-field.o"
 	@echo "... src/force-field.i"
 	@echo "... src/force-field.s"
@@ -1160,6 +1279,9 @@ help:
 	@echo "... src/lj-rf.o"
 	@echo "... src/lj-rf.i"
 	@echo "... src/lj-rf.s"
+	@echo "... src/lj-sf.o"
+	@echo "... src/lj-sf.i"
+	@echo "... src/lj-sf.s"
 	@echo "... src/lj.o"
 	@echo "... src/lj.i"
 	@echo "... src/lj.s"

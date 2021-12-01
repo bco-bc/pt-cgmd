@@ -5,8 +5,8 @@
  * Copyright (c) 2021 Biocenter Oulu, University of Oulu, Finland. All rights reserved.
  */
 
-#include "simploce/simulation/hp.hpp"
-#include "simploce/simulation/force-field.hpp"
+#include "simploce/potentials/hp.hpp"
+#include "simploce/potentials/force-field.hpp"
 #include "simploce/simulation/s-properties.hpp"
 #include "simploce/simulation/bc.hpp"
 #include "simploce/particle/particle.hpp"
@@ -18,18 +18,18 @@ namespace simploce {
     }
 
     std::pair<energy_t, force_t>
-    HP::operator () (const p_ptr_t &p1, const p_ptr_t &p2) {
+    HP::operator () (const p_ptr_t &pi, const p_ptr_t &pj) {
         // Get r0 and fc parameters.
-        auto params = forceField_->harmonic(p1->spec(), p2->spec());
+        auto params = forceField_->harmonic(pi->spec(), pj->spec());
         auto r0 = params.first;
         auto fc = params.second;
 
         // Current positions.
-        const auto &r1 = p1->position();
-        const auto &r2 = p2->position();
+        const auto &ri = pi->position();
+        const auto &rj = pj->position();
 
         // Apply boundary condition.
-        dist_vect_t rij = bc_->apply(r1, r2);
+        dist_vect_t rij = bc_->apply(ri, rj);
         auto Rij = norm<real_t>(rij);
         real_t dR = Rij - r0;
 

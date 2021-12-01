@@ -5,10 +5,10 @@
  * Copyright (c) 2021 Biocenter Oulu, University of Oulu, Finland. All rights reserved.
  */
 
-#include "simploce/simulation/sf.hpp"
+#include "simploce/potentials/sf.hpp"
 
 #include <utility>
-#include "simploce/simulation/force-field.hpp"
+#include "simploce/potentials/force-field.hpp"
 #include "simploce/simulation/s-properties.hpp"
 #include "simploce/simulation/bc.hpp"
 #include "simploce/units/units-mu.hpp"

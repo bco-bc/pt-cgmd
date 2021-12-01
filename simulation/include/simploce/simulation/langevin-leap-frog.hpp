@@ -19,7 +19,7 @@ namespace simploce {
      *  Goga et al, J. Chem. Theory Comput. 2012, 8, 3637−3649.
      * </a>
      */
-    class LangevinLeapFrog: public Displacer {
+    class LangevinLeapFrog: public displacer {
     public:
 
         /**
@@ -30,7 +30,9 @@ namespace simploce {
         LangevinLeapFrog(sim_param_ptr_t simulationParameters,
                          interactor_ptr_t interactor);
         
-
+        /**
+         * @return Time, potential energy (bonded, non-bonded), kinetic energy, temperature.
+         */
         SimulationData displace(const p_system_ptr_t& particleSystem) const override;
         
     private:

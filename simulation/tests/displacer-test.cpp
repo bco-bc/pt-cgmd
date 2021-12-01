@@ -46,14 +46,18 @@ void test1(const spec_catalog_ptr_t& catalog, const ff_ptr_t& forceField) {
             factory::interactor(simulationParameters, forceField, bc);
     auto displacer = factory::displacer(conf::MONTE_CARLO, simulationParameters, interactor);
     auto result = interactor->interact(particleSystem);
-    std::cout << "BEFORE: Non-bonded: " << result.first << ", bonded: " << result.second << std::endl;
+    std::cout << "BEFORE: Non-bonded: " << std::get<1>(result);
+    std::cout << ", bonded: " << std::get<0>(result) << std::endl;
+    std::cout << "; external: " << std::get<2>(result) << std::endl;
     std::cout << "Displacing particle system..." << std::endl;
     for (int k = 0; k != 100; ++k) {
         displacer->displace(particleSystem);
     }
     std::cout << "Done." << std::endl;
     result = interactor->interact(particleSystem);
-    std::cout << "BEFORE: Non-bonded: " << result.first << ", bonded: " << result.second << std::endl;
+    std::cout << "AFTER: Non-bonded: " << std::get<1>(result);
+    std::cout << ", bonded: " << std::get<0>(result) << std::endl;
+    std::cout << "; external: " << std::get<2>(result) << std::endl;
 }
 
 int main() {

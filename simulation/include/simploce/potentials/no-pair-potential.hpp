@@ -5,7 +5,7 @@
  * Copyright (c) 2021 Biocenter Oulu, University of Oulu, Finland. All rights reserved.
  */
 
-#include "pair-potential.hpp"
+#include "simploce/potentials/pair-potential.hpp"
 
 #ifndef SIMULATION_NO_PAIR_POTENTIAL_HPP
 #define SIMULATION_NO_PAIR_POTENTIAL_HPP

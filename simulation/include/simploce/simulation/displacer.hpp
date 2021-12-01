@@ -16,13 +16,12 @@ namespace simploce {
     /**
      * Displaces or changes the state of simulation model.
      */
-    struct Displacer {
+    struct displacer {
         
-        virtual ~Displacer() = default;
+        virtual ~displacer() = default;
 
         /**
          * Displaces particle system.
-         * @param simulationData Simulation parameters.
          * @param particleSystem
          * @return Simulation data.
          */

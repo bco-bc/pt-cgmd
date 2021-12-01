@@ -19,7 +19,7 @@ namespace simploce {
      * Calculates the radial distribution function g(r) between particles of
      * given types.
      */
-    class Gr : public Analyzer {
+    class Gr : public analyzer {
     public:
 
         /**
@@ -52,7 +52,7 @@ namespace simploce {
          * @param specName2 Particle specification name #2.
          * @param box Simulation box.
          * @param bc Boundary condition.
-         * @return Analyzer.
+         * @return analyzer.
          */
         static gr_ptr_t
         create(const length_t& dr,

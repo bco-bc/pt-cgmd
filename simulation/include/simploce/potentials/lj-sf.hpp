@@ -1,25 +1,25 @@
 /*
  * Author: André H. Juffer.
- * Created on 13/11/2021, 17:23.
+ * Created on 01/12/2021, 12:28.
  *
  * Copyright (c) 2021 Biocenter Oulu, University of Oulu, Finland. All rights reserved.
  */
 
-#ifndef SIMULATION_HP_HPP
-#define SIMULATION_HP_HPP
+#ifndef SIMULATION_LJ_SF_HPP
+#define SIMULATION_LJ_SF_HPP
 
 #include "pair-potential.hpp"
+#include "../simulation/s-types.hpp"
 
 namespace simploce {
 
     /**
-     * Harmonic potential, U(r) = 0.5 * k * (r - r0)^2, where r is a distance, k is a
-     * force constant (fc) and r0 is the equilibrium distance.
+     * Lennard-Jones plus shifted force electrostatics.
      */
-    class HP : public pair_potential {
+    class LJ_SF: public pair_potential {
     public:
 
-        HP(ff_ptr_t forceField, bc_ptr_t bc);
+        LJ_SF(ff_ptr_t forceField, bc_ptr_t bc, sf_ptr_t sf);
 
         std::pair<energy_t, force_t> operator () (const p_ptr_t &p1, const p_ptr_t &p2) override;
 
@@ -27,8 +27,8 @@ namespace simploce {
 
         ff_ptr_t forceField_;
         bc_ptr_t bc_;
+        sf_ptr_t sf_;
     };
-
 }
 
-#endif //SIMULATION_HP_HPP
+#endif //SIMULATION_LJ_SF_HPP

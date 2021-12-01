@@ -6,8 +6,8 @@
 
 #include "simploce/simulation/s-factory.hpp"
 #include "simploce/simulation/continuous.hpp"
-#include "simploce/simulation/force-field.hpp"
-#include "simploce/simulation/forces.hpp"
+#include "simploce/potentials/force-field.hpp"
+#include "simploce/potentials/forces.hpp"
 #include "simploce/simulation/distance-pair-list-generator.hpp"
 #include "simploce/simulation/s-types.hpp"
 #include "simploce/simulation/interactor.hpp"
@@ -24,7 +24,6 @@
 #include "simploce/util/file.hpp"
 #include <memory>
 #include <stdexcept>
-#include <fstream>
 
 namespace simploce {
     namespace factory {
@@ -90,8 +89,10 @@ namespace simploce {
                 simulationParameters_->put("simulation.nsteps", 1000);
                 simulationParameters_->put("simulation.nwrite", "10");
                 simulationParameters_->put("simulation.npairlists", 10);
-                simulationParameters_->put("simulation.temperature", 298.15);
-                simulationParameters_->put("simulation.timestep", 0.020);  // 20 fs.
+                simulationParameters_->put("simulation.temperature", 298.15);  // K.
+                simulationParameters_->put("simulation.timestep", 0.020);      // 20 fs.
+                simulationParameters_->put("simulation.gamma", 1.0); // ps^-1.
+                simulationParameters_->put("simulation.include-external", 0);
             }
             return simulationParameters_;
         }
@@ -217,7 +218,7 @@ namespace simploce {
             return forces_;
         }
 
-        p_system_ptr_t particleSystem(std::string fileName,
+        p_system_ptr_t particleSystem(const std::string& fileName,
                                       const spec_catalog_ptr_t& catalog,
                                       bool isCoarseGrained) {
             std::ifstream stream;

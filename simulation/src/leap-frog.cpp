@@ -9,12 +9,13 @@
 #include "simploce/simulation/interactor.hpp"
 #include "simploce/simulation/s-properties.hpp"
 #include "simploce/particle/particle-system.hpp"
+#include <utility>
 #include <vector>
+#include <stdexcept>
 
 namespace simploce {
     
     /*
-     * @param T particle pointer typeName.
      * @param dt Time step. 
      * @param particles Particles.
      * @return Kinetic energy, temperature.
@@ -23,13 +24,11 @@ namespace simploce {
     displace_(const stime_t dt, 
               const std::vector<p_ptr_t>& particles)
     {
-        static std::size_t counter = 0;
-        
         // Assume current step n-1/2 at time t(n-1/2).
         
         // Compute linear momentum and position, plus kinetic energy.
         SimulationData data;
-        for (auto ptr : particles) {
+        for (const auto& ptr : particles) {
             auto &particle = *ptr;
             mass_t mass = particle.mass();             // In u.
             const force_t &f = particle.force();       // Force (kJ/(mol nm) at time t(n-1/2).
@@ -54,12 +53,18 @@ namespace simploce {
         // Temperature at t(n).
         data.temperature = properties::temperature(particles, data.kinetic);
         
-        return std::move(data);
+        return data;
     }
     
     LeapFrog::LeapFrog(sim_param_ptr_t simulationParameters,
                        interactor_ptr_t interactor) :
-        simulationParameters_{std::move(simulationParameters)}, interactor_{interactor} {
+        simulationParameters_{std::move(simulationParameters)}, interactor_{std::move(interactor)} {
+        if (!simulationParameters_) {
+            throw std::domain_error("LeapFrog: Missing simulation parameters.");
+        }
+        if (!interactor_) {
+            throw std::domain_error("LeapFrog: Missing interactor.");
+        }
     }
     
     SimulationData 
@@ -76,13 +81,18 @@ namespace simploce {
         // Displace.
         SimulationData data =
                 particleSystem->doWithAll<SimulationData>([] (const std::vector<p_ptr_t>& all) {
-            return std::move(displace_(dt, all));
+            auto data = displace_(dt, all);
+            data.totalMomentum = norm<real_t>(properties::linearMomentum(all));
+            return std::move(data);
         });
+
         
         // Save simulation data.
-        data.bonded = result.first;
-        data.nonBonded = result.second;
+        data.bonded = std::get<0>(result);
+        data.nonBonded = std::get<1>(result);
+        data.external = std::get<2>(result);
         data.t = counter * dt;
+        data.accepted = true;
         
         return data;
     }

@@ -11,6 +11,7 @@ tests/CMakeFiles/coarse-grained-test.dir/coarse-grained-test.cpp.o
  ../include/simploce/particle/particle-spec.hpp
  ../include/simploce/particle/particle-system.hpp
  ../include/simploce/particle/particle.hpp
+ /home/andre/wrk3/simploce/pt-cgmd/particles/tests/coarse-grained-test.cpp
  /localdisk/include/simploce/conf/u-conf.hpp
  /localdisk/include/simploce/types/cvector_t.hpp
  /localdisk/include/simploce/types/u-types.hpp
@@ -18,4 +19,3 @@ tests/CMakeFiles/coarse-grained-test.dir/coarse-grained-test.cpp.o
  /localdisk/include/simploce/util/box.hpp
  /localdisk/include/simploce/util/cube.hpp
  /localdisk/include/simploce/util/file.hpp
- /wrk3/simploce/pt-cgmd/particles/tests/coarse-grained-test.cpp

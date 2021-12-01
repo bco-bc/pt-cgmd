@@ -4,7 +4,7 @@
  * Created on November 22, 2021, 12:29 PM.
  */
 
-#include "simploce/simulation/lj.hpp"
+#include "simploce/potentials/lj.hpp"
 #include "simploce/simulation/s-factory.hpp"
 #include "simploce/simulation/s-conf.hpp"
 #include "simploce/simulation/s-properties.hpp"
@@ -38,7 +38,7 @@ int main() {
 
     // Calculate potential.
     real_t dz = 0.01;
-    distance_t rc = properties::cutoffDistance(box);
+    dist_t rc = properties::cutoffDistance(box);
     int n = util::nint(rc()/dz);
     for (int i = 1; i <= n; ++i) {
         real_t z = i * dz;

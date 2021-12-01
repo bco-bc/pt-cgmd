@@ -28,7 +28,7 @@ namespace simploce {
     class SF;
     class SC;
     class Forces;
-    class Displacer;
+    class displacer;
 
     // S is protonation state typeName, e.g. Discrete or Continuous.
     template <typename S>
@@ -114,9 +114,9 @@ namespace simploce {
     using interactor_ptr_t = std::shared_ptr<Interactor>;
 
     /**
-     * Displacer pointer typeName.
+     * displacer pointer typeName.
      */
-    using displacer_ptr_t = std::shared_ptr<Displacer>;
+    using displacer_ptr_t = std::shared_ptr<displacer>;
 
     /**
      * Reaction field electrostatic interaction pointer typeName.

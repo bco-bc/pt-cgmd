@@ -29,6 +29,7 @@ add_executable(s-particle-system src/s-particle-system.cpp)
 add_executable(s-validate src/s-validate.cpp)
 add_executable(s-simulate src/s-simulate.cpp)
 add_executable(s-gr src/s-gr.cpp)
+add_executable(s-distance src/s-distance.cpp)
 
 #[[target_link_directories(s-dipole-moment PUBLIC ${CMAKE_INSTALL_PREFIX}/lib)
 target_link_libraries(s-dipole-moment simulation particles util cpputil pthread ${Boost_LIBRARIES})
@@ -42,6 +43,8 @@ target_link_directories(s-simulate PUBLIC ${CMAKE_INSTALL_PREFIX}/lib)
 target_link_libraries(s-simulate simulation particles util cpputil pthread ${Boost_LIBRARIES})
 target_link_directories(s-gr PUBLIC ${CMAKE_INSTALL_PREFIX}/lib)
 target_link_libraries(s-gr simulation particles util cpputil pthread ${Boost_LIBRARIES})
+target_link_directories(s-distance PUBLIC ${CMAKE_INSTALL_PREFIX}/lib)
+target_link_libraries(s-distance simulation particles util cpputil pthread ${Boost_LIBRARIES})
 
 #[[install(TARGETS s-cgmd s-dipole-moment s-gr s-msd s-particle-system DESTINATION bin)]]
-install(TARGETS s-particle-system s-validate s-simulate s-gr DESTINATION bin)
+install(TARGETS s-particle-system s-validate s-simulate s-gr s-distance DESTINATION bin)

@@ -24,11 +24,8 @@ namespace po = boost::program_options;
 using namespace simploce;
 using namespace simploce::param;
 
-/*
- * Coarse grained molecular dynamics.
- */
 int main(int argc, char *argv[]) {
-    util::Logger logger("simploce::s-cgmd::main");
+    util::Logger logger("simploce::s-simulate::main");
 
     std::ofstream trajectory, data;
     try {
@@ -39,6 +36,7 @@ int main(int argc, char *argv[]) {
         std::string fnOutputParticleSystem{"out.ps"};
         std::string fnForceField{"interaction-parameters.dat"};
         bool isCoarseGrained{false};
+        bool includeExternalPotentials{false};
 
         std::size_t nSteps = 1000;                       // Number of steps.
         std::size_t nWrite = 10;                         // Number of steps between writing to simulation
@@ -99,6 +97,9 @@ int main(int argc, char *argv[]) {
             "Other choices are 'mc' (Monte Carlo), 'lf' (leapFrog), 'vv' (Velocity Verlet), and "
             "'pt-lvv' (Langevin Velocity Verlet with Proton Transfer)"
         )(
+            "include-external-potentials, e",
+            "Include external potentials for force calculations."
+        )(
             "verbose,v",
             "Verbose"
         )(
@@ -158,6 +159,9 @@ int main(int argc, char *argv[]) {
         if (vm.count("displacer")) {
             displacerType = vm["displacer"].as<std::string>();
         }
+        if (vm.count("include-external-potentials")) {
+            includeExternalPotentials = true;
+        }
         if (vm.count("verbose") ) {
             logger.changeLogLevel(util::Logger::LOGTRACE);
         }
@@ -170,6 +174,7 @@ int main(int argc, char *argv[]) {
         simulationParameters->put<real_t>("simulation.timestep", timestep);
         simulationParameters->put<real_t>("simulation.gamma", gamma);
         simulationParameters->put<std::size_t>("simulation.npairlists", nPairLists);
+        simulationParameters->put<bool>("simulation.include-external", includeExternalPotentials);
         logger.info("Simulation parameters:");
         std::cout << *simulationParameters << std::endl;
 

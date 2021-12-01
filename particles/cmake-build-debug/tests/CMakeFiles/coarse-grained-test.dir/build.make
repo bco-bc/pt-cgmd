@@ -44,19 +44,19 @@ cmake_force:
 SHELL = /bin/sh
 
 # The CMake executable.
-CMAKE_COMMAND = /localdisk/clion-2021.2.3/bin/cmake/linux/bin/cmake
+CMAKE_COMMAND = /home/andre/clion-2021.2.3/bin/cmake/linux/bin/cmake
 
 # The command to remove a file.
-RM = /localdisk/clion-2021.2.3/bin/cmake/linux/bin/cmake -E rm -f
+RM = /home/andre/clion-2021.2.3/bin/cmake/linux/bin/cmake -E rm -f
 
 # Escaping for special characters.
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /wrk3/simploce/pt-cgmd/particles
+CMAKE_SOURCE_DIR = /home/andre/wrk3/simploce/pt-cgmd/particles
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /wrk3/simploce/pt-cgmd/particles/cmake-build-debug
+CMAKE_BINARY_DIR = /home/andre/wrk3/simploce/pt-cgmd/particles/cmake-build-debug
 
 # Include any dependencies generated for this target.
 include tests/CMakeFiles/coarse-grained-test.dir/depend.make
@@ -68,16 +68,16 @@ include tests/CMakeFiles/coarse-grained-test.dir/flags.make
 
 tests/CMakeFiles/coarse-grained-test.dir/coarse-grained-test.cpp.o: tests/CMakeFiles/coarse-grained-test.dir/flags.make
 tests/CMakeFiles/coarse-grained-test.dir/coarse-grained-test.cpp.o: ../tests/coarse-grained-test.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/wrk3/simploce/pt-cgmd/particles/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object tests/CMakeFiles/coarse-grained-test.dir/coarse-grained-test.cpp.o"
-	cd /wrk3/simploce/pt-cgmd/particles/cmake-build-debug/tests && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/coarse-grained-test.dir/coarse-grained-test.cpp.o -c /wrk3/simploce/pt-cgmd/particles/tests/coarse-grained-test.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/andre/wrk3/simploce/pt-cgmd/particles/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object tests/CMakeFiles/coarse-grained-test.dir/coarse-grained-test.cpp.o"
+	cd /home/andre/wrk3/simploce/pt-cgmd/particles/cmake-build-debug/tests && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/coarse-grained-test.dir/coarse-grained-test.cpp.o -c /home/andre/wrk3/simploce/pt-cgmd/particles/tests/coarse-grained-test.cpp
 
 tests/CMakeFiles/coarse-grained-test.dir/coarse-grained-test.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/coarse-grained-test.dir/coarse-grained-test.cpp.i"
-	cd /wrk3/simploce/pt-cgmd/particles/cmake-build-debug/tests && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /wrk3/simploce/pt-cgmd/particles/tests/coarse-grained-test.cpp > CMakeFiles/coarse-grained-test.dir/coarse-grained-test.cpp.i
+	cd /home/andre/wrk3/simploce/pt-cgmd/particles/cmake-build-debug/tests && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/andre/wrk3/simploce/pt-cgmd/particles/tests/coarse-grained-test.cpp > CMakeFiles/coarse-grained-test.dir/coarse-grained-test.cpp.i
 
 tests/CMakeFiles/coarse-grained-test.dir/coarse-grained-test.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/coarse-grained-test.dir/coarse-grained-test.cpp.s"
-	cd /wrk3/simploce/pt-cgmd/particles/cmake-build-debug/tests && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /wrk3/simploce/pt-cgmd/particles/tests/coarse-grained-test.cpp -o CMakeFiles/coarse-grained-test.dir/coarse-grained-test.cpp.s
+	cd /home/andre/wrk3/simploce/pt-cgmd/particles/cmake-build-debug/tests && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/andre/wrk3/simploce/pt-cgmd/particles/tests/coarse-grained-test.cpp -o CMakeFiles/coarse-grained-test.dir/coarse-grained-test.cpp.s
 
 # Object files for target coarse-grained-test
 coarse__grained__test_OBJECTS = \
@@ -90,18 +90,18 @@ tests/coarse-grained-test: tests/CMakeFiles/coarse-grained-test.dir/coarse-grain
 tests/coarse-grained-test: tests/CMakeFiles/coarse-grained-test.dir/build.make
 tests/coarse-grained-test: libparticles.so
 tests/coarse-grained-test: tests/CMakeFiles/coarse-grained-test.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/wrk3/simploce/pt-cgmd/particles/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Linking CXX executable coarse-grained-test"
-	cd /wrk3/simploce/pt-cgmd/particles/cmake-build-debug/tests && $(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/coarse-grained-test.dir/link.txt --verbose=$(VERBOSE)
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/home/andre/wrk3/simploce/pt-cgmd/particles/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Linking CXX executable coarse-grained-test"
+	cd /home/andre/wrk3/simploce/pt-cgmd/particles/cmake-build-debug/tests && $(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/coarse-grained-test.dir/link.txt --verbose=$(VERBOSE)
 
 # Rule to build all files generated by this target.
 tests/CMakeFiles/coarse-grained-test.dir/build: tests/coarse-grained-test
 .PHONY : tests/CMakeFiles/coarse-grained-test.dir/build
 
 tests/CMakeFiles/coarse-grained-test.dir/clean:
-	cd /wrk3/simploce/pt-cgmd/particles/cmake-build-debug/tests && $(CMAKE_COMMAND) -P CMakeFiles/coarse-grained-test.dir/cmake_clean.cmake
+	cd /home/andre/wrk3/simploce/pt-cgmd/particles/cmake-build-debug/tests && $(CMAKE_COMMAND) -P CMakeFiles/coarse-grained-test.dir/cmake_clean.cmake
 .PHONY : tests/CMakeFiles/coarse-grained-test.dir/clean
 
 tests/CMakeFiles/coarse-grained-test.dir/depend:
-	cd /wrk3/simploce/pt-cgmd/particles/cmake-build-debug && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /wrk3/simploce/pt-cgmd/particles /wrk3/simploce/pt-cgmd/particles/tests /wrk3/simploce/pt-cgmd/particles/cmake-build-debug /wrk3/simploce/pt-cgmd/particles/cmake-build-debug/tests /wrk3/simploce/pt-cgmd/particles/cmake-build-debug/tests/CMakeFiles/coarse-grained-test.dir/DependInfo.cmake --color=$(COLOR)
+	cd /home/andre/wrk3/simploce/pt-cgmd/particles/cmake-build-debug && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /home/andre/wrk3/simploce/pt-cgmd/particles /home/andre/wrk3/simploce/pt-cgmd/particles/tests /home/andre/wrk3/simploce/pt-cgmd/particles/cmake-build-debug /home/andre/wrk3/simploce/pt-cgmd/particles/cmake-build-debug/tests /home/andre/wrk3/simploce/pt-cgmd/particles/cmake-build-debug/tests/CMakeFiles/coarse-grained-test.dir/DependInfo.cmake --color=$(COLOR)
 .PHONY : tests/CMakeFiles/coarse-grained-test.dir/depend
 

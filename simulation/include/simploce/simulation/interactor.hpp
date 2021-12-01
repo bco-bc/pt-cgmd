@@ -37,7 +37,7 @@ namespace simploce {
          * @param particleSystem Particle system.
          * @return Returns bonded and non-bonded potential energy, respectively.
          */
-        std::pair<energy_t, energy_t> interact(const p_system_ptr_t &particleSystem);
+        std::tuple<energy_t, energy_t, energy_t> interact(const p_system_ptr_t &particleSystem);
 
         /**
          * Returns the interaction energy of one particle with all other particles.

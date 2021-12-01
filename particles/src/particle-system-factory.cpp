@@ -33,31 +33,56 @@ namespace simploce {
     }
 
     p_system_ptr_t
-    ParticleSystemFactory::diatomic(const distance_t& distance,
+    ParticleSystemFactory::diatomic(const dist_t& distance,
                                     const spec_ptr_t& spec,
                                     const temperature_t& temperature) {
         util::Logger logger{"simploce::ParticleSystemFactory::diatomic"};
 
+        // Atomistic model.
         auto atomistic = factory::atomistic();
         std::vector<p_ptr_t> atoms{};
-        position_t r1{-0.5 * distance(), 0.0, 0.0};
+
+        // Atom #1
+        position_t r1{-0.5 * distance() - 0.03, 0.0, 0.0};
         std::string name1 = spec->name() + "1";
         auto atom_1 = atomistic->addAtom(name1, spec);
         atom_1->position(r1);
         util::assignVelocity(atom_1, temperature);
+
+        // Motion along the x-axis.
+        auto v = atom_1->velocity();
+        v[1] = 0.0;
+        v[2] = 0.0;
+        atom_1->velocity(v);
+
         atoms.emplace_back(atom_1);
-        position_t r2{0.5 * distance(), 0.0, 0.0};
+
+        // Atom #2
+        position_t r2{0.5 * distance() + 0.03, 0.0, 0.0};
         std::string name2 = spec->name() + "2";
         auto atom_2 = atomistic->addAtom(name2, spec);
         atom_2->position(r2);
         util::assignVelocity(atom_2, temperature);
+
+        // Initially opposite motion.
+        v = -1.0 * atom_1->velocity();
+        atom_2->velocity(v);
+
         atoms.emplace_back(atom_2);
+
+        // Make bond.
         id_pair_t bond = std::make_pair(atom_1->id(), atom_2->id());
         std::vector<id_pair_t> bonds{bond};
         auto atomGroup = ParticleGroup::make(atoms, bonds);
         atomistic->addParticleGroup(atomGroup);
-        box_ptr_t box(new Cube<real_t>{0.0});
+
+        // Place diatomic in a very large box.
+        box_ptr_t box(new Cube<real_t>{1000.0});
         atomistic->box(box);
+
+        util::removeOverallLinearMomentum(atomistic);
+
+        // Done.
         return std::move(atomistic);
     }
 
@@ -66,7 +91,7 @@ namespace simploce {
                                             std::size_t nLimit,
                                             const density_t& densitySI,
                                             const temperature_t& temperature) {
-        const distance_t DISTANCE_CW_DP = 0.2; // nm.
+        const dist_t DISTANCE_CW_DP = 0.2; // nm.
 
         util::Logger logger{"ParticleSystemFactory::polarizableWater"};
 
@@ -207,6 +232,9 @@ namespace simploce {
             logger.warn("The number of created water groups is less then the number of requested water groups.");
         }
         coarseGrained->box(box);
+
+        util::removeOverallLinearMomentum(coarseGrained);
+
         return std::move(coarseGrained);
     }
 
@@ -291,11 +319,15 @@ namespace simploce {
             i += 1;
         }
         atomistic->box(box);
+
         logger.info("Number of ion particles generated: " + boost::lexical_cast<std::string>(counter));
         if (counter < nIons) {
             logger.warn("Number of generated ions is smaller than requested.");
         }
         logger.info("Ion number density (1/nm^3): " + boost::lexical_cast<std::string>(real_t(counter)/volume()));
+
+        util::removeOverallLinearMomentum(atomistic);
+
         return std::move(atomistic);
     }
 
@@ -387,6 +419,9 @@ namespace simploce {
         logger.info("Density (u/nm3): " + util::toString(density));
         density_t densSI = density() * units::si<real_t>::MU * 1.0e+27;
         logger.info("Density (kg/m^3): " + util::toString(densSI));
+
+        util::removeOverallLinearMomentum(atomistic);
+
         return std::move(atomistic);
     }
 

@@ -88,7 +88,6 @@ analyzers__test_EXTERNAL_OBJECTS =
 
 tests/analyzers-test: tests/CMakeFiles/analyzers-test.dir/analyzers-test.cpp.o
 tests/analyzers-test: tests/CMakeFiles/analyzers-test.dir/build.make
-tests/analyzers-test: libsimulation.so
 tests/analyzers-test: tests/CMakeFiles/analyzers-test.dir/link.txt
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/home/andre/wrk3/simploce/pt-cgmd/simulation/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Linking CXX executable analyzers-test"
 	cd /home/andre/wrk3/simploce/pt-cgmd/simulation/cmake-build-debug/tests && $(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/analyzers-test.dir/link.txt --verbose=$(VERBOSE)

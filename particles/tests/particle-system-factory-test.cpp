@@ -67,8 +67,8 @@ int main() {
 
     //diatomic(catalog);
     //argon(catalog);
-    //electrolyteSolution(catalog);
-    coarseGrainedPolarizableWater(catalog);
+    electrolyteSolution(catalog);
+    //coarseGrainedPolarizableWater(catalog);
 
     return (EXIT_SUCCESS);
 }

@@ -32,7 +32,7 @@ namespace simploce {
          * with the given temperature.
          * @return Diatomic molecule.
          */
-        p_system_ptr_t diatomic(const distance_t& distance,
+        p_system_ptr_t diatomic(const dist_t& distance,
                                 const spec_ptr_t& spec,
                                 const temperature_t& temperature = 298.15);
 

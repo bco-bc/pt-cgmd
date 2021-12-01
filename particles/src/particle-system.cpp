@@ -10,6 +10,7 @@
 #include "simploce/particle/particle-spec.hpp"
 #include "simploce/particle/particle-spec-catalog.hpp"
 #include "simploce/particle/p-properties.hpp"
+#include "simploce/particle/p-util.hpp"
 #include "simploce/particle/p-conf.hpp"
 #include "simploce/particle/p-factory.hpp"
 #include "simploce/util/util.hpp"
@@ -107,7 +108,7 @@ namespace simploce {
     }
 
     p_ptr_t ParticleSystem::find(const id_t& id) const {
-        return properties::find(id, all_);
+        return util::find(id, all_);
     }
 
     bool
@@ -229,7 +230,7 @@ namespace simploce {
                               util::toString(freeParticle->id()) + ": Already added to particle system.");
         }
         this->add(freeParticle);
-        free_.push_back(freeParticle);
+        free_.emplace_back(freeParticle);
     }
 
     void
@@ -240,7 +241,8 @@ namespace simploce {
             if ( !this->contains(p->id()) ) {
                 util::logAndThrow(
                         logger,
-                        util::toString(p->id()) + ": Particle in particle group not yet added to particle system."
+                        util::toString(p->id()) +
+                                                ": Particle in particle group not yet added to particle system."
                 );
             }
         }
@@ -248,10 +250,11 @@ namespace simploce {
             if (g == particleGroup) {
                 util::logAndThrow(
                         logger,
-                        util::toString(particleGroup->id()) + ": Particle group already added to particle system.");
+                        util::toString(particleGroup->id()) +
+                                                ": Particle group already added to particle system.");
             }
         }
-        groups_.push_back(particleGroup);
+        groups_.emplace_back(particleGroup);
         this->removeFromFree(particleGroup);
     }
 
@@ -278,6 +281,10 @@ namespace simploce {
         util::Logger logger("simploce::ParticleSystem::readFreeAndGroups");
         std::string stringBuffer;
         char buffer[1000];
+
+        // Clear free particles and groups to avoid double counting.
+        free_.clear();
+        groups_.clear();
 
         // Read free particles.
         std::size_t nFree;

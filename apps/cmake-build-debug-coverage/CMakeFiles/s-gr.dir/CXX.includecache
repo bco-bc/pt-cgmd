@@ -6,38 +6,6 @@
 
 #IncludeRegexTransform: 
 
-/home/andre/wrk3/simploce/pt-cgmd/apps/src/s-gr.cpp
-simploce/analysis/gr.hpp
-/home/andre/wrk3/simploce/pt-cgmd/apps/src/simploce/analysis/gr.hpp
-simploce/analysis/a-types.hpp
-/home/andre/wrk3/simploce/pt-cgmd/apps/src/simploce/analysis/a-types.hpp
-simploce/analysis/analysis.hpp
-/home/andre/wrk3/simploce/pt-cgmd/apps/src/simploce/analysis/analysis.hpp
-simploce/simulation/s-types.hpp
-/home/andre/wrk3/simploce/pt-cgmd/apps/src/simploce/simulation/s-types.hpp
-simploce/simulation/s-conf.hpp
-/home/andre/wrk3/simploce/pt-cgmd/apps/src/simploce/simulation/s-conf.hpp
-simploce/simulation/s-factory.hpp
-/home/andre/wrk3/simploce/pt-cgmd/apps/src/simploce/simulation/s-factory.hpp
-simploce/particle/particle-spec-catalog.hpp
-/home/andre/wrk3/simploce/pt-cgmd/apps/src/simploce/particle/particle-spec-catalog.hpp
-simploce/particle/particle-system.hpp
-/home/andre/wrk3/simploce/pt-cgmd/apps/src/simploce/particle/particle-system.hpp
-simploce/util/file.hpp
-/home/andre/wrk3/simploce/pt-cgmd/apps/src/simploce/util/file.hpp
-simploce/util/logger.hpp
-/home/andre/wrk3/simploce/pt-cgmd/apps/src/simploce/util/logger.hpp
-simploce/util/param.hpp
-/home/andre/wrk3/simploce/pt-cgmd/apps/src/simploce/util/param.hpp
-boost/program_options.hpp
--
-string
--
-iostream
--
-memory
--
-
 /localdisk/include/simploce/analysis/a-types.hpp
 simploce/util/param.hpp
 /localdisk/include/simploce/analysis/simploce/util/param.hpp
@@ -81,12 +49,6 @@ particle.hpp
 /localdisk/include/simploce/particle/particle.hpp
 p-types.hpp
 /localdisk/include/simploce/particle/p-types.hpp
-
-/localdisk/include/simploce/particle/p-conf.hpp
-p-types.hpp
-/localdisk/include/simploce/particle/p-types.hpp
-simploce/conf/u-conf.hpp
-/localdisk/include/simploce/particle/simploce/conf/u-conf.hpp
 
 /localdisk/include/simploce/particle/p-factory.hpp
 p-types.hpp
@@ -141,10 +103,6 @@ simploce/particle/protonatable.hpp
 /localdisk/include/simploce/simulation/simploce/particle/protonatable.hpp
 iostream
 -
-
-/localdisk/include/simploce/simulation/s-conf.hpp
-simploce/particle/p-conf.hpp
-/localdisk/include/simploce/simulation/simploce/particle/p-conf.hpp
 
 /localdisk/include/simploce/simulation/s-factory.hpp
 s-types.hpp
@@ -232,6 +190,34 @@ sstream
 
 /localdisk/include/simploce/util/param.hpp
 boost/property_tree/ptree.hpp
+-
+iostream
+-
+
+/wrk3/simploce/pt-cgmd/apps/src/s-gr.cpp
+simploce/analysis/gr.hpp
+/wrk3/simploce/pt-cgmd/apps/src/simploce/analysis/gr.hpp
+simploce/analysis/a-types.hpp
+/wrk3/simploce/pt-cgmd/apps/src/simploce/analysis/a-types.hpp
+simploce/analysis/analysis.hpp
+/wrk3/simploce/pt-cgmd/apps/src/simploce/analysis/analysis.hpp
+simploce/simulation/s-types.hpp
+/wrk3/simploce/pt-cgmd/apps/src/simploce/simulation/s-types.hpp
+simploce/simulation/s-factory.hpp
+/wrk3/simploce/pt-cgmd/apps/src/simploce/simulation/s-factory.hpp
+simploce/particle/particle-spec-catalog.hpp
+/wrk3/simploce/pt-cgmd/apps/src/simploce/particle/particle-spec-catalog.hpp
+simploce/particle/particle-system.hpp
+/wrk3/simploce/pt-cgmd/apps/src/simploce/particle/particle-system.hpp
+simploce/util/file.hpp
+/wrk3/simploce/pt-cgmd/apps/src/simploce/util/file.hpp
+simploce/util/logger.hpp
+/wrk3/simploce/pt-cgmd/apps/src/simploce/util/logger.hpp
+simploce/util/param.hpp
+/wrk3/simploce/pt-cgmd/apps/src/simploce/util/param.hpp
+boost/program_options.hpp
+-
+string
 -
 iostream
 -

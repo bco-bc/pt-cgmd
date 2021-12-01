@@ -5,8 +5,8 @@
  * Copyright (c) 2021 Biocenter Oulu, University of Oulu, Finland. All rights reserved.
  */
 
-#include "simploce/simulation/halve-attractive-qp.hpp"
-#include "simploce/simulation/force-field.hpp"
+#include "simploce/potentials/halve-attractive-qp.hpp"
+#include "simploce/potentials/force-field.hpp"
 #include "simploce/simulation/bc.hpp"
 #include "simploce/particle/particle.hpp"
 

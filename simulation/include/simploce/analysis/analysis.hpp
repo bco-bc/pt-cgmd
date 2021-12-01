@@ -26,7 +26,7 @@ namespace simploce {
          * @param particleSystem Particle system.
          * @param simulationParameters Analysis parameters. Must include the number of states in the trajectory
          * to skip (parameter name is "analysis.trajectory.nskip") before carrying out the analysis.
-         * @param analyzer Analyzer.
+         * @param analyzer analyzer.
          */
         Analysis(p_system_ptr_t particleSystem,
                  a_param_ptr_t analysisParameters,

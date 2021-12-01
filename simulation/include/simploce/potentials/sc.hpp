@@ -8,7 +8,7 @@
 #ifndef SIMULATION_SC_HPP
 #define SIMULATION_SC_HPP
 
-#include "pair-potential.hpp"
+#include "simploce/potentials/pair-potential.hpp"
 
 namespace simploce {
 
