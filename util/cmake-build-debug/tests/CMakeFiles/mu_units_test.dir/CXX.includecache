@@ -22,11 +22,11 @@ cmath
 limits
 -
 
-/home/andre/wrk3/simploce/pt-cgmd/util/tests/units-mu-test.cpp
+/wrk3/simploce/pt-cgmd/util/tests/units-mu-test.cpp
 simploce/units/units-mu.hpp
-/home/andre/wrk3/simploce/pt-cgmd/util/tests/simploce/units/units-mu.hpp
+/wrk3/simploce/pt-cgmd/util/tests/simploce/units/units-mu.hpp
 simploce/conf/u-conf.hpp
-/home/andre/wrk3/simploce/pt-cgmd/util/tests/simploce/conf/u-conf.hpp
+/wrk3/simploce/pt-cgmd/util/tests/simploce/conf/u-conf.hpp
 iostream
 -
 iomanip

@@ -1,1 +1,1 @@
-/usr/bin/c++ -g CMakeFiles/forcefield-test.dir/forcefield-test.cpp.o -o forcefield-test   -L/localdisk/lib  -Wl,-rpath,/home/andre/wrk3/simploce/pt-cgmd/simulation/cmake-build-debug:/localdisk/lib ../libsimulation.so -lparticles -lutil -lcpputil -lpthread 
+/usr/bin/c++ -g CMakeFiles/forcefield-test.dir/forcefield-test.cpp.o -o forcefield-test   -L/localdisk/lib  -Wl,-rpath,/wrk3/simploce/pt-cgmd/simulation/cmake-build-debug:/localdisk/lib ../libsimulation.so -lparticles -lutil -lcpputil -lpthread 

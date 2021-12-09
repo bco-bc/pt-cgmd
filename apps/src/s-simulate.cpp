@@ -97,7 +97,7 @@ int main(int argc, char *argv[]) {
             "Other choices are 'mc' (Monte Carlo), 'lf' (leapFrog), 'vv' (Velocity Verlet), and "
             "'pt-lvv' (Langevin Velocity Verlet with Proton Transfer)"
         )(
-            "include-external-potentials, e",
+            "include-external-potentials,e",
             "Include external potentials for force calculations."
         )(
             "verbose,v",

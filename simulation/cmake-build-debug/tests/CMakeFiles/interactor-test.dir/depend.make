@@ -8,7 +8,6 @@ tests/CMakeFiles/interactor-test.dir/interactor-test.cpp.o: \
  ../include/simploce/simulation/protonatable-particle-system-factory.hpp \
  ../include/simploce/simulation/s-factory.hpp \
  ../include/simploce/simulation/s-types.hpp \
- ../tests/interactor-test.cpp \
  /localdisk/include/simploce/conf/u-conf.hpp \
  /localdisk/include/simploce/particle/atomistic.hpp \
  /localdisk/include/simploce/particle/coarse-grained.hpp \
@@ -26,4 +25,5 @@ tests/CMakeFiles/interactor-test.dir/interactor-test.cpp.o: \
  /localdisk/include/simploce/util/cube.hpp \
  /localdisk/include/simploce/util/file.hpp \
  /localdisk/include/simploce/util/logger.hpp \
- /localdisk/include/simploce/util/param.hpp
+ /localdisk/include/simploce/util/param.hpp \
+ ../tests/interactor-test.cpp

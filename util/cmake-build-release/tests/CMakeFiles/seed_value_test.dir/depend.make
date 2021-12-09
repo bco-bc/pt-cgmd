@@ -7,5 +7,5 @@ tests/CMakeFiles/seed_value_test.dir/seed-value-test.cpp.o: \
  ../include/simploce/types/u-types.hpp \
  ../include/simploce/types/value_t.hpp \
  ../include/simploce/util/util.hpp \
- ../tests/seed-value-test.cpp \
- /localdisk/include/simploce/util/logger.hpp
+ /localdisk/include/simploce/util/logger.hpp \
+ ../tests/seed-value-test.cpp

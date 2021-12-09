@@ -44,19 +44,19 @@ cmake_force:
 SHELL = /bin/sh
 
 # The CMake executable.
-CMAKE_COMMAND = /home/andre/clion-2021.2.3/bin/cmake/linux/bin/cmake
+CMAKE_COMMAND = /localdisk/clion-2021.2.3/bin/cmake/linux/bin/cmake
 
 # The command to remove a file.
-RM = /home/andre/clion-2021.2.3/bin/cmake/linux/bin/cmake -E rm -f
+RM = /localdisk/clion-2021.2.3/bin/cmake/linux/bin/cmake -E rm -f
 
 # Escaping for special characters.
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /home/andre/wrk3/simploce/pt-cgmd/util
+CMAKE_SOURCE_DIR = /wrk3/simploce/pt-cgmd/util
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /home/andre/wrk3/simploce/pt-cgmd/util/cmake-build-release
+CMAKE_BINARY_DIR = /wrk3/simploce/pt-cgmd/util/cmake-build-release
 
 # Include any dependencies generated for this target.
 include tests/CMakeFiles/telegraph_process_test.dir/depend.make
@@ -68,16 +68,16 @@ include tests/CMakeFiles/telegraph_process_test.dir/flags.make
 
 tests/CMakeFiles/telegraph_process_test.dir/telegraph-process-test.cpp.o: tests/CMakeFiles/telegraph_process_test.dir/flags.make
 tests/CMakeFiles/telegraph_process_test.dir/telegraph-process-test.cpp.o: ../tests/telegraph-process-test.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/andre/wrk3/simploce/pt-cgmd/util/cmake-build-release/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object tests/CMakeFiles/telegraph_process_test.dir/telegraph-process-test.cpp.o"
-	cd /home/andre/wrk3/simploce/pt-cgmd/util/cmake-build-release/tests && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/telegraph_process_test.dir/telegraph-process-test.cpp.o -c /home/andre/wrk3/simploce/pt-cgmd/util/tests/telegraph-process-test.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/wrk3/simploce/pt-cgmd/util/cmake-build-release/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object tests/CMakeFiles/telegraph_process_test.dir/telegraph-process-test.cpp.o"
+	cd /wrk3/simploce/pt-cgmd/util/cmake-build-release/tests && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/telegraph_process_test.dir/telegraph-process-test.cpp.o -c /wrk3/simploce/pt-cgmd/util/tests/telegraph-process-test.cpp
 
 tests/CMakeFiles/telegraph_process_test.dir/telegraph-process-test.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/telegraph_process_test.dir/telegraph-process-test.cpp.i"
-	cd /home/andre/wrk3/simploce/pt-cgmd/util/cmake-build-release/tests && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/andre/wrk3/simploce/pt-cgmd/util/tests/telegraph-process-test.cpp > CMakeFiles/telegraph_process_test.dir/telegraph-process-test.cpp.i
+	cd /wrk3/simploce/pt-cgmd/util/cmake-build-release/tests && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /wrk3/simploce/pt-cgmd/util/tests/telegraph-process-test.cpp > CMakeFiles/telegraph_process_test.dir/telegraph-process-test.cpp.i
 
 tests/CMakeFiles/telegraph_process_test.dir/telegraph-process-test.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/telegraph_process_test.dir/telegraph-process-test.cpp.s"
-	cd /home/andre/wrk3/simploce/pt-cgmd/util/cmake-build-release/tests && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/andre/wrk3/simploce/pt-cgmd/util/tests/telegraph-process-test.cpp -o CMakeFiles/telegraph_process_test.dir/telegraph-process-test.cpp.s
+	cd /wrk3/simploce/pt-cgmd/util/cmake-build-release/tests && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /wrk3/simploce/pt-cgmd/util/tests/telegraph-process-test.cpp -o CMakeFiles/telegraph_process_test.dir/telegraph-process-test.cpp.s
 
 # Object files for target telegraph_process_test
 telegraph_process_test_OBJECTS = \
@@ -90,18 +90,18 @@ tests/telegraph_process_test: tests/CMakeFiles/telegraph_process_test.dir/telegr
 tests/telegraph_process_test: tests/CMakeFiles/telegraph_process_test.dir/build.make
 tests/telegraph_process_test: libutil.so
 tests/telegraph_process_test: tests/CMakeFiles/telegraph_process_test.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/home/andre/wrk3/simploce/pt-cgmd/util/cmake-build-release/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Linking CXX executable telegraph_process_test"
-	cd /home/andre/wrk3/simploce/pt-cgmd/util/cmake-build-release/tests && $(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/telegraph_process_test.dir/link.txt --verbose=$(VERBOSE)
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/wrk3/simploce/pt-cgmd/util/cmake-build-release/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Linking CXX executable telegraph_process_test"
+	cd /wrk3/simploce/pt-cgmd/util/cmake-build-release/tests && $(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/telegraph_process_test.dir/link.txt --verbose=$(VERBOSE)
 
 # Rule to build all files generated by this target.
 tests/CMakeFiles/telegraph_process_test.dir/build: tests/telegraph_process_test
 .PHONY : tests/CMakeFiles/telegraph_process_test.dir/build
 
 tests/CMakeFiles/telegraph_process_test.dir/clean:
-	cd /home/andre/wrk3/simploce/pt-cgmd/util/cmake-build-release/tests && $(CMAKE_COMMAND) -P CMakeFiles/telegraph_process_test.dir/cmake_clean.cmake
+	cd /wrk3/simploce/pt-cgmd/util/cmake-build-release/tests && $(CMAKE_COMMAND) -P CMakeFiles/telegraph_process_test.dir/cmake_clean.cmake
 .PHONY : tests/CMakeFiles/telegraph_process_test.dir/clean
 
 tests/CMakeFiles/telegraph_process_test.dir/depend:
-	cd /home/andre/wrk3/simploce/pt-cgmd/util/cmake-build-release && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /home/andre/wrk3/simploce/pt-cgmd/util /home/andre/wrk3/simploce/pt-cgmd/util/tests /home/andre/wrk3/simploce/pt-cgmd/util/cmake-build-release /home/andre/wrk3/simploce/pt-cgmd/util/cmake-build-release/tests /home/andre/wrk3/simploce/pt-cgmd/util/cmake-build-release/tests/CMakeFiles/telegraph_process_test.dir/DependInfo.cmake --color=$(COLOR)
+	cd /wrk3/simploce/pt-cgmd/util/cmake-build-release && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /wrk3/simploce/pt-cgmd/util /wrk3/simploce/pt-cgmd/util/tests /wrk3/simploce/pt-cgmd/util/cmake-build-release /wrk3/simploce/pt-cgmd/util/cmake-build-release/tests /wrk3/simploce/pt-cgmd/util/cmake-build-release/tests/CMakeFiles/telegraph_process_test.dir/DependInfo.cmake --color=$(COLOR)
 .PHONY : tests/CMakeFiles/telegraph_process_test.dir/depend
 

@@ -4,7 +4,7 @@
 # compile CXX with /usr/bin/c++
 CXX_DEFINES = -Dutil_EXPORTS
 
-CXX_INCLUDES = -I/home/andre/wrk3/simploce/pt-cgmd/util/include -I/localdisk/include
+CXX_INCLUDES = -I/wrk3/simploce/pt-cgmd/util/include -I/localdisk/include
 
 CXX_FLAGS = -g -fPIC -std=gnu++14
 

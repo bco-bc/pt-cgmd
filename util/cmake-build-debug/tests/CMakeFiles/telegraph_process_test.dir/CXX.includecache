@@ -56,9 +56,9 @@ vector
 iostream
 -
 
-/home/andre/wrk3/simploce/pt-cgmd/util/tests/telegraph-process-test.cpp
+/wrk3/simploce/pt-cgmd/util/tests/telegraph-process-test.cpp
 simploce/util/telegraph-process.hpp
-/home/andre/wrk3/simploce/pt-cgmd/util/tests/simploce/util/telegraph-process.hpp
+/wrk3/simploce/pt-cgmd/util/tests/simploce/util/telegraph-process.hpp
 iostream
 -
 

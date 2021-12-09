@@ -20,9 +20,9 @@ algorithm
 cmath
 -
 
-/home/andre/wrk3/simploce/pt-cgmd/util/tests/value-type-test.cpp
+/wrk3/simploce/pt-cgmd/util/tests/value-type-test.cpp
 simploce/types/value_t.hpp
-/home/andre/wrk3/simploce/pt-cgmd/util/tests/simploce/types/value_t.hpp
+/wrk3/simploce/pt-cgmd/util/tests/simploce/types/value_t.hpp
 cstdlib
 -
 iostream

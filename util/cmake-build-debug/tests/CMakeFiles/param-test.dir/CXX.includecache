@@ -12,9 +12,9 @@ boost/property_tree/ptree.hpp
 iostream
 -
 
-/home/andre/wrk3/simploce/pt-cgmd/util/tests/param-test.cpp
+/wrk3/simploce/pt-cgmd/util/tests/param-test.cpp
 simploce/util/param.hpp
-/home/andre/wrk3/simploce/pt-cgmd/util/tests/simploce/util/param.hpp
+/wrk3/simploce/pt-cgmd/util/tests/simploce/util/param.hpp
 cstdlib
 -
 

@@ -12,7 +12,6 @@ tests/CMakeFiles/pair-list-test.dir/pair-list-test.cpp.o: \
  ../include/simploce/simulation/s-factory.hpp \
  ../include/simploce/simulation/s-properties.hpp \
  ../include/simploce/simulation/s-types.hpp \
- ../tests/pair-list-test.cpp \
  /localdisk/include/simploce/conf/u-conf.hpp \
  /localdisk/include/simploce/particle/atom.hpp \
  /localdisk/include/simploce/particle/atomistic.hpp \
@@ -33,4 +32,5 @@ tests/CMakeFiles/pair-list-test.dir/pair-list-test.cpp.o: \
  /localdisk/include/simploce/util/cube.hpp \
  /localdisk/include/simploce/util/file.hpp \
  /localdisk/include/simploce/util/logger.hpp \
- /localdisk/include/simploce/util/param.hpp
+ /localdisk/include/simploce/util/param.hpp \
+ ../tests/pair-list-test.cpp

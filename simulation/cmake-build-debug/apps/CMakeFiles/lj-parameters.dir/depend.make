@@ -4,7 +4,6 @@
 apps/CMakeFiles/lj-parameters.dir/lj-parameters.cpp.o: \
  ../include/simploce/simulation/continuous.hpp \
  ../include/simploce/simulation/s-types.hpp \
- ../apps/lj-parameters.cpp \
  /localdisk/include/simploce/conf/u-conf.hpp \
  /localdisk/include/simploce/particle/p-types.hpp \
  /localdisk/include/simploce/particle/protonatable.hpp \
@@ -16,4 +15,5 @@ apps/CMakeFiles/lj-parameters.dir/lj-parameters.cpp.o: \
  /localdisk/include/simploce/util/box.hpp \
  /localdisk/include/simploce/util/cube.hpp \
  /localdisk/include/simploce/util/math-constants.hpp \
- /localdisk/include/simploce/util/param.hpp
+ /localdisk/include/simploce/util/param.hpp \
+ ../apps/lj-parameters.cpp

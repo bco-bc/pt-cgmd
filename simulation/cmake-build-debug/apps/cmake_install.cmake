@@ -1,4 +1,4 @@
-# Install script for directory: /home/andre/wrk3/simploce/pt-cgmd/simulation/apps
+# Install script for directory: /wrk3/simploce/pt-cgmd/simulation/apps
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)

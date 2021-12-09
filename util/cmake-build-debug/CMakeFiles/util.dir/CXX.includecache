@@ -46,6 +46,12 @@ algorithm
 cmath
 -
 
+../include/simploce/util/param.hpp
+boost/property_tree/ptree.hpp
+-
+iostream
+-
+
 ../include/simploce/util/poisson-process.hpp
 simploce/types/u-types.hpp
 ../include/simploce/util/simploce/types/u-types.hpp
@@ -100,11 +106,23 @@ cassert
 stdexcept
 -
 
-/home/andre/wrk3/simploce/pt-cgmd/util/src/poisson-process.cpp
+/localdisk/include/simploce/util/logger.hpp
+string
+-
+sstream
+-
+
+/wrk3/simploce/pt-cgmd/util/src/param.cpp
+simploce/util/param.hpp
+/wrk3/simploce/pt-cgmd/util/src/simploce/util/param.hpp
+boost/property_tree/json_parser.hpp
+-
+
+/wrk3/simploce/pt-cgmd/util/src/poisson-process.cpp
 simploce/util/poisson-process.hpp
-/home/andre/wrk3/simploce/pt-cgmd/util/src/simploce/util/poisson-process.hpp
+/wrk3/simploce/pt-cgmd/util/src/simploce/util/poisson-process.hpp
 simploce/conf/u-conf.hpp
-/home/andre/wrk3/simploce/pt-cgmd/util/src/simploce/conf/u-conf.hpp
+/wrk3/simploce/pt-cgmd/util/src/simploce/conf/u-conf.hpp
 boost/lexical_cast.hpp
 -
 cmath
@@ -118,27 +136,21 @@ random
 iostream
 -
 
-/home/andre/wrk3/simploce/pt-cgmd/util/src/telegraph-process.cpp
+/wrk3/simploce/pt-cgmd/util/src/telegraph-process.cpp
 simploce/util/telegraph-process.hpp
-/home/andre/wrk3/simploce/pt-cgmd/util/src/simploce/util/telegraph-process.hpp
+/wrk3/simploce/pt-cgmd/util/src/simploce/util/telegraph-process.hpp
 simploce/util/poisson-process.hpp
-/home/andre/wrk3/simploce/pt-cgmd/util/src/simploce/util/poisson-process.hpp
+/wrk3/simploce/pt-cgmd/util/src/simploce/util/poisson-process.hpp
 simploce/conf/u-conf.hpp
-/home/andre/wrk3/simploce/pt-cgmd/util/src/simploce/conf/u-conf.hpp
+/wrk3/simploce/pt-cgmd/util/src/simploce/conf/u-conf.hpp
 iomanip
 -
 
-/home/andre/wrk3/simploce/pt-cgmd/util/src/util.cpp
+/wrk3/simploce/pt-cgmd/util/src/util.cpp
 simploce/util/util.hpp
-/home/andre/wrk3/simploce/pt-cgmd/util/src/simploce/util/util.hpp
+/wrk3/simploce/pt-cgmd/util/src/simploce/util/util.hpp
 boost/uuid/uuid_generators.hpp
-/home/andre/wrk3/simploce/pt-cgmd/util/src/boost/uuid/uuid_generators.hpp
+/wrk3/simploce/pt-cgmd/util/src/boost/uuid/uuid_generators.hpp
 boost/lexical_cast.hpp
-/home/andre/wrk3/simploce/pt-cgmd/util/src/boost/lexical_cast.hpp
-
-/localdisk/include/simploce/util/logger.hpp
-string
--
-sstream
--
+/wrk3/simploce/pt-cgmd/util/src/boost/lexical_cast.hpp
 

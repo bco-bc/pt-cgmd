@@ -7,7 +7,6 @@ tests/CMakeFiles/pdb-test.dir/pdb-test.cpp.o: \
  ../include/simploce/simulation/pbc.hpp \
  ../include/simploce/simulation/s-factory.hpp \
  ../include/simploce/simulation/s-types.hpp \
- ../tests/pdb-test.cpp \
  /localdisk/include/simploce/conf/u-conf.hpp \
  /localdisk/include/simploce/particle/p-factory.hpp \
  /localdisk/include/simploce/particle/p-types.hpp \
@@ -17,4 +16,5 @@ tests/CMakeFiles/pdb-test.dir/pdb-test.cpp.o: \
  /localdisk/include/simploce/types/value_t.hpp \
  /localdisk/include/simploce/util/box.hpp \
  /localdisk/include/simploce/util/cube.hpp \
- /localdisk/include/simploce/util/param.hpp
+ /localdisk/include/simploce/util/param.hpp \
+ ../tests/pdb-test.cpp

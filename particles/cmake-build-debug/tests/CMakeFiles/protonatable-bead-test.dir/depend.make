@@ -18,7 +18,6 @@ tests/CMakeFiles/protonatable-bead-test.dir/protonatable-bead-test.cpp.o: \
  ../include/simploce/particle/protonatable-bead.hpp \
  ../include/simploce/particle/protonatable-coarse-grained.hpp \
  ../include/simploce/particle/protonatable.hpp \
- ../tests/protonatable-bead-test.cpp \
  /localdisk/include/simploce/conf/u-conf.hpp \
  /localdisk/include/simploce/types/cvector_t.hpp \
  /localdisk/include/simploce/types/u-types.hpp \
@@ -29,4 +28,5 @@ tests/CMakeFiles/protonatable-bead-test.dir/protonatable-bead-test.cpp.o: \
  /localdisk/include/simploce/util/cube.hpp \
  /localdisk/include/simploce/util/logger.hpp \
  /localdisk/include/simploce/util/math-constants.hpp \
- /localdisk/include/simploce/util/util.hpp
+ /localdisk/include/simploce/util/util.hpp \
+ ../tests/protonatable-bead-test.cpp

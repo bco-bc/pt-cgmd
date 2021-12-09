@@ -26,9 +26,9 @@ iomanip
 array
 -
 
-/home/andre/wrk3/simploce/pt-cgmd/util/tests/cvector-test.cpp
+/wrk3/simploce/pt-cgmd/util/tests/cvector-test.cpp
 simploce/types/cvector_t.hpp
-/home/andre/wrk3/simploce/pt-cgmd/util/tests/simploce/types/cvector_t.hpp
+/wrk3/simploce/pt-cgmd/util/tests/simploce/types/cvector_t.hpp
 iostream
 -
 cassert

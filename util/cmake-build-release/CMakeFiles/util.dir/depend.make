@@ -25,5 +25,5 @@ CMakeFiles/util.dir/src/util.cpp.o: \
  ../include/simploce/types/u-types.hpp \
  ../include/simploce/types/value_t.hpp \
  ../include/simploce/util/util.hpp \
- ../src/util.cpp \
- /localdisk/include/simploce/util/logger.hpp
+ /localdisk/include/simploce/util/logger.hpp \
+ ../src/util.cpp

@@ -10,7 +10,6 @@ tests/CMakeFiles/rf-test.dir/rf-test.cpp.o: \
  ../include/simploce/simulation/s-factory.hpp \
  ../include/simploce/simulation/s-properties.hpp \
  ../include/simploce/simulation/s-types.hpp \
- ../tests/rf-test.cpp \
  /localdisk/include/simploce/conf/u-conf.hpp \
  /localdisk/include/simploce/particle/atom.hpp \
  /localdisk/include/simploce/particle/bead.hpp \
@@ -29,4 +28,5 @@ tests/CMakeFiles/rf-test.dir/rf-test.cpp.o: \
  /localdisk/include/simploce/util/cube.hpp \
  /localdisk/include/simploce/util/logger.hpp \
  /localdisk/include/simploce/util/param.hpp \
- /localdisk/include/simploce/util/util.hpp
+ /localdisk/include/simploce/util/util.hpp \
+ ../tests/rf-test.cpp

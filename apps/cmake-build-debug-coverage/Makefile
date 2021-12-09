@@ -57,10 +57,10 @@ RM = /home/andre/clion-2021.2.3/bin/cmake/linux/bin/cmake -E rm -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /wrk3/simploce/pt-cgmd/apps
+CMAKE_SOURCE_DIR = /home/andre/wrk3/simploce/pt-cgmd/apps
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /wrk3/simploce/pt-cgmd/apps/cmake-build-debug-coverage
+CMAKE_BINARY_DIR = /home/andre/wrk3/simploce/pt-cgmd/apps/cmake-build-debug-coverage
 
 #=============================================================================
 # Targets provided globally by CMake.
@@ -132,9 +132,9 @@ install/local/fast: preinstall/fast
 
 # The main all target
 all: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /wrk3/simploce/pt-cgmd/apps/cmake-build-debug-coverage/CMakeFiles /wrk3/simploce/pt-cgmd/apps/cmake-build-debug-coverage//CMakeFiles/progress.marks
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/andre/wrk3/simploce/pt-cgmd/apps/cmake-build-debug-coverage/CMakeFiles /home/andre/wrk3/simploce/pt-cgmd/apps/cmake-build-debug-coverage//CMakeFiles/progress.marks
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 all
-	$(CMAKE_COMMAND) -E cmake_progress_start /wrk3/simploce/pt-cgmd/apps/cmake-build-debug-coverage/CMakeFiles 0
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/andre/wrk3/simploce/pt-cgmd/apps/cmake-build-debug-coverage/CMakeFiles 0
 .PHONY : all
 
 # The main clean target

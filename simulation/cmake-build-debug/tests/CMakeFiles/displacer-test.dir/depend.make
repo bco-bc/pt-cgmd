@@ -14,7 +14,6 @@ tests/CMakeFiles/displacer-test.dir/displacer-test.cpp.o: \
  ../include/simploce/simulation/s-types.hpp \
  ../include/simploce/simulation/sim-data.hpp \
  ../include/simploce/simulation/velocity-verlet.hpp \
- ../tests/displacer-test.cpp \
  /localdisk/include/simploce/conf/u-conf.hpp \
  /localdisk/include/simploce/particle/bead.hpp \
  /localdisk/include/simploce/particle/coarse-grained.hpp \
@@ -34,4 +33,5 @@ tests/CMakeFiles/displacer-test.dir/displacer-test.cpp.o: \
  /localdisk/include/simploce/util/cube.hpp \
  /localdisk/include/simploce/util/file.hpp \
  /localdisk/include/simploce/util/logger.hpp \
- /localdisk/include/simploce/util/param.hpp
+ /localdisk/include/simploce/util/param.hpp \
+ ../tests/displacer-test.cpp

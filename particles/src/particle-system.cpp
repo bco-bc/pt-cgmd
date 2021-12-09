@@ -166,13 +166,16 @@ namespace simploce {
         for (const auto& p: all_) {
             p->writeState(stream);
         }
+        stream << std::endl;
     }
 
     void
     ParticleSystem::readState(std::istream& stream) {
+        std::string stringBuffer;
         for (auto& p: all_) {
             p->readState(stream);
         }
+        std::getline(stream, stringBuffer);  // Read EOL.
     }
 
     void

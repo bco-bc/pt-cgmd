@@ -1,1 +1,1 @@
-/usr/bin/c++ -O3 -O3 -DNDEBUG CMakeFiles/box-cube-test.dir/box-cube-test.cpp.o -o box-cube-test  -Wl,-rpath,/home/andre/wrk3/simploce/pt-cgmd/util/cmake-build-release ../libutil.so 
+/usr/bin/c++ -O3 -O3 -DNDEBUG CMakeFiles/box-cube-test.dir/box-cube-test.cpp.o -o box-cube-test  -Wl,-rpath,/wrk3/simploce/pt-cgmd/util/cmake-build-release ../libutil.so 

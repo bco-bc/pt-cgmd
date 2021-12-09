@@ -8,7 +8,7 @@ set(CMAKE_DEPENDS_LANGUAGES
   )
 # The set of files for implicit dependencies of each language:
 set(CMAKE_DEPENDS_CHECK_CXX
-  "/home/andre/wrk3/simploce/pt-cgmd/simulation/apps/lj-parameters.cpp" "/home/andre/wrk3/simploce/pt-cgmd/simulation/cmake-build-debug/apps/CMakeFiles/lj-parameters.dir/lj-parameters.cpp.o"
+  "/wrk3/simploce/pt-cgmd/simulation/apps/lj-parameters.cpp" "/wrk3/simploce/pt-cgmd/simulation/cmake-build-debug/apps/CMakeFiles/lj-parameters.dir/lj-parameters.cpp.o"
   )
 set(CMAKE_CXX_COMPILER_ID "GNU")
 
@@ -24,7 +24,7 @@ set(CMAKE_DEPENDS_DEPENDENCY_FILES
 
 # Targets to which this target links.
 set(CMAKE_TARGET_LINKED_INFO_FILES
-  "/home/andre/wrk3/simploce/pt-cgmd/simulation/cmake-build-debug/CMakeFiles/simulation.dir/DependInfo.cmake"
+  "/wrk3/simploce/pt-cgmd/simulation/cmake-build-debug/CMakeFiles/simulation.dir/DependInfo.cmake"
   )
 
 # Fortran module output directory.

@@ -13,7 +13,6 @@ tests/CMakeFiles/simulation-test.dir/simulation-test.cpp.o: \
  ../include/simploce/simulation/s-types.hpp \
  ../include/simploce/simulation/sim-data.hpp \
  ../include/simploce/simulation/simulation.hpp \
- ../tests/simulation-test.cpp \
  /localdisk/include/simploce/conf/u-conf.hpp \
  /localdisk/include/simploce/particle/p-conf.hpp \
  /localdisk/include/simploce/particle/p-factory.hpp \
@@ -31,4 +30,5 @@ tests/CMakeFiles/simulation-test.dir/simulation-test.cpp.o: \
  /localdisk/include/simploce/util/cube.hpp \
  /localdisk/include/simploce/util/file.hpp \
  /localdisk/include/simploce/util/logger.hpp \
- /localdisk/include/simploce/util/param.hpp
+ /localdisk/include/simploce/util/param.hpp \
+ ../tests/simulation-test.cpp

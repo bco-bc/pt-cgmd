@@ -18,7 +18,6 @@ tests/CMakeFiles/protonatable-coarse-grained-test.dir/protonatable-coarse-graine
  ../include/simploce/particle/protonatable-bead.hpp \
  ../include/simploce/particle/protonatable-coarse-grained.hpp \
  ../include/simploce/particle/protonatable.hpp \
- ../tests/protonatable-coarse-grained-test.cpp \
  /localdisk/include/simploce/conf/u-conf.hpp \
  /localdisk/include/simploce/types/cvector_t.hpp \
  /localdisk/include/simploce/types/u-types.hpp \
@@ -30,4 +29,5 @@ tests/CMakeFiles/protonatable-coarse-grained-test.dir/protonatable-coarse-graine
  /localdisk/include/simploce/util/file.hpp \
  /localdisk/include/simploce/util/logger.hpp \
  /localdisk/include/simploce/util/math-constants.hpp \
- /localdisk/include/simploce/util/util.hpp
+ /localdisk/include/simploce/util/util.hpp \
+ ../tests/protonatable-coarse-grained-test.cpp

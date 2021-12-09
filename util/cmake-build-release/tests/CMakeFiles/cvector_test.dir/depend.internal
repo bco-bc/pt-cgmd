@@ -4,4 +4,4 @@
 tests/CMakeFiles/cvector_test.dir/cvector-test.cpp.o
  ../include/simploce/conf/u-conf.hpp
  ../include/simploce/types/cvector_t.hpp
- /home/andre/wrk3/simploce/pt-cgmd/util/tests/cvector-test.cpp
+ /wrk3/simploce/pt-cgmd/util/tests/cvector-test.cpp

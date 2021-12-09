@@ -6,7 +6,6 @@ tests/CMakeFiles/protonatable-particle-system-factory-test.dir/protonatable-part
  ../include/simploce/simulation/protonatable-particle-system-factory.hpp \
  ../include/simploce/simulation/s-factory.hpp \
  ../include/simploce/simulation/s-types.hpp \
- ../tests/protonatable-particle-system-factory-test.cpp \
  /localdisk/include/simploce/conf/u-conf.hpp \
  /localdisk/include/simploce/particle/atom.hpp \
  /localdisk/include/simploce/particle/bead.hpp \
@@ -32,4 +31,5 @@ tests/CMakeFiles/protonatable-particle-system-factory-test.dir/protonatable-part
  /localdisk/include/simploce/util/cube.hpp \
  /localdisk/include/simploce/util/logger.hpp \
  /localdisk/include/simploce/util/param.hpp \
- /localdisk/include/simploce/util/util.hpp
+ /localdisk/include/simploce/util/util.hpp \
+ ../tests/protonatable-particle-system-factory-test.cpp

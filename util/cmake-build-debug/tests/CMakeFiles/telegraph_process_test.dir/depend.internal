@@ -7,4 +7,4 @@ tests/CMakeFiles/telegraph_process_test.dir/telegraph-process-test.cpp.o
  ../include/simploce/types/u-types.hpp
  ../include/simploce/types/value_t.hpp
  ../include/simploce/util/telegraph-process.hpp
- /home/andre/wrk3/simploce/pt-cgmd/util/tests/telegraph-process-test.cpp
+ /wrk3/simploce/pt-cgmd/util/tests/telegraph-process-test.cpp
