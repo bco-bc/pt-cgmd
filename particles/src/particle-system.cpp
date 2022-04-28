@@ -181,7 +181,7 @@ namespace simploce {
     void
     ParticleSystem::add(const p_ptr_t& particle)
     {
-        util::Logger logger{"simploce::ParticleSystem<P,PG>::add()"};
+        util::Logger logger{"simploce::ParticleSystem::add()"};
 
         if ( this->contains(particle->id()) ) {
             std::string msg =

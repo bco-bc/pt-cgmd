@@ -84,7 +84,7 @@ if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_
   if(CMAKE_ERROR_ON_ABSOLUTE_INSTALL_DESTINATION)
     message(FATAL_ERROR "ABSOLUTE path INSTALL DESTINATION forbidden (by caller): ${CMAKE_ABSOLUTE_DESTINATION_FILES}")
   endif()
-file(INSTALL DESTINATION "/localdisk" TYPE DIRECTORY FILES "/wrk3/simploce/pt-cgmd/particles/resources")
+  file(INSTALL DESTINATION "/localdisk" TYPE DIRECTORY FILES "/wrk3/simploce/pt-cgmd/particles/resources")
 endif()
 
 if(CMAKE_INSTALL_COMPONENT)

@@ -162,6 +162,19 @@ depend:
 .PHONY : depend
 
 #=============================================================================
+# Target rules for targets named s-distance
+
+# Build rule for target.
+s-distance: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 s-distance
+.PHONY : s-distance
+
+# fast build rule for target.
+s-distance/fast:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/s-distance.dir/build.make CMakeFiles/s-distance.dir/build
+.PHONY : s-distance/fast
+
+#=============================================================================
 # Target rules for targets named s-gr
 
 # Build rule for target.
@@ -199,19 +212,6 @@ s-particle-system: cmake_check_build_system
 s-particle-system/fast:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/s-particle-system.dir/build.make CMakeFiles/s-particle-system.dir/build
 .PHONY : s-particle-system/fast
-
-#=============================================================================
-# Target rules for targets named s-distance
-
-# Build rule for target.
-s-distance: cmake_check_build_system
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 s-distance
-.PHONY : s-distance
-
-# fast build rule for target.
-s-distance/fast:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/s-distance.dir/build.make CMakeFiles/s-distance.dir/build
-.PHONY : s-distance/fast
 
 #=============================================================================
 # Target rules for targets named s-simulate

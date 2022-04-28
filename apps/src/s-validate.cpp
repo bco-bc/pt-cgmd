@@ -11,6 +11,7 @@
 #include "simploce/simulation/continuous.hpp"
 #include "simploce/particle/protonatable-coarse-grained.hpp"
 #include "simploce/particle/atomistic.hpp"
+#include "simploce/simulation/s-properties.hpp"
 #include "simploce/util/specification.hpp"
 #include "simploce/util/logger.hpp"
 #include "simploce/util/file.hpp"
@@ -33,6 +34,10 @@ static void validate(const prot_cg_sys_ptr_t& cg) {
     std::cout << "Number of protonatable beads: " << util::toString(cg->numberProtonatableBeads()) << std::endl;
     std::cout << "Box dimension(s)" << *(cg->box()) << std::endl;
     std::cout << "Protonatable?: " << cg->isProtonatable() << std::endl;
+    cg->doWithAll<void>([] (const std::vector<p_ptr_t>& all) {
+        auto p = properties::linearMomentum(all);
+        std::cout << "TOTAL linear momentum: " << p << std::endl;
+    });
     std::cout << std::endl;
 }
 
@@ -44,6 +49,10 @@ static void validate(const at_sys_ptr_t& atomistic) {
     std::cout << "Number of atoms: " << util::toString(atomistic->numberOfAtoms()) << std::endl;
     std::cout << "Box dimension(s)" << *(atomistic->box()) << std::endl;
     std::cout << "Protonatable?: " << atomistic->isProtonatable() << std::endl;
+    atomistic->doWithAll<void>([] (const std::vector<p_ptr_t>& all) {
+        auto p = properties::linearMomentum(all);
+        std::cout << "TOTAL linear momentum: " << p << std::endl;
+    });
 }
 
 int main(int argc, char *argv[]) {

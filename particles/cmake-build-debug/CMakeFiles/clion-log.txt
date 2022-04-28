@@ -1,4 +1,4 @@
-/localdisk/clion-2021.2.3/bin/cmake/linux/bin/cmake -DCMAKE_BUILD_TYPE=Debug -DCMAKE_DEPENDS_USE_COMPILER=FALSE -G "CodeBlocks - Unix Makefiles" /wrk3/simploce/pt-cgmd/particles
+/localdisk/clion-2021.2.3/bin/cmake/linux/bin/cmake -DCMAKE_BUILD_TYPE=Debug -G "CodeBlocks - Unix Makefiles" /wrk3/simploce/pt-cgmd/particles
 -- The C compiler identification is GNU 7.5.0
 -- The CXX compiler identification is GNU 7.5.0
 -- Detecting C compiler ABI info

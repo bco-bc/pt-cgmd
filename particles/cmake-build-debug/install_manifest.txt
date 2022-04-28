@@ -23,6 +23,7 @@
 /localdisk/include/simploce/particle/particle-group.hpp
 /localdisk/resources/coarse-grained-system.dat
 /localdisk/resources/electrolyte.ps
+/localdisk/resources/small.ps
 /localdisk/resources/protonation-sites.dat
 /localdisk/resources/protonatable-coarse-grained-system.dat
 /localdisk/resources/particles-specs.dat

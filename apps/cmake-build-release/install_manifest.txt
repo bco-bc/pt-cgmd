@@ -1,4 +1,0 @@
-/home/andre/bin/s-cgmd
-/home/andre/bin/s-dipole-moment
-/home/andre/bin/s-gr
-/home/andre/bin/s-msd

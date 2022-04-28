@@ -63,10 +63,10 @@ CMAKE_BINARY_DIR = /home/andre/wrk3/simploce/pt-cgmd/apps/cmake-build-debug
 # Directory level rules for the build root directory
 
 # The main recursive "all" target.
+all: CMakeFiles/s-distance.dir/all
 all: CMakeFiles/s-gr.dir/all
 all: CMakeFiles/s-validate.dir/all
 all: CMakeFiles/s-particle-system.dir/all
-all: CMakeFiles/s-distance.dir/all
 all: CMakeFiles/s-simulate.dir/all
 .PHONY : all
 
@@ -75,12 +75,38 @@ preinstall:
 .PHONY : preinstall
 
 # The main recursive "clean" target.
+clean: CMakeFiles/s-distance.dir/clean
 clean: CMakeFiles/s-gr.dir/clean
 clean: CMakeFiles/s-validate.dir/clean
 clean: CMakeFiles/s-particle-system.dir/clean
-clean: CMakeFiles/s-distance.dir/clean
 clean: CMakeFiles/s-simulate.dir/clean
 .PHONY : clean
+
+#=============================================================================
+# Target rules for target CMakeFiles/s-distance.dir
+
+# All Build rule for target.
+CMakeFiles/s-distance.dir/all:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/s-distance.dir/build.make CMakeFiles/s-distance.dir/depend
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/s-distance.dir/build.make CMakeFiles/s-distance.dir/build
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/andre/wrk3/simploce/pt-cgmd/apps/cmake-build-debug/CMakeFiles --progress-num=1,2 "Built target s-distance"
+.PHONY : CMakeFiles/s-distance.dir/all
+
+# Build rule for subdir invocation for target.
+CMakeFiles/s-distance.dir/rule: cmake_check_build_system
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/andre/wrk3/simploce/pt-cgmd/apps/cmake-build-debug/CMakeFiles 2
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 CMakeFiles/s-distance.dir/all
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/andre/wrk3/simploce/pt-cgmd/apps/cmake-build-debug/CMakeFiles 0
+.PHONY : CMakeFiles/s-distance.dir/rule
+
+# Convenience name for target.
+s-distance: CMakeFiles/s-distance.dir/rule
+.PHONY : s-distance
+
+# clean rule for target.
+CMakeFiles/s-distance.dir/clean:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/s-distance.dir/build.make CMakeFiles/s-distance.dir/clean
+.PHONY : CMakeFiles/s-distance.dir/clean
 
 #=============================================================================
 # Target rules for target CMakeFiles/s-gr.dir
@@ -159,32 +185,6 @@ s-particle-system: CMakeFiles/s-particle-system.dir/rule
 CMakeFiles/s-particle-system.dir/clean:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/s-particle-system.dir/build.make CMakeFiles/s-particle-system.dir/clean
 .PHONY : CMakeFiles/s-particle-system.dir/clean
-
-#=============================================================================
-# Target rules for target CMakeFiles/s-distance.dir
-
-# All Build rule for target.
-CMakeFiles/s-distance.dir/all:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/s-distance.dir/build.make CMakeFiles/s-distance.dir/depend
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/s-distance.dir/build.make CMakeFiles/s-distance.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/andre/wrk3/simploce/pt-cgmd/apps/cmake-build-debug/CMakeFiles --progress-num=1,2 "Built target s-distance"
-.PHONY : CMakeFiles/s-distance.dir/all
-
-# Build rule for subdir invocation for target.
-CMakeFiles/s-distance.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/andre/wrk3/simploce/pt-cgmd/apps/cmake-build-debug/CMakeFiles 2
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 CMakeFiles/s-distance.dir/all
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/andre/wrk3/simploce/pt-cgmd/apps/cmake-build-debug/CMakeFiles 0
-.PHONY : CMakeFiles/s-distance.dir/rule
-
-# Convenience name for target.
-s-distance: CMakeFiles/s-distance.dir/rule
-.PHONY : s-distance
-
-# clean rule for target.
-CMakeFiles/s-distance.dir/clean:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/s-distance.dir/build.make CMakeFiles/s-distance.dir/clean
-.PHONY : CMakeFiles/s-distance.dir/clean
 
 #=============================================================================
 # Target rules for target CMakeFiles/s-simulate.dir

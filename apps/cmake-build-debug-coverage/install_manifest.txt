@@ -1,2 +1,0 @@
-/localdisk/bin/s-particle-system
-/localdisk/bin/s-validate

@@ -46,7 +46,7 @@ int main(int argc, char *argv[]) {
         real_t temperature{298.15};                      // in K.
         real_t gamma{1.0};                               // in ps^-1
         std::string displacerType =
-                conf::LANGEVIN_VELOCITY_VERLET;          // Displacer.
+                conf::VELOCITY_VERLET;                   // Displacer.
 
         po::options_description usage("Usage");
         usage.add_options() (
@@ -93,9 +93,10 @@ int main(int argc, char *argv[]) {
             "Time step (ps). Default is 0.020 ps or 20 fs."
         )(
             "displacer,d", po::value<std::string>(&displacerType),
-            "Displacer specification. Default is 'lvv' (Langevin Velocity Verlet). "
-            "Other choices are 'mc' (Monte Carlo), 'lf' (leapFrog), 'vv' (Velocity Verlet), and "
-            "'pt-lvv' (Langevin Velocity Verlet with Proton Transfer)"
+            "Displacer specification. Default is 'vv' (Velocity Verlet). "
+            "Other choices are 'mc' (Monte Carlo), 'lf' (leapFrog), "
+            "'lvv' (Langevin Velocity Verlet, NOT TESTED), and "
+            "'pt-lvv' (Langevin Velocity Verlet with Proton Transfer, NOT TESTED)"
         )(
             "include-external-potentials,e",
             "Include external potentials for force calculations."
