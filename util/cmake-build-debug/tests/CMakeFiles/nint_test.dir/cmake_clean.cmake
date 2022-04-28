@@ -1,5 +1,6 @@
 file(REMOVE_RECURSE
   "CMakeFiles/nint_test.dir/nint-test.cpp.o"
+  "CMakeFiles/nint_test.dir/nint-test.cpp.o.d"
   "nint_test"
   "nint_test.pdb"
 )

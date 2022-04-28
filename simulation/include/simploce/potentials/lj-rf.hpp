@@ -9,8 +9,8 @@
 #define SIMULATION_LJ_RF_HPP
 
 #include "simploce/potentials/pair-potential.hpp"
-#include "simploce/simulation/rf.hpp"
-#include "simploce/simulation/s-types.hpp"
+#include "rf.hpp"
+#include "simploce/types/s-types.hpp"
 #include <utility>
 
 namespace simploce {

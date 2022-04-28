@@ -1,5 +1,6 @@
 file(REMOVE_RECURSE
   "CMakeFiles/particle-system-factory-test.dir/particle-system-factory-test.cpp.o"
+  "CMakeFiles/particle-system-factory-test.dir/particle-system-factory-test.cpp.o.d"
   "particle-system-factory-test"
   "particle-system-factory-test.pdb"
 )

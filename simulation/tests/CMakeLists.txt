@@ -2,11 +2,6 @@ set(CMAKE_THREAD_PREFER_PTHREAD ON)
 set(THREADS_PREFER_PTHREAD_FLAG ON)
 find_package(Threads REQUIRED)
 
-#[[
-add_executable(grid-cells-test grid-cells-test.cpp)
-
-]]
-
 add_executable(protonatable-particle-system-factory-test protonatable-particle-system-factory-test.cpp)
 add_executable(forcefield-test forcefield-test.cpp)
 add_executable(pair-list-test pair-list-test.cpp)
@@ -18,13 +13,8 @@ add_executable(simulation-test simulation-test.cpp)
 add_executable(rf-test rf-test.cpp)
 add_executable(lj-test lj-test.cpp)
 add_executable(elec-pot-difference-test elec-pot-difference-test.cpp)
-
-#[[
-target_link_directories(grid-cells-test PUBLIC ${CMAKE_INSTALL_PREFIX}/lib)
-target_link_libraries(grid-cells-test simulation particles util cpputil pthread)
-target_link_directories(pt-pairlist-test PUBLIC ${CMAKE_INSTALL_PREFIX}/lib)
-target_link_libraries(pt-pairlist-test simulation particles util cpputil pthread)
-]]
+add_executable(sf-test sf-test.cpp)
+add_executable(wall-test wall-test.cpp)
 
 target_link_directories(protonatable-particle-system-factory-test PUBLIC ${CMAKE_INSTALL_PREFIX}/lib)
 target_link_libraries(protonatable-particle-system-factory-test simulation particles util cpputil pthread)
@@ -48,4 +38,8 @@ target_link_directories(lj-test PUBLIC ${CMAKE_INSTALL_PREFIX}/lib)
 target_link_libraries(lj-test simulation particles util cpputil pthread)
 target_link_directories(elec-pot-difference-test PUBLIC ${CMAKE_INSTALL_PREFIX}/lib)
 target_link_libraries(elec-pot-difference-test simulation particles util cpputil pthread)
+target_link_directories(sf-test PUBLIC ${CMAKE_INSTALL_PREFIX}/lib)
+target_link_libraries(sf-test simulation particles util cpputil pthread)
+target_link_directories(wall-test PUBLIC ${CMAKE_INSTALL_PREFIX}/lib)
+target_link_libraries(wall-test simulation particles util cpputil pthread)
 

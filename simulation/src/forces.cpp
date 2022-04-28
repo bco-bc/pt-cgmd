@@ -6,19 +6,20 @@
 
 #include "simploce/potentials/forces.hpp"
 #include "simploce/simulation/pair-lists.hpp"
-#include "simploce/simulation/s-conf.hpp"
+#include "simploce/conf/s-conf.hpp"
 #include "simploce/potentials/pair-potential.hpp"
 #include "simploce/potentials/force-field.hpp"
 #include "simploce/potentials/lj.hpp"
 #include "simploce/potentials/hp.hpp"
 #include "simploce/potentials/halve-attractive-qp.hpp"
 #include "simploce/potentials/lj-rf.hpp"
-#include "simploce/simulation/rf.hpp"
+#include "simploce/potentials/rf.hpp"
 #include "simploce/potentials/sf.hpp"
 #include "simploce/potentials/sc.hpp"
 #include "simploce/potentials/hs-sf.hpp"
 #include "simploce/potentials/lj-sf.hpp"
 #include "simploce/potentials/hs-sc.hpp"
+#include "simploce/potentials/wall.hpp"
 #include "simploce/potentials/no-pair-potential.hpp"
 #include "simploce/potentials/external-potential.hpp"
 #include "simploce/potentials/elec-pot-difference.hpp"
@@ -28,6 +29,8 @@
 #include "simploce/particle/particle-spec.hpp"
 #include "simploce/particle/bond.hpp"
 #include "simploce/util/util.hpp"
+#include "simploce/util/direction.hpp"
+#include "simploce/util/flat-surface.hpp"
 #include <utility>
 #include <memory>
 #include <map>
@@ -41,13 +44,12 @@ namespace simploce {
     static pp_map_t nonBondedPairPotentials_{};
     static pp_map_t bondedPairPotentials_{};
 
-    static pair_potential_ptr_t NONE = std::make_shared<NoPairPotential>();
-
     static ep_cont_t externalPotentials_{};
 
     static pair_potential_ptr_t
     findPairPotential_(const std::string& key, const pp_map_t& pairPotential) {
         static util::Logger logger("simploce::findPairPotential_()");
+        static pair_potential_ptr_t NONE = std::make_shared<NoPairPotential>();
         auto iter = pairPotential.find(key);
         if (iter == pairPotential.end() ) {
             logger.warn(key + ": No pair potential identified.");
@@ -66,7 +68,8 @@ namespace simploce {
      * @return Associated pair potentials.
      */
     static void
-    associatePairPotentials_(const std::vector<p_ptr_t>& all,
+    associatePairPotentials_(const dist_t& cutoff,
+                             const std::vector<p_ptr_t>& all,
                              const ff_ptr_t &forceField,
                              const box_ptr_t &box,
                              const bc_ptr_t &bc) {
@@ -76,8 +79,8 @@ namespace simploce {
         nonBondedPairPotentials_.clear();
         auto interactionParameters = forceField->nonBondedSpecifications();
         for (auto& ip : interactionParameters) {
-            std::string type = ip.typeName;
-            if (type == conf::LJ) {
+            std::string typeName = ip.typeName;
+            if (typeName == conf::LJ) {
                 std::string key1 = ip.spec1->name() + "-" + ip.spec2->name();
                 auto lj = std::make_shared<LJ>(forceField, bc);
                 auto pair1 = std::make_pair(key1, lj);
@@ -87,10 +90,10 @@ namespace simploce {
                     auto pair2 = std::make_pair(key2, lj);
                     nonBondedPairPotentials_.emplace(pair2);
                 }
-            } else if (type == conf::LJ_RF) {
+            } else if (typeName == conf::LJ_RF) {
                 std::string key1 = ip.spec1->name() + "-" + ip.spec2->name();
                 real_t kappa = properties::kappa(all);
-                auto rf = std::make_shared<RF>(kappa, forceField, box, bc);
+                auto rf = std::make_shared<RF>(cutoff, kappa, forceField, box, bc);
                 auto lj_rf = std::make_shared<LJ_RF>(kappa, forceField, box, bc, rf);
                 auto pair1 = std::make_pair(key1, lj_rf);
                 nonBondedPairPotentials_.emplace(pair1);
@@ -99,10 +102,10 @@ namespace simploce {
                     auto pair2 = std::make_pair(key2, lj_rf);
                     nonBondedPairPotentials_.emplace(pair2);
                 }
-            } else if (type == conf::RF) {
+            } else if (typeName == conf::RF) {
                 std::string key1 = ip.spec1->name() + "-" + ip.spec2->name();
                 real_t kappa = properties::kappa(all);
-                auto rf = std::make_shared<RF>(kappa, forceField, box, bc);
+                auto rf = std::make_shared<RF>(cutoff, kappa, forceField, box, bc);
                 auto pair1 = std::make_pair(key1, rf);
                 nonBondedPairPotentials_.emplace(pair1);
                 if ( ip.spec1 != ip.spec2 ) {
@@ -110,9 +113,9 @@ namespace simploce {
                     auto pair2 = std::make_pair(key2, rf);
                     nonBondedPairPotentials_.emplace(pair2);
                 }
-            } else if (type == conf::LJ_SF) {
+            } else if (typeName == conf::LJ_SF) {
                 std::string key1 = ip.spec1->name() + "-" + ip.spec2->name();
-                auto sf = std::make_shared<SF>(forceField, box, bc);
+                auto sf = std::make_shared<SF>(cutoff, forceField, box, bc);
                 auto lj_sf = std::make_shared<LJ_SF>(forceField, bc, sf);
                 auto pair1 = std::make_pair(key1, lj_sf);
                 nonBondedPairPotentials_.emplace(pair1);
@@ -121,9 +124,9 @@ namespace simploce {
                     auto pair2 = std::make_pair(key2, lj_sf);
                     nonBondedPairPotentials_.emplace(pair2);
                 }
-            } else if ( type == conf::HS_SF ) {
+            } else if (typeName == conf::HS_SF ) {
                std::string key1 = ip.spec1->name() + "-" + ip.spec2->name();
-               auto sf = std::make_shared<SF>(forceField, box, bc);
+               auto sf = std::make_shared<SF>(cutoff, forceField, box, bc);
                auto hs_sf = std::make_shared<HS_SF>(forceField, bc, sf);
                auto pair1 = std::make_pair(key1, hs_sf);
                nonBondedPairPotentials_.emplace(pair1);
@@ -132,7 +135,7 @@ namespace simploce {
                     auto pair2 = std::make_pair(key2, hs_sf);
                     nonBondedPairPotentials_.emplace(pair2);
                 }
-            } else if ( type == conf::HS_SC) {
+            } else if (typeName == conf::HS_SC) {
                 std::string key1 = ip.spec1->name() + "-" + ip.spec2->name();
                 auto hs_sc = std::make_shared<HS_SC>(forceField, bc);
                 auto pair1 = std::make_pair(key1, hs_sc);
@@ -143,7 +146,7 @@ namespace simploce {
                     nonBondedPairPotentials_.emplace(pair2);
                 }
             } else {
-                util::logAndThrow(logger,"Pair potential '" + type + "' is not available.");
+                util::logAndThrow(logger, "Pair potential '" + typeName + "' is not available.");
             }
         }
 
@@ -190,14 +193,24 @@ namespace simploce {
         util::Logger logger("simploce::associateExternalPotentials_()");
         auto external = forceField->externalSpecifications();
         for (const auto& spec : external) {
-            if (spec.typeName == conf::ELECTRIC_POTENTIAL_DIFFERENCE) {
-                ElectricPotentialDifference::DIRECTION direction = ElectricPotentialDifference::valueOf(spec.direction);
+            std::string typeName = spec.typeName;
+            if (typeName == conf::ELECTRIC_POTENTIAL_DIFFERENCE) {
+                auto direction = Direction::valueOf(spec.direction);
                 auto potential = std::make_shared<ElectricPotentialDifference>(spec.deltaV,
                                                                                spec.distance,
                                                                                spec.eps_inside_rc,
                                                                                bc,
                                                                                direction);
                 externalPotentials_.emplace_back(potential);
+            } else if (typeName == conf::WALL) {
+                auto plane = Plane::valueOf(spec.plane);
+                dist_t distance{spec.distance};
+                FlatSurface flatSurface{plane, distance};
+                srf_charge_density_t sigma{spec.sigma};
+                auto potential = std::make_shared<Wall>(spec.C12, spec.C6, bc, flatSurface, sigma);
+                externalPotentials_.emplace_back(potential);
+            } else {
+                util::logAndThrow(logger,"External potential '" + typeName + "' is not available.");
             }
         }
 
@@ -385,19 +398,21 @@ namespace simploce {
      * @param particle Particle.
      * @param all -All- particles.
      * @param nonBondedPairPotentials Pair potentials.
-     * @return Bonded and non-bonded potential energy.
+     * @return Bonded, non-bonded, and external potential energy.
      */
-    static std::pair<energy_t, energy_t>
+    static std::tuple<energy_t, energy_t, energy_t>
     interactionEnergyOfOneParticle_(const p_ptr_t& particle,
                                     const std::vector<p_ptr_t>& free,
                                     const std::vector<pg_ptr_t>& groups,
                                     const pp_map_t& nonBondedPairPotentials,
                                     const pp_map_t& bondedPairPotentials,
+                                    const ep_cont_t& externalPotentials,
                                     const box_ptr_t& box,
+                                    const dist_t cutoff,
                                     const bc_ptr_t& bc) {
-        static auto rc2 = properties::squareCutoffDistance(box);
+        static auto rc2 = cutoff() * cutoff();
 
-        energy_t nonBonded{0.0}, bonded{0.0};
+        energy_t nonBonded{0.0}, bonded{0.0}, external{0.0};
         auto name = particle->spec()->name();
         auto id = particle->id();
         auto pr = particle->position();
@@ -449,32 +464,42 @@ namespace simploce {
                 }
             }
         }
-        return std::move(std::make_pair(bonded, nonBonded));
+
+        // Interaction with external potentials.
+        for (auto& ep: externalPotentials) {
+            auto& potential = *ep;
+            std::pair<energy_t, force_t> ef = potential(particle);
+            // Force is ignored.
+            external += std::get<0>(ef);
+        }
+        return std::move(std::make_tuple(bonded, nonBonded, external));
     }
 
     static void
-    associatePotentials(const std::vector<p_ptr_t>& all,
-                        const ff_ptr_t& forceField,
-                        const box_ptr_t& box,
-                        const bc_ptr_t& bc) {
+    associatePotentials_(const dist_t & cutoff,
+                         const std::vector<p_ptr_t>& all,
+                         const ff_ptr_t& forceField,
+                         const box_ptr_t& box,
+                         const bc_ptr_t& bc) {
         static bool ASSOCIATED{false};
         if (ASSOCIATED) {
             return;
         }
-        associatePairPotentials_(all, forceField, box, bc);
+        associatePairPotentials_(cutoff, all, forceField, box, bc);
         associateExternalPotentials_(forceField, bc);
         ASSOCIATED = true;
     }
 
-    Forces::Forces(bc_ptr_t bc, ff_ptr_t forceField) :
-        bc_{std::move(bc)}, forceField_{std::move(forceField)} {
+    Forces::Forces(const param_ptr_t& param, bc_ptr_t bc, ff_ptr_t forceField) :
+            cutoff_{}, bc_{std::move(bc)}, forceField_{std::move(forceField)} {
+        cutoff_ = param->get<real_t>("forces.nb.cutoff");
     }
 
     energy_t Forces::nonBonded(const p_system_ptr_t& particleSystem,
                                const PairLists &pairLists) {
         auto box = particleSystem->box();
         return particleSystem->doWithAll<energy_t>([this, pairLists, box] (std::vector<p_ptr_t>& all) {
-            associatePotentials(all, forceField_, box, this->bc_);
+            associatePotentials_(cutoff_, all, forceField_, box, this->bc_);
             return computeNonBondedForces_(all,
                                            pairLists,
                                            nonBondedPairPotentials_,
@@ -487,7 +512,7 @@ namespace simploce {
     Forces::external(const p_system_ptr_t& particleSystem) {
         auto box = particleSystem->box();
         return particleSystem->doWithAll<energy_t>([this, box] (const std::vector<p_ptr_t>& all) {
-            associatePotentials(all, this->forceField_, box, this->bc_);
+            associatePotentials_(cutoff_, all, this->forceField_, box, this->bc_);
             return computeExternalForces(all, externalPotentials_);
         });
     }
@@ -500,26 +525,28 @@ namespace simploce {
                 const std::vector<p_ptr_t>& free,
                 const std::vector<pg_ptr_t>& groups
                 ) {
-            associatePotentials(all, this->forceField_, box, this->bc_);
+            associatePotentials_(cutoff_, all, this->forceField_, box, this->bc_);
             return computeBondedForces_(groups, bondedPairPotentials_);
         });
     }
 
-    std::pair<energy_t, energy_t>
+    std::tuple<energy_t, energy_t, energy_t>
     Forces::interaction(const p_ptr_t& particle,
                         const p_system_ptr_t& particleSystem) {
         auto box = particleSystem->box();
-        return particleSystem->doWithAllFreeGroups<std::pair<energy_t, energy_t>>([this, particle, box] (
+        return particleSystem->doWithAllFreeGroups<std::tuple<energy_t, energy_t, energy_t>>([this, particle, box] (
                 const std::vector<p_ptr_t>& all,
                 const std::vector<p_ptr_t>& free,
                 const std::vector<pg_ptr_t>& groups) {
-            associatePotentials(all, this->forceField_, box, this->bc_);
+            associatePotentials_(cutoff_, all, this->forceField_, box, this->bc_);
             return interactionEnergyOfOneParticle_(particle,
                                                    free,
                                                    groups,
                                                    nonBondedPairPotentials_,
                                                    bondedPairPotentials_,
+                                                   externalPotentials_,
                                                    box,
+                                                   this->cutoff_,
                                                    this->bc_);
         });
     }

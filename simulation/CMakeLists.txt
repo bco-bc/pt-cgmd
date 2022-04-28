@@ -26,13 +26,13 @@ add_library(simulation SHARED
         src/sf.cpp src/hs-sf.cpp src/sc.cpp src/hs-sc.cpp src/no-pair-potential.cpp
         src/halve-attractive-qp.cpp src/lj-sf.cpp
         src/pair-lists.cpp src/simulation.cpp src/sim-data.cpp
-        src/no-bc.cpp src/pbc.cpp src/s-factory.cpp
+        src/no-bc.cpp src/pbc.cpp src/1d-pbc.cpp src/s-factory.cpp
         src/s-properties.cpp src/protonatable-particle-system-factory.cpp
         src/continuous.cpp src/discrete.cpp src/force-field.cpp
         src/distance-pair-list-generator.cpp src/leap-frog.cpp src/velocity-verlet.cpp
         src/langevin-leap-frog.cpp src/langevin-velocity-verlet.cpp
-        src/mc.cpp src/analysis.cpp src/gr.cpp src/dipole-moment.cpp src/distance.cpp
-        src/const-surface-charge-density.cpp src/elec-pot-difference.cpp)
+        src/mc.cpp src/analysis.cpp src/gr.cpp
+        src/const-surface-charge-density.cpp src/elec-pot-difference.cpp src/wall.cpp)
 
 
 add_subdirectory(tests)

@@ -6,21 +6,15 @@
 
 #IncludeRegexTransform: 
 
-../include/simploce/potentials/const-surface-charge-density.hpp
-external-potential.hpp
-../include/simploce/potentials/external-potential.hpp
-../simulation/s-types.hpp
-../include/simploce/simulation/s-types.hpp
-
 ../include/simploce/potentials/elec-pot-difference.hpp
 external-potential.hpp
 ../include/simploce/potentials/external-potential.hpp
-const-surface-charge-density.hpp
-../include/simploce/potentials/const-surface-charge-density.hpp
+simploce/util/direction.hpp
+../include/simploce/potentials/simploce/util/direction.hpp
 
 ../include/simploce/potentials/external-potential.hpp
-../simulation/s-types.hpp
-../include/simploce/simulation/s-types.hpp
+simploce/types/s-types.hpp
+../include/simploce/potentials/simploce/types/s-types.hpp
 
 ../include/simploce/simulation/continuous.hpp
 simploce/particle/protonatable.hpp
@@ -29,19 +23,35 @@ iostream
 -
 
 ../include/simploce/simulation/s-factory.hpp
-s-types.hpp
-../include/simploce/simulation/s-types.hpp
+simploce/types/s-types.hpp
+../include/simploce/simulation/simploce/types/s-types.hpp
 simploce/particle/p-factory.hpp
 ../include/simploce/simulation/simploce/particle/p-factory.hpp
+simploce/util/direction.hpp
+../include/simploce/simulation/simploce/util/direction.hpp
 
-../include/simploce/simulation/s-types.hpp
-continuous.hpp
-../include/simploce/simulation/continuous.hpp
+../include/simploce/types/s-types.hpp
+simploce/simulation/continuous.hpp
+../include/simploce/types/simploce/simulation/continuous.hpp
 simploce/particle/p-types.hpp
-../include/simploce/simulation/simploce/particle/p-types.hpp
+../include/simploce/types/simploce/particle/p-types.hpp
 simploce/util/param.hpp
-../include/simploce/simulation/simploce/util/param.hpp
+../include/simploce/types/simploce/util/param.hpp
 tuple
+-
+
+/home/andre/wrk3/simploce/pt-cgmd/simulation/tests/elec-pot-difference-test.cpp
+simploce/potentials/elec-pot-difference.hpp
+/home/andre/wrk3/simploce/pt-cgmd/simulation/tests/simploce/potentials/elec-pot-difference.hpp
+simploce/simulation/s-factory.hpp
+/home/andre/wrk3/simploce/pt-cgmd/simulation/tests/simploce/simulation/s-factory.hpp
+simploce/particle/atom.hpp
+/home/andre/wrk3/simploce/pt-cgmd/simulation/tests/simploce/particle/atom.hpp
+simploce/particle/particle-spec-catalog.hpp
+/home/andre/wrk3/simploce/pt-cgmd/simulation/tests/simploce/particle/particle-spec-catalog.hpp
+simploce/units/units-mu.hpp
+/home/andre/wrk3/simploce/pt-cgmd/simulation/tests/simploce/units/units-mu.hpp
+cstdlib
 -
 
 /localdisk/include/simploce/conf/u-conf.hpp
@@ -164,6 +174,8 @@ algorithm
 box.hpp
 /localdisk/include/simploce/util/box.hpp
 
+/localdisk/include/simploce/util/direction.hpp
+
 /localdisk/include/simploce/util/math-constants.hpp
 cmath
 -
@@ -174,19 +186,5 @@ limits
 boost/property_tree/ptree.hpp
 -
 iostream
--
-
-/wrk3/simploce/pt-cgmd/simulation/tests/elec-pot-difference-test.cpp
-simploce/potentials/elec-pot-difference.hpp
-/wrk3/simploce/pt-cgmd/simulation/tests/simploce/potentials/elec-pot-difference.hpp
-simploce/simulation/s-factory.hpp
-/wrk3/simploce/pt-cgmd/simulation/tests/simploce/simulation/s-factory.hpp
-simploce/particle/atom.hpp
-/wrk3/simploce/pt-cgmd/simulation/tests/simploce/particle/atom.hpp
-simploce/particle/particle-spec-catalog.hpp
-/wrk3/simploce/pt-cgmd/simulation/tests/simploce/particle/particle-spec-catalog.hpp
-simploce/units/units-mu.hpp
-/wrk3/simploce/pt-cgmd/simulation/tests/simploce/units/units-mu.hpp
-cstdlib
 -
 

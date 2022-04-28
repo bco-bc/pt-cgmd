@@ -3,7 +3,7 @@
 //
 
 #include "simploce/simulation/continuous.hpp"
-#include "simploce/simulation/s-conf.hpp"
+#include "simploce/conf/s-conf.hpp"
 #include "simploce/units/units-mu.hpp"
 
 namespace simploce {

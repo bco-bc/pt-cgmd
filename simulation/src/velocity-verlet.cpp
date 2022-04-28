@@ -97,10 +97,10 @@ namespace simploce {
         return data;
     }
        
-    VelocityVerlet::VelocityVerlet(sim_param_ptr_t simulationParameters,
+    VelocityVerlet::VelocityVerlet(param_ptr_t param,
                                    interactor_ptr_t interactor) :
-        simulationParameters_{std::move(simulationParameters)}, interactor_{std::move(interactor)} {
-        if (!simulationParameters_) {
+            param_{std::move(param)}, interactor_{std::move(interactor)} {
+        if (!param_) {
             throw std::domain_error("VelocityVerlet: Missing simulation parameters.");
         }
         if (!interactor_) {
@@ -112,7 +112,7 @@ namespace simploce {
     VelocityVerlet::displace(const p_system_ptr_t& particleSystem) const
     {        
         static std::size_t counter = 0;
-        static stime_t dt =  simulationParameters_->get<real_t>("simulation.timestep");
+        static stime_t dt =  param_->get<real_t>("simulation.timestep");
         static std::vector<force_t> fis{};
         
         counter += 1;
@@ -121,18 +121,18 @@ namespace simploce {
         }
         
         // Displace particle positions.
-        particleSystem->doWithAll<void>([] (const std::vector<p_ptr_t>& all) {
-            fis = displacePosition_(dt, all);
+        particleSystem->doWithDisplaceables<void>([] (const std::vector<p_ptr_t>& particles) {
+            fis = displacePosition_(dt, particles);
         });
         
         // Compute forces and potential energy at t(n+1) using positions at t(n+1).
         auto result = interactor_->interact(particleSystem);
         
         // Displace particle momenta.
-        SimulationData data = particleSystem->doWithAll<SimulationData>([] (const std::vector<p_ptr_t>& all) {
-            auto data = displaceVelocity_(dt, fis, all);
-            data.totalMomentum = norm<real_t>(properties::linearMomentum(all));
-            return std::move(data);
+        SimulationData data = particleSystem->doWithDisplaceables<SimulationData>([] (const std::vector<p_ptr_t>& particles) {
+            auto data = displaceVelocity_(dt, fis, particles);
+            data.totalMomentum = norm<real_t>(properties::linearMomentum(particles));
+            return data;
         });
         
         // Save simulation data at t(n+1).

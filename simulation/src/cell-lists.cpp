@@ -25,7 +25,7 @@
 #include "simploce/simulation/cell-lists.hpp"
 #include "simploce/simulation/grid.hpp"
 #include "simploce/simulation/bc.hpp"
-#include "simploce/simulation/s-conf.hpp"
+#include "simploce/conf/s-conf.hpp"
 #include "simploce/simulation/s-properties.hpp"
 #include "simploce/particle/particle-group.hpp"
 #include <memory>

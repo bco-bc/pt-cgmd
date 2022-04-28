@@ -13,27 +13,43 @@ iostream
 -
 
 ../include/simploce/simulation/protonatable-particle-system-factory.hpp
-s-types.hpp
-../include/simploce/simulation/s-types.hpp
+simploce/types/s-types.hpp
+../include/simploce/simulation/simploce/types/s-types.hpp
 s-factory.hpp
 ../include/simploce/simulation/s-factory.hpp
 simploce/particle/particle-system-factory.hpp
 ../include/simploce/simulation/simploce/particle/particle-system-factory.hpp
 
 ../include/simploce/simulation/s-factory.hpp
-s-types.hpp
-../include/simploce/simulation/s-types.hpp
+simploce/types/s-types.hpp
+../include/simploce/simulation/simploce/types/s-types.hpp
 simploce/particle/p-factory.hpp
 ../include/simploce/simulation/simploce/particle/p-factory.hpp
+simploce/util/direction.hpp
+../include/simploce/simulation/simploce/util/direction.hpp
 
-../include/simploce/simulation/s-types.hpp
-continuous.hpp
-../include/simploce/simulation/continuous.hpp
+../include/simploce/types/s-types.hpp
+simploce/simulation/continuous.hpp
+../include/simploce/types/simploce/simulation/continuous.hpp
 simploce/particle/p-types.hpp
-../include/simploce/simulation/simploce/particle/p-types.hpp
+../include/simploce/types/simploce/particle/p-types.hpp
 simploce/util/param.hpp
-../include/simploce/simulation/simploce/util/param.hpp
+../include/simploce/types/simploce/util/param.hpp
 tuple
+-
+
+/home/andre/wrk3/simploce/pt-cgmd/simulation/tests/protonatable-particle-system-factory-test.cpp
+simploce/simulation/protonatable-particle-system-factory.hpp
+/home/andre/wrk3/simploce/pt-cgmd/simulation/tests/simploce/simulation/protonatable-particle-system-factory.hpp
+simploce/simulation/continuous.hpp
+/home/andre/wrk3/simploce/pt-cgmd/simulation/tests/simploce/simulation/continuous.hpp
+simploce/simulation/s-factory.hpp
+/home/andre/wrk3/simploce/pt-cgmd/simulation/tests/simploce/simulation/s-factory.hpp
+simploce/types/s-types.hpp
+/home/andre/wrk3/simploce/pt-cgmd/simulation/tests/simploce/types/s-types.hpp
+simploce/particle/protonatable-coarse-grained.hpp
+/home/andre/wrk3/simploce/pt-cgmd/simulation/tests/simploce/particle/protonatable-coarse-grained.hpp
+cstdlib
 -
 
 /localdisk/include/simploce/conf/u-conf.hpp
@@ -256,6 +272,8 @@ algorithm
 box.hpp
 /localdisk/include/simploce/util/box.hpp
 
+/localdisk/include/simploce/util/direction.hpp
+
 /localdisk/include/simploce/util/logger.hpp
 string
 -
@@ -300,19 +318,5 @@ utility
 cassert
 -
 stdexcept
--
-
-/wrk3/simploce/pt-cgmd/simulation/tests/protonatable-particle-system-factory-test.cpp
-simploce/simulation/protonatable-particle-system-factory.hpp
-/wrk3/simploce/pt-cgmd/simulation/tests/simploce/simulation/protonatable-particle-system-factory.hpp
-simploce/simulation/continuous.hpp
-/wrk3/simploce/pt-cgmd/simulation/tests/simploce/simulation/continuous.hpp
-simploce/simulation/s-factory.hpp
-/wrk3/simploce/pt-cgmd/simulation/tests/simploce/simulation/s-factory.hpp
-simploce/simulation/s-types.hpp
-/wrk3/simploce/pt-cgmd/simulation/tests/simploce/simulation/s-types.hpp
-simploce/particle/protonatable-coarse-grained.hpp
-/wrk3/simploce/pt-cgmd/simulation/tests/simploce/particle/protonatable-coarse-grained.hpp
-cstdlib
 -
 

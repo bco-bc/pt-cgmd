@@ -17,6 +17,9 @@ namespace simploce {
      * solids and plasmas as well as molecules, atoms, nuclei, and hadrons. 
      * Consists of interacting 'particles'. A particle system consists of
      * free particles (e.g., an ion) and particle groups (protein residue, molecule, etc.).
+     * There are also 'displaceable' particles, which refer to particles that can be, e.g.,
+     * moved ('displaced') to a new position. Any particle is assumed to be
+     * displaceable unless explicitly removed from the list of displaceable particles.
      * @tparam P Particle type.
      * @tparam PG Particle group type.
      */
@@ -41,9 +44,10 @@ namespace simploce {
                             const spec_ptr_t& spec);
 
         /**
-         * Adds a particle group with bonds to this physical system. All arguments are required.
-         * @param particles Particles forming a particle group. Each of these particles must already
-         * be present in this particle system.
+         * Adds a particle group with bonds to this physical system. All arguments are
+         * required.
+         * @param particles Particles forming a particle group. Each of these particles
+         * must already be present in this particle system.
          * @param bonds Bonds between particles, given as pairs of particle identifiers.
          * @return Particle group added.
          */
@@ -132,8 +136,7 @@ namespace simploce {
         virtual bool isProtonatable() const;
 
         /**
-         * Performs a "task" with -all- particles. The given task must expose the
-         * operator 
+         * Performs a "task" with -all- particles. The given task must expose the operator
          * <code>
          * R operator () (const std::vector<p_ptr_t>& all);
          * </code>
@@ -145,6 +148,23 @@ namespace simploce {
          */
         template <typename R, typename TASK>
         R doWithAll(const TASK& task) { return task(all_); }
+
+        /**
+         * Performs a "task" with all "displaceable" particles. Displaceable means here that the particle
+         * in question may undergo a state transition (e.g., new position). Note that this method restricts the
+         * task to those particles that can be displaced in contrast to the other 'doWith*' methods.
+         * The given task must expose the operator
+         * <code>
+         * R operator () (const std::vector<p_ptr_t>& displaceables);
+         * </code>
+         * where 'displaceables' represents all displaceable particles.
+         * @tparam R Return type. May be 'void'.
+         * @tparam TASK Task type.
+         * @param task Task. This may be a lambda expression.
+         * @return Result.
+         */
+        template <typename R, typename TASK>
+        R doWithDisplaceables(const TASK& task) { return task(displaceables_); }
         
         /**
          * Performs a "task" with all, free particles, as well as with the
@@ -166,19 +186,22 @@ namespace simploce {
         R doWithAllFreeGroups(const TASK& task) { return task(all_, free_, groups_); }
 
         /**
-         * Writes this particle system to an output stream.
+         * Writes this particle system to an output stream. Displaceable particles are -not-
+         * stored in the output stream.
          * @param stream Output stream.
          */
         void write(std::ostream& stream) const;
         
         /**
-         * Writes the current state to an output stream.
+         * Writes the current state to an output stream. The state of -all- particles is
+         * written to the output stream.
          * @param stream Output stream.
          */
         void writeState(std::ostream& stream) const;
 
         /**
-         * Read the current state from an input stream.
+         * Read the current state from an input stream. The state of -all- particles is
+         * read from the input stream.
          * @param stream Input stream.
          */
         void readState(std::istream& stream);
@@ -188,7 +211,7 @@ namespace simploce {
         /**
          * Constructor. No particles, no box.
          */
-        ParticleSystem() : all_{}, free_{}, groups_{}, box_{} {}
+        ParticleSystem() : all_{}, free_{}, displaceables_{}, groups_{}, box_{} {}
         
         /**
          * Adds particle.
@@ -209,10 +232,9 @@ namespace simploce {
         
         /**
          * Adds a free particle. Must -not- already be present.
-         * @param freeParticle Free particle.
+         * @param particle Free particle.
          */
-        void addFree(const p_ptr_t& freeParticle);
-
+        void addFree(const p_ptr_t& particle);
 
         /**
          * Adds particle group. Must -not- already be present. Any particle in this group
@@ -232,6 +254,19 @@ namespace simploce {
          * @param particleGroup Particle group.
          */
         void removeFromFree(const pg_ptr_t& particleGroup);
+
+        /**
+         * Removes a particle from the list of displaceable particles.
+         * @param particle Particle.
+         */
+        void removeFromDisplaceables(const p_ptr_t& particle);
+
+        /**
+         * Removes particles of given particle specification from the list of
+         * displaceable particles.
+         * @param spec Particle specification.
+         */
+        void removeFromDisplaceables(const spec_ptr_t& spec);
         
         /**
          * Reads free particles and particle groups from an input stream.
@@ -241,18 +276,27 @@ namespace simploce {
 
         /**
          * Returns all particle groups.
+         * @return Groups. May be empty.
          */
         std::vector<pg_ptr_t> &groups();
         
         /**
          * Returns all particles.
+         * @return Particles. Should not be empty.
          */
         std::vector<p_ptr_t> &all();
 
         /**
          * Returns free particles.
+         * @return Particles. May be empty.
          */
         std::vector<p_ptr_t> &free();
+
+        /**
+         * Returns all displaceable particles.
+         * @return Particles. May be empty.
+         */
+        std::vector<p_ptr_t> &displaceables();
 
         /**
          * Clears this particle system. That is, removes all particles and particle groups.
@@ -301,6 +345,10 @@ namespace simploce {
         
         // Free particles, not in any group.
         std::vector<p_ptr_t> free_;
+
+        // Displaceable particles. Particles are always displaceables unless removed from this
+        // list.
+        std::vector<p_ptr_t> displaceables_;
         
         // Particles groups.
         std::vector<pg_ptr_t> groups_;

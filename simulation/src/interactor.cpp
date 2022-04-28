@@ -17,20 +17,20 @@
 
 namespace simploce {
     
-    Interactor::Interactor(sim_param_ptr_t simulationParameters,
+    Interactor::Interactor(param_ptr_t param,
                            pair_list_gen_ptr_t pairListGenerator,
                            forces_ptr_t forces) :
-        simulationParameters_{std::move(simulationParameters)},
-        pairListsGenerator_{std::move(pairListGenerator)}, forces_{std::move(forces)},
-        pairLists_{} {
+            param_{std::move(param)},
+            pairListsGenerator_{std::move(pairListGenerator)}, forces_{std::move(forces)},
+            pairLists_{} {
     }
 
     std::tuple<energy_t, energy_t, energy_t>
     Interactor::interact(const p_system_ptr_t &particleSystem) {
         static util::Logger logger("simploce::Interactor::interact");
 
-        static auto nUpdatePairLists = simulationParameters_->get<std::size_t>("simulation.npairlists");
-        static auto includeExternal = simulationParameters_->get<bool>("simulation.include-external");
+        static auto nUpdatePairLists = param_->get<std::size_t>("simulation.npairlists");
+        static auto includeExternal = param_->get<bool>("simulation.include-external");
         static std::size_t counter = 0;
 
         // Update particle pair list, if needed.
@@ -62,7 +62,7 @@ namespace simploce {
         return std::move(std::tuple<energy_t, energy_t, energy_t>{bonded, nonBonded, external});
     }
 
-    std::pair<energy_t, energy_t>
+    std::tuple<energy_t, energy_t, energy_t>
     Interactor::interact(const p_ptr_t& particle,
                          const p_system_ptr_t &particleSystem) {
         return std::move(this->forces_->interaction(particle, particleSystem));

@@ -1,5 +1,6 @@
 file(REMOVE_RECURSE
   "CMakeFiles/mu_units_test.dir/units-mu-test.cpp.o"
+  "CMakeFiles/mu_units_test.dir/units-mu-test.cpp.o.d"
   "mu_units_test"
   "mu_units_test.pdb"
 )

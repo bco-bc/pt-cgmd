@@ -1,5 +1,5 @@
 /*
- * Creates particle models.
+ * Creates particle systems.
  * Author: André H. Juffer.
  * Created on 02/11/2021, 10:41.
  *
@@ -27,6 +27,7 @@ int main(int argc, char *argv[]) {
         const util::Specification ARGON{"argon"};
         const util::Specification POLARIZABLE_WATER{"polarizable-water"};
         const util::Specification ELECTROLYTE{"electrolyte"};
+        bool addBoundaryParticles{false};
 
         std::string fnParticleSpecCatalog{"particle-spec-catalog.dat"};
         std::string fnParticleModel{"particle.system"};
@@ -47,6 +48,9 @@ int main(int argc, char *argv[]) {
                 po::value<util::Specification>(&specification),
                 selectFrom.c_str()
         )(
+                "add-boundary-particles,b",
+                "Add boundary particles"
+        )(
                 "fn-particle-system,o",
                 po::value<std::string>(&fnParticleModel),
                 "Output file name for newly created particle system. Default is 'particle.system'."
@@ -64,6 +68,9 @@ int main(int argc, char *argv[]) {
             std::cout << "Create a particle system:" << std::endl;
             std::cout << usage << "\n";
             return 0;
+        }
+        if (vm.count("add-boundary-particles")) {
+            addBoundaryParticles = true;
         }
         if (vm.count("verbose") ) {
             logger.changeLogLevel(util::Logger::LOGTRACE);
@@ -86,10 +93,15 @@ int main(int argc, char *argv[]) {
             stream << *argon << std::endl;
         } else if ( specification == ELECTROLYTE) {
             auto electrolyte = factory->simpleElectrolyte();
+             if (addBoundaryParticles) {
+                 factory->addParticleBoundary(electrolyte, 0.6, Plane::YZ);
+                 factory->addParticleBoundary(electrolyte, 0.6, Plane::ZX);
+             }
             stream << *electrolyte << std::endl;
         } else {
             util::logAndThrow(logger, specification.spec() + ": No such particle model available.");
         }
+
         stream.close();
         logger.info("Created particle model stored in '" + fnParticleModel + "'");
     } catch (std::exception& exception) {

@@ -7,6 +7,7 @@ add_executable(particle-test particle-test.cpp)
 add_executable(read-cg-test read-cg-test.cpp)
 add_executable(protonatable-bead-test protonatable-bead-test.cpp)
 add_executable(protonatable-coarse-grained-test protonatable-coarse-grained-test.cpp)
+add_executable(boundary-particles-test boundary-particles-test.cpp)
 
 target_link_directories(coarse-grained-test PUBLIC ${CMAKE_INSTALL_PREFIX}/lib)
 target_link_libraries(coarse-grained-test particles util cpputil)
@@ -26,3 +27,6 @@ target_link_directories(protonatable-bead-test PUBLIC ${CMAKE_INSTALL_PREFIX}/li
 target_link_libraries(protonatable-bead-test particles util cpputil)
 target_link_directories(protonatable-coarse-grained-test PUBLIC ${CMAKE_INSTALL_PREFIX}/lib)
 target_link_libraries(protonatable-coarse-grained-test particles util cpputil)
+target_link_directories(boundary-particles-test PUBLIC ${CMAKE_INSTALL_PREFIX}/lib)
+target_link_libraries(boundary-particles-test particles util cpputil)
+

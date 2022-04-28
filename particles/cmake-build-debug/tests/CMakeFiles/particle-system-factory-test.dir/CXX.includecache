@@ -56,6 +56,28 @@ p-factory.hpp
 p-types.hpp
 ../include/simploce/particle/p-types.hpp
 
+/home/andre/wrk3/simploce/pt-cgmd/particles/tests/particle-system-factory-test.cpp
+simploce/particle/particle-system-factory.hpp
+/home/andre/wrk3/simploce/pt-cgmd/particles/tests/simploce/particle/particle-system-factory.hpp
+simploce/particle/particle-spec-catalog.hpp
+/home/andre/wrk3/simploce/pt-cgmd/particles/tests/simploce/particle/particle-spec-catalog.hpp
+simploce/particle/coarse-grained.hpp
+/home/andre/wrk3/simploce/pt-cgmd/particles/tests/simploce/particle/coarse-grained.hpp
+simploce/particle/atomistic.hpp
+/home/andre/wrk3/simploce/pt-cgmd/particles/tests/simploce/particle/atomistic.hpp
+simploce/particle/p-factory.hpp
+/home/andre/wrk3/simploce/pt-cgmd/particles/tests/simploce/particle/p-factory.hpp
+simploce/particle/p-types.hpp
+/home/andre/wrk3/simploce/pt-cgmd/particles/tests/simploce/particle/p-types.hpp
+simploce/util/util.hpp
+/home/andre/wrk3/simploce/pt-cgmd/particles/tests/simploce/util/util.hpp
+cstdlib
+-
+iostream
+-
+string
+-
+
 /localdisk/include/simploce/conf/u-conf.hpp
 
 /localdisk/include/simploce/types/cvector_t.hpp
@@ -154,27 +176,5 @@ utility
 cassert
 -
 stdexcept
--
-
-/wrk3/simploce/pt-cgmd/particles/tests/particle-system-factory-test.cpp
-simploce/particle/particle-system-factory.hpp
-/wrk3/simploce/pt-cgmd/particles/tests/simploce/particle/particle-system-factory.hpp
-simploce/particle/particle-spec-catalog.hpp
-/wrk3/simploce/pt-cgmd/particles/tests/simploce/particle/particle-spec-catalog.hpp
-simploce/particle/coarse-grained.hpp
-/wrk3/simploce/pt-cgmd/particles/tests/simploce/particle/coarse-grained.hpp
-simploce/particle/atomistic.hpp
-/wrk3/simploce/pt-cgmd/particles/tests/simploce/particle/atomistic.hpp
-simploce/particle/p-factory.hpp
-/wrk3/simploce/pt-cgmd/particles/tests/simploce/particle/p-factory.hpp
-simploce/particle/p-types.hpp
-/wrk3/simploce/pt-cgmd/particles/tests/simploce/particle/p-types.hpp
-simploce/util/util.hpp
-/wrk3/simploce/pt-cgmd/particles/tests/simploce/util/util.hpp
-cstdlib
--
-iostream
--
-string
 -
 

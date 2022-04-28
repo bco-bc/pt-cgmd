@@ -5,3 +5,39 @@
  * Copyright (c) 2021 Biocenter Oulu, University of Oulu, Finland. All rights reserved.
  */
 
+#include "simploce/util/direction.hpp"
+#include <stdexcept>
+
+namespace simploce {
+
+    Direction::Direction(char value) :
+        value_(value) {
+    }
+
+    bool Direction::operator == (const Direction& direction) const {
+        return value_ == direction.value_;
+    }
+
+    Direction
+    Direction::X{'x'};
+
+    Direction
+    Direction::Y{'y'};
+
+    Direction
+    Direction::Z{'z'};
+
+    Direction
+    Direction::valueOf(char value) {
+        if (value == 'x') {
+            return Direction::X;
+        } else if (value == 'y') {
+            return Direction::Y;
+        } else if (value == 'z') {
+            return Direction::Z;
+        } else {
+            throw std::domain_error(value + ": no such direction.");
+        }
+    }
+}
+

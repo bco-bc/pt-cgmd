@@ -9,7 +9,7 @@
 #include "simploce/potentials/force-field.hpp"
 #include "simploce/potentials/forces.hpp"
 #include "simploce/simulation/distance-pair-list-generator.hpp"
-#include "simploce/simulation/s-types.hpp"
+#include "simploce/types/s-types.hpp"
 #include "simploce/simulation/interactor.hpp"
 #include "simploce/simulation/leap-frog.hpp"
 #include "simploce/simulation/mc.hpp"
@@ -17,7 +17,8 @@
 #include "simploce/simulation/langevin-velocity-verlet.hpp"
 #include "simploce/simulation/protonatable-particle-system-factory.hpp"
 #include "simploce/simulation/pbc.hpp"
-#include "simploce/simulation/s-conf.hpp"
+#include "simploce/simulation/1d-pbc.hpp"
+#include "simploce/conf/s-conf.hpp"
 #include "simploce/particle/p-factory.hpp"
 #include "simploce/particle/protonatable-coarse-grained.hpp"
 #include "simploce/particle/atomistic.hpp"
@@ -38,7 +39,7 @@ namespace simploce {
         static pair_list_gen_ptr_t pairListsGenerator_{};
 
         // Simulation parameters.
-        static sim_param_ptr_t simulationParameters_{};
+        static param_ptr_t simulationParameters_{};
         
         // Protonatable particle system factory.
         static prot_p_sys_factory protonatableParticleModelFactory_{};
@@ -47,7 +48,7 @@ namespace simploce {
         //static sim_model_fact_ptr_t simModelFactory_{};
 
         // Boundary conditions.
-        static bc_ptr_t pbc_{};
+        static bc_ptr_t bc_{};
         
         // Interactor.
         static interactor_ptr_t interactor_{};
@@ -82,7 +83,7 @@ namespace simploce {
             return forceField_;
         }
 
-        sim_param_ptr_t
+        param_ptr_t
         simulationParameters() {
             if ( !simulationParameters_ ) {
                 simulationParameters_ = std::make_shared<simploce::param::param_t>();
@@ -90,16 +91,18 @@ namespace simploce {
                 simulationParameters_->put("simulation.nwrite", "10");
                 simulationParameters_->put("simulation.npairlists", 10);
                 simulationParameters_->put("simulation.temperature", 298.15);  // K.
-                simulationParameters_->put("simulation.timestep", 0.020);      // 20 fs.
+                simulationParameters_->put("simulation.timestep", 0.001);      // 1 fs.
                 simulationParameters_->put("simulation.gamma", 1.0); // ps^-1.
-                simulationParameters_->put("simulation.include-external", 0);
+                simulationParameters_->put("simulation.include-external", 0);  // False
+                simulationParameters_->put("forces.nb.cutoff", 2.6);
+                simulationParameters_->put("displacer.mc.range", 0.1);
             }
             return simulationParameters_;
         }
 
-        pair_list_gen_ptr_t pairListsGenerator(const bc_ptr_t &bc) {
+        pair_list_gen_ptr_t pairListsGenerator(const dist_t& cutoff, const bc_ptr_t &bc) {
             if ( !pairListsGenerator_ ) {
-                pairListsGenerator_ = std::make_shared<DistancePairListGenerator>(bc);
+                pairListsGenerator_ = std::make_shared<DistancePairListGenerator>(cutoff, bc);
             }
             return pairListsGenerator_;
         }
@@ -113,8 +116,8 @@ namespace simploce {
         }
 
 
-        displacer_ptr_t displacer(std::string displacerType,
-                                  const sim_param_ptr_t& simulationParameters,
+        displacer_ptr_t displacer(const std::string& displacerType,
+                                  const param_ptr_t& simulationParameters,
                                   const interactor_ptr_t& interactor) {
             static util::Logger logger("simploce::factory::displacer");
             if (displacerType == conf::LEAP_FROG ) {
@@ -166,13 +169,21 @@ namespace simploce {
         bc_ptr_t 
         boundaryCondition(const box_ptr_t& box)
         {
-            if ( !pbc_ ) {
-                pbc_ = std::make_shared<PeriodicBoundaryCondition>(box);
+            if ( !bc_ ) {
+                bc_ = std::make_shared<PeriodicBoundaryCondition>(box);
             }
-            return pbc_;
+            return bc_;
         }
 
-        /*
+        bc_ptr_t
+        oneDimensionBoundaryCondition(const box_ptr_t& box, const Direction& direction)
+        {
+            if ( !bc_ ) {
+                bc_ = std::make_shared<OneD_PeriodicBoundaryCondition>(box, direction);
+            }
+            return bc_;
+        }
+       /*
         prot_pair_list_gen_ptr_t
         protonTransferPairListGenerator(const bc_ptr_t& bc)
         {
@@ -193,12 +204,13 @@ namespace simploce {
             return constantRate_;
         }
         */
-        interactor_ptr_t interactor(const sim_param_ptr_t& simulationParameters,
+        interactor_ptr_t interactor(const param_ptr_t& simulationParameters,
                                     const ff_ptr_t& forceField,
                                     const bc_ptr_t &bc) {
             if ( !interactor_ ) {
-                auto pairListGenerator = factory::pairListsGenerator(bc);
-                auto forces = factory::forces(bc, forceField);
+                dist_t cutoff = simulationParameters->get<real_t>("forces.nb.cutoff");
+                auto pairListGenerator = factory::pairListsGenerator(cutoff, bc);
+                auto forces = factory::forces(simulationParameters, bc, forceField);
                 interactor_ = std::make_shared<Interactor>(simulationParameters,
                                                            pairListGenerator,
                                                            forces);
@@ -211,9 +223,9 @@ namespace simploce {
             return std::make_shared<prot_cg_sys_t>();
         }
 
-        forces_ptr_t forces(const bc_ptr_t& bc, const ff_ptr_t& forceField) {
+        forces_ptr_t forces(const param_ptr_t& simulationParam, const bc_ptr_t& bc, const ff_ptr_t& forceField) {
             if ( !forces_ ) {
-                forces_ = std::make_shared<Forces>(bc, forceField);
+                forces_ = std::make_shared<Forces>(simulationParam, bc, forceField);
             }
             return forces_;
         }

@@ -7,8 +7,8 @@
 #IncludeRegexTransform: 
 
 ../include/simploce/simulation/bc.hpp
-s-types.hpp
-../include/simploce/simulation/s-types.hpp
+simploce/types/s-types.hpp
+../include/simploce/simulation/simploce/types/s-types.hpp
 
 ../include/simploce/simulation/continuous.hpp
 simploce/particle/protonatable.hpp
@@ -21,8 +21,8 @@ pair-list-generator.hpp
 ../include/simploce/simulation/pair-list-generator.hpp
 
 ../include/simploce/simulation/pair-list-generator.hpp
-s-types.hpp
-../include/simploce/simulation/s-types.hpp
+simploce/types/s-types.hpp
+../include/simploce/simulation/simploce/types/s-types.hpp
 pair-lists.hpp
 ../include/simploce/simulation/pair-lists.hpp
 vector
@@ -37,35 +37,65 @@ bc.hpp
 ../include/simploce/simulation/bc.hpp
 
 ../include/simploce/simulation/protonatable-particle-system-factory.hpp
-s-types.hpp
-../include/simploce/simulation/s-types.hpp
+simploce/types/s-types.hpp
+../include/simploce/simulation/simploce/types/s-types.hpp
 s-factory.hpp
 ../include/simploce/simulation/s-factory.hpp
 simploce/particle/particle-system-factory.hpp
 ../include/simploce/simulation/simploce/particle/particle-system-factory.hpp
 
 ../include/simploce/simulation/s-factory.hpp
-s-types.hpp
-../include/simploce/simulation/s-types.hpp
+simploce/types/s-types.hpp
+../include/simploce/simulation/simploce/types/s-types.hpp
 simploce/particle/p-factory.hpp
 ../include/simploce/simulation/simploce/particle/p-factory.hpp
+simploce/util/direction.hpp
+../include/simploce/simulation/simploce/util/direction.hpp
 
 ../include/simploce/simulation/s-properties.hpp
-s-types.hpp
-../include/simploce/simulation/s-types.hpp
+simploce/types/s-types.hpp
+../include/simploce/simulation/simploce/types/s-types.hpp
 simploce/particle/p-properties.hpp
 ../include/simploce/simulation/simploce/particle/p-properties.hpp
 vector
 -
 
-../include/simploce/simulation/s-types.hpp
-continuous.hpp
-../include/simploce/simulation/continuous.hpp
+../include/simploce/types/s-types.hpp
+simploce/simulation/continuous.hpp
+../include/simploce/types/simploce/simulation/continuous.hpp
 simploce/particle/p-types.hpp
-../include/simploce/simulation/simploce/particle/p-types.hpp
+../include/simploce/types/simploce/particle/p-types.hpp
 simploce/util/param.hpp
-../include/simploce/simulation/simploce/util/param.hpp
+../include/simploce/types/simploce/util/param.hpp
 tuple
+-
+
+/home/andre/wrk3/simploce/pt-cgmd/simulation/tests/pair-list-test.cpp
+simploce/simulation/distance-pair-list-generator.hpp
+/home/andre/wrk3/simploce/pt-cgmd/simulation/tests/simploce/simulation/distance-pair-list-generator.hpp
+simploce/simulation/s-factory.hpp
+/home/andre/wrk3/simploce/pt-cgmd/simulation/tests/simploce/simulation/s-factory.hpp
+simploce/particle/atomistic.hpp
+/home/andre/wrk3/simploce/pt-cgmd/simulation/tests/simploce/particle/atomistic.hpp
+simploce/simulation/protonatable-particle-system-factory.hpp
+/home/andre/wrk3/simploce/pt-cgmd/simulation/tests/simploce/simulation/protonatable-particle-system-factory.hpp
+simploce/particle/particle-spec-catalog.hpp
+/home/andre/wrk3/simploce/pt-cgmd/simulation/tests/simploce/particle/particle-spec-catalog.hpp
+simploce/util/file.hpp
+/home/andre/wrk3/simploce/pt-cgmd/simulation/tests/simploce/util/file.hpp
+simploce/simulation/pbc.hpp
+/home/andre/wrk3/simploce/pt-cgmd/simulation/tests/simploce/simulation/pbc.hpp
+simploce/simulation/s-properties.hpp
+/home/andre/wrk3/simploce/pt-cgmd/simulation/tests/simploce/simulation/s-properties.hpp
+simploce/util/logger.hpp
+/home/andre/wrk3/simploce/pt-cgmd/simulation/tests/simploce/util/logger.hpp
+simploce/util/param.hpp
+/home/andre/wrk3/simploce/pt-cgmd/simulation/tests/simploce/util/param.hpp
+cstdlib
+-
+iostream
+-
+string
 -
 
 /localdisk/include/simploce/conf/u-conf.hpp
@@ -224,6 +254,8 @@ algorithm
 box.hpp
 /localdisk/include/simploce/util/box.hpp
 
+/localdisk/include/simploce/util/direction.hpp
+
 /localdisk/include/simploce/util/file.hpp
 fstream
 -
@@ -238,31 +270,5 @@ sstream
 boost/property_tree/ptree.hpp
 -
 iostream
--
-
-/wrk3/simploce/pt-cgmd/simulation/tests/pair-list-test.cpp
-simploce/simulation/distance-pair-list-generator.hpp
-/wrk3/simploce/pt-cgmd/simulation/tests/simploce/simulation/distance-pair-list-generator.hpp
-simploce/simulation/s-factory.hpp
-/wrk3/simploce/pt-cgmd/simulation/tests/simploce/simulation/s-factory.hpp
-simploce/particle/atomistic.hpp
-/wrk3/simploce/pt-cgmd/simulation/tests/simploce/particle/atomistic.hpp
-simploce/simulation/protonatable-particle-system-factory.hpp
-/wrk3/simploce/pt-cgmd/simulation/tests/simploce/simulation/protonatable-particle-system-factory.hpp
-simploce/particle/particle-spec-catalog.hpp
-/wrk3/simploce/pt-cgmd/simulation/tests/simploce/particle/particle-spec-catalog.hpp
-simploce/util/file.hpp
-/wrk3/simploce/pt-cgmd/simulation/tests/simploce/util/file.hpp
-simploce/simulation/pbc.hpp
-/wrk3/simploce/pt-cgmd/simulation/tests/simploce/simulation/pbc.hpp
-simploce/simulation/s-properties.hpp
-/wrk3/simploce/pt-cgmd/simulation/tests/simploce/simulation/s-properties.hpp
-simploce/util/logger.hpp
-/wrk3/simploce/pt-cgmd/simulation/tests/simploce/util/logger.hpp
-cstdlib
--
-iostream
--
-string
 -
 

@@ -70,7 +70,7 @@ namespace simploce {
             
             
             mass_t mass = particle.mass();                        // In u.
-            real_t fc =  mass() * gamma;                          // Friction 
+            real_t fc =  mass() * gamma;                          // Friction coefficient.
             FC_[index] = fc;                                      // coefficient in u/ps.
                                                                   
             // All kinds of constant factors for each particle.
@@ -188,41 +188,41 @@ namespace simploce {
         
     }
     
-    LangevinVelocityVerlet::LangevinVelocityVerlet(sim_param_ptr_t simulationParameters,
+    LangevinVelocityVerlet::LangevinVelocityVerlet(param_ptr_t param,
                                                    interactor_ptr_t interactor) :
-        simulationParameters_(std::move(simulationParameters)), interactor_{std::move(interactor)} {
+            param_(std::move(param)), interactor_{std::move(interactor)} {
     }
         
     SimulationData 
     LangevinVelocityVerlet::displace(const p_system_ptr_t& particleSystem) const
     {
-        static stime_t dt = simulationParameters_->get<real_t>("simulation.timestep");
-        static temperature_t temperature = simulationParameters_->get<real_t>("simulation.temperature", 298.15);
-        static real_t gamma = simulationParameters_->get<real_t>("simulation.gamma", 0.5);
+        static stime_t dt = param_->get<real_t>("simulation.timestep");
+        static temperature_t temperature = param_->get<real_t>("simulation.temperature");
+        static real_t gamma = param_->get<real_t>("simulation.gamma");
         static std::size_t counter = 0;
 
         counter += 1;
 
         if ( counter == 1 ) {
-            particleSystem->doWithAll<void>([] (const std::vector<p_ptr_t>& atoms) {
-                setupHelpers_(dt, temperature, gamma, atoms);
+            particleSystem->doWithDisplaceables<void>([] (const std::vector<p_ptr_t>& particles) {
+                setupHelpers_(dt, temperature, gamma, particles);
             });
             interactor_->interact(particleSystem);  // Initial forces.
         }
                 
-        // Displace atom positions.
-        particleSystem->doWithAll<void>([] (const std::vector<p_ptr_t>& all) {
-            displacePosition_(dt, all);
+        // Displace particle positions.
+        particleSystem->doWithDisplaceables<void>([] (const std::vector<p_ptr_t>& particles) {
+            displacePosition_(dt, particles);
         });
         
         // Compute forces and potential energy at t(n+1) using positions at t(n+1).
         auto result = interactor_->interact(particleSystem);
         
-        // Displace atom velocities.
-        SimulationData data = particleSystem->doWithAll<SimulationData>([] (const std::vector<p_ptr_t>& all) {
-            auto data = displaceVelocity_(all);
-            data.totalMomentum = norm<real_t>(properties::linearMomentum(all));
-            return std::move(data);
+        // Displace particle velocities.
+        SimulationData data = particleSystem->doWithDisplaceables<SimulationData>([] (const std::vector<p_ptr_t>& particles) {
+            auto data = displaceVelocity_(particles);
+            data.totalMomentum = norm<real_t>(properties::linearMomentum(particles));
+            return data;
         });
         
         // Save simulation data

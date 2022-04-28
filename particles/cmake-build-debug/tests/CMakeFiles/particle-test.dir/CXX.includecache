@@ -48,6 +48,22 @@ memory
 string
 -
 
+/home/andre/wrk3/simploce/pt-cgmd/particles/tests/particle-test.cpp
+simploce/particle/p-types.hpp
+/home/andre/wrk3/simploce/pt-cgmd/particles/tests/simploce/particle/p-types.hpp
+simploce/particle/coarse-grained.hpp
+/home/andre/wrk3/simploce/pt-cgmd/particles/tests/simploce/particle/coarse-grained.hpp
+simploce/particle/particle-spec.hpp
+/home/andre/wrk3/simploce/pt-cgmd/particles/tests/simploce/particle/particle-spec.hpp
+simploce/particle/atomistic.hpp
+/home/andre/wrk3/simploce/pt-cgmd/particles/tests/simploce/particle/atomistic.hpp
+simploce/particle/particle.hpp
+/home/andre/wrk3/simploce/pt-cgmd/particles/tests/simploce/particle/particle.hpp
+cstdlib
+-
+iostream
+-
+
 /localdisk/include/simploce/conf/u-conf.hpp
 
 /localdisk/include/simploce/types/cvector_t.hpp
@@ -107,20 +123,4 @@ algorithm
 /localdisk/include/simploce/util/cube.hpp
 box.hpp
 /localdisk/include/simploce/util/box.hpp
-
-/wrk3/simploce/pt-cgmd/particles/tests/particle-test.cpp
-simploce/particle/p-types.hpp
-/wrk3/simploce/pt-cgmd/particles/tests/simploce/particle/p-types.hpp
-simploce/particle/coarse-grained.hpp
-/wrk3/simploce/pt-cgmd/particles/tests/simploce/particle/coarse-grained.hpp
-simploce/particle/particle-spec.hpp
-/wrk3/simploce/pt-cgmd/particles/tests/simploce/particle/particle-spec.hpp
-simploce/particle/atomistic.hpp
-/wrk3/simploce/pt-cgmd/particles/tests/simploce/particle/atomistic.hpp
-simploce/particle/particle.hpp
-/wrk3/simploce/pt-cgmd/particles/tests/simploce/particle/particle.hpp
-cstdlib
--
-iostream
--
 

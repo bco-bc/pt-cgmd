@@ -28,10 +28,6 @@ namespace simploce {
     
     position_t placeInside(const position_t& r_out) const override;
     
-    std::string id() const override;
-
-    void box(const box_ptr_t& box) override;
-
   private:
 
     box_ptr_t box_;

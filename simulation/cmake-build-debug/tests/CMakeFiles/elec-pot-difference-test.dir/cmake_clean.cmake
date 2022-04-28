@@ -1,5 +1,6 @@
 file(REMOVE_RECURSE
   "CMakeFiles/elec-pot-difference-test.dir/elec-pot-difference-test.cpp.o"
+  "CMakeFiles/elec-pot-difference-test.dir/elec-pot-difference-test.cpp.o.d"
   "elec-pot-difference-test"
   "elec-pot-difference-test.pdb"
 )

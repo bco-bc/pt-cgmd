@@ -1,5 +1,6 @@
 file(REMOVE_RECURSE
   "CMakeFiles/box-cube-test.dir/box-cube-test.cpp.o"
+  "CMakeFiles/box-cube-test.dir/box-cube-test.cpp.o.d"
   "box-cube-test"
   "box-cube-test.pdb"
 )

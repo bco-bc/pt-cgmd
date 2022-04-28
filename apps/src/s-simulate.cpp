@@ -5,8 +5,8 @@
  * Created on September 10, 2019, 2:58 PM
  */
 
-#include "simploce/simulation/s-types.hpp"
-#include "simploce/simulation/s-conf.hpp"
+#include "simploce/types/s-types.hpp"
+#include "simploce/conf/s-conf.hpp"
 #include "simploce/simulation/s-factory.hpp"
 #include "simploce/simulation/simulation.hpp"
 #include "simploce/particle/particle-spec-catalog.hpp"
@@ -35,6 +35,7 @@ int main(int argc, char *argv[]) {
         std::string fnInputParticleSystem{"in.ps"};
         std::string fnOutputParticleSystem{"out.ps"};
         std::string fnForceField{"interaction-parameters.dat"};
+
         bool isCoarseGrained{false};
         bool includeExternalPotentials{false};
 
@@ -47,6 +48,10 @@ int main(int argc, char *argv[]) {
         real_t gamma{1.0};                               // in ps^-1
         std::string displacerType =
                 conf::VELOCITY_VERLET;                   // Displacer.
+        real_t cutoff{2.6};                              // Cutoff distance.
+        bool pbc_1{false};                               // Apply 1D-PBC.
+        char direction{'z'};                             // Direction.
+        real_t range{0.1};                               // Range from a random number is sampled in MC.
 
         po::options_description usage("Usage");
         usage.add_options() (
@@ -62,6 +67,10 @@ int main(int argc, char *argv[]) {
             po::value<std::string>(&fnForceField),
             "Input file name interaction parameters. Default is 'interaction-parameters.dat'."
         )(
+            "cutoff-distance,r",
+            po::value<real_t>(&cutoff),
+            "Cutoff distance")
+        (
             "fn-trajectory", po::value<std::string>(&fnTrajectory),
             "Output file name trajectory. Default is 'trajectory.dat'."
         )(
@@ -98,8 +107,15 @@ int main(int argc, char *argv[]) {
             "'lvv' (Langevin Velocity Verlet, NOT TESTED), and "
             "'pt-lvv' (Langevin Velocity Verlet with Proton Transfer, NOT TESTED)"
         )(
+            "range",po::value<real_t>(&range),
+            "Length of interval from which random numnber is selected in MC."
+        )
+        (
             "include-external-potentials,e",
             "Include external potentials for force calculations."
+        )(
+             "pbc-1", po::value<char>(&direction),
+             "Apply periodicity in the given direction only. Select one of 'x', y', and 'z'."
         )(
             "verbose,v",
             "Verbose"
@@ -126,6 +142,9 @@ int main(int argc, char *argv[]) {
         }
         if (vm.count("fn-force-field")) {
             fnForceField = vm["fn-force-field"].as<std::string>();
+        }
+        if (vm.count("cutoff-distance")) {
+            cutoff = vm["cutoff-distance"].as<real_t>();
         }
         if (vm.count("fn-trajectory")) {
             fnTrajectory = vm["fn-trajectory"].as<std::string>();
@@ -160,24 +179,33 @@ int main(int argc, char *argv[]) {
         if (vm.count("displacer")) {
             displacerType = vm["displacer"].as<std::string>();
         }
+        if (vm.count("range")) {
+            range = vm["range"].as<real_t>();
+        }
         if (vm.count("include-external-potentials")) {
             includeExternalPotentials = true;
+        }
+        if (vm.count("pbc-1")) {
+            pbc_1 = true;
+            direction = vm["pbc-1"].as<char>();
         }
         if (vm.count("verbose") ) {
             logger.changeLogLevel(util::Logger::LOGTRACE);
         }
 
         // Simulation parameters
-        sim_param_ptr_t simulationParameters = factory::simulationParameters();
-        simulationParameters->put<std::size_t>("simulation.nsteps", nSteps);
-        simulationParameters->put<std::size_t>("simulation.nwrite", nWrite);
-        simulationParameters->put<real_t>("simulation.temperature", temperature);
-        simulationParameters->put<real_t>("simulation.timestep", timestep);
-        simulationParameters->put<real_t>("simulation.gamma", gamma);
-        simulationParameters->put<std::size_t>("simulation.npairlists", nPairLists);
-        simulationParameters->put<bool>("simulation.include-external", includeExternalPotentials);
+        param_ptr_t param = factory::simulationParameters();
+        param->put<std::size_t>("simulation.nsteps", nSteps);
+        param->put<std::size_t>("simulation.nwrite", nWrite);
+        param->put<real_t>("simulation.temperature", temperature);
+        param->put<real_t>("simulation.timestep", timestep);
+        param->put<real_t>("simulation.gamma", gamma);
+        param->put<std::size_t>("simulation.npairlists", nPairLists);
+        param->put<bool>("simulation.include-external", includeExternalPotentials);
+        param->put<real_t>("forces.nb.cutoff", cutoff);
+        param->put<real_t>("displacer.mc.range", range);
         logger.info("Simulation parameters:");
-        std::cout << *simulationParameters << std::endl;
+        std::cout << *param << std::endl;
 
         // Read particle specifications.
         spec_catalog_ptr_t catalog = factory::particleSpecCatalog(fnParticleSpecCatalog);
@@ -190,14 +218,21 @@ int main(int argc, char *argv[]) {
         auto forceField = factory::forceField(fnForceField, catalog);
 
         // Interactor
-        auto bc = factory::boundaryCondition(particleSystem->box());
-        auto interactor = factory::interactor(simulationParameters, forceField, bc);
+        bc_ptr_t bc;
+        if (pbc_1) {
+            logger.info("Applying PBC only in the " + util::toString(direction) + "-direction.");
+            bc = factory::oneDimensionBoundaryCondition(particleSystem->box(), Direction::valueOf(direction));
+        } else {
+            logger.info("Applying PBC in all directions.");
+            bc = factory::boundaryCondition(particleSystem->box());
+        }
+        auto interactor = factory::interactor(param, forceField, bc);
 
         // Get the displacer.
-        auto displacer = factory::displacer(displacerType, simulationParameters, interactor);
+        auto displacer = factory::displacer(displacerType, param, interactor);
 
         // Simulate
-        Simulation simulation(simulationParameters, particleSystem, displacer);
+        Simulation simulation(param, particleSystem, displacer);
         logger.info("Simulation ongoing...");
         util::open_output_file(trajectory, fnTrajectory);
         util::open_output_file(data, fnSimulationData);
@@ -205,6 +240,7 @@ int main(int argc, char *argv[]) {
         trajectory.close();
         data.close();
         logger.info("Done.");
+
 
         // Write output particle system.
         std::ofstream stream;

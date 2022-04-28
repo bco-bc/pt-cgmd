@@ -23,13 +23,14 @@ void test1(const spec_catalog_ptr_t &catalog, const ff_ptr_t &forceField) {
     box_ptr_t box = factory::box(length_t{3.47786});
     auto atomistic = factory->argon(box);
 
-    auto simulationParameters = factory::simulationParameters();
-    param::write(std::cout, *simulationParameters);
+    auto params = factory::simulationParameters();
+    param::write(std::cout, *params);
     auto bc = factory::boundaryCondition(atomistic->box());
-    auto pairListGenerator = factory::pairListsGenerator(bc);
+    auto cutoff = params->get<real_t>("forces.nb.cutoff");
+    auto pairListGenerator = factory::pairListsGenerator(cutoff, bc);
 
-    auto forces = factory::forces(bc, forceField);
-    auto interactor = factory::interactor(simulationParameters, forceField, bc);
+    auto forces = factory::forces(params, bc, forceField);
+    auto interactor = factory::interactor(params, forceField, bc);
     auto result = interactor->interact(atomistic);
     std::cout << "Bonded potential energy: " << std::get<0>(result) << std::endl;
     std::cout << "Non-bonded potential energy: " << std::get<1>(result)<< std::endl;
@@ -47,7 +48,8 @@ void test2(const spec_catalog_ptr_t &catalog, const ff_ptr_t &forceField) {
     param::write(std::cout, *simulationParameters);
     auto box = diatomic->box();
     auto bc = factory::boundaryCondition(box);
-    auto pairListGenerator = factory::pairListsGenerator(bc);
+    auto cutoff = simulationParameters->get<real_t>("forces.nb.cutoff");
+    auto pairListGenerator = factory::pairListsGenerator(cutoff, bc);
 
     auto interactor = factory::interactor(simulationParameters, forceField, bc);
     auto result = interactor->interact(diatomic);
@@ -63,8 +65,9 @@ void test3 (const spec_catalog_ptr_t &catalog, const ff_ptr_t &forceField) {
     auto box = factory::box(7.27);
     auto bc = factory::boundaryCondition(box);
     auto polarizableWater = factory->polarizableWater(box);
-    auto pairListGenerator = factory::pairListsGenerator(bc);
     auto simulationParameters = factory::simulationParameters();
+    auto cutoff = simulationParameters->get<real_t>("forces.nb.cutoff");
+    auto pairListGenerator = factory::pairListsGenerator(cutoff, bc);
 
     auto interactor = factory::interactor(simulationParameters, forceField, bc);
     auto result = interactor->interact(polarizableWater);

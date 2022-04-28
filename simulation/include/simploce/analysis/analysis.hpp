@@ -8,7 +8,7 @@
 #define ANALYSIS_HPP
 
 #include "a-types.hpp"
-#include "../simulation/s-types.hpp"
+#include "simploce/types/s-types.hpp"
 #include "simploce/particle/bead.hpp"
 #include <iostream>
 

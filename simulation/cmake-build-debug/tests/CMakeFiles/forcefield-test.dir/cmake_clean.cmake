@@ -1,5 +1,6 @@
 file(REMOVE_RECURSE
   "CMakeFiles/forcefield-test.dir/forcefield-test.cpp.o"
+  "CMakeFiles/forcefield-test.dir/forcefield-test.cpp.o.d"
   "forcefield-test"
   "forcefield-test.pdb"
 )

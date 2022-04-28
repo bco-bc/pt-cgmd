@@ -7,7 +7,7 @@
 #ifndef S_UTIL_HPP
 #define S_UTIL_HPP
 
-#include "s-types.hpp"
+#include "simploce/types/s-types.hpp"
 #include "simploce/particle/p-properties.hpp"
 #include <vector>
 
@@ -41,21 +41,6 @@ namespace simploce {
         pressure_t pressure(const std::vector<p_ptr_t>& particles,
                             const temperature_t& temperature,
                             const box_ptr_t& box);
-        
-        /**
-         * Returns cutoff distance.
-         * @param box Simulation box.
-         * @return Cutoff distance. Always <= 0.5 * box.size().
-         * @see conf::CUTOFF_DISTANCE
-         */
-        length_t cutoffDistance(const box_ptr_t& box);
-        
-        /**
-         * Returns square of cutoff distance.
-         * @param box Simulation box.
-         * @return Square of cutoff distance.
-         */
-        real_t squareCutoffDistance(const box_ptr_t& box);
         
         /**
          * Returns dielectric constant according to Fröhlich.

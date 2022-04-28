@@ -34,6 +34,22 @@ string
 iostream
 -
 
+/home/andre/wrk3/simploce/pt-cgmd/particles/apps/total-masses.cpp
+simploce/util/file.hpp
+/home/andre/wrk3/simploce/pt-cgmd/particles/apps/simploce/util/file.hpp
+simploce/particle/particle-spec.hpp
+/home/andre/wrk3/simploce/pt-cgmd/particles/apps/simploce/particle/particle-spec.hpp
+simploce/particle/particle-spec-catalog.hpp
+/home/andre/wrk3/simploce/pt-cgmd/particles/apps/simploce/particle/particle-spec-catalog.hpp
+simploce/particle/p-types.hpp
+/home/andre/wrk3/simploce/pt-cgmd/particles/apps/simploce/particle/p-types.hpp
+cstdlib
+-
+iostream
+-
+string
+-
+
 /localdisk/include/simploce/conf/u-conf.hpp
 
 /localdisk/include/simploce/types/cvector_t.hpp
@@ -96,21 +112,5 @@ box.hpp
 
 /localdisk/include/simploce/util/file.hpp
 fstream
--
-
-/wrk3/simploce/pt-cgmd/particles/apps/total-masses.cpp
-simploce/util/file.hpp
-/wrk3/simploce/pt-cgmd/particles/apps/simploce/util/file.hpp
-simploce/particle/particle-spec.hpp
-/wrk3/simploce/pt-cgmd/particles/apps/simploce/particle/particle-spec.hpp
-simploce/particle/particle-spec-catalog.hpp
-/wrk3/simploce/pt-cgmd/particles/apps/simploce/particle/particle-spec-catalog.hpp
-simploce/particle/p-types.hpp
-/wrk3/simploce/pt-cgmd/particles/apps/simploce/particle/p-types.hpp
-cstdlib
--
-iostream
--
-string
 -
 

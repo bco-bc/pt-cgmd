@@ -8,7 +8,7 @@
 #ifndef DISPLACER_HPP
 #define DISPLACER_HPP
 
-#include "s-types.hpp"
+#include "simploce/types/s-types.hpp"
 #include "sim-data.hpp"
 
 namespace simploce {

@@ -9,7 +9,7 @@
 #include "simploce/analysis/gr.hpp"
 #include "simploce/analysis/a-types.hpp"
 #include "simploce/analysis/analysis.hpp"
-#include "simploce/simulation/s-types.hpp"
+#include "simploce/types/s-types.hpp"
 #include "simploce/simulation/s-factory.hpp"
 #include "simploce/particle/particle-spec-catalog.hpp"
 #include "simploce/particle/particle-system.hpp"
@@ -37,6 +37,7 @@ int main(int argc, char *argv[]) {
     std::size_t nSkip = 0;        // Number of states in trajectory to skip
                                   // before executing analysis.
     bool isCoarseGrained{false};
+    real_t cutoff{2.6};           // Cutoff distance.
 
     po::options_description usage("Usage");
     usage.add_options() (
@@ -60,6 +61,10 @@ int main(int argc, char *argv[]) {
     )(
         "bin-size,b", po::value<real_t>(&dr),
         "Bin size of g(r). Default is 0.01 nm."
+    )(
+       "cutoff-distance,r",
+        po::value<real_t>(&cutoff),
+       "Cutoff distance"
     )(
         "coarse-grained,c",
         "Input is a coarse-grained description."
@@ -108,6 +113,10 @@ int main(int argc, char *argv[]) {
     if (vm.count("bin-size")) {
         dr = vm["bin-size"].as<real_t>();
     }
+    if (vm.count("cutoff-distance")) {
+        cutoff = vm["cutoff-distance"].as<real_t>();
+    }
+
     if (vm.count("skip-number-of-states")) {
         nSkip = vm["skip-number-of-states"].as<std::size_t>();
     }
@@ -117,7 +126,8 @@ int main(int argc, char *argv[]) {
 
     // Analysis parameters
     a_param_ptr_t analysisParameters = factory::simulationParameters();
-    analysisParameters->add<std::size_t>("analysis.trajectory.nskip", nSkip);
+    analysisParameters->put<std::size_t>("analysis.trajectory.nskip", nSkip);
+    analysisParameters->put("analysis.gr.cutoff", cutoff);
     logger.info("Analysis parameters:");
     std::cout << *analysisParameters << std::endl;
 
@@ -130,7 +140,7 @@ int main(int argc, char *argv[]) {
 
     // Analyzer.
     bc_ptr_t bc = factory::boundaryCondition(particleSystem->box());
-    gr_ptr_t gr = Gr::create(dr, specName1, specName2, bc);
+    gr_ptr_t gr = Gr::create(dr, cutoff, specName1, specName2, bc);
 
     // Perform the analysis.
     Analysis analysis(particleSystem, analysisParameters, gr);

@@ -17,36 +17,6 @@
 					<DistClean command="/usr/bin/make -j4 -f &quot;/wrk3/simploce/pt-cgmd/util/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
 				</MakeCommands>
 			</Target>
-			<Target title="install/strip">
-				<Option working_dir="/wrk3/simploce/pt-cgmd/util/cmake-build-debug"/>
-				<Option type="4"/>
-				<MakeCommands>
-					<Build command="/usr/bin/make -j4 -f &quot;/wrk3/simploce/pt-cgmd/util/cmake-build-debug/Makefile&quot;  VERBOSE=1 install/strip"/>
-					<CompileFile command="/usr/bin/make -j4 -f &quot;/wrk3/simploce/pt-cgmd/util/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
-					<Clean command="/usr/bin/make -j4 -f &quot;/wrk3/simploce/pt-cgmd/util/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
-					<DistClean command="/usr/bin/make -j4 -f &quot;/wrk3/simploce/pt-cgmd/util/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
-				</MakeCommands>
-			</Target>
-			<Target title="install/local">
-				<Option working_dir="/wrk3/simploce/pt-cgmd/util/cmake-build-debug"/>
-				<Option type="4"/>
-				<MakeCommands>
-					<Build command="/usr/bin/make -j4 -f &quot;/wrk3/simploce/pt-cgmd/util/cmake-build-debug/Makefile&quot;  VERBOSE=1 install/local"/>
-					<CompileFile command="/usr/bin/make -j4 -f &quot;/wrk3/simploce/pt-cgmd/util/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
-					<Clean command="/usr/bin/make -j4 -f &quot;/wrk3/simploce/pt-cgmd/util/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
-					<DistClean command="/usr/bin/make -j4 -f &quot;/wrk3/simploce/pt-cgmd/util/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
-				</MakeCommands>
-			</Target>
-			<Target title="install">
-				<Option working_dir="/wrk3/simploce/pt-cgmd/util/cmake-build-debug"/>
-				<Option type="4"/>
-				<MakeCommands>
-					<Build command="/usr/bin/make -j4 -f &quot;/wrk3/simploce/pt-cgmd/util/cmake-build-debug/Makefile&quot;  VERBOSE=1 install"/>
-					<CompileFile command="/usr/bin/make -j4 -f &quot;/wrk3/simploce/pt-cgmd/util/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
-					<Clean command="/usr/bin/make -j4 -f &quot;/wrk3/simploce/pt-cgmd/util/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
-					<DistClean command="/usr/bin/make -j4 -f &quot;/wrk3/simploce/pt-cgmd/util/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
-				</MakeCommands>
-			</Target>
 			<Target title="util">
 				<Option output="/wrk3/simploce/pt-cgmd/util/cmake-build-debug/libutil.so" prefix_auto="0" extension_auto="0"/>
 				<Option working_dir="/wrk3/simploce/pt-cgmd/util/cmake-build-debug"/>
@@ -97,16 +67,6 @@
 					<DistClean command="/usr/bin/make -j4 -f &quot;/wrk3/simploce/pt-cgmd/util/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
 				</MakeCommands>
 			</Target>
-			<Target title="list_install_components">
-				<Option working_dir="/wrk3/simploce/pt-cgmd/util/cmake-build-debug"/>
-				<Option type="4"/>
-				<MakeCommands>
-					<Build command="/usr/bin/make -j4 -f &quot;/wrk3/simploce/pt-cgmd/util/cmake-build-debug/Makefile&quot;  VERBOSE=1 list_install_components"/>
-					<CompileFile command="/usr/bin/make -j4 -f &quot;/wrk3/simploce/pt-cgmd/util/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
-					<Clean command="/usr/bin/make -j4 -f &quot;/wrk3/simploce/pt-cgmd/util/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
-					<DistClean command="/usr/bin/make -j4 -f &quot;/wrk3/simploce/pt-cgmd/util/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
-				</MakeCommands>
-			</Target>
 			<Target title="edit_cache">
 				<Option working_dir="/wrk3/simploce/pt-cgmd/util/cmake-build-debug"/>
 				<Option type="4"/>
@@ -127,8 +87,48 @@
 					<DistClean command="/usr/bin/make -j4 -f &quot;/wrk3/simploce/pt-cgmd/util/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
 				</MakeCommands>
 			</Target>
-			<Target title="param-test">
-				<Option output="/wrk3/simploce/pt-cgmd/util/cmake-build-debug/tests/param-test" prefix_auto="0" extension_auto="0"/>
+			<Target title="list_install_components">
+				<Option working_dir="/wrk3/simploce/pt-cgmd/util/cmake-build-debug"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j4 -f &quot;/wrk3/simploce/pt-cgmd/util/cmake-build-debug/Makefile&quot;  VERBOSE=1 list_install_components"/>
+					<CompileFile command="/usr/bin/make -j4 -f &quot;/wrk3/simploce/pt-cgmd/util/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j4 -f &quot;/wrk3/simploce/pt-cgmd/util/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j4 -f &quot;/wrk3/simploce/pt-cgmd/util/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="install">
+				<Option working_dir="/wrk3/simploce/pt-cgmd/util/cmake-build-debug"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j4 -f &quot;/wrk3/simploce/pt-cgmd/util/cmake-build-debug/Makefile&quot;  VERBOSE=1 install"/>
+					<CompileFile command="/usr/bin/make -j4 -f &quot;/wrk3/simploce/pt-cgmd/util/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j4 -f &quot;/wrk3/simploce/pt-cgmd/util/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j4 -f &quot;/wrk3/simploce/pt-cgmd/util/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="install/local">
+				<Option working_dir="/wrk3/simploce/pt-cgmd/util/cmake-build-debug"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j4 -f &quot;/wrk3/simploce/pt-cgmd/util/cmake-build-debug/Makefile&quot;  VERBOSE=1 install/local"/>
+					<CompileFile command="/usr/bin/make -j4 -f &quot;/wrk3/simploce/pt-cgmd/util/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j4 -f &quot;/wrk3/simploce/pt-cgmd/util/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j4 -f &quot;/wrk3/simploce/pt-cgmd/util/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="install/strip">
+				<Option working_dir="/wrk3/simploce/pt-cgmd/util/cmake-build-debug"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j4 -f &quot;/wrk3/simploce/pt-cgmd/util/cmake-build-debug/Makefile&quot;  VERBOSE=1 install/strip"/>
+					<CompileFile command="/usr/bin/make -j4 -f &quot;/wrk3/simploce/pt-cgmd/util/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j4 -f &quot;/wrk3/simploce/pt-cgmd/util/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j4 -f &quot;/wrk3/simploce/pt-cgmd/util/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="mu_units_test">
+				<Option output="/wrk3/simploce/pt-cgmd/util/cmake-build-debug/tests/mu_units_test" prefix_auto="0" extension_auto="0"/>
 				<Option working_dir="/wrk3/simploce/pt-cgmd/util/cmake-build-debug/tests"/>
 				<Option object_output="./"/>
 				<Option type="1"/>
@@ -146,14 +146,14 @@
 					<Add directory="/usr/include"/>
 				</Compiler>
 				<MakeCommands>
-					<Build command="/usr/bin/make -j4 -f &quot;/wrk3/simploce/pt-cgmd/util/cmake-build-debug/tests/Makefile&quot;  VERBOSE=1 param-test"/>
+					<Build command="/usr/bin/make -j4 -f &quot;/wrk3/simploce/pt-cgmd/util/cmake-build-debug/tests/Makefile&quot;  VERBOSE=1 mu_units_test"/>
 					<CompileFile command="/usr/bin/make -j4 -f &quot;/wrk3/simploce/pt-cgmd/util/cmake-build-debug/tests/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
 					<Clean command="/usr/bin/make -j4 -f &quot;/wrk3/simploce/pt-cgmd/util/cmake-build-debug/tests/Makefile&quot;  VERBOSE=1 clean"/>
 					<DistClean command="/usr/bin/make -j4 -f &quot;/wrk3/simploce/pt-cgmd/util/cmake-build-debug/tests/Makefile&quot;  VERBOSE=1 clean"/>
 				</MakeCommands>
 			</Target>
-			<Target title="param-test/fast">
-				<Option output="/wrk3/simploce/pt-cgmd/util/cmake-build-debug/tests/param-test" prefix_auto="0" extension_auto="0"/>
+			<Target title="mu_units_test/fast">
+				<Option output="/wrk3/simploce/pt-cgmd/util/cmake-build-debug/tests/mu_units_test" prefix_auto="0" extension_auto="0"/>
 				<Option working_dir="/wrk3/simploce/pt-cgmd/util/cmake-build-debug/tests"/>
 				<Option object_output="./"/>
 				<Option type="1"/>
@@ -171,57 +171,7 @@
 					<Add directory="/usr/include"/>
 				</Compiler>
 				<MakeCommands>
-					<Build command="/usr/bin/make -j4 -f &quot;/wrk3/simploce/pt-cgmd/util/cmake-build-debug/tests/Makefile&quot;  VERBOSE=1 param-test/fast"/>
-					<CompileFile command="/usr/bin/make -j4 -f &quot;/wrk3/simploce/pt-cgmd/util/cmake-build-debug/tests/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
-					<Clean command="/usr/bin/make -j4 -f &quot;/wrk3/simploce/pt-cgmd/util/cmake-build-debug/tests/Makefile&quot;  VERBOSE=1 clean"/>
-					<DistClean command="/usr/bin/make -j4 -f &quot;/wrk3/simploce/pt-cgmd/util/cmake-build-debug/tests/Makefile&quot;  VERBOSE=1 clean"/>
-				</MakeCommands>
-			</Target>
-			<Target title="telegraph_process_test">
-				<Option output="/wrk3/simploce/pt-cgmd/util/cmake-build-debug/tests/telegraph_process_test" prefix_auto="0" extension_auto="0"/>
-				<Option working_dir="/wrk3/simploce/pt-cgmd/util/cmake-build-debug/tests"/>
-				<Option object_output="./"/>
-				<Option type="1"/>
-				<Option compiler="gcc"/>
-				<Compiler>
-					<Add directory="/wrk3/simploce/pt-cgmd/util/include"/>
-					<Add directory="/localdisk/include"/>
-					<Add directory="/usr/include/c++/7"/>
-					<Add directory="/usr/include/x86_64-linux-gnu/c++/7"/>
-					<Add directory="/usr/include/c++/7/backward"/>
-					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/7/include"/>
-					<Add directory="/usr/local/include"/>
-					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/7/include-fixed"/>
-					<Add directory="/usr/include/x86_64-linux-gnu"/>
-					<Add directory="/usr/include"/>
-				</Compiler>
-				<MakeCommands>
-					<Build command="/usr/bin/make -j4 -f &quot;/wrk3/simploce/pt-cgmd/util/cmake-build-debug/tests/Makefile&quot;  VERBOSE=1 telegraph_process_test"/>
-					<CompileFile command="/usr/bin/make -j4 -f &quot;/wrk3/simploce/pt-cgmd/util/cmake-build-debug/tests/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
-					<Clean command="/usr/bin/make -j4 -f &quot;/wrk3/simploce/pt-cgmd/util/cmake-build-debug/tests/Makefile&quot;  VERBOSE=1 clean"/>
-					<DistClean command="/usr/bin/make -j4 -f &quot;/wrk3/simploce/pt-cgmd/util/cmake-build-debug/tests/Makefile&quot;  VERBOSE=1 clean"/>
-				</MakeCommands>
-			</Target>
-			<Target title="telegraph_process_test/fast">
-				<Option output="/wrk3/simploce/pt-cgmd/util/cmake-build-debug/tests/telegraph_process_test" prefix_auto="0" extension_auto="0"/>
-				<Option working_dir="/wrk3/simploce/pt-cgmd/util/cmake-build-debug/tests"/>
-				<Option object_output="./"/>
-				<Option type="1"/>
-				<Option compiler="gcc"/>
-				<Compiler>
-					<Add directory="/wrk3/simploce/pt-cgmd/util/include"/>
-					<Add directory="/localdisk/include"/>
-					<Add directory="/usr/include/c++/7"/>
-					<Add directory="/usr/include/x86_64-linux-gnu/c++/7"/>
-					<Add directory="/usr/include/c++/7/backward"/>
-					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/7/include"/>
-					<Add directory="/usr/local/include"/>
-					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/7/include-fixed"/>
-					<Add directory="/usr/include/x86_64-linux-gnu"/>
-					<Add directory="/usr/include"/>
-				</Compiler>
-				<MakeCommands>
-					<Build command="/usr/bin/make -j4 -f &quot;/wrk3/simploce/pt-cgmd/util/cmake-build-debug/tests/Makefile&quot;  VERBOSE=1 telegraph_process_test/fast"/>
+					<Build command="/usr/bin/make -j4 -f &quot;/wrk3/simploce/pt-cgmd/util/cmake-build-debug/tests/Makefile&quot;  VERBOSE=1 mu_units_test/fast"/>
 					<CompileFile command="/usr/bin/make -j4 -f &quot;/wrk3/simploce/pt-cgmd/util/cmake-build-debug/tests/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
 					<Clean command="/usr/bin/make -j4 -f &quot;/wrk3/simploce/pt-cgmd/util/cmake-build-debug/tests/Makefile&quot;  VERBOSE=1 clean"/>
 					<DistClean command="/usr/bin/make -j4 -f &quot;/wrk3/simploce/pt-cgmd/util/cmake-build-debug/tests/Makefile&quot;  VERBOSE=1 clean"/>
@@ -277,8 +227,8 @@
 					<DistClean command="/usr/bin/make -j4 -f &quot;/wrk3/simploce/pt-cgmd/util/cmake-build-debug/tests/Makefile&quot;  VERBOSE=1 clean"/>
 				</MakeCommands>
 			</Target>
-			<Target title="mu_units_test">
-				<Option output="/wrk3/simploce/pt-cgmd/util/cmake-build-debug/tests/mu_units_test" prefix_auto="0" extension_auto="0"/>
+			<Target title="telegraph_process_test">
+				<Option output="/wrk3/simploce/pt-cgmd/util/cmake-build-debug/tests/telegraph_process_test" prefix_auto="0" extension_auto="0"/>
 				<Option working_dir="/wrk3/simploce/pt-cgmd/util/cmake-build-debug/tests"/>
 				<Option object_output="./"/>
 				<Option type="1"/>
@@ -296,14 +246,14 @@
 					<Add directory="/usr/include"/>
 				</Compiler>
 				<MakeCommands>
-					<Build command="/usr/bin/make -j4 -f &quot;/wrk3/simploce/pt-cgmd/util/cmake-build-debug/tests/Makefile&quot;  VERBOSE=1 mu_units_test"/>
+					<Build command="/usr/bin/make -j4 -f &quot;/wrk3/simploce/pt-cgmd/util/cmake-build-debug/tests/Makefile&quot;  VERBOSE=1 telegraph_process_test"/>
 					<CompileFile command="/usr/bin/make -j4 -f &quot;/wrk3/simploce/pt-cgmd/util/cmake-build-debug/tests/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
 					<Clean command="/usr/bin/make -j4 -f &quot;/wrk3/simploce/pt-cgmd/util/cmake-build-debug/tests/Makefile&quot;  VERBOSE=1 clean"/>
 					<DistClean command="/usr/bin/make -j4 -f &quot;/wrk3/simploce/pt-cgmd/util/cmake-build-debug/tests/Makefile&quot;  VERBOSE=1 clean"/>
 				</MakeCommands>
 			</Target>
-			<Target title="mu_units_test/fast">
-				<Option output="/wrk3/simploce/pt-cgmd/util/cmake-build-debug/tests/mu_units_test" prefix_auto="0" extension_auto="0"/>
+			<Target title="telegraph_process_test/fast">
+				<Option output="/wrk3/simploce/pt-cgmd/util/cmake-build-debug/tests/telegraph_process_test" prefix_auto="0" extension_auto="0"/>
 				<Option working_dir="/wrk3/simploce/pt-cgmd/util/cmake-build-debug/tests"/>
 				<Option object_output="./"/>
 				<Option type="1"/>
@@ -321,157 +271,7 @@
 					<Add directory="/usr/include"/>
 				</Compiler>
 				<MakeCommands>
-					<Build command="/usr/bin/make -j4 -f &quot;/wrk3/simploce/pt-cgmd/util/cmake-build-debug/tests/Makefile&quot;  VERBOSE=1 mu_units_test/fast"/>
-					<CompileFile command="/usr/bin/make -j4 -f &quot;/wrk3/simploce/pt-cgmd/util/cmake-build-debug/tests/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
-					<Clean command="/usr/bin/make -j4 -f &quot;/wrk3/simploce/pt-cgmd/util/cmake-build-debug/tests/Makefile&quot;  VERBOSE=1 clean"/>
-					<DistClean command="/usr/bin/make -j4 -f &quot;/wrk3/simploce/pt-cgmd/util/cmake-build-debug/tests/Makefile&quot;  VERBOSE=1 clean"/>
-				</MakeCommands>
-			</Target>
-			<Target title="matrix_map_test">
-				<Option output="/wrk3/simploce/pt-cgmd/util/cmake-build-debug/tests/matrix_map_test" prefix_auto="0" extension_auto="0"/>
-				<Option working_dir="/wrk3/simploce/pt-cgmd/util/cmake-build-debug/tests"/>
-				<Option object_output="./"/>
-				<Option type="1"/>
-				<Option compiler="gcc"/>
-				<Compiler>
-					<Add directory="/wrk3/simploce/pt-cgmd/util/include"/>
-					<Add directory="/localdisk/include"/>
-					<Add directory="/usr/include/c++/7"/>
-					<Add directory="/usr/include/x86_64-linux-gnu/c++/7"/>
-					<Add directory="/usr/include/c++/7/backward"/>
-					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/7/include"/>
-					<Add directory="/usr/local/include"/>
-					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/7/include-fixed"/>
-					<Add directory="/usr/include/x86_64-linux-gnu"/>
-					<Add directory="/usr/include"/>
-				</Compiler>
-				<MakeCommands>
-					<Build command="/usr/bin/make -j4 -f &quot;/wrk3/simploce/pt-cgmd/util/cmake-build-debug/tests/Makefile&quot;  VERBOSE=1 matrix_map_test"/>
-					<CompileFile command="/usr/bin/make -j4 -f &quot;/wrk3/simploce/pt-cgmd/util/cmake-build-debug/tests/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
-					<Clean command="/usr/bin/make -j4 -f &quot;/wrk3/simploce/pt-cgmd/util/cmake-build-debug/tests/Makefile&quot;  VERBOSE=1 clean"/>
-					<DistClean command="/usr/bin/make -j4 -f &quot;/wrk3/simploce/pt-cgmd/util/cmake-build-debug/tests/Makefile&quot;  VERBOSE=1 clean"/>
-				</MakeCommands>
-			</Target>
-			<Target title="matrix_map_test/fast">
-				<Option output="/wrk3/simploce/pt-cgmd/util/cmake-build-debug/tests/matrix_map_test" prefix_auto="0" extension_auto="0"/>
-				<Option working_dir="/wrk3/simploce/pt-cgmd/util/cmake-build-debug/tests"/>
-				<Option object_output="./"/>
-				<Option type="1"/>
-				<Option compiler="gcc"/>
-				<Compiler>
-					<Add directory="/wrk3/simploce/pt-cgmd/util/include"/>
-					<Add directory="/localdisk/include"/>
-					<Add directory="/usr/include/c++/7"/>
-					<Add directory="/usr/include/x86_64-linux-gnu/c++/7"/>
-					<Add directory="/usr/include/c++/7/backward"/>
-					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/7/include"/>
-					<Add directory="/usr/local/include"/>
-					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/7/include-fixed"/>
-					<Add directory="/usr/include/x86_64-linux-gnu"/>
-					<Add directory="/usr/include"/>
-				</Compiler>
-				<MakeCommands>
-					<Build command="/usr/bin/make -j4 -f &quot;/wrk3/simploce/pt-cgmd/util/cmake-build-debug/tests/Makefile&quot;  VERBOSE=1 matrix_map_test/fast"/>
-					<CompileFile command="/usr/bin/make -j4 -f &quot;/wrk3/simploce/pt-cgmd/util/cmake-build-debug/tests/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
-					<Clean command="/usr/bin/make -j4 -f &quot;/wrk3/simploce/pt-cgmd/util/cmake-build-debug/tests/Makefile&quot;  VERBOSE=1 clean"/>
-					<DistClean command="/usr/bin/make -j4 -f &quot;/wrk3/simploce/pt-cgmd/util/cmake-build-debug/tests/Makefile&quot;  VERBOSE=1 clean"/>
-				</MakeCommands>
-			</Target>
-			<Target title="value_type_test">
-				<Option output="/wrk3/simploce/pt-cgmd/util/cmake-build-debug/tests/value_type_test" prefix_auto="0" extension_auto="0"/>
-				<Option working_dir="/wrk3/simploce/pt-cgmd/util/cmake-build-debug/tests"/>
-				<Option object_output="./"/>
-				<Option type="1"/>
-				<Option compiler="gcc"/>
-				<Compiler>
-					<Add directory="/wrk3/simploce/pt-cgmd/util/include"/>
-					<Add directory="/localdisk/include"/>
-					<Add directory="/usr/include/c++/7"/>
-					<Add directory="/usr/include/x86_64-linux-gnu/c++/7"/>
-					<Add directory="/usr/include/c++/7/backward"/>
-					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/7/include"/>
-					<Add directory="/usr/local/include"/>
-					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/7/include-fixed"/>
-					<Add directory="/usr/include/x86_64-linux-gnu"/>
-					<Add directory="/usr/include"/>
-				</Compiler>
-				<MakeCommands>
-					<Build command="/usr/bin/make -j4 -f &quot;/wrk3/simploce/pt-cgmd/util/cmake-build-debug/tests/Makefile&quot;  VERBOSE=1 value_type_test"/>
-					<CompileFile command="/usr/bin/make -j4 -f &quot;/wrk3/simploce/pt-cgmd/util/cmake-build-debug/tests/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
-					<Clean command="/usr/bin/make -j4 -f &quot;/wrk3/simploce/pt-cgmd/util/cmake-build-debug/tests/Makefile&quot;  VERBOSE=1 clean"/>
-					<DistClean command="/usr/bin/make -j4 -f &quot;/wrk3/simploce/pt-cgmd/util/cmake-build-debug/tests/Makefile&quot;  VERBOSE=1 clean"/>
-				</MakeCommands>
-			</Target>
-			<Target title="value_type_test/fast">
-				<Option output="/wrk3/simploce/pt-cgmd/util/cmake-build-debug/tests/value_type_test" prefix_auto="0" extension_auto="0"/>
-				<Option working_dir="/wrk3/simploce/pt-cgmd/util/cmake-build-debug/tests"/>
-				<Option object_output="./"/>
-				<Option type="1"/>
-				<Option compiler="gcc"/>
-				<Compiler>
-					<Add directory="/wrk3/simploce/pt-cgmd/util/include"/>
-					<Add directory="/localdisk/include"/>
-					<Add directory="/usr/include/c++/7"/>
-					<Add directory="/usr/include/x86_64-linux-gnu/c++/7"/>
-					<Add directory="/usr/include/c++/7/backward"/>
-					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/7/include"/>
-					<Add directory="/usr/local/include"/>
-					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/7/include-fixed"/>
-					<Add directory="/usr/include/x86_64-linux-gnu"/>
-					<Add directory="/usr/include"/>
-				</Compiler>
-				<MakeCommands>
-					<Build command="/usr/bin/make -j4 -f &quot;/wrk3/simploce/pt-cgmd/util/cmake-build-debug/tests/Makefile&quot;  VERBOSE=1 value_type_test/fast"/>
-					<CompileFile command="/usr/bin/make -j4 -f &quot;/wrk3/simploce/pt-cgmd/util/cmake-build-debug/tests/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
-					<Clean command="/usr/bin/make -j4 -f &quot;/wrk3/simploce/pt-cgmd/util/cmake-build-debug/tests/Makefile&quot;  VERBOSE=1 clean"/>
-					<DistClean command="/usr/bin/make -j4 -f &quot;/wrk3/simploce/pt-cgmd/util/cmake-build-debug/tests/Makefile&quot;  VERBOSE=1 clean"/>
-				</MakeCommands>
-			</Target>
-			<Target title="seed_value_test">
-				<Option output="/wrk3/simploce/pt-cgmd/util/cmake-build-debug/tests/seed_value_test" prefix_auto="0" extension_auto="0"/>
-				<Option working_dir="/wrk3/simploce/pt-cgmd/util/cmake-build-debug/tests"/>
-				<Option object_output="./"/>
-				<Option type="1"/>
-				<Option compiler="gcc"/>
-				<Compiler>
-					<Add directory="/wrk3/simploce/pt-cgmd/util/include"/>
-					<Add directory="/localdisk/include"/>
-					<Add directory="/usr/include/c++/7"/>
-					<Add directory="/usr/include/x86_64-linux-gnu/c++/7"/>
-					<Add directory="/usr/include/c++/7/backward"/>
-					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/7/include"/>
-					<Add directory="/usr/local/include"/>
-					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/7/include-fixed"/>
-					<Add directory="/usr/include/x86_64-linux-gnu"/>
-					<Add directory="/usr/include"/>
-				</Compiler>
-				<MakeCommands>
-					<Build command="/usr/bin/make -j4 -f &quot;/wrk3/simploce/pt-cgmd/util/cmake-build-debug/tests/Makefile&quot;  VERBOSE=1 seed_value_test"/>
-					<CompileFile command="/usr/bin/make -j4 -f &quot;/wrk3/simploce/pt-cgmd/util/cmake-build-debug/tests/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
-					<Clean command="/usr/bin/make -j4 -f &quot;/wrk3/simploce/pt-cgmd/util/cmake-build-debug/tests/Makefile&quot;  VERBOSE=1 clean"/>
-					<DistClean command="/usr/bin/make -j4 -f &quot;/wrk3/simploce/pt-cgmd/util/cmake-build-debug/tests/Makefile&quot;  VERBOSE=1 clean"/>
-				</MakeCommands>
-			</Target>
-			<Target title="seed_value_test/fast">
-				<Option output="/wrk3/simploce/pt-cgmd/util/cmake-build-debug/tests/seed_value_test" prefix_auto="0" extension_auto="0"/>
-				<Option working_dir="/wrk3/simploce/pt-cgmd/util/cmake-build-debug/tests"/>
-				<Option object_output="./"/>
-				<Option type="1"/>
-				<Option compiler="gcc"/>
-				<Compiler>
-					<Add directory="/wrk3/simploce/pt-cgmd/util/include"/>
-					<Add directory="/localdisk/include"/>
-					<Add directory="/usr/include/c++/7"/>
-					<Add directory="/usr/include/x86_64-linux-gnu/c++/7"/>
-					<Add directory="/usr/include/c++/7/backward"/>
-					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/7/include"/>
-					<Add directory="/usr/local/include"/>
-					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/7/include-fixed"/>
-					<Add directory="/usr/include/x86_64-linux-gnu"/>
-					<Add directory="/usr/include"/>
-				</Compiler>
-				<MakeCommands>
-					<Build command="/usr/bin/make -j4 -f &quot;/wrk3/simploce/pt-cgmd/util/cmake-build-debug/tests/Makefile&quot;  VERBOSE=1 seed_value_test/fast"/>
+					<Build command="/usr/bin/make -j4 -f &quot;/wrk3/simploce/pt-cgmd/util/cmake-build-debug/tests/Makefile&quot;  VERBOSE=1 telegraph_process_test/fast"/>
 					<CompileFile command="/usr/bin/make -j4 -f &quot;/wrk3/simploce/pt-cgmd/util/cmake-build-debug/tests/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
 					<Clean command="/usr/bin/make -j4 -f &quot;/wrk3/simploce/pt-cgmd/util/cmake-build-debug/tests/Makefile&quot;  VERBOSE=1 clean"/>
 					<DistClean command="/usr/bin/make -j4 -f &quot;/wrk3/simploce/pt-cgmd/util/cmake-build-debug/tests/Makefile&quot;  VERBOSE=1 clean"/>
@@ -527,6 +327,56 @@
 					<DistClean command="/usr/bin/make -j4 -f &quot;/wrk3/simploce/pt-cgmd/util/cmake-build-debug/tests/Makefile&quot;  VERBOSE=1 clean"/>
 				</MakeCommands>
 			</Target>
+			<Target title="matrix_map_test">
+				<Option output="/wrk3/simploce/pt-cgmd/util/cmake-build-debug/tests/matrix_map_test" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/wrk3/simploce/pt-cgmd/util/cmake-build-debug/tests"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add directory="/wrk3/simploce/pt-cgmd/util/include"/>
+					<Add directory="/localdisk/include"/>
+					<Add directory="/usr/include/c++/7"/>
+					<Add directory="/usr/include/x86_64-linux-gnu/c++/7"/>
+					<Add directory="/usr/include/c++/7/backward"/>
+					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/7/include"/>
+					<Add directory="/usr/local/include"/>
+					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/7/include-fixed"/>
+					<Add directory="/usr/include/x86_64-linux-gnu"/>
+					<Add directory="/usr/include"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j4 -f &quot;/wrk3/simploce/pt-cgmd/util/cmake-build-debug/tests/Makefile&quot;  VERBOSE=1 matrix_map_test"/>
+					<CompileFile command="/usr/bin/make -j4 -f &quot;/wrk3/simploce/pt-cgmd/util/cmake-build-debug/tests/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j4 -f &quot;/wrk3/simploce/pt-cgmd/util/cmake-build-debug/tests/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j4 -f &quot;/wrk3/simploce/pt-cgmd/util/cmake-build-debug/tests/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="matrix_map_test/fast">
+				<Option output="/wrk3/simploce/pt-cgmd/util/cmake-build-debug/tests/matrix_map_test" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/wrk3/simploce/pt-cgmd/util/cmake-build-debug/tests"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add directory="/wrk3/simploce/pt-cgmd/util/include"/>
+					<Add directory="/localdisk/include"/>
+					<Add directory="/usr/include/c++/7"/>
+					<Add directory="/usr/include/x86_64-linux-gnu/c++/7"/>
+					<Add directory="/usr/include/c++/7/backward"/>
+					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/7/include"/>
+					<Add directory="/usr/local/include"/>
+					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/7/include-fixed"/>
+					<Add directory="/usr/include/x86_64-linux-gnu"/>
+					<Add directory="/usr/include"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j4 -f &quot;/wrk3/simploce/pt-cgmd/util/cmake-build-debug/tests/Makefile&quot;  VERBOSE=1 matrix_map_test/fast"/>
+					<CompileFile command="/usr/bin/make -j4 -f &quot;/wrk3/simploce/pt-cgmd/util/cmake-build-debug/tests/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j4 -f &quot;/wrk3/simploce/pt-cgmd/util/cmake-build-debug/tests/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j4 -f &quot;/wrk3/simploce/pt-cgmd/util/cmake-build-debug/tests/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
 			<Target title="nint_test">
 				<Option output="/wrk3/simploce/pt-cgmd/util/cmake-build-debug/tests/nint_test" prefix_auto="0" extension_auto="0"/>
 				<Option working_dir="/wrk3/simploce/pt-cgmd/util/cmake-build-debug/tests"/>
@@ -572,6 +422,56 @@
 				</Compiler>
 				<MakeCommands>
 					<Build command="/usr/bin/make -j4 -f &quot;/wrk3/simploce/pt-cgmd/util/cmake-build-debug/tests/Makefile&quot;  VERBOSE=1 nint_test/fast"/>
+					<CompileFile command="/usr/bin/make -j4 -f &quot;/wrk3/simploce/pt-cgmd/util/cmake-build-debug/tests/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j4 -f &quot;/wrk3/simploce/pt-cgmd/util/cmake-build-debug/tests/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j4 -f &quot;/wrk3/simploce/pt-cgmd/util/cmake-build-debug/tests/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="seed_value_test">
+				<Option output="/wrk3/simploce/pt-cgmd/util/cmake-build-debug/tests/seed_value_test" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/wrk3/simploce/pt-cgmd/util/cmake-build-debug/tests"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add directory="/wrk3/simploce/pt-cgmd/util/include"/>
+					<Add directory="/localdisk/include"/>
+					<Add directory="/usr/include/c++/7"/>
+					<Add directory="/usr/include/x86_64-linux-gnu/c++/7"/>
+					<Add directory="/usr/include/c++/7/backward"/>
+					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/7/include"/>
+					<Add directory="/usr/local/include"/>
+					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/7/include-fixed"/>
+					<Add directory="/usr/include/x86_64-linux-gnu"/>
+					<Add directory="/usr/include"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j4 -f &quot;/wrk3/simploce/pt-cgmd/util/cmake-build-debug/tests/Makefile&quot;  VERBOSE=1 seed_value_test"/>
+					<CompileFile command="/usr/bin/make -j4 -f &quot;/wrk3/simploce/pt-cgmd/util/cmake-build-debug/tests/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j4 -f &quot;/wrk3/simploce/pt-cgmd/util/cmake-build-debug/tests/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j4 -f &quot;/wrk3/simploce/pt-cgmd/util/cmake-build-debug/tests/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="seed_value_test/fast">
+				<Option output="/wrk3/simploce/pt-cgmd/util/cmake-build-debug/tests/seed_value_test" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/wrk3/simploce/pt-cgmd/util/cmake-build-debug/tests"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add directory="/wrk3/simploce/pt-cgmd/util/include"/>
+					<Add directory="/localdisk/include"/>
+					<Add directory="/usr/include/c++/7"/>
+					<Add directory="/usr/include/x86_64-linux-gnu/c++/7"/>
+					<Add directory="/usr/include/c++/7/backward"/>
+					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/7/include"/>
+					<Add directory="/usr/local/include"/>
+					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/7/include-fixed"/>
+					<Add directory="/usr/include/x86_64-linux-gnu"/>
+					<Add directory="/usr/include"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j4 -f &quot;/wrk3/simploce/pt-cgmd/util/cmake-build-debug/tests/Makefile&quot;  VERBOSE=1 seed_value_test/fast"/>
 					<CompileFile command="/usr/bin/make -j4 -f &quot;/wrk3/simploce/pt-cgmd/util/cmake-build-debug/tests/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
 					<Clean command="/usr/bin/make -j4 -f &quot;/wrk3/simploce/pt-cgmd/util/cmake-build-debug/tests/Makefile&quot;  VERBOSE=1 clean"/>
 					<DistClean command="/usr/bin/make -j4 -f &quot;/wrk3/simploce/pt-cgmd/util/cmake-build-debug/tests/Makefile&quot;  VERBOSE=1 clean"/>
@@ -627,6 +527,56 @@
 					<DistClean command="/usr/bin/make -j4 -f &quot;/wrk3/simploce/pt-cgmd/util/cmake-build-debug/tests/Makefile&quot;  VERBOSE=1 clean"/>
 				</MakeCommands>
 			</Target>
+			<Target title="value_type_test">
+				<Option output="/wrk3/simploce/pt-cgmd/util/cmake-build-debug/tests/value_type_test" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/wrk3/simploce/pt-cgmd/util/cmake-build-debug/tests"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add directory="/wrk3/simploce/pt-cgmd/util/include"/>
+					<Add directory="/localdisk/include"/>
+					<Add directory="/usr/include/c++/7"/>
+					<Add directory="/usr/include/x86_64-linux-gnu/c++/7"/>
+					<Add directory="/usr/include/c++/7/backward"/>
+					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/7/include"/>
+					<Add directory="/usr/local/include"/>
+					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/7/include-fixed"/>
+					<Add directory="/usr/include/x86_64-linux-gnu"/>
+					<Add directory="/usr/include"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j4 -f &quot;/wrk3/simploce/pt-cgmd/util/cmake-build-debug/tests/Makefile&quot;  VERBOSE=1 value_type_test"/>
+					<CompileFile command="/usr/bin/make -j4 -f &quot;/wrk3/simploce/pt-cgmd/util/cmake-build-debug/tests/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j4 -f &quot;/wrk3/simploce/pt-cgmd/util/cmake-build-debug/tests/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j4 -f &quot;/wrk3/simploce/pt-cgmd/util/cmake-build-debug/tests/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="value_type_test/fast">
+				<Option output="/wrk3/simploce/pt-cgmd/util/cmake-build-debug/tests/value_type_test" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/wrk3/simploce/pt-cgmd/util/cmake-build-debug/tests"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add directory="/wrk3/simploce/pt-cgmd/util/include"/>
+					<Add directory="/localdisk/include"/>
+					<Add directory="/usr/include/c++/7"/>
+					<Add directory="/usr/include/x86_64-linux-gnu/c++/7"/>
+					<Add directory="/usr/include/c++/7/backward"/>
+					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/7/include"/>
+					<Add directory="/usr/local/include"/>
+					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/7/include-fixed"/>
+					<Add directory="/usr/include/x86_64-linux-gnu"/>
+					<Add directory="/usr/include"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j4 -f &quot;/wrk3/simploce/pt-cgmd/util/cmake-build-debug/tests/Makefile&quot;  VERBOSE=1 value_type_test/fast"/>
+					<CompileFile command="/usr/bin/make -j4 -f &quot;/wrk3/simploce/pt-cgmd/util/cmake-build-debug/tests/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j4 -f &quot;/wrk3/simploce/pt-cgmd/util/cmake-build-debug/tests/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j4 -f &quot;/wrk3/simploce/pt-cgmd/util/cmake-build-debug/tests/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
 			<Target title="id-test">
 				<Option output="/wrk3/simploce/pt-cgmd/util/cmake-build-debug/tests/id-test" prefix_auto="0" extension_auto="0"/>
 				<Option working_dir="/wrk3/simploce/pt-cgmd/util/cmake-build-debug/tests"/>
@@ -677,8 +627,117 @@
 					<DistClean command="/usr/bin/make -j4 -f &quot;/wrk3/simploce/pt-cgmd/util/cmake-build-debug/tests/Makefile&quot;  VERBOSE=1 clean"/>
 				</MakeCommands>
 			</Target>
+			<Target title="param-test">
+				<Option output="/wrk3/simploce/pt-cgmd/util/cmake-build-debug/tests/param-test" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/wrk3/simploce/pt-cgmd/util/cmake-build-debug/tests"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add directory="/wrk3/simploce/pt-cgmd/util/include"/>
+					<Add directory="/localdisk/include"/>
+					<Add directory="/usr/include/c++/7"/>
+					<Add directory="/usr/include/x86_64-linux-gnu/c++/7"/>
+					<Add directory="/usr/include/c++/7/backward"/>
+					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/7/include"/>
+					<Add directory="/usr/local/include"/>
+					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/7/include-fixed"/>
+					<Add directory="/usr/include/x86_64-linux-gnu"/>
+					<Add directory="/usr/include"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j4 -f &quot;/wrk3/simploce/pt-cgmd/util/cmake-build-debug/tests/Makefile&quot;  VERBOSE=1 param-test"/>
+					<CompileFile command="/usr/bin/make -j4 -f &quot;/wrk3/simploce/pt-cgmd/util/cmake-build-debug/tests/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j4 -f &quot;/wrk3/simploce/pt-cgmd/util/cmake-build-debug/tests/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j4 -f &quot;/wrk3/simploce/pt-cgmd/util/cmake-build-debug/tests/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="param-test/fast">
+				<Option output="/wrk3/simploce/pt-cgmd/util/cmake-build-debug/tests/param-test" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/wrk3/simploce/pt-cgmd/util/cmake-build-debug/tests"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add directory="/wrk3/simploce/pt-cgmd/util/include"/>
+					<Add directory="/localdisk/include"/>
+					<Add directory="/usr/include/c++/7"/>
+					<Add directory="/usr/include/x86_64-linux-gnu/c++/7"/>
+					<Add directory="/usr/include/c++/7/backward"/>
+					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/7/include"/>
+					<Add directory="/usr/local/include"/>
+					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/7/include-fixed"/>
+					<Add directory="/usr/include/x86_64-linux-gnu"/>
+					<Add directory="/usr/include"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j4 -f &quot;/wrk3/simploce/pt-cgmd/util/cmake-build-debug/tests/Makefile&quot;  VERBOSE=1 param-test/fast"/>
+					<CompileFile command="/usr/bin/make -j4 -f &quot;/wrk3/simploce/pt-cgmd/util/cmake-build-debug/tests/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j4 -f &quot;/wrk3/simploce/pt-cgmd/util/cmake-build-debug/tests/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j4 -f &quot;/wrk3/simploce/pt-cgmd/util/cmake-build-debug/tests/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="flat-surface-test">
+				<Option output="/wrk3/simploce/pt-cgmd/util/cmake-build-debug/tests/flat-surface-test" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/wrk3/simploce/pt-cgmd/util/cmake-build-debug/tests"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add directory="/wrk3/simploce/pt-cgmd/util/include"/>
+					<Add directory="/localdisk/include"/>
+					<Add directory="/usr/include/c++/7"/>
+					<Add directory="/usr/include/x86_64-linux-gnu/c++/7"/>
+					<Add directory="/usr/include/c++/7/backward"/>
+					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/7/include"/>
+					<Add directory="/usr/local/include"/>
+					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/7/include-fixed"/>
+					<Add directory="/usr/include/x86_64-linux-gnu"/>
+					<Add directory="/usr/include"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j4 -f &quot;/wrk3/simploce/pt-cgmd/util/cmake-build-debug/tests/Makefile&quot;  VERBOSE=1 flat-surface-test"/>
+					<CompileFile command="/usr/bin/make -j4 -f &quot;/wrk3/simploce/pt-cgmd/util/cmake-build-debug/tests/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j4 -f &quot;/wrk3/simploce/pt-cgmd/util/cmake-build-debug/tests/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j4 -f &quot;/wrk3/simploce/pt-cgmd/util/cmake-build-debug/tests/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="flat-surface-test/fast">
+				<Option output="/wrk3/simploce/pt-cgmd/util/cmake-build-debug/tests/flat-surface-test" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/wrk3/simploce/pt-cgmd/util/cmake-build-debug/tests"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add directory="/wrk3/simploce/pt-cgmd/util/include"/>
+					<Add directory="/localdisk/include"/>
+					<Add directory="/usr/include/c++/7"/>
+					<Add directory="/usr/include/x86_64-linux-gnu/c++/7"/>
+					<Add directory="/usr/include/c++/7/backward"/>
+					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/7/include"/>
+					<Add directory="/usr/local/include"/>
+					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/7/include-fixed"/>
+					<Add directory="/usr/include/x86_64-linux-gnu"/>
+					<Add directory="/usr/include"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j4 -f &quot;/wrk3/simploce/pt-cgmd/util/cmake-build-debug/tests/Makefile&quot;  VERBOSE=1 flat-surface-test/fast"/>
+					<CompileFile command="/usr/bin/make -j4 -f &quot;/wrk3/simploce/pt-cgmd/util/cmake-build-debug/tests/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j4 -f &quot;/wrk3/simploce/pt-cgmd/util/cmake-build-debug/tests/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j4 -f &quot;/wrk3/simploce/pt-cgmd/util/cmake-build-debug/tests/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
 		</Build>
+		<Unit filename="/wrk3/simploce/pt-cgmd/util/src/direction.cpp">
+			<Option target="util"/>
+		</Unit>
+		<Unit filename="/wrk3/simploce/pt-cgmd/util/src/flat-surface.cpp">
+			<Option target="util"/>
+		</Unit>
 		<Unit filename="/wrk3/simploce/pt-cgmd/util/src/param.cpp">
+			<Option target="util"/>
+		</Unit>
+		<Unit filename="/wrk3/simploce/pt-cgmd/util/src/plane.cpp">
 			<Option target="util"/>
 		</Unit>
 		<Unit filename="/wrk3/simploce/pt-cgmd/util/src/poisson-process.cpp">
@@ -695,6 +754,9 @@
 		</Unit>
 		<Unit filename="/wrk3/simploce/pt-cgmd/util/tests/cvector-test.cpp">
 			<Option target="cvector_test"/>
+		</Unit>
+		<Unit filename="/wrk3/simploce/pt-cgmd/util/tests/flat-surface-test.cpp">
+			<Option target="flat-surface-test"/>
 		</Unit>
 		<Unit filename="/wrk3/simploce/pt-cgmd/util/tests/id-test.cpp">
 			<Option target="id-test"/>

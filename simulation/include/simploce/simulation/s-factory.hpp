@@ -7,8 +7,9 @@
 #ifndef S_FACTORY_HPP
 #define S_FACTORY_HPP
 
-#include "s-types.hpp"
+#include "simploce/types/s-types.hpp"
 #include "simploce/particle/p-factory.hpp"
+#include "simploce/util/direction.hpp"
 
 
 namespace simploce {
@@ -42,15 +43,15 @@ namespace simploce {
          * 'simulation.nwrite', 'simulation.npairlists', 'simulation.temperature', and
          * 'simulation.timestep'.
          */
-        sim_param_ptr_t simulationParameters();
+        param_ptr_t simulationParameters();
 
         /**
          * Returns pair lists generator.
-         * @param box Simulation box.
+         * @param cutoff Cutoff distance non-bonded interactions.
          * @param bc Boundary condition.
          * @return Pair lists generator.
          */
-        pair_list_gen_ptr_t pairListsGenerator(const bc_ptr_t &bc);
+        pair_list_gen_ptr_t pairListsGenerator(const dist_t& cutoff, const bc_ptr_t &bc);
 
         /**
          * Returns factory for creating protonatable particle systems.
@@ -62,7 +63,7 @@ namespace simploce {
          * Returns an interactor.
          * @return Interactor.
          */
-        interactor_ptr_t interactor(const sim_param_ptr_t& simulationParameters,
+        interactor_ptr_t interactor(const param_ptr_t& simulationParameters,
                                     const ff_ptr_t& forceField,
                                     const bc_ptr_t &bc);
         
@@ -72,8 +73,8 @@ namespace simploce {
          * @param displacerType displacer identifier.
          * @return Algorithm.
          */
-        displacer_ptr_t displacer(std::string displacerType,
-                                  const sim_param_ptr_t& simulationParameters,
+        displacer_ptr_t displacer(const std::string& displacerType,
+                                  const param_ptr_t& simulationParameters,
                                   const interactor_ptr_t& interactor);
         
         /**
@@ -83,6 +84,16 @@ namespace simploce {
          */
         bc_ptr_t 
         boundaryCondition(const box_ptr_t& box);
+
+
+        /**
+         * Returns 1 dimensional periodic boundary conditions.
+         * @param box Simulation box.
+         * @param direction Apply PBC in this diection only.
+         * @return Boundary condition.
+         */
+        bc_ptr_t
+        oneDimensionBoundaryCondition(const box_ptr_t& box, const Direction& direction);
         
         /**
          * Returns generator of pairs of protonatable beads possibly involved in proton
@@ -111,12 +122,12 @@ namespace simploce {
 
         /**
          * Returns force calculator.
-         * @param box Simulation box.
+         * @param simulationParam Simulation parameters.
          * @param bc Boundary condition.
          * @param forceField Force field.
          * @return Force calculator.
          */
-        forces_ptr_t forces(const bc_ptr_t& bc, const ff_ptr_t& forceField);
+        forces_ptr_t forces(const param_ptr_t& simulationParam, const bc_ptr_t& bc, const ff_ptr_t& forceField);
 
         /**
          * Reads a particle system from an input file.

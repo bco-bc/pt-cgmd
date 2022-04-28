@@ -61,6 +61,11 @@ namespace simploce {
     ParticleSpecCatalog::N() const {
         return this->lookup("N");
     }
+
+    spec_ptr_t
+    ParticleSpecCatalog::staticBP() const {
+        return this->lookup("SBP");
+    }
     
     spec_catalog_ptr_t 
     ParticleSpecCatalog::obtainFrom(std::istream& stream)

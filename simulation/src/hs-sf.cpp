@@ -10,7 +10,7 @@
 #include "simploce/simulation/s-properties.hpp"
 #include "simploce/potentials/sf.hpp"
 #include "simploce/potentials/force-field.hpp"
-#include "simploce/simulation/s-conf.hpp"
+#include "simploce/conf/s-conf.hpp"
 #include "simploce/particle/particle.hpp"
 #include "simploce/particle/particle-spec.hpp"
 #include <utility>

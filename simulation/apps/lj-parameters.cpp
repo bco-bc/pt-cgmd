@@ -6,7 +6,7 @@
  */
 
 #include <cstdlib>
-#include "simploce/simulation/s-types.hpp"
+#include "simploce/types/s-types.hpp"
 #include "simploce/units/units-mu.hpp"
 #include <iostream>
 

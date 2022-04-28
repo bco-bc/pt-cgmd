@@ -5,7 +5,7 @@
  * Copyright (c) 2021 Biocenter Oulu, University of Oulu, Finland. All rights reserved.
  */
 
-#include "simploce/simulation/rf.hpp"
+#include "simploce/potentials/rf.hpp"
 #include "simploce/simulation/s-properties.hpp"
 #include "simploce/units/units-mu.hpp"
 #include "simploce/potentials/force-field.hpp"
@@ -16,8 +16,8 @@
 
 namespace simploce {
 
-    RF::RF(real_t kappa, ff_ptr_t forceField, box_ptr_t box, bc_ptr_t bc) :
-        kappa_(kappa), forceField_(std::move(forceField)), box_{std::move(box)},
+    RF::RF(dist_t cutoff, real_t kappa, ff_ptr_t forceField, box_ptr_t box, bc_ptr_t bc) :
+        cutoff_{cutoff}, kappa_(kappa), forceField_(std::move(forceField)), box_{std::move(box)},
         bc_{std::move(bc)} {
     }
 
@@ -51,31 +51,34 @@ namespace simploce {
                        charge_t q2,
                        real_t eps_inside_rc,
                        real_t eps_outside_rc) {
-        static const dist_t rc = properties::cutoffDistance(box_);
-        static const real_t rf = rc();
+        static const real_t rf = cutoff_() * cutoff_();
         static const real_t rf3 = rf * rf * rf;
 
-        auto C_rf = compute_C_rf_(rc, eps_inside_rc, eps_outside_rc);
+        auto C_rf = compute_C_rf_(cutoff_(), eps_inside_rc, eps_outside_rc);
         auto factor = units::mu<real_t>::FOUR_PI_E0 * eps_inside_rc;
 
+        // Potential energy.
         real_t c1 = q1() * q2() / factor;
         real_t C = c1 / Rij;
         real_t RF = -c1 * (0.5 * C_rf * Rij2 / rf3 + (1.0 - 0.5 * C_rf) / rf);
         energy_t energy{C + RF};
 
-         // Force on particle #1, kJ/(mol nm).
+         // Force on particle #1.
         dist_vect_t unitVector = rij / Rij;
-        real_t dCRFdR = 0.0;
+        real_t dCdR = -c1 / Rij2;
+        real_t dCRFdR = -c1 * C_rf * Rij / rf3;
         force_t f{};
         for (std::size_t k = 0; k != 3; ++k) {
-            f[k] = -dCRFdR * unitVector[k];
+            f[k] = -(dCRFdR + dCdR) * unitVector[k];
         }
+
+        // Done.
         return std::move(std::pair<energy_t, force_t>{energy, f});
     }
 
     real_t
-    RF::compute_C_rf_(const dist_t& rc, real_t eps_inside_rc, real_t eps_outside_rc) {
-        util::Logger logger("simploce::RF::operator ()");
+    RF::compute_C_rf_(const dist_t& rc, real_t eps_inside_rc, real_t eps_outside_rc) const {
+        static util::Logger logger("simploce::RF::operator ()");
         real_t kappa_rc = kappa_ * rc();
         real_t kappa_rc_2 = kappa_rc * kappa_rc;
 

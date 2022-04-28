@@ -6,7 +6,7 @@
 
 #include "simploce/simulation/pt-langevin-velocity-verlet.hpp"
 #include "simploce/simulation/pt-pair-list-generator.hpp"
-#include "simploce/simulation/s-conf.hpp"
+#include "simploce/conf/s-conf.hpp"
 #include "simploce/simulation/pt.hpp"
 #include "simploce/simulation/s-factory.hpp"
 #include "simploce/simulation/continuous.hpp"

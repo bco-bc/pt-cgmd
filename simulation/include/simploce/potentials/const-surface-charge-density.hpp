@@ -8,7 +8,8 @@
 #define SIMULATION_CONST_SURFACE_CHARGE_DENSITY_HPP
 
 #include "external-potential.hpp"
-#include "../simulation/s-types.hpp"
+#include "simploce/types/s-types.hpp"
+#include "simploce/util/flat-surface.hpp"
 
 namespace simploce {
 
@@ -19,23 +20,15 @@ namespace simploce {
     public:
 
         /**
-         * Surface location.
-         * xy : Surface is in the xy plane at z = 0.
-         * yz : Surface is in the yz plane at x = 0;
-         * zx : Surface is in the zx plane at y = 0;
+         * Constructor.
+         * @param sigma Surface charge density (e/nm^2)
+         * @param eps_r Relative permittivity.
+         * @param bc Boundary condition.
+         * @param flatSurface Flat surface specification. Default is a surface parallel to xy-plane at z = 0.
          */
-        enum PLANE {xy=1, yz, zx};
-
-        /**
-         * Conversion from std::string to PLANE.
-         * @param value One of "xy", "yz", and "zx".
-         * @return PLANE.
-         */
-        static PLANE valueOf(std::string value);
-
         ConstantSurfaceChargeDensity(srf_charge_density_t sigma,
+                                     FlatSurface flatSurface,
                                      real_t eps_r,
-                                     PLANE plane,
                                      bc_ptr_t bc);
 
         std::pair<energy_t, force_t> operator () (const p_ptr_t& particle) override;
@@ -45,7 +38,7 @@ namespace simploce {
         friend class ElectricPotentialDifference;
 
         static std::pair<energy_t, force_t> forceAndEnergy(srf_charge_density_t sigma,
-                                                           PLANE plane,
+                                                           const FlatSurface& flatSurface,
                                                            real_t eps_r,
                                                            const bc_ptr_t& bc,
                                                            const position_t& r,
@@ -53,8 +46,8 @@ namespace simploce {
 
         srf_charge_density_t sigma_;
         real_t eps_r_;
-        PLANE plane_;
         bc_ptr_t bc_;
+        FlatSurface flatSurface_;
     };
 }
 

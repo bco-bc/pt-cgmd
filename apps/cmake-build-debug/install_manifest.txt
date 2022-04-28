@@ -2,4 +2,5 @@
 /localdisk/bin/s-validate
 /localdisk/bin/s-simulate
 /localdisk/bin/s-gr
-/localdisk/bin/s-distance
+/localdisk/bin/s-pdb
+/localdisk/bin/s-add-boundary

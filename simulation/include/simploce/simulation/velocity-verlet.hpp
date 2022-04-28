@@ -9,7 +9,7 @@
 
 #include "displacer.hpp"
 #include "sim-data.hpp"
-#include "s-types.hpp"
+#include "simploce/types/s-types.hpp"
 
 namespace simploce {
     
@@ -19,18 +19,18 @@ namespace simploce {
     class VelocityVerlet: public displacer {
     public:
         
-        VelocityVerlet(sim_param_ptr_t simulationParameters,
+        VelocityVerlet(param_ptr_t param,
                        interactor_ptr_t interactor);
         
         /**
          * @param at Atomistic model.
          * @return kinetic, potential energy, and temperature.
          */
-        SimulationData displace(const p_system_ptr_t& all) const override;
+        SimulationData displace(const p_system_ptr_t& particles) const override;
         
     private:
         
-        sim_param_ptr_t simulationParameters_;
+        param_ptr_t param_;
         interactor_ptr_t interactor_;
     };
 

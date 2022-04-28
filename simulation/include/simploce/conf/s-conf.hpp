@@ -9,7 +9,7 @@
 #define SCONF_HPP
 
 #include "simploce/particle/p-conf.hpp"
-#include "simploce/potentials/sp-conf.hpp"
+#include "sp-conf.hpp"
 
 namespace simploce {
     namespace conf {

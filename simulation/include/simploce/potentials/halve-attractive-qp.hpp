@@ -9,7 +9,7 @@
 #define SIMULATION_HALVE_ATTRACTIVE_QP_HPP
 
 #include "simploce/potentials/pair-potential.hpp"
-#include "simploce/simulation/s-types.hpp"
+#include "simploce/types/s-types.hpp"
 
 namespace simploce {
 

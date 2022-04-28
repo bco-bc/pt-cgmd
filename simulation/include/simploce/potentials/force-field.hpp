@@ -8,7 +8,7 @@
 #define FORCE_FIELD_HPP
 
 #include "simploce/simulation/pair-lists.hpp"
-#include "simploce/simulation/s-types.hpp"
+#include "simploce/types/s-types.hpp"
 #include "simploce/util/map2.hpp"
 #include <string>
 #include <utility>
@@ -35,9 +35,11 @@ namespace simploce {
             real_t r0;              // Equilibrium distance.
             real_t eps_inside_rc;   // Relative permittivity inside cutoff distance.
             real_t eps_outside_rc;  // Relative permittivity outside cutoff distance.
-            real_t deltaV;     // Electric potential difference.
+            real_t deltaV;          // Electric potential difference.
             real_t distance;        // Distance between two points.
-            char direction;         // Direction (or axis) along which the potential difference is applied.
+            char direction;         // Direction (or axis) along which something is applied.
+            std::string plane;      // Plane specification.
+            real_t sigma;           // Surface charge density.
         };
 
         /**

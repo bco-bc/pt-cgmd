@@ -1,5 +1,6 @@
 file(REMOVE_RECURSE
   "CMakeFiles/pair-list-test.dir/pair-list-test.cpp.o"
+  "CMakeFiles/pair-list-test.dir/pair-list-test.cpp.o.d"
   "pair-list-test"
   "pair-list-test.pdb"
 )

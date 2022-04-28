@@ -56,10 +56,10 @@ namespace simploce {
         return data;
     }
     
-    LeapFrog::LeapFrog(sim_param_ptr_t simulationParameters,
+    LeapFrog::LeapFrog(param_ptr_t param,
                        interactor_ptr_t interactor) :
-        simulationParameters_{std::move(simulationParameters)}, interactor_{std::move(interactor)} {
-        if (!simulationParameters_) {
+            param_{std::move(param)}, interactor_{std::move(interactor)} {
+        if (!param_) {
             throw std::domain_error("LeapFrog: Missing simulation parameters.");
         }
         if (!interactor_) {
@@ -70,8 +70,8 @@ namespace simploce {
     SimulationData 
     LeapFrog::displace(const p_system_ptr_t& particleSystem) const
     {
-        static stime_t dt = simulationParameters_->get<real_t>("simulation.timestep");
-        static std::size_t counter = 0.0;
+        static stime_t dt = param_->get<real_t>("simulation.timestep");
+        static std::size_t counter = 0;
         
         counter += 1;
         
@@ -80,9 +80,9 @@ namespace simploce {
         
         // Displace.
         SimulationData data =
-                particleSystem->doWithAll<SimulationData>([] (const std::vector<p_ptr_t>& all) {
-            auto data = displace_(dt, all);
-            data.totalMomentum = norm<real_t>(properties::linearMomentum(all));
+                particleSystem->doWithDisplaceables<SimulationData>([] (const std::vector<p_ptr_t>& particles) {
+            auto data = displace_(dt, particles);
+            data.totalMomentum = norm<real_t>(properties::linearMomentum(particles));
             return std::move(data);
         });
 

@@ -25,7 +25,7 @@ namespace simploce {
          * @param box Simulation box.
          * @param bc Boundary condition.
          */
-        SF(ff_ptr_t forceField, box_ptr_t box, bc_ptr_t bc);
+        SF(dist_t cutoff, ff_ptr_t forceField, box_ptr_t box, bc_ptr_t bc);
 
         std::pair<energy_t, force_t> operator () (const p_ptr_t &p1, const p_ptr_t &p2) override;
 
@@ -41,6 +41,7 @@ namespace simploce {
                                                     const charge_t& q2,
                                                     real_t eps_inside_rc);
 
+        dist_t cutoff_;
         ff_ptr_t forceField_;
         box_ptr_t box_;
         bc_ptr_t bc_;

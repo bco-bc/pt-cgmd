@@ -1,5 +1,6 @@
 file(REMOVE_RECURSE
   "CMakeFiles/coarse-grained-test.dir/coarse-grained-test.cpp.o"
+  "CMakeFiles/coarse-grained-test.dir/coarse-grained-test.cpp.o.d"
   "coarse-grained-test"
   "coarse-grained-test.pdb"
 )

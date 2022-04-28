@@ -55,7 +55,7 @@ namespace simploce {
         ConstantRateProtonTransfer(const rate_t& rate, 
                                    const real_t& gamma);
         
-        void transfer(const sim_param_t& param,
+        void transfer(const param_t& param,
                       const std::vector<prot_bead_ptr_t>& continuous,
                       const prot_pair_list_t& pairList) const override;
         

@@ -9,7 +9,7 @@
 #include "simploce/simulation/continuous.hpp"
 #include "simploce/particle/protonatable-coarse-grained.hpp"
 #include "simploce/types/cvector_t.hpp"
-#include "simploce/simulation/s-conf.hpp"
+#include "simploce/conf/s-conf.hpp"
 
 namespace simploce {
 

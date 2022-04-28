@@ -1,5 +1,6 @@
 file(REMOVE_RECURSE
   "CMakeFiles/lj-parameters.dir/lj-parameters.cpp.o"
+  "CMakeFiles/lj-parameters.dir/lj-parameters.cpp.o.d"
   "lj-parameters"
   "lj-parameters.pdb"
 )

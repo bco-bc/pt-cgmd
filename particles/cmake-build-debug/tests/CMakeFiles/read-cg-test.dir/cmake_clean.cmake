@@ -1,5 +1,6 @@
 file(REMOVE_RECURSE
   "CMakeFiles/read-cg-test.dir/read-cg-test.cpp.o"
+  "CMakeFiles/read-cg-test.dir/read-cg-test.cpp.o.d"
   "read-cg-test"
   "read-cg-test.pdb"
 )

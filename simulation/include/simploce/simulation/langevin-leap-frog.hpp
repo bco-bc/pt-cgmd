@@ -8,7 +8,7 @@
 #define LANGEVIN_LEAP_FROG_HPP
 
 #include "displacer.hpp"
-#include "s-types.hpp"
+#include "simploce/types/s-types.hpp"
 
 namespace simploce {
     
@@ -27,7 +27,7 @@ namespace simploce {
          * @param simulationParameters Simulation parameters.
          * @param interactor Interactor.
          */
-        LangevinLeapFrog(sim_param_ptr_t simulationParameters,
+        LangevinLeapFrog(param_ptr_t simulationParameters,
                          interactor_ptr_t interactor);
         
         /**
@@ -37,7 +37,7 @@ namespace simploce {
         
     private:
 
-        sim_param_ptr_t simulationParameters_;
+        param_ptr_t simulationParameters_;
         interactor_ptr_t interactor_;
     };
 }

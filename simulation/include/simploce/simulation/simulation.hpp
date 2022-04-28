@@ -7,7 +7,7 @@
 #ifndef SIMULATION_HPP
 #define SIMULATION_HPP
 
-#include "s-types.hpp"
+#include "simploce/types/s-types.hpp"
 #include <fstream>
 
 namespace simploce {
@@ -21,25 +21,25 @@ namespace simploce {
 
         /**
          * Constructor. All arguments are required.
-         * @param simulationParams Simulation parameters.
+         * @param param Simulation parameters.
          * @param particleSystem Particular system.
          * @param displacer displacer.
          */
-        Simulation(sim_param_ptr_t simulationParams,
+        Simulation(param_ptr_t param,
                    p_system_ptr_t particleSystem,
                    displacer_ptr_t displacer);
         
         /**
          * Performs the simulation.
-         * @param trajectoryStream Output trajectory stream.
+         * @param particles Output trajectory stream.
          * @param dataStream Output simulation data stream for monitoring the simulation.
          */
-        void perform(std::ofstream& trajectoryStream,
+        void perform(std::ofstream& particles,
                      std::ofstream& dataStream);
         
     private:
         
-        sim_param_ptr_t simulationParameters_;
+        param_ptr_t param_;
         p_system_ptr_t particleSystem_;
         displacer_ptr_t displacer_;
 

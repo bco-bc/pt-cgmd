@@ -26,11 +26,11 @@ iostream
 string
 -
 
-/wrk3/simploce/pt-cgmd/util/tests/matrix-map-test.cpp
+/home/andre/wrk3/simploce/pt-cgmd/util/tests/matrix-map-test.cpp
 simploce/util/map2.hpp
-/wrk3/simploce/pt-cgmd/util/tests/simploce/util/map2.hpp
+/home/andre/wrk3/simploce/pt-cgmd/util/tests/simploce/util/map2.hpp
 simploce/util/map.hpp
-/wrk3/simploce/pt-cgmd/util/tests/simploce/util/map.hpp
+/home/andre/wrk3/simploce/pt-cgmd/util/tests/simploce/util/map.hpp
 iostream
 -
 

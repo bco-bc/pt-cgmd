@@ -36,6 +36,18 @@ map
 p-types.hpp
 ../include/simploce/particle/p-types.hpp
 
+/home/andre/wrk3/simploce/pt-cgmd/particles/tests/read-cg-test.cpp
+simploce/particle/particle-spec-catalog.hpp
+/home/andre/wrk3/simploce/pt-cgmd/particles/tests/simploce/particle/particle-spec-catalog.hpp
+simploce/particle/coarse-grained.hpp
+/home/andre/wrk3/simploce/pt-cgmd/particles/tests/simploce/particle/coarse-grained.hpp
+simploce/util/file.hpp
+/home/andre/wrk3/simploce/pt-cgmd/particles/tests/simploce/util/file.hpp
+cstdlib
+-
+iostream
+-
+
 /localdisk/include/simploce/conf/u-conf.hpp
 
 /localdisk/include/simploce/types/cvector_t.hpp
@@ -98,17 +110,5 @@ box.hpp
 
 /localdisk/include/simploce/util/file.hpp
 fstream
--
-
-/wrk3/simploce/pt-cgmd/particles/tests/read-cg-test.cpp
-simploce/particle/particle-spec-catalog.hpp
-/wrk3/simploce/pt-cgmd/particles/tests/simploce/particle/particle-spec-catalog.hpp
-simploce/particle/coarse-grained.hpp
-/wrk3/simploce/pt-cgmd/particles/tests/simploce/particle/coarse-grained.hpp
-simploce/util/file.hpp
-/wrk3/simploce/pt-cgmd/particles/tests/simploce/util/file.hpp
-cstdlib
--
-iostream
 -
 

@@ -4,10 +4,8 @@
  * Created on November 22, 2021, 12:29 PM.
  */
 
-#include "simploce/simulation/rf.hpp"
+#include "simploce/potentials/rf.hpp"
 #include "simploce/simulation/s-factory.hpp"
-#include "simploce/simulation/s-conf.hpp"
-#include "simploce/simulation/s-properties.hpp"
 #include "simploce/particle/particle-spec.hpp"
 #include "simploce/particle/particle-spec-catalog.hpp"
 #include "simploce/particle/atom.hpp"
@@ -25,9 +23,10 @@ int main() {
     auto catalog = factory::particleSpecCatalog(fileName);
     fileName = "/localdisk/resources/interaction-parameters.dat";
     auto forceField = factory::forceField(fileName, catalog);
-    auto box = factory::box(2.0 * conf::CUTOFF_DISTANCE);
+    dist_t cutoff = 2.6;
+    auto box = factory::box(2.0 * cutoff());
     auto bc = factory::boundaryCondition(box);
-    RF pairPotential{0.0, forceField, box, bc};
+    RF pairPotential{cutoff, 0.0, forceField, box, bc};
 
     // Particles.
     auto T1 = catalog->lookup("T1");
@@ -39,13 +38,12 @@ int main() {
 
     // Calculate potential.
     real_t dz = 0.1;
-    dist_t rc = properties::cutoffDistance(box);
-    int n = util::nint(rc()/dz);
-    for (int i = 1; i <= n; ++i) {
+    int n = util::nint(cutoff() / dz);
+    for (int i = 1; i < n; ++i) {
         real_t z = i * dz;
         p2->position(position_t{0.0, 0.0, z});
-        auto energy = pairPotential.operator()(p1, p2);
-        std::cout << z << conf::SPACE << energy.first << std::endl;
+        auto result = pairPotential.operator()(p1, p2);
+        std::cout << z << conf::SPACE << result.first << conf::SPACE << result.second << std::endl;
     }
 
 

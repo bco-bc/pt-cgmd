@@ -32,7 +32,7 @@
 #ifndef GRID_HPP
 #define GRID_HPP
 
-#include "s-types.hpp"
+#include "simploce/types/s-types.hpp"
 #include "cell.hpp"
 #include "bc.hpp"
 #include "simploce/util/util.hpp"

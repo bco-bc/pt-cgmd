@@ -9,6 +9,7 @@
 
 #include "p-types.hpp"
 #include "p-factory.hpp"
+#include "simploce/util/plane.hpp"
 
 namespace simploce {
 
@@ -87,6 +88,19 @@ namespace simploce {
                              std::size_t nLimit = 864,
                              const density_t& densitySI = 1374.0,
                              const temperature_t& temperature = 94.4);
+
+
+        /**
+         * Adds a layer of surface/boundary particles.
+         * @param particleSystem Particle system to which boundary particles are added.
+         * @param spacing Spacing between boundary particles.
+         * @param plane Plane identifying surface.  Both corresponding sides of the particle
+         * box will be covered with boundary particles.
+         */
+        void addParticleBoundary(const p_system_ptr_t& particleSystem,
+                                 dist_t spacing,
+                                 Plane plane,
+                                 bool excludeCorner = false);
 
     protected:
 

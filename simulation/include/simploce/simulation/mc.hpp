@@ -8,7 +8,7 @@
 #define MC_HPP
 
 #include "displacer.hpp"
-#include "s-types.hpp"
+#include "simploce/types/s-types.hpp"
 #include <iostream>
 
 namespace simploce {
@@ -24,14 +24,14 @@ namespace simploce {
          * @param simulationParams Simulation parameters.
          * @param interactor Interactor.
          */
-        MonteCarlo(sim_param_ptr_t simulationParameters,
+        MonteCarlo(param_ptr_t param,
                    interactor_ptr_t interactor);
         
-        SimulationData displace(const p_system_ptr_t& particleSystem) const override;
+        SimulationData displace(const p_system_ptr_t& particles) const override;
         
     private:
 
-        sim_param_ptr_t simulationParameters_;
+        param_ptr_t param_;
         interactor_ptr_t interactor_;
         
     };

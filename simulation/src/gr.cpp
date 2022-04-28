@@ -21,10 +21,11 @@
 namespace simploce {
 
     Gr::Gr(length_t dr,
+           dist_t cutoff,
            std::string specName1,
            std::string specName2,
            bc_ptr_t bc) :
-        dr_{dr}, specName1_{std::move(specName1)}, specName2_{std::move(specName2)},
+        dr_{dr}, cutoff_{cutoff}, specName1_{std::move(specName1)}, specName2_{std::move(specName2)},
         bc_{std::move(bc)} {
         if ( specName1_.empty() || specName2_.empty() ) {
             throw std::domain_error("g(r): Two particle specification names must be provided.");
@@ -43,7 +44,7 @@ namespace simploce {
 
         if ( counter_ == 1) {
             auto box = particleSystem->box();
-            rMax_ = properties::cutoffDistance(box);
+            rMax_ = cutoff_;
             auto nBins = std::size_t(rMax_() / dr_());
             volume_ = box->volume();
             hr_.resize(nBins, 0);
@@ -214,10 +215,11 @@ namespace simploce {
 
     gr_ptr_t
     Gr::create(const length_t& dr,
+               const dist_t& cutoff,
                const std::string& specName1,
                const std::string& specName2,
                const bc_ptr_t& bc) {
-        return std::make_shared<Gr>(dr, specName1, specName2, bc);
+        return std::make_shared<Gr>(dr, cutoff, specName1, specName2, bc);
     }
 }
 

@@ -7,7 +7,7 @@
 #ifndef SIMULATION_PAIR_POTENTIAL_HPP
 #define SIMULATION_PAIR_POTENTIAL_HPP
 
-#include "simploce/simulation/s-types.hpp"
+#include "simploce/types/s-types.hpp"
 
 namespace simploce {
 

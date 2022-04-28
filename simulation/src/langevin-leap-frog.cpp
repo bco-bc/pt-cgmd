@@ -9,7 +9,7 @@
 
 namespace simploce {
 
-    LangevinLeapFrog::LangevinLeapFrog(sim_param_ptr_t simulationParameters,
+    LangevinLeapFrog::LangevinLeapFrog(param_ptr_t simulationParameters,
                                        interactor_ptr_t interactor) :
         simulationParameters_{std::move(simulationParameters)}, interactor_{std::move(interactor)}{
         if ( !simulationParameters_ ) {
@@ -22,7 +22,7 @@ namespace simploce {
         
     SimulationData 
     LangevinLeapFrog::displace(const p_system_ptr_t& particleSystem) const {
-        throw std::domain_error("LangevinLeapFrogNot implemented yet.");
+        throw std::domain_error("LangevinLeapFrog not implemented yet.");
     }
     
         

@@ -9,37 +9,22 @@
 #define SIMULATION_ELEC_POT_DIFFERENCE_HPP
 
 #include "external-potential.hpp"
-#include "const-surface-charge-density.hpp"
+#include "simploce/util/direction.hpp"
 
 namespace simploce {
 
     /**
-     * An electric potential difference between two "points".
+     * An electric potential difference over a given distance in a given direction
      */
     class ElectricPotentialDifference : public external_potential {
     public:
 
         /**
-         * Direction along which the potential difference is applied.
-         * x : Electric potential difference is applied along the x-direction.
-         * y : Electric potential difference is applied along the y-direction.
-         * z : Electric potential difference is applied along the z-direction.
-         */
-        enum DIRECTION {x = 1, y, z};
-
-        /**
-         * Conversion from char to DIRECTION.
-         * @param value One of 'x', 'y', and 'z'.
-         * @return DIRECTION.
-         */
-        static DIRECTION valueOf(char value);
-
-        /**
          * Constructor. All arguments are required.
-         * @param deltaV Electric potential difference. If positive and in the x-direction, an electric field is
-         * pointing towards the negative x-axis. The force on a positively (negatively) charged particle is in
+         * @param deltaV Electric potential difference. If positive and in the x/y/z-direction, an electric field is
+         * pointing towards the negative x/y/z-axis. The force on a positively (negatively) charged particle is in
          * the same (opposite) direction.
-         * @param distance Distance between the two points.
+         * @param distance Distance.
          * @param eps_r Relative permittivity.
          * @param bc Boundary condition.
          * @param direction Direction.
@@ -48,12 +33,13 @@ namespace simploce {
                                     dist_t distance,
                                     real_t eps_r,
                                     bc_ptr_t bc,
-                                    DIRECTION direction);
+                                    const Direction& direction);
 
         std::pair<energy_t, force_t> operator () (const p_ptr_t& particle) override;
 
     private:
 
+        real_t eps_r_;
         bc_ptr_t bc_;
     };
 }

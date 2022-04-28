@@ -15,10 +15,6 @@
 
 using namespace simploce;
 
-/*
- * Simple C++ Test Suite
- */
-
 void test1() {
     std::cout << "particle-spec-catalog-test argon 1" << std::endl;
     std::string fileName = "/localdisk/resources/particles-specs.dat";

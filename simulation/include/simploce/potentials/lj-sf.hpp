@@ -9,7 +9,7 @@
 #define SIMULATION_LJ_SF_HPP
 
 #include "pair-potential.hpp"
-#include "../simulation/s-types.hpp"
+#include "simploce/types/s-types.hpp"
 
 namespace simploce {
 

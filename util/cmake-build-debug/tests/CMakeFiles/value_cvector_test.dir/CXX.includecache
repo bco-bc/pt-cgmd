@@ -46,11 +46,11 @@ algorithm
 cmath
 -
 
-/wrk3/simploce/pt-cgmd/util/tests/value-cvector-test.cpp
+/home/andre/wrk3/simploce/pt-cgmd/util/tests/value-cvector-test.cpp
 cstdlib
 -
 iostream
 -
 simploce/types/u-types.hpp
-/wrk3/simploce/pt-cgmd/util/tests/simploce/types/u-types.hpp
+/home/andre/wrk3/simploce/pt-cgmd/util/tests/simploce/types/u-types.hpp
 

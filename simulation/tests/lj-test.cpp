@@ -6,7 +6,7 @@
 
 #include "simploce/potentials/lj.hpp"
 #include "simploce/simulation/s-factory.hpp"
-#include "simploce/simulation/s-conf.hpp"
+#include "simploce/conf/s-conf.hpp"
 #include "simploce/simulation/s-properties.hpp"
 #include "simploce/particle/particle-spec.hpp"
 #include "simploce/particle/particle-spec-catalog.hpp"
@@ -25,7 +25,7 @@ int main() {
     auto catalog = factory::particleSpecCatalog(fileName);
     fileName = "/localdisk/resources/interaction-parameters.dat";
     auto forceField = factory::forceField(fileName, catalog);
-    auto box = factory::box(2.0 * conf::CUTOFF_DISTANCE);
+    auto box = factory::box(2.0 * 2.6);
     auto bc = factory::boundaryCondition(box);
     LJ pairPotential{forceField, bc};
 
@@ -38,7 +38,7 @@ int main() {
 
     // Calculate potential.
     real_t dz = 0.01;
-    dist_t rc = properties::cutoffDistance(box);
+    dist_t rc = 2.6;
     int n = util::nint(rc()/dz);
     for (int i = 1; i <= n; ++i) {
         real_t z = i * dz;

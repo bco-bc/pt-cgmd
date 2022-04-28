@@ -7,11 +7,12 @@
  */
 
 #include "simploce/simulation/s-factory.hpp"
-#include "simploce/simulation/s-types.hpp"
+#include "simploce/types/s-types.hpp"
 #include "simploce/simulation/continuous.hpp"
 #include "simploce/particle/protonatable-coarse-grained.hpp"
 #include "simploce/particle/atomistic.hpp"
 #include "simploce/simulation/s-properties.hpp"
+#include "simploce/potentials/force-field.hpp"
 #include "simploce/util/specification.hpp"
 #include "simploce/util/logger.hpp"
 #include "simploce/util/file.hpp"
@@ -55,18 +56,27 @@ static void validate(const at_sys_ptr_t& atomistic) {
     });
 }
 
+static void validate(const ff_ptr_t& forceField) {
+    std::cout.setf(std::ios::scientific);
+    std::cout.precision(conf::PRECISION);
+    std::cout << "Validating force field:" << std::endl;
+    std::cout << *forceField << std::endl;
+}
+
 int main(int argc, char *argv[]) {
     util::Logger logger{"s-validate-model::main"};
 
     try {
         const util::Specification PARTICLE{"particle"};
         const util::Specification SIM_PARAMS {"simulation-parameters"};
+        const util::Specification FORCE_FIELD{"force-field"};
 
         std::string fnParticleSpecCatalog{"particle-spec-catalog.dat"};
         std::string fnIn{"particle.system"};
         util::Specification specification = PARTICLE;
         std::string selectFrom = "Input specification. Select one from '" +
-                PARTICLE.spec() + "' (default), '" + SIM_PARAMS.spec() + "'.";
+                PARTICLE.spec() + "' (default), '" + SIM_PARAMS.spec() +
+                "', '" + FORCE_FIELD.spec() + "'.";
         bool isCoarseGrained{false};
 
         po::options_description usage("Usage");
@@ -125,10 +135,16 @@ int main(int argc, char *argv[]) {
         } else if ( specification == SIM_PARAMS ) {
             std::ifstream stream;
             util::open_input_file(stream, fnIn);
-            sim_param_t simulationParameters;
-            param::read(stream, simulationParameters);
+            param_t param;
+            param::read(stream, param);
             stream.close();
-            param::write(std::cout, simulationParameters);
+            param::write(std::cout, param);
+        } else if (specification == FORCE_FIELD) {
+            auto catalog = factory::particleSpecCatalog(fnParticleSpecCatalog);
+            auto forceField = factory::forceField(fnIn, catalog);
+            validate(forceField);
+        } else {
+            throw std::domain_error(specification.spec() + ": Cannot validate.");
         }
 
     } catch (std::exception& exception) {

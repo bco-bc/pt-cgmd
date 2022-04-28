@@ -1,5 +1,6 @@
 file(REMOVE_RECURSE
   "CMakeFiles/displacer-test.dir/displacer-test.cpp.o"
+  "CMakeFiles/displacer-test.dir/displacer-test.cpp.o.d"
   "displacer-test"
   "displacer-test.pdb"
 )

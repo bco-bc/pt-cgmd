@@ -5,8 +5,8 @@
  */
 
 #include "simploce/potentials/force-field.hpp"
-#include "simploce/simulation/s-conf.hpp"
-#include "simploce/simulation/s-types.hpp"
+#include "simploce/conf/s-conf.hpp"
+#include "simploce/types/s-types.hpp"
 #include "simploce/particle/particle-spec-catalog.hpp"
 #include "simploce/particle/particle-spec.hpp"
 #include "simploce/util/logger.hpp"
@@ -135,10 +135,19 @@ namespace simploce {
             if (typeName == conf::ELECTRIC_POTENTIAL_DIFFERENCE) {
                 spec.typeName = conf::ELECTRIC_POTENTIAL_DIFFERENCE;
                 std::string s;
-                stream >> spec.deltaV >> spec.distance >> s;
+                stream >> spec.deltaV >> spec.distance >> spec.eps_inside_rc >> s;
                 boost::trim(s);
                 spec.direction = s[0];
+            } else if (typeName == conf::WALL) {
+                spec.typeName = conf::WALL;
+                std::string s;
+                stream >> spec.C12 >> spec.C6 >> spec.sigma >> spec.distance >> s;
+                boost::trim(s);
+                spec.plane = s;
+            } else {
+                util::logAndThrow(logger, "'" + typeName + "': No such external potential.");
             }
+
             forceField->addExternalSpecification(spec);
             std::getline(stream, stringBuffer);
         }
@@ -358,7 +367,7 @@ namespace simploce {
     std::tuple<real_t, real_t, real_t>
     ForceField::lennardJonesShiftedForce(const spec_ptr_t &spec1,
                                          const spec_ptr_t &spec2) const {
-        static util::Logger logger("simploce::ForceField::lennardJonesShitedForce()");
+        static util::Logger logger("simploce::ForceField::lennardJonesShiftedForce()");
         for (auto& spec : this->nonBondedSpecs_) {
             if (spec.typeName == conf::LJ_SF ) {
                 if ( (*(spec.spec1) == *spec1 && *(spec.spec2) == *spec2) ||
@@ -460,8 +469,18 @@ namespace simploce {
                 stream << std::setw(conf::NAME_WIDTH) << spec.typeName;
                 stream << std::setw(conf::REAL_WIDTH) << spec.deltaV;
                 stream << std::setw(conf::REAL_WIDTH) << spec.distance;
+                stream << conf::SPACE << spec.eps_inside_rc;
+                stream << conf::SPACE << spec.direction;
+                stream << conf::SPACE << "# deltaV distance eps_r direction";
+                stream << std::endl;
+            } else if (spec.typeName == conf::WALL) {
+                stream << std::setw(conf::NAME_WIDTH) << spec.typeName;
+                stream << conf::SPACE << spec.C12;
+                stream << conf::SPACE << spec.C6;
+                stream << conf::SPACE << spec.sigma;
                 stream << conf::SPACE << spec.distance;
-                stream << conf::SPACE << "# deltaV distance eps_r";
+                stream << conf::SPACE << spec.plane;
+                stream << conf::SPACE << "# C12, C6, sigma, distance, plane";
                 stream << std::endl;
             }
         }

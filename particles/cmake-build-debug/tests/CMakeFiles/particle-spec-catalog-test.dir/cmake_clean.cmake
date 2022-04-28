@@ -1,5 +1,6 @@
 file(REMOVE_RECURSE
   "CMakeFiles/particle-spec-catalog-test.dir/particle-spec-catalog-test.cpp.o"
+  "CMakeFiles/particle-spec-catalog-test.dir/particle-spec-catalog-test.cpp.o.d"
   "particle-spec-catalog-test"
   "particle-spec-catalog-test.pdb"
 )

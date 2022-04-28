@@ -66,9 +66,9 @@ algorithm
 box.hpp
 ../include/simploce/util/box.hpp
 
-/wrk3/simploce/pt-cgmd/util/tests/box-cube-test.cpp
+/home/andre/wrk3/simploce/pt-cgmd/util/tests/box-cube-test.cpp
 simploce/util/cube.hpp
-/wrk3/simploce/pt-cgmd/util/tests/simploce/util/cube.hpp
+/home/andre/wrk3/simploce/pt-cgmd/util/tests/simploce/util/cube.hpp
 iostream
 -
 

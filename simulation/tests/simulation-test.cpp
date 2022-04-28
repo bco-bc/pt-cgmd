@@ -13,7 +13,7 @@
 #include "simploce/particle/particle-system-factory.hpp"
 #include "simploce/particle/particle-system.hpp"
 #include "simploce/simulation/pair-lists.hpp"
-#include "simploce/simulation/s-conf.hpp"
+#include "simploce/conf/s-conf.hpp"
 #include "simploce/util/param.hpp"
 #include "simploce/util/file.hpp"
 #include "simploce/util/logger.hpp"

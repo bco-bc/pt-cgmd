@@ -17,17 +17,17 @@ namespace simploce {
     class LeapFrog : public displacer {
     public:    
         
-        LeapFrog(sim_param_ptr_t simulationParameters,
+        LeapFrog(param_ptr_t param,
                  interactor_ptr_t interactor);
                 
         /**
          * @return Time, potential energy (bonded, non-bonded), kinetic energy, temperature.
          */
-        SimulationData displace(const p_system_ptr_t& particleSystem) const override;
+        SimulationData displace(const p_system_ptr_t& particles) const override;
         
     private:
 
-        sim_param_ptr_t simulationParameters_;
+        param_ptr_t param_;
         interactor_ptr_t interactor_;
     };
     

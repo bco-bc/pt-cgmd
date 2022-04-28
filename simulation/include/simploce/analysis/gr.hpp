@@ -9,7 +9,7 @@
 
 #include "analyzer.hpp"
 #include "a-types.hpp"
-#include "../simulation/s-types.hpp"
+#include "simploce/types/s-types.hpp"
 #include <string>
 #include <memory>
 
@@ -25,11 +25,13 @@ namespace simploce {
         /**
          * Constructor
          * @param dr Spacing or bin size.
+         * @param cutoff Cutoff distance for g(r) (maximal distance).
          * @param specName1 Particle specification name #1.
          * @param specName2 Particle specification name #2.
          * @param bc Boundary condition.
          */
         Gr(length_t dr,
+           dist_t cutoff,
            std::string specName1,
            std::string specName2,
            bc_ptr_t bc);
@@ -56,6 +58,7 @@ namespace simploce {
          */
         static gr_ptr_t
         create(const length_t& dr,
+               const dist_t& cutoff,
                const std::string& specName1, 
                const std::string& specName2,
                const bc_ptr_t& bc);
@@ -63,6 +66,7 @@ namespace simploce {
     private:
         
         length_t dr_;
+        dist_t cutoff_;
         std::string specName1_;
         std::string specName2_;
         bc_ptr_t bc_;

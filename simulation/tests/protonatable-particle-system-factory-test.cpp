@@ -8,7 +8,7 @@
 #include "simploce/simulation/protonatable-particle-system-factory.hpp"
 #include "simploce/simulation/continuous.hpp"
 #include "simploce/simulation/s-factory.hpp"
-#include "simploce/simulation/s-types.hpp"
+#include "simploce/types/s-types.hpp"
 #include "simploce/particle/protonatable-coarse-grained.hpp"
 #include <cstdlib>
 

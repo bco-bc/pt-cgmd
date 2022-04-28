@@ -1,5 +1,6 @@
 file(REMOVE_RECURSE
   "CMakeFiles/protonatable-bead-test.dir/protonatable-bead-test.cpp.o"
+  "CMakeFiles/protonatable-bead-test.dir/protonatable-bead-test.cpp.o.d"
   "protonatable-bead-test"
   "protonatable-bead-test.pdb"
 )

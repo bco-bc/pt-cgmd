@@ -7,7 +7,7 @@
 #ifndef PAIR_LIST_GENERATOR_HPP
 #define PAIR_LIST_GENERATOR_HPP
 
-#include "s-types.hpp"
+#include "simploce/types/s-types.hpp"
 #include "pair-lists.hpp"
 #include <vector>
 

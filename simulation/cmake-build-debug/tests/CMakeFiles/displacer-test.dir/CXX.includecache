@@ -6,7 +6,13 @@
 
 #IncludeRegexTransform: 
 
-../include/simploce/potentials/sp-conf.hpp
+../include/simploce/conf/s-conf.hpp
+simploce/particle/p-conf.hpp
+../include/simploce/conf/simploce/particle/p-conf.hpp
+sp-conf.hpp
+../include/simploce/conf/sp-conf.hpp
+
+../include/simploce/conf/sp-conf.hpp
 
 ../include/simploce/simulation/continuous.hpp
 simploce/particle/protonatable.hpp
@@ -15,16 +21,16 @@ iostream
 -
 
 ../include/simploce/simulation/displacer.hpp
-s-types.hpp
-../include/simploce/simulation/s-types.hpp
+simploce/types/s-types.hpp
+../include/simploce/simulation/simploce/types/s-types.hpp
 sim-data.hpp
 ../include/simploce/simulation/sim-data.hpp
 
 ../include/simploce/simulation/interactor.hpp
 pair-lists.hpp
 ../include/simploce/simulation/pair-lists.hpp
-s-types.hpp
-../include/simploce/simulation/s-types.hpp
+simploce/types/s-types.hpp
+../include/simploce/simulation/simploce/types/s-types.hpp
 
 ../include/simploce/simulation/langevin-velocity-verlet.hpp
 displacer.hpp
@@ -38,31 +44,17 @@ displacer.hpp
 simploce/particle/particle-group.hpp
 ../include/simploce/simulation/simploce/particle/particle-group.hpp
 
-../include/simploce/simulation/s-conf.hpp
-simploce/particle/p-conf.hpp
-../include/simploce/simulation/simploce/particle/p-conf.hpp
-../potentials/sp-conf.hpp
-../include/simploce/potentials/sp-conf.hpp
-
 ../include/simploce/simulation/s-factory.hpp
-s-types.hpp
-../include/simploce/simulation/s-types.hpp
+simploce/types/s-types.hpp
+../include/simploce/simulation/simploce/types/s-types.hpp
 simploce/particle/p-factory.hpp
 ../include/simploce/simulation/simploce/particle/p-factory.hpp
-
-../include/simploce/simulation/s-types.hpp
-continuous.hpp
-../include/simploce/simulation/continuous.hpp
-simploce/particle/p-types.hpp
-../include/simploce/simulation/simploce/particle/p-types.hpp
-simploce/util/param.hpp
-../include/simploce/simulation/simploce/util/param.hpp
-tuple
--
+simploce/util/direction.hpp
+../include/simploce/simulation/simploce/util/direction.hpp
 
 ../include/simploce/simulation/sim-data.hpp
-s-types.hpp
-../include/simploce/simulation/s-types.hpp
+simploce/types/s-types.hpp
+../include/simploce/simulation/simploce/types/s-types.hpp
 iostream
 -
 
@@ -71,8 +63,56 @@ displacer.hpp
 ../include/simploce/simulation/displacer.hpp
 sim-data.hpp
 ../include/simploce/simulation/sim-data.hpp
-s-types.hpp
-../include/simploce/simulation/s-types.hpp
+simploce/types/s-types.hpp
+../include/simploce/simulation/simploce/types/s-types.hpp
+
+../include/simploce/types/s-types.hpp
+simploce/simulation/continuous.hpp
+../include/simploce/types/simploce/simulation/continuous.hpp
+simploce/particle/p-types.hpp
+../include/simploce/types/simploce/particle/p-types.hpp
+simploce/util/param.hpp
+../include/simploce/types/simploce/util/param.hpp
+tuple
+-
+
+/home/andre/wrk3/simploce/pt-cgmd/simulation/tests/displacer-test.cpp
+simploce/simulation/leap-frog.hpp
+/home/andre/wrk3/simploce/pt-cgmd/simulation/tests/simploce/simulation/leap-frog.hpp
+simploce/simulation/velocity-verlet.hpp
+/home/andre/wrk3/simploce/pt-cgmd/simulation/tests/simploce/simulation/velocity-verlet.hpp
+simploce/simulation/langevin-velocity-verlet.hpp
+/home/andre/wrk3/simploce/pt-cgmd/simulation/tests/simploce/simulation/langevin-velocity-verlet.hpp
+simploce/simulation/sim-data.hpp
+/home/andre/wrk3/simploce/pt-cgmd/simulation/tests/simploce/simulation/sim-data.hpp
+simploce/simulation/s-factory.hpp
+/home/andre/wrk3/simploce/pt-cgmd/simulation/tests/simploce/simulation/s-factory.hpp
+simploce/types/s-types.hpp
+/home/andre/wrk3/simploce/pt-cgmd/simulation/tests/simploce/types/s-types.hpp
+simploce/conf/s-conf.hpp
+/home/andre/wrk3/simploce/pt-cgmd/simulation/tests/simploce/conf/s-conf.hpp
+simploce/simulation/interactor.hpp
+/home/andre/wrk3/simploce/pt-cgmd/simulation/tests/simploce/simulation/interactor.hpp
+simploce/particle/bead.hpp
+/home/andre/wrk3/simploce/pt-cgmd/simulation/tests/simploce/particle/bead.hpp
+simploce/particle/coarse-grained.hpp
+/home/andre/wrk3/simploce/pt-cgmd/simulation/tests/simploce/particle/coarse-grained.hpp
+simploce/particle/particle-spec-catalog.hpp
+/home/andre/wrk3/simploce/pt-cgmd/simulation/tests/simploce/particle/particle-spec-catalog.hpp
+simploce/particle/particle-system-factory.hpp
+/home/andre/wrk3/simploce/pt-cgmd/simulation/tests/simploce/particle/particle-system-factory.hpp
+simploce/util/file.hpp
+/home/andre/wrk3/simploce/pt-cgmd/simulation/tests/simploce/util/file.hpp
+simploce/util/logger.hpp
+/home/andre/wrk3/simploce/pt-cgmd/simulation/tests/simploce/util/logger.hpp
+simploce/util/param.hpp
+/home/andre/wrk3/simploce/pt-cgmd/simulation/tests/simploce/util/param.hpp
+fstream
+-
+cstdlib
+-
+iostream
+-
 
 /localdisk/include/simploce/conf/u-conf.hpp
 
@@ -216,6 +256,8 @@ algorithm
 box.hpp
 /localdisk/include/simploce/util/box.hpp
 
+/localdisk/include/simploce/util/direction.hpp
+
 /localdisk/include/simploce/util/file.hpp
 fstream
 -
@@ -228,44 +270,6 @@ sstream
 
 /localdisk/include/simploce/util/param.hpp
 boost/property_tree/ptree.hpp
--
-iostream
--
-
-/wrk3/simploce/pt-cgmd/simulation/tests/displacer-test.cpp
-simploce/simulation/leap-frog.hpp
-/wrk3/simploce/pt-cgmd/simulation/tests/simploce/simulation/leap-frog.hpp
-simploce/simulation/velocity-verlet.hpp
-/wrk3/simploce/pt-cgmd/simulation/tests/simploce/simulation/velocity-verlet.hpp
-simploce/simulation/langevin-velocity-verlet.hpp
-/wrk3/simploce/pt-cgmd/simulation/tests/simploce/simulation/langevin-velocity-verlet.hpp
-simploce/simulation/sim-data.hpp
-/wrk3/simploce/pt-cgmd/simulation/tests/simploce/simulation/sim-data.hpp
-simploce/simulation/s-factory.hpp
-/wrk3/simploce/pt-cgmd/simulation/tests/simploce/simulation/s-factory.hpp
-simploce/simulation/s-types.hpp
-/wrk3/simploce/pt-cgmd/simulation/tests/simploce/simulation/s-types.hpp
-simploce/simulation/s-conf.hpp
-/wrk3/simploce/pt-cgmd/simulation/tests/simploce/simulation/s-conf.hpp
-simploce/simulation/interactor.hpp
-/wrk3/simploce/pt-cgmd/simulation/tests/simploce/simulation/interactor.hpp
-simploce/particle/bead.hpp
-/wrk3/simploce/pt-cgmd/simulation/tests/simploce/particle/bead.hpp
-simploce/particle/coarse-grained.hpp
-/wrk3/simploce/pt-cgmd/simulation/tests/simploce/particle/coarse-grained.hpp
-simploce/particle/particle-spec-catalog.hpp
-/wrk3/simploce/pt-cgmd/simulation/tests/simploce/particle/particle-spec-catalog.hpp
-simploce/particle/particle-system-factory.hpp
-/wrk3/simploce/pt-cgmd/simulation/tests/simploce/particle/particle-system-factory.hpp
-simploce/util/file.hpp
-/wrk3/simploce/pt-cgmd/simulation/tests/simploce/util/file.hpp
-simploce/util/logger.hpp
-/wrk3/simploce/pt-cgmd/simulation/tests/simploce/util/logger.hpp
-simploce/util/param.hpp
-/wrk3/simploce/pt-cgmd/simulation/tests/simploce/util/param.hpp
-fstream
--
-cstdlib
 -
 iostream
 -

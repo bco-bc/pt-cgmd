@@ -32,7 +32,7 @@
 #include "simploce/simulation/pt-pair-list-generator.hpp"
 #include "simploce/simulation/continuous.hpp"
 #include "simploce/simulation/constant-rate-pt.hpp"
-#include "simploce/simulation/s-conf.hpp"
+#include "simploce/conf/s-conf.hpp"
 #include "simploce/particle/protonatable-bead.hpp"
 #include "simploce/util/telegraph-process.hpp"
 #include <stdexcept>

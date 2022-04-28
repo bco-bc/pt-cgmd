@@ -15,8 +15,8 @@
 
 namespace simploce {
 
-    SF::SF(ff_ptr_t forceField, box_ptr_t box, bc_ptr_t bc) :
-        forceField_{std::move(forceField)}, box_{std::move(box)}, bc_{std::move(bc)} {
+    SF::SF(dist_t cutoff, ff_ptr_t forceField, box_ptr_t box, bc_ptr_t bc) :
+        cutoff_{cutoff}, forceField_{std::move(forceField)}, box_{std::move(box)}, bc_{std::move(bc)} {
     }
 
     std::pair<energy_t, force_t>
@@ -48,11 +48,10 @@ namespace simploce {
                        const charge_t& q1,
                        const charge_t& q2,
                        real_t eps_inside_rc) {
-        static auto rc = properties::cutoffDistance(box_);
-        static auto rc2 = rc() * rc();
+        static auto rc2 = cutoff_() * cutoff_();
 
         real_t t1 = q1() * q2() / (units::mu<real_t>::FOUR_PI_E0 * eps_inside_rc);
-        real_t elec = t1 * (1.0 / Rij - 1.0 / rc() + (Rij - rc()) / rc2);    // kJ/mol
+        real_t elec = t1 * (1.0 / Rij - 1.0 / cutoff_() + (Rij - cutoff_()) / rc2);    // kJ/mol
 
         dist_vect_t uv = rij/Rij;
         real_t dElecdR = t1 * (-1.0 / Rij2 + 1.0 / rc2);

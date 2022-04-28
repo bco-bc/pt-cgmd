@@ -5,7 +5,7 @@
  */
 
 #include "simploce/simulation/no-bc.hpp"
-#include "simploce/simulation/s-conf.hpp"
+#include "simploce/conf/s-conf.hpp"
 
 namespace simploce {
 
@@ -21,11 +21,5 @@ namespace simploce {
     {
         return r_out;
     }
-    
-    std::string 
-    NoBoundaryCondition::id() const
-    {
-        return conf::NO_BC;
-    }
- 
+
 }

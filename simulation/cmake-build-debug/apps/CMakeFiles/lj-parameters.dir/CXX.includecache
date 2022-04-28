@@ -12,14 +12,24 @@ simploce/particle/protonatable.hpp
 iostream
 -
 
-../include/simploce/simulation/s-types.hpp
-continuous.hpp
-../include/simploce/simulation/continuous.hpp
+../include/simploce/types/s-types.hpp
+simploce/simulation/continuous.hpp
+../include/simploce/types/simploce/simulation/continuous.hpp
 simploce/particle/p-types.hpp
-../include/simploce/simulation/simploce/particle/p-types.hpp
+../include/simploce/types/simploce/particle/p-types.hpp
 simploce/util/param.hpp
-../include/simploce/simulation/simploce/util/param.hpp
+../include/simploce/types/simploce/util/param.hpp
 tuple
+-
+
+/home/andre/wrk3/simploce/pt-cgmd/simulation/apps/lj-parameters.cpp
+cstdlib
+-
+simploce/types/s-types.hpp
+/home/andre/wrk3/simploce/pt-cgmd/simulation/apps/simploce/types/s-types.hpp
+simploce/units/units-mu.hpp
+/home/andre/wrk3/simploce/pt-cgmd/simulation/apps/simploce/units/units-mu.hpp
+iostream
 -
 
 /localdisk/include/simploce/conf/u-conf.hpp
@@ -117,16 +127,6 @@ limits
 /localdisk/include/simploce/util/param.hpp
 boost/property_tree/ptree.hpp
 -
-iostream
--
-
-/wrk3/simploce/pt-cgmd/simulation/apps/lj-parameters.cpp
-cstdlib
--
-simploce/simulation/s-types.hpp
-/wrk3/simploce/pt-cgmd/simulation/apps/simploce/simulation/s-types.hpp
-simploce/units/units-mu.hpp
-/wrk3/simploce/pt-cgmd/simulation/apps/simploce/units/units-mu.hpp
 iostream
 -
 

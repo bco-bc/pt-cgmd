@@ -1,4 +1,4 @@
-/home/andre/clion-2021.2.3/bin/cmake/linux/bin/cmake -DCMAKE_BUILD_TYPE=Debug -DCMAKE_DEPENDS_USE_COMPILER=FALSE -G "CodeBlocks - Unix Makefiles" /home/andre/wrk3/simploce/pt-cgmd/apps
+/localdisk/clion-2021.2.3/bin/cmake/linux/bin/cmake -DCMAKE_BUILD_TYPE=Debug -DCMAKE_MAKE_PROGRAM=/localdisk/clion-2021.2.3/bin/ninja/linux/ninja -G Ninja -S /wrk3/simploce/pt-cgmd/apps -B /wrk3/simploce/pt-cgmd/apps/cmake-build-debug
 -- Configuring done
 -- Generating done
--- Build files have been written to: /home/andre/wrk3/simploce/pt-cgmd/apps/cmake-build-debug
+-- Build files have been written to: /wrk3/simploce/pt-cgmd/apps/cmake-build-debug

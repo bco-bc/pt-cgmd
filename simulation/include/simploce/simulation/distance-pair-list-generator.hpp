@@ -22,13 +22,14 @@ namespace simploce {
          * @param box Simulation box.
          * @param bc Boundary condition.
          */
-        DistancePairListGenerator(bc_ptr_t bc);
+        DistancePairListGenerator(dist_t cutoff, bc_ptr_t bc);
 
         PairLists
         generate(const p_system_ptr_t& particleSystem) const;
 
     private:
 
+        dist_t cutoff_;
         box_ptr_t box_;
         bc_ptr_t bc_;
     };

@@ -4,22 +4,11 @@ set(CMAKE_DEPENDS_IN_PROJECT_ONLY OFF)
 
 # The set of languages for which implicit dependencies are needed:
 set(CMAKE_DEPENDS_LANGUAGES
-  "CXX"
-  )
-# The set of files for implicit dependencies of each language:
-set(CMAKE_DEPENDS_CHECK_CXX
-  "/wrk3/simploce/pt-cgmd/particles/tests/particle-spec-catalog-test.cpp" "/wrk3/simploce/pt-cgmd/particles/cmake-build-debug/tests/CMakeFiles/particle-spec-catalog-test.dir/particle-spec-catalog-test.cpp.o"
-  )
-set(CMAKE_CXX_COMPILER_ID "GNU")
-
-# The include file search paths:
-set(CMAKE_CXX_TARGET_INCLUDE_PATH
-  "../include"
-  "/localdisk/include"
   )
 
 # The set of dependency files which are needed:
 set(CMAKE_DEPENDS_DEPENDENCY_FILES
+  "/wrk3/simploce/pt-cgmd/particles/tests/particle-spec-catalog-test.cpp" "tests/CMakeFiles/particle-spec-catalog-test.dir/particle-spec-catalog-test.cpp.o" "gcc" "tests/CMakeFiles/particle-spec-catalog-test.dir/particle-spec-catalog-test.cpp.o.d"
   )
 
 # Targets to which this target links.

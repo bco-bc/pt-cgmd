@@ -7,7 +7,7 @@
 #ifndef SIMULATION_PROTONATABLE_PARTICLE_SYSTEM_FACTORY_HPP
 #define SIMULATION_PROTONATABLE_PARTICLE_SYSTEM_FACTORY_HPP
 
-#include "s-types.hpp"
+#include "simploce/types/s-types.hpp"
 #include "s-factory.hpp"
 #include "simploce/particle/particle-system-factory.hpp"
 

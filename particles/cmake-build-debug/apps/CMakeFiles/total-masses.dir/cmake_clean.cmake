@@ -1,5 +1,6 @@
 file(REMOVE_RECURSE
   "CMakeFiles/total-masses.dir/total-masses.cpp.o"
+  "CMakeFiles/total-masses.dir/total-masses.cpp.o.d"
   "total-masses"
   "total-masses.pdb"
 )

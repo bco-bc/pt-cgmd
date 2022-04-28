@@ -7,7 +7,7 @@
 #ifndef PT_PAIR_LIST_GENERATOR_HPP
 #define PT_PAIR_LIST_GENERATOR_HPP
 
-#include "s-types.hpp"
+#include "simploce/types/s-types.hpp"
 #include <memory>
 #include <utility>
 

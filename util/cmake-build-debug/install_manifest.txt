@@ -1,8 +1,11 @@
 /localdisk/lib/libutil.so
+/localdisk/include/simploce/util/direction.hpp
 /localdisk/include/simploce/util/map.hpp
+/localdisk/include/simploce/util/plane.hpp
 /localdisk/include/simploce/util/map2.hpp
 /localdisk/include/simploce/util/poisson-process.hpp
 /localdisk/include/simploce/util/telegraph-process.hpp
+/localdisk/include/simploce/util/flat-surface.hpp
 /localdisk/include/simploce/util/cube.hpp
 /localdisk/include/simploce/util/util.hpp
 /localdisk/include/simploce/util/math-constants.hpp

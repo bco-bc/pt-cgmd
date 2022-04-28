@@ -56,7 +56,13 @@ namespace simploce {
          * Returns specification for nitrogen.
          * @return Specification.
          */
-        spec_ptr_t N() const;        
+        spec_ptr_t N() const;
+
+        /**
+         * Returns specification for a static boundary particle.
+         * @return Specification.
+         */
+        spec_ptr_t staticBP() const;
         
         /**
          * Creates a catalog by reading specifications from a given input stream.

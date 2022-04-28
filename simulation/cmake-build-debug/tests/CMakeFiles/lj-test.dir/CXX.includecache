@@ -6,19 +6,25 @@
 
 #IncludeRegexTransform: 
 
+../include/simploce/conf/s-conf.hpp
+simploce/particle/p-conf.hpp
+../include/simploce/conf/simploce/particle/p-conf.hpp
+sp-conf.hpp
+../include/simploce/conf/sp-conf.hpp
+
+../include/simploce/conf/sp-conf.hpp
+
 ../include/simploce/potentials/lj.hpp
 simploce/potentials/pair-potential.hpp
 ../include/simploce/potentials/simploce/potentials/pair-potential.hpp
-simploce/simulation/s-types.hpp
-../include/simploce/potentials/simploce/simulation/s-types.hpp
+simploce/types/s-types.hpp
+../include/simploce/potentials/simploce/types/s-types.hpp
 utility
 -
 
 ../include/simploce/potentials/pair-potential.hpp
-simploce/simulation/s-types.hpp
-../include/simploce/potentials/simploce/simulation/s-types.hpp
-
-../include/simploce/potentials/sp-conf.hpp
+simploce/types/s-types.hpp
+../include/simploce/potentials/simploce/types/s-types.hpp
 
 ../include/simploce/simulation/continuous.hpp
 simploce/particle/protonatable.hpp
@@ -26,34 +32,52 @@ simploce/particle/protonatable.hpp
 iostream
 -
 
-../include/simploce/simulation/s-conf.hpp
-simploce/particle/p-conf.hpp
-../include/simploce/simulation/simploce/particle/p-conf.hpp
-../potentials/sp-conf.hpp
-../include/simploce/potentials/sp-conf.hpp
-
 ../include/simploce/simulation/s-factory.hpp
-s-types.hpp
-../include/simploce/simulation/s-types.hpp
+simploce/types/s-types.hpp
+../include/simploce/simulation/simploce/types/s-types.hpp
 simploce/particle/p-factory.hpp
 ../include/simploce/simulation/simploce/particle/p-factory.hpp
+simploce/util/direction.hpp
+../include/simploce/simulation/simploce/util/direction.hpp
 
 ../include/simploce/simulation/s-properties.hpp
-s-types.hpp
-../include/simploce/simulation/s-types.hpp
+simploce/types/s-types.hpp
+../include/simploce/simulation/simploce/types/s-types.hpp
 simploce/particle/p-properties.hpp
 ../include/simploce/simulation/simploce/particle/p-properties.hpp
 vector
 -
 
-../include/simploce/simulation/s-types.hpp
-continuous.hpp
-../include/simploce/simulation/continuous.hpp
+../include/simploce/types/s-types.hpp
+simploce/simulation/continuous.hpp
+../include/simploce/types/simploce/simulation/continuous.hpp
 simploce/particle/p-types.hpp
-../include/simploce/simulation/simploce/particle/p-types.hpp
+../include/simploce/types/simploce/particle/p-types.hpp
 simploce/util/param.hpp
-../include/simploce/simulation/simploce/util/param.hpp
+../include/simploce/types/simploce/util/param.hpp
 tuple
+-
+
+/home/andre/wrk3/simploce/pt-cgmd/simulation/tests/lj-test.cpp
+simploce/potentials/lj.hpp
+/home/andre/wrk3/simploce/pt-cgmd/simulation/tests/simploce/potentials/lj.hpp
+simploce/simulation/s-factory.hpp
+/home/andre/wrk3/simploce/pt-cgmd/simulation/tests/simploce/simulation/s-factory.hpp
+simploce/conf/s-conf.hpp
+/home/andre/wrk3/simploce/pt-cgmd/simulation/tests/simploce/conf/s-conf.hpp
+simploce/simulation/s-properties.hpp
+/home/andre/wrk3/simploce/pt-cgmd/simulation/tests/simploce/simulation/s-properties.hpp
+simploce/particle/particle-spec.hpp
+/home/andre/wrk3/simploce/pt-cgmd/simulation/tests/simploce/particle/particle-spec.hpp
+simploce/particle/particle-spec-catalog.hpp
+/home/andre/wrk3/simploce/pt-cgmd/simulation/tests/simploce/particle/particle-spec-catalog.hpp
+simploce/particle/atom.hpp
+/home/andre/wrk3/simploce/pt-cgmd/simulation/tests/simploce/particle/atom.hpp
+simploce/util/util.hpp
+/home/andre/wrk3/simploce/pt-cgmd/simulation/tests/simploce/util/util.hpp
+simploce/util/logger.hpp
+/home/andre/wrk3/simploce/pt-cgmd/simulation/tests/simploce/util/logger.hpp
+string
 -
 
 /localdisk/include/simploce/conf/u-conf.hpp
@@ -200,6 +224,8 @@ algorithm
 box.hpp
 /localdisk/include/simploce/util/box.hpp
 
+/localdisk/include/simploce/util/direction.hpp
+
 /localdisk/include/simploce/util/logger.hpp
 string
 -
@@ -244,27 +270,5 @@ utility
 cassert
 -
 stdexcept
--
-
-/wrk3/simploce/pt-cgmd/simulation/tests/lj-test.cpp
-simploce/potentials/lj.hpp
-/wrk3/simploce/pt-cgmd/simulation/tests/simploce/potentials/lj.hpp
-simploce/simulation/s-factory.hpp
-/wrk3/simploce/pt-cgmd/simulation/tests/simploce/simulation/s-factory.hpp
-simploce/simulation/s-conf.hpp
-/wrk3/simploce/pt-cgmd/simulation/tests/simploce/simulation/s-conf.hpp
-simploce/simulation/s-properties.hpp
-/wrk3/simploce/pt-cgmd/simulation/tests/simploce/simulation/s-properties.hpp
-simploce/particle/particle-spec.hpp
-/wrk3/simploce/pt-cgmd/simulation/tests/simploce/particle/particle-spec.hpp
-simploce/particle/particle-spec-catalog.hpp
-/wrk3/simploce/pt-cgmd/simulation/tests/simploce/particle/particle-spec-catalog.hpp
-simploce/particle/atom.hpp
-/wrk3/simploce/pt-cgmd/simulation/tests/simploce/particle/atom.hpp
-simploce/util/util.hpp
-/wrk3/simploce/pt-cgmd/simulation/tests/simploce/util/util.hpp
-simploce/util/logger.hpp
-/wrk3/simploce/pt-cgmd/simulation/tests/simploce/util/logger.hpp
-string
 -
 

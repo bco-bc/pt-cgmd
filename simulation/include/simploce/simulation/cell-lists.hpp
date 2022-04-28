@@ -33,7 +33,7 @@
 #define CELL_LISTS_HPP
 
 #include "pair-list-generator.hpp"
-#include "s-types.hpp"
+#include "simploce/types/s-types.hpp"
 #include "simploce/particle/bead.hpp"
 #include "simploce/particle/atom.hpp"
 

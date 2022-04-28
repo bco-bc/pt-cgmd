@@ -7,7 +7,7 @@
 #ifndef BC_HPP
 #define BC_HPP
 
-#include "s-types.hpp"
+#include "simploce/types/s-types.hpp"
 
 namespace simploce {
 
@@ -27,23 +27,11 @@ namespace simploce {
     virtual dist_vect_t apply(const position_t& ri, const position_t& rj) const = 0;
     
     /**
-     * Moves given position to the inside of the simulation box.
+     * Moves given position inside simulation box.
      * @param r_out Position possibly outside simulation box.
      * @return Position Inside simulation box.
      */
     virtual position_t placeInside(const position_t& r_out) const = 0;
-    
-    /**
-     * Returns an identifier.
-     * @return Identifier.
-     */
-    virtual std::string id() const = 0;
-
-    /**
-     * Sets or updates the box.
-     * @param box.
-     */
-    virtual void box(const box_ptr_t& box) {};
 
   };
   

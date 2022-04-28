@@ -5,7 +5,6 @@
  */
 
 #include "simploce/simulation/distance-pair-list-generator.hpp"
-#include "simploce/simulation/s-properties.hpp"
 #include "simploce/simulation/bc.hpp"
 #include "simploce/particle/particle.hpp"
 #include "simploce/particle/particle-system.hpp"
@@ -16,19 +15,21 @@
 namespace simploce {
 
     /**
-     * For -any- collection of particles, compute the pair lists.
+     * Returns particle pair lists for -any- collection of particles.
      * @param box Simulation box.
+     * @param cutoff Cutoff distance.
      * @param bc Boundary condition.
      * @return Particle pairs.
      */
     static typename PairLists::pp_pair_cont_t
     forParticles_(const box_ptr_t& box,
+                  const dist_t cutoff,
                   const bc_ptr_t& bc,
                   const std::vector<p_ptr_t>& particles)
     {
         using pp_pair_cont_t = typename PairLists::pp_pair_cont_t;
 
-        static real_t rc2 = properties::squareCutoffDistance(box);
+        static real_t rc2 = cutoff() * cutoff();
 
         if ( particles.empty() ) {
             return std::move(pp_pair_cont_t{});  // Empty pair list.
@@ -62,19 +63,21 @@ namespace simploce {
      * Returns particle pair list for particles in -different- groups.
      * @tparam P Particle typeName.
      * @param box Simulation box.
+     * @param cutoff Cutoff distance.
      * @param bc Boundary condition.
      * @param groups
-     * @return Particle group pairs.
+     * @return Particle pairs.
      */
     static typename PairLists::pp_pair_cont_t
-    forBetweenGroups_(const box_ptr_t& box,
-                      const bc_ptr_t& bc,
-                      const std::vector<pg_ptr_t>& groups)
+    forParticlesBetweenGroups_(const box_ptr_t& box,
+                               const dist_t& cutoff,
+                               const bc_ptr_t& bc,
+                               const std::vector<pg_ptr_t>& groups)
     {
         using pp_pair_cont_t = typename PairLists::pp_pair_cont_t;
         using pp_pair_t = typename PairLists::pp_pair_t;
 
-        static real_t rc2 =  properties::squareCutoffDistance(box);
+        static real_t rc2 =  cutoff() * cutoff();
 
         if ( groups.empty() ) {
             return std::move(pp_pair_cont_t{});  // Empty list.
@@ -83,7 +86,7 @@ namespace simploce {
         // Pair list.
         pp_pair_cont_t particlePairs{};
 
-        // For all different particle group pairs.
+        // For all different particle group pairs. Include pairs if groups are within the cutoff distance.
         for (auto iter_i = groups.begin(); iter_i != groups.end() - 1; ++iter_i) {
             const auto gi = *iter_i;
             auto r_gi = gi->position();
@@ -91,10 +94,10 @@ namespace simploce {
             for (auto iter_j = iter_i + 1; iter_j != groups.end(); ++iter_j) {
                 auto gj = *iter_j;
                 auto r_gj = gj->position();
-                auto R = bc->apply(r_gi, r_gj);
+                auto R = bc->apply(r_gi, r_gj);  // Group distance (vector).
                 auto R2 = norm_square<real_t>(R);
                 if ( R2 <= rc2 ) {
-                    // Include all particle pairs.
+                    // Include all particle pairs between the two groups.
                     const auto particles_j = gj->particles();
                     for (const auto& pi : particles_i) {
                         for (const auto& pj : particles_j) {
@@ -110,8 +113,18 @@ namespace simploce {
         return std::move(particlePairs);
     }
 
+    /**
+     * Returns particle pair list between any collection of particles and particles in groups.
+     * @param box Simulation box.
+     * @param cutoff Cutoff distance.
+     * @param bc Boundary condition.
+     * @param particles Particles.
+     * @param groups Particle groups.
+     * @return Particle pairs.
+     */
     static typename PairLists::pp_pair_cont_t
     forParticlesAndGroups_(const box_ptr_t& box,
+                           const dist_t cutoff,
                            const bc_ptr_t& bc,
                            const std::vector<p_ptr_t>& particles,
                            const std::vector<pg_ptr_t>& groups)
@@ -119,7 +132,7 @@ namespace simploce {
         using pp_pair_cont_t = typename PairLists::pp_pair_cont_t;
         using pp_pair_t = typename PairLists::pp_pair_t;
 
-        static real_t rc2 =  properties::squareCutoffDistance(box);
+        static real_t rc2 =  cutoff() * cutoff();
 
         if ( particles.empty() || groups.empty() ) {
             return std::move(pp_pair_cont_t{});  // Empty list.
@@ -132,11 +145,11 @@ namespace simploce {
             position_t ri = pi->position();
             for (const auto& g : groups) {
                 if ( !g->contains(pi) ) {
-                    for (const auto& pj : g->particles()) {
-                        auto rj = pj->position();
-                        auto R = bc->apply(ri, rj);
-                        auto R2 = norm_square<real_t>(R);
-                        if ( R2 <= rc2 ) {
+                    position_t r_g = g->position();
+                    auto R = bc->apply(ri, r_g);  // Distance (vector) between particle and group.
+                    auto R2 = norm_square<real_t>(R);
+                    if (R2 <= rc2) {
+                        for (const auto& pj : g->particles()) {
                             pp_pair_t pair = std::make_pair(pi, pj);
                             particlePairs.push_back(pair);
                         }
@@ -150,7 +163,7 @@ namespace simploce {
     }
 
     /**
-     * Returns particle pair list for non-bonded particle pairs
+     * Returns particle pair list for non-bonded particle pairs for particles in the -same- group.
      * @return Particle pairs.
      */
     static typename PairLists::pp_pair_cont_t
@@ -160,8 +173,6 @@ namespace simploce {
         using pp_pair_cont_t = typename PairLists::pp_pair_cont_t;
         using pp_pair_t = typename PairLists::pp_pair_t;
 
-        static real_t rc2 =  properties::squareCutoffDistance(box);
-
         if ( groups.empty() ) {
             return std::move(pp_pair_cont_t{});  // Empty list.
         }
@@ -169,9 +180,9 @@ namespace simploce {
         // Pair list.
         pp_pair_cont_t particlePairs{};
 
-        for (auto g: groups) {
+        for (const auto& g: groups) {
             auto pairs = g->nonBondedParticlePairs();
-            for (auto pair: pairs ) {
+            for (const auto& pair: pairs ) {
                 pp_pair_t pp = std::make_pair(pair.first, pair.second);
                 particlePairs.emplace_back(pp);
             }
@@ -192,6 +203,7 @@ namespace simploce {
      */
     static PairLists
     makePairLists_(const box_ptr_t& box,
+                   const dist_t cutoff,
                    const bc_ptr_t& bc,
                    const std::vector<p_ptr_t> &all,
                    const std::vector<p_ptr_t> &free,
@@ -201,21 +213,21 @@ namespace simploce {
         static bool firstTime = true;
         if ( firstTime ) {
             logger.info("Creating distance-based particle pair lists.");
-            logger.debug("Cutoff distance: " + util::toString(properties::cutoffDistance(box)));
+            logger.debug("Cutoff distance: " + util::toString(cutoff()));
         }
 
         // Prepare new particle pair list.
-        auto particlePairs = forParticles_(box, bc, free);
+        auto particlePairs = forParticles_(box, cutoff, bc, free);
         auto ppSize = particlePairs.size();
-        auto fgParticlePairs = forParticlesAndGroups_(box, bc, free, groups);
+        auto fgParticlePairs = forParticlesAndGroups_(box, cutoff, bc, free, groups);
         auto fgSize = fgParticlePairs.size();
         particlePairs.insert(particlePairs.end(), fgParticlePairs.begin(), fgParticlePairs.end());
-        auto ggParticlePairs = forBetweenGroups_(box, bc, groups);
+        auto ggParticlePairs = forParticlesBetweenGroups_(box, cutoff, bc, groups);
         auto ggSize = ggParticlePairs.size();
         particlePairs.insert(particlePairs.end(), ggParticlePairs.begin(), ggParticlePairs.end());
-        auto inGparticlePairs = forParticlesInGroups(box, bc, groups);
-        auto ingSize = inGparticlePairs.size();
-        particlePairs.insert(particlePairs.end(), inGparticlePairs.begin(), inGparticlePairs.end());
+        auto inGroupsParticlePairs = forParticlesInGroups(box, bc, groups);
+        auto ingSize = inGroupsParticlePairs.size();
+        particlePairs.insert(particlePairs.end(), inGroupsParticlePairs.begin(), inGroupsParticlePairs.end());
 
         if ( firstTime ) {
             logger.debug("Non-bonded particle pair list:");
@@ -235,8 +247,8 @@ namespace simploce {
         return std::move(PairLists(all.size(), particlePairs));
     }
 
-    DistancePairListGenerator::DistancePairListGenerator(bc_ptr_t bc) :
-        pair_lists_generator{}, bc_{std::move(bc)} {
+    DistancePairListGenerator::DistancePairListGenerator(dist_t cutoff, bc_ptr_t bc) :
+        pair_lists_generator{}, cutoff_{cutoff}, bc_{std::move(bc)} {
     }
 
     PairLists
@@ -246,7 +258,7 @@ namespace simploce {
                 const std::vector<p_ptr_t>& all,
                 const std::vector<p_ptr_t>& free,
                 const std::vector<pg_ptr_t>& groups) {
-            return std::move(makePairLists_(box, this->bc_, all, free, groups));
+            return std::move(makePairLists_(box, this->cutoff_, this->bc_, all, free, groups));
         });
     }
 

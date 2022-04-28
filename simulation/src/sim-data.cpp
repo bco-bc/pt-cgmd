@@ -5,7 +5,7 @@
  */
 
 #include "simploce/simulation/sim-data.hpp"
-#include "simploce/simulation/s-conf.hpp"
+#include "simploce/conf/s-conf.hpp"
 #include <iomanip>
 #include <iostream>
 

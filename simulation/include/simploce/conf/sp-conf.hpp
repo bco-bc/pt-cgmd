@@ -1,6 +1,8 @@
-//
-// Created by ajuffer on 11/29/21.
-//
+/*
+ * Created by André H. Juffer, Biocenter Oulu, University of Oulu, Finland.
+ *
+ * Created on 11/29/21.
+ */
 
 #ifndef SIMULATION_SP_CONF_HPP
 #define SIMULATION_SP_CONF_HPP
@@ -27,7 +29,7 @@ namespace simploce {
         // External potential types.
         const std::string C_SRF_CG_DENSITY = "c-srf-cg-dens";            // Const surface charge density.
         const std::string ELECTRIC_POTENTIAL_DIFFERENCE = "epd";         // Electric potential difference.
-
+        const std::string WALL = "wall";                                 // Impenetrable wall.
     }
 }
 

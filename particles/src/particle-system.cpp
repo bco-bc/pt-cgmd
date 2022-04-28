@@ -20,9 +20,10 @@
 namespace simploce {
 
     ParticleSystem::ParticleSystem(ParticleSystem&& particleSystem) noexcept:
-        all_{}, free_{}, groups_{}, box_{} {
+        all_{}, free_{}, displaceables_(), groups_{}, box_{} {
         all_ = std::move(particleSystem.all_);
         free_ = std::move(particleSystem.free_);
+        displaceables_ = std::move(particleSystem.displaceables_);
         groups_ = std::move(particleSystem.groups_);
         box_ = std::move(particleSystem.box_);
     }
@@ -31,6 +32,7 @@ namespace simploce {
     ParticleSystem::operator = (ParticleSystem&& particleSystem) noexcept {
         all_ = std::move(particleSystem.all_);
         free_ = std::move(particleSystem.free_);
+        displaceables_ = std::move(particleSystem.displaceables_);
         groups_ = std::move(particleSystem.groups_);
         box_ = std::move(particleSystem.box_);
         return *this;
@@ -196,7 +198,8 @@ namespace simploce {
                     ": Already added to particle system.";
             util::logAndThrow(logger, msg);
         }
-        all_.push_back(particle);
+        all_.emplace_back(particle);
+        displaceables_.emplace_back(particle);
     }
 
     void
@@ -204,6 +207,10 @@ namespace simploce {
         auto iter = std::find(free_.begin(), free_.end(), particle);
         if ( iter != free_.end() ) {
             free_.erase(iter);
+        }
+        iter = std::find(displaceables_.begin(), displaceables_.end(), particle);
+        if ( iter != displaceables_.end() ) {
+            displaceables_.erase(iter);
         }
         iter = std::find(all_.begin(), all_.end(), particle);
         if ( iter != all_.end()  ) {
@@ -220,26 +227,26 @@ namespace simploce {
     }
 
     void
-    ParticleSystem::addFree(const p_ptr_t& freeParticle)
+    ParticleSystem::addFree(const p_ptr_t& particle)
     {
-        util::Logger logger{"simploce::ParticleSystem<P,PG>::addFree()"};
-        if ( this->contains(freeParticle->id()) ) {
+        util::Logger logger{"simploce::ParticleSystem::addFree()"};
+        if ( this->contains(particle->id()) ) {
             util::logAndThrow(logger,
-                              util::toString(freeParticle->id()) + ": Already added to particle system.");
+                              util::toString(particle->id()) + ": Already added to particle system.");
         }
-        auto iter = std::find(free_.begin(), free_.end(), freeParticle);
+        auto iter = std::find(free_.begin(), free_.end(), particle);
         if ( iter != free_.end() ) {
             util::logAndThrow(logger,
-                              util::toString(freeParticle->id()) + ": Already added to particle system.");
+                              util::toString(particle->id()) + ": Already added to particle system.");
         }
-        this->add(freeParticle);
-        free_.emplace_back(freeParticle);
+        this->add(particle);
+        free_.emplace_back(particle);
     }
 
     void
     ParticleSystem::addParticleGroup(const pg_ptr_t& particleGroup)
     {
-        util::Logger logger{"simploce::ParticleSystem<P,PG>::addParticleGroup"};
+        util::Logger logger{"simploce::ParticleSystem::addParticleGroup"};
         for (const p_ptr_t& p : particleGroup->particles() ) {
             if ( !this->contains(p->id()) ) {
                 util::logAndThrow(
@@ -275,6 +282,27 @@ namespace simploce {
             if ( iter != free_.end() ) {
                 free_.erase(iter);
             }
+        }
+    }
+
+    void
+    ParticleSystem::removeFromDisplaceables(const p_ptr_t& particle) {
+        auto iter = std::find(displaceables_.begin(), displaceables_.end(), particle);
+        if (iter != displaceables_.end() ) {
+            displaceables_.erase(iter);
+        }
+    }
+
+    void
+    ParticleSystem::removeFromDisplaceables(const spec_ptr_t& spec) {
+        std::vector<p_ptr_t> remove{};
+        for (const auto p: displaceables_) {
+            if (p->spec()->name() == spec->name()) {
+                remove.emplace_back(p);
+            }
+        }
+        for (const auto p: remove) {
+            this->removeFromDisplaceables(p);
         }
     }
 
@@ -368,7 +396,7 @@ namespace simploce {
     }
 
     std::vector<pg_ptr_t>&
-            ParticleSystem::groups() {
+    ParticleSystem::groups() {
         return groups_;
     }
 
@@ -382,9 +410,15 @@ namespace simploce {
         return free_;
     }
 
+    std::vector<p_ptr_t>&
+    ParticleSystem::displaceables() {
+        return displaceables_;
+    }
+
     void
     ParticleSystem::clear() {
         groups_.clear();
+        displaceables_.clear();
         free_.clear();
         all_.clear();
         box_ = factory::box(length_t{0.0});

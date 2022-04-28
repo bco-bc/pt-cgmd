@@ -14,8 +14,7 @@ namespace simploce {
     
     /**
      * Displaces particles according a stochastic velocity Verlet algorithm applicable to
-     * an Langevin equation. Provides for a canonical ensemble (NVT constant) simulation. 
-     * Requires force field, temperature, time step and damping rate.
+     * an Langevin equation. Provides for a canonical ensemble (NVT constant) simulation.
      * @see <a href="http://dx.doi.org/10.1080/00268976.2012.760055">
      *   Grønbech-Jensen and Oded Farago, Molec. Phys., 111, 983-991, 2013
      * </a>
@@ -25,17 +24,17 @@ namespace simploce {
 
         /**
          * Constructor. All arguments are required.
-         * @param simulationParameters Simulation parameters.
+         * @param param Simulation parameters.
          * @param interactor Interactor.
          */
-        LangevinVelocityVerlet(sim_param_ptr_t simulationParameters,
+        LangevinVelocityVerlet(param_ptr_t param,
                                interactor_ptr_t interactor);
 
-        SimulationData displace(const p_system_ptr_t& all) const override;
+        SimulationData displace(const p_system_ptr_t& particles) const override;
 
     private:
 
-        sim_param_ptr_t simulationParameters_;
+        param_ptr_t param_;
         interactor_ptr_t interactor_;
         
     };

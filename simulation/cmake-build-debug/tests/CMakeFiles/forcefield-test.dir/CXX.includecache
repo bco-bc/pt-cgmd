@@ -9,8 +9,8 @@
 ../include/simploce/potentials/force-field.hpp
 simploce/simulation/pair-lists.hpp
 ../include/simploce/potentials/simploce/simulation/pair-lists.hpp
-simploce/simulation/s-types.hpp
-../include/simploce/potentials/simploce/simulation/s-types.hpp
+simploce/types/s-types.hpp
+../include/simploce/potentials/simploce/types/s-types.hpp
 simploce/util/map2.hpp
 ../include/simploce/potentials/simploce/util/map2.hpp
 string
@@ -31,19 +31,39 @@ simploce/particle/particle-group.hpp
 ../include/simploce/simulation/simploce/particle/particle-group.hpp
 
 ../include/simploce/simulation/s-factory.hpp
-s-types.hpp
-../include/simploce/simulation/s-types.hpp
+simploce/types/s-types.hpp
+../include/simploce/simulation/simploce/types/s-types.hpp
 simploce/particle/p-factory.hpp
 ../include/simploce/simulation/simploce/particle/p-factory.hpp
+simploce/util/direction.hpp
+../include/simploce/simulation/simploce/util/direction.hpp
 
-../include/simploce/simulation/s-types.hpp
-continuous.hpp
-../include/simploce/simulation/continuous.hpp
+../include/simploce/types/s-types.hpp
+simploce/simulation/continuous.hpp
+../include/simploce/types/simploce/simulation/continuous.hpp
 simploce/particle/p-types.hpp
-../include/simploce/simulation/simploce/particle/p-types.hpp
+../include/simploce/types/simploce/particle/p-types.hpp
 simploce/util/param.hpp
-../include/simploce/simulation/simploce/util/param.hpp
+../include/simploce/types/simploce/util/param.hpp
 tuple
+-
+
+/home/andre/wrk3/simploce/pt-cgmd/simulation/tests/forcefield-test.cpp
+simploce/simulation/s-factory.hpp
+/home/andre/wrk3/simploce/pt-cgmd/simulation/tests/simploce/simulation/s-factory.hpp
+simploce/potentials/force-field.hpp
+/home/andre/wrk3/simploce/pt-cgmd/simulation/tests/simploce/potentials/force-field.hpp
+simploce/util/file.hpp
+/home/andre/wrk3/simploce/pt-cgmd/simulation/tests/simploce/util/file.hpp
+simploce/util/logger.hpp
+/home/andre/wrk3/simploce/pt-cgmd/simulation/tests/simploce/util/logger.hpp
+cstdlib
+-
+string
+-
+iostream
+-
+fstream
 -
 
 /localdisk/include/simploce/conf/u-conf.hpp
@@ -142,6 +162,8 @@ algorithm
 box.hpp
 /localdisk/include/simploce/util/box.hpp
 
+/localdisk/include/simploce/util/direction.hpp
+
 /localdisk/include/simploce/util/file.hpp
 fstream
 -
@@ -176,23 +198,5 @@ string
 boost/property_tree/ptree.hpp
 -
 iostream
--
-
-/wrk3/simploce/pt-cgmd/simulation/tests/forcefield-test.cpp
-simploce/simulation/s-factory.hpp
-/wrk3/simploce/pt-cgmd/simulation/tests/simploce/simulation/s-factory.hpp
-simploce/potentials/force-field.hpp
-/wrk3/simploce/pt-cgmd/simulation/tests/simploce/potentials/force-field.hpp
-simploce/util/file.hpp
-/wrk3/simploce/pt-cgmd/simulation/tests/simploce/util/file.hpp
-simploce/util/logger.hpp
-/wrk3/simploce/pt-cgmd/simulation/tests/simploce/util/logger.hpp
-cstdlib
--
-string
--
-iostream
--
-fstream
 -
 

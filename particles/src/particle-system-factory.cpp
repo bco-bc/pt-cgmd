@@ -269,7 +269,7 @@ namespace simploce {
         logger.info("TOTAL number of ions requested: " + boost::lexical_cast<std::string>(nIons));
 
         // Spacing between particles.
-        const length_t spacing = 0.4; // The location of the first peak of g(r) for
+        const length_t spacing = 0.6; // The location of the first peak of g(r) for
                                       // 0.1 M NaCl is around 0.3 nm.
         std::size_t nx = util::nint(Lx / spacing);
         std::size_t ny = util::nint(Ly / spacing);
@@ -337,7 +337,7 @@ namespace simploce {
                                  const density_t& densitySI,
                                  const temperature_t& temperature)
     {
-        util::Logger logger{"simploce::ParticleSystemFactory:::argon"};
+        util::Logger logger{"simploce::ParticleSystemFactory::argon"};
 
         logger.info("Creating atomistic particle model for argon.");
         logger.info("Requested temperature: " + util::toString(temperature()));
@@ -423,6 +423,95 @@ namespace simploce {
         util::removeOverallLinearMomentum(atomistic);
 
         return std::move(atomistic);
+    }
+
+    void
+    ParticleSystemFactory::addParticleBoundary(const p_system_ptr_t& particleSystem,
+                                               dist_t spacing,
+                                               Plane plane,
+                                               bool excludeCorner) {
+        util::Logger logger{"simploce::ParticleSystemFactory::addParticleBoundary"};
+        logger.info("Adding boundary particles.");
+        logger.info("Spacing (nm): " + util::toString(spacing()));
+        logger.info("Plane: " + plane.toString());
+        auto box = particleSystem->box();
+        /*auto size = box->size();
+        size += spacing();
+        box = factory::box(size);
+        particleSystem->box(box);*/
+
+        length_t limit1, limit2, dis1, dis2;
+
+        if (plane == Plane::XY) {
+            int n = box->lengthX() / spacing();
+            dis1 = box->lengthX() / n;
+            n = box->lengthY() / spacing();
+            dis2 = box->lengthY() / n;
+            limit1 = box->lengthX();
+            limit2 = box->lengthY();
+        } else if (plane == Plane::YZ) {
+            int n = box->lengthY() / spacing();
+            dis1 = box->lengthY() / n;
+            n = box->lengthZ() / spacing();
+            dis2 = box->lengthZ() / n;
+            limit1 = box->lengthY();
+            limit2 = box->lengthZ();
+        } else {
+            int n = box->lengthZ() / spacing();
+            dis1 = box->lengthZ() / n;
+            n = box->lengthX() / spacing();
+            dis2 = box->lengthX() / n;
+            limit1 = box->lengthZ();
+            limit2 = box->lengthX();
+        }
+        logger.info("Upper length limit #1" + util::toString(limit1));
+        logger.info("Upper length limit #2" + util::toString(limit2));
+        std::vector<p_ptr_t> particles;
+        std::vector<id_pair_t> bonds;  // No bonds.
+
+        real_t coord1 = 0.0;
+        real_t coord2 = excludeCorner ? dis2() : 0.0;
+        limit2 = excludeCorner ? limit2 -= dis2 : limit2;
+
+        int counter = 0;
+        do {
+            do {
+                counter += 1;
+                std::string name = "BP" + util::toString(counter);
+                auto p1 = particleSystem->addParticle(name,catalog_->staticBP());
+                if (plane == Plane::XY) {
+                    position_t r{coord1, coord2, 0.0};
+                    p1->position(r);
+                } else if (plane == Plane::YZ) {
+                    position_t r{0.0, coord1, coord2};
+                    p1->position(r);
+                } else {
+                    position_t r{coord2, 0.0, coord1};
+                    p1->position(r);
+                }
+                particles.emplace_back(p1);
+                counter += 1;
+                name = "BP" + util::toString(counter);
+                auto p2 = particleSystem->addParticle(name, catalog_->staticBP());
+                if (plane == Plane::XY) {
+                    position_t r{coord1, coord2, box->lengthZ()};
+                    p2->position(r);
+                } else if (plane == Plane::YZ) {
+                    position_t r{box->lengthX(), coord1, coord2};
+                    p2->position(r);
+                } else {
+                    position_t r{coord2, box->lengthY(), coord1};
+                    p2->position(r);
+                }
+                particles.emplace_back(p2);
+                coord2 += dis2();
+            } while (coord2 <= limit2());
+            coord2 = excludeCorner ? dis2() : 0.0;
+            coord1 += dis1();
+        } while (coord1 <= limit1());
+        logger.info("Added number of boundary particles: " + util::toString(counter));
+
+        particleSystem->addParticleGroup(particles, bonds);
     }
 
     spec_catalog_ptr_t&

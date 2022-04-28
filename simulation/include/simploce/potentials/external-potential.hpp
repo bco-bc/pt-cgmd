@@ -7,7 +7,7 @@
 #ifndef SIMULATION_EXTERNAL_POTENTIAL_HPP
 #define SIMULATION_EXTERNAL_POTENTIAL_HPP
 
-#include "../simulation/s-types.hpp"
+#include "simploce/types/s-types.hpp"
 
 namespace simploce {
 

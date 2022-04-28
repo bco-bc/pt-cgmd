@@ -7,7 +7,7 @@
 #ifndef SIMULATION_FORCES_HPP
 #define SIMULATION_FORCES_HPP
 
-#include "../simulation/s-types.hpp"
+#include "simploce/types/s-types.hpp"
 
 namespace simploce {
 
@@ -23,7 +23,7 @@ namespace simploce {
          * @param bc Boundary conditions.
          * @param forceField Force field.
          */
-        Forces(bc_ptr_t bc, ff_ptr_t forceField);
+        Forces(const param_ptr_t& param, bc_ptr_t bc, ff_ptr_t forceField);
 
         /**
          * Calculates forces on particles due to non-bonded interactions.
@@ -52,13 +52,14 @@ namespace simploce {
          * Returns interaction energy of one given particle with all other particles.
          * @param particle Particle.
          * @param particleSystem Particle system.
-         * @return Bonded and non-bonded interaction (potential) energy.
+         * @return Bonded, non-bonded, and external interaction (potential) energy.
          */
-        std::pair<energy_t, energy_t> interaction(const p_ptr_t& particle,
-                                                  const p_system_ptr_t& particleSystem);
+        std::tuple<energy_t, energy_t, energy_t> interaction(const p_ptr_t& particle,
+                                                   const p_system_ptr_t& particleSystem);
 
     private:
 
+        dist_t cutoff_;
         bc_ptr_t bc_;
         ff_ptr_t forceField_;
 

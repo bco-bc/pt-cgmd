@@ -13,7 +13,7 @@ include_directories(${CMAKE_INSTALL_PREFIX}/include SYSTEM)
 
 add_library(util SHARED
         src/param.cpp src/poisson-process.cpp src/telegraph-process.cpp
-        src/util.cpp)
+        src/util.cpp src/plane.cpp src/flat-surface.cpp src/direction.cpp)
 add_subdirectory(tests)
 
 install(TARGETS util DESTINATION lib)
