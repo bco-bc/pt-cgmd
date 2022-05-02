@@ -1,1 +1,0 @@
-/usr/bin/c++ -g CMakeFiles/particle-system-factory-test.dir/particle-system-factory-test.cpp.o -o particle-system-factory-test   -L/localdisk/lib  -Wl,-rpath,/wrk3/simploce/pt-cgmd/particles/cmake-build-debug:/localdisk/lib ../libparticles.so -lutil -lcpputil 

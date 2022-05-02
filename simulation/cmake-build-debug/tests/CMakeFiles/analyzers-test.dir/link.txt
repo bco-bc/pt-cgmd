@@ -1,1 +1,0 @@
-/usr/bin/c++ -g CMakeFiles/analyzers-test.dir/analyzers-test.cpp.o -o analyzers-test 

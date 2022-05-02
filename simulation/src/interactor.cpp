@@ -68,4 +68,9 @@ namespace simploce {
         return std::move(this->forces_->interaction(particle, particleSystem));
     }
 
+    const PairLists&
+    Interactor::pairLists() const {
+        return pairLists_;
+    }
+
 }

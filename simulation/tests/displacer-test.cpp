@@ -44,7 +44,7 @@ void test1(const spec_catalog_ptr_t& catalog, const ff_ptr_t& forceField) {
     p_system_ptr_t particleSystem = factory->diatomic(0.12, catalog->O());
     auto interactor =
             factory::interactor(simulationParameters, forceField, bc);
-    auto displacer = factory::displacer(conf::MONTE_CARLO, simulationParameters, interactor);
+    auto displacer = factory::displacer(conf::MONTE_CARLO, simulationParameters, interactor, bc);
     auto result = interactor->interact(particleSystem);
     std::cout << "BEFORE: Non-bonded: " << std::get<1>(result);
     std::cout << ", bonded: " << std::get<0>(result) << std::endl;

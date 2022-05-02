@@ -1,1 +1,0 @@
-/usr/bin/c++ -g CMakeFiles/pt-pairlist-test.dir/pt-pairlist-test.cpp.o -o pt-pairlist-test   -L/localdisk/lib  -Wl,-rpath,/localdisk/lib:/home/andre/wrk3/simploce/pt-cgmd/simulation/cmake-build-debug ../libsimulation.so -lparticles -lutil -lcpputil -lpthread 

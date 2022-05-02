@@ -229,7 +229,7 @@ int main(int argc, char *argv[]) {
         auto interactor = factory::interactor(param, forceField, bc);
 
         // Get the displacer.
-        auto displacer = factory::displacer(displacerType, param, interactor);
+        auto displacer = factory::displacer(displacerType, param, interactor, bc);
 
         // Simulate
         Simulation simulation(param, particleSystem, displacer);

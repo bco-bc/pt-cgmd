@@ -1,4 +1,0 @@
-/localdisk/clion-2021.2.3/bin/cmake/linux/bin/cmake -DCMAKE_BUILD_TYPE=Debug -G "CodeBlocks - Unix Makefiles" -S /wrk3/simploce/pt-cgmd/particles -B /wrk3/simploce/pt-cgmd/particles/cmake-build-debug
--- Configuring done
--- Generating done
--- Build files have been written to: /wrk3/simploce/pt-cgmd/particles/cmake-build-debug

@@ -1,1 +1,0 @@
-/usr/bin/c++ -g CMakeFiles/coarse-grained-test.dir/coarse-grained-test.cpp.o -o coarse-grained-test   -L/localdisk/lib  -Wl,-rpath,/wrk3/simploce/pt-cgmd/particles/cmake-build-debug:/localdisk/lib ../libparticles.so -lutil -lcpputil 

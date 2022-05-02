@@ -15,6 +15,7 @@
 #include "simploce/simulation/mc.hpp"
 #include "simploce/simulation/velocity-verlet.hpp"
 #include "simploce/simulation/langevin-velocity-verlet.hpp"
+#include "simploce/simulation/dpd.hpp"
 #include "simploce/simulation/protonatable-particle-system-factory.hpp"
 #include "simploce/simulation/pbc.hpp"
 #include "simploce/simulation/1d-pbc.hpp"
@@ -118,7 +119,8 @@ namespace simploce {
 
         displacer_ptr_t displacer(const std::string& displacerType,
                                   const param_ptr_t& simulationParameters,
-                                  const interactor_ptr_t& interactor) {
+                                  const interactor_ptr_t& interactor,
+                                  const bc_ptr_t& bc) {
             static util::Logger logger("simploce::factory::displacer");
             if (displacerType == conf::LEAP_FROG ) {
                 logger.debug("Creating LeapFrog displacer.");
@@ -132,6 +134,9 @@ namespace simploce {
             } else if ( displacerType == conf::VELOCITY_VERLET ) {
                 logger.debug("Creating Velocity Verlet displacer.");
                 return std::make_shared<VelocityVerlet>(simulationParameters, interactor);
+            } else if ( displacerType == conf::DPD) {
+                logger.debug("Creating Dissipative Particle Dynamics displacer.");
+                return std::make_shared<DPD>(simulationParameters_, interactor, bc);
             } else {
                 util::logAndThrow(logger, displacerType + ": No such displacer.");
                 return nullptr;

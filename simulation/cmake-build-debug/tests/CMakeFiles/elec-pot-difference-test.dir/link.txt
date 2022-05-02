@@ -1,1 +1,0 @@
-/usr/bin/c++ -g CMakeFiles/elec-pot-difference-test.dir/elec-pot-difference-test.cpp.o -o elec-pot-difference-test   -L/localdisk/lib  -Wl,-rpath,/wrk3/simploce/pt-cgmd/simulation/cmake-build-debug:/localdisk/lib ../libsimulation.so -lparticles -lutil -lcpputil -lpthread 

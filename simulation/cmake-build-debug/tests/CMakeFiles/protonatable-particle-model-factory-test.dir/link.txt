@@ -1,1 +1,0 @@
-/usr/bin/c++ -g CMakeFiles/protonatable-particle-model-factory-test.dir/protonatable-particle-model-factory-test.cpp.o -o protonatable-particle-model-factory-test   -L/localdisk/lib  -Wl,-rpath,/home/andre/wrk3/simploce/pt-cgmd/simulation/cmake-build-debug:/localdisk/lib ../libsimulation.so -lparticles -lutil -lcpputil -lpthread 

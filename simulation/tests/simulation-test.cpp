@@ -46,7 +46,7 @@ void test1(const spec_catalog_ptr_t& catalog, const ff_ptr_t& forceField) {
     auto bc = factory::boundaryCondition(particleSystem->box());
     auto interactor = factory::interactor(simulationParameters, forceField, bc);
     //auto displacer = factory::displacer(conf::MONTE_CARLO, simulationParameters, interactor);
-    auto displacer = factory::displacer(conf::LEAP_FROG, simulationParameters, interactor);
+    auto displacer = factory::displacer(conf::LEAP_FROG, simulationParameters, interactor, bc);
     Simulation simulation{simulationParameters, particleSystem, displacer};
 
     std::cout << "Simulating..." << std::endl;

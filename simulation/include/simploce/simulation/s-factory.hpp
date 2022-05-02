@@ -75,7 +75,8 @@ namespace simploce {
          */
         displacer_ptr_t displacer(const std::string& displacerType,
                                   const param_ptr_t& simulationParameters,
-                                  const interactor_ptr_t& interactor);
+                                  const interactor_ptr_t& interactor,
+                                  const bc_ptr_t& bc);
         
         /**
          * Returns periodic boundary conditions.

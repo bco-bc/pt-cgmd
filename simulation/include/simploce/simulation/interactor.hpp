@@ -48,6 +48,12 @@ namespace simploce {
         std::tuple<energy_t, energy_t, energy_t> interact(const p_ptr_t& particle,
                                                           const p_system_ptr_t &particleSystem);
 
+        /**
+         * Returns the pair lists.
+         * @return Pair lists.
+         */
+        const PairLists& pairLists() const;
+
     private:
 
         param_ptr_t param_;

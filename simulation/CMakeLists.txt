@@ -30,7 +30,7 @@ add_library(simulation SHARED
         src/s-properties.cpp src/protonatable-particle-system-factory.cpp
         src/continuous.cpp src/discrete.cpp src/force-field.cpp
         src/distance-pair-list-generator.cpp src/leap-frog.cpp src/velocity-verlet.cpp
-        src/langevin-leap-frog.cpp src/langevin-velocity-verlet.cpp
+        src/langevin-leap-frog.cpp src/langevin-velocity-verlet.cpp src/dpd.cpp
         src/mc.cpp src/analysis.cpp src/gr.cpp
         src/const-surface-charge-density.cpp src/elec-pot-difference.cpp src/wall.cpp)
 

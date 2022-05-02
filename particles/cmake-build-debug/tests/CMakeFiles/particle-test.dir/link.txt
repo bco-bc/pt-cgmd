@@ -1,1 +1,0 @@
-/usr/bin/c++ -g CMakeFiles/particle-test.dir/particle-test.cpp.o -o particle-test   -L/localdisk/lib  -Wl,-rpath,/wrk3/simploce/pt-cgmd/particles/cmake-build-debug:/localdisk/lib ../libparticles.so -lutil -lcpputil 

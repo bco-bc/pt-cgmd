@@ -1,1 +1,0 @@
-/usr/bin/c++ -g CMakeFiles/pair-potential-test.dir/pair-potential-test.cpp.o -o pair-potential-test   -L/localdisk/lib  -Wl,-rpath,/wrk3/simploce/pt-cgmd/simulation/cmake-build-debug:/localdisk/lib ../libsimulation.so -lparticles -lutil -lcpputil -lpthread 

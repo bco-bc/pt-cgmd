@@ -1,1 +1,0 @@
-/usr/bin/c++ -g CMakeFiles/simulation-model-factory-test.dir/simulation-model-factory-test.cpp.o -o simulation-model-factory-test   -L/localdisk/lib  -Wl,-rpath,/localdisk/lib:/home/andre/wrk3/simploce/pt-cgmd/simulation/cmake-build-debug ../libsimulation.so -lparticles -lutil -lcpputil -lpthread 

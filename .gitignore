@@ -1,8 +1,2 @@
-simulation/cmake-build-debug/
-simulation/cmake-build-release/
-apps/cmake-build-debug/
-apps/cmake-build-release/
-particles/cmake-build-debug/
-particles/cmake-build-release/
-util/cmake-build-debug/
-util/cmake-build-release/
+**cmake-build*/
+.gitignore~
