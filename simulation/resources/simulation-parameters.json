@@ -1,8 +1,22 @@
 {
+  "comment" : "Not for DPD",
   "simulation" : {
     "nsteps" : 1000,
     "nwrite" : 10,
     "npairlists" : 10,
-    "temperature" : 298.15
+    "temperature" : 298.15,
+    "mesoscale" : 0,
+    "forces" : {
+      "include-external" : 0,
+      "cutoff" : 2.6
+    },
+    "displacer" : {
+      "lvv" : {
+        "gamma" : 1.0
+      },
+      "mc" : {
+        "range" : 0.1
+      }
+    }
   }
 }

@@ -19,6 +19,8 @@
 #include "simploce/potentials/hs-sf.hpp"
 #include "simploce/potentials/lj-sf.hpp"
 #include "simploce/potentials/hs-sc.hpp"
+#include "simploce/potentials/soft-repulsion.hpp"
+#include "simploce/potentials/hp-sr.hpp"
 #include "simploce/potentials/wall.hpp"
 #include "simploce/potentials/no-pair-potential.hpp"
 #include "simploce/potentials/external-potential.hpp"
@@ -80,6 +82,8 @@ namespace simploce {
         auto interactionParameters = forceField->nonBondedSpecifications();
         for (auto& ip : interactionParameters) {
             std::string typeName = ip.typeName;
+            logger.debug(typeName + ": Non-bonded pair potential.");
+
             if (typeName == conf::LJ) {
                 std::string key1 = ip.spec1->name() + "-" + ip.spec2->name();
                 auto lj = std::make_shared<LJ>(forceField, bc);
@@ -145,8 +149,29 @@ namespace simploce {
                     auto pair2 = std::make_pair(key2, hs_sc);
                     nonBondedPairPotentials_.emplace(pair2);
                 }
+            } else if (typeName == conf::SR) {
+                std::string key1 = ip.spec1->name() + "-" + ip.spec2->name();
+                auto sr = std::make_shared<SoftRepulsion>(forceField, bc, cutoff);
+                auto pair1 = std::make_pair(key1, sr);
+                nonBondedPairPotentials_.emplace(pair1);
+                if ( ip.spec1 != ip.spec2 ) {
+                    std::string key2 = ip.spec2->name() + "-" + ip.spec1->name();
+                    auto pair2 = std::make_pair(key2, sr);
+                    nonBondedPairPotentials_.emplace(pair2);
+                }
+            } else if (typeName == conf::HP_SR) {
+                std::string key1 = ip.spec1->name() + "-" + ip.spec2->name();
+                auto hp_sr = std::make_shared<HarmonicSoftRepulsion>(forceField, bc, cutoff);
+                auto pair1 = std::make_pair(key1, hp_sr);
+                nonBondedPairPotentials_.emplace(pair1);
+                if ( ip.spec1 != ip.spec2 ) {
+                    std::string key2 = ip.spec2->name() + "-" + ip.spec1->name();
+                    auto pair2 = std::make_pair(key2, hp_sr);
+                    nonBondedPairPotentials_.emplace(pair2);
+                }
             } else {
-                util::logAndThrow(logger, "Pair potential '" + typeName + "' is not available.");
+                util::logAndThrow(logger,
+                                  "Non-bonded pair potential '" + typeName + "' is not available.");
             }
         }
 
@@ -154,8 +179,9 @@ namespace simploce {
         bondedPairPotentials_.clear();
         interactionParameters = forceField->bondedSpecifications();
         for (auto& ip : interactionParameters) {
-            std::string type = ip.typeName;
-            if (type == conf::HP ) {
+            std::string typeName = ip.typeName;
+            logger.debug(typeName + ": Bonded pair potential.");
+            if (typeName == conf::HP ) {
                 std::string key1 = ip.spec1->name() + "-" + ip.spec2->name();
                 auto hp = std::make_shared<HP>(forceField, bc);
                 auto pair1 = std::make_pair(key1, hp);
@@ -165,7 +191,7 @@ namespace simploce {
                     auto pair2 = std::make_pair(key2, hp);
                     bondedPairPotentials_.emplace(pair2);
                 }
-            } else if ( type == conf::HA_QP ) {
+            } else if (typeName == conf::HA_QP ) {
                 std::string key1 = ip.spec1->name() + "-" + ip.spec2->name();
                 auto ha_qp = std::make_shared<HalveAttractiveQP>(forceField, bc);
                 auto pair1 = std::make_pair(key1, ha_qp);
@@ -175,8 +201,28 @@ namespace simploce {
                     auto pair2 = std::make_pair(key2, ha_qp);
                     bondedPairPotentials_.emplace(pair2);
                 }
+            } else if (typeName == conf::SR) {
+                std::string key1 = ip.spec1->name() + "-" + ip.spec2->name();
+                auto sr = std::make_shared<SoftRepulsion>(forceField, bc, cutoff);
+                auto pair1 = std::make_pair(key1, sr);
+                bondedPairPotentials_.emplace(pair1);
+                if (ip.spec1 != ip.spec2) {
+                    std::string key2 = ip.spec2->name() + "-" + ip.spec1->name();
+                    auto pair2 = std::make_pair(key2, sr);
+                    bondedPairPotentials_.emplace(pair2);
+                }
+            } else if (typeName == conf::HP_SR) {
+                std::string key1 = ip.spec1->name() + "-" + ip.spec2->name();
+                auto hp_sr = std::make_shared<HarmonicSoftRepulsion>(forceField, bc, cutoff);
+                auto pair1 = std::make_pair(key1, hp_sr);
+                bondedPairPotentials_.emplace(pair1);
+                if (ip.spec1 != ip.spec2) {
+                    std::string key2 = ip.spec2->name() + "-" + ip.spec1->name();
+                    auto pair2 = std::make_pair(key2, hp_sr);
+                    bondedPairPotentials_.emplace(pair2);
+                }
             } else {
-                util::logAndThrow(logger,"Pair potential '" + type + "' is not available.");
+                util::logAndThrow(logger, "Bonded pair potential '" + typeName + "' is not available.");
             }
         }
 
@@ -267,6 +313,8 @@ namespace simploce {
         using pp_pair_cont_t = PairLists::pp_pair_cont_t;
 
         static util::Logger logger("simploce::forces::computeNonBondedForces_()");
+        logger.trace("Entering.");
+
         static std::vector<pp_pair_cont_t> subPairLists;
         static bool firstTime = true;
 
@@ -281,7 +329,7 @@ namespace simploce {
             // Handle particle-particle interaction concurrently as tasks, where one task is executed
             // by the current thread.
             if ( firstTime ) {
-                logger.debug("Lennard-Jones and electrostatic forces and energies are computed concurrently.");
+                logger.info("Non-bonded forces are computed concurrently.");
             }
             std::vector<std::future<result_t> > futures{};
             if ( pairLists.isModified() || firstTime) {
@@ -317,7 +365,7 @@ namespace simploce {
                 // Sequentially. All particle-particle pair interactions are handled by the
                 // current thread.
                 if ( firstTime ) {
-                    logger.debug("Lennard-Jones and electrostatic forces and energies are computed sequentially.");
+                    logger.info("Non-bonded forces and energies are computed sequentially.");
                 }
                 auto result = computeNonBondedForcesParticlePairs_(pairLists.particlePairList(),
                                                                    nonBondedPairPotentials,
@@ -339,6 +387,8 @@ namespace simploce {
 
             // Done. Returns potential energy.
             firstTime = false;
+
+            logger.trace("Leaving.");
             return energy;
     }
 
@@ -476,7 +526,7 @@ namespace simploce {
     }
 
     static void
-    associatePotentials_(const dist_t & cutoff,
+    associatePotentials_(const dist_t& cutoff,
                          const std::vector<p_ptr_t>& all,
                          const ff_ptr_t& forceField,
                          const box_ptr_t& box,
@@ -492,7 +542,7 @@ namespace simploce {
 
     Forces::Forces(const param_ptr_t& param, bc_ptr_t bc, ff_ptr_t forceField) :
             cutoff_{}, bc_{std::move(bc)}, forceField_{std::move(forceField)} {
-        cutoff_ = param->get<real_t>("forces.nb.cutoff");
+        cutoff_ = param->get<real_t>("simulation.forces.cutoff");
     }
 
     energy_t Forces::nonBonded(const p_system_ptr_t& particleSystem,

@@ -6,7 +6,7 @@
  */
 
 #include "simploce/particle/particle-spec.hpp"
-#include "simploce/particle/p-conf.hpp"
+#include "simploce/conf/p-conf.hpp"
 #include <stdexcept>
 #include <utility>
 

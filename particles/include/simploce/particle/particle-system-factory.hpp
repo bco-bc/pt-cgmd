@@ -9,6 +9,8 @@
 
 #include "p-types.hpp"
 #include "p-factory.hpp"
+#include "simploce/conf/p-conf.hpp"
+#include "simploce/units/units-mu.hpp"
 #include "simploce/util/plane.hpp"
 
 namespace simploce {
@@ -29,13 +31,13 @@ namespace simploce {
          * Create a diatomic molecule consisting of two identical atom type (e.g. O).
          * @param distance Distance between atoms.
          * @param spec Particle specification of atoms.
-         * @param temperature Temperature (K). Velocities are assigned to the atoms compatible
+         * @param temperature Requested temperature (K). Velocities are assigned to the atoms compatible
          * with the given temperature.
          * @return Diatomic molecule.
          */
         p_system_ptr_t diatomic(const dist_t& distance,
                                 const spec_ptr_t& spec,
-                                const temperature_t& temperature = 298.15);
+                                const temperature_t& temperature = units::si<real_t>::ROOM_TEMPERATURE);
 
         /**
          * Returns coarse grained polarizable water model. This model is based on
@@ -58,19 +60,19 @@ namespace simploce {
 
         /**
          * Returns electrolyte solution of given molarity in a box. This model
-         * is loosely based upon the Debye-Huckel theory of electrolytes.
+         * is loosely based upon the Debye-Hückel theory of electrolytes.
          * Ions are represented by Na+ and Cl- particles, and water is
-         * considered as a background continuum. The Debye-Huckel theory is
+         * considered as a background continuum. The Debye-Hückel theory is
          * valid for low ionic strength only.
          * @param box Particle box
          * @param molarity Molarity in mol/l (M). Default is 0.1 M. The average
          * physiological salt concentration is 0.15 mM.
-         * @param temperature Requested temperature in K. Default is 298.15 K.
+         * @param temperature Requested temperature in K. Default is room temperature.
          * @return Ionic solution.
          */
         p_system_ptr_t simpleElectrolyte(const box_ptr_t& box = factory::box(6.30),
                                          const molarity_t& molarity = 0.1,
-                                         const temperature_t& temperature = 298.15);
+                                         const temperature_t& temperature = units::si<real_t>::ROOM_TEMPERATURE);
 
         /**
          * Returns argon at given density and temperature. The defaults values are
@@ -89,6 +91,32 @@ namespace simploce {
                              const density_t& densitySI = 1374.0,
                              const temperature_t& temperature = 94.4);
 
+        /**
+         * Creates a coarse-grained (that is, mesoscale) polymer solution in water.
+         * @param box Box
+         * @param chainLength Numbers of monomeric units (beads) in the chain, each of which will be of
+         * the same particle specification and represent several real monomers.
+         * @param monomericUnitBeadSpecName Specification name for the monomeric units.
+         * @param numberOfPolymers Required number of polymers.
+         * @param spacing Spacing between polymer segments in a chain.
+         * @param numberOfWaters Required number of water beads.
+         * waterBeadSpecName Specification name for water beads.
+         * @poram temperature Requested temperature. This assumes a DPD unit system, where temperature is
+         * expressed as kT=n, where n is a non-negative integer and k is the Boltzmann constant.
+         * @param placeRandom Places particles randomly in the box. By default, a grid is employed to create
+         * the polymer solution.
+         * @return Particle system.
+         */
+        p_system_ptr_t polymerSolution(const box_ptr_t& box,
+                                       int chainLength,
+                                       const std::string& monomericUnitBeadSpecName,
+                                       int numberOfPolymers,
+                                       const length_t& spacing,
+                                       int numberOfWaters,
+                                       const std::string& waterBeadSpecName,
+                                       const temperature_t& temperature = 1,
+                                       bool placeRandom = false);
+
 
         /**
          * Adds a layer of surface/boundary particles.
@@ -102,9 +130,18 @@ namespace simploce {
                                  Plane plane,
                                  bool excludeCorner = false);
 
-    protected:
+        /**
+         * Generates a atomic particle system from PDB.
+         * @param fileName Filename with PDB entry.
+         * @param temperature Requested temperature in K.
+         * @param excludeWater If true, water in the input file is ignored.
+         * @return Particle system.
+         */
+        p_system_ptr_t fromPDB(std::string& fileName,
+                               const temperature_t& temperature = units::si<real_t>::ROOM_TEMPERATURE,
+                               bool excludeWater = true);
 
-        velocity_t generateVelocity_(const temperature_t& temperature);
+    protected:
 
         /**
          * Returns particle specification catalog.

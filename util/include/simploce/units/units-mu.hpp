@@ -121,6 +121,20 @@ namespace simploce {
              */
             static const V kcal_mol_A2_to_kJ_mol_nm2;
 
+            /**
+             * Converts energy in J to kJ/mol.
+             * @param energy Energy in J.
+             * @return energy in kJ/mol.
+             */
+            static V energyJtoKJperMol(V energy);
+
+            /**
+             * Converts time in s to time in ps.
+             * @param time Time is s.
+             * @return Time in ps.
+             */
+            static V timeToPs(V time);
+
         };
 
         template<typename V>
@@ -146,7 +160,7 @@ namespace simploce {
         const V mu<V>::F = si<V>::F / si<V>::E;
 
         template<typename V>
-        const V mu<V>::kT = mu<V>::KB * si<V>::roomT;
+        const V mu<V>::kT = mu<V>::KB * si<V>::ROOM_TEMPERATURE;
 
         template<typename V>
         const V mu<V>::PROTON_MASS = si<V>::PROTON_MASS / si<V>::MU;
@@ -178,6 +192,16 @@ namespace simploce {
 
         template <typename V>
         const V mu<V>::kcal_mol_A2_to_kJ_mol_nm2 = mu<V>::cal_to_J / (mu<V>::Angstrom_to_nm * mu<V>::Angstrom_to_nm);
+
+        template<typename V>
+        V mu<V>::energyJtoKJperMol(V energy) {
+            return energy / 1000.0 * si<V>::NA;
+        }
+
+        template<typename V>
+        V mu<V>::timeToPs(V time) {
+            return time * 1.0e+12;
+        }
 
     }
 }

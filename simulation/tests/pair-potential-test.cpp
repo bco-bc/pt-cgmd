@@ -6,6 +6,7 @@
 
 #include "simploce/potentials/lj.hpp"
 #include "simploce/potentials/halve-attractive-qp.hpp"
+#include "simploce/potentials/hp.hpp"
 #include "simploce/simulation/s-factory.hpp"
 #include "simploce/conf/s-conf.hpp"
 #include "simploce/potentials/force-field.hpp"
@@ -65,8 +66,36 @@ void testHAQP(const spec_catalog_ptr_t &catalog, const ff_ptr_t &forceField) {
         auto f2 = -result.second[2];
         std::cout << z << conf::SPACE << result.first << conf::SPACE << f2 << std::endl;
     }
+}
 
+void testHP(const spec_catalog_ptr_t &catalog, const ff_ptr_t &forceField) {
+    std::ofstream ostream;
+    std::string fn = "/wrk3/tests/hp.dat";
+    util::open_output_file(ostream, fn);
+    auto box = factory::box(10, 10, 40);
+    bc_ptr_t bc = factory::boundaryCondition(box);
+    pair_potential_ptr_t ptr(new HP(forceField, bc));
+    auto p1 = Bead::create("1", 0, "T1", catalog->lookup("PMU"));
+    p1->position(position_t{0.0, 0.0, 0.0});
+    auto p2 = Bead::create("1", 1, "T2", catalog->lookup("PMU"));
+    p2->position(position_t{0.0, 0.0, 1.0});
 
+    p2->position(position_t{0.0, 0.0, 0.51});
+    ptr->operator()(p1, p2);
+
+    dist_t rc = 40.0;
+    real_t dz = 0.1;
+    int n = util::nint(rc()/dz);
+    for (int i = 1; i < n; ++i) {
+        real_t z = i * dz;
+        p2->position(position_t{0.0, 0.0, z});
+        auto result = ptr->operator()(p1, p2);
+        // Force on second particle!
+        auto f2 = -result.second[2];
+        std::cout << z << conf::SPACE << result.first << conf::SPACE << f2 << std::endl;
+        ostream << z << conf::SPACE << result.first << conf::SPACE << f2 << std::endl;
+    }
+    ostream.close();
 }
 
 int main() {
@@ -78,14 +107,16 @@ int main() {
     auto catalog = factory::particleSpecCatalog(stream);
     stream.close();
 
-    std::string fnInteractions = "/localdisk/resources/interaction-parameters.dat";
+    std::string fnInteractions = "/localdisk/resources/interaction-parameters-polymer-solution.dat";
     util::open_input_file(stream, fnInteractions);
     auto forceField = factory::forceField(stream, catalog);
     stream.close();
 
-    test1(catalog, forceField);
+    //test1(catalog, forceField);
 
-    testHAQP(catalog, forceField);
+    //testHAQP(catalog, forceField);
+
+    testHP(catalog, forceField);
 
     return EXIT_SUCCESS;
 }

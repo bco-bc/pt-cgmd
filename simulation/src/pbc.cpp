@@ -6,7 +6,6 @@
 
 #include "simploce/simulation/pbc.hpp"
 #include "simploce/conf/s-conf.hpp"
-#include "simploce/simulation/s-factory.hpp"
 #include "simploce/util/util.hpp"
 #include "simploce/util/logger.hpp"
 #include <cmath>

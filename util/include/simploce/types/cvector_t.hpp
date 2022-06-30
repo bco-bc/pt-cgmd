@@ -1,5 +1,4 @@
 /*
- * File:   cvector_t.hpp
  * Author: André H. Juffer, Biocenter Oulu.
  *
  * Created on August 8, 2019, 11:16 AM
@@ -41,7 +40,12 @@ namespace simploce {
      */
     template <typename V, int D>
     class cvector_t {
-    public:    
+    public:
+
+        /**
+         * Exposes the value of the discriminator.
+         */
+        static constexpr int discriminator = D;
     
         /**
          * Default constructable. Initialized with zero valued components.
@@ -63,7 +67,7 @@ namespace simploce {
         cvector_t(V x, V y, V z) : elems_{x, y, z} {}
         
         explicit cvector_t(const std::array<V,3>& a) : elems_{a} {}
-    
+
         /**
          * Returns x-component.
          * @return Value.

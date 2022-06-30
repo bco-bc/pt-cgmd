@@ -39,19 +39,17 @@ namespace simploce {
 
         /**
          * Returns a default simulation parameters.
-         * @return  Simulation parameters. Holds default values for 'simulation.nsteps',
-         * 'simulation.nwrite', 'simulation.npairlists', 'simulation.temperature', and
-         * 'simulation.timestep'.
+         * @return Simulation parameters. Holds default values for various parameters.
          */
         param_ptr_t simulationParameters();
 
         /**
          * Returns pair lists generator.
-         * @param cutoff Cutoff distance non-bonded interactions.
+         * @param SImulation parameters.
          * @param bc Boundary condition.
          * @return Pair lists generator.
          */
-        pair_list_gen_ptr_t pairListsGenerator(const dist_t& cutoff, const bc_ptr_t &bc);
+        pair_list_gen_ptr_t pairListsGenerator(const param_ptr_t& param , const bc_ptr_t &bc);
 
         /**
          * Returns factory for creating protonatable particle systems.
@@ -61,22 +59,41 @@ namespace simploce {
 
         /**
          * Returns an interactor.
+         * @param param Simulation parameters.
+         * @param forceField Force field.
+         * @param bc Boundary conditions.
          * @return Interactor.
          */
-        interactor_ptr_t interactor(const param_ptr_t& simulationParameters,
+        interactor_ptr_t interactor(const param_ptr_t& param,
                                     const ff_ptr_t& forceField,
                                     const bc_ptr_t &bc);
+
+        /**
+         * Returns converter between molecular units (MU) and MVV_DPD units, based on characteristic values for
+         * mass, length, and energy.
+         * @param mass Mass in MU.
+         * @param length Length in MU.
+         * @param energy Energy in MU.
+         * @return Converter
+         */
+        units::dpd_ptr_t dpdUnits(const mass_t& mass, const length_t& length, const energy_t& energy);
         
         /**
          * Returns an algorithm (a displacer) to displace a particle system (to change
          * the system's state).
          * @param displacerType displacer identifier.
+         * @param param Parameters for conducting the requested simulation
+         * (e.g., number of steps, etc.).
+         * @param interactor Interactor.
+         * @param bc Boundary condition.
+         * @param dpdUnits Units convertor for MVV_DPD simulations. Must be present for MVV_DPD simulations.
          * @return Algorithm.
          */
         displacer_ptr_t displacer(const std::string& displacerType,
-                                  const param_ptr_t& simulationParameters,
+                                  const param_ptr_t& param,
                                   const interactor_ptr_t& interactor,
-                                  const bc_ptr_t& bc);
+                                  const bc_ptr_t& bc,
+                                  const units::dpd_ptr_t& dpdUnits = nullptr);
         
         /**
          * Returns periodic boundary conditions.
@@ -90,7 +107,7 @@ namespace simploce {
         /**
          * Returns 1 dimensional periodic boundary conditions.
          * @param box Simulation box.
-         * @param direction Apply PBC in this diection only.
+         * @param direction Apply PBC in this direction only.
          * @return Boundary condition.
          */
         bc_ptr_t
@@ -105,7 +122,7 @@ namespace simploce {
         prot_pair_list_gen_ptr_t
         protonTransferPairListGenerator(const bc_ptr_t& bc);
         
-        /**
+        *
          * Returns proton transfer (PT) displacer with constant rate.
          * @param rate Rate.
          * @param gamma Inverse of time constant of decay.
@@ -123,12 +140,12 @@ namespace simploce {
 
         /**
          * Returns force calculator.
-         * @param simulationParam Simulation parameters.
+         * @param param Simulation parameters.
          * @param bc Boundary condition.
          * @param forceField Force field.
          * @return Force calculator.
          */
-        forces_ptr_t forces(const param_ptr_t& simulationParam, const bc_ptr_t& bc, const ff_ptr_t& forceField);
+        forces_ptr_t forces(const param_ptr_t& param, const bc_ptr_t& bc, const ff_ptr_t& forceField);
 
         /**
          * Reads a particle system from an input file.

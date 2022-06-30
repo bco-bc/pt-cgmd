@@ -51,7 +51,7 @@ namespace simploce {
         }
         
         // Temperature at t(n).
-        data.temperature = properties::temperature(particles, data.kinetic);
+        data.temperature = properties::kineticTemperature(particles, data.kinetic);
         
         return data;
     }

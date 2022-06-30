@@ -5,7 +5,7 @@
  * Created on July 30, 2019, 4:06 PM
  */
 
-#include "simploce/particle/p-conf.hpp"
+#include "simploce/conf/p-conf.hpp"
 #include "simploce/particle/particle.hpp"
 #include "simploce/particle/particle-spec.hpp"
 #include "simploce/util/util.hpp"

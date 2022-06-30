@@ -7,7 +7,6 @@
 #ifndef S_TYPES_HPP
 #define S_TYPES_HPP
 
-#include "simploce/simulation/continuous.hpp"
 #include "simploce/particle/p-types.hpp"
 #include "simploce/util/param.hpp"
 #include <tuple>
@@ -30,11 +29,11 @@ namespace simploce {
     class Forces;
     class displacer;
 
-    // S is protonation state typeName, e.g. Discrete or Continuous.
+    // S is protonation state type, e.g. Discrete or Continuous.
     template <typename S>
     class ProtonatableBead;
 
-    // S is protonation state typeName, e.g. Discrete or Continuous.
+    // S is protonation state type, e.g. Discrete or Continuous.
     template <typename S>
     class ProtonatableCoarseGrained;
 
@@ -60,11 +59,7 @@ namespace simploce {
      * and the requested number of steps.
      */
     using param_t = param::param_t;
-
-    /**
-     * Parameters pointer typeName.
-     */
-    using param_ptr_t = std::shared_ptr<param_t>;
+    using param_ptr_t = param::param_ptr_t;
 
     /**
      * Protonatable coarse grained particle system.
@@ -133,6 +128,19 @@ namespace simploce {
      */
     using sc_ptr_t = std::shared_ptr<SC>;
 
+    namespace units {
+
+        /**
+         * Converter between molecular units and MVV_DPD units.
+         * @tparam V
+         */
+        template <typename V>
+        class dpd;
+
+        using dpd_ptr_t = std::shared_ptr<dpd<real_t>>;
+    }
+
+
 
     // OLD
 
@@ -148,9 +156,9 @@ namespace simploce {
     /**
      * Coarse grained simulation model.
      */
-    using cg_sim_model_ptr_t = std::shared_ptr<SimulationModel<Bead>>;
+    //using cg_sim_model_ptr_t = std::shared_ptr<SimulationModel<Bead>>;
     
-    using sim_model_fact_ptr_t = std::shared_ptr<SimulationModelFactory>;
+    //using sim_model_fact_ptr_t = std::shared_ptr<SimulationModelFactory>;
             
 
     /**
@@ -172,7 +180,8 @@ namespace simploce {
      * Proton transfer displacer pointer typeName.
      */
     using pt_displacer_ptr_t = std::shared_ptr<ProtonTransfer>;
-    
+
+
 }
 
 #endif /* S_TYPES_HPP */

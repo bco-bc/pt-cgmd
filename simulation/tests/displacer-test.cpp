@@ -25,6 +25,7 @@
 #include <iostream>
 
 using namespace simploce;
+using namespace simploce::conf;
 using namespace simploce::param;
 
 /*

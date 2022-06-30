@@ -219,7 +219,7 @@ namespace simploce {
     ProtonatableCoarseGrained<S>::replaceGroupsByParticles(const spec_ptr_t& spec,
                                                            int nReplace) {
         for (int i = 0; i != nReplace; ++i) {
-            auto v = util::random<real_t>();
+            auto v = util::random();
             int index = int(v * this->groups().size());
             auto group = this->groups()[index];
             position_t r = group->position();

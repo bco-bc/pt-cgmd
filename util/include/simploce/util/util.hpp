@@ -29,6 +29,18 @@ namespace simploce {
     namespace util {
 
         /**
+         * Signum.
+         * T is any type that supports constructor T{0} and the < operator.
+         * @param val Some value of type T.
+         * @return -1 (negative number), 1 (positive number), or 0 (zero).
+         * @see <a href="http://en.wikipedia.org/wiki/Sign_function">Sign function</a>
+         */
+        template <typename T>
+        int sgn(T val) {
+            return (T{0} < val) - (val < T{0});
+        }
+
+        /**
          * Returns new identifier.
          * @return Identifier.
          */
@@ -63,25 +75,19 @@ namespace simploce {
         int nint(real_t val);
             
         /**
-         * Very -simple- random number generator. Not for production.
-         * V is the value type of real numbers.
-         * @return Random value in the range [0,1].
+         * Random number generator in a given range.
+         * @param max Max value .
+         * @return Random value between 0 and max, uniformly sampled.
          */
-        template <typename V>
-        V random() {
-            static bool init = false;
-            if ( !init ) {
-                std::time_t timer;
-                V seed = time(&timer);
-                srand(seed);
-                init = true;
-            }
-            int n = std::rand();
-            V v = V(n) / RAND_MAX;
-            return v;
-        }
+        real_t randomUniform(real_t min = 0, real_t max = 1);
         
-        /**
+         /**
+         * Random number generator in the range [0,1.0].
+         * @return Random value.
+         */
+        real_t random();
+
+       /**
          * Waits for all future results before returning.
          * @tparam T Result type stored in future.
          * @param futures Futures.
@@ -154,6 +160,11 @@ namespace simploce {
             return subLists;
         }
 
+        /**
+         * Return unit vector with random components.
+         * @return Unit vector.
+         */
+        dist_vect_t randomUnit();
     }
 }
 

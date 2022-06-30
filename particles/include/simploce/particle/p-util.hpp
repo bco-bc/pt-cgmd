@@ -18,8 +18,10 @@ namespace simploce {
          * Assigns velocity to the given particle compatible with the given temperature.
          * @param particle Particle.
          * @param temperature Temperature.
+         * @param isMesoscale If true, temperature is expressed as kT=n, where k is the
+         * Boltzmann constant and n is a nonnegative integer.
          */
-        void assignVelocity(p_ptr_t &particle, const temperature_t& temperature);
+        void assignVelocity(p_ptr_t &particle, const temperature_t& temperature, bool isMesoscale = false);
 
         /**
          * Finds particle in a given particle collection.
@@ -30,7 +32,7 @@ namespace simploce {
         template <typename P, template<typename, typename ...> class CONT = std::vector>
         std::shared_ptr<P> find(simploce::id_t id, const CONT<std::shared_ptr<P>>& particles)
         {
-            for (auto p : particles) {
+            for (auto& p : particles) {
                 if ( p->id() == id ) {
                     return p;
                 }

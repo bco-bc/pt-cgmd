@@ -10,7 +10,7 @@
 #include "simploce/simulation/displacer.hpp"
 #include "simploce/simulation/s-properties.hpp"
 #include "simploce/particle/particle-system.hpp"
-#include "simploce/util/util.hpp"
+#include "simploce/simulation/s-util.hpp"
 
 namespace simploce {
 
@@ -24,16 +24,46 @@ namespace simploce {
 
     void Simulation::perform(std::ofstream& trajectoryStream,
                              std::ofstream& dataStream) {
-        static util::Logger logger("simploce::simulation::perform()");
+        static util::Logger logger("simploce::Simulation::perform()");
+        logger.trace("Entering");
 
+        logger.info("Simulation ongoing.");
+
+        // Set up.
         std::size_t numberAccepted = 0;
         auto box = particleSystem_->box();
-        auto nSteps = param_->get<int>("simulation.nsteps", 10000);
-        auto nWrite = param_->get<int>("simulation.nwrite", 10);
-        logger.debug("Number of steps: " + util::toString(nSteps));
-        logger.debug("Number of steps between writing simulation data: " + util::toString(nWrite));
+        auto nSteps = param_->get<int>("simulation.nsteps");
+        auto nWrite = param_->get<int>("simulation.nwrite");
+        auto referenceTemperature = param_->get<real_t>("simulation.temperature");
+        auto isMesoscale = param_->get<bool>("simulation.mesoscale");
+        auto removeCenterOfMassMotion = param_->get<bool>("simulation.remove-com-motion", false);
+        auto nRemoveCenterOfMassMotion =
+                param_->get<int>("simulation.nremove-com-motion", nSteps + 1);
+        auto scaleVelocities = param_->get<bool>("simulation.scale-velocities", false);
+        auto nScaleVelocities =
+                param_->get<int>("simulation.nscale-velocities", nSteps + 1);
+        auto maxTemperatureDifference =
+                param_->get<real_t>("simulation.relative-temperature-difference", 10.0);  // in %.
+
+        logger.debug(std::to_string(nSteps) + ": Requested number of simulation steps.");
+        logger.debug(std::to_string(nWrite) + ": Number of steps between writing simulation data.");
+        logger.info(std::to_string(removeCenterOfMassMotion) + ": Remove center of mass motion?");
+        logger.info(std::to_string(scaleVelocities) + ": Scale velocities?");
+
+        if ( scaleVelocities ) {
+            logger.info(std::to_string(referenceTemperature) +
+                        ": Reference temperature for scaling velocities.");
+            logger.debug(std::to_string(nScaleVelocities) + ": Number of steps between scaling velocities.");
+            logger.debug(std::to_string(maxTemperatureDifference) +
+                        ": Allowed relative difference (%) between actual and reference temperature.");
+        }
+        if ( removeCenterOfMassMotion ) {
+            logger.debug(std::to_string(nRemoveCenterOfMassMotion) +
+                        ": Number of steps between removing center of mass motion.");
+        }
+
         for (int counter = 1; counter <= nSteps; ++counter) {
-            logger.trace("Step #: " + util::toString(counter));
+            logger.debug("Step #: " + util::toString(counter));
             SimulationData data = displacer_->displace(particleSystem_);
             if ( data.accepted ) {
                 numberAccepted += 1;
@@ -51,7 +81,26 @@ namespace simploce {
                 trajectoryStream.flush();
                 dataStream.flush();
             }
+            if (removeCenterOfMassMotion) {
+                if (counter % nRemoveCenterOfMassMotion == 0) {
+                    logger.debug(std::to_string(counter) + ": Removing center of mass motion.");
+                    util::removeCenterOfMassMotion(particleSystem_);
+                }
+            }
+            if (scaleVelocities) {
+                if (counter % nScaleVelocities == 0) {
+                    auto difference =
+                        std::fabs(referenceTemperature - data.temperature()) / referenceTemperature * 100.0;
+                    if (difference > maxTemperatureDifference) {
+                        logger.warn(std::to_string(counter) + ": Scaling velocities after displacement.");
+                        util::scaleVelocities(particleSystem_, referenceTemperature, isMesoscale);
+                    }
+                }
+            }
         }
+        logger.info("Simulation completed.");
+
+        logger.trace("Leaving.");
     }
 
 }

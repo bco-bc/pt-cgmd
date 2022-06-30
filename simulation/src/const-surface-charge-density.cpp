@@ -40,7 +40,7 @@ namespace simploce {
                                                  const charge_t& q) {
         auto pair = flatSurface.distanceTo(r);
         auto R = pair.first;
-        energy_t energy{-sigma() * R() / (2.0 * units::mu<real_t>::E0 * eps_r)};
+        energy_t energy{-sigma() * R() * q()/ (2.0 * units::mu<real_t>::E0 * eps_r)};
         real_t dUrdR =  -sigma() / (2.0 * units::mu<real_t>::E0 * eps_r);
         dist_vect_t unitVector = flatSurface.unitVectorPerpendicularTo();
         force_t f{};

@@ -18,10 +18,18 @@
 
 namespace simploce {
 
+    static void notFound(util::Logger& logger,
+                         const spec_ptr_t& spec1, const spec_ptr_t& spec2) {
+        util::logAndThrow(logger,
+                          "(" + spec1->name() + ", " + spec2->name() +
+                          "): No interaction parameters for this particle specifications pair.");
+    }
+
     ff_ptr_t
     ForceField::obtainFrom(std::istream &stream,
                            const spec_catalog_ptr_t &catalog) {
-        util::Logger logger("simploce::ForceField::forceField");
+        util::Logger logger("simploce::ForceField::obtainFrom()");
+        logger.trace("Reading force field.");
 
         ff_ptr_t forceField = std::make_shared<ForceField>();
         char charBuffer[100];
@@ -40,6 +48,7 @@ namespace simploce {
             stream.read(charBuffer, conf::NAME_WIDTH);
             std::string typeName = std::string(charBuffer, conf::NAME_WIDTH);
             boost::trim(typeName);
+            logger.debug(typeName + ": Got non-bonded pair potential.");
 
             // Get two particle specifications.
             stream.read(charBuffer, conf::NAME_WIDTH);
@@ -71,6 +80,9 @@ namespace simploce {
             } else if (typeName == conf::LJ_SF) {
                 spec.typeName = conf::LJ_SF;
                 stream >> spec.C12 >> spec.C6 >> spec.eps_inside_rc;
+            } else if (typeName == conf::SR) {
+                spec.typeName = conf::SR;
+                stream >> spec.max_a;
             } else {
                 util::logAndThrow(logger, "'" + typeName + "': No such interaction type.");
             }
@@ -92,6 +104,7 @@ namespace simploce {
             stream.read(charBuffer, conf::NAME_WIDTH);
             std::string typeName = std::string(charBuffer, conf::NAME_WIDTH);
             boost::trim(typeName);
+            logger.debug(typeName + ": Got bonded pair potential.");
 
             // Get two particle specifications.
             stream.read(charBuffer, conf::NAME_WIDTH);
@@ -109,6 +122,12 @@ namespace simploce {
             if (typeName == conf::HP || typeName == conf::HA_QP ) {
                 spec.typeName = typeName;
                 stream >> spec.r0 >> spec.fc;
+            } else if (typeName == conf::SR) {
+                spec.typeName = conf::SR;
+                stream >> spec.max_a;
+            } else if (typeName == conf::HP_SR) {
+                spec.typeName = typeName;
+                stream >> spec.r0 >> spec.fc >> spec.max_a;
             } else {
                 util::logAndThrow(logger, "'" + typeName + "': No such interaction type.");
             }
@@ -130,6 +149,7 @@ namespace simploce {
             stream.read(charBuffer, conf::NAME_WIDTH);
             std::string typeName = std::string(charBuffer, conf::NAME_WIDTH);
             boost::trim(typeName);
+            logger.debug(typeName + ": Got external potential.");
 
             int_spec_t spec;
             if (typeName == conf::ELECTRIC_POTENTIAL_DIFFERENCE) {
@@ -161,6 +181,7 @@ namespace simploce {
                      util::toString(numberBonded));
         logger.debug("Number of external potential potential types: " +
                      util::toString(nExternal));
+        logger.trace("Reading force field complete.");
 
         return std::move(forceField);
     }
@@ -227,9 +248,7 @@ namespace simploce {
             }
         }
         // Not found.
-        util::logAndThrow(logger,
-                          "(" + spec1->name() + ", " + spec2->name() +
-                          "): No interaction parameters for this particle specifications pair.");
+        notFound(logger, spec1, spec2);
         return std::move(std::make_pair(0.0, 0.0));
     }
 
@@ -247,9 +266,7 @@ namespace simploce {
             }
         }
         // Not found.
-        util::logAndThrow(logger,
-                          "(" + spec1->name() + ", " + spec2->name() +
-                          "): No interaction parameters for this particle specifications pair.");
+        notFound(logger, spec1, spec2);
         return std::move(std::make_pair(0.0, 0.0));
     }
 
@@ -272,9 +289,7 @@ namespace simploce {
             }
         }
         // Not found.
-        util::logAndThrow(logger,
-                          "(" + spec1->name() + ", " + spec2->name() +
-                          "): No interaction parameters for this particle specifications pair.");
+        notFound(logger, spec1, spec2);
         return 0.0;
     }
 
@@ -297,9 +312,7 @@ namespace simploce {
             }
         }
         // Not found.
-        util::logAndThrow(logger,
-                          "(" + spec1->name() + ", " + spec2->name() +
-                          "): No interaction parameters for this particle specifications pair.");
+        notFound(logger, spec1, spec2);
         return 0.0;
     }
 
@@ -322,9 +335,7 @@ namespace simploce {
             }
         }
         // Not found.
-        util::logAndThrow(logger,
-                          "(" + spec1->name() + ", " + spec2->name() +
-                          "): No interaction parameters for this particle specifications pair.");
+        notFound(logger, spec1, spec2);
         return std::make_pair(0.0, 0.0);
     }
 
@@ -341,8 +352,7 @@ namespace simploce {
             }
         }
         // Not found.
-        logger.warn("(" + spec1->name() + ", " + spec2->name() +
-                    "): No interaction for this particle specifications pair.");
+        notFound(logger, spec1, spec2);
         return std::make_pair(0.0, 0.0);
     }
 
@@ -359,8 +369,7 @@ namespace simploce {
             }
         }
         // Not found.
-        logger.warn("(" + spec1->name() + ", " + spec2->name() +
-                    "): No interaction parameters for this particle specifications pair.");
+        notFound(logger, spec1, spec2);
         return std::move(std::make_tuple(0.0, 0.0, 0.0, 0.0));
     }
 
@@ -377,9 +386,43 @@ namespace simploce {
             }
         }
         // Not found.
-        logger.warn("(" + spec1->name() + ", " + spec2->name() +
-                    "): No interaction parameters for this particle specifications pair.");
+        notFound(logger, spec1, spec2);
         return std::move(std::make_tuple(0.0, 0.0, 0.0));
+    }
+
+    real_t
+    ForceField::softRepulsion(const spec_ptr_t &spec1,
+                              const spec_ptr_t &spec2) const {
+        static util::Logger logger("simploce::ForceField::softRepulsion()");
+        for (auto& spec : this->nonBondedSpecs_) {
+            if (spec.typeName == conf::SR ) {
+                if ( (*(spec.spec1) == *spec1 && *(spec.spec2) == *spec2) ||
+                     (*(spec.spec1) == *spec2 && *(spec.spec2) == *spec1) ) {
+                    return spec.max_a;
+                }
+            }
+        }
+        // Not found.
+        notFound(logger, spec1, spec2);
+        return 0.0;
+    }
+
+    std::tuple<real_t, real_t, real_t>
+    ForceField::harmonicSoftRepulsion(const spec_ptr_t &spec1,
+                                      const spec_ptr_t &spec2) const {
+        static util::Logger logger("simploce::ForceField::harmonicSoftRepulsion()");
+        for (auto& spec : this->bondedSpecs_) {
+            if (spec.typeName == conf::HP_SR ) {
+                if ( (*(spec.spec1) == *spec1 && *(spec.spec2) == *spec2) ||
+                     (*(spec.spec1) == *spec2 && *(spec.spec2) == *spec1) ) {
+                    return std::make_tuple(spec.r0, spec.fc, spec.max_a);
+                }
+            }
+        }
+
+        // Not found.
+        notFound(logger, spec1, spec2);
+        return std::make_tuple(0.0, 0.0, 0.0);
     }
 
     std::pair<srf_charge_density_t, real_t>
@@ -443,6 +486,13 @@ namespace simploce {
                 stream << std::setw(conf::REAL_WIDTH) << spec.eps_outside_rc;
                 stream << conf::SPACE << "# eps_inside_rc, eps_outside_rc";
                 stream << std::endl;
+            } else if (spec.typeName == conf::SR) {
+                stream << std::setw(conf::NAME_WIDTH) << spec.typeName;
+                stream << std::setw(conf::NAME_WIDTH) << spec.spec1->name();
+                stream << std::setw(conf::NAME_WIDTH) << spec.spec2->name();
+                stream << std::setw(conf::REAL_WIDTH) << spec.max_a;
+                stream << conf::SPACE << "# Maximum repulsion (MVV_DPD).";
+                stream << std::endl;
             }
         }
         const auto& bSpecs = forceField.bondedSpecifications();
@@ -457,6 +507,22 @@ namespace simploce {
                 stream << std::setw(conf::REAL_WIDTH) << spec.r0;
                 stream << std::setw(conf::REAL_WIDTH) << spec.fc;
                 stream << conf::SPACE << "# r0, fc";
+                stream << std::endl;
+            } else if (spec.typeName == conf::SR) {
+                stream << std::setw(conf::NAME_WIDTH) << spec.typeName;
+                stream << std::setw(conf::NAME_WIDTH) << spec.spec1->name();
+                stream << std::setw(conf::NAME_WIDTH) << spec.spec2->name();
+                stream << std::setw(conf::REAL_WIDTH) << spec.max_a;
+                stream << conf::SPACE << "# Maximum repulsion (DPD).";
+                stream << std::endl;
+            } else if (spec.typeName == conf::HP_SR) {
+                stream << std::setw(conf::NAME_WIDTH) << spec.typeName;
+                stream << std::setw(conf::NAME_WIDTH) << spec.spec1->name();
+                stream << std::setw(conf::NAME_WIDTH) << spec.spec2->name();
+                stream << std::setw(conf::REAL_WIDTH) << spec.r0;
+                stream << std::setw(conf::REAL_WIDTH) << spec.fc;
+                stream << std::setw(conf::REAL_WIDTH) << spec.max_a;
+                stream << conf::SPACE << "# r0, fc, aij (maximum repulsion, DPD)";
                 stream << std::endl;
             }
         }

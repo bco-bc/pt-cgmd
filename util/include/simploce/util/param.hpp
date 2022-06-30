@@ -19,8 +19,16 @@
 
 namespace simploce {
     namespace param {
-    
+
+        /**
+         * Parameters type.
+         */
         using param_t = boost::property_tree::ptree;
+
+        /**
+         * Parameters pointer type.
+         */
+        using param_ptr_t = std::shared_ptr<param_t>;
     
         /**
          * Read parameters from input stream.

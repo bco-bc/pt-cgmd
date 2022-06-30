@@ -7,17 +7,15 @@
  */
 
 #include "simploce/simulation/s-factory.hpp"
-#include "simploce/types/s-types.hpp"
-#include "simploce/simulation/continuous.hpp"
-#include "simploce/particle/protonatable-coarse-grained.hpp"
-#include "simploce/particle/atomistic.hpp"
 #include "simploce/simulation/s-properties.hpp"
+#include "simploce/types/s-types.hpp"
+#include "simploce/particle/protonatable-coarse-grained.hpp"
 #include "simploce/potentials/force-field.hpp"
 #include "simploce/util/specification.hpp"
 #include "simploce/util/logger.hpp"
-#include "simploce/util/file.hpp"
 #include "simploce/util/util.hpp"
 #include "simploce/util/param.hpp"
+#include "simploce/util/program-options.hpp"
 #include <boost/program_options.hpp>
 #include <string>
 #include <iostream>
@@ -26,125 +24,101 @@
 using namespace simploce;
 namespace po = boost::program_options;
 
-static void validate(const prot_cg_sys_ptr_t& cg) {
+static void validate(const p_system_ptr_t& particleSystem, const param_ptr_t& param) {
     std::cout.setf(std::ios::scientific);
     std::cout.precision(conf::PRECISION);
-    std::cout << "Validating protonatable coarse grained particle model:" << std::endl;
-    std::cout << "Number of particles: " << util::toString(cg->numberOfParticles()) << std::endl;
-    std::cout << "Number of beads: " << util::toString(cg->numberOfBeads()) << std::endl;
-    std::cout << "Number of protonatable beads: " << util::toString(cg->numberProtonatableBeads()) << std::endl;
-    std::cout << "Box dimension(s)" << *(cg->box()) << std::endl;
-    std::cout << "Protonatable?: " << cg->isProtonatable() << std::endl;
-    cg->doWithAll<void>([] (const std::vector<p_ptr_t>& all) {
+    std::cout << "Validating particle system:" << std::endl;
+    std::cout << "Number of particles: " << util::toString(particleSystem->numberOfParticles()) << std::endl;
+    std::cout << "Box dimension(s)" << *(particleSystem->box()) << std::endl;
+    std::cout << "Protonatable?: " << particleSystem->isProtonatable() << std::endl;
+    particleSystem->doWithAll<void>([param] (const std::vector<p_ptr_t>& all) {
         auto p = properties::linearMomentum(all);
-        std::cout << "TOTAL linear momentum: " << p << std::endl;
+        std::cout << "TOTAL linear momentum vector components: " << p << std::endl;
+        std::cout << "TOTAL linear momentum vector length: " << norm<real_t>(p) << std::endl;
+        energy_t ekin{0.0};
+        mass_t total;
+        position_t cm{0.0, 0.0, 0.0};
+        auto isMesoscale = param->get<bool>("simulation.mesoscale");
+        for (const auto& particle: all) {
+            auto v = particle->velocity();
+            auto mass = particle->mass();
+            ekin += 0.5 * mass() * inner<real_t>(v, v);
+            auto r = particle->position();
+            cm += mass() * r;
+            total += mass;
+        }
+        auto temperature = properties::kineticTemperature(all, ekin, isMesoscale);
+        std::cout << "Temperature: " << temperature << std::endl;
+        cm /= total();
+        std::cout << "Center of mass: " << cm << std::endl;
     });
-    std::cout << std::endl;
-}
-
-static void validate(const at_sys_ptr_t& atomistic) {
-    std::cout.setf(std::ios::scientific);
-    std::cout.precision(conf::PRECISION);
-    std::cout << "Validating atomistic particle model:" << std::endl;
-    std::cout << "Number of particles: " << util::toString(atomistic->numberOfParticles()) << std::endl;
-    std::cout << "Number of atoms: " << util::toString(atomistic->numberOfAtoms()) << std::endl;
-    std::cout << "Box dimension(s)" << *(atomistic->box()) << std::endl;
-    std::cout << "Protonatable?: " << atomistic->isProtonatable() << std::endl;
-    atomistic->doWithAll<void>([] (const std::vector<p_ptr_t>& all) {
-        auto p = properties::linearMomentum(all);
-        std::cout << "TOTAL linear momentum: " << p << std::endl;
-    });
+    auto volume = particleSystem->box()->volume();
+    auto nd = real_t(particleSystem->numberOfParticles()) / volume;
+    std::cout << "Number density: " << nd << std::endl;
 }
 
 static void validate(const ff_ptr_t& forceField) {
+    std::cout << "Validating force field." << std::endl;
     std::cout.setf(std::ios::scientific);
     std::cout.precision(conf::PRECISION);
-    std::cout << "Validating force field:" << std::endl;
     std::cout << *forceField << std::endl;
+}
+
+static void validate(const param_ptr_t& param) {
+    std::cout << "Validating (simulation) parameters." << std::endl;
+    param::write(std::cout, *param);
 }
 
 int main(int argc, char *argv[]) {
     util::Logger logger{"s-validate-model::main"};
 
     try {
+        // Some default parameters
+        param_ptr_t param = factory::simulationParameters();
+
         const util::Specification PARTICLE{"particle"};
-        const util::Specification SIM_PARAMS {"simulation-parameters"};
+        const util::Specification SIM_PARAMS {"parameters"};
         const util::Specification FORCE_FIELD{"force-field"};
 
         std::string fnParticleSpecCatalog{"particle-spec-catalog.dat"};
         std::string fnIn{"particle.system"};
         util::Specification specification = PARTICLE;
         std::string selectFrom = "Input specification. Select one from '" +
-                PARTICLE.spec() + "' (default), '" + SIM_PARAMS.spec() +
-                "', '" + FORCE_FIELD.spec() + "'.";
-        bool isCoarseGrained{false};
+                PARTICLE.spec() + "' (default), '" +
+                SIM_PARAMS.spec() + "', '" +
+                FORCE_FIELD.spec() + "'.";
 
         po::options_description usage("Usage");
+        util::addStandardOptions(usage);
         usage.add_options() (
-                "fn-in,i",
-                po::value<std::string>(&fnIn),
-                "Input file name."
-        )(
-                "fn-particle-spec-catalog,s",
-                po::value<std::string>(&fnParticleSpecCatalog),
-                "Input file name of particle specifications. Default 'particle-spec-catalog.dat'."
-        )(
                 "input-spec",
                 po::value<util::Specification>(&specification),
                 selectFrom.c_str()
-        )(
-                "coarse-grained,c",
-                "Input is a coarse-grained description."
-        )(
-                "verbose,v",
-                "Verbose"
-        )(
-                "help,h", "This help message"
         );
 
         po::variables_map vm;
         po::store(po::parse_command_line(argc, argv, usage), vm);
         po::notify(vm);
+
         if (vm.count("help") || argc == 1) {
             std::cout << "Validate model:" << std::endl;
             std::cout << usage << "\n";
             return 0;
         }
-        if (vm.count("coarse-grained") ) {
-            isCoarseGrained = true;
-        }
-        if (vm.count("verbose") ) {
-            logger.changeLogLevel(util::Logger::LOGTRACE);
-        }
+        util::verbose(vm);
 
         logger.info("Input model specification: " + specification.spec());
-
         if (specification == PARTICLE ) {
-            auto catalog = factory::particleSpecCatalog(fnParticleSpecCatalog);
-            std::ifstream stream;
-            util::open_input_file(stream, fnIn);
-            if ( isCoarseGrained ) {
-                logger.debug("Assuming (protonatable) coarse grained particle model.");
-                auto particleModel = prot_cg_sys_t::obtainFrom(stream, catalog);
-                validate(particleModel);
-            } else {
-                logger.debug("Assuming atomistic particle model.");
-                auto atomistic = Atomistic::obtainFrom(stream, catalog);
-                validate(atomistic);
-            }
+            auto particleSystem = util::getParticleSystem(vm, param);
+            validate(particleSystem, param);
         } else if ( specification == SIM_PARAMS ) {
-            std::ifstream stream;
-            util::open_input_file(stream, fnIn);
-            param_t param;
-            param::read(stream, param);
-            stream.close();
-            param::write(std::cout, param);
+            util::getParameters(vm, param);
+            validate(param);
         } else if (specification == FORCE_FIELD) {
-            auto catalog = factory::particleSpecCatalog(fnParticleSpecCatalog);
-            auto forceField = factory::forceField(fnIn, catalog);
+            auto forceField = util::getForceField(vm);
             validate(forceField);
         } else {
-            throw std::domain_error(specification.spec() + ": Cannot validate.");
+            throw std::domain_error(specification.spec() + ": Cannot validate. Not such specification.");
         }
 
     } catch (std::exception& exception) {

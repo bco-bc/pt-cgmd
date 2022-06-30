@@ -19,10 +19,16 @@ namespace simploce {
         static spec_catalog_ptr_t catalog_{};
         static p_system_fact_ptr_t particleModelFactory_{};
 
-        box_ptr_t box(const length_t& side)
+        box_ptr_t
+        box(const length_t& side)
         {
             return std::make_shared<Cube<real_t>>(side());
-        }                
+        }
+
+        box_ptr_t
+        box(const length_t& sideX, const length_t& sideY, const length_t& sideZ) {
+            return std::make_shared<Box<real_t>>(sideX(), sideY(), sideZ());
+        }
         
         spec_catalog_ptr_t 
         particleSpecCatalog(const std::string& fileName)

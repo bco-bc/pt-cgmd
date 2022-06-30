@@ -32,19 +32,25 @@ namespace simploce {
         dist_vect_t rij = bc_->apply(ri, rj);
         auto Rij = norm<real_t>(rij);
         real_t dR = Rij - r0;
+        dist_vect_t unitVector = rij / Rij;
+
+        return std::move(HP::forceAndEnergy(rij, unitVector, Rij, r0, fc));
+    }
+
+    std::pair<energy_t, force_t>
+    HP::forceAndEnergy(const dist_vect_t &r_ij, const dist_vect_t &uv_ij, real_t R_ij, real_t r0, real_t fc) {
+        real_t dR = R_ij - r0;
 
         // Potential energy, kJ/mol
         energy_t energy{0.5 * fc * dR * dR};
 
-        // Force on particle #1.
-        dist_vect_t unitVector = rij / Rij;
+        // Force
         real_t dHPdR = fc * dR;
         force_t f{};
         for (std::size_t k = 0; k != 3; ++k) {
-            f[k] = -dHPdR * unitVector[k];
+            f[k] = -dHPdR * uv_ij[k];
         }
 
-        // Done.
         return std::move(std::make_pair(energy, f));
     }
 

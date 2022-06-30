@@ -11,7 +11,7 @@
 #include "simploce/particle/particle-spec-catalog.hpp"
 #include "simploce/particle/p-properties.hpp"
 #include "simploce/particle/p-util.hpp"
-#include "simploce/particle/p-conf.hpp"
+#include "simploce/conf/p-conf.hpp"
 #include "simploce/particle/p-factory.hpp"
 #include "simploce/util/util.hpp"
 #include "simploce/util/logger.hpp"
@@ -181,6 +181,16 @@ namespace simploce {
     }
 
     void
+    ParticleSystem::setOriginToCenterOfMass() {
+        auto cm = properties::centerOfMass(all_);
+        for (auto& p : all_) {
+            auto r = p->position();
+            r -= cm;
+            p->position(r);
+        }
+    }
+
+    void
     ParticleSystem::add(const p_ptr_t& particle)
     {
         util::Logger logger{"simploce::ParticleSystem::add()"};
@@ -296,12 +306,12 @@ namespace simploce {
     void
     ParticleSystem::removeFromDisplaceables(const spec_ptr_t& spec) {
         std::vector<p_ptr_t> remove{};
-        for (const auto p: displaceables_) {
+        for (const auto& p: displaceables_) {
             if (p->spec()->name() == spec->name()) {
                 remove.emplace_back(p);
             }
         }
-        for (const auto p: remove) {
+        for (const auto& p: remove) {
             this->removeFromDisplaceables(p);
         }
     }
@@ -309,7 +319,9 @@ namespace simploce {
     void
     ParticleSystem::readFreeAndGroups(std::istream& stream)
     {
-        util::Logger logger("simploce::ParticleSystem::readFreeAndGroups");
+        util::Logger logger("simploce::ParticleSystem::readFreeAndGroups()");
+        logger.trace("Entering");
+
         std::string stringBuffer;
         char buffer[1000];
 
@@ -320,6 +332,7 @@ namespace simploce {
         // Read free particles.
         std::size_t nFree;
         stream >> nFree;
+        logger.debug(std::to_string(nFree) + ": Number of free particles.");
         std::getline(stream, stringBuffer);  // Read EOL.
         for (std::size_t counter = 0; counter != nFree; ++counter) {
 
@@ -344,6 +357,7 @@ namespace simploce {
         // Read particle groups.
         std::size_t nGroups;
         stream >> nGroups;
+        logger.debug(std::to_string(nGroups) + ": Number of groups.");
         std::getline(stream, stringBuffer);  // Read EOL.
         for (std::size_t counter = 0; counter != nGroups; ++counter) {
 
@@ -351,6 +365,7 @@ namespace simploce {
             std::vector<p_ptr_t> particles;
             std::size_t nParticles;
             stream >> nParticles;
+            logger.debug(std::to_string(nParticles) + ": Number of particles in current particle group.");
             std::getline(stream, stringBuffer);  // Read EOL.
             for (std::size_t j = 0; j != nParticles; ++j) {
 
@@ -374,6 +389,7 @@ namespace simploce {
             std::vector<id_pair_t> bonds;
             std::size_t nBonds;
             stream >> nBonds;
+            logger.debug(std::to_string(nBonds)+ ": Number of bonds in current particle group.");
             std::getline(stream, stringBuffer);  // Read EOL.
             for (std::size_t j = 0; j != nBonds; ++j) {
                 id_t id1, id2;
@@ -393,6 +409,7 @@ namespace simploce {
             auto group = ParticleGroup::make(particles, bonds);
             this->addParticleGroup(group);
         }
+        logger.trace("Leaving");
     }
 
     std::vector<pg_ptr_t>&
@@ -440,12 +457,14 @@ namespace simploce {
 
     void
     ParticleSystem::parse(std::istream &stream, const spec_catalog_ptr_t &catalog) {
-        util::Logger logger{"simploce::ParticleSystem<P,PG>::parse()"};
+        util::Logger logger{"simploce::ParticleSystem::parse()"};
+        logger.trace("Entering");
 
         int nParticles, protonatable;
         stream >> nParticles >> protonatable;
+        logger.debug(std::to_string(nParticles) + ": Number of particles.");
         if ( protonatable == conf::PROTONATABLE ) {
-            logger.debug("Particle model may be protonatable.");
+            logger.warn("Particle system may be protonatable.");
         }
         std::string stringBuffer;
         std::getline(stream, stringBuffer);  // Read EOL.
@@ -491,12 +510,15 @@ namespace simploce {
         box_ptr_t box = factory::box(0.0);
         stream >> *box;
         this->box(box);
+        logger.debug("[" + std::to_string(box->lengthX()) + ", " + std::to_string(box->lengthY()) +
+                    std::to_string(box->lengthZ()) + ": Box dimensions.");
 
         // Log some details.
-        logger.debug("Number of particles: " + util::toString(this->numberOfParticles()));
-        logger.debug("Number of free particles: " + util::toString(this->numberOfFreeParticles()));
-        logger.debug("Number of particle groups: " + util::toString(this->numberOfParticleGroups()));
+        logger.debug(std::to_string(this->numberOfParticles()) + ": Number of particles.");
+        logger.debug(std::to_string(this->numberOfFreeParticles()) + ": Number of free particles.");
+        logger.debug(std::to_string(this->numberOfParticleGroups()) + ": Number of particle groups.");
 
+        logger.trace("Leaving.");
     }
 
     std::ostream&

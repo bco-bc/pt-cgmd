@@ -24,6 +24,15 @@ namespace simploce {
         box_ptr_t box(const length_t& side);
 
         /**
+         * Creates rectangular box.
+         * @param sideX Side length in x-direction.
+         * @param sideY Side length in y-direction.
+         * @param sideZ Side length in y-direction.
+         * @return
+         */
+        box_ptr_t box(const length_t& sideX, const length_t& sideY, const length_t& sideZ);
+
+        /**
          * Obtains a particle specification catalog from a file.
          * @param fileName Input file name.
          * @return Particle specification catalog.

@@ -8,8 +8,9 @@
 #ifndef P_CONF_HPP
 #define P_CONF_HPP
 
-#include "p-types.hpp"
 #include "simploce/conf/u-conf.hpp"
+#include "simploce/types/u-types.hpp"
+#include <cstdlib>
 
 namespace simploce {
     namespace conf {

@@ -1,0 +1,13 @@
+add_executable(test-triangulation test-triangulation.cpp)
+add_executable(test-edge test-edge.cpp)
+add_executable(test-triangle test-triangle.cpp)
+add_executable(test-nsc test-nsc.cpp)
+
+target_link_directories(test-triangulation PUBLIC ${CMAKE_INSTALL_PREFIX}/lib)
+target_link_libraries(test-triangulation surface util cpputil)
+target_link_directories(test-edge PUBLIC ${CMAKE_INSTALL_PREFIX}/lib)
+target_link_libraries(test-edge surface util cpputil)
+target_link_directories(test-triangle PUBLIC ${CMAKE_INSTALL_PREFIX}/lib)
+target_link_libraries(test-triangle surface util cpputil)
+target_link_directories(test-nsc PUBLIC ${CMAKE_INSTALL_PREFIX}/lib)
+target_link_libraries(test-nsc surface util cpputil)

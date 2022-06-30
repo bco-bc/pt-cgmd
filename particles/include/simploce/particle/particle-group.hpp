@@ -25,7 +25,7 @@ namespace simploce {
         /**
          * Particle pointer container type.
          */
-        using p_ptr_cont_t = std::set<p_ptr_t>;
+        using p_ptr_cont_t = std::vector<p_ptr_t>;
         
         /**
          * Bonds container type.

@@ -8,7 +8,7 @@
 #ifndef SCONF_HPP
 #define SCONF_HPP
 
-#include "simploce/particle/p-conf.hpp"
+#include "simploce/conf/p-conf.hpp"
 #include "sp-conf.hpp"
 
 namespace simploce {
@@ -24,7 +24,8 @@ namespace simploce {
         const std::string PT_LANGEVIN_VELOCITY_VERLET = "pt-lvv";    // With proton transfer (PT).
         const std::string VELOCITY_VERLET = "vv";
         const std::string MONTE_CARLO = "mc";
-        const std::string DPD = "dpd";
+        const std::string DPD = "mvv-dpd";
+        const std::string S1_DPD = "s1-dpd";
 
         // Minimum number of particles.
         const std::size_t MIN_NUMBER_OF_PARTICLES{500};

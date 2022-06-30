@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.19)
+cmake_minimum_required(VERSION 3.22)
 project(simulation)
 
 set(CMAKE_CXX_STANDARD 14)
@@ -24,15 +24,17 @@ include_directories(${CMAKE_INSTALL_PREFIX}/include SYSTEM)
 add_library(simulation SHARED
         src/interactor.cpp src/forces.cpp src/lj.cpp src/lj-rf.cpp src/hp.cpp src/rf.cpp
         src/sf.cpp src/hs-sf.cpp src/sc.cpp src/hs-sc.cpp src/no-pair-potential.cpp
-        src/halve-attractive-qp.cpp src/lj-sf.cpp
+        src/halve-attractive-qp.cpp src/lj-sf.cpp src/soft-repulsion.cpp src/hp-sr.cpp
         src/pair-lists.cpp src/simulation.cpp src/sim-data.cpp
         src/no-bc.cpp src/pbc.cpp src/1d-pbc.cpp src/s-factory.cpp
         src/s-properties.cpp src/protonatable-particle-system-factory.cpp
         src/continuous.cpp src/discrete.cpp src/force-field.cpp
         src/distance-pair-list-generator.cpp src/leap-frog.cpp src/velocity-verlet.cpp
-        src/langevin-leap-frog.cpp src/langevin-velocity-verlet.cpp src/dpd.cpp
+        src/langevin-leap-frog.cpp src/langevin-velocity-verlet.cpp src/mvv-dpd.cpp
+        src/s1-dpd.cpp
         src/mc.cpp src/analysis.cpp src/gr.cpp
-        src/const-surface-charge-density.cpp src/elec-pot-difference.cpp src/wall.cpp)
+        src/const-surface-charge-density.cpp src/elec-pot-difference.cpp src/wall.cpp
+        src/s-util.cpp)
 
 
 add_subdirectory(tests)

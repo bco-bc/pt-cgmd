@@ -27,21 +27,20 @@ namespace simploce {
 
     std::tuple<energy_t, energy_t, energy_t>
     Interactor::interact(const p_system_ptr_t &particleSystem) {
-        static util::Logger logger("simploce::Interactor::interact");
+        static util::Logger logger("simploce::Interactor::interact()");
+        logger.trace("Entering.");
 
         static auto nUpdatePairLists = param_->get<std::size_t>("simulation.npairlists");
-        static auto includeExternal = param_->get<bool>("simulation.include-external");
+        static auto includeExternal = param_->get<bool>("simulation.forces.include-external");
         static std::size_t counter = 0;
 
         // Update particle pair list, if needed.
         if (counter % nUpdatePairLists == 0 || counter == 0) {
             logger.debug("Number of steps between update of particle pair list: " +
                           util::toString(nUpdatePairLists));
-            logger.trace("Updating particle pair lists...");
             pairLists_ = pairListsGenerator_->generate(particleSystem);
             pairLists_.modified_(true);
             pairLists_.numberOfParticles(particleSystem->numberOfParticles());
-            logger.trace("Done.");
         } else {
             pairLists_.modified_(false);
         }
@@ -52,6 +51,7 @@ namespace simploce {
         auto nonBonded = this->forces_->nonBonded(particleSystem, pairLists_);
         energy_t external{0};
         if (includeExternal) {
+            logger.warn("Including external potentials.");
             external = this->forces_->external(particleSystem);
         }
 
@@ -59,6 +59,7 @@ namespace simploce {
         counter += 1;
 
         // Done.
+        logger.trace("Leaving.");
         return std::move(std::tuple<energy_t, energy_t, energy_t>{bonded, nonBonded, external});
     }
 

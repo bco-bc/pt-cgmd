@@ -7,7 +7,7 @@
 
 #include "simploce/particle/particle-spec-catalog.hpp"
 #include "simploce/particle/particle-spec.hpp"
-#include "simploce/particle/p-conf.hpp"
+#include "simploce/conf/p-conf.hpp"
 #include "simploce/util/logger.hpp"
 #include <boost/algorithm/string.hpp>
 #include <boost/lexical_cast.hpp>
@@ -24,13 +24,30 @@ namespace simploce {
     spec_ptr_t 
     ParticleSpecCatalog::lookup(const std::string& name) const
     {
-        util::Logger logger("simploce::ParticleSpecCatalog::lookup()");
+        util::Logger logger("simploce::ParticleSpecCatalog::lookup(const std::string& name)");
         auto iter = specs_.find(name);
         if ( iter == specs_.end() ) {
             std::string message = name + ": No specification available for this particle.";
             util::logAndThrow(logger, message);
         }
         return (*iter).second;
+    }
+
+    spec_ptr_t
+    ParticleSpecCatalog::lookupByElementName(const std::string &name) {
+        util::Logger logger("simploce::ParticleSpecCatalog::lookupByElementName(const std::string &name)");
+        if (name.empty()) {
+            util::logAndThrow(logger, "Name must be provided.");
+        }
+        // Assume first character specifies element name.
+        const char ch = name[0];
+        switch (ch) {
+            case 'C': return this->C(); break;
+            case 'H': return this->H(); break;
+            case 'O': return this->O(); break;
+            case 'N': return this->N(); break;
+            default: return this->lookup(std::string{ch});
+        }
     }
     
     spec_ptr_t 
@@ -94,6 +111,9 @@ namespace simploce {
             if ( !protonatable ) {
                 auto spec = ParticleSpec::create(name, charge, mass, radius, free, description);
                 auto pair = std::make_pair(name, spec);
+                if (specs.count(name) != 0) {
+                    util::logAndThrow(logger, name + ": Double entry for this specification in catalog.");
+                }
                 specs.insert(pair);
             } else {
                 auto spec = ParticleSpec::create(name, charge, mass, radius, pKa, free, description);

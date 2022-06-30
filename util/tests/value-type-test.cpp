@@ -25,15 +25,26 @@ void test1() {
     pressure_t p3 = p1;
     pressure_t p2(4);
     pressure_t p4{p2};
-    std::cout << "p1: " << p1 << std::endl;
-    std::cout << "p2: " << p2 << std::endl;
+    std::cout << "p1:      " << p1 << std::endl;
+    std::cout << "p2:      " << p2 << std::endl;
     std::cout << "p3 = p1: " << p3 << std::endl;
     std::cout << "p4{p2}: " << p4 << std::endl;
-    std::cout << "(p2 == p4)? " << (p2==p4) << std::endl;
-    std::cout << "(p2 == p3)? " << (p2==p3) << std::endl;
+    std::cout << "(p2 == p4)? " << (p2 == p4) << std::endl;
+    std::cout << "(p2 == p3)? " << (p2 == p3) << std::endl;
+    std::cout << "(p2 <= p4)? " << (p2 <= p4) << std::endl;
+    std::cout << "(p1 >= p3)? " << (p1 >= p3) << std::endl;
+    std::cout << "(p1 >= p4)? " << (p1 >= p4) << std::endl;
+    std::cout << "(p2 < p4)?  " << (p2 < p4) << std::endl;
+    std::cout << "(p1 > p3)?  " << (p1 > p3) << std::endl;
+    std::cout << "(p1 > p4)?  " << (p1 > p4) << std::endl;
+    std::cout << std::endl;
+
     pressure_t p = p1 + p2;
-    std::cout << "p : " << p << std::endl;
-        
+    std::cout << "p1 + p2 : " << p << std::endl;
+    p1 += p2;
+    std::cout << "(p1+=p2): " << p1 << std::endl;
+    std::cout << std::endl;
+
     volume_t V(300);
     std::cout << "V : " << V << std::endl;
     pressure_t r1 = p * 2.0;

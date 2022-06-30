@@ -9,7 +9,7 @@
 #define PARTICLES_PROTONATABLE_BEAD_HPP
 
 #include "simploce/particle/p-types.hpp"
-#include "simploce/particle/p-conf.hpp"
+#include "simploce/conf/p-conf.hpp"
 #include "bead.hpp"
 #include <type_traits>
 #include <iostream>

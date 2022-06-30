@@ -10,12 +10,14 @@
 #include "simploce/potentials/forces.hpp"
 #include "simploce/simulation/distance-pair-list-generator.hpp"
 #include "simploce/types/s-types.hpp"
+#include "simploce/units/units-dpd.hpp"
 #include "simploce/simulation/interactor.hpp"
 #include "simploce/simulation/leap-frog.hpp"
 #include "simploce/simulation/mc.hpp"
 #include "simploce/simulation/velocity-verlet.hpp"
 #include "simploce/simulation/langevin-velocity-verlet.hpp"
-#include "simploce/simulation/dpd.hpp"
+#include "simploce/simulation/mvv-dpd.hpp"
+#include "simploce/simulation/s1-dpd.hpp"
 #include "simploce/simulation/protonatable-particle-system-factory.hpp"
 #include "simploce/simulation/pbc.hpp"
 #include "simploce/simulation/1d-pbc.hpp"
@@ -40,7 +42,7 @@ namespace simploce {
         static pair_list_gen_ptr_t pairListsGenerator_{};
 
         // Simulation parameters.
-        static param_ptr_t simulationParameters_{};
+        static param_ptr_t param_{};
         
         // Protonatable particle system factory.
         static prot_p_sys_factory protonatableParticleModelFactory_{};
@@ -54,7 +56,7 @@ namespace simploce {
         // Interactor.
         static interactor_ptr_t interactor_{};
 
-        //static prot_pair_list_gen_ptr_t ptPairlisGen_{};
+        //static prot_pair_list_gen_ptr_t ptPairlistGen_{};
         
         //static pt_displacer_ptr_t constantRate_{};
 
@@ -86,24 +88,25 @@ namespace simploce {
 
         param_ptr_t
         simulationParameters() {
-            if ( !simulationParameters_ ) {
-                simulationParameters_ = std::make_shared<simploce::param::param_t>();
-                simulationParameters_->put("simulation.nsteps", 1000);
-                simulationParameters_->put("simulation.nwrite", "10");
-                simulationParameters_->put("simulation.npairlists", 10);
-                simulationParameters_->put("simulation.temperature", 298.15);  // K.
-                simulationParameters_->put("simulation.timestep", 0.001);      // 1 fs.
-                simulationParameters_->put("simulation.gamma", 1.0); // ps^-1.
-                simulationParameters_->put("simulation.include-external", 0);  // False
-                simulationParameters_->put("forces.nb.cutoff", 2.6);
-                simulationParameters_->put("displacer.mc.range", 0.1);
+            if ( !param_ ) {
+                param_ = std::make_shared<simploce::param::param_t>();
+                param_->put("simulation.nsteps", 1000);
+                param_->put("simulation.nwrite", "10");
+                param_->put("simulation.npairlists", 10);
+                param_->put("simulation.temperature", 298.15);  // K.
+                param_->put("simulation.timestep", 0.001);      // 1 fs.
+                param_->put("simulation.forces.include-external", 0);  // False
+                param_->put("simulation.forces.cutoff", 2.6);
+                param_->put("simulation.displacer.mc.range", 0.1);
+                param_->put("simulation.displacer.lvv.gamma", 1.0); // ps^-1
+                param_->put("simulation.displacer.dpd.gamma", 3.0);
             }
-            return simulationParameters_;
+            return param_;
         }
 
-        pair_list_gen_ptr_t pairListsGenerator(const dist_t& cutoff, const bc_ptr_t &bc) {
+        pair_list_gen_ptr_t pairListsGenerator(const param_ptr_t& param, const bc_ptr_t &bc) {
             if ( !pairListsGenerator_ ) {
-                pairListsGenerator_ = std::make_shared<DistancePairListGenerator>(cutoff, bc);
+                pairListsGenerator_ = std::make_shared<DistancePairListGenerator>(param, bc);
             }
             return pairListsGenerator_;
         }
@@ -116,27 +119,34 @@ namespace simploce {
             return protonatableParticleModelFactory_;
         }
 
+        units::dpd_ptr_t dpdUnits(const mass_t& mass, const length_t& length, const energy_t& energy) {
+            return std::make_shared<units::dpd<real_t>>(mass, length, energy);
+        }
 
         displacer_ptr_t displacer(const std::string& displacerType,
-                                  const param_ptr_t& simulationParameters,
+                                  const param_ptr_t& param,
                                   const interactor_ptr_t& interactor,
-                                  const bc_ptr_t& bc) {
+                                  const bc_ptr_t& bc,
+                                  const units::dpd_ptr_t& dpdUnits) {
             static util::Logger logger("simploce::factory::displacer");
             if (displacerType == conf::LEAP_FROG ) {
                 logger.debug("Creating LeapFrog displacer.");
-                return std::make_shared<LeapFrog>(simulationParameters, interactor);
+                return std::make_shared<LeapFrog>(param, interactor);
             } else if ( displacerType == conf::MONTE_CARLO ) {
                  logger.debug("Creating Monte Carlo displacer.");
-                return std::make_shared<MonteCarlo>(simulationParameters, interactor);
+                return std::make_shared<MonteCarlo>(param, interactor);
             } else if ( displacerType == conf::LANGEVIN_VELOCITY_VERLET ) {
                 logger.debug("Creating Langevin Velocity Verlet displacer.");
-                return std::make_shared<LangevinVelocityVerlet>(simulationParameters, interactor);
+                return std::make_shared<LangevinVelocityVerlet>(param, interactor);
             } else if ( displacerType == conf::VELOCITY_VERLET ) {
                 logger.debug("Creating Velocity Verlet displacer.");
-                return std::make_shared<VelocityVerlet>(simulationParameters, interactor);
+                return std::make_shared<VelocityVerlet>(param, interactor);
             } else if ( displacerType == conf::DPD) {
-                logger.debug("Creating Dissipative Particle Dynamics displacer.");
-                return std::make_shared<DPD>(simulationParameters_, interactor, bc);
+                logger.debug("Creating Modified Velocity Verlet DPD displacer.");
+                return std::make_shared<MVV_DPD>(param_, interactor, bc, dpdUnits);
+            } else if ( displacerType == conf::S1_DPD) {
+                logger.debug("Creating S1 DPD displacer.");
+                return std::make_shared<S1_DPD>(param_, interactor, bc, dpdUnits);
             } else {
                 util::logAndThrow(logger, displacerType + ": No such displacer.");
                 return nullptr;
@@ -209,14 +219,14 @@ namespace simploce {
             return constantRate_;
         }
         */
-        interactor_ptr_t interactor(const param_ptr_t& simulationParameters,
+        interactor_ptr_t interactor(const param_ptr_t& param,
                                     const ff_ptr_t& forceField,
                                     const bc_ptr_t &bc) {
             if ( !interactor_ ) {
-                dist_t cutoff = simulationParameters->get<real_t>("forces.nb.cutoff");
-                auto pairListGenerator = factory::pairListsGenerator(cutoff, bc);
-                auto forces = factory::forces(simulationParameters, bc, forceField);
-                interactor_ = std::make_shared<Interactor>(simulationParameters,
+                dist_t cutoff = param->get<real_t>("simulation.forces.cutoff");
+                auto pairListGenerator = factory::pairListsGenerator(param, bc);
+                auto forces = factory::forces(param, bc, forceField);
+                interactor_ = std::make_shared<Interactor>(param,
                                                            pairListGenerator,
                                                            forces);
             }
@@ -228,9 +238,9 @@ namespace simploce {
             return std::make_shared<prot_cg_sys_t>();
         }
 
-        forces_ptr_t forces(const param_ptr_t& simulationParam, const bc_ptr_t& bc, const ff_ptr_t& forceField) {
+        forces_ptr_t forces(const param_ptr_t& param, const bc_ptr_t& bc, const ff_ptr_t& forceField) {
             if ( !forces_ ) {
-                forces_ = std::make_shared<Forces>(simulationParam, bc, forceField);
+                forces_ = std::make_shared<Forces>(param, bc, forceField);
             }
             return forces_;
         }

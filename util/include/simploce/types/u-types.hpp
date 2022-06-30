@@ -11,6 +11,7 @@
 #include "value_t.hpp"
 #include "cvector_t.hpp"
 #include "boost/uuid/uuid.hpp"
+#include <memory>
 
 namespace simploce {
 
@@ -124,9 +125,15 @@ namespace simploce {
     using voltage = el_pot_diff;
 
     /**
+     * Area
+     */
+     using area_t = value_t<real_t, -19>;
+
+    /**
      * Position.
      */
     using position_t = cvector_t<real_t, 1>;
+    using position_ptr_t = std::shared_ptr<position_t>;
 
     /*
      * Distance vector type.
@@ -152,6 +159,11 @@ namespace simploce {
      * Electric dipole moment.
      */
     using dipole_moment_t = cvector_t<real_t, 5>;
+
+    /**
+     * Normal vector.
+     */
+    using normal_t = dist_vect_t;
 
 }
 

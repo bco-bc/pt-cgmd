@@ -57,29 +57,31 @@ namespace simploce {
             static const V F;
 
             /**
-             * Room temperature (25 degrees Celsius, 298.15 K), in K.
+             * Room temperature (25 degrees Celsius, 298.15 K), in K. Corresponds to the Standard Ambient Temperature
+             * (SAT) according International Union of Pure and Applied Chemistry (IUPAC).
              */
-            static const V roomT;
+             static const V SAT;
+             static const V ROOM_TEMPERATURE;
 
-            /**
-             * Value of kT at room temperature. In J.
-             */
-            static const V kT;
+             /**
+              * Value of kT at room temperature. In J.
+              */
+             static const V kT;
 
-            /**
-             * Avogadro constant. In 1/mol.
-             */
-            const static V NA;
+             /**
+              * Avogadro constant. In 1/mol.
+              */
+             const static V NA;
 
-            /**
-             * Unified atomic mass unit. In kg.
-             */
-            static const V MU;
+             /**
+              * Unified atomic mass unit. In kg.
+              */
+             static const V MU;
 
-            /**
-             * Proton mass. In kg.
-             */
-            static const V PROTON_MASS;
+             /**
+              * Proton mass. In kg.
+              */
+             static const V PROTON_MASS;
 
             /**
              * Proton charge. In C.
@@ -160,10 +162,13 @@ namespace simploce {
         const V si<V>::PROTON_CHARGE = si<V>::E;
 
         template<typename V>
-        const V si<V>::roomT = 298.15;
+        const V si<V>::SAT = 298.15;
 
         template<typename V>
-        const V si<V>::kT = si<V>::KB * si<V>::roomT;
+        const V si<V>::ROOM_TEMPERATURE = SAT;
+
+        template<typename V>
+        const V si<V>::kT = si<V>::KB * si<V>::ROOM_TEMPERATURE;
 
         // https://physics.nist.gov/cgi-bin/cuu/Value?alph|search_for=fine+structure+
         template<typename V>

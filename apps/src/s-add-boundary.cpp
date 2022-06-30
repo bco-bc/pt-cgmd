@@ -53,7 +53,7 @@ int main(int argc, char *argv[]) {
     po::notify(vm);
 
     if (vm.count("help") || argc == 1) {
-        std::cout << "Convert particle system to PDB" << std::endl;
+        std::cout << "Add boundary particles" << std::endl;
         std::cout << usage << "\n";
         return 0;
     }
@@ -92,4 +92,5 @@ int main(int argc, char *argv[]) {
     stream.close();
     logger.info("Wrote particle system with boundary particles to: " + fnOutputParticleSystem);
 
+    return EXIT_SUCCESS;
 }

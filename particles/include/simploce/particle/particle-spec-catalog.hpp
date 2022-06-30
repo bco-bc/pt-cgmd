@@ -27,6 +27,13 @@ namespace simploce {
          * @throw Exception if specification cannot be found.
          */
         spec_ptr_t lookup(const std::string& name) const;
+
+        /**
+         * Returns a specification.
+         * @param name Element name. Must not contain spaces.
+         * @return Specification.
+         */
+        spec_ptr_t lookupByElementName(const std::string& name);
         
         /**
          * Returns specification for molecular water.

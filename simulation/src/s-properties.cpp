@@ -1,5 +1,4 @@
 /*
- * File:   sim-util.cpp
  * Author: André H. Juffer, Biocenter Oulu.
  *
  * Created on October 17, 2019, 1:38 PM
@@ -22,26 +21,30 @@ namespace simploce {
             return 0.0;
         }
 
-        temperature_t temperature(const std::vector<p_ptr_t>& particles,
-                                  const energy_t& eKin) {
-            std::size_t nParticles = particles.size();
+        temperature_t kineticTemperature(const std::vector<p_ptr_t>& particles,
+                                         const energy_t& eKin,
+                                         bool isMesoscale) {
+            auto nParticles = particles.size();
+            auto KB = isMesoscale ? 1 : units::mu<real_t>::KB;
             real_t nDof = 3.0 * real_t(nParticles) - 3.0;  // Assuming total linear momentum is constant.
             if (nDof > 3 ) {
-                return 2.0 * eKin() / (nDof * units::mu<real_t>::KB );  // In K.
+                return 2.0 * eKin() / (nDof * KB);
             } else {
-                // No point calculating temperature for a low number of degrees of freedom.
+                // No point in calculating the temperature for a low number of degrees of freedom.
                 return 0.0;
             }
         }
 
         pressure_t pressure(const std::vector<p_ptr_t>& particles,
                             const temperature_t& temperature,
-                            const box_ptr_t& box)
+                            const box_ptr_t& box,
+                            bool isMesoscale)
         {
             volume_t volume = box->volume();
             real_t virial1 = 0.0;
             pressure_t pressure{};
 
+            auto KB = isMesoscale ? 1 : units::mu<real_t>::KB;
             std::size_t nParticles = particles.size();
             for (const auto& particle : particles) {
                 position_t r = particle->position();
@@ -51,7 +54,7 @@ namespace simploce {
             if ( volume() > 0.0 ) {
                 virial1 /= ( 3.0 * volume() );
                 real_t virial2 =
-                        real_t(nParticles) * units::mu<real_t>::KB * temperature() / volume();
+                        real_t(nParticles) * KB * temperature() / volume();
                 pressure = virial2 - virial1; // In kJ/(mol nm^3)
             } else {
                 pressure = 0.0;

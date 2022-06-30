@@ -79,7 +79,7 @@ namespace simploce {
     /**
      * Particle box type.
      */
-    using box_t = Cube<real_t>;
+    using box_t = Box<real_t>;
 
     /**
      * Particle box pointer type.

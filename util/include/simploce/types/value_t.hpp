@@ -36,13 +36,18 @@ namespace simploce {
      *    volume_t V{123};
      *    auto p = n * k * T / V;
      * </pre>
-     * does.
+     * does. Once assigned, the value cannot change.
      * @param V value type (double, float).
-     * @param D Type discriminator.
+     * @param D Discriminator value.
      */
     template <typename V, int D>
     class value_t {
     public:
+
+        /**
+         * Exposes the value of the discriminator.
+         */
+        static constexpr int discriminator = D;
         
         /**
          * Default constructable.
@@ -76,16 +81,23 @@ namespace simploce {
         /**
          * Addition.
          * @param v Value.
-         * @return This value.
+         * @return New value.
          */
         value_t operator += (const value_t& v);
         
         /**
          * Subtraction.
          * @param v Value.
-         * @return This value.
+         * @return New value.
          */
         value_t operator -= (const value_t& v);
+
+        /**
+         * Division by number.
+         * @param v Number.
+         * @return New value.
+         */
+        value_t operator /= (V v);
         
     private:
         
@@ -94,16 +106,25 @@ namespace simploce {
     };
     
     template <typename V, int D>
-    value_t<V,D> value_t<V,D>::operator += (const value_t<V,D>& v)
+    value_t<V,D>
+    value_t<V,D>::operator += (const value_t<V,D>& v)
     {
         v_ += v();
         return *this;
     }
     
     template <typename V, int D>
-    value_t<V,D> value_t<V,D>::operator -= (const value_t<V,D>& v)
+    value_t<V,D>
+    value_t<V,D>::operator -= (const value_t<V,D>& v)
     {
         v_ -= v();
+        return *this;
+    }
+
+    template <typename V, int D>
+    value_t<V,D>
+    value_t<V,D>::operator /= (V v) {
+        v_ /= v;
         return *this;
     }
 
@@ -215,9 +236,31 @@ namespace simploce {
         V eps = std::numeric_limits<V>::epsilon();
         return (std::fabs(v1()-v2()) < eps);
     }
+
+    /**
+     * Comparison, smaller than or equal to another value.
+     * @param v1 Value.
+     * @param v2 Value.
+     * @return Result of v1 <= v2.
+     */
+    template <typename V, int D>
+    bool operator <= (const value_t<V,D>& v1, const value_t<V,D>& v2) {
+        return v1() <= v2();
+    }
     
     /**
-     * Comparison, smaller then or equal to.
+     * Comparison, smaller than another value.
+     * @param v1 Value.
+     * @param v2 Value.
+     * @return Result of v1 < v2.
+     */
+    template <typename V, int D>
+    bool operator < (const value_t<V,D>& v1, const value_t<V,D>& v2) {
+        return v1() < v2();
+    }
+
+    /**
+     * Comparison, smaller than or equal to a number.
      * @param v Value.
      * @param number Number.
      * @return Result of v <= number.
@@ -227,7 +270,29 @@ namespace simploce {
     {
         return v() <= number;
     }
+
+    /**
+     * Comparison, greater than of equal to another value.
+     * @param v1 Value.
+     * @param v2 Value.
+     * @return Result f v1 >= v2.
+     */
+    template <typename V, int D>
+    bool operator >= (const value_t<V,D>& v1, const value_t<V,D>& v2) {
+        return v1() >= v2();
+    }
     
+    /**
+     * Comparison, greater than another value.
+     * @param v1 Value.
+     * @param v2 Value.
+     * @return Result f v1 > v2.
+     */
+    template <typename V, int D>
+    bool operator > (const value_t<V,D>& v1, const value_t<V,D>& v2) {
+        return v1() > v2();
+    }
+
     /**
      * Comparison, greater then or equal to
      * @param v Value.

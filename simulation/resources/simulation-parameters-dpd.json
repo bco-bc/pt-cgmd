@@ -1,0 +1,32 @@
+{
+  "comment" : "For MC and DPD of a polymer solution",
+  "simulation" : {
+    "nsteps" : 1000,
+    "timestep": 0.02,
+    "nwrite" : 100,
+    "npairlists" : 10,
+    "temperature" : 2.0,
+    "mesoscale" : 1,
+    "displacer" : {
+      "dpd" : {
+        "gamma": 2.25,
+        "lambda" : 0.5,
+        "characteristics": {
+          "mass": 1.0,
+          "length": 1.0,
+          "energy": 1.0
+        }
+      },
+      "mc" : {
+        "range" : 0.5
+      },
+      "lvv" : {
+        "gamma" : 2.25
+      }
+    },
+    "forces" : {
+      "cutoff" : 1.0,
+      "include-external" : 0
+    }
+  }
+}

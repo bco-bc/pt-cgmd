@@ -7,6 +7,8 @@
 #ifndef SIMULATION_SP_CONF_HPP
 #define SIMULATION_SP_CONF_HPP
 
+#include <string>
+
 namespace simploce {
     namespace conf {
 
@@ -25,6 +27,8 @@ namespace simploce {
         const std::string LJ_SF = "lj+sf";      // Lennard-Jones plus shifted force electrostatics.
         const std::string HP = "hp";            // Harmonic.
         const std::string HA_QP = "ha-qp";      // Halve-attractive quartic.
+        const std::string SR = "sr";            // Soft repulsive (for MVV_DPD).
+        const std::string HP_SR = "hp+sr";      // Harmonic + soft repulsive.
 
         // External potential types.
         const std::string C_SRF_CG_DENSITY = "c-srf-cg-dens";            // Const surface charge density.

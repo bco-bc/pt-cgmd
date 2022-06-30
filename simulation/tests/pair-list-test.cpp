@@ -25,8 +25,7 @@ using namespace simploce::param;
 void test2(const param_ptr_t& param, p_system_ptr_t &coarseGrained) {
     auto box = coarseGrained->box();
     auto bc = factory::boundaryCondition(box);
-    auto cutoff = param->get<real_t>("forces.nb.cutoff");
-    pair_list_gen_ptr_t generator = factory::pairListsGenerator(cutoff, bc);
+    pair_list_gen_ptr_t generator = factory::pairListsGenerator(param, bc);
     auto pairLists = generator->generate(coarseGrained);
     const auto& particlePairs = pairLists.particlePairList();
     std::cout << "Number of pairs: " << particlePairs.size() << std::endl;
@@ -35,8 +34,7 @@ void test2(const param_ptr_t& param, p_system_ptr_t &coarseGrained) {
 void test3(const param_ptr_t& param, p_system_ptr_t & atomistic) {
     auto box = atomistic->box();
     auto bc = factory::boundaryCondition(box);
-    auto cutoff = param->get<real_t>("forces.nb.cutoff");
-    pair_list_gen_ptr_t generator = factory::pairListsGenerator(cutoff, bc);
+    pair_list_gen_ptr_t generator = factory::pairListsGenerator(param, bc);
     auto pairLists = generator->generate(atomistic);
     const auto& particlePairs = pairLists.particlePairList();
     std::cout << "Number of pairs: " << particlePairs.size() << std::endl;
@@ -49,14 +47,14 @@ int main() {
     std::ifstream stream;
     util::open_input_file(stream, fileName);
     auto catalog = ParticleSpecCatalog::obtainFrom(stream);
+    stream.close();
+    std::clog << "Particle specs: " << *catalog << std::endl;
 
     auto factory = factory::protonatableParticleSystemFactory(catalog);
     auto param = factory::simulationParameters();
-    param->put<real_t>("forces.nb.cutoff", 2.0);
 
-    auto polarizableWater = factory->polarizableWater(factory::box(7.27));
-    test2(param, polarizableWater);
-    std::cout << "Parameters: " << std::endl << *param << std::endl;
+    //auto polarizableWater = factory->polarizableWater(factory::box(7.27));
+    // test2(param, polarizableWater);
 
     //auto argon = factory->argon(factory::box(3.47786));
     //test3(argon);
@@ -66,6 +64,26 @@ int main() {
     //                                          catalog,
     //                                          false);
     //test3(param, electrolyte);
+
+
+
+    // WARNING: Mesoscale units!
+    auto box = factory::box(10.0, 10., 40.0);
+    auto polymerSolution =
+            factory->polymerSolution(box,
+                                     15,
+                                     "PMU",
+                                     400,
+                                     1.0,
+                                     6000,
+                                     "H2Om",
+                                     2.0,
+                                     true);
+    param->put("simulation.timestep", 0.01);
+    param->put("simulation.mesoscale", true);
+    param->put("simulation.forces.cutoff", 1.0);
+    param->put("simulation.temperature", 2.0);
+    test2(param, polymerSolution);
 
     return (EXIT_SUCCESS);
 }

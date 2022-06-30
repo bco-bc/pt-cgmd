@@ -23,13 +23,18 @@ namespace simploce {
         real_t kappa(const std::vector<p_ptr_t>& particles);
         
         /**
-         * Calculates instantaneous temperature for a collection of particles.
+         * Calculates instantaneous (kinetic) temperature for a collection of particles.
          * @param particles Particles.
          * @param eKin Kinetic energy.
+         * @param isMesoscale Particles represent a isMesoscale system. If true, than an unit system is assumed
+         * identical to that of dissipative particle dynamics, such that kT=n where k is Boltzmann constant and T
+         * is the temperature, and n is an non-negative number.
+         * Otherwise molecular units are assumed.
          * @return Instantaneous temperature.
          */
-        temperature_t temperature(const std::vector<p_ptr_t>& particles,
-                                  const energy_t& eKin);
+        temperature_t kineticTemperature(const std::vector<p_ptr_t>& particles,
+                                         const energy_t& eKin,
+                                         bool isMesoscale = false);
         
         /**
          * Returns pressure. Calculated from Virial Theorem.
@@ -40,7 +45,8 @@ namespace simploce {
          */
         pressure_t pressure(const std::vector<p_ptr_t>& particles,
                             const temperature_t& temperature,
-                            const box_ptr_t& box);
+                            const box_ptr_t& box,
+                            bool isMesoscale = false);
         
         /**
          * Returns dielectric constant according to Fröhlich.

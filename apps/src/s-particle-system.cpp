@@ -7,6 +7,7 @@
  */
 
 #include "simploce/simulation/s-factory.hpp"
+#include "simploce/units/units-mu.hpp"
 #include "simploce/simulation/protonatable-particle-system-factory.hpp"
 #include "simploce/particle/particle-spec-catalog.hpp"
 #include "simploce/particle/particle-system.hpp"
@@ -27,15 +28,19 @@ int main(int argc, char *argv[]) {
         const util::Specification ARGON{"argon"};
         const util::Specification POLARIZABLE_WATER{"polarizable-water"};
         const util::Specification ELECTROLYTE{"electrolyte"};
+        const util::Specification POLYMER_SOLUTION{"polymer-solution"};
         bool addBoundaryParticles{false};
 
+        real_t temperature{units::si<real_t>::ROOM_TEMPERATURE};
+
         std::string fnParticleSpecCatalog{"particle-spec-catalog.dat"};
-        std::string fnParticleModel{"particle.system"};
+        std::string fnParticleSystem{"out.ps"};
         util::Specification specification = DIATOMIC;
         std::string selectFrom = "Particle system selection. Choose one from '" +
                 DIATOMIC.spec() + "' (molecular oxygen, atomistic), '" +
                 ARGON.spec() + "' (atomistic), '" +
                 ELECTROLYTE.spec() + "' (electrolyte), '" +
+                POLYMER_SOLUTION.spec() + "' (polymer solution), '" +
                 POLARIZABLE_WATER.spec() + "' (coarse grained). Default is 'diatomic'.";
 
         po::options_description usage("Usage");
@@ -52,8 +57,11 @@ int main(int argc, char *argv[]) {
                 "Add boundary particles"
         )(
                 "fn-particle-system,o",
-                po::value<std::string>(&fnParticleModel),
-                "Output file name for newly created particle system. Default is 'particle.system'."
+                po::value<std::string>(&fnParticleSystem),
+                "Output file name for newly created particle system. Default is 'out.ps'."
+        )(
+                "temperature,T", po::value<real_t>(&temperature),
+                "Temperature. Default is 298.15 K."
         )(
                 "verbose,v",
                 "Verbose"
@@ -81,7 +89,7 @@ int main(int argc, char *argv[]) {
         auto catalog = factory::particleSpecCatalog(fnParticleSpecCatalog);
         auto factory = factory::protonatableParticleSystemFactory(catalog);
         std::ofstream stream;
-        util::open_output_file(stream, fnParticleModel);
+        util::open_output_file(stream, fnParticleSystem);
         if ( specification == DIATOMIC ) {
             auto diatomic = factory->diatomic(dist_t{0.12}, catalog->O());
             stream << *diatomic << std::endl;
@@ -98,12 +106,25 @@ int main(int argc, char *argv[]) {
                  factory->addParticleBoundary(electrolyte, 0.6, Plane::ZX);
              }
             stream << *electrolyte << std::endl;
+        } else if ( specification == POLYMER_SOLUTION ) {
+            auto box = factory::box(10, 10, 40);
+            auto polymerSolution =
+                    factory->polymerSolution(box,
+                                             15,
+                                             "PMU",
+                                             400,
+                                             1.0,
+                                             6000,
+                                             "H2Om",
+                                             temperature,
+                                             true);
+            stream << *polymerSolution << std::endl;
         } else {
             util::logAndThrow(logger, specification.spec() + ": No such particle model available.");
         }
 
         stream.close();
-        logger.info("Created particle model stored in '" + fnParticleModel + "'");
+        logger.info("Created particle model stored in '" + fnParticleSystem + "'");
     } catch (std::exception& exception) {
         logger.error(exception.what());
     }

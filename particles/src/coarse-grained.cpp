@@ -7,7 +7,7 @@
 
 #include "simploce/particle/coarse-grained.hpp"
 #include "simploce/particle/bead.hpp"
-#include "simploce/particle/p-conf.hpp"
+#include "simploce/conf/p-conf.hpp"
 #include "simploce/particle/particle-group.hpp"
 #include "simploce/particle/p-factory.hpp"
 #include "simploce/particle/bond.hpp"

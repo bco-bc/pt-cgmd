@@ -6,7 +6,6 @@
  */
 
 #include "simploce/util/flat-surface.hpp"
-#include "simploce/conf/s-conf.hpp"
 #include "simploce/util/util.hpp"
 #include <cmath>
 

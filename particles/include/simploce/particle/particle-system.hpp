@@ -205,6 +205,11 @@ namespace simploce {
          * @param stream Input stream.
          */
         void readState(std::istream& stream);
+
+        /**
+         * Express all particle positions relative to the center of mass.
+         */
+        void setOriginToCenterOfMass();
         
     protected:
         

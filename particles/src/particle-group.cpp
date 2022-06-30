@@ -36,7 +36,7 @@ namespace simploce {
             id_{++ID_}, particles_{}, bonds_{}
     {
         for (const auto& p : particles) {
-            particles_.insert(p);
+            particles_.emplace_back(p);
         }
         for (const auto& pair : bonds) {
             auto p1 = this->find_(pair.first);
@@ -63,7 +63,8 @@ namespace simploce {
 
     bool
     ParticleGroup::contains(const p_ptr_t& p) const {
-        return particles_.find(p) != particles_.end();
+        auto result = std::find(particles_.begin(), particles_.end(), p);
+        return result != std::end(particles_);
     }
 
     charge_t
@@ -93,8 +94,7 @@ namespace simploce {
 
     pg_ptr_t
     ParticleGroup::make(const std::vector<p_ptr_t>& particles,
-                        const std::vector<id_pair_t>& bonds)
-    {
+                        const std::vector<id_pair_t>& bonds) {
         return std::make_shared<ParticleGroup>(particles, bonds);
     }
 
@@ -135,24 +135,28 @@ namespace simploce {
 
     void
     ParticleGroup::defineNonBonded_() {
+        static util::Logger logger("simploce::ParticleGroup::defineNonBonded_()");
+        logger.trace("Entering");
         nonBonded_.clear();
-        for (auto pi: particles_) {
-            for (auto pj: particles_ ) {
-                if (pi != pj) {
-                    bool notInvolved{true};
-                    // Check bonds.
-                    for (auto b: bonds_) {
-                        if (b.contains(pi) || b.contains(pj)) {
-                            notInvolved = false;
-                        }
+        for (std::size_t i = 0; i != particles_.size() - 1; ++i) {
+            const auto& pi = particles_[i];
+            for (std::size_t j = i + 1; j != particles_.size(); ++j) {
+                const auto &pj = particles_[j];
+                bool isBond{false};
+                for (const auto &b: bonds_) {
+                    if (b.contains(pi) && b.contains(pj)) {
+                        isBond = true;
                     }
-                    // Check more here...
-                    if ( notInvolved ) {
-                        nonBonded_.emplace_back(std::make_pair(pi, pj));
-                    }
+                }
+                if ( !isBond) {
+                    nonBonded_.emplace_back(std::make_pair(pi, pj));
                 }
             }
         }
+        logger.debug(std::to_string(nonBonded_.size()) +
+                     ": Number of non-bonded pairs in group #" + std::to_string(id_) +
+                     ".");
+        logger.trace("Leaving");
     }
 
     std::size_t
@@ -168,10 +172,15 @@ namespace simploce {
         }
         stream << std::endl;
         stream << group.bonds().size() << std::endl;
+        std::size_t counter = 1;
         for (const auto& bond : group.bonds() ) {
             std::string id1 = util::toString(bond.getParticleOne()->id());
             std::string id2 = util::toString(bond.getParticleTwo()->id());
             stream << std::setw(conf::ID_WIDTH) << id1 << std::setw(conf::ID_WIDTH) << id2;
+            if (counter != group.bonds().size() ) {
+                stream << std::endl;
+            }
+            counter += 1;
         }
 
         return stream;

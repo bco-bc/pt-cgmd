@@ -1,0 +1,663 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AnalysisUIOptions">
+    <option name="SCOPE_TYPE" value="3" />
+  </component>
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="CMakeReloadState">
+    <option name="reloaded" value="true" />
+  </component>
+  <component name="CMakeRunConfigurationManager">
+    <generated>
+      <config projectName="particles" targetName="particle-test" />
+      <config projectName="particles" targetName="total-masses" />
+      <config projectName="particles" targetName="atomic-content-handler-test" />
+      <config projectName="particles" targetName="polymer-solution-test" />
+      <config projectName="particles" targetName="read-cg-test" />
+      <config projectName="particles" targetName="particles" />
+      <config projectName="particles" targetName="boundary-particles-test" />
+      <config projectName="particles" targetName="particle-system-factory-test" />
+      <config projectName="particles" targetName="pdb-reader-test" />
+      <config projectName="particles" targetName="protonatable-bead-test" />
+      <config projectName="particles" targetName="coarse-grained-test" />
+      <config projectName="particles" targetName="particle-spec-catalog-test" />
+      <config projectName="particles" targetName="protonatable-coarse-grained-test" />
+    </generated>
+  </component>
+  <component name="CMakeSettings" AUTO_RELOAD="true">
+    <configurations>
+      <configuration PROFILE_NAME="Debug" ENABLED="true" CONFIG_NAME="Debug" />
+    </configurations>
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="dd141dda-25b4-4481-b9ee-4ed613dd7b51" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/../apps/include/simploce/util/program-options.hpp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../apps/src/program-options.cpp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../apps/src/s-triangulate.cpp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../bem/.idea/.gitignore" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../bem/.idea/bem.iml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../bem/.idea/misc.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../bem/.idea/modules.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../bem/.idea/vcs.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../bem/include/simploce/bem/bem-calculator.hpp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../bem/include/simploce/bem/bem-data.hpp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../bem/include/simploce/bem/flat-triangles-calculator.hpp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../bem/include/simploce/bem/kernels.hpp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../bem/include/simploce/bem/types/bem-types.hpp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../bem/include/simploce/bem/utils.hpp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../bem/src/bem-data.cpp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../bem/src/flat-triangles-calculator.cpp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../bem/src/kernels.cpp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../bem/tests/CMakeLists.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../bem/tests/test-bem-calculator.cpp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../bem/tests/test-kernels.cpp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../bem/tests/test-matrix-vector.cpp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/include/simploce/chem/base-content-handler.hpp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/include/simploce/chem/chem-reader.hpp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/include/simploce/chem/chem-types.hpp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/include/simploce/chem/content-handler.hpp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/include/simploce/chem/input-source.hpp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/include/simploce/chem/pdb-reader.hpp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/include/simploce/particle/atomic-content-handler.hpp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/atomic-content-handler.cpp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/base-content-handler.cpp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/chem-reader.cpp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/content-handler.cpp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/input-source.cpp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/pdb-reader.cpp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/tests/atomic-content-handler-test.cpp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/tests/pdb-reader-test.cpp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/tests/polymer-solution-test.cpp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../simulation/include/simploce/potentials/hp-sr.hpp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../simulation/include/simploce/potentials/soft-repulsion.hpp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../simulation/include/simploce/simulation/s-util.hpp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../simulation/include/simploce/units/units-dpd.hpp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../simulation/resources/interaction-parameters-polymer-solution.dat" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../simulation/resources/simulation-parameters-dpd.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../simulation/src/hp-sr.cpp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../simulation/src/s-util.cpp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../simulation/src/soft-repulsion.cpp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../simulation/tests/dpd-test.cpp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../simulation/tests/hp-sr-test.cpp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../simulation/tests/soft-repulsion-test.cpp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../simulation/tests/units-dpd-test.cpp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../surface/.idea/.gitignore" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../surface/.idea/misc.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../surface/.idea/modules.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../surface/.idea/surface.iml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../surface/.idea/vcs.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../surface/include/simploce/surface/conf/srf-conf.hpp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../surface/include/simploce/surface/dotted-surface-generator.hpp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../surface/include/simploce/surface/edge.hpp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../surface/include/simploce/surface/face.hpp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../surface/include/simploce/surface/nsc-new.hpp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../surface/include/simploce/surface/nsc.hpp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../surface/include/simploce/surface/pentagon.hpp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../surface/include/simploce/surface/polyhedron-generator.hpp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../surface/include/simploce/surface/polyhedron.hpp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../surface/include/simploce/surface/sphere.hpp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../surface/include/simploce/surface/triangle.hpp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../surface/include/simploce/surface/triangulation.hpp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../surface/include/simploce/surface/types/srf-types.hpp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../surface/include/simploce/surface/vertex.hpp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../surface/resources/sphere-1.0nm-240-triangles.dat" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../surface/src/dotted-surface-generator.cpp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../surface/src/edge.cpp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../surface/src/face.cpp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../surface/src/nsc-new.cpp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../surface/src/nsc.cpp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../surface/src/pentagon.cpp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../surface/src/polyhedron-generator.cpp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../surface/src/polyhedron.cpp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../surface/src/sphere.cpp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../surface/src/triangle.cpp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../surface/src/triangulation.cpp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../surface/src/vertex.cpp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../surface/tests/CMakeLists.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../surface/tests/test-edge.cpp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../surface/tests/test-nsc.cpp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../surface/tests/test-triangle.cpp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../surface/tests/test-triangulation.cpp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../util/tests/random-test.cpp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../util/tests/sgn-test.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../apps/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../apps/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../apps/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../apps/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../apps/CMakeLists.txt" beforeDir="false" afterPath="$PROJECT_DIR$/../apps/CMakeLists.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../apps/include/simploce/util/util.hpp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../apps/src/s-add-boundary.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/../apps/src/s-add-boundary.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../apps/src/s-particle-system.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/../apps/src/s-particle-system.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../apps/src/s-pdb.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/../apps/src/s-pdb.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../apps/src/s-simulate.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/../apps/src/s-simulate.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../apps/src/s-validate.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/../apps/src/s-validate.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/CMakeLists.txt" beforeDir="false" afterPath="$PROJECT_DIR$/CMakeLists.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/include/simploce/particle/p-conf.hpp" beforeDir="false" afterPath="$PROJECT_DIR$/include/simploce/conf/p-conf.hpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/include/simploce/particle/p-factory.hpp" beforeDir="false" afterPath="$PROJECT_DIR$/include/simploce/particle/p-factory.hpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/include/simploce/particle/p-types.hpp" beforeDir="false" afterPath="$PROJECT_DIR$/include/simploce/particle/p-types.hpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/include/simploce/particle/p-util.hpp" beforeDir="false" afterPath="$PROJECT_DIR$/include/simploce/particle/p-util.hpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/include/simploce/particle/particle-group.hpp" beforeDir="false" afterPath="$PROJECT_DIR$/include/simploce/particle/particle-group.hpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/include/simploce/particle/particle-spec-catalog.hpp" beforeDir="false" afterPath="$PROJECT_DIR$/include/simploce/particle/particle-spec-catalog.hpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/include/simploce/particle/particle-system-factory.hpp" beforeDir="false" afterPath="$PROJECT_DIR$/include/simploce/particle/particle-system-factory.hpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/include/simploce/particle/particle-system.hpp" beforeDir="false" afterPath="$PROJECT_DIR$/include/simploce/particle/particle-system.hpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/include/simploce/particle/protonatable-bead.hpp" beforeDir="false" afterPath="$PROJECT_DIR$/include/simploce/particle/protonatable-bead.hpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/include/simploce/particle/protonatable-coarse-grained.hpp" beforeDir="false" afterPath="$PROJECT_DIR$/include/simploce/particle/protonatable-coarse-grained.hpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/particles-specs.dat" beforeDir="false" afterPath="$PROJECT_DIR$/resources/particles-specs.dat" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/coarse-grained.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/src/coarse-grained.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/p-factory.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/src/p-factory.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/p-util.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/src/p-util.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/particle-group.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/src/particle-group.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/particle-spec-catalog.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/src/particle-spec-catalog.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/particle-spec.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/src/particle-spec.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/particle-system-factory.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/src/particle-system-factory.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/particle-system.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/src/particle-system.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/particle.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/src/particle.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/protonation-site-catalog.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/src/protonation-site-catalog.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/CMakeLists.txt" beforeDir="false" afterPath="$PROJECT_DIR$/tests/CMakeLists.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../simulation/CMakeLists.txt" beforeDir="false" afterPath="$PROJECT_DIR$/../simulation/CMakeLists.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../simulation/include/simploce/conf/s-conf.hpp" beforeDir="false" afterPath="$PROJECT_DIR$/../simulation/include/simploce/conf/s-conf.hpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../simulation/include/simploce/conf/sp-conf.hpp" beforeDir="false" afterPath="$PROJECT_DIR$/../simulation/include/simploce/conf/sp-conf.hpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../simulation/include/simploce/potentials/force-field.hpp" beforeDir="false" afterPath="$PROJECT_DIR$/../simulation/include/simploce/potentials/force-field.hpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../simulation/include/simploce/potentials/hp.hpp" beforeDir="false" afterPath="$PROJECT_DIR$/../simulation/include/simploce/potentials/hp.hpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../simulation/include/simploce/potentials/hs-sf.hpp" beforeDir="false" afterPath="$PROJECT_DIR$/../simulation/include/simploce/potentials/hs-sf.hpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../simulation/include/simploce/simulation/dpd.hpp" beforeDir="false" afterPath="$PROJECT_DIR$/../simulation/include/simploce/simulation/dpd.hpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../simulation/include/simploce/simulation/s-factory.hpp" beforeDir="false" afterPath="$PROJECT_DIR$/../simulation/include/simploce/simulation/s-factory.hpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../simulation/include/simploce/simulation/s-properties.hpp" beforeDir="false" afterPath="$PROJECT_DIR$/../simulation/include/simploce/simulation/s-properties.hpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../simulation/include/simploce/types/s-types.hpp" beforeDir="false" afterPath="$PROJECT_DIR$/../simulation/include/simploce/types/s-types.hpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../simulation/resources/simulation-parameters.json" beforeDir="false" afterPath="$PROJECT_DIR$/../simulation/resources/simulation-parameters.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../simulation/src/const-surface-charge-density.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/../simulation/src/const-surface-charge-density.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../simulation/src/distance-pair-list-generator.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/../simulation/src/distance-pair-list-generator.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../simulation/src/dpd.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/../simulation/src/dpd.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../simulation/src/force-field.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/../simulation/src/force-field.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../simulation/src/forces.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/../simulation/src/forces.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../simulation/src/hp.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/../simulation/src/hp.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../simulation/src/interactor.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/../simulation/src/interactor.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../simulation/src/langevin-velocity-verlet.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/../simulation/src/langevin-velocity-verlet.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../simulation/src/leap-frog.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/../simulation/src/leap-frog.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../simulation/src/mc.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/../simulation/src/mc.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../simulation/src/pbc.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/../simulation/src/pbc.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../simulation/src/s-factory.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/../simulation/src/s-factory.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../simulation/src/s-properties.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/../simulation/src/s-properties.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../simulation/src/simulation.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/../simulation/src/simulation.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../simulation/src/velocity-verlet.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/../simulation/src/velocity-verlet.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../simulation/tests/CMakeLists.txt" beforeDir="false" afterPath="$PROJECT_DIR$/../simulation/tests/CMakeLists.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../simulation/tests/displacer-test.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/../simulation/tests/displacer-test.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../simulation/tests/pair-potential-test.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/../simulation/tests/pair-potential-test.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../util/include/simploce/conf/u-conf.hpp" beforeDir="false" afterPath="$PROJECT_DIR$/../util/include/simploce/conf/u-conf.hpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../util/include/simploce/types/cvector_t.hpp" beforeDir="false" afterPath="$PROJECT_DIR$/../util/include/simploce/types/cvector_t.hpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../util/include/simploce/types/u-types.hpp" beforeDir="false" afterPath="$PROJECT_DIR$/../util/include/simploce/types/u-types.hpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../util/include/simploce/types/value_t.hpp" beforeDir="false" afterPath="$PROJECT_DIR$/../util/include/simploce/types/value_t.hpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../util/include/simploce/units/units-mu.hpp" beforeDir="false" afterPath="$PROJECT_DIR$/../util/include/simploce/units/units-mu.hpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../util/include/simploce/units/units-si.hpp" beforeDir="false" afterPath="$PROJECT_DIR$/../util/include/simploce/units/units-si.hpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../util/include/simploce/util/param.hpp" beforeDir="false" afterPath="$PROJECT_DIR$/../util/include/simploce/util/param.hpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../util/include/simploce/util/util.hpp" beforeDir="false" afterPath="$PROJECT_DIR$/../util/include/simploce/util/util.hpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../util/src/flat-surface.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/../util/src/flat-surface.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../util/src/util.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/../util/src/util.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../util/tests/CMakeLists.txt" beforeDir="false" afterPath="$PROJECT_DIR$/../util/tests/CMakeLists.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../util/tests/value-type-test.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/../util/tests/value-type-test.cpp" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="ClangdSettings">
+    <option name="formatViaClangd" value="false" />
+  </component>
+  <component name="ExecutionTargetManager" SELECTED_TARGET="CMakeBuildProfile:Debug" />
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="CMakeLists.txt" />
+      </list>
+    </option>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
+  </component>
+  <component name="GitSEFilterConfiguration">
+    <file-type-list>
+      <filtered-out-file-type name="LOCAL_BRANCH" />
+      <filtered-out-file-type name="REMOTE_BRANCH" />
+      <filtered-out-file-type name="TAG" />
+      <filtered-out-file-type name="COMMIT_BY_MESSAGE" />
+    </file-type-list>
+  </component>
+  <component name="MarkdownSettingsMigration">
+    <option name="stateVersion" value="1" />
+  </component>
+  <component name="ProjectId" id="1vGEzHm6PtV8e9RHmWnNxoOHsqV" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true">
+    <ConfirmationsSetting value="2" id="Add" />
+  </component>
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;RunOnceActivity.cidr.known.project.marker&quot;: &quot;true&quot;,
+    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
+    &quot;cf.first.check.clang-format&quot;: &quot;false&quot;,
+    &quot;cidr.known.project.marker&quot;: &quot;true&quot;,
+    &quot;cmake.loaded.for.project&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;
+  }
+}</component>
+  <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/include/simploce/conf" />
+      <recent name="$PROJECT_DIR$/apps" />
+    </key>
+  </component>
+  <component name="RunManager" selected="CMake Application.polymer-solution-test">
+    <configuration default="true" type="GradleAppRunConfiguration" factoryName="Application" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" PASS_PARENT_ENVS_2="true">
+      <method v="2">
+        <option name="com.jetbrains.cidr.cpp.gradle.execution.GradleNativeBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
+      </method>
+    </configuration>
+    <configuration default="true" type="CLionExternalRunConfiguration" factoryName="Application" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" PASS_PARENT_ENVS_2="true">
+      <method v="2">
+        <option name="CLION.EXTERNAL.BUILD" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="atomic-content-handler-test" type="CMakeRunConfiguration" factoryName="Application" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" PASS_PARENT_ENVS_2="true" PROJECT_NAME="particles" TARGET_NAME="atomic-content-handler-test" CONFIG_NAME="Debug" RUN_TARGET_PROJECT_NAME="particles" RUN_TARGET_NAME="atomic-content-handler-test">
+      <method v="2">
+        <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="boundary-particles-test" type="CMakeRunConfiguration" factoryName="Application" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" PASS_PARENT_ENVS_2="true" PROJECT_NAME="particles" TARGET_NAME="boundary-particles-test" CONFIG_NAME="Debug" RUN_TARGET_PROJECT_NAME="particles" RUN_TARGET_NAME="boundary-particles-test">
+      <method v="2">
+        <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="coarse-grained-test" type="CMakeRunConfiguration" factoryName="Application" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" WORKING_DIR="file://$USER_HOME$" PASS_PARENT_ENVS_2="true" PROJECT_NAME="particles" TARGET_NAME="coarse-grained-test" CONFIG_NAME="Debug" RUN_TARGET_PROJECT_NAME="particles" RUN_TARGET_NAME="coarse-grained-test">
+      <method v="2">
+        <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="particle-model-factory-test" type="CMakeRunConfiguration" factoryName="Application" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" WORKING_DIR="file://$USER_HOME$" PASS_PARENT_ENVS_2="true" PROJECT_NAME="particles" TARGET_NAME="particle-model-factory-test" CONFIG_NAME="Debug" RUN_TARGET_PROJECT_NAME="particles" RUN_TARGET_NAME="particle-model-factory-test">
+      <method v="2">
+        <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="particle-spec-catalog-test" type="CMakeRunConfiguration" factoryName="Application" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" WORKING_DIR="file://$USER_HOME$" PASS_PARENT_ENVS_2="true" PROJECT_NAME="particles" TARGET_NAME="particle-spec-catalog-test" CONFIG_NAME="Debug" RUN_TARGET_PROJECT_NAME="particles" RUN_TARGET_NAME="particle-spec-catalog-test">
+      <method v="2">
+        <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="particle-system-factory-test" type="CMakeRunConfiguration" factoryName="Application" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" PASS_PARENT_ENVS_2="true" PROJECT_NAME="particles" TARGET_NAME="particle-system-factory-test" CONFIG_NAME="Debug" RUN_TARGET_PROJECT_NAME="particles" RUN_TARGET_NAME="particle-system-factory-test">
+      <method v="2">
+        <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="particle-test" type="CMakeRunConfiguration" factoryName="Application" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" WORKING_DIR="file://$USER_HOME$" PASS_PARENT_ENVS_2="true" PROJECT_NAME="particles" TARGET_NAME="particle-test" CONFIG_NAME="Debug" RUN_TARGET_PROJECT_NAME="particles" RUN_TARGET_NAME="particle-test">
+      <method v="2">
+        <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="particles" type="CMakeRunConfiguration" factoryName="Application" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" PASS_PARENT_ENVS_2="true" PROJECT_NAME="particles" TARGET_NAME="particles" CONFIG_NAME="Debug">
+      <method v="2">
+        <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="pdb-reader-test" type="CMakeRunConfiguration" factoryName="Application" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" PASS_PARENT_ENVS_2="true" PROJECT_NAME="particles" TARGET_NAME="pdb-reader-test" CONFIG_NAME="Debug" RUN_TARGET_PROJECT_NAME="particles" RUN_TARGET_NAME="pdb-reader-test">
+      <method v="2">
+        <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="polymer-solution-test" type="CMakeRunConfiguration" factoryName="Application" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" PASS_PARENT_ENVS_2="true" PROJECT_NAME="particles" TARGET_NAME="polymer-solution-test" CONFIG_NAME="Debug" RUN_TARGET_PROJECT_NAME="particles" RUN_TARGET_NAME="polymer-solution-test">
+      <method v="2">
+        <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="prot-site-catalog-test" type="CMakeRunConfiguration" factoryName="Application" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" WORKING_DIR="file://$USER_HOME$" PASS_PARENT_ENVS_2="true" PROJECT_NAME="particles" TARGET_NAME="prot-site-catalog-test" CONFIG_NAME="Debug" RUN_TARGET_PROJECT_NAME="particles" RUN_TARGET_NAME="prot-site-catalog-test">
+      <method v="2">
+        <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="protonatable-bead-test" type="CMakeRunConfiguration" factoryName="Application" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" PASS_PARENT_ENVS_2="true" PROJECT_NAME="particles" TARGET_NAME="protonatable-bead-test" CONFIG_NAME="Debug" RUN_TARGET_PROJECT_NAME="particles" RUN_TARGET_NAME="protonatable-bead-test">
+      <method v="2">
+        <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="protonatable-coarse-grained-test" type="CMakeRunConfiguration" factoryName="Application" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" PASS_PARENT_ENVS_2="true" PROJECT_NAME="particles" TARGET_NAME="protonatable-coarse-grained-test" CONFIG_NAME="Debug" RUN_TARGET_PROJECT_NAME="particles" RUN_TARGET_NAME="protonatable-coarse-grained-test">
+      <method v="2">
+        <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="protonation-site-test" type="CMakeRunConfiguration" factoryName="Application" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" WORKING_DIR="file://$USER_HOME$" PASS_PARENT_ENVS_2="true" PROJECT_NAME="particles" TARGET_NAME="protonation-site-test" CONFIG_NAME="Debug" RUN_TARGET_PROJECT_NAME="particles" RUN_TARGET_NAME="protonation-site-test">
+      <method v="2">
+        <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="read-cg-test" type="CMakeRunConfiguration" factoryName="Application" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" WORKING_DIR="file://$USER_HOME$" PASS_PARENT_ENVS_2="true" PROJECT_NAME="particles" TARGET_NAME="read-cg-test" CONFIG_NAME="Debug" RUN_TARGET_PROJECT_NAME="particles" RUN_TARGET_NAME="read-cg-test">
+      <method v="2">
+        <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="total-masses" type="CMakeRunConfiguration" factoryName="Application" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" PASS_PARENT_ENVS_2="true" PROJECT_NAME="particles" TARGET_NAME="total-masses" CONFIG_NAME="Debug" RUN_TARGET_PROJECT_NAME="particles" RUN_TARGET_NAME="total-masses">
+      <method v="2">
+        <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
+      </method>
+    </configuration>
+    <list>
+      <item itemvalue="CMake Application.coarse-grained-test" />
+      <item itemvalue="CMake Application.particle-model-factory-test" />
+      <item itemvalue="CMake Application.particle-spec-catalog-test" />
+      <item itemvalue="CMake Application.particle-system-factory-test" />
+      <item itemvalue="CMake Application.particle-test" />
+      <item itemvalue="CMake Application.pdb-reader-test" />
+      <item itemvalue="CMake Application.polymer-solution-test" />
+      <item itemvalue="CMake Application.prot-site-catalog-test" />
+      <item itemvalue="CMake Application.protonatable-bead-test" />
+      <item itemvalue="CMake Application.protonatable-coarse-grained-test" />
+      <item itemvalue="CMake Application.protonation-site-test" />
+      <item itemvalue="CMake Application.read-cg-test" />
+      <item itemvalue="CMake Application.particles" />
+      <item itemvalue="CMake Application.total-masses" />
+      <item itemvalue="CMake Application.atomic-content-handler-test" />
+      <item itemvalue="CMake Application.boundary-particles-test" />
+    </list>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="dd141dda-25b4-4481-b9ee-4ed613dd7b51" name="Default Changelist" comment="" />
+      <created>1626180285446</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1626180285446</updated>
+      <workItem from="1626180286437" duration="4146000" />
+      <workItem from="1626186247024" duration="1048000" />
+      <workItem from="1626187662254" duration="710000" />
+      <workItem from="1626256024439" duration="10000" />
+      <workItem from="1627401839955" duration="132000" />
+      <workItem from="1628844456046" duration="32000" />
+      <workItem from="1634300287162" duration="330000" />
+      <workItem from="1634379194984" duration="1821000" />
+      <workItem from="1634389356524" duration="2098000" />
+      <workItem from="1634553925315" duration="1629000" />
+      <workItem from="1634556051485" duration="332000" />
+      <workItem from="1634566529133" duration="1648000" />
+      <workItem from="1634632017145" duration="14867000" />
+      <workItem from="1634713055671" duration="512000" />
+      <workItem from="1634713605252" duration="237000" />
+      <workItem from="1634713927656" duration="8061000" />
+      <workItem from="1634730680174" duration="5566000" />
+      <workItem from="1634742610074" duration="3009000" />
+      <workItem from="1634808349689" duration="90000" />
+      <workItem from="1634808490491" duration="15631000" />
+      <workItem from="1634838520883" duration="9782000" />
+      <workItem from="1634887395012" duration="14159000" />
+      <workItem from="1634909235901" duration="29000" />
+      <workItem from="1634984353333" duration="22000" />
+      <workItem from="1634984393205" duration="5802000" />
+      <workItem from="1635146530654" duration="5153000" />
+      <workItem from="1635158774110" duration="23000" />
+      <workItem from="1635158913338" duration="219000" />
+      <workItem from="1635159136999" duration="5361000" />
+      <workItem from="1635167721360" duration="2518000" />
+      <workItem from="1635171032199" duration="2038000" />
+      <workItem from="1635184388086" duration="6000" />
+      <workItem from="1635185718797" duration="208000" />
+      <workItem from="1635186617532" duration="1726000" />
+      <workItem from="1635234325075" duration="423000" />
+      <workItem from="1635234765702" duration="42000" />
+      <workItem from="1635234814194" duration="115000" />
+      <workItem from="1635255556408" duration="54000" />
+      <workItem from="1635255681907" duration="22000" />
+      <workItem from="1635334974228" duration="647000" />
+      <workItem from="1635340243543" duration="634000" />
+      <workItem from="1635343262924" duration="9346000" />
+      <workItem from="1635412383568" duration="16915000" />
+      <workItem from="1635430747185" duration="33000" />
+      <workItem from="1635441372970" duration="103000" />
+      <workItem from="1635442445051" duration="67000" />
+      <workItem from="1635442651370" duration="395000" />
+      <workItem from="1635443168435" duration="3770000" />
+      <workItem from="1635497843020" duration="12000" />
+      <workItem from="1635497863858" duration="347000" />
+      <workItem from="1635507573314" duration="1454000" />
+      <workItem from="1635510700994" duration="4640000" />
+      <workItem from="1635597917329" duration="3171000" />
+      <workItem from="1635602055240" duration="783000" />
+      <workItem from="1635604063567" duration="232000" />
+      <workItem from="1635604494789" duration="2544000" />
+      <workItem from="1635675432949" duration="22000" />
+      <workItem from="1635762894832" duration="2120000" />
+      <workItem from="1635767593871" duration="83000" />
+      <workItem from="1635767978572" duration="293000" />
+      <workItem from="1635768613496" duration="137000" />
+      <workItem from="1635768756085" duration="1376000" />
+      <workItem from="1635770683110" duration="3062000" />
+      <workItem from="1635774524624" duration="7993000" />
+      <workItem from="1635842046789" duration="226000" />
+      <workItem from="1635847398807" duration="59000" />
+      <workItem from="1635847494703" duration="644000" />
+      <workItem from="1635851267449" duration="915000" />
+      <workItem from="1635852379045" duration="1065000" />
+      <workItem from="1635853685273" duration="3380000" />
+      <workItem from="1635857308101" duration="891000" />
+      <workItem from="1635860901777" duration="169000" />
+      <workItem from="1635861771066" duration="811000" />
+      <workItem from="1635867645104" duration="33000" />
+      <workItem from="1635869358940" duration="1694000" />
+      <workItem from="1635871200913" duration="2269000" />
+      <workItem from="1635873601199" duration="173000" />
+      <workItem from="1635937504458" duration="1534000" />
+      <workItem from="1635939366367" duration="374000" />
+      <workItem from="1635945707038" duration="1649000" />
+      <workItem from="1635948188095" duration="7872000" />
+      <workItem from="1635956386228" duration="575000" />
+      <workItem from="1635957281337" duration="888000" />
+      <workItem from="1635969308612" duration="364000" />
+      <workItem from="1636023326721" duration="7000" />
+      <workItem from="1636023439370" duration="55000" />
+      <workItem from="1636023745019" duration="8349000" />
+      <workItem from="1636054555843" duration="4224000" />
+      <workItem from="1636059089108" duration="851000" />
+      <workItem from="1636100365278" duration="17330000" />
+      <workItem from="1636122755339" duration="85000" />
+      <workItem from="1636123102199" duration="408000" />
+      <workItem from="1636123536049" duration="1561000" />
+      <workItem from="1636368862842" duration="30000" />
+      <workItem from="1636368973413" duration="43000" />
+      <workItem from="1636369532676" duration="100000" />
+      <workItem from="1636379683751" duration="31000" />
+      <workItem from="1636462813208" duration="54000" />
+      <workItem from="1636477505541" duration="136000" />
+      <workItem from="1636545281912" duration="1251000" />
+      <workItem from="1636550127599" duration="1218000" />
+      <workItem from="1636551579833" duration="32000" />
+      <workItem from="1636552676782" duration="3432000" />
+      <workItem from="1636626445605" duration="37000" />
+      <workItem from="1636627952886" duration="614000" />
+      <workItem from="1636654580135" duration="31000" />
+      <workItem from="1636656584216" duration="50000" />
+      <workItem from="1636660616786" duration="397000" />
+      <workItem from="1636704574679" duration="557000" />
+      <workItem from="1636714341054" duration="636000" />
+      <workItem from="1636799585964" duration="30000" />
+      <workItem from="1636977622363" duration="320000" />
+      <workItem from="1636991820069" duration="107000" />
+      <workItem from="1636991996052" duration="451000" />
+      <workItem from="1636995008527" duration="28000" />
+      <workItem from="1637004178544" duration="720000" />
+      <workItem from="1637005030898" duration="458000" />
+      <workItem from="1637048519431" duration="217000" />
+      <workItem from="1637048861586" duration="2288000" />
+      <workItem from="1637055005076" duration="7614000" />
+      <workItem from="1637067777890" duration="53000" />
+      <workItem from="1637067901056" duration="138000" />
+      <workItem from="1637081257928" duration="34000" />
+      <workItem from="1637146082371" duration="2010000" />
+      <workItem from="1637148147773" duration="1854000" />
+      <workItem from="1637157871061" duration="263000" />
+      <workItem from="1637175119126" duration="617000" />
+      <workItem from="1637178420306" duration="100000" />
+      <workItem from="1637230825968" duration="632000" />
+      <workItem from="1637254080802" duration="35000" />
+      <workItem from="1637258778987" duration="78000" />
+      <workItem from="1637258927170" duration="147000" />
+      <workItem from="1637327827329" duration="32000" />
+      <workItem from="1637400949409" duration="2033000" />
+      <workItem from="1637403067478" duration="861000" />
+      <workItem from="1637403996213" duration="1364000" />
+      <workItem from="1637418735017" duration="45000" />
+      <workItem from="1637494082613" duration="96000" />
+      <workItem from="1637576620836" duration="70000" />
+      <workItem from="1637583078520" duration="126000" />
+      <workItem from="1637607103855" duration="43000" />
+      <workItem from="1637607583369" duration="161000" />
+      <workItem from="1637661120351" duration="322000" />
+      <workItem from="1637747350064" duration="44000" />
+      <workItem from="1637754224655" duration="1417000" />
+      <workItem from="1637756406414" duration="81000" />
+      <workItem from="1637849481748" duration="109000" />
+      <workItem from="1637921865072" duration="26000" />
+      <workItem from="1637922931429" duration="16000" />
+      <workItem from="1637933325813" duration="80000" />
+      <workItem from="1637934609075" duration="23000" />
+      <workItem from="1637938241627" duration="142000" />
+      <workItem from="1637959472899" duration="11000" />
+      <workItem from="1638006959570" duration="264000" />
+      <workItem from="1638007886139" duration="229000" />
+      <workItem from="1638008131705" duration="4723000" />
+      <workItem from="1638175794824" duration="73000" />
+      <workItem from="1638175928738" duration="599000" />
+      <workItem from="1638267012888" duration="110000" />
+      <workItem from="1638267392363" duration="46000" />
+      <workItem from="1638347686047" duration="392000" />
+      <workItem from="1638359216413" duration="16000" />
+      <workItem from="1638457721351" duration="105000" />
+      <workItem from="1638457940914" duration="142000" />
+      <workItem from="1638472788825" duration="42000" />
+      <workItem from="1638872566529" duration="50000" />
+      <workItem from="1638964714982" duration="167000" />
+      <workItem from="1639045938888" duration="28000" />
+      <workItem from="1639050249926" duration="42000" />
+      <workItem from="1639081462236" duration="60000" />
+      <workItem from="1639390647461" duration="41000" />
+      <workItem from="1639392388008" duration="249000" />
+      <workItem from="1639429743498" duration="25000" />
+      <workItem from="1640257012310" duration="39000" />
+      <workItem from="1640257283871" duration="13000" />
+      <workItem from="1640340247288" duration="35000" />
+      <workItem from="1650375138871" duration="158000" />
+      <workItem from="1650446950123" duration="2750000" />
+      <workItem from="1650449740150" duration="1643000" />
+      <workItem from="1650451580997" duration="2497000" />
+      <workItem from="1650457380916" duration="16000" />
+      <workItem from="1650460412616" duration="1363000" />
+      <workItem from="1650461949537" duration="407000" />
+      <workItem from="1650462593487" duration="250000" />
+      <workItem from="1650867513480" duration="851000" />
+      <workItem from="1650868885526" duration="53000" />
+      <workItem from="1650869199875" duration="531000" />
+      <workItem from="1650871365508" duration="2441000" />
+      <workItem from="1650873902208" duration="212000" />
+      <workItem from="1650874340056" duration="110000" />
+      <workItem from="1650874656449" duration="277000" />
+      <workItem from="1650875426916" duration="2216000" />
+      <workItem from="1651139511871" duration="4139000" />
+      <workItem from="1651485037256" duration="45000" />
+      <workItem from="1651485637125" duration="39000" />
+      <workItem from="1652363689722" duration="42000" />
+      <workItem from="1652961971210" duration="45000" />
+      <workItem from="1652967655056" duration="39000" />
+      <workItem from="1652969045713" duration="3710000" />
+      <workItem from="1653039499212" duration="14148000" />
+      <workItem from="1653302300307" duration="7560000" />
+      <workItem from="1653566513067" duration="1158000" />
+      <workItem from="1653567785481" duration="25000" />
+      <workItem from="1653674396727" duration="3843000" />
+      <workItem from="1653903019179" duration="1214000" />
+      <workItem from="1653992678144" duration="634000" />
+      <workItem from="1653995313087" duration="28000" />
+      <workItem from="1653996189787" duration="8672000" />
+      <workItem from="1654089062125" duration="5069000" />
+      <workItem from="1654097931314" duration="12183000" />
+      <workItem from="1654153793736" duration="924000" />
+      <workItem from="1654167365895" duration="13854000" />
+      <workItem from="1654190797745" duration="6941000" />
+      <workItem from="1654247224560" duration="177000" />
+      <workItem from="1654249368469" duration="2808000" />
+      <workItem from="1654514255023" duration="99000" />
+      <workItem from="1654516286978" duration="36000" />
+      <workItem from="1654516450499" duration="457000" />
+      <workItem from="1654520211896" duration="132000" />
+      <workItem from="1654520424765" duration="510000" />
+      <workItem from="1654539914704" duration="38000" />
+      <workItem from="1654606738255" duration="469000" />
+      <workItem from="1654633744991" duration="40000" />
+      <workItem from="1654686120850" duration="157000" />
+      <workItem from="1654770300299" duration="1496000" />
+      <workItem from="1654774948725" duration="1442000" />
+      <workItem from="1654777042969" duration="1007000" />
+      <workItem from="1654785373577" duration="42000" />
+      <workItem from="1654804526207" duration="1232000" />
+      <workItem from="1654852192531" duration="25000" />
+      <workItem from="1654852355034" duration="1501000" />
+      <workItem from="1655151815801" duration="677000" />
+      <workItem from="1655202380888" duration="2669000" />
+      <workItem from="1655205539226" duration="1983000" />
+      <workItem from="1655278628851" duration="34000" />
+      <workItem from="1655296452812" duration="1094000" />
+      <workItem from="1655631782747" duration="2746000" />
+      <workItem from="1655647134781" duration="562000" />
+      <workItem from="1655651638863" duration="696000" />
+      <workItem from="1655653283622" duration="3037000" />
+      <workItem from="1655712203130" duration="3021000" />
+      <workItem from="1655725953655" duration="7447000" />
+      <workItem from="1655733737643" duration="663000" />
+      <workItem from="1655751798388" duration="1275000" />
+      <workItem from="1655800742349" duration="606000" />
+      <workItem from="1655803135708" duration="8002000" />
+      <workItem from="1655902037421" duration="7210000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+  <component name="VcsManagerConfiguration">
+    <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="com.jetbrains.cidr.execution.debugger.OCBreakpointType">
+          <url>file://$PROJECT_DIR$/tests/protonatable-coarse-grained-test.cpp</url>
+          <line>92</line>
+          <option name="timeStamp" value="11" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="com.jetbrains.cidr.execution.debugger.OCBreakpointType">
+          <url>file://$PROJECT_DIR$/tests/protonatable-bead-test.cpp</url>
+          <line>118</line>
+          <option name="timeStamp" value="12" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="com.jetbrains.cidr.execution.debugger.OCBreakpointType">
+          <url>file://$PROJECT_DIR$/src/pdb-reader.cpp</url>
+          <line>258</line>
+          <option name="timeStamp" value="19" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
+  </component>
+</project>

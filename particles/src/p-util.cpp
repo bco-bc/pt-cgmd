@@ -18,15 +18,10 @@ namespace simploce {
 
         // From Maxwell velocity distribution.
         // https://en.wikipedia.org/wiki/Maxwell%E2%80%93Boltzmann_distribution
-        void assignVelocity(p_ptr_t &particle, const temperature_t& temperature) {
-            static real_t KB = units::mu<real_t>::KB;
-            static std::random_device rd{};
-            static std::mt19937 gen{rd()};
-            static bool init = false;
-            if ( !init ) {
-                gen.seed(util::seedValue<std::size_t>());  // seed() From util.hpp
-                init = true;
-            }
+        void assignVelocity(p_ptr_t &particle, const temperature_t& temperature, bool isMesoscale) {
+            real_t KB = isMesoscale ? 1 : units::mu<real_t>::KB;
+            std::random_device rd{};
+            std::mt19937 gen{rd()};
 
             // For each velocity component, take its value from a Gaussian density for
             // velocity with standard deviation 'sigma' and zero average.
@@ -40,13 +35,14 @@ namespace simploce {
         }
 
         void removeOverallLinearMomentum(const p_system_ptr_t& particleSystem) {
+            static util::Logger logger("simploce::util::removeOverallLinearMomentum");
+            logger.trace("Entering.");
+
             particleSystem->doWithAll<void>([] (const std::vector<p_ptr_t>& all) {
-                util::Logger logger("simploce::removeOverallLinearMomentum");
                 auto P = properties::linearMomentum(all);
-                logger.debug("TOTAL linear momentum before:");
-                util::log(logger, P, util::Logger::LOGDEBUG);
+                logger.debug(util::toString(P) + ": TOTAL linear momentum before:");
                 P /= all.size();
-                for (auto p : all) {
+                for (auto& p : all) {
                     auto mass = p->mass();
                     velocity_t v = p->velocity();
                     for (int k = 0; k !=3; ++k) {
@@ -55,9 +51,10 @@ namespace simploce {
                     p->velocity(v);
                 }
                 P = properties::linearMomentum(all);
-                logger.debug("TOTAL linear momentum afterwards:");
-                util::log(logger, P, util::Logger::LOGDEBUG);
+                logger.debug(util::toString(P) + ": TOTAL linear momentum afterwards:");
             });
+
+            logger.trace("Leaving.");
         }
     }
 }

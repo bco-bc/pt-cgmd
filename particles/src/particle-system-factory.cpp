@@ -13,16 +13,20 @@
 #include "simploce/particle/bead.hpp"
 #include "simploce/particle/p-factory.hpp"
 #include "simploce/particle/p-util.hpp"
+#include "simploce/particle/atomic-content-handler.hpp"
+#include "simploce/chem/input-source.hpp"
+#include "simploce/chem/pdb-reader.hpp"
 #include "simploce/util/util.hpp"
 #include "simploce/units/units-mu.hpp"
 #include "simploce/util/logger.hpp"
 #include <stdexcept>
 #include <cmath>
 #include <utility>
+#include <random>
 
 namespace simploce {
 
-    ParticleSystemFactory::ParticleSystemFactory(spec_catalog_ptr_t  catalog) :
+    ParticleSystemFactory::ParticleSystemFactory(spec_catalog_ptr_t catalog) :
         catalog_{std::move(catalog)}
     {
         if ( !catalog_ ) {
@@ -124,8 +128,8 @@ namespace simploce {
         number_density_t atNumberDensity = density / h2oSpec->mass();
         int natWaters = int(atNumberDensity * volume);
         int ncgWaters = int(real_t(natWaters) / 5.0);
-        if ( ncgWaters > nLimit ) {
-            ncgWaters = nLimit;
+        if ( ncgWaters > int(nLimit) ) {
+            ncgWaters = int(nLimit);
             logger.warn("Number of requested CG waters is higher than the maximum number of CG water allowed.");
         }
         logger.info("Generating " + util::toString(ncgWaters) + " CG water.");
@@ -188,7 +192,7 @@ namespace simploce {
 
                     // Place the DP parallel to one of the 3 coordinate axes.
                     position_t r2{};
-                    int l = int(util::random<real_t>() * 3.0);
+                    int l = int(util::random() * 3.0);
                     switch (l) {
                         case 0: {
                             real_t coord = x + DISTANCE_CW_DP();
@@ -291,9 +295,9 @@ namespace simploce {
                 while ( k < nz && counter < nIons ) {
 
                     // Position.
-                    real_t x = (i + 0.5) * spacing() + util::random<real_t>() * 0.1;
-                    real_t y = (j + 0.5) * spacing() - util::random<real_t>() * 0.1;
-                    real_t z = (k + 0.5) * spacing() + util::random<real_t>() * 0.1;
+                    real_t x = (i + 0.5) * spacing() + util::random() * 0.1;
+                    real_t y = (j + 0.5) * spacing() - util::random() * 0.1;
+                    real_t z = (k + 0.5) * spacing() + util::random() * 0.1;
                     position_t r{x,y,z};
                     if ( counter % 2 == 0 ) {
                         // Na+
@@ -369,9 +373,9 @@ namespace simploce {
 
         int nAtoms = int(numberDensity() * volume());
         logger.info("Requested number of argon atoms: " + util::toString(nAtoms));
-        if (nAtoms > nLimit) {
+        if (nAtoms > int(nLimit)) {
             logger.warn("Number of requested atoms is higher that maximum number of atoms allowed.");
-            nAtoms = nLimit;
+            nAtoms = int(nLimit);
         }
         logger.info("Generating " + util::toString(nAtoms) + " argon atoms.");
 
@@ -425,6 +429,207 @@ namespace simploce {
         return std::move(atomistic);
     }
 
+    p_system_ptr_t
+    ParticleSystemFactory::polymerSolution(const box_ptr_t& box,
+                                           int chainLength,
+                                           const std::string& monomericUnitBeadSpecName,
+                                           int numberOfPolymers,
+                                           const length_t& spacing,
+                                           int numberOfWaters,
+                                           const std::string& waterBeadSpecName,
+                                           const temperature_t& temperature,
+                                           bool placeRandom) {
+        util::Logger logger("simploce::ParticleSystemFactory::polymerSolution");
+        logger.trace("Entering.");
+
+        logger.info("Creating coarse-grained particle system of a polymer solution.");
+        logger.info(util::toString(*box) + ": Requested box dimensions.");
+        logger.info(std::to_string(chainLength) + ": Requested polymer chain length (number of monomeric units).");
+        logger.info(monomericUnitBeadSpecName + ": Monomeric unit particle specification name.");
+        logger.info(std::to_string(numberOfPolymers) + ": Requested number of polymers.");
+        logger.info(std::to_string(spacing()) + ": Requested spacing between monomeric units.");
+        logger.info(std::to_string(numberOfWaters) + ": Requested number of water beads.");
+        logger.info(waterBeadSpecName + ": Water specification name.");
+        logger.info(std::to_string(temperature()) + ": Requested temperature.");
+        auto numberOfBeads = numberOfWaters + numberOfPolymers * chainLength;
+        logger.info(std::to_string(numberOfPolymers * chainLength) + ": Number of polymer beads required.");
+        logger.info(std::to_string(numberOfWaters) + ": Number of water beads required.");
+        logger.info(std::to_string(numberOfBeads) + ": Total number of beads required.");
+        logger.info(std::to_string(placeRandom) + ": Place beads randomly in box.");
+
+        auto spec = catalog_->lookup(monomericUnitBeadSpecName);
+        auto waterSpec = catalog_->lookup(waterBeadSpecName);
+        if (box->size() < (chainLength - 1) * spacing() + 2.0 * spec->radius()() && numberOfPolymers > 0) {
+            util::logAndThrow(logger, "Box size is too small for required polymer chain length.");
+        }
+        length_t longestSide{box->lengthX()};
+        std::size_t longestSideIndex = 0;
+        for (std::size_t k = 1; k != 3; ++k) {
+            auto length = box->operator[](k);
+            if ( box->operator[](k) > longestSide() ) {
+                longestSideIndex = k;
+                longestSide = length;
+            }
+        }
+        logger.debug(std::to_string(longestSide()) + ": Longest box side.");
+        logger.debug(std::to_string(longestSideIndex) + ": Longest box side index.");
+        if (longestSideIndex != 2 && numberOfPolymers > 0) {
+            util::logAndThrow(logger, "Longest box side should be in the z-direction.");
+        }
+
+        auto polymerSystem = factory::coarseGrained();
+        auto boxX = box->lengthX();
+        auto boxY = box->lengthY();
+        auto boxZ = box->lengthZ();
+
+        if (placeRandom) {
+            int counter{0};
+
+            std::random_device rd;
+            std::mt19937 gen(rd());
+            std::uniform_real_distribution<real_t> dis(0.0, 1.0);
+
+            // Polymers. Placed randomly in the box.
+            for (auto i = 0; i != numberOfPolymers; ++i) {
+                std::vector<p_ptr_t> particles;
+                auto x = dis(gen) * boxX;
+                auto y = dis(gen) * boxY;
+                auto z = dis(gen) * boxZ;
+                position_t r{x, y, z};
+                for (auto j = 0; j != chainLength; ++j) {
+                    r[2] = z + real_t(j) * spacing();
+                    auto name = spec->name() + util::toString(counter);
+                    auto particle = polymerSystem->addBead(name, spec);
+                    particle->position(r);
+                    util::assignVelocity(particle, temperature, true);
+                    particles.emplace_back(particle);
+                    counter += 1;
+                }
+                std::vector<id_pair_t> bonds;
+                for (std::size_t j = 0; j != (chainLength - 1); ++j) {
+                    auto id1 = particles[j]->id();
+                    auto id2 = particles[j + 1]->id();
+                    bonds.emplace_back(id_pair_t{id1, id2});
+                }
+                polymerSystem->addParticleGroup(particles, bonds);
+            }
+
+            // Add water beads, placed randomly in the box.
+            for (auto i = 0; i != numberOfWaters; ++i) {
+                auto x = dis(gen) * boxX;
+                auto y = dis(gen) * boxY;
+                auto z = dis(gen) * boxZ;
+                position_t r{x, y, z};
+                auto name = waterBeadSpecName + util::toString(counter);
+                auto particle = polymerSystem->addBead(name, waterSpec);
+                particle->position(r);
+                util::assignVelocity(particle, temperature, true);
+                counter += 1;
+            }
+            logger.info(std::to_string(counter) + ": Number of beads placed randomly in box.");
+        } else {
+            // Initialize counters.
+            int counter{0};
+            int maxCounterX = int(box->lengthX() / spacing());
+            int maxCounterY = int(box->lengthY() / spacing());
+            int maxCounterZ = int(box->lengthZ() / spacing());
+            logger.debug(std::to_string(maxCounterX) + ": Maximum value counterX.");
+            logger.debug(std::to_string(maxCounterY) + ": Maximum value counterY.");
+            logger.debug(std::to_string(maxCounterZ) + ": Maximum value counterZ.");
+            auto numberOfGridPositions = maxCounterX * maxCounterY * maxCounterZ;
+            logger.debug(std::to_string(numberOfGridPositions) + ": Number of available grid positions.");
+            int counterX = 0;
+            int counterY = 0;
+            int counterZ = 0;
+
+            for (std::size_t i = 0; i != numberOfPolymers; ++i) {
+                // Create a polymer.
+                std::vector<p_ptr_t> particles;
+                for (std::size_t j = 0; j != chainLength; ++j) {
+                    //std::clog << "Polymer: " << counter << " " << counterX << " " << counterY << " " << counterZ << std::endl;
+                    auto x = counterX * spacing();
+                    auto y = counterY * spacing();
+                    auto z = counterZ * spacing();
+                    position_t r{x, y, z};
+                    auto name = spec->name() + util::toString(counter);
+                    auto particle = polymerSystem->addBead(name, spec);
+                    counter += 1;
+                    particle->position(r);
+                    util::assignVelocity(particle, temperature, true);
+                    particles.emplace_back(particle);
+                    counterZ += 1;
+                    if (counterZ == maxCounterZ) {
+                        logger.debug(std::to_string(i) + ": Number of polymers added.");
+                        util::logAndThrow(logger,
+                                          "Box length in z-direction is too short to accommodate "
+                                          "more polymer chains. Try again with reduced spacing.");
+                    }
+                }
+                std::vector<id_pair_t> bonds;
+                for (std::size_t j = 0; j != (chainLength - 1); ++j) {
+                    auto id1 = particles[j]->id();
+                    auto id2 = particles[j + 1]->id();
+                    bonds.emplace_back(id_pair_t{id1, id2});
+                }
+                polymerSystem->addParticleGroup(particles, bonds);
+
+                if (counter != numberOfPolymers * chainLength) {
+                    counterZ -= chainLength;
+                    counterX += 1;
+                    if (counterX == maxCounterX) {
+                        counterX = 0;
+                        counterY += 1;
+                        if (counterY == maxCounterY) {
+                            counterZ += chainLength;
+                            counterY = 0;
+                        }
+                    }
+                }
+            }
+            counterX = 0;
+            counterY = 0;
+            for (auto i = 0; i != numberOfWaters; ++i) {
+                //std::clog << "Water: " << counter << " " << counterX << " " << counterY << " " << counterZ << std::endl;
+                auto x = counterX * spacing();
+                auto y = counterY * spacing();
+                auto z = counterZ * spacing();
+                auto name = waterBeadSpecName + util::toString(counter);
+                position_t r{x, y, z};
+                auto particle = polymerSystem->addBead(name, waterSpec);
+                util::assignVelocity(particle, temperature, true);
+                particle->position(position_t{x, y, z});
+                counter += 1;
+
+                counterX += 1;
+                if (counterX == maxCounterX) {
+                    counterX = 0;
+                    counterY += 1;
+                    if (counterY == maxCounterY) {
+                        counterY = 0;
+                        counterZ += 1;
+                        if (counterZ == maxCounterZ) {
+                            util::logAndThrow(logger,
+                                              "Box too small to accommodate "
+                                              "more water. Try again with reduced spacing.");
+                        }
+                    }
+                }
+            }
+            logger.info(std::to_string(counter) + ": Number of beads placed on a grid in the box.");
+        }
+        util::removeOverallLinearMomentum(polymerSystem);
+
+        // Box
+        polymerSystem->box(box);
+
+        logger.info(std::to_string(polymerSystem->numberOfBeads()) + ": Total number of beads created.");
+        logger.info(std::to_string(polymerSystem->numberOfParticleGroups()) + ": Number of particle groups created.");
+        logger.info(std::to_string(polymerSystem->numberOfFreeParticles()) + ": Number of free beads created." );
+
+        logger.trace("Leaving");
+        return std::move(polymerSystem);
+    }
+
     void
     ParticleSystemFactory::addParticleBoundary(const p_system_ptr_t& particleSystem,
                                                dist_t spacing,
@@ -443,23 +648,23 @@ namespace simploce {
         length_t limit1, limit2, dis1, dis2;
 
         if (plane == Plane::XY) {
-            int n = box->lengthX() / spacing();
+            int n = int(box->lengthX() / spacing());
             dis1 = box->lengthX() / n;
-            n = box->lengthY() / spacing();
+            n = int(box->lengthY() / spacing());
             dis2 = box->lengthY() / n;
             limit1 = box->lengthX();
             limit2 = box->lengthY();
         } else if (plane == Plane::YZ) {
-            int n = box->lengthY() / spacing();
+            int n = int(box->lengthY() / spacing());
             dis1 = box->lengthY() / n;
-            n = box->lengthZ() / spacing();
+            n = int(box->lengthZ() / spacing());
             dis2 = box->lengthZ() / n;
             limit1 = box->lengthY();
             limit2 = box->lengthZ();
         } else {
-            int n = box->lengthZ() / spacing();
+            int n = int(box->lengthZ() / spacing());
             dis1 = box->lengthZ() / n;
-            n = box->lengthX() / spacing();
+            n = int(box->lengthX() / spacing());
             dis2 = box->lengthX() / n;
             limit1 = box->lengthZ();
             limit2 = box->lengthX();
@@ -512,6 +717,26 @@ namespace simploce {
         logger.info("Added number of boundary particles: " + util::toString(counter));
 
         particleSystem->addParticleGroup(particles, bonds);
+    }
+
+    p_system_ptr_t
+    ParticleSystemFactory::fromPDB(std::string &fileName,
+                                   const temperature_t& temperature,
+                                   bool excludeWater) {
+        util::Logger logger("Creating atomic particle system from PDB entry.");
+        auto source = std::make_shared<InputSource>(fileName);
+        p_system_ptr_t particleSystem = factory::atomistic();
+        cont_handler_ptr_t handler(new AtomicContentHandler(particleSystem,
+                                                                    catalog_,
+                                                                            excludeWater));
+        PDBReader reader;
+        reader.parse(handler, source);
+        particleSystem->doWithAll<void>([temperature] (const std::vector<p_ptr_t>& all) {
+            for (auto p : all) {
+                util::assignVelocity(p, temperature);
+            }
+        });
+        return particleSystem;
     }
 
     spec_catalog_ptr_t&

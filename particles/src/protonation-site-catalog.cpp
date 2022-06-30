@@ -8,7 +8,7 @@
 #include "simploce/particle/protonation-site-catalog.hpp"
 #include "simploce/particle/protonation-site.hpp"
 #include "simploce/particle/particle-spec.hpp"
-#include "simploce/particle/p-conf.hpp"
+#include "simploce/conf/p-conf.hpp"
 #include <boost/algorithm/string.hpp>
 #include <string>
 #include <map>

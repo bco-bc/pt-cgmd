@@ -40,6 +40,7 @@ namespace simploce {
             char direction;         // Direction (or axis) along which something is applied.
             std::string plane;      // Plane specification.
             real_t sigma;           // Surface charge density.
+            real_t max_a;           // Maximum repulsion (MVV_DPD).
         };
 
         /**
@@ -214,6 +215,25 @@ namespace simploce {
          */
         std::pair<real_t, real_t> halveAttractiveQuartic(const spec_ptr_t &spec1,
                                                          const spec_ptr_t &spec2) const;
+
+        /**
+         * Returns non-bonded interaction parameters for the conservative soft-repulsive potential for the given pair of
+         * particle specifications.
+         * @param spec1 Particle specification #1.
+         * @param spec2 Particle specification #2.
+         * @return Maximum repulsion (a).
+         */
+        real_t softRepulsion(const spec_ptr_t &spec1,
+                             const spec_ptr_t &spec2) const;
+
+        /**
+         * Returns bonded interaction potential parameters for a harmonic potential plus soft repulsive potential.
+         * @param spec1 Particle specification #1.
+         * @param spec2 Particle specification #2.
+         * @return Equilibrium distance (r0), force constant (fc), Maximum repulsion (a).
+         */
+        std::tuple<real_t, real_t, real_t> harmonicSoftRepulsion(const spec_ptr_t &spec1,
+                                                                 const spec_ptr_t &spec2) const;
 
         /**
          * Returns const surface charge density external potential parameters.
