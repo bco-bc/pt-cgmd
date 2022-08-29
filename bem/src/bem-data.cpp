@@ -9,12 +9,11 @@
 
 namespace simploce {
 
-    BEMData::BEMData(const param_ptr_t& param, std::size_t nCol) :
-        S{nCol, nCol}, lu{S}, b{nCol}, x{nCol}, epsRatio{}, ka{} {
+    BEMData::BEMData(const param_ptr_t& param, std::size_t dimension) :
+            S{dimension, dimension}, lu{S}, b{dimension}, x{dimension}, epsRatio{} {
         epsSolute = param->get<real_t>("bem.solute.eps");
         epsSolvent = param->get<real_t>("bem.solvent.eps");
         epsRatio = epsSolvent / epsSolute;
-        ka = param->get<real_t>("bem.solvent.ka");
     }
     
 }

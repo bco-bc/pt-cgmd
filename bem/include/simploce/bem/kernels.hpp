@@ -19,7 +19,7 @@ namespace simploce {
          * @param epsRatio Ratio of dielectric constants.
          * @param r Position on boundary.
          * @param normal Unit normal vector at r.
-         * @param r0 Position on boundary, collocation point.
+         * @param r0 Position on boundary.
          * @return Value.
          */
         real_t Lij0(const real_t& epsRatio,

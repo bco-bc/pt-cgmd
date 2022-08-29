@@ -50,7 +50,7 @@ namespace simploce {
     }
 
     area_t
-    Pentagon::area() const {
+    Pentagon::area() {
         static auto PI = math::constants<real_t>::PI;
         static util::Logger logger("simploce::surface::Pentagon::area()");
         logger.trace("Entering.");
@@ -68,12 +68,6 @@ namespace simploce {
         area_t area = 5.0 * average() * average() * std::tan(3.0 * PI / 10.0) / 4.0;
         logger.trace("Leaving.");
         return area;
-    }
-
-    normal_t Pentagon::normal() const {
-        static util::Logger logger("simploce::Pentagon::normal()");
-        logger.warn("Not implemented.");
-        return normal_t{};
     }
 
     void

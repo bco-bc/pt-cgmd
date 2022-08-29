@@ -46,13 +46,19 @@ namespace simploce {
          * Returns total area.
          * @return Area.
          */
-        virtual area_t area() const = 0;
+        virtual area_t area() = 0;
 
         /**
-         * Returns outward unit normal vector.
+         * Returns outward unit normal vector. Calculates normal from vertices' normals.
          * @return Unit normal vector.
          */
-        virtual normal_t normal() const = 0;
+        virtual normal_t normal();
+
+        /**
+         * Returns center. Calculated as midpoint of face.
+         * @return Center, associated outward unit normal vector.
+         */
+        virtual std::pair<position_t, normal_t> center();
 
     protected:
 
@@ -73,6 +79,11 @@ namespace simploce {
         std::vector<vertex_ptr_t> vertices_;
         std::vector<edge_ptr_t> edges_;
         std::vector<int> indices_;
+
+        normal_t normal_{};
+        std::pair<position_t, normal_t> center_{};
+        bool hasNormal_{false};
+        bool hasCenter_{false};
 
     };
 }

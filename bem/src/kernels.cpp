@@ -15,14 +15,13 @@ namespace simploce {
                     const position_t& r,
                     const normal_t& normal,
                     const position_t& r0) {
-            const static auto PI = simploce::math::constants<real_t>::PI;
+            const static auto FOUR_PI = 4.0 * simploce::math::constants<real_t>::PI;
             auto disv = r - r0;
             auto dis = norm<real_t>(disv);
             auto imp = inner<real_t>(disv, normal);
-            auto t3 = 2.0 / (1.0 + epsRatio);
-            auto t4 = 4.0 * PI * dis;
-            auto t5 = t4 * dis * dis;
-            return t3 * (1.0 - epsRatio) * imp / t5;
+            auto f1 = 2.0 * (epsRatio - 1.0) / (epsRatio + 1.0);
+            auto f2 = FOUR_PI * dis * dis * dis;
+            return -f1 * imp / f2;
         }
 
         real_t Lij(const real_t& ka,

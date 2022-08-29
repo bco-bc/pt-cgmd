@@ -52,6 +52,11 @@ namespace simploce {
         return area;
     }
 
+    void
+    Polyhedron::assignCentersAndAreas() {
+
+    }
+
     void Polyhedron::writeEdges(std::ostream& stream) {
         stream << edges_.size() << std::endl;
         for (auto& edge: edges_) {
@@ -62,6 +67,11 @@ namespace simploce {
     std::size_t
     Polyhedron::numberOfFaces() const {
         return faces_.size();
+    }
+
+    std::size_t
+    Polyhedron::numberOfVertices() const {
+        return vertices_.size();
     }
 
     void
@@ -119,10 +129,8 @@ namespace simploce {
                                                    const std::vector<edge_ptr_t>& edges) {
             stream << vertices.size() << conf::SPACE << faces.size() << std::endl;
             for (const auto& vertex: vertices) {
-                stream << vertex->position() << std::endl;
-            }
-            for (const auto& vertex: vertices) {
-                stream << vertex->normal() << std::endl;
+                stream << std::setw(conf::INTEGER_WIDTH) << vertex->index();
+                stream << conf::SPACE << vertex->position() << conf::SPACE << vertex->normal() << std::endl;
             }
             for (const auto& face: faces) {
                 for (const auto& vertex: face->vertices()) {

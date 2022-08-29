@@ -72,13 +72,13 @@ namespace simploce {
         auto r = radius();
         auto r2 = 2.0 * r;
         for (std::size_t k = 0; k != numberOfDots; ++k) {
-            auto v = util::random<real_t>();
+            auto v = util::randomUniform();
             auto x = -r + v * r2;
 
-            v = util::random<real_t>();
+            v = util::randomUniform();
             auto y = -r + v* r2;
 
-            v = util::random<real_t>();
+            v = util::randomUniform();
             auto z = -r + v * r2;
 
             dot_t dot{x, y, z};

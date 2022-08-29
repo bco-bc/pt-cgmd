@@ -18,6 +18,8 @@ namespace simploce {
      */
     struct bem_calculator {
 
+        virtual ~bem_calculator() {}
+
         /**
          * Computes the surface matrix S in Sx=b, where x represents the
          * set of unknowns at the collocation points and b is the source vector.
@@ -37,11 +39,18 @@ namespace simploce {
         virtual void solve() = 0;
 
         /**
-         * Returns electric potentials at specified points located -inside- the surface.
+         * Returns reaction potential at specified points located in the solute region.
          * @param points Points.
-         * @return Electric potentials.
+         * @return Reaction potentials.
          */
-        virtual std::vector<el_pot> electricPotentials(const std::vector<position_t> &points) = 0;
+        virtual std::vector<el_pot> reactionPotentialSolute(const std::vector<position_t> &points) = 0;
+
+         /**
+         * Returns reaction potential at specified points located in the solvent region.
+         * @param points Points.
+         * @return Reaction potentials.
+         */
+       virtual std::vector<el_pot> reactionPotentialSolvent(const std::vector<position_t> &points) = 0;
     };
 }
 

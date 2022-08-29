@@ -39,13 +39,19 @@ namespace simploce {
         Triangle(const Triangle&) = delete;
         Triangle& operator = (const Triangle&) = delete;
 
-        area_t area() const override;
-
-        normal_t normal() const override;
+        /**
+         * Uses Heron's formula. Applicable for a flat triangle.
+         * @return Area.
+         * @see <a href="https://en.wikipedia.org/wiki/Triangle#Computing_the_area_of_a_triangle">Wikipedia</a>
+         */
+        area_t area() override;
 
     private:
 
         void validate_() override;
+
+        area_t area_{};
+        bool hasArea_{false};
 
     };
 }

@@ -36,14 +36,26 @@ namespace simploce {
 
         // Types for LU-decomposition.
         using lu_t = Eigen::PartialPivLU<Eigen::Ref<matrix_t>>;
-        using lu_ptr_t = std::shared_ptr<lu_t>;
+        //using lu_ptr_t = std::shared_ptr<lu_t>;
+
+        // Node
+        using node_t = struct Node {
+            Node() : r{}, nv{}, index{0}, area{0.0} {}
+            position_t r;
+            normal_t nv;
+            index_t index;
+            area_t area;
+        };
 
         /**
          * Constructor.
          * @param param BEM parameters.
-         * @param nCol Number of collocation points.
+         * @param dimension Dimension of square surface matrix.
          */
-        BEMData(const param_ptr_t &param, std::size_t nCol);
+        BEMData(const param_ptr_t &param, std::size_t dimension);
+
+        // Nodes
+        std::vector<node_t> nodes;
 
         // Surface matrix.
         matrix_t S;
@@ -56,7 +68,7 @@ namespace simploce {
         // Right-hand-side.
         vector_t b{};
 
-        // Unknowns at collocation points.
+        // Unknowns.
         vector_t x{};
 
         // Dielectric constant of solute.
@@ -68,9 +80,6 @@ namespace simploce {
         // Ratio between the dielectric constants outside and inside the dielectric
         // boundary (surface).
         real_t epsRatio{};
-
-        // Inverse Debye length.
-        real_t ka{};
     };
 
 }

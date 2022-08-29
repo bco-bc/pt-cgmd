@@ -87,6 +87,17 @@ namespace simploce {
          */
         std::size_t numberOfFaces() const;
 
+        /**
+         * Returns the number of vertices.
+         * @return  Number of vertices.
+         */
+        std::size_t numberOfVertices() const;
+
+        /**
+         * Assigns centers and areas for each face on this polyhedron.
+         */
+        virtual void assignCentersAndAreas();
+
     private:
 
         friend class polyhedron_generator;

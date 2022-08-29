@@ -17,6 +17,7 @@ namespace simploce {
 
     // Forward declarations.
     class bem_calculator;
+    class Curve;
 
     /**
      * Surface pointer type.
@@ -33,6 +34,11 @@ namespace simploce {
      * Pointer type for the BEM calculator.
      */
     using bem_calc_ptr_t = std::shared_ptr<bem_calculator>;
+
+    /**
+     * Curve pointer type.
+     */
+    using curve_ptr_t = std::shared_ptr<Curve>;
 }
 
 #endif //BEM_BEM_TYPES_HPP

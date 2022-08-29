@@ -37,14 +37,18 @@ namespace simploce {
         Face(std::move(vertices), std::move(edges)) {
     }
 
-    area_t Triangle::area() const {
-        auto edges = this->edges();
-        auto a = edges[0]->length();
-        auto b = edges[1]->length();
-        auto c = edges[2]->length();
-        auto s = 0.5 * (a + b + c);
-        auto t = s * (s - a) * (s - b) * (s - c);
-        return area_t{std::sqrt(t)};
+    area_t Triangle::area() {
+        if (!hasArea_) {
+            auto edges = this->edges();
+            auto a = edges[0]->length();
+            auto b = edges[1]->length();
+            auto c = edges[2]->length();
+            auto s = 0.5 * (a + b + c);
+            auto t = s * (s - a) * (s - b) * (s - c);
+            area_ = std::sqrt(t);
+            hasArea_ = true;
+        }
+        return area_;
     }
 
     void Triangle::validate_() {
@@ -76,23 +80,4 @@ namespace simploce {
             throw std::domain_error("A triangle's edges must refer to its own vertices");
     }
 
-    // The following assumes that the triangle is part of some triangulated surface of which the
-    // geometric center is at the origin.
-    normal_t
-    Triangle::normal() const {
-        auto vertices = this->vertices();
-        std::vector<position_t> positions;
-        position_t mp{};
-        for (auto& vertex: vertices) {
-            auto position = vertex->position();
-            position /= norm<real_t>(position);
-            positions.emplace_back(position);
-            mp += position;
-        }
-        mp /= 3.0;  // On the surface of a unit sphere.
-        auto nv =
-                cross<real_t, normal_t::discriminator>(positions[0] -positions[1], positions[0] - positions[2]);
-        nv /= norm<real_t>(nv);
-        return inner<real_t>(mp, nv) > 0 ? nv : -1.0 * nv;
-    }
-}
+ }

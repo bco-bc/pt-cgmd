@@ -26,7 +26,10 @@ namespace simploce {
          *   <li>Energy: kJ/mol = (u nm^2)/(ps^2)</li>
          *   <li>Force: kJ/(mol nm) = (u nm)/(ps^2)</li>
          *   <li>Charge: e (= 1.6021766208e-19 C).</li>
+         *   <li>Electric potential: kJ/(mol e)</li>
+         *   <li>Electric field: kJ/(mol e nm)</li>
          * </ul>
+         * @see Berendsen, H. J. C, Simulating the physical world. Cambridge University Press, 2007 (p. xv - xxvii).
         */
         template<typename V>
         struct mu {
@@ -42,7 +45,7 @@ namespace simploce {
             static const V E0;
 
             /**
-             * 4 * PI * E0. In (kJ nm) / (mol e2).
+             * 4 * PI * E0. In (mol e^2)/kJ nm).
              */
             static const V FOUR_PI_E0;
 

@@ -51,9 +51,7 @@ namespace simploce {
          * @return Area.
          * <a href="https://en.wikipedia.org/wiki/Pentagon#Derivation_of_the_area_formula">Wikipedia</a>
          */
-        area_t area() const override;
-
-        normal_t normal() const override;
+        area_t area() override;
 
     private:
 
