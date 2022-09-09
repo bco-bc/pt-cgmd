@@ -13,6 +13,7 @@
 #include <iomanip>
 #include <algorithm>
 #include <cmath>
+#include <limits>
 
 namespace simploce {
     

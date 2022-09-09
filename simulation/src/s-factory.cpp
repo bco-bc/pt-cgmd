@@ -9,6 +9,7 @@
 #include "simploce/potentials/force-field.hpp"
 #include "simploce/potentials/forces.hpp"
 #include "simploce/simulation/distance-pair-list-generator.hpp"
+#include "simploce/simulation/cell-pair-list-generator.hpp"
 #include "simploce/types/s-types.hpp"
 #include "simploce/units/units-dpd.hpp"
 #include "simploce/simulation/interactor.hpp"
@@ -106,7 +107,8 @@ namespace simploce {
 
         pair_list_gen_ptr_t pairListsGenerator(const param_ptr_t& param, const bc_ptr_t &bc) {
             if ( !pairListsGenerator_ ) {
-                pairListsGenerator_ = std::make_shared<DistancePairListGenerator>(param, bc);
+                //pairListsGenerator_ = std::make_shared<DistancePairListGenerator>(param, bc);
+                pairListsGenerator_ = std::make_shared<CellPairListGenerator>(param, bc);
             }
             return pairListsGenerator_;
         }

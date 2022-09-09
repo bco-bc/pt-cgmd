@@ -28,6 +28,7 @@ namespace simploce {
     class SC;
     class Forces;
     class displacer;
+    class Cell;
 
     // S is protonation state type, e.g. Discrete or Continuous.
     template <typename S>
@@ -139,6 +140,11 @@ namespace simploce {
 
         using dpd_ptr_t = std::shared_ptr<dpd<real_t>>;
     }
+
+    /**
+     * Cell pointer type.
+     */
+    using cell_ptr_t = std::shared_ptr<Cell>;
 
 
 

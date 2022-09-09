@@ -69,7 +69,7 @@ namespace simploce {
         } else if (R_ij <= eps ) {
             logger.warn(std::to_string(R_ij) + ": Zero distance encountered between two particles.");
         }
-        // Force on particle i. R_ij should never be zero.
+        // Interaction energy and force on particle i. R_ij should never be zero.
         energy_t energy{-a_ij * (R_ij - R_ij * R_ij / (2.0 * cutoff())) + 0.5 * a_ij * cutoff()};
         force_t f{};
         for (std::size_t k = 0; k != 3; ++k) {

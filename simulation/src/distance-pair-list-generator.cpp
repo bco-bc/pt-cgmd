@@ -6,56 +6,16 @@
 
 #include "simploce/simulation/distance-pair-list-generator.hpp"
 #include "simploce/simulation/bc.hpp"
+#include "simploce/simulation/s-util.hpp"
 #include "simploce/particle/particle.hpp"
 #include "simploce/particle/particle-system.hpp"
 #include "simploce/util/logger.hpp"
 #include "simploce/util/util.hpp"
-#include "simploce/units/units-mu.hpp"
 #include <utility>
+#include <thread>
 
 namespace simploce {
     namespace pairlist {
-
-        static dist_t
-        computeCutoff_(const param_ptr_t& param,
-                       const p_system_ptr_t & particleSystem) {
-            util::Logger logger("simploce::pairlist::computeCutoff()");
-            logger.trace("Entering.");
-
-            temperature_t temperature = param->get<real_t>("simulation.temperature");
-            auto isMesoscale = param->get<bool>("simulation.mesoscale", false);
-            stime_t dt = param->get<real_t>("simulation.timestep", 0.001);
-            auto cutoff = param->get<real_t>("simulation.forces.cutoff");
-            auto nPairLists = param->get<int>("simulation.npairlists");
-
-            // Compute typical displacement.
-            auto numberOfParticles = particleSystem->numberOfParticles();
-            auto KB = isMesoscale ? 1 : units::mu<real_t>::KB;
-            mass_t mass = particleSystem->mass();
-            mass /= real_t(numberOfParticles);
-            energy_t eKin = KB * temperature() / mass();  // Equipartition, 1D.
-            auto v = std::sqrt(2.0 * eKin() / mass());
-            auto displacement = v * dt;
-
-            // Verlet cutoff distance for pair lists.
-            // See https://en.wikipedia.org/wiki/Verlet_list
-            dist_t pairListCutoff = cutoff + 2.0 * nPairLists * displacement();
-
-            logger.debug(util::toString(temperature) + ": Temperature.");
-            logger.debug(util::toString(dt) + ": Time step.");
-            logger.debug(util::toString(eKin) +
-                          ": Estimated kinetic energy per particle at the given temperature.");
-            logger.debug(util::toString(mass) + ": Average mass.");
-            logger.debug(std::to_string(isMesoscale) + ": Mesoscale simulation?");
-            logger.debug(std::to_string(cutoff) + ": Cutoff distance for forces.");
-            logger.debug(std::to_string(v) + ": Average velocity.");
-            logger.debug(std::to_string(displacement()) + ": Typical displacement in single step.");
-            logger.debug(util::toString(nPairLists) + ": Number of steps between update pair lists.");
-            logger.info(util::toString(pairListCutoff) + ": Cutoff distance for pair lists generation.");
-
-            logger.trace("Leaving.");
-            return pairListCutoff;
-        }
 
         /**
          * Returns particle pair lists for -any- collection of particles.
@@ -71,13 +31,18 @@ namespace simploce {
                       const std::vector<p_ptr_t> &particles) {
             using pp_pair_cont_t = typename PairLists::pp_pair_cont_t;
 
+            static util::Logger logger("simploce::pairlist::forParticles_()");
+            logger.trace("Entering.");
+
             static real_t rc2 = cutoff() * cutoff();
 
+            // Empty particle set?
             if (particles.empty()) {
-                return std::move(pp_pair_cont_t{});  // Empty pair list.
+                // Return empty pair list.
+                return std::move(pp_pair_cont_t{});
             }
 
-            // Particle/particle pair list.
+            // Pair list.
             pp_pair_cont_t particlePairs{};
 
             // For all pairs in the set.
@@ -98,6 +63,161 @@ namespace simploce {
             }
 
             // Done.
+            logger.trace("Leaving.");
+            return std::move(particlePairs);
+        }
+
+        /**
+         * Finds all pairs between two sets of particles.
+         * @param box Simulation box
+         * @param cutoff Cutoff distance.
+         * @param bc Boundary condition.
+         * @param particles1 Particle set #1.
+         * @param particles2 Particle set #2. May be identical to particle set #1.
+         * @return Particle pairs.
+         */
+        static typename PairLists::pp_pair_cont_t
+        forParticlesParticles_(const box_ptr_t &box,
+                               const dist_t &cutoff,
+                               const bc_ptr_t &bc,
+                               const std::vector<p_ptr_t>& particles1,
+                               const std::vector<p_ptr_t>& particles2) {
+            using pp_pair_cont_t = typename PairLists::pp_pair_cont_t;
+
+            static util::Logger logger("simploce::pairlist::forParticlesParticles_()");
+            logger.trace("Entering.");
+
+            static int counter = 1;
+            counter += 1;
+            std::cout << "COUNTER: " << counter << std::endl;
+
+            logger.debug(std::to_string(particles1.size()) + ": Number of particles in particle set 1.");
+            logger.debug(std::to_string(particles2.size()) + ": Number of particles in particle set 2.");
+            logger.debug(std::to_string(particles1 == particles2) + ": Identical particles sets?");
+
+            // Empty particle set(s)?
+            if (particles1.empty() || particles2.empty()) {
+                // Return an empty pair list.
+                return std::move(pp_pair_cont_t{});
+            }
+
+            // Same set of particles?
+            if ( &particles1 == &particles2) {
+                return forParticles_(box, cutoff, bc, particles1);
+            }
+
+            static real_t rc2 = cutoff() * cutoff();
+
+            pp_pair_cont_t particlePairs{};
+            for (auto& pi : particles1) {
+                auto ri = pi->position();
+                for (auto& pj : particles2) {
+                    auto rj = pj->position();
+                    dist_vect_t rij = bc->apply(ri, rj);
+                    auto R2 = norm_square<real_t>(rij);
+                    if (R2 <= rc2) {
+                        // Include this pair.
+                        auto pair = std::make_pair(pi, pj);
+                        particlePairs.emplace_back(pair);
+                    }
+                }
+
+            }
+
+            logger.trace("Leaving.");
+            return std::move(particlePairs);
+        }
+
+
+        /**
+         * Generates concurrently particle pair list for -any- collection of particles.
+         * @param box Simulation box.
+         * @param cutoff Cutoff distance.
+         * @param bc Boundary condition.
+         * @return Particle pairs.
+         */
+        static typename PairLists::pp_pair_cont_t
+        forParticlesConcurrent_(const box_ptr_t &box,
+                                const dist_t &cutoff,
+                                const bc_ptr_t &bc,
+                                const std::vector<p_ptr_t> &particles) {
+            using result_t = PairLists::pp_pair_cont_t;
+
+            static util::Logger logger("simploce::pairlist::forParticlesConcurrent_()");
+            logger.trace("Entering.");
+
+            logger.debug(std::to_string(particles.size()) + ": Number of particles.");
+
+            // Stores results of individual tasks.
+            std::vector<result_t> results{};
+
+            // Can we use multiple threads.
+            int numberOfTasks = int(std::thread::hardware_concurrency() - 4);
+            numberOfTasks = numberOfTasks > 1 ? numberOfTasks : 1;
+            if (numberOfTasks > 1) {
+                // Yes: Generate pair list concurrently, that is, use different threads.
+                int numberOfGroups = int(std::sqrt(numberOfTasks));
+                int numberParticlesPerGroup = int(particles.size()/numberOfGroups);
+                logger.debug(std::to_string(numberOfTasks) + ": Maximum number of tasks.");
+                logger.debug(std::to_string(numberOfGroups) + ": Estimated number of groups.");
+                logger.debug(std::to_string(numberParticlesPerGroup) + ": Estimated number of particles per group.");
+
+                // Divide particles in groups.
+                std::vector<std::vector<p_ptr_t>> groups{};
+                std::vector<p_ptr_t> group{};
+                int counter = 0;
+                for (auto& p : particles) {
+                    if (counter == numberParticlesPerGroup) {
+                        logger.debug(std::to_string(group.size()) +
+                                     ": Number of particles in current group.");
+                        groups.emplace_back(group);
+                        group.clear();
+                        counter = 0;
+                    }
+                    group.emplace_back(p);
+                    counter += 1;
+                }
+                logger.debug(std::to_string(group.size()) +
+                             ": Number of particles in last group.");
+                groups.emplace_back(group);
+                logger.debug(std::to_string(groups.size()) + ": Actual number of groups.");
+
+                std::vector<std::future<result_t>> futures{};
+                for (auto iter_i = groups.begin(); iter_i < groups.end() - 1; ++iter_i) {
+                    // Exclude last group, is handled in the current thread.
+                    for (auto iter_j = iter_i; iter_j < groups.end(); ++iter_j) {
+                        futures.push_back(
+                                std::async(
+                                        std::launch::async,
+                                        forParticlesParticles_,
+                                        std::ref(box),
+                                        std::ref(cutoff),
+                                        std::ref(bc),
+                                        std::ref(*iter_i),
+                                        std::ref(*iter_j)
+                                )
+                        );
+                    }
+                }
+                results = util::waitForAll(futures);
+                auto &particles_1 = *(groups.end() - 1);
+                auto result = forParticlesParticles_(box, cutoff, bc, particles_1, particles_1);
+                results.emplace_back(result);
+            } else {
+                // NO: Use the current thread.
+                auto result = forParticles_(box, cutoff, bc, particles);
+                results.emplace_back(result);
+            }
+
+            // Make the pair list.
+            PairLists::pp_pair_cont_t particlePairs{};
+            for (auto& r : results) {
+                for (auto& pair : r) {
+                    particlePairs.emplace_back(pair);
+                }
+            }
+
+            logger.trace("Leaving.");
             return std::move(particlePairs);
         }
 
@@ -250,9 +370,10 @@ namespace simploce {
             std::vector<result_t> results{};
             std::vector<std::future<result_t>> futures{};
 
+            // Four tasks.
             futures.emplace_back(std::async(
                     std::launch::async,
-                    forParticles_,
+                    forParticlesConcurrent_,
                     std::ref(box),
                     std::ref(cutoff),
                     std::ref(bc),
@@ -278,7 +399,7 @@ namespace simploce {
             // Wait for tasks to complete.
             results = util::waitForAll<result_t>(futures);
 
-            // One remaining pair list to be completed in the current thread.
+            // One remaining task to be completed in the current thread.
             const auto result = forParticlesInGroups(box, bc, groups);
             results.emplace_back(result);
 
@@ -334,7 +455,7 @@ namespace simploce {
             particlePairs.insert(particlePairs.end(), inGroupsParticlePairs.begin(), inGroupsParticlePairs.end());
 
             // Some debugging information.
-            logger.debug("Particle pair lists (nonconcurrent):");
+            logger.debug("Particle pair lists (non-concurrent):");
             logger.debug("Cutoff distance: " + util::toString(cutoff()));
             logger.debug("Number of free-particle/free-particle pairs: " + util::toString(ppSize));
             logger.debug("Number of free-particle/particle-in-group pairs: " + util::toString(fgSize));
@@ -358,9 +479,16 @@ namespace simploce {
 
     PairLists
     DistancePairListGenerator::generate(const p_system_ptr_t& particleSystem) const {
+        static util::Logger logger("simploce::DistancePairListGenerator::generate()");
+        logger.trace("Entering.");
+
+        static int counter = 1;
+        if (counter == 1) {
+            logger.info("Distance-based particle pair list generation.");
+        }
         auto box = particleSystem->box();
-        static dist_t cutoff = pairlist::computeCutoff_(this->param_, particleSystem);
-        return particleSystem->doWithAllFreeGroups<PairLists>([this, box] (
+        static dist_t cutoff = util::computePairListCutoff(this->param_, particleSystem);
+        auto pairLists = particleSystem->doWithAllFreeGroups<PairLists>([this, box] (
                 const std::vector<p_ptr_t>& all,
                 const std::vector<p_ptr_t>& free,
                 const std::vector<pg_ptr_t>& groups) {
@@ -371,6 +499,14 @@ namespace simploce {
                 return std::move(pairlist::makePairListsNonConcurrent_(box, cutoff, this->bc_, all, free, groups));
             }
         });
+        if (counter == 1) {
+            logger.info(std::to_string(pairLists.particlePairList().size()) +
+                                ": Number of particle pairs in step #" + std::to_string(counter));
+        }
+        counter += 1;
+
+        logger.trace("Leaving.");
+        return std::move(pairLists);
     }
 
 }

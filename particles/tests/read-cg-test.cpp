@@ -8,6 +8,7 @@
 #include "simploce/particle/particle-spec-catalog.hpp"
 #include "simploce/particle/coarse-grained.hpp"
 #include "simploce/util/file.hpp"
+#include "simploce/util/logger.hpp"
 #include <cstdlib>
 #include <iostream>
 
@@ -17,7 +18,9 @@ using namespace simploce;
  * Simple C++ Test Suite
  */
 
-void test1() {
+void test() {
+    util::Logger::changeLogLevel(util::Logger::LOGDEBUG);
+
     std::cout << "Particle specifications:" << std::endl;
     std::ifstream stream;
     util::open_input_file(stream,
@@ -28,7 +31,7 @@ void test1() {
     
     std::cout << "Particle model:" << std::endl;
     util::open_input_file(stream,
-                    "/localdisk/resources/coarse-grained-system.dat");
+                    "/wrk3/tests/droplets-polymer-solution.ps");
     cg_sys_ptr_t cg = CoarseGrained::obtainFrom(stream, catalog);
     stream.close();
     std::cout << *cg << std::endl;
@@ -36,7 +39,7 @@ void test1() {
 
 
 int main(int argc, char** argv) {
-    test1();
+    test();
     return (EXIT_SUCCESS);
 }
 

@@ -9,9 +9,19 @@
 #define SIMULATION_S_UTIL_HPP
 
 #include "simploce/particle/p-util.hpp"
+#include "simploce/types/s-types.hpp"
 
 namespace simploce {
     namespace util {
+
+        /**
+         * Returns cutoff distance for pair list calculation.
+         * @param param Simulation parameters.
+         * @param particleSystem Particle system.
+         * @return Cutoff distance.
+         */
+        dist_t computePairListCutoff(const param_ptr_t& param,
+                                      const p_system_ptr_t & particleSystem);
 
         /**
          * Scales or adjust all velocities to a reference temperature. Use only for equilibration purposes.

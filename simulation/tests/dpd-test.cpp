@@ -24,23 +24,26 @@ int main() {
 
     auto catalog = factory::particleSpecCatalog("/localdisk/resources/particles-specs.dat");
     auto factory = factory::particleSystemFactory(catalog);
-    auto particleSystem = simploce::factory::particleSystem("/wrk3/tests/polymer-solution.ps",
-                                                            catalog,
-                                                            true);
+    auto particleSystem =
+            simploce::factory::particleSystem("/wrk3/tests/droplets-polymer-solution.ps",
+                                              catalog,
+                                              true);
+    std::cout << "Number of particles: " << particleSystem->numberOfParticles() << std::endl;
 
     auto bc = factory::boundaryCondition(particleSystem->box());
     auto forceField =
-            factory::forceField("/localdisk/resources/interaction-parameters-polymer-solution.dat", catalog);
+            factory::forceField("/localdisk/resources/interaction-parameters-droplets-polymer-solution.dat", catalog);
     std::clog << *forceField << std::endl;
 
     auto param = factory::simulationParameters();
     param->put("comment", "For MC and DPD");
     param->put("simulation.nsteps", 20000);
-    param->put("simulation.nwrite", 100);
+    param->put("simulation.nwrite", 1000);
     param->put("simulation.timestep", 0.01);
-    param->put("simulation.temperature", 2.0);
-    param->put("simulation.displacer.dpd.gamma", 4.5);
+    param->put("simulation.temperature", 1.0);
+    param->put("simulation.displacer.dpd.gamma", 2.25);
     param->put("simulation.displacer.dpd.lambda", 0.50);
+    param->put("simulation.displacer.dpd.weight-factor", 0.5);
 
     param->put("simulation.displacer.mc.range", 0.5);
 
@@ -48,7 +51,7 @@ int main() {
     param->put("simulation.mesoscale", 1);
 
     param->put("simulation.scale-velocities", false);
-    param->put("simulation.nscale-velocities", 1);
+    param->put("simulation.nscale-velocities", 100);
     param->put("simulation.relative-temperature-difference", 10.0);
     param->put("simulation.remove-com-motion", false);
     param->put("simulation.nremove-com-motion", 1);
@@ -70,14 +73,16 @@ int main() {
     std::ofstream trajectoryStream, dataStream;
     util::open_output_file(trajectoryStream, "/wrk3/tests/trajectory.dat");
     util::open_output_file(dataStream, "/wrk3/tests/simulation.dat");
+    //util::Logger::changeLogLevel(util::Logger::LOGDEBUG);
     simulation.perform(trajectoryStream, dataStream);
+    //util::Logger::changeLogLevel(util::Logger::LOGWARN);
     trajectoryStream.flush();
     trajectoryStream.close();
     dataStream.flush();
     dataStream.close();
 
     std::ofstream ostream;
-    util::open_output_file(ostream, "/wrk3/tests/polymer-solution-mvv_dpd.ps");
+    util::open_output_file(ostream, "/wrk3/tests/droplets-polymer-solution-dpd.ps");
     ostream << *particleSystem << std::endl;
 
     return 0;

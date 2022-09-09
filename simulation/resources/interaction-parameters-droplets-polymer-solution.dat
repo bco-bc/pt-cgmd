@@ -1,0 +1,15 @@
+# Non-bonded
+# Type    Name #1    Name #2   Parameters                       Description
+5
+sr        PMU        PMU       25.0                             # Maximum repulsion.
+sr        PMU        H2Om      60.0                             # Maximum repulsion.
+sr        H2Om       H2Om      25.0                             # Maximum repulsion.
+sr        DROm       DROm      25.0                             # Maximum repulsion
+sr        DROm       H2Om      60.0                             # Maximum repulsion
+# Bonded
+# Type    Name #1    Name #2   Parameters                       Description
+1
+hp+sr     PMU        PMU       0.0  2.0  25.0                   # r0, fc, maximum repulsion.
+# External
+# Type    Parameters
+0

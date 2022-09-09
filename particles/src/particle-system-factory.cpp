@@ -10,6 +10,7 @@
 #include "simploce/particle/particle-group.hpp"
 #include "simploce/particle/atomistic.hpp"
 #include "simploce/particle/coarse-grained.hpp"
+#include "simploce/particle/particle-system.hpp"
 #include "simploce/particle/bead.hpp"
 #include "simploce/particle/p-factory.hpp"
 #include "simploce/particle/p-util.hpp"
@@ -455,7 +456,7 @@ namespace simploce {
         logger.info(std::to_string(numberOfPolymers * chainLength) + ": Number of polymer beads required.");
         logger.info(std::to_string(numberOfWaters) + ": Number of water beads required.");
         logger.info(std::to_string(numberOfBeads) + ": Total number of beads required.");
-        logger.info(std::to_string(placeRandom) + ": Place beads randomly in box.");
+        logger.info(std::to_string(placeRandom) + ": Place beads randomly in box?");
 
         auto spec = catalog_->lookup(monomericUnitBeadSpecName);
         auto waterSpec = catalog_->lookup(waterBeadSpecName);
@@ -525,8 +526,12 @@ namespace simploce {
                 particle->position(r);
                 util::assignVelocity(particle, temperature, true);
                 counter += 1;
+                if ( i > 0 && i % 10000 == 0) {
+                    logger.debug(std::to_string(i) + ": Number of water beads created.");
+                }
             }
-            logger.info(std::to_string(counter) + ": Number of beads placed randomly in box.");
+            logger.debug(std::to_string(numberOfWaters) + ": Number of water beads created.");
+            logger.info(std::to_string(counter) + ": Total number of beads placed randomly in box.");
         } else {
             // Initialize counters.
             int counter{0};
@@ -628,6 +633,75 @@ namespace simploce {
 
         logger.trace("Leaving");
         return std::move(polymerSystem);
+    }
+
+    p_system_ptr_t
+    ParticleSystemFactory::dropletPolymerSolution(const box_ptr_t& box,
+                                                  int chainLength,
+                                                  const std::string& monomericUnitBeadSpecName,
+                                                  int numberOfPolymers,
+                                                  const length_t& spacing,
+                                                  int numberOfWaters,
+                                                  const std::string& waterBeadSpecName,
+                                                  int numberOfDropletBeads,
+                                                  const std::string& dropletBeadSpecName,
+                                                  const temperature_t& temperature) {
+        util::Logger logger("simploce::ParticleSystemFactory::dropletPolymerSolution");
+        logger.trace("Entering.");
+
+        logger.info("Creating droplet polymer solution.");
+        logger.info(util::toString(*box) + ": Requested box dimensions.");
+        logger.info(std::to_string(chainLength) + ": Requested polymer chain length (number of monomeric units).");
+        logger.info(monomericUnitBeadSpecName + ": Monomeric unit particle specification name.");
+        logger.info(std::to_string(numberOfPolymers) + ": Requested number of polymers.");
+        logger.info(std::to_string(spacing()) + ": Requested spacing between monomeric units.");
+        logger.info(std::to_string(numberOfWaters) + ": Requested number of water beads.");
+        logger.info(waterBeadSpecName + ": Water specification name.");
+        logger.info(std::to_string(temperature()) + ": Requested temperature.");
+        logger.info(std::to_string(numberOfPolymers * chainLength) + ": Number of polymer beads required.");
+        logger.info(std::to_string(numberOfDropletBeads) + ": Requested number of droplet beads.");
+        logger.info(std::to_string(numberOfWaters) + ": Requested number of water beads.");
+        auto numberOfBeads = numberOfWaters + numberOfPolymers * chainLength + numberOfDropletBeads;
+        logger.info(std::to_string(numberOfBeads) + ": Total number of beads required.");
+
+        auto particleSystem = this->polymerSolution(box,
+                                                                 chainLength,
+                                                                 monomericUnitBeadSpecName,
+                                                                 numberOfPolymers,
+                                                                 spacing,
+                                                                 numberOfWaters,
+                                                                 waterBeadSpecName,
+                                                                 temperature,
+                                                                 true);
+
+        auto boxX = box->lengthX();
+        auto boxY = box->lengthY();
+        auto boxZ = box->lengthZ();
+        std::random_device rd;
+        std::mt19937 gen(rd());
+        std::uniform_real_distribution<real_t> dis(0.0, 1.0);
+        auto dropletBeadSpec = catalog_->lookup(dropletBeadSpecName);
+        auto counter = particleSystem->numberOfParticles();
+
+        // Add droplet particles, placed randomly in the box.
+        for (auto i = 0; i != numberOfDropletBeads; ++i) {
+            auto x = dis(gen) * boxX;
+            auto y = dis(gen) * boxY;
+            auto z = dis(gen) * boxZ;
+            position_t r{x, y, z};
+            auto name = dropletBeadSpecName + util::toString(counter);
+            auto particle = particleSystem->addParticle(name, dropletBeadSpec);
+            particle->position(r);
+            util::assignVelocity(particle, temperature, true);
+            counter += 1;
+            if ( i > 0 && i % 10000 == 0) {
+                logger.debug(std::to_string(i) + ": Number of droplet beads created.");
+            }
+        }
+        logger.debug(std::to_string(numberOfDropletBeads) + ": Number of droplet beads created.");
+
+        logger.trace("Leaving.");
+        return std::move(particleSystem);
     }
 
     void

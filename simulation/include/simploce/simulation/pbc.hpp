@@ -20,7 +20,7 @@ namespace simploce {
       
     /**
      * Constructor.
-     * @param box Orthogonal simulation box (container, unit cell). 
+     * @param box Orthogonal simulation box (container, unit findCell).
      */
     PeriodicBoundaryCondition(box_ptr_t box);
 

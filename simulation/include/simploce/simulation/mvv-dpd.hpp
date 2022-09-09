@@ -13,7 +13,9 @@ namespace simploce {
 
     /**
      * Dissipative particle dynamics. Implements the modified Velocity-Verlet (MVV) algorithm
-     * by Groot and Warren, J. Chem. Phys., v. 107, p. 4423, 1997.
+     * by Groot and Warren, J. Chem. Phys., v. 107, p. 4423, 1997. It also employs a weight factor s
+     * in (1-r/r_c)^s for calculating wR and wD. If not specified, s=1 (as in the original
+     * DPD algorithm).
      * The units employed are MVV_DPD units, that is dimensionless values are assumed.
      */
     class MVV_DPD : public displacer {

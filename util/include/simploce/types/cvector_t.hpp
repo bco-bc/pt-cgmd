@@ -15,6 +15,7 @@
 #include <iostream>
 #include <iomanip>
 #include <array>
+#include <limits>
 
 namespace simploce {
     

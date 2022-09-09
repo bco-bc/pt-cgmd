@@ -12,15 +12,15 @@
 namespace simploce {
 
     /**
-     * Generates pair lists on the basis of distances between particle and particle groups.e.
+     * Generates pair lists on the basis of distances between particle and particle groups.
      */
     class DistancePairListGenerator : public pair_lists_generator {
     public:
 
         /**
          * Constructor.
-         * @param box Simulation box.
-         * @param bc Boundary condition.
+         * @param param Simulation parameters.
+         * @param bc Boundary conditions.
          */
         DistancePairListGenerator(param_ptr_t param, bc_ptr_t bc);
 
@@ -29,7 +29,6 @@ namespace simploce {
     private:
 
         param_ptr_t param_;
-        box_ptr_t box_;
         bc_ptr_t bc_;
     };
 

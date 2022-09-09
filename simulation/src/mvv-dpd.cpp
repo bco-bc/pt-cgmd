@@ -111,6 +111,7 @@ namespace simploce {
                                  const stime_t &dt,
                                  const bc_ptr_t &bc,
                                  real_t gamma,
+                                 real_t weightFactor,
                                  const dist_t &cutoff,
                                  const temperature_t &temperature) {
             static util::Logger logger("simploce::mvv_dpd::randomDissipativeForces_()");
@@ -129,6 +130,7 @@ namespace simploce {
 
             if (counter == 0) {
                 logger.info(std::to_string(sigma) + ": Strength (sigma) of random force.");
+                logger.info(std::to_string(weightFactor) + ": Weight factor s in (1.0-r/r_c)^s.");
             }
             counter += 1;
 
@@ -150,9 +152,10 @@ namespace simploce {
                     auto uv = (dist > eps ? (rij / dist) : util::randomUnit());
                     auto vij = v1 - v2;                  // Difference velocity.
                     auto ip = inner<real_t>(uv, vij);
-                    auto wR = 1.0 - dist / cutoff();               // (1-r/r_c)
-                    auto wD = wR * wR;                             // (1-r/r_c)^2
-                    auto W = normalDistribution(generator);     // Random number.
+                    auto w = 1.0 - dist / cutoff();                // (1-r/r_c)
+                    auto wD = std::pow(w, weightFactor);      // (1-r/r_c)^s
+                    auto wR = std::sqrt(wD);                     // wD = (wR)^2
+                    auto W = normalDistribution(generator);      // Random number.
                     static force_t randomF_1;                              // Random force on particle 1
                     static force_t dissipativeF_1;                         // Dissipative force on particle 1.
                     for (auto k = 0; k != 3; ++k) {
@@ -210,6 +213,9 @@ namespace simploce {
         static auto gamma = param_->get<real_t>("simulation.displacer.dpd.gamma");
         static auto lambda = param_->get<real_t>("simulation.displacer.dpd.lambda");
         static dist_t cutoff = param_->get<real_t>("simulation.forces.cutoff");
+        static auto weightFactor =
+                param_->get<real_t>("simulation.displacer.dpd.weight-factor",
+                                                        1.0);
         static auto isMesoscale = param_->get<bool>("simulation.mesoscale");
         static auto conservativeForces =
             param_->get<bool>("simulation.forces.conservative", true);
@@ -226,6 +232,7 @@ namespace simploce {
             logger.debug(util::toString(gamma) + ": gamma.");
             logger.debug(util::toString(lambda) + ": lambda.");
             logger.debug(util::toString(cutoff) + ": Cutoff distance.");
+            logger.debug(std::to_string(weightFactor) + ": Weight factor (s) in (1-r/rc)^s.");
 
             particleSystem->doWithDisplaceables<void>([] (const std::vector<p_ptr_t>& particles) {
                 auto numberOfParticles = particles.size();
@@ -243,7 +250,7 @@ namespace simploce {
 
             // Add random and dissipative forces.
             const auto& pairLists = interactor_->pairLists();
-            mvv_dpd::randomDissipativeForces_(pairLists, dt, bc_, gamma, cutoff, temperature);
+            mvv_dpd::randomDissipativeForces_(pairLists, dt, bc_, gamma, weightFactor, cutoff, temperature);
         }
 
         // Displace position and velocities, the latter are the "uncorrected" velocities.
@@ -259,7 +266,7 @@ namespace simploce {
 
         // Add random and dissipative forces using positions and "uncorrected" velocities at time t(n+1).
         const auto& pairLists = interactor_->pairLists();
-        mvv_dpd::randomDissipativeForces_(pairLists, dt, bc_, gamma, cutoff, temperature);
+        mvv_dpd::randomDissipativeForces_(pairLists, dt, bc_, gamma, weightFactor, cutoff, temperature);
 
         // "Correct" particle velocities.
         SimulationData data =

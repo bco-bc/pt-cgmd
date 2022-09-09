@@ -20,11 +20,12 @@
 namespace simploce {
 
     ParticleSystem::ParticleSystem(ParticleSystem&& particleSystem) noexcept:
-        all_{}, free_{}, displaceables_(), groups_{}, box_{} {
+        all_{}, free_{}, displaceables_(), groups_{}, ids_{}, box_{} {
         all_ = std::move(particleSystem.all_);
         free_ = std::move(particleSystem.free_);
         displaceables_ = std::move(particleSystem.displaceables_);
         groups_ = std::move(particleSystem.groups_);
+        ids_ = std::move(particleSystem.ids_);
         box_ = std::move(particleSystem.box_);
     }
 
@@ -34,13 +35,14 @@ namespace simploce {
         free_ = std::move(particleSystem.free_);
         displaceables_ = std::move(particleSystem.displaceables_);
         groups_ = std::move(particleSystem.groups_);
+        ids_ = std::move(particleSystem.ids_);
         box_ = std::move(particleSystem.box_);
         return *this;
     }
 
     p_ptr_t
     ParticleSystem::addParticle(const std::string& name,
-                                      const spec_ptr_t& spec) {
+                                const spec_ptr_t& spec) {
         id_t id = this->generateParticleId();
         int index = int(this->numberOfParticles());   // Starts with 0.
         auto particle = this->createParticle_(id, index, name, spec);
@@ -49,6 +51,22 @@ namespace simploce {
         } else {
             this->add(particle);
         }
+        ids_.emplace_back(id);
+        return particle;
+    }
+
+    p_ptr_t
+    ParticleSystem::addParticle(const simploce::id_t &particleId,
+                                const std::string &name,
+                                const simploce::spec_ptr_t &spec) {
+        int index = int(this->numberOfParticles());   // Starts with 0.
+        auto particle = this->createParticle_(particleId, index, name, spec);
+        if (spec->isFree()) {
+            this->addFree(particle);
+        } else {
+            this->add(particle);
+        }
+        ids_.emplace_back(particleId);
         return particle;
     }
 
@@ -115,7 +133,7 @@ namespace simploce {
 
     bool
     ParticleSystem::contains(const id_t& id) const {
-        return this->find(id) != nullptr;
+        return std::find(ids_.begin(), ids_.end(), id) != ids_.end();
     }
 
     box_ptr_t
@@ -194,11 +212,12 @@ namespace simploce {
     ParticleSystem::add(const p_ptr_t& particle)
     {
         util::Logger logger{"simploce::ParticleSystem::add()"};
+        logger.trace("Entering.");
 
         if ( this->contains(particle->id()) ) {
             std::string msg =
                     util::toString(particle->id()) +
-                    ": Particle ID already in use in particle system.";
+                    ": Particle identifier already in use in this particle system.";
             util::logAndThrow(logger, msg);
         }
         auto iter = std::find(all_.begin(), all_.end(), particle);
@@ -210,10 +229,13 @@ namespace simploce {
         }
         all_.emplace_back(particle);
         displaceables_.emplace_back(particle);
+
+        logger.trace("Leaving.");
     }
 
     void
     ParticleSystem::remove(const p_ptr_t& particle) {
+        auto id = particle->id();
         auto iter = std::find(free_.begin(), free_.end(), particle);
         if ( iter != free_.end() ) {
             free_.erase(iter);
@@ -225,6 +247,10 @@ namespace simploce {
         iter = std::find(all_.begin(), all_.end(), particle);
         if ( iter != all_.end()  ) {
             all_.erase(iter);
+        }
+        auto id_iter = std::find(ids_.begin(), ids_.end(), id);
+        if ( id_iter != ids_.end()) {
+            ids_.erase(id_iter);
         }
     }
 
@@ -240,10 +266,6 @@ namespace simploce {
     ParticleSystem::addFree(const p_ptr_t& particle)
     {
         util::Logger logger{"simploce::ParticleSystem::addFree()"};
-        if ( this->contains(particle->id()) ) {
-            util::logAndThrow(logger,
-                              util::toString(particle->id()) + ": Already added to particle system.");
-        }
         auto iter = std::find(free_.begin(), free_.end(), particle);
         if ( iter != free_.end() ) {
             util::logAndThrow(logger,
@@ -349,6 +371,10 @@ namespace simploce {
             }
 
             free_.push_back(particle);
+
+            if (counter % 10000 == 0) {
+                logger.debug(std::to_string(counter) + ": Number of free particles read.");
+            }
         }
         if (nFree > 0 ) {
             std::getline(stream, stringBuffer);  // Read EOL.
@@ -357,7 +383,7 @@ namespace simploce {
         // Read particle groups.
         std::size_t nGroups;
         stream >> nGroups;
-        logger.debug(std::to_string(nGroups) + ": Number of groups.");
+        logger.debug(std::to_string(nGroups) + ": Number of particle groups.");
         std::getline(stream, stringBuffer);  // Read EOL.
         for (std::size_t counter = 0; counter != nGroups; ++counter) {
 
@@ -408,6 +434,11 @@ namespace simploce {
             // Create the group.
             auto group = ParticleGroup::make(particles, bonds);
             this->addParticleGroup(group);
+
+            if ( counter % 10000 == 0) {
+                logger.debug(std::to_string(counter) + ": Number of particle group read.");
+            }
+
         }
         logger.trace("Leaving");
     }
@@ -438,6 +469,7 @@ namespace simploce {
         displaceables_.clear();
         free_.clear();
         all_.clear();
+        ids_.clear();
         box_ = factory::box(length_t{0.0});
     }
 
@@ -495,14 +527,17 @@ namespace simploce {
             id_t id = util::toId(str);
 
             // Add particle.
-            auto particle = this->addParticle(name, spec);
-            this->assignParticleId(id, particle);
+            auto particle = this->addParticle(id, name, spec);
 
             // Position, velocity.
             particle->readState(stream);
 
             // Done, next.
             std::getline(stream, stringBuffer);  // Read EOL.
+
+            if ( i % 10000 == 0) {
+                logger.debug(std::to_string(i) + ": Number of particles read.");
+            }
         }
 
         // Free atoms and atom groups.

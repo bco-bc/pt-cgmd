@@ -24,7 +24,8 @@ namespace simploce {
         void assignVelocity(p_ptr_t &particle, const temperature_t& temperature, bool isMesoscale = false);
 
         /**
-         * Finds particle in a given particle collection.
+         * Finds particle in a given particle collection. This is slow for large collections of particles when
+         * repeatable used.
          * @param id Particle identifier.
          * @param particles Particles.
          * @return Particle or nullptr if the particle cannot be identified.

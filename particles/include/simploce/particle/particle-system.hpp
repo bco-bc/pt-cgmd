@@ -44,6 +44,18 @@ namespace simploce {
                             const spec_ptr_t& spec);
 
         /**
+         * Adds new particle with existing particle identifier. Use this when reading particle
+         * systems from file.
+         * @param particleId Unique particle identifier.
+         * @param name  name Name (does not need to be unique).
+         * @param spec Particle specification.
+         * @return Added particle.
+         */
+        p_ptr_t addParticle(const id_t& particleId,
+                            const std::string& name,
+                            const spec_ptr_t& spec);
+
+        /**
          * Adds a particle group with bonds to this physical system. All arguments are
          * required.
          * @param particles Particles forming a particle group. Each of these particles
@@ -167,8 +179,8 @@ namespace simploce {
         R doWithDisplaceables(const TASK& task) { return task(displaceables_); }
         
         /**
-         * Performs a "task" with all, free particles, as well as with the
-         * particle groups. The given task must expose the operator
+         * Performs a "task" with all and free particles, as well as with all particle groups.
+         * The given task must expose the operator
          * <code>
          *  R operator () (std::vector<p_ptr_t>& all,
          *                 std::vector<p_ptr_t>& free,
@@ -357,6 +369,9 @@ namespace simploce {
         
         // Particles groups.
         std::vector<pg_ptr_t> groups_;
+
+        // All particle identifiers in this particle system.
+        std::vector<id_t> ids_;
 
         // Particle box.
         box_ptr_t box_;

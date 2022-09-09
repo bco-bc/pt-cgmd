@@ -16,7 +16,8 @@
 namespace simploce {
 
     /**
-     * Create particle model.
+     * Create particle model. Particle position are always initially in the positive quadrant of the
+     * Cartesian coordinate system.
      */
     class ParticleSystemFactory {
     public:
@@ -100,7 +101,7 @@ namespace simploce {
          * @param numberOfPolymers Required number of polymers.
          * @param spacing Spacing between polymer segments in a chain.
          * @param numberOfWaters Required number of water beads.
-         * waterBeadSpecName Specification name for water beads.
+         * @waterBeadSpecName Specification name for water beads.
          * @poram temperature Requested temperature. This assumes a DPD unit system, where temperature is
          * expressed as kT=n, where n is a non-negative integer and k is the Boltzmann constant.
          * @param placeRandom Places particles randomly in the box. By default, a grid is employed to create
@@ -116,6 +117,35 @@ namespace simploce {
                                        const std::string& waterBeadSpecName,
                                        const temperature_t& temperature = 1,
                                        bool placeRandom = false);
+
+
+        /**
+         * Creates a coarse-grained (that is, mesoscale) mixture of droplet, polymer and solvent beads
+         * (the latter is referred to as water). This follows the setup by Howard et al, Soft Matter, 2019, 15, 3168.
+         * @param box Box
+         * @param chainLength Numbers of monomeric units (beads) in the chain, each of which will be of
+         * the same particle specification and represent several real monomers.
+         * @param monomericUnitBeadSpecName Specification name for the monomeric units.
+         * @param numberOfPolymers Required number of polymers.
+         * @param spacing Spacing between polymer segments in a chain.
+         * @param numberOfWaters Required number of water (solvent) beads.
+         * @param waterBeadSpecName Specification name for water beads.
+         * @param numberOfDropletBeads Number of droplet particles (beads).
+         * @param dropletBeadSpecName Droplet bead name.
+         * @param temperature Requested temperature. This assumes a DPD unit system, where temperature is
+         * expressed as kT=n, where n is a non-negative integer and k is the Boltzmann constant.
+         * @return Particle system.
+         */
+        p_system_ptr_t dropletPolymerSolution(const box_ptr_t& box,
+                                              int chainLength,
+                                              const std::string& monomericUnitBeadSpecName,
+                                              int numberOfPolymers,
+                                              const length_t& spacing,
+                                              int numberOfWaters,
+                                              const std::string& waterBeadSpecName,
+                                              int numberOfDropletBeads,
+                                              const std::string& dropletBeadSpecName,
+                                              const temperature_t& temperature = 1);
 
 
         /**

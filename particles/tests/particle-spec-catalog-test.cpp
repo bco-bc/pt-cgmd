@@ -15,7 +15,7 @@
 
 using namespace simploce;
 
-void test1() {
+void test() {
     std::cout << "particle-spec-catalog-test argon 1" << std::endl;
     std::string fileName = "/localdisk/resources/particles-specs.dat";
     std::ifstream stream;
@@ -38,7 +38,7 @@ void test1() {
 }
 
 int main() {
-    test1();
+    test();
     return (EXIT_SUCCESS);
 }
 

@@ -12,7 +12,7 @@ include_directories(include)
 include_directories(${CMAKE_INSTALL_PREFIX}/include SYSTEM)
 
 #[[add_library(simulation SHARED
-        src/acid-base-solution.cpp src/analysis.cpp src/cell-lists.cpp src/cg-electrolyte.cpp src/cg-hp.cpp
+        src/acid-base-solution.cpp src/analysis.cpp src/findCell-lists.cpp src/cg-electrolyte.cpp src/cg-hp.cpp
         src/cg-lj-fluid.cpp src/cg-pol-water.cpp src/constant-rate-pt.cpp src/distance-lists.cpp
         src/interactor.cpp src/langevin-leap-frog.cpp src/langevin-velocity-verlet.cpp src/leap-frog.cpp
         src/lj-coulomb-forces.cpp src/mc.cpp src/no-bc.cpp src/boundaryCondition.cpp src/pt-langevin-velocity-verlet.cpp
@@ -29,7 +29,9 @@ add_library(simulation SHARED
         src/no-bc.cpp src/pbc.cpp src/1d-pbc.cpp src/s-factory.cpp
         src/s-properties.cpp src/protonatable-particle-system-factory.cpp
         src/continuous.cpp src/discrete.cpp src/force-field.cpp
-        src/distance-pair-list-generator.cpp src/leap-frog.cpp src/velocity-verlet.cpp
+        src/distance-pair-list-generator.cpp src/cell.cpp src/grid.cpp
+        src/cell-pair-list-generator.cpp
+        src/leap-frog.cpp src/velocity-verlet.cpp
         src/langevin-leap-frog.cpp src/langevin-velocity-verlet.cpp src/mvv-dpd.cpp
         src/s1-dpd.cpp
         src/mc.cpp src/analysis.cpp src/gr.cpp

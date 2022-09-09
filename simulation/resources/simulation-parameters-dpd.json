@@ -2,10 +2,10 @@
   "comment" : "For MC and DPD of a polymer solution",
   "simulation" : {
     "nsteps" : 1000,
-    "timestep": 0.02,
+    "timestep": 0.01,
     "nwrite" : 100,
     "npairlists" : 10,
-    "temperature" : 2.0,
+    "temperature" : 1.0,
     "mesoscale" : 1,
     "displacer" : {
       "dpd" : {

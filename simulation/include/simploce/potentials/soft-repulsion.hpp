@@ -13,7 +13,9 @@
 namespace simploce {
 
     /**
-     * Standard conservative soft repulsion potential commonly used in dissipative particle dynamics.
+     * Standard conservative soft repulsion potential commonly used in dissipative particle dynamics. The force is
+     * of the form a * (1.0 - r/r_c) * u where r <= r_c is the distance between two DPD particles and r_c is a cutoff
+     * distance. The factor a represents the maximal strength of the interaction and u is a unit vector.
      */
     class SoftRepulsion : public pair_potential {
     public:

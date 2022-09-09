@@ -96,7 +96,7 @@ std::istream& operator >> (std::istream& stream, Continuous& continuous) {
     return stream;
 }
 
-void test1() {
+void test() {
     std::cout << "Discrete protonation state" << std::endl;
 
     using cg_t = ProtonatableCoarseGrained<Discrete>;
@@ -166,7 +166,7 @@ void test2() {
 
 
 int main() {
-    test1();
+    test();
     test2();
     return (EXIT_SUCCESS);
 }

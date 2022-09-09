@@ -26,7 +26,7 @@ struct Update {
     }
 };
 
-void test1()
+void test()
 {
     CoarseGrained cg;
     
@@ -147,7 +147,7 @@ void test1()
 
 int main() {
     try {
-        test1();
+        test();
     } catch (std::exception &exception) {
         std::cerr << "Test halted due to exception. " << exception.what() << std::endl;
         return (EXIT_FAILURE);

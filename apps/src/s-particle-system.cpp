@@ -29,6 +29,7 @@ int main(int argc, char *argv[]) {
         const util::Specification POLARIZABLE_WATER{"polarizable-water"};
         const util::Specification ELECTROLYTE{"electrolyte"};
         const util::Specification POLYMER_SOLUTION{"polymer-solution"};
+        const util::Specification DROPLETS_POLYMER_SOLUTION{"channel-droplets-polymer-solution"};
         bool addBoundaryParticles{false};
 
         real_t temperature{units::si<real_t>::ROOM_TEMPERATURE};
@@ -36,12 +37,14 @@ int main(int argc, char *argv[]) {
         std::string fnParticleSpecCatalog{"particle-spec-catalog.dat"};
         std::string fnParticleSystem{"out.ps"};
         util::Specification specification = DIATOMIC;
-        std::string selectFrom = "Particle system selection. Choose one from '" +
+        std::string selectFrom =
+                "Particle system selection. Choose one from '" +
                 DIATOMIC.spec() + "' (molecular oxygen, atomistic), '" +
-                ARGON.spec() + "' (atomistic), '" +
+                ARGON.spec() + "' (atomistic, default), '" +
                 ELECTROLYTE.spec() + "' (electrolyte), '" +
                 POLYMER_SOLUTION.spec() + "' (polymer solution), '" +
-                POLARIZABLE_WATER.spec() + "' (coarse grained). Default is 'diatomic'.";
+                POLARIZABLE_WATER.spec() + "' (coarse grained),  '" +
+                DROPLETS_POLYMER_SOLUTION.spec() + "' (droplets in a polymer solution in a channel)'";
 
         po::options_description usage("Usage");
         usage.add_options() (
@@ -73,7 +76,8 @@ int main(int argc, char *argv[]) {
         po::store(po::parse_command_line(argc, argv, usage), vm);
         po::notify(vm);
         if (vm.count("help") || argc == 1) {
-            std::cout << "Create a particle system:" << std::endl;
+            std::cout << "Create a particle system. The particle systems listed below are based on particle ";
+            std::cout << "publications and are created according to the article's authors specifications." << std::endl;
             std::cout << usage << "\n";
             return 0;
         }
@@ -119,6 +123,20 @@ int main(int argc, char *argv[]) {
                                              temperature,
                                              true);
             stream << *polymerSolution << std::endl;
+        } else if ( specification == DROPLETS_POLYMER_SOLUTION) {
+            auto box = factory::box(15, 15, 30);
+            auto dropletsPolymerSolution =
+                    factory->dropletPolymerSolution(box,
+                                            1,
+                                            "PMU",
+                                            0,
+                                            1.0,
+                                            10125,
+                                            "H2Om",
+                                            10125,
+                                            "DROm",
+                                            1.0);
+            stream << *dropletsPolymerSolution << std::endl;
         } else {
             util::logAndThrow(logger, specification.spec() + ": No such particle model available.");
         }
