@@ -30,6 +30,7 @@ int main(int argc, char *argv[]) {
         const util::Specification ELECTROLYTE{"electrolyte"};
         const util::Specification POLYMER_SOLUTION{"polymer-solution"};
         const util::Specification DROPLETS_POLYMER_SOLUTION{"channel-droplets-polymer-solution"};
+        const util::Specification WATER_IN_MICROCHANNEL("water-in-microchannel");
         bool addBoundaryParticles{false};
 
         real_t temperature{units::si<real_t>::ROOM_TEMPERATURE};
@@ -44,7 +45,8 @@ int main(int argc, char *argv[]) {
                 ELECTROLYTE.spec() + "' (electrolyte), '" +
                 POLYMER_SOLUTION.spec() + "' (polymer solution), '" +
                 POLARIZABLE_WATER.spec() + "' (coarse grained),  '" +
-                DROPLETS_POLYMER_SOLUTION.spec() + "' (droplets in a polymer solution in a channel)'";
+                DROPLETS_POLYMER_SOLUTION.spec() + "' (droplets in a polymer solution in a channel), '" +
+                WATER_IN_MICROCHANNEL.spec() + "' (water in a microchannel)'.";
 
         po::options_description usage("Usage");
         usage.add_options() (
@@ -64,7 +66,7 @@ int main(int argc, char *argv[]) {
                 "Output file name for newly created particle system. Default is 'out.ps'."
         )(
                 "temperature,T", po::value<real_t>(&temperature),
-                "Temperature. Default is 298.15 K."
+                "Temperature. Default is 298.15. For mesoscale, select 1, 2, 3, and so forth."
         )(
                 "verbose,v",
                 "Verbose"
@@ -76,7 +78,7 @@ int main(int argc, char *argv[]) {
         po::store(po::parse_command_line(argc, argv, usage), vm);
         po::notify(vm);
         if (vm.count("help") || argc == 1) {
-            std::cout << "Create a particle system. The particle systems listed below are based on particle ";
+            std::cout << "Create a particle system. The particle systems listed below are based on specific ";
             std::cout << "publications and are created according to the article's authors specifications." << std::endl;
             std::cout << usage << "\n";
             return 0;
@@ -85,10 +87,11 @@ int main(int argc, char *argv[]) {
             addBoundaryParticles = true;
         }
         if (vm.count("verbose") ) {
-            logger.changeLogLevel(util::Logger::LOGTRACE);
+            util::Logger::changeLogLevel(util::Logger::LOGTRACE);
         }
 
         logger.info("Selected particle system: " + specification.spec());
+        logger.info(std::to_string(temperature) + ": Temperature (arbitrary units).");
 
         auto catalog = factory::particleSpecCatalog(fnParticleSpecCatalog);
         auto factory = factory::protonatableParticleSystemFactory(catalog);
@@ -137,6 +140,17 @@ int main(int argc, char *argv[]) {
                                             "DROm",
                                             1.0);
             stream << *dropletsPolymerSolution << std::endl;
+        } else if (specification == WATER_IN_MICROCHANNEL) {
+            auto box = factory::box(40, 42, 80);
+            auto particleSystem =
+                factory->identicalParticles(box,
+                                            "H2Om",
+                                            number_density_t{3.0},
+                                            temperature_t{1.0},
+                                            true);
+            logger.info("Writing particle system...");
+            stream << *particleSystem << std::endl;
+            logger.info("Done.");
         } else {
             util::logAndThrow(logger, specification.spec() + ": No such particle model available.");
         }

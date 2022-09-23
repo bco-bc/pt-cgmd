@@ -147,6 +147,21 @@ namespace simploce {
                                               const std::string& dropletBeadSpecName,
                                               const temperature_t& temperature = 1);
 
+        /**
+         * Creates a particle system consisting of identical particles (that is, of the same particle specification).
+         * @param box Box.
+         * @param specName Particle specification name.
+         * @param rho Number density.
+         * @param temperature Temperature.
+         * @param mesoscale Whether the particle system is created at the mesoscale level. Controls unit system.
+         * @return Particle system.
+         */
+        p_system_ptr_t identicalParticles(const box_ptr_t& box,
+                                          const std::string& specName,
+                                          const number_density_t& rho,
+                                          const temperature_t& temperature,
+                                          bool mesoscale = true);
+
 
         /**
          * Adds a layer of surface/boundary particles.
@@ -159,6 +174,18 @@ namespace simploce {
                                  dist_t spacing,
                                  Plane plane,
                                  bool excludeCorner = false);
+
+        /**
+         * Creates a channel in the z-direction by selecting particles with d < wallWidth, where d is the distance
+         * to the box edges in the x and y direction. The particles' coordinates must place each particle
+         * inside the box.
+         * @param particleSystem Particle system.
+         * @param wallWidth Wall width.
+         * @param mesoscale Whether the given particle system is provided at the mesoscale level. Controls unit system.
+         */
+        void makeChannel(const p_system_ptr_t& particleSystem,
+                         const length_t& wallWidth,
+                         bool mesoscale = true);
 
         /**
          * Generates a atomic particle system from PDB.

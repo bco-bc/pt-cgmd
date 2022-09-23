@@ -19,9 +19,51 @@
 
 namespace simploce {
 
+    void
+    ParticleSystem::validate(const simploce::p_system_ptr_t &particleSystem) {
+        // For all pairs of particles.
+        util::Logger logger("simploce::ParticleSystem::validate()");
+        logger.trace("Entering.");
+        logger.info("Validating particle system...");
+        auto& all = particleSystem->all_;
+        auto numberOfParticles = all.size();
+        auto numberOfPairs = numberOfParticles * (numberOfParticles - 1) / 2;
+        logger.debug(std::to_string(numberOfParticles) + ": Number of particles.");
+        logger.debug(std::to_string(numberOfPairs) + ": Number of particle pairs.");
+        std::size_t counter = 0;
+        for (auto iter_i = all.begin(); iter_i < all.end() - 1; ++iter_i) {
+            auto pi = *iter_i;
+            auto id_i = pi->id();
+            for (auto iter_j = iter_i + 1; iter_j < all.end(); ++iter_j) {
+                auto pj = *iter_j;
+                auto id_j = pj->id();
+                if ( pi == pj) {
+                    std::string msg =
+                            "Particles (" + util::toString(id_i) + ", " + util::toString(id_j) +
+                            ") : Particles point to same particle.";
+                    util::logAndThrow(logger, msg);
+                }
+                if ( id_i == id_j) {
+                    std::string msg =
+                            "Particles (" + std::to_string(pi->index()) + ", " + std::to_string(pj->index()) +
+                            ": Identical particle identifiers.";
+                    util::logAndThrow(logger, msg);
+                }
+                counter += 1;
+                if (counter % 5000000 == 0 && counter > 1) {
+                    auto percentage = real_t(counter) / real_t(numberOfPairs) * 100.0;
+                    logger.debug(std::to_string(percentage) + ": Percentage of particle pairs validated.");
+                }
+            }
+        }
+        logger.info("Done. No errors encountered.");
+        logger.trace("Leaving.");
+    }
+
     ParticleSystem::ParticleSystem(ParticleSystem&& particleSystem) noexcept:
-        all_{}, free_{}, displaceables_(), groups_{}, ids_{}, box_{} {
+        all_{}, mapAll_{}, free_{}, displaceables_(), groups_{}, ids_{}, box_{} {
         all_ = std::move(particleSystem.all_);
+        mapAll_ = std::move(particleSystem.mapAll_);
         free_ = std::move(particleSystem.free_);
         displaceables_ = std::move(particleSystem.displaceables_);
         groups_ = std::move(particleSystem.groups_);
@@ -32,6 +74,7 @@ namespace simploce {
     ParticleSystem&
     ParticleSystem::operator = (ParticleSystem&& particleSystem) noexcept {
         all_ = std::move(particleSystem.all_);
+        mapAll_ = std::move(particleSystem.mapAll_);
         free_ = std::move(particleSystem.free_);
         displaceables_ = std::move(particleSystem.displaceables_);
         groups_ = std::move(particleSystem.groups_);
@@ -51,7 +94,7 @@ namespace simploce {
         } else {
             this->add(particle);
         }
-        ids_.emplace_back(id);
+        ids_.emplace(id);
         return particle;
     }
 
@@ -66,7 +109,7 @@ namespace simploce {
         } else {
             this->add(particle);
         }
-        ids_.emplace_back(particleId);
+        ids_.emplace(particleId);
         return particle;
     }
 
@@ -91,6 +134,11 @@ namespace simploce {
     std::size_t
     ParticleSystem::numberOfParticleGroups() const {
         return groups_.size();
+    }
+
+        std::size_t
+    ParticleSystem::numberOfDisplaceableParticles() const {
+        return displaceables_.size();
     }
 
     std::size_t
@@ -128,12 +176,14 @@ namespace simploce {
     }
 
     p_ptr_t ParticleSystem::find(const id_t& id) const {
-        return util::find(id, all_);
+        auto iter = mapAll_.find(id);
+        return iter != mapAll_.end() ? iter->second : nullptr;
+        //return util::find(id, all_);
     }
 
     bool
     ParticleSystem::contains(const id_t& id) const {
-        return std::find(ids_.begin(), ids_.end(), id) != ids_.end();
+        return ids_.find(id) != ids_.end();
     }
 
     box_ptr_t
@@ -208,12 +258,16 @@ namespace simploce {
         }
     }
 
+    ParticleSystem::ParticleSystem() : all_{}, mapAll_{}, displaceables_{}, groups_{}, ids_{}, box_{} {
+    }
+
     void
     ParticleSystem::add(const p_ptr_t& particle)
     {
         util::Logger logger{"simploce::ParticleSystem::add()"};
         logger.trace("Entering.");
-
+        //logger.debug(util::toString(particle->id()) + ": Identifier particle being added.");
+        /*
         if ( this->contains(particle->id()) ) {
             std::string msg =
                     util::toString(particle->id()) +
@@ -227,7 +281,10 @@ namespace simploce {
                     ": Already added to particle system.";
             util::logAndThrow(logger, msg);
         }
+         */
         all_.emplace_back(particle);
+        auto pair = std::make_pair(particle->id(), particle);
+        mapAll_.emplace(pair);
         displaceables_.emplace_back(particle);
 
         logger.trace("Leaving.");
@@ -244,6 +301,7 @@ namespace simploce {
         if ( iter != displaceables_.end() ) {
             displaceables_.erase(iter);
         }
+        mapAll_.erase(id);
         iter = std::find(all_.begin(), all_.end(), particle);
         if ( iter != all_.end()  ) {
             all_.erase(iter);
@@ -266,11 +324,13 @@ namespace simploce {
     ParticleSystem::addFree(const p_ptr_t& particle)
     {
         util::Logger logger{"simploce::ParticleSystem::addFree()"};
+        /*
         auto iter = std::find(free_.begin(), free_.end(), particle);
         if ( iter != free_.end() ) {
             util::logAndThrow(logger,
                               util::toString(particle->id()) + ": Already added to particle system.");
         }
+        */
         this->add(particle);
         free_.emplace_back(particle);
     }
@@ -327,15 +387,25 @@ namespace simploce {
 
     void
     ParticleSystem::removeFromDisplaceables(const spec_ptr_t& spec) {
+        util::Logger logger("simploce::ParticleSystem::removeFromDisplaceables()");
+        logger.trace("Entering.");
         std::vector<p_ptr_t> remove{};
         for (const auto& p: displaceables_) {
             if (p->spec()->name() == spec->name()) {
                 remove.emplace_back(p);
             }
         }
+        logger.debug(std::to_string(remove.size()) + ": Number of particles to be removed from displaceables.");
+        std::size_t counter = 0;
         for (const auto& p: remove) {
             this->removeFromDisplaceables(p);
+            counter += 1;
+            if ( counter % 1000 == 0 && counter > 1) {
+                logger.debug(std::to_string(counter) + ": Number of particles removed.");
+            }
         }
+        logger.debug(std::to_string(counter) + ": Number of particles removed.");
+        logger.trace("Leaving");
     }
 
     void
@@ -469,6 +539,7 @@ namespace simploce {
         displaceables_.clear();
         free_.clear();
         all_.clear();
+        //mapAll_.clear();
         ids_.clear();
         box_ = factory::box(length_t{0.0});
     }
@@ -554,6 +625,11 @@ namespace simploce {
         logger.debug(std::to_string(this->numberOfParticleGroups()) + ": Number of particle groups.");
 
         logger.trace("Leaving.");
+    }
+
+    void
+    ParticleSystem::resetSpec_(const simploce::p_ptr_t &particle, const simploce::spec_ptr_t &spec) {
+        particle->resetSpec(spec);
     }
 
     std::ostream&

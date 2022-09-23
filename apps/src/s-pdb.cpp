@@ -16,6 +16,7 @@
 #include "simploce/util/logger.hpp"
 #include "simploce/util/file.hpp"
 #include "simploce/util/util.hpp"
+#include "simploce/util/hybrid_36_c.hpp"
 #include <boost/program_options.hpp>
 #include <cstdlib>
 #include <iostream>
@@ -25,15 +26,25 @@ namespace po = boost::program_options;
 using namespace simploce;
 
 static void
-outputHETATM(std::ofstream& ostream,
-             const spec_catalog_ptr_t& catalog,
-             const p_ptr_t& particle,
-             int rsn,
-             const PeriodicBoundaryCondition& pbc,
-             bool inBox) {
-    ostream << "HETATM";
+outputFreeParticle(std::ofstream& ostream,
+                   const spec_catalog_ptr_t& catalog,
+                   const p_ptr_t& particle,
+                   int rsn,
+                   const PeriodicBoundaryCondition& pbc,
+                   bool inBox) {
+    ostream << "ATOM  ";
     auto index = particle->index() + 1;
-    ostream << std::setw(5) << index;  // Atom serial number.
+    auto stringIndex = std::to_string(index);
+    if (index > 99999) {
+        char result[5];
+        const char* errmsg = hy36encode(5, index, result);
+        if (errmsg) {
+            throw std::domain_error(errmsg);
+        }
+        stringIndex = std::string(result);
+    }
+    ostream << std::setw(5) << stringIndex;
+    //ostream << std::setw(5) << index;  // Atom serial number.
 
     ostream << conf::SPACE;      // Space between atom serial number and atom name.
 
@@ -58,7 +69,7 @@ outputHETATM(std::ofstream& ostream,
 
     ostream << conf::SPACE;
 
-    ostream << 'A';                     // Chain identifier.
+    ostream << conf::SPACE;                     // Chain identifier.
     int number = (rsn >= 10000 ? 9999 : rsn);
     ostream << std::setw(4) << number;  // Residue sequence number.
     ostream << conf::SPACE;             // Code for insertion of residues.
@@ -173,7 +184,7 @@ void toPDB(const p_system_ptr_t& particleSystem,
             std::string residueName = p->spec()->name().substr(0,3);
             rsn += 1;
             //int rsn = int (p->index() + 1);
-            outputHETATM(ostream, catalog, p, rsn, pbc, inBox);
+            outputFreeParticle(ostream, catalog, p, rsn, pbc, inBox);
             // oneLineToPDB(ostream, "HETATM", residueName, rsn, p, catalog, pbc, inBox);
         }
     });

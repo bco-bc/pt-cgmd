@@ -11,6 +11,7 @@
 #include "simploce/particle/p-factory.hpp"
 #include "simploce/particle/p-types.hpp"
 #include "simploce/util/util.hpp"
+#include "simploce/util/file.hpp"
 #include <cstdlib>
 #include <iostream>
 #include <string>
@@ -58,6 +59,19 @@ void electrolyteSolution(const spec_catalog_ptr_t& catalog) {
     std::cout << std::endl;
 }
 
+p_system_ptr_t identicalParticles(const spec_catalog_ptr_t& catalog) {
+    std::cout << "Creating identical particles:" << std::endl;
+    auto factory = factory::particleSystemFactory(catalog);
+    box_ptr_t box = factory::box(40, 42, 80);
+    std::string specName{"H2Om"};
+    number_density_t rho{0.8};
+    auto particleSystem = factory->identicalParticles(box, specName, rho, temperature_t{1.0});
+    std::cout << "Number of particles: " << particleSystem->numberOfParticles() << std::endl;
+    //ParticleSystem::validate(particleSystem);
+    std::cout << std::endl;
+    return particleSystem;
+}
+
 int main() {
     util::Logger logger("main");
     logger.changeLogLevel(util::Logger::LOGDEBUG);
@@ -67,8 +81,16 @@ int main() {
 
     //diatomic(catalog);
     //argon(catalog);
-    electrolyteSolution(catalog);
+    //electrolyteSolution(catalog);
     //coarseGrainedPolarizableWater(catalog);
+    auto particleSystem = identicalParticles(catalog);
+
+    fileName = "/wrk3/tests/identical-particles.ps";
+    std::ofstream stream;
+    util::open_output_file(stream, fileName);
+    stream << *particleSystem << std::endl;
+    stream.close();
+    logger.info(fileName + ": Particle system written to this file.");
 
     return (EXIT_SUCCESS);
 }

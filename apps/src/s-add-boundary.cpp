@@ -22,7 +22,10 @@ int main(int argc, char *argv[]) {
     std::string fnParticleSpecCatalog{"particle-spec-catalog.dat"};
     std::string fnInputParticleSystem{"in.ps"};
     std::string fnOutputParticleSystem{"out.ps"};
+    std::string fnOutputPDB{"out.pdb"};
     bool isCoarseGrained{false};
+    bool channel{false};
+    real_t wallWidth{1.0};
 
     po::options_description usage("Usage");
     usage.add_options() (
@@ -34,12 +37,24 @@ int main(int argc, char *argv[]) {
         po::value<std::string>(&fnInputParticleSystem),
         "Input file name particle system. Default is 'in.ps'."
     )(
+        "fn-output-particle-system,o",
+        po::value<std::string>(&fnOutputParticleSystem),
+        "Output file name particle system. Default is 'out.ps'."
+    )(
         "coarse-grained,c",
         "Input is a coarse-grained description."
     )(
-        "fn-output-pdb,o",
-        po::value<std::string>(&fnOutputParticleSystem),
+        "fn-output-pdb",
+        po::value<std::string>(&fnOutputPDB),
         "Output file name PDB."
+    )(
+        "channel",
+        "Creates a channel in the z-direction by creating a wall of particles of given width. "
+        "Particles are taken from the given particle system. No additional particles are created."
+    )(
+        "wall-width",
+        po::value<real_t>(&wallWidth),
+        "Width of channel boundary. Default is 1.0."
     )(
         "verbose,v",
         "Verbose"
@@ -63,11 +78,20 @@ int main(int argc, char *argv[]) {
     if (vm.count("fn-input-particle-system")) {
         fnInputParticleSystem = vm["fn-input-particle-system"].as<std::string>();
     }
+    if (vm.count("fn-output-particle-system")) {
+        fnOutputParticleSystem = vm["fn-output-particle-system"].as<std::string>();
+    }
     if (vm.count("coarse-grained") ) {
         isCoarseGrained = true;
     }
-    if (vm.count("fn-output-particle-system")) {
-        fnOutputParticleSystem = vm["fn-output-particle-system"].as<std::string>();
+    if (vm.count("channel")) {
+        channel = true;
+    }
+    if (vm.count("wall-width")) {
+        wallWidth = vm["wall-width"].as<real_t>();
+    }
+    if (vm.count("fn-output-pdb")) {
+        fnOutputPDB = vm["fn-output-pdb"].as<std::string>();
     }
     if (vm.count("verbose") ) {
         util::Logger::changeLogLevel(util::Logger::LOGDEBUG);

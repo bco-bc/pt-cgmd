@@ -79,10 +79,10 @@ namespace simploce {
          * @param max Max value .
          * @return Random value between 0 and max, uniformly sampled.
          */
-        real_t randomUniform(real_t min = 0, real_t max = 1);
+        real_t randomUniform(real_t min = 0, real_t max = 1.0);
         
          /**
-         * Random number generator in the range [0,1.0].
+         * Random number generator in the range [0, 1.0].
          * @return Random value.
          */
         real_t random();

@@ -8,6 +8,7 @@
 #include "simploce/particle/particle-spec.hpp"
 #include "simploce/particle/particle-spec-catalog.hpp"
 #include "simploce/particle/particle-group.hpp"
+#include "simploce/particle/particle.hpp"
 #include "simploce/particle/atomistic.hpp"
 #include "simploce/particle/coarse-grained.hpp"
 #include "simploce/particle/particle-system.hpp"
@@ -704,6 +705,47 @@ namespace simploce {
         return std::move(particleSystem);
     }
 
+    p_system_ptr_t
+    ParticleSystemFactory::identicalParticles(const simploce::box_ptr_t &box,
+                                              const std::string &specName,
+                                              const simploce::number_density_t &rho,
+                                              const temperature_t& temperature,
+                                              bool mesoscale) {
+        util::Logger logger("simploce::ParticleSystemFactory::identicalParticles()");
+        logger.trace("Entering");
+        logger.info("Creating physical system of identical particles.");
+        logger.info(util::toString(*box) + ": Requested box dimensions.");
+        logger.info(specName + ": Requested particle specification name.");
+        logger.info(std::to_string(rho()) + ": Requested number density.");
+        logger.info(std::to_string(temperature()) + ": Requested temperature.");
+        auto numberOfParticles = int(rho() * box->volume());
+        logger.info(std::to_string(numberOfParticles) + ": Requested number of particles.");
+        logger.info(std::to_string(mesoscale) + ": Mesoscale?");
+
+        auto spec = catalog_->lookup(specName);
+
+        auto particleSystem = factory::coarseGrained();
+        for (auto counter = 0; counter != numberOfParticles; ++counter) {
+            auto x = util::randomUniform(0.0, box->lengthX());
+            auto y = util::randomUniform(0.0, box->lengthY());
+            auto z = util::randomUniform(0.0, box->lengthZ());
+            position_t r(x, y, z);
+            std::string name = specName + std::to_string(counter);
+            auto particle = particleSystem->addBead(name, spec);
+            particle->position(r);
+            util::assignVelocity(particle, temperature, mesoscale);
+            auto n = particleSystem->numberOfParticles();
+            if (n % 100000 == 0) {
+                logger.info(std::to_string(n) + ": Number of particles created.");
+            }
+        }
+        logger.info(std::to_string(particleSystem->numberOfParticles()) + ": Number of particles created.");
+        particleSystem->box(box);
+
+        logger.trace("Leaving.");
+        return particleSystem;
+    }
+
     void
     ParticleSystemFactory::addParticleBoundary(const p_system_ptr_t& particleSystem,
                                                dist_t spacing,
@@ -791,6 +833,41 @@ namespace simploce {
         logger.info("Added number of boundary particles: " + util::toString(counter));
 
         particleSystem->addParticleGroup(particles, bonds);
+    }
+
+    void
+    ParticleSystemFactory::makeChannel(const simploce::p_system_ptr_t &particleSystem,
+                                       const simploce::length_t &wallWidth,
+                                       bool mesoscale) {
+        util::Logger logger("simploce::ParticleSystemFactory::makeChannel()");
+        logger.trace("Entering.");
+        logger.info(std::to_string(wallWidth()) + ": Requested wall width.");
+        auto box = particleSystem->box();
+        logger.info(util::toString(*box) + ": Box dimensions.");
+        auto spec = catalog_->staticBP();
+
+        particleSystem->doWithAll<void>([&box, &wallWidth, &particleSystem, &spec] (
+                const std::vector<p_ptr_t>& all) {
+            for (auto& p : all) {
+                auto r = p->position();
+                auto x = std::fabs(r.x());
+                auto y = std::fabs(r.y());
+                auto inWall = box->lengthX() - x < wallWidth() ||
+                              x < wallWidth() ||
+                              box->lengthY() - y < wallWidth() ||
+                              y < wallWidth();
+                if (inWall) {
+                    particleSystem->resetSpec_(p, spec);
+                    p->velocity(velocity_t{});
+                }
+            }
+        });
+        logger.debug(std::to_string(particleSystem->numberOfSpecifications(spec)) + ": Number of boundary particles.");
+        logger.debug("Making boundary particles non-displaceable...");
+        particleSystem->removeFromDisplaceables(spec);
+        logger.debug("Done.");
+
+        logger.trace("Leaving.");
     }
 
     p_system_ptr_t

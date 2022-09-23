@@ -56,7 +56,7 @@ namespace simploce {
         }
 
         real_t random() {
-            return randomUniform(0,1.0);
+            return randomUniform(0.0,1.0);
         }
 
         dist_vect_t randomUnit() {

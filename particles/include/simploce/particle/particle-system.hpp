@@ -9,6 +9,8 @@
 #define PARTICLE_SYSTEM_HPP
 
 #include "p-types.hpp"
+#include <set>
+#include <map>
 
 namespace simploce {
 
@@ -25,6 +27,13 @@ namespace simploce {
      */
     class ParticleSystem {
     public:
+
+        /**
+         * Validate particle system. E.g, whether all assigned particle identifiers are unique. NOTE: For larger
+         * systems, this is rather slow.
+         * @param particleSystem Particle system.
+         */
+        static void validate(const p_system_ptr_t& particleSystem);
         
         // Noncopyable.
         ParticleSystem(const ParticleSystem&) = delete;
@@ -91,6 +100,8 @@ namespace simploce {
          * @return Number.
          */
         std::size_t numberOfSpecifications(const spec_ptr_t& spec) const;
+
+        std::size_t numberOfDisplaceableParticles() const;
         
         /**
          * Returns total charge.
@@ -228,7 +239,7 @@ namespace simploce {
         /**
          * Constructor. No particles, no box.
          */
-        ParticleSystem() : all_{}, free_{}, displaceables_{}, groups_{}, box_{} {}
+        ParticleSystem();
         
         /**
          * Adds particle.
@@ -343,6 +354,15 @@ namespace simploce {
 
     private:
 
+        friend class ParticleSystemFactory;
+
+        /**
+         * Resets particle specification of given particle.
+         * @param particle Particle.
+         * @param spec Specification.
+         */
+        void resetSpec_(const p_ptr_t& particle, const spec_ptr_t& spec);
+
         /**
          * Creates particle.
          * @param id Unique particle identifier.
@@ -359,19 +379,19 @@ namespace simploce {
 
         // All particles
         std::vector<p_ptr_t> all_;
+        std::map<id_t, p_ptr_t> mapAll_;
         
         // Free particles, not in any group.
         std::vector<p_ptr_t> free_;
 
-        // Displaceable particles. Particles are always displaceables unless removed from this
-        // list.
+        // Displaceable particles. Particles are always displaceables unless removed from this list.
         std::vector<p_ptr_t> displaceables_;
         
         // Particles groups.
         std::vector<pg_ptr_t> groups_;
 
         // All particle identifiers in this particle system.
-        std::vector<id_t> ids_;
+        std::set<id_t> ids_;
 
         // Particle box.
         box_ptr_t box_;

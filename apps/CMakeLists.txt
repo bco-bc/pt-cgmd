@@ -23,7 +23,7 @@ include_directories(include)
 include_directories(${Boost_INCLUDE_DIR} SYSTEM)
 include_directories(${CMAKE_INSTALL_PREFIX}/include SYSTEM)
 
-add_library(apps SHARED src/program-options.cpp)
+add_library(apps SHARED src/program-options.cpp src/hybrid_36_c.cpp)
 
 add_executable(s-validate src/s-validate.cpp)
 add_executable(s-simulate src/s-simulate.cpp)
