@@ -14,9 +14,9 @@
 namespace simploce {
 
     /**
-     * Halve attractive quartic potential, U(r) = 0.5 * k * (r - r0)^4, where r is a distance,
+     * Halve attractive quartic bonded potential, U(r) = 0.5 * k * (r - r0)^4, where r is a distance,
      * k is a force constant (fc) and r0 is the equilibrium distance. Halve attractive implies
-     * U(r) = 0 for r <= r0.
+     * U(r) = 0 and dU(r)/dr = 0 for r <= r0.
      * @see <a href="https://dx.doi.org/10.1063/1.3553378">
      * Riniker and van Gunsteren, J. Chem. Phys., 134, 084110.2011.
      * </a>

@@ -29,7 +29,7 @@ p_system_ptr_t getElectrolyte(const spec_catalog_ptr_t& catalog) {
 
 p_system_ptr_t getWaterInChannel(const spec_catalog_ptr_t& catalog) {
     auto factory = simploce::factory::particleSystemFactory(catalog);
-    box_ptr_t box = factory::box(40, 42, 80);
+    box_ptr_t box = factory::box(10.00000, 8.33333, 166.66667);
     std::string specName{"H2Om"};
     number_density_t rho{3.0};
     return factory->identicalParticles(box, specName, rho, temperature_t{1.0});
@@ -54,7 +54,7 @@ int main() {
     util::Logger::changeLogLevel(util::Logger::LOGDEBUG);
     auto particleSystem = getWaterInChannel(catalog);
     auto factory = simploce::factory::particleSystemFactory(catalog);
-    factory->makeChannel(particleSystem, length_t{1.0}, true);
+    factory->makeChannel(particleSystem, length_t{0.1}, true);
     std::string fileName = "/wrk3/tests/particles-in-channel.ps";
     std::ofstream stream;
     util::open_output_file(stream, fileName);
@@ -63,9 +63,8 @@ int main() {
     std::clog << fileName << ": Particle system written to this file." << std::endl;
     auto spec = catalog->staticBP();
     auto numberOfBoundaryParticles = particleSystem->numberOfSpecifications(spec);
+    particleSystem->freeze(spec);
     std::clog << numberOfBoundaryParticles << ": Number of boundary particles." << std::endl;
     std::clog << particleSystem->numberOfParticles() << ": Total number of particles." << std::endl;
-    std::clog << particleSystem->numberOfDisplaceableParticles() << ": Number of displaceable particles." << std::endl;
-
     return (EXIT_SUCCESS);
 }

@@ -6,7 +6,7 @@
  */
 
 #include "simploce/simulation/s1-dpd.hpp"
-#include "simploce/simulation/pair-lists.hpp"
+#include "simploce/simulation/pair-list.hpp"
 #include "simploce/simulation/bc.hpp"
 #include "simploce/simulation/s-properties.hpp"
 #include "simploce/simulation/interactor.hpp"
@@ -21,7 +21,7 @@ namespace simploce {
 
         /**
          * Step 1: Displace velocities due to random and dissipative forces. See Nikunen et al., Table 4, p. 414.
-         * @param pairLists Particle pair lists.
+         * @param pairList Particle pair lists.
          * @param dt Timestep.
          * @param bc Boundary condition.
          * @param gamma Friction
@@ -29,7 +29,7 @@ namespace simploce {
          * @param temperature Temperature.
          */
         static void
-        randomDissipativeForces_(const PairLists &pairLists,
+        randomDissipativeForces_(const std::vector<PairList::p_pair_t>& particlePairs,
                                  const stime_t &dt,
                                  const bc_ptr_t &bc,
                                  real_t gamma,
@@ -53,7 +53,7 @@ namespace simploce {
             }
             counter += 1;
 
-            for (auto& pp: pairLists.particlePairList()) {
+            for (auto& pp: particlePairs) {
                 auto &p1 = pp.first;
                 auto &p2 = pp.second;
                 auto &particle1 = *p1;
@@ -167,7 +167,7 @@ namespace simploce {
                    interactor_ptr_t interactor,
                    bc_ptr_t bc,
                    units::dpd_ptr_t dpdUnits) :
-            param_{std::move(param)}, interactor_{std::move(interactor)}, bc_{std::move(bc)},
+            displacer{}, param_{std::move(param)}, interactor_{std::move(interactor)}, bc_{std::move(bc)},
             dpdUnits_{std::move(dpdUnits)} {
         util::Logger logger("simploce::S1_DPD::S1_DPD()");
         if (!param_) {
@@ -196,11 +196,11 @@ namespace simploce {
         static temperature_t temperature = param_->get<real_t>("simulation.temperature");
         static auto gamma = param_->get<real_t>("simulation.displacer.dpd.gamma");
         static auto lambda = param_->get<real_t>("simulation.displacer.dpd.lambda");
-        static dist_t cutoff = param_->get<real_t>("simulation.forces.cutoff");
-        static auto isMesoscale = param_->get<bool>("simulation.mesoscale");
+        static dist_t cutoff = param_->get<real_t>("simulation.forces.cutoffSR");
+        static auto mesoscopic = param_->get<bool>("simulation.mesoscale");
         static auto conservativeForces =
                 param_->get<bool>("simulation.forces.conservative", true);
-        if (!isMesoscale) {
+        if (!mesoscopic) {
             logger.warn("Simulation parameters may not be suitable for a DPD simulation.");
         }
 
@@ -208,11 +208,11 @@ namespace simploce {
 
         if ( counter == 1) {
             logger.info("Dissipative Particle Dynamics (S1).");
-            logger.debug(util::toString(dt) + ": Time step.");
-            logger.debug(util::toString(temperature) + ": Temperature.");
-            logger.debug(util::toString(gamma) + ": gamma.");
-            logger.debug(util::toString(lambda) + ": lambda.");
-            logger.debug(util::toString(cutoff) + ": Cutoff distance.");
+            logger.debug(std::to_string(dt()) + ": Time step.");
+            logger.debug(std::to_string(temperature()) + ": Temperature.");
+            logger.debug(std::to_string(gamma) + ": gamma.");
+            logger.debug(std::to_string(lambda) + ": lambda.");
+            logger.debug(std::to_string(cutoff()) + ": Cutoff distance.");
 
             // Initial conservative forces.
             interactor_->interact(particleSystem);
@@ -224,9 +224,15 @@ namespace simploce {
 
         // Steps 1 to 3: Displacement due to random and dissipative forces, followed by displacement
         // due to conservative forces.
-        particleSystem->doWithDisplaceables<void>([this] (const std::vector<p_ptr_t>& particles) {
-            auto pairLists = this->interactor_->pairLists();
-            s1_dpd::randomDissipativeForces_(pairLists, dt, this->bc_, gamma, cutoff, temperature);
+        particleSystem->doWithAll<void>([this] (
+                const std::vector<p_ptr_t>& particles) {
+            auto pairList = this->interactor_->pairList();
+            logger.debug(std::to_string(pairList->nonBondedParticlePairs().size()) +
+                         ": Number of non-bonded particle pairs.");
+            logger.debug(std::to_string(pairList->bondedParticlePairs().size()) +
+                         ": Number of bonded particle pairs.");
+            s1_dpd::randomDissipativeForces_(pairList->nonBondedParticlePairs(), dt, this->bc_, gamma, cutoff, temperature);
+            s1_dpd::randomDissipativeForces_(pairList->bondedParticlePairs(), dt, this->bc_, gamma, cutoff, temperature);
             s1_dpd::displace_(dt, particles);
         });
 
@@ -238,7 +244,7 @@ namespace simploce {
 
         // Final step 5. Displace velocities.
         auto data =
-                particleSystem->doWithDisplaceables<SimulationData>([] (
+                particleSystem->doWithAll<SimulationData>([] (
                         const std::vector<p_ptr_t>& particles) {
             auto data = s1_dpd::displaceVelocity_(dt, particles);
             data.totalMomentum = norm<real_t>(properties::linearMomentum(particles));

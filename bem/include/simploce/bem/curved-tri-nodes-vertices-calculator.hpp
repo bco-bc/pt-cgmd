@@ -41,9 +41,9 @@ namespace simploce {
 
         void solve() override;
 
-        std::vector<el_pot> reactionPotentialSolute(const std::vector<position_t> &points) override;
+        std::vector<el_pot_t> reactionPotentialSolute(const std::vector<position_t> &points) override;
 
-        std::vector<el_pot> reactionPotentialSolvent(const std::vector<position_t> &points) override;
+        std::vector<el_pot_t> reactionPotentialSolvent(const std::vector<position_t> &points) override;
 
     private:
 

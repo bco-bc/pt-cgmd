@@ -19,6 +19,10 @@ namespace simploce {
         {
             boost::property_tree::json_parser::write_json(stream, p);
         }
+
+        void write(std::ostream& stream, const param_ptr_t& p) {
+            write(stream, *p);
+        }
         
         std::istream& operator >> (std::istream& stream, param_t& p)
         {

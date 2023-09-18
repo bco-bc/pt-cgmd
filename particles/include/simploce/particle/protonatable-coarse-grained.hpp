@@ -120,10 +120,10 @@ namespace simploce {
 
     private:
 
-        p_ptr_t createParticle_(const id_t& id,
-                                int index,
-                                const std::string& name,
-                                const spec_ptr_t& spec) override;
+        p_ptr_t createParticle(const id_t& id,
+                               int index,
+                               const std::string& name,
+                               const spec_ptr_t& spec) override;
 
         std::vector<prot_bead_ptr_t> protonatableBeads_;
     };
@@ -132,11 +132,11 @@ namespace simploce {
     typename ProtonatableCoarseGrained<S>::prot_cg_mod_ptr_t
     ProtonatableCoarseGrained<S>::obtainFrom(std::istream& stream,
                                              const spec_catalog_ptr_t& catalog) {
-        util::Logger logger{"simploce::ProtonatableCoarseGrained<S>::obtainFrom"};
+        util::Logger logger{"simploce::ProtonatableCoarseGrained<S>::parseIt"};
         auto protonatableCoarseGrained = std::make_shared<ProtonatableCoarseGrained<S>>();
-        protonatableCoarseGrained->parse(stream, catalog);
+        protonatableCoarseGrained->parseIt(stream, catalog);
         logger.debug("Number of protonatable particles: " +
-                      util::toString(protonatableCoarseGrained->numberProtonatableBeads()));
+                      std::to_string(protonatableCoarseGrained->numberProtonatableBeads()));
         return protonatableCoarseGrained;
     }
 
@@ -148,7 +148,7 @@ namespace simploce {
     template <typename S>
     ProtonatableCoarseGrained<S>::ProtonatableCoarseGrained(ProtonatableCoarseGrained&& pcg) noexcept {
         auto ptr = &pcg;
-        auto& all = this->all();
+        std::vector<p_ptr_t>& all = this->all();
         all.clear();
         auto p = ptr->all();
         all = std::move((&pcg)->all());
@@ -166,7 +166,7 @@ namespace simploce {
     ProtonatableCoarseGrained<S>&
     ProtonatableCoarseGrained<S>::operator = (ProtonatableCoarseGrained&& pcg) noexcept {
         auto ptr = &pcg;
-        auto& all = this->all();
+        std::vector<p_ptr_t>& all = this->all();
         all.clear();
         auto p = ptr->all();
         all = std::move((&pcg)->all());
@@ -227,7 +227,7 @@ namespace simploce {
             for ( auto& p: group->particles() ) {
                 this->remove(p);
             }
-            std::string name = spec->name() + util::toString(this->numberOfParticles());
+            std::string name = spec->name() + std::to_string(this->numberOfParticles());
             if (spec->isProtonatable() ) {
                 auto p = this->addProtonatableBead(name, spec);
                 p->position(r);
@@ -247,10 +247,10 @@ namespace simploce {
 
     template<typename S>
     p_ptr_t
-    ProtonatableCoarseGrained<S>::createParticle_(const id_t& id,
-                                                  int index,
-                                                  const std::string& name,
-                                                  const spec_ptr_t& spec) {
+    ProtonatableCoarseGrained<S>::createParticle(const id_t& id,
+                                                 int index,
+                                                 const std::string& name,
+                                                 const spec_ptr_t& spec) {
         if ( spec->isProtonatable() ) {
             prot_bead_ptr_t bead = ProtonatableBead<S>::create(id, index, name, spec);
             protonatableBeads_.emplace_back(bead);

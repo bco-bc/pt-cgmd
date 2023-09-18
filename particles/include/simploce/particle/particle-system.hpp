@@ -9,6 +9,7 @@
 #define PARTICLE_SYSTEM_HPP
 
 #include "p-types.hpp"
+#include "particle.hpp"
 #include <set>
 #include <map>
 
@@ -22,19 +23,17 @@ namespace simploce {
      * There are also 'displaceable' particles, which refer to particles that can be, e.g.,
      * moved ('displaced') to a new position. Any particle is assumed to be
      * displaceable unless explicitly removed from the list of displaceable particles.
-     * @tparam P Particle type.
-     * @tparam PG Particle group type.
      */
     class ParticleSystem {
     public:
 
         /**
-         * Validate particle system. E.g, whether all assigned particle identifiers are unique. NOTE: For larger
-         * systems, this is rather slow.
+         * Validates particle system. E.g, whether all assigned particle identifiers are unique.
+         * NOTE: For larger systems, this is rather slow.
          * @param particleSystem Particle system.
          */
         static void validate(const p_system_ptr_t& particleSystem);
-        
+
         // Noncopyable.
         ParticleSystem(const ParticleSystem&) = delete;
         ParticleSystem& operator = (const ParticleSystem&) = delete;
@@ -43,6 +42,8 @@ namespace simploce {
         ParticleSystem(ParticleSystem&& particleSystem) noexcept;
         ParticleSystem& operator = (ParticleSystem&& particleSystem) noexcept;
         
+        virtual ~ParticleSystem() = default;
+
         /**
          * Adds a new particle to this particle system. All arguments are required.
          * @param name Name (does not need to be unique).
@@ -53,7 +54,7 @@ namespace simploce {
                             const spec_ptr_t& spec);
 
         /**
-         * Adds new particle with existing particle identifier. Use this when reading particle
+         * Adds particle with existing particle identifier. Use this when reading particle
          * systems from file.
          * @param particleId Unique particle identifier.
          * @param name  name Name (does not need to be unique).
@@ -65,8 +66,7 @@ namespace simploce {
                             const spec_ptr_t& spec);
 
         /**
-         * Adds a particle group with bonds to this physical system. All arguments are
-         * required.
+         * Adds new particle group with bonds to this physical system.
          * @param particles Particles forming a particle group. Each of these particles
          * must already be present in this particle system.
          * @param bonds Bonds between particles, given as pairs of particle identifiers.
@@ -101,7 +101,23 @@ namespace simploce {
          */
         std::size_t numberOfSpecifications(const spec_ptr_t& spec) const;
 
-        std::size_t numberOfDisplaceableParticles() const;
+        /**
+         * Freezes particles of given specification at their current positions. These particles cannot be
+         * displaced anymore.
+         * @param spec Specification.
+         */
+        void freeze(const spec_ptr_t& spec);
+
+        /**
+         * Identifies displaceable particles.
+         */
+        void identifyDisplaceables();
+
+        /**
+         * Returns number of frozen particles.
+         * @return Number.
+         */
+        std::size_t numberOfFrozenParticles() const;
         
         /**
          * Returns total charge.
@@ -170,25 +186,10 @@ namespace simploce {
          * @return Result.
          */
         template <typename R, typename TASK>
-        R doWithAll(const TASK& task) { return task(all_); }
+        R doWithAll(const TASK& task) {
+            return task(allV_);
+        }
 
-        /**
-         * Performs a "task" with all "displaceable" particles. Displaceable means here that the particle
-         * in question may undergo a state transition (e.g., new position). Note that this method restricts the
-         * task to those particles that can be displaced in contrast to the other 'doWith*' methods.
-         * The given task must expose the operator
-         * <code>
-         * R operator () (const std::vector<p_ptr_t>& displaceables);
-         * </code>
-         * where 'displaceables' represents all displaceable particles.
-         * @tparam R Return type. May be 'void'.
-         * @tparam TASK Task type.
-         * @param task Task. This may be a lambda expression.
-         * @return Result.
-         */
-        template <typename R, typename TASK>
-        R doWithDisplaceables(const TASK& task) { return task(displaceables_); }
-        
         /**
          * Performs a "task" with all and free particles, as well as with all particle groups.
          * The given task must expose the operator
@@ -206,7 +207,9 @@ namespace simploce {
          * @return Result.
          */
         template <typename R, typename TASK>
-        R doWithAllFreeGroups(const TASK& task) { return task(all_, free_, groups_); }
+        R doWithAllFreeGroups(const TASK& task) {
+            return task(allV_, freeV_, groups_);
+        }
 
         /**
          * Writes this particle system to an output stream. Displaceable particles are -not-
@@ -223,17 +226,17 @@ namespace simploce {
         void writeState(std::ostream& stream) const;
 
         /**
-         * Read the current state from an input stream. The state of -all- particles is
+         * Reads the current state from an input stream. The state of -all- particles is
          * read from the input stream.
          * @param stream Input stream.
          */
         void readState(std::istream& stream);
 
         /**
-         * Express all particle positions relative to the center of mass.
+         * Expresses all particle positions relative to the center of mass.
          */
         void setOriginToCenterOfMass();
-        
+
     protected:
         
         /**
@@ -248,7 +251,8 @@ namespace simploce {
         void add(const p_ptr_t& particle);
 
         /**
-         * Completely removes particle from this particle system.
+         * Completely removes particle from this particle system. May be slow for large
+         * particle systems.
          * @param particle Particle to be removed.
          */
         void remove(const p_ptr_t& particle);
@@ -284,47 +288,28 @@ namespace simploce {
         void removeFromFree(const pg_ptr_t& particleGroup);
 
         /**
-         * Removes a particle from the list of displaceable particles.
-         * @param particle Particle.
-         */
-        void removeFromDisplaceables(const p_ptr_t& particle);
-
-        /**
-         * Removes particles of given particle specification from the list of
-         * displaceable particles.
-         * @param spec Particle specification.
-         */
-        void removeFromDisplaceables(const spec_ptr_t& spec);
-        
-        /**
          * Reads free particles and particle groups from an input stream.
          * @param stream Input stream.
          */
         void readFreeAndGroups(std::istream& stream);
 
-        /**
+        /*
          * Returns all particle groups.
          * @return Groups. May be empty.
          */
-        std::vector<pg_ptr_t> &groups();
-        
+        const std::vector<pg_ptr_t> &groups() const;
+
         /**
          * Returns all particles.
-         * @return Particles. Should not be empty.
+         * @return All particles.
          */
-        std::vector<p_ptr_t> &all();
+         const std::vector<p_ptr_t>& all() const;
 
         /**
          * Returns free particles.
          * @return Particles. May be empty.
          */
-        std::vector<p_ptr_t> &free();
-
-        /**
-         * Returns all displaceable particles.
-         * @return Particles. May be empty.
-         */
-        std::vector<p_ptr_t> &displaceables();
+        const std::vector<p_ptr_t> &free() const;
 
         /**
          * Clears this particle system. That is, removes all particles and particle groups.
@@ -342,7 +327,8 @@ namespace simploce {
          * @param id Identifier.
          * @param particle Particle.
          */
-        static void assignParticleId(const id_t& id, p_ptr_t& particle);
+        void assignParticleId(const id_t& id,
+                              p_ptr_t& particle);
 
         /**
          * Obtains particle system from an input stream.
@@ -361,7 +347,8 @@ namespace simploce {
          * @param particle Particle.
          * @param spec Specification.
          */
-        void resetSpec_(const p_ptr_t& particle, const spec_ptr_t& spec);
+        static void resetSpec(const p_ptr_t& particle,
+                              const spec_ptr_t& spec);
 
         /**
          * Creates particle.
@@ -372,21 +359,19 @@ namespace simploce {
          * @param spec Particle specification.
          * @return Created particle.
          */
-        virtual p_ptr_t createParticle_(const id_t& id,
-                                        int index,
-                                        const std::string& name,
-                                        const spec_ptr_t& spec) = 0;
+        virtual p_ptr_t createParticle(const id_t& id,
+                                       int index,
+                                       const std::string& name,
+                                       const spec_ptr_t& spec) = 0;
 
         // All particles
-        std::vector<p_ptr_t> all_;
-        std::map<id_t, p_ptr_t> mapAll_;
+        std::vector<p_ptr_t> allV_;
+        std::map<id_t, p_ptr_t> allM_;
         
         // Free particles, not in any group.
-        std::vector<p_ptr_t> free_;
+        std::vector<p_ptr_t> freeV_;
+        std::map<id_t, p_ptr_t> freeM_;
 
-        // Displaceable particles. Particles are always displaceables unless removed from this list.
-        std::vector<p_ptr_t> displaceables_;
-        
         // Particles groups.
         std::vector<pg_ptr_t> groups_;
 
@@ -403,7 +388,8 @@ namespace simploce {
      * @param particleSystem Particle system.
      * @return Output stream.
      */
-    std::ostream& operator << (std::ostream& stream, const ParticleSystem& particleSystem);
+    std::ostream& operator << (std::ostream& stream,
+                               const ParticleSystem& particleSystem);
 
 
 }

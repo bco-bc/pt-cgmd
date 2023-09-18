@@ -26,8 +26,8 @@ namespace simploce {
             static real_t MAX = 99999;
             real_t r1 = util::random() * MAX;
             real_t r2 = util::random() * MAX;
-            std::string v1 = util::toString(int(r1));
-            std::string v2 = util::toString(int(r2));
+            std::string v1 = std::to_string(int(r1));
+            std::string v2 = std::to_string(int(r2));
             return v1 + "-" + v2;
         }
 

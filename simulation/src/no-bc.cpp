@@ -11,15 +11,19 @@ namespace simploce {
 
     dist_vect_t 
     NoBoundaryCondition::apply(const position_t& ri,
-                               const position_t& rj) const
-    {
+                               const position_t& rj) const {
         return std::move(dist_vect_t{ri - rj});
     }
     
     position_t 
-    NoBoundaryCondition::placeInside(const position_t& r_out) const
-    {
+    NoBoundaryCondition::placeInside(const position_t& r_out) const {
         return r_out;
+    }
+
+    velocity_t
+    NoBoundaryCondition::apply(const simploce::velocity_t &v,
+                               const position_t& r) const {
+        return v;
     }
 
 }

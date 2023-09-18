@@ -8,11 +8,14 @@
 #define SIMULATION_HP_SR_HPP
 
 #include "pair-potential.hpp"
+#include "soft-repulsion.hpp"
+#include "hp.hpp"
 
 namespace simploce {
 
     /**
-     * Combination of the harmonic and soft repulsion pair potential. This is a bonded potential.
+     * Combined potential of the harmonic and soft repulsion pair potential.
+     * This is a bonded potential for mesoscopic simulations, e.g., DPD.
      */
     class HarmonicSoftRepulsion : public pair_potential {
     public:
@@ -21,9 +24,13 @@ namespace simploce {
          * Constructor.
          * @param forceField Force field.
          * @param bc Boundary condition.
-         * @param cutoff Cutoff distance.
+         * @param softRepulsion Soft repulsion potential.
+         * @param harmonic Harmonic interaction potential.
          */
-        HarmonicSoftRepulsion(ff_ptr_t forceField, bc_ptr_t bc, dist_t cutoff);
+        HarmonicSoftRepulsion(ff_ptr_t forceField,
+                              bc_ptr_t bc,
+                              std::shared_ptr<SoftRepulsion> softRepulsion,
+                              std::shared_ptr<HP> harmonic);
 
         std::pair<energy_t, force_t> operator () (const p_ptr_t &p1, const p_ptr_t &p2) override;
 
@@ -31,7 +38,9 @@ namespace simploce {
 
         ff_ptr_t forceField_;
         bc_ptr_t bc_;
-        dist_t cutoff_;
+
+        std::shared_ptr<SoftRepulsion> softRepulsion_;
+        std::shared_ptr<HP> harmonic_;
 
     };
 }

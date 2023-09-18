@@ -46,8 +46,8 @@ namespace simploce {
             // Setup
             static temperature_t temperature = param->get<real_t>("simulation.temperature");
             static auto range = param->get<real_t>("simulation.displacer.mc.range");
-            static auto isMesoscale = param->get<bool>("simulation.mesoscale");
-            static auto KB = isMesoscale ? 1.0 : units::mu<real_t>::KB;
+            static auto mesoscopic = param->get<bool>("simulation.mesoscale");
+            static auto KB = mesoscopic ? 1.0 : units::mu<real_t>::KB;
             static const real_t kT = KB * temperature();
 
             std::random_device rd;
@@ -125,7 +125,7 @@ namespace simploce {
             std::uniform_int_distribution<std::size_t> dis(0, particles.size() - 1);
             auto index = dis(gen);
             auto particle = particles[index];
-            logger.debug(util::toString(particle->id()) + ": Identifier selected particle.");
+            logger.debug(util::to_string(particle->id()) + ": Identifier selected particle.");
 
             // Displace selected particle.
             auto result = displaceParticle_(particle, particleSystem, interactor, param);
@@ -154,7 +154,7 @@ namespace simploce {
 
     SimulationData
     MonteCarlo::displace(const p_system_ptr_t& particleSystem) const {
-        return particleSystem->doWithDisplaceables<SimulationData>([this, particleSystem] (
+        return particleSystem->doWithAll<SimulationData>([this, particleSystem] (
                 const std::vector<p_ptr_t>& particles) {
             return mc::displaceOneParticle_(particles,
                                             particleSystem,

@@ -16,7 +16,7 @@ HCOOH     1              1       44.0090000         -1.0                    0.0 
 Na+       0              1      131.00000            1.0                    0.116                0.0           # Sodium ion.
 Cl-       0              1      143.00000           -1.0                    0.167                0.0           # Chloride ion.
 Ar        0              1       39.95000            0.0                    0.096                0.0           # Argon atom.
-SBP       0              0        0.0                0.0                    0.0                  0.0           # Static (not moving) boundary particle.
+SBP       0              0        1.0                0.0                    0.0                  0.0           # Static (not moving) boundary particle.
 PMU       0              0        1.0                0.0                    1.0                  0.0           # Polymeric unit (mesoscale).
 H2Om      0              1        1.0                0.0                    1.0                  0.0           # Water (mesoscale).
 DROm      0              1        1.0                0.0                    1.0                  0.0           # Droplet bead (mesoscale)

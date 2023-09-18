@@ -25,9 +25,9 @@ void test1(const spec_catalog_ptr_t &catalog, const ff_ptr_t &forceField) {
 
     auto param = factory::simulationParameters();
     param::write(std::cout, *param);
-    auto bc = factory::boundaryCondition(atomistic->box());
+    auto bc = factory::pbc(atomistic->box());
     auto cutoff = param->get<real_t>("forces.nb.cutoff");
-    auto pairListGenerator = factory::pairListsGenerator(param, bc);
+    auto pairListGenerator = factory::pairListGenerator(param, bc);
 
     auto forces = factory::forces(param, bc, forceField);
     auto interactor = factory::interactor(param, forceField, bc);
@@ -47,9 +47,9 @@ void test2(const spec_catalog_ptr_t &catalog, const ff_ptr_t &forceField) {
     auto simulationParameters = factory::simulationParameters();
     param::write(std::cout, *simulationParameters);
     auto box = diatomic->box();
-    auto bc = factory::boundaryCondition(box);
+    auto bc = factory::pbc(box);
 
-    auto pairListGenerator = factory::pairListsGenerator(simulationParameters, bc);
+    auto pairListGenerator = factory::pairListGenerator(simulationParameters, bc);
 
     auto interactor = factory::interactor(simulationParameters, forceField, bc);
     auto result = interactor->interact(diatomic);
@@ -63,11 +63,11 @@ void test3 (const spec_catalog_ptr_t &catalog, const ff_ptr_t &forceField) {
     std::cout << "Polarizable water:" << std::endl;
     auto factory = factory::protonatableParticleSystemFactory(catalog);
     auto box = factory::box(7.27);
-    auto bc = factory::boundaryCondition(box);
+    auto bc = factory::pbc(box);
     auto polarizableWater = factory->polarizableWater(box);
     auto param = factory::simulationParameters();
     auto cutoff = param->get<real_t>("forces.nb.cutoff");
-    auto pairListGenerator = factory::pairListsGenerator(param, bc);
+    auto pairListGenerator = factory::pairListGenerator(param, bc);
 
     auto interactor = factory::interactor(param, forceField, bc);
     auto result = interactor->interact(polarizableWater);

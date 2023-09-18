@@ -116,13 +116,13 @@ namespace simploce {
     /**
      * Electric potential.
      */
-    using el_pot = value_t<real_t, -18>;
+    using el_pot_t = value_t<real_t, -18>;
 
     /**
      * Electric potential difference.
      */
-    using el_pot_diff = el_pot;
-    using voltage = el_pot_diff;
+    using el_pot_diff_t = el_pot_t;
+    using voltage_t = el_pot_diff_t;
 
     /**
      * Area

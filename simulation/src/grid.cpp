@@ -211,7 +211,7 @@ namespace simploce {
         nz_ = std::get<6>(setup);
 
         //auto cells = this->cells();
-        //neighbors_ = grid::setupNeighbors_(cells, cutoff_, bc_);
+        //neighbors_ = grid::setupNeighbors_(cells, cutoffSR_, bc_);
         neighbors_ = grid::setupNeighbors_(cells_, nx_, ny_, nz_, 2);
     }
 
@@ -233,7 +233,7 @@ namespace simploce {
             auto insideX = (i >= 0 && i < nx_);
             auto insideY = (j >= 0 && j < ny_);
             auto insideZ = (k >= 0 && k < nz_);
-            // std::clog << i << " " << j << " " << k << " " << insideX << " " << insideY << " " << insideZ << std::endl;
+            //std::clog << p->index() << " " << i << " " << j << " " << k << " " << insideX << " " << insideY << " " << insideZ << std::endl;
             assert(insideX == true);
             assert(insideY == true);
             assert(insideZ == true);

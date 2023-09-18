@@ -29,7 +29,7 @@ namespace simploce {
                 dotsCenter += dot;
             }
             dotsCenter /= dots.size();
-            logger.debug(util::toString(dotsCenter) + ": Current geometric center of dots.");
+            logger.debug(util::to_string(dotsCenter) + ": Current geometric center of dots.");
             real_t largest{0.0};
             for (auto& dot: dots) {
                 dot -= dotsCenter;
@@ -43,7 +43,7 @@ namespace simploce {
                 dotsCenter += dot;
             }
             dotsCenter /= dots.size();
-            logger.debug(util::toString(dotsCenter) + ": New geometric center of dots.");
+            logger.debug(util::to_string(dotsCenter) + ": New geometric center of dots.");
             logger.debug(std::to_string(largest) + ": Length longest dot.");
 
             // Move geometric center vertices to origin.
@@ -52,7 +52,7 @@ namespace simploce {
                 verticesCenter += v->position();
             }
             verticesCenter /= vertices.size();
-            logger.debug(util::toString(verticesCenter) + ": Current geometric center of vertices.");
+            logger.debug(util::to_string(verticesCenter) + ": Current geometric center of vertices.");
             for (auto& vertex: vertices) {
                 auto r = vertex->position();
                 r -=verticesCenter;
@@ -63,7 +63,7 @@ namespace simploce {
                 verticesCenter += v->position();
             }
             verticesCenter /= vertices.size();
-            logger.debug(util::toString(verticesCenter) + ": New geometric center of vertices.");
+            logger.debug(util::to_string(verticesCenter) + ": New geometric center of vertices.");
 
             // Adjust length of vertices to dimension of dotted surface.
             for (const auto& vertex: vertices) {

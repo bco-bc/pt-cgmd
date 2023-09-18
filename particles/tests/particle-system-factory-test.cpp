@@ -7,7 +7,6 @@
 #include "simploce/particle/particle-system-factory.hpp"
 #include "simploce/particle/particle-spec-catalog.hpp"
 #include "simploce/particle/coarse-grained.hpp"
-#include "simploce/particle/atomistic.hpp"
 #include "simploce/particle/p-factory.hpp"
 #include "simploce/particle/p-types.hpp"
 #include "simploce/util/util.hpp"
@@ -40,12 +39,13 @@ void diatomic(const spec_catalog_ptr_t& catalog) {
     std::cout << std::endl;
 }
 
-void coarseGrainedPolarizableWater(const spec_catalog_ptr_t& catalog) {
+p_system_ptr_t coarseGrainedPolarizableWater(const spec_catalog_ptr_t& catalog) {
     std::cout << "Creating coarse grained polarizable water model:" << std::endl;
     auto factory = factory::particleSystemFactory(catalog);
     auto coarseGrained = factory->polarizableWater();
-    std::cout << *coarseGrained << std::endl;
+    //std::cout << *coarseGrained << std::endl;
     std::cout << std::endl;
+    return coarseGrained;
 }
 
 void electrolyteSolution(const spec_catalog_ptr_t& catalog) {
@@ -55,16 +55,16 @@ void electrolyteSolution(const spec_catalog_ptr_t& catalog) {
     auto electrolyte = factory->simpleElectrolyte(box);
     std::cout << *electrolyte << std::endl;
     std::cout << "Number of Na+: ";
-    std::cout << util::toString(electrolyte->numberOfSpecifications(catalog->lookup("Na+")));
+    std::cout << util::to_string(electrolyte->numberOfSpecifications(catalog->lookup("Na+")));
     std::cout << std::endl;
 }
 
 p_system_ptr_t identicalParticles(const spec_catalog_ptr_t& catalog) {
     std::cout << "Creating identical particles:" << std::endl;
     auto factory = factory::particleSystemFactory(catalog);
-    box_ptr_t box = factory::box(40, 42, 80);
+    box_ptr_t box = factory::box(5, 5, 10);
     std::string specName{"H2Om"};
-    number_density_t rho{0.8};
+    number_density_t rho{3.0};
     auto particleSystem = factory->identicalParticles(box, specName, rho, temperature_t{1.0});
     std::cout << "Number of particles: " << particleSystem->numberOfParticles() << std::endl;
     //ParticleSystem::validate(particleSystem);
@@ -72,20 +72,33 @@ p_system_ptr_t identicalParticles(const spec_catalog_ptr_t& catalog) {
     return particleSystem;
 }
 
+p_system_ptr_t mesoscalePolarizableWater(const spec_catalog_ptr_t& catalog) {
+    std::cout << "Creating mesoscale polarizable water:" << std::endl;
+    auto factory = factory::particleSystemFactory(catalog);
+    auto particleSystem = factory->mesoscalePolarizableWater();
+    std::cout << "Number of beads: " << particleSystem->numberOfParticles() << std::endl;
+    std::cout << "Number of groups: " << particleSystem->numberOfParticleGroups() << std::endl;
+    std::cout << "Number of CW beads: " << particleSystem->numberOfSpecifications(catalog->lookup("CW")) << std::endl;
+    std::cout << "Number of DP beads: " << particleSystem->numberOfSpecifications(catalog->lookup("DP")) << std::endl;
+    return particleSystem;
+}
+
 int main() {
     util::Logger logger("main");
-    logger.changeLogLevel(util::Logger::LOGDEBUG);
-    std::string fileName = "/localdisk/resources/particles-specs.dat";
+    simploce::util::Logger::changeLogLevel(util::Logger::LOGINFO);
+    //std::string fileName = "/localdisk/resources/particles-specs.dat";
+    std::string fileName = "/wrk3/simulation/meso-water/water-specs.dat";
     spec_catalog_ptr_t catalog = factory::particleSpecCatalog(fileName);
     std::cout << *catalog << std::endl << std::endl;
 
     //diatomic(catalog);
     //argon(catalog);
     //electrolyteSolution(catalog);
-    //coarseGrainedPolarizableWater(catalog);
-    auto particleSystem = identicalParticles(catalog);
+    // auto particleSystem = coarseGrainedPolarizableWater(catalog);
+    // auto particleSystem = identicalParticles(catalog);
+    auto particleSystem = mesoscalePolarizableWater(catalog);
 
-    fileName = "/wrk3/tests/identical-particles.ps";
+    fileName = "/wrk3/tests/particles.ps";
     std::ofstream stream;
     util::open_output_file(stream, fileName);
     stream << *particleSystem << std::endl;

@@ -26,7 +26,7 @@ int main() {
     fileName = "/localdisk/resources/interaction-parameters.dat";
     auto forceField = factory::forceField(fileName, catalog);
     auto box = factory::box(2.0 * 2.6);
-    auto bc = factory::boundaryCondition(box);
+    auto bc = factory::pbc(box);
     LJ pairPotential{forceField, bc};
 
     // Particles.

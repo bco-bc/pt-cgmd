@@ -105,7 +105,7 @@ void test()
     std::cout << "Particle model:" << std::endl;
     util::open_input_file(stream,
                     "/localdisk/resources/coarse-grained-system.dat");
-    auto cg2 = CoarseGrained::obtainFrom(stream, catalog);
+    auto cg2 = CoarseGrained::parseIt(stream, catalog);
     stream.close();
     std::cout << "Number of beads: " << cg2->numberOfParticles() << std::endl; 
     std::cout << "State:" << std::endl;

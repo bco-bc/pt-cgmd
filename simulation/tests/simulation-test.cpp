@@ -12,7 +12,7 @@
 #include "simploce/particle/particle-spec-catalog.hpp"
 #include "simploce/particle/particle-system-factory.hpp"
 #include "simploce/particle/particle-system.hpp"
-#include "simploce/simulation/pair-lists.hpp"
+#include "simploce/simulation/pair-list.hpp"
 #include "simploce/conf/s-conf.hpp"
 #include "simploce/util/param.hpp"
 #include "simploce/util/file.hpp"
@@ -29,7 +29,7 @@ using namespace simploce::param;
  */
 
 void test1(const spec_catalog_ptr_t& catalog, const ff_ptr_t& forceField) {
-    std::cout << "simulation-test test 1" << std::endl;
+    std::cout << "simulation-test Yiannourakou 1" << std::endl;
     
     std::ofstream trajectoryStream, dataStream;
     util::open_output_file(trajectoryStream, "/wrk3/tests/trajectory.dat");
@@ -43,11 +43,11 @@ void test1(const spec_catalog_ptr_t& catalog, const ff_ptr_t& forceField) {
     std::cout << *simulationParameters << std::endl;
     auto factory = factory::particleSystemFactory(catalog);
     auto particleSystem = factory->diatomic(0.12, catalog->O());
-    auto bc = factory::boundaryCondition(particleSystem->box());
+    auto bc = factory::pbc(particleSystem->box());
     auto interactor = factory::interactor(simulationParameters, forceField, bc);
     //auto displacer = factory::displacer(conf::MONTE_CARLO, simulationParameters, interactor);
     auto displacer = factory::displacer(conf::LEAP_FROG, simulationParameters, interactor, bc);
-    Simulation simulation{simulationParameters, particleSystem, displacer};
+    Simulation simulation{simulationParameters, particleSystem, displacer, bc};
 
     std::cout << "Simulating..." << std::endl;
     simulation.perform(trajectoryStream, dataStream);

@@ -24,14 +24,16 @@ namespace simploce {
          * @param catalog Particle specifications catalog.
          * @return Coarse grained particle system.
          */
-        static cg_sys_ptr_t obtainFrom(std::istream& stream,
-                                       const spec_catalog_ptr_t& catalog);
+        static cg_sys_ptr_t parseIt(std::istream& stream,
+                                    const spec_catalog_ptr_t& catalog);
 
 
         /**
          * Constructor. Creates empty coarse grained particle system.
          */
         CoarseGrained();
+
+        ~CoarseGrained() noexcept override;
         
         /**
          * Adds a new bead to this physical system. All arguments are required.
@@ -50,10 +52,10 @@ namespace simploce {
 
     private:
 
-        p_ptr_t createParticle_(const id_t& id,
-                                int index,
-                                const std::string& name,
-                                const spec_ptr_t& spec) override;
+        p_ptr_t createParticle(const id_t& id,
+                               int index,
+                               const std::string& name,
+                               const spec_ptr_t& spec) override;
 
         friend class ParticleSystemFactory;
 

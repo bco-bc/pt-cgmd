@@ -16,8 +16,7 @@ namespace simploce {
     
     /**
      * The smallest constituent unit of ordinary matter that has the 
-     * properties of a chemical element. An atom cannot freely be created.
-     * Each atom belongs to an Atomistic
+     * properties of a chemical element.
      * @see Atomistic
      */
     class Atom: public Particle {
@@ -36,6 +35,12 @@ namespace simploce {
                                  const std::string &name,
                                  const spec_ptr_t &spec);
 
+        // Noncopyable.
+        Atom(const Atom &) = delete;
+        Atom &operator=(const Atom &) = delete;
+
+    private:
+
         /**
          * Constructor. All arguments are required.
          * @param id Unique atom identifier.
@@ -47,12 +52,6 @@ namespace simploce {
              std::size_t index,
              const std::string &name,
              const spec_ptr_t &spec);
-
-        // Noncopyable.
-        Atom(const Atom &) = delete;
-        Atom &operator=(const Atom &) = delete;
-
-        virtual ~Atom();
 
     };
 

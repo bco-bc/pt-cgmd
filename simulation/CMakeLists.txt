@@ -15,7 +15,7 @@ include_directories(${CMAKE_INSTALL_PREFIX}/include SYSTEM)
         src/acid-base-solution.cpp src/analysis.cpp src/findCell-lists.cpp src/cg-electrolyte.cpp src/cg-hp.cpp
         src/cg-lj-fluid.cpp src/cg-pol-water.cpp src/constant-rate-pt.cpp src/distance-lists.cpp
         src/interactor.cpp src/langevin-leap-frog.cpp src/langevin-velocity-verlet.cpp src/leap-frog.cpp
-        src/lj-coulomb-forces.cpp src/mc.cpp src/no-bc.cpp src/boundaryCondition.cpp src/pt-langevin-velocity-verlet.cpp
+        src/lj-coulomb-forces.cpp src/mc.cpp src/no-bc.cpp src/pbc.cpp src/pt-langevin-velocity-verlet.cpp
         src/pt-pair-list-generator.cpp src/s-factory.cpp src/sim-data.cpp src/sim-model.cpp src/sim-model-factory.cpp
         src/s-properties.cpp src/simulation.cpp src/velocity-verlet.cpp src/protonatable-particle-system-factory.cpp
         src/continuous.cpp src/discrete.cpp src/force-field.cpp src/distance-pair-list-generator.cpp)
@@ -23,10 +23,14 @@ include_directories(${CMAKE_INSTALL_PREFIX}/include SYSTEM)
 
 add_library(simulation SHARED
         src/interactor.cpp src/forces.cpp src/lj.cpp src/lj-rf.cpp src/hp.cpp src/rf.cpp
-        src/sf.cpp src/hs-sf.cpp src/sc.cpp src/hs-sc.cpp src/no-pair-potential.cpp
-        src/halve-attractive-qp.cpp src/lj-sf.cpp src/soft-repulsion.cpp src/hp-sr.cpp
-        src/pair-lists.cpp src/simulation.cpp src/sim-data.cpp
-        src/no-bc.cpp src/pbc.cpp src/1d-pbc.cpp src/s-factory.cpp
+        src/sf.cpp src/hs-sf.cpp src/sc.cpp src/hs-sc.cpp src/non-interacting.cpp
+        src/halve-attractive-qp.cpp src/halve-attractive-hp.cpp
+        src/lj-sf.cpp src/soft-repulsion.cpp src/hp-sr.cpp
+        src/solid-sphere-dsf.cpp src/gauss-sf.cpp src/gauss-sf-sr.cpp
+        src/pressure-gradient.cpp
+        src/cutoffs.cpp
+        src/pair-list.cpp src/simulation.cpp src/sim-data.cpp
+        src/no-bc.cpp src/pbc.cpp src/pbc-1d-bb.cpp src/s-factory.cpp
         src/s-properties.cpp src/protonatable-particle-system-factory.cpp
         src/continuous.cpp src/discrete.cpp src/force-field.cpp
         src/distance-pair-list-generator.cpp src/cell.cpp src/grid.cpp
@@ -35,7 +39,7 @@ add_library(simulation SHARED
         src/langevin-leap-frog.cpp src/langevin-velocity-verlet.cpp src/mvv-dpd.cpp
         src/s1-dpd.cpp
         src/mc.cpp src/analysis.cpp src/gr.cpp
-        src/const-surface-charge-density.cpp src/elec-pot-difference.cpp src/wall.cpp
+        src/const-surface-charge-density.cpp src/voltage.cpp src/wall.cpp
         src/s-util.cpp)
 
 
@@ -45,4 +49,4 @@ add_subdirectory(apps)
 install(TARGETS simulation DESTINATION lib)
 install(DIRECTORY include/simploce DESTINATION include)
 install(DIRECTORY resources DESTINATION ${CMAKE_INSTALL_PREFIX})
-install(TARGETS lj-parameters DESTINATION bin)
+install(TARGETS lj-parameters one-water-dpd-particle-simulation DESTINATION bin)

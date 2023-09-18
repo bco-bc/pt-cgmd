@@ -6,7 +6,6 @@
  */
 
 #include "simploce/analysis/gr.hpp"
-#include "simploce/simulation/s-properties.hpp"
 #include "simploce/simulation/bc.hpp"
 #include "simploce/particle/particle-system.hpp"
 #include "simploce/particle/particle.hpp"
@@ -61,10 +60,10 @@ namespace simploce {
                 }
                 this->pp_(all);
 
-                logger.debug("Number of particles of typeName #1 '" + specName1_ + "': " + util::toString(nParticles1_));
-                logger.debug("Number of particles of typeName #2 '" + specName2_ + "': " + util::toString(nParticles2_));
-                logger.debug("Upper limit for g(r): " + util::toString(rMax_));
-                logger.debug("Bin size: " + util::toString(dr_));
+                logger.debug("Number of particles of typeName #1 '" + specName1_ + "': " + std::to_string(nParticles1_));
+                logger.debug("Number of particles of typeName #2 '" + specName2_ + "': " + std::to_string(nParticles2_));
+                logger.debug("Upper limit for g(r): " + std::to_string(rMax_()));
+                logger.debug("Bin size: " + std::to_string(dr_()));
                 if (nParticles1_ == 0 || nParticles2_ == 0) {
                     util::logAndThrow(logger, "No such particle(s).");
                 }
@@ -84,12 +83,12 @@ namespace simploce {
         static const real_t rc2 = rMax_() * rMax_();
 
         for (auto iter_i = particles.begin(); iter_i != particles.end(); ++iter_i) {
-            auto pi = *iter_i;
+            const auto& pi = *iter_i;
             if ( pi->spec()->name() == specName1_ ) {
                 auto ri = pi->position();
                 for (auto iter_j = particles.begin(); iter_j != particles.end(); ++iter_j) {
                     if ( iter_i != iter_j) {
-                        auto pj = *iter_j;
+                        const auto& pj = *iter_j;
                         if ( pj->spec()->name() == specName2_ ) {
                             auto rj = pj->position();
                             auto rij = bc_->apply(ri, rj);
@@ -143,7 +142,7 @@ namespace simploce {
     Gr::gg_(const std::vector<pg_ptr_t>& groups)
     {
         for (auto it_i = groups.begin(); it_i != groups.end(); ++it_i) {
-            auto gi = *it_i;
+            const auto& gi = *it_i;
             auto particles_i = gi->particles();
             auto rgi = gi->position();
             for (const auto& gj : groups) {
@@ -176,8 +175,7 @@ namespace simploce {
 
     // See Friedman. "A course in statistical mechanics", Prentice Hall, 1985, p.82, Eq (4.20).
     std::vector<std::pair<real_t, real_t>>
-    Gr::results() const
-    {
+    Gr::results() const {
         util::Logger logger{"simploce::Gr::results()"};
 
         std::vector<std::pair<real_t, real_t>> gr{};
@@ -208,7 +206,7 @@ namespace simploce {
             gr.push_back(pair);
         }
 
-        logger.debug("Number of observations: " + util::toString(counter_));
+        logger.debug("Number of observations: " + std::to_string(counter_));
 
         return gr;
     }

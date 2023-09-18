@@ -1,5 +1,5 @@
 /*
- * File:   pair-list-test.cpp
+ * File:   pair-list-Yiannourakou.cpp
  * Author: André H. Juffer, Biocenter Oulu, University of Oulu, Finland.
  *
  * Created on September 4, 2019, 2:55 PM
@@ -27,28 +27,25 @@ using namespace std::chrono;
 
 void test2(const param_ptr_t& param, p_system_ptr_t &coarseGrained) {
     auto box = coarseGrained->box();
-    auto bc = factory::boundaryCondition(box);
-    pair_list_gen_ptr_t generator = factory::pairListsGenerator(param, bc);
-    auto pairLists = generator->generate(coarseGrained);
-    const auto& particlePairs = pairLists.particlePairList();
+    auto bc = factory::pbc(box);
+    pair_list_gen_ptr_t generator = factory::pairListGenerator(param, bc);
+    auto particlePairs = generator->generate(coarseGrained);
     std::cout << "Number of pairs: " << particlePairs.size() << std::endl;
 }
 
 void distanceBased(const param_ptr_t& param, p_system_ptr_t & particleSystem) {
     auto box = particleSystem->box();
-    auto bc = factory::boundaryCondition(box);
+    auto bc = factory::pbc(box);
     DistancePairListGenerator generator(param, bc);
-    auto pairLists = generator.generate(particleSystem);
-    const auto& particlePairs = pairLists.particlePairList();
+    auto particlePairs = generator.generate(particleSystem);
     std::cout << "Distance-based number of pairs: " << particlePairs.size() << std::endl;
 }
 
 void cellBased(const param_ptr_t& param, p_system_ptr_t& particleSystem) {
     auto box = particleSystem->box();
-    auto bc = factory::boundaryCondition(box);
+    auto bc = factory::pbc(box);
     CellPairListGenerator generator(param, bc);
-    auto pairLists = generator.generate(particleSystem);
-    const auto& particlePairs = pairLists.particlePairList();
+    auto particlePairs = generator.generate(particleSystem);
     std::cout << "Cell-based number of pairs: " << particlePairs.size() << std::endl;
 }
 
@@ -61,6 +58,8 @@ int main() {
     auto catalog = ParticleSpecCatalog::obtainFrom(stream);
     stream.close();
     std::clog << "Particle specs: " << *catalog << std::endl;
+
+    auto frozenSpec = catalog->staticBP();
 
     auto factory = factory::protonatableParticleSystemFactory(catalog);
     auto param = factory::simulationParameters();
@@ -110,20 +109,32 @@ int main() {
                                             */
 
     std::cout << "Reading particle system..." << std::endl;
-    auto particleSystem =
+    /* auto particleSystem =
             simploce::factory::particleSystem("/wrk3/tests/droplets-polymer-solution.ps",
                                               catalog,
                                               true);
+                                              */
+
+    auto particleSystem =
+            simploce::factory::particleSystem("/wrk3/tests/particles-in-channel.ps",
+                                              catalog,
+                                              true);
+
+    util::Logger::changeLogLevel(util::Logger::LOGTRACE);
     std::cout << "Number of particles: " << particleSystem->numberOfParticles() << std::endl;
+    particleSystem->freeze(frozenSpec);
+    std::cout << "Number of frozen particles: " << particleSystem->numberOfFrozenParticles() << std::endl;
 
     param->put("simulation.timestep", 0.01);
     param->put("simulation.mesoscale", true);
     param->put("simulation.forces.cutoff", 1.0);
     param->put("simulation.temperature", 1.0);
 
+    param->put("simulation.forces.exclude-frozen", true);
+
     param::write(std::clog, *param);
 
-    util::Logger::changeLogLevel(util::Logger::LOGTRACE);
+
 
     std::cout << std::endl;
     std::cout << "Cell-based (with setup):" << std::endl;
@@ -134,21 +145,20 @@ int main() {
     std::cout << "Duration: " << durationCellBased.count() << std::endl;
 
     std::cout << std::endl;
-    std::cout << "Distance-based:" << std::endl;
-    start = high_resolution_clock::now();
-    distanceBased(param, particleSystem);
-    stop = high_resolution_clock::now();
-    auto durationDistanceBased = duration_cast<microseconds>(stop - start);
-    std::cout << "Duration: " << durationDistanceBased.count() << std::endl;
-
-    std::cout << std::endl;
     std::cout << "Cell-based (no setup):" << std::endl;
     start = high_resolution_clock::now();
     cellBased(param, particleSystem);
     stop = high_resolution_clock::now();
     auto duration = duration_cast<microseconds>(stop - start);
     std::cout << "Duration: " << duration.count() << std::endl;
+
     std::cout << std::endl;
+    std::cout << "Distance-based:" << std::endl;
+    start = high_resolution_clock::now();
+    distanceBased(param, particleSystem);
+    stop = high_resolution_clock::now();
+    auto durationDistanceBased = duration_cast<microseconds>(stop - start);
+    std::cout << "Duration: " << durationDistanceBased.count() << std::endl;
 
     std::cout << "Ratio durations cell-based (with setup) / distance_based: ";
     std::cout  << real_t(durationCellBased.count()) / real_t(durationDistanceBased.count()) << std::endl;

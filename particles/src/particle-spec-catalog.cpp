@@ -20,6 +20,16 @@ namespace simploce {
     ParticleSpecCatalog::ParticleSpecCatalog(map_specs_t specs) :
        specs_{std::move(specs)} {
     }
+
+    bool
+    ParticleSpecCatalog::hasSpecification(const std::string &name) const {
+        try {
+            this->lookup(name);
+            return true;
+        } catch (std::exception& exception) {
+            return false;
+        }
+    }
     
     spec_ptr_t 
     ParticleSpecCatalog::lookup(const std::string& name) const
@@ -34,7 +44,7 @@ namespace simploce {
     }
 
     spec_ptr_t
-    ParticleSpecCatalog::lookupByElementName(const std::string &name) {
+    ParticleSpecCatalog::lookupByElementName(const std::string &name) const {
         util::Logger logger("simploce::ParticleSpecCatalog::lookupByElementName(const std::string &name)");
         if (name.empty()) {
             util::logAndThrow(logger, "Name must be provided.");
@@ -87,7 +97,7 @@ namespace simploce {
     spec_catalog_ptr_t 
     ParticleSpecCatalog::obtainFrom(std::istream& stream)
     {
-        util::Logger logger("simploce::ParticleSpecCatalog::obtainFrom()");
+        util::Logger logger("simploce::ParticleSpecCatalog::parseIt()");
         map_specs_t specs{};
 
         char charBuffer[100];
@@ -138,7 +148,7 @@ namespace simploce {
     {
         std::size_t counter = 0;
         std::string header =
-            "      Name  protonatable-bead?  Mass (deprotonated)  Charge (deprotonated)  Radius  pKa  Short Description";
+            "      Name  protonatable-bead?  free-particle? Mass-deprotonated  Charge-deprotonated  Radius  pKa  Short Description";
         stream << header << std::endl;
         for (auto iter = specs_.begin(); iter != specs_.end(); ++iter) {
             counter += 1;

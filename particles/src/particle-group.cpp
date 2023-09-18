@@ -168,14 +168,14 @@ namespace simploce {
     {
         stream << group.particles().size() << std::endl;
         for (const auto& p : group.particles() ) {
-            stream << std::setw(conf::ID_WIDTH) << util::toString(p->id());
+            stream << std::setw(conf::ID_WIDTH) << util::to_string(p->id());
         }
         stream << std::endl;
         stream << group.bonds().size() << std::endl;
         std::size_t counter = 1;
         for (const auto& bond : group.bonds() ) {
-            std::string id1 = util::toString(bond.getParticleOne()->id());
-            std::string id2 = util::toString(bond.getParticleTwo()->id());
+            std::string id1 = util::to_string(bond.getParticleOne()->id());
+            std::string id2 = util::to_string(bond.getParticleTwo()->id());
             stream << std::setw(conf::ID_WIDTH) << id1 << std::setw(conf::ID_WIDTH) << id2;
             if (counter != group.bonds().size() ) {
                 stream << std::endl;

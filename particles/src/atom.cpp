@@ -20,13 +20,11 @@ namespace simploce {
         }
     }
     
-    Atom::~Atom() = default;
-    
     atom_ptr_t 
     Atom::create(const id_t& id,
                  std::size_t index, 
                  const std::string &name, 
                  const spec_ptr_t &spec) {
-        return std::make_shared<Atom>(id, index, name, spec);
+        return std::shared_ptr<Atom>{new Atom(id, index, name, spec)};
     }
 }

@@ -9,9 +9,6 @@
 #define U_CONF_HPP
 
 namespace simploce {
-    /**
-     * Some universal settings.
-     */
     namespace conf {
         
         /**

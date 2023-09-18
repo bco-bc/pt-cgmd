@@ -15,8 +15,7 @@ namespace simploce {
     
     /**
      * Coarse grained particle. In proteins, it represents typically 4 to 6 atoms,
-     * but for water it may represent several water molecules. A bead cannot freely be created.
-     * Each bead belongs to an CoarseGrained
+     * but for water it may represent several water molecules.
      * @see CoarseGrained
      */
     class Bead : public Particle {
@@ -35,6 +34,14 @@ namespace simploce {
                                  const std::string& name,
                                  const spec_ptr_t& spec);
 
+        // Noncopyable.
+        Bead(const Bead&) = delete;
+        Bead& operator = (const Bead&) = delete;
+        
+        ~Bead() override;
+
+    protected:
+
         /**
          * Constructor. All arguments are required.
          * @param id Unique bead identifier.
@@ -46,13 +53,6 @@ namespace simploce {
              std::size_t index,
              const std::string& name,
              const spec_ptr_t& spec);
-
-        // Noncopyable.
-        Bead(const Bead&) = delete;
-        Bead& operator = (const Bead&) = delete;
-        
-        virtual ~Bead();
-
     };
 }
 

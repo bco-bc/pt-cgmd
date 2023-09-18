@@ -107,7 +107,7 @@ namespace simploce {
          * @return String.
          */
         template <typename T>
-        std::string toString(const T& t) {
+        std::string to_string(const T& t) {
             return boost::lexical_cast<std::string, T>(t);
         }
 
@@ -134,7 +134,7 @@ namespace simploce {
             
             std::size_t counter = 0;      
             static const std::size_t nsublists = std::thread::hardware_concurrency();
-            logger.debug("Number of available threads: " + util::toString(nsublists));
+            logger.debug("Number of available threads: " + std::to_string(nsublists));
             std::size_t numberOfItemsPerSubList = items.size() / nsublists;                                                              
             for (std::size_t k = 0; k != nsublists; ++k) {
                 std::vector<T> single{};  // A single sublist of items.

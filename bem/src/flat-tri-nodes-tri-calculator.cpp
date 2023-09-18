@@ -64,15 +64,15 @@ namespace simploce {
             logger.trace("Leaving.");
         }
 
-        static std::vector<el_pot>
+        static std::vector<el_pot_t>
         reactionPotential_(real_t factor,
                            const std::vector<position_t> &points,
                            const surface_ptr_t& surface) {
-            auto result = surface->doWithAll<std::vector<el_pot>>([factor, points](
+            auto result = surface->doWithAll<std::vector<el_pot_t>>([factor, points](
                         const std::vector<vertex_ptr_t> &vertices,
                         const std::vector<face_ptr_t> &faces,
                         const std::vector<edge_ptr_t> &edges) {
-                std::vector<el_pot> rp(points.size(), 0.0);  // Reaction potentials.
+                std::vector<el_pot_t> rp(points.size(), 0.0);  // Reaction potentials.
                 auto& data = *bem_flat_tri_nodes_tri::bemData_;
                 auto epsRatio = data.epsRatio;
                 for (auto k = 0; k != points.size(); ++k) {
@@ -191,7 +191,7 @@ namespace simploce {
         logger.trace("Leaving");
     }
 
-    std::vector<el_pot>
+    std::vector<el_pot_t>
     FlatTriNodesTriCalculator::reactionPotentialSolute(const std::vector<position_t> &points) {
         static util::Logger logger("simploce::FlatTriNodesTriCalculator::reactionPotentialSolute()");
         logger.trace("Entering.");
@@ -205,7 +205,7 @@ namespace simploce {
         return std::move(result);
     }
 
-    std::vector<el_pot>
+    std::vector<el_pot_t>
     FlatTriNodesTriCalculator::reactionPotentialSolvent(const std::vector<position_t> &points) {
         static util::Logger logger("simploce::FlatTriNodesTriCalculator::reactionPotentialSolvent()");
         logger.trace("Entering.");

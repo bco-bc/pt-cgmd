@@ -16,16 +16,17 @@
 
 namespace simploce {
 
-    SoftRepulsion::SoftRepulsion(ff_ptr_t forceField, bc_ptr_t bc, dist_t cutoff) :
-        forceField_{std::move(forceField)}, bc_{std::move(bc)}, cutoff_{cutoff} {
+    SoftRepulsion::SoftRepulsion(ff_ptr_t forceField, bc_ptr_t bc, dist_t cutoffSR) :
+        forceField_{std::move(forceField)}, bc_{std::move(bc)}, cutoffSR_{cutoffSR} {
+        util::Logger logger{"simploce::SoftRepulsion::SoftRepulsion(...)"};
         if (!forceField_) {
-            throw std::domain_error("SoftRepulsion: Missing force field.");
+            logAndThrow(logger, "Missing force field.");
         }
         if (!bc_) {
-            throw std::domain_error("SoftRepulsion: Missing boundary conditions.");
+            logAndThrow(logger, "Missing boundary conditions.");
         }
-        if (cutoff_ <= 0.0) {
-            throw std::domain_error("SoftRepulsion: Cutoff distance must be > 0.0.");
+        if (cutoffSR_() <= 0.0) {
+            logAndThrow(logger, "A cutoff distance must be > 0.0.");
         }
     }
 
@@ -35,9 +36,9 @@ namespace simploce {
         logger.trace("Entering");
 
         static auto eps = real_t(std::numeric_limits<float>::min());
-        logger.debug(p1->name() + ", " + p2->name() + ": Particle pair.");
-        auto a_ij = forceField_->softRepulsion(p1->spec(), p2->spec());
-        logger.debug(std::to_string(a_ij) + ": Maximum repulsion.");
+
+        // Get interaction parameters.
+        auto Aij = forceField_->softRepulsion(p1->spec(), p2->spec());
 
         // Current positions.
         const auto &ri = p1->position();
@@ -46,34 +47,39 @@ namespace simploce {
         // Apply boundary condition.
         auto rij = bc_->apply(ri, rj);
         auto Rij = norm<real_t>(rij);  // Should not be zero.
-        auto unitVector = (Rij > eps ? (rij / Rij) : util::randomUnit());
+        auto Rij2 = Rij * Rij;
 
-        logger.trace("Leaving.");
-        return std::move(SoftRepulsion::forceAndEnergy(rij, unitVector, Rij, a_ij, cutoff_));
+        // Forces and energy.
+        auto pair = forceAndEnergy(rij, Rij, Rij2, Aij);
+
+        // Done.
+        logger.trace("Leaving");
+        return std::move(pair);
     }
 
     std::pair<energy_t, force_t>
-    SoftRepulsion::forceAndEnergy(const dist_vect_t &r_ij,
-                                  const dist_vect_t& uv_ij,
-                                  real_t R_ij,
-                                  real_t a_ij,
-                                  const dist_t &cutoff) {
+    SoftRepulsion::forceAndEnergy(const dist_vect_t &rij,
+                                  real_t Rij,
+                                  real_t Rij2,
+                                  real_t Aij) const {
         static util::Logger logger("simploce::SoftRepulsion::forceAndEnergy()");
         logger.trace("Entering.");
 
         static auto eps = real_t(std::numeric_limits<float>::min());
 
         // Within cutoff distance?
-        if (R_ij >= cutoff()) {
+        if (Rij >= cutoffSR_()) {
             return std::make_pair(energy_t{0.0}, force_t{0.0, 0.0, 0.0});
-        } else if (R_ij <= eps ) {
-            logger.warn(std::to_string(R_ij) + ": Zero distance encountered between two particles.");
+        } else if (Rij <= eps ) {
+            logger.warn(std::to_string(Rij) + ": Zero distance encountered between two particles.");
         }
-        // Interaction energy and force on particle i. R_ij should never be zero.
-        energy_t energy{-a_ij * (R_ij - R_ij * R_ij / (2.0 * cutoff())) + 0.5 * a_ij * cutoff()};
+
+        // Interaction energy and force on particle i. Rij should never be zero.
+        auto unitVector = (Rij > eps ? (rij / Rij) : util::randomUnit());
+        energy_t energy{-Aij * (Rij - Rij2 / (2.0 * cutoffSR_())) + 0.5 * Aij * cutoffSR_()};
         force_t f{};
         for (std::size_t k = 0; k != 3; ++k) {
-            f[k] = a_ij * (1.0 - R_ij / cutoff()) * uv_ij[k];
+            f[k] = Aij * (1.0 - Rij / cutoffSR_ ()) * unitVector[k];
         }
 
         logger.trace("Leaving.");

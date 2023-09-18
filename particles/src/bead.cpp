@@ -23,7 +23,7 @@ namespace simploce {
                  std::size_t index,
                  const std::string& name,
                  const spec_ptr_t& spec) {
-        return std::make_shared<Bead>(id, index, name, spec);
+        return std::shared_ptr<Bead>{new Bead(id, index, name, spec)};
     }
         
 }

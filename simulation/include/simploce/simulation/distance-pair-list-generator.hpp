@@ -12,9 +12,9 @@
 namespace simploce {
 
     /**
-     * Generates pair lists on the basis of distances between particle and particle groups.
+     * Finds non-bonded particle pairs on the basis of distances between particles.
      */
-    class DistancePairListGenerator : public pair_lists_generator {
+    class DistancePairListGenerator : public pair_list_generator {
     public:
 
         /**
@@ -24,7 +24,8 @@ namespace simploce {
          */
         DistancePairListGenerator(param_ptr_t param, bc_ptr_t bc);
 
-        PairLists generate(const p_system_ptr_t& particleSystem) const override;
+        std::vector<PairList::p_pair_t>
+        generate(const p_system_ptr_t& particleSystem) const override;
 
     private:
 

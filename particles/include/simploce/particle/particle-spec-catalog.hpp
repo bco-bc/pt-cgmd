@@ -19,6 +19,13 @@ namespace simploce {
      */
     class ParticleSpecCatalog {
     public:
+
+        /**
+         * Inquires whether the catalog has a particle specification of given name.
+         * @param name Particle specification name
+         * @return True if it has, otherwise false.
+         */
+        bool hasSpecification(const std::string& name) const;
         
         /**
          * Returns a specification.
@@ -33,11 +40,12 @@ namespace simploce {
          * @param name Element name. Must not contain spaces.
          * @return Specification.
          */
-        spec_ptr_t lookupByElementName(const std::string& name);
+        spec_ptr_t lookupByElementName(const std::string& name) const;
         
         /**
          * Returns specification for molecular water.
          * @return Specification.
+         *
          */
         spec_ptr_t molecularWater() const;
         

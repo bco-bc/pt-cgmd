@@ -5,7 +5,6 @@
  * Created on September 10, 2019, 2:58 PM
  */
 
-#include "simploce/types/s-types.hpp"
 #include "simploce/conf/s-conf.hpp"
 #include "simploce/simulation/s-factory.hpp"
 #include "simploce/simulation/simulation.hpp"
@@ -47,7 +46,8 @@ int main(int argc, char *argv[]) {
         auto temperature = param->get<real_t>("simulation.temperature");
         auto gamma = param->get<real_t>("simulation.displacer.lvv.gamma"); // Damping rate.
         std::string displacerType = conf::VELOCITY_VERLET;                        // Default displacer.
-        auto cutoff = param->get<real_t>("simulation.forces.cutoff");      // Cutoff distance.
+        auto cutoffSR = param->get<real_t>("simulation.forces.cutoffSR");         // Cutoff distance for short range interactions.
+        auto cutoffLR = param->get<real_t>("simulation.forces.cutoffLR");         // Cutoff distance for short range interactions.
 
         bool pbc_1{false};                               // Apply 1D-PBC.
         char direction{'z'};                             // Direction.
@@ -63,9 +63,13 @@ int main(int argc, char *argv[]) {
                 "fn-sim-data", po::value<std::string>(&fnSimulationData),
                 "Output file name of simulation data. Default is 'simulation.dat'."
         )(
-                "cutoff-distance,r",
-                po::value<real_t>(&cutoff),
-                "Cutoff distance for forces."
+                "cutoff-distance-sr",
+                po::value<real_t>(&cutoffSR),
+                "Cutoff distance for short-ranged forces."
+        )(
+                "cutoff-distance-lr",
+                po::value<real_t>(&cutoffLR),
+                "Cutoff distance for long-ranged forces."
         )(
                 "temperature,T",
                 po::value<real_t>(&temperature),
@@ -132,9 +136,13 @@ int main(int argc, char *argv[]) {
 
         // First read simulation parameters, if provided.
         util::getParameters(vm, param);
-        if (vm.count("cutoff-distance")) {
-            cutoff = vm["cutoff-distance"].as<real_t>();
-            param->put<real_t>("simulation.forces.cutoff", cutoff);
+        if (vm.count("cutoff-distance-sr")) {
+            cutoffSR = vm["cutoff-distance-sr"].as<real_t>();
+            param->put<real_t>("simulation.forces.cutoffSR", cutoffSR);
+        }
+        if (vm.count("cutoff-distance-lr")) {
+            cutoffSR = vm["cutoff-distance-lr"].as<real_t>();
+            param->put<real_t>("simulation.forces.cutoffLR", cutoffSR);
         }
         if (vm.count("fn-trajectory")) {
             fnTrajectory = vm["fn-trajectory"].as<std::string>();
@@ -201,11 +209,11 @@ int main(int argc, char *argv[]) {
         std::cout << *forceField << std::endl;
 
         // Interactor
-        bc_ptr_t bc =  factory::boundaryCondition(particleSystem->box());
+        bc_ptr_t bc =  factory::pbc(particleSystem->box());
         if (pbc_1) {
             logger.info(std::to_string(direction) + ": Applying PBC in this direction only.");
-            bc = factory::oneDimensionBoundaryCondition(particleSystem->box(),
-                                                        Direction::valueOf(direction));
+            bc = factory::pbc1dBB(particleSystem->box(),
+                                  Direction::valueOf(direction));
         } else {
             logger.info("Applying PBC in all directions.");
         }
@@ -216,7 +224,7 @@ int main(int argc, char *argv[]) {
         auto displacer = factory::displacer(displacerType, param, interactor, bc, dpdUnits);
 
         // Simulate
-        Simulation simulation(param, particleSystem, displacer);
+        Simulation simulation(param, particleSystem, displacer, bc);
         util::open_output_file(trajectory, fnTrajectory);
         util::open_output_file(data, fnSimulationData);
         simulation.perform(trajectory, data);

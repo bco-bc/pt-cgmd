@@ -13,10 +13,10 @@
 namespace simploce {
     
     /**
-     * Creates particle pair lists based on the location of particles in cells.
+     * Finds non-bonded particle pairs based on the location of particles in cells.
      * @see <a href="https://en.wikipedia.org/wiki/Cell_lists">Cell lists at Wikipedia</a>
      */
-    class CellPairListGenerator : public pair_lists_generator {
+    class CellPairListGenerator : public pair_list_generator {
     public:
 
         /**
@@ -26,7 +26,8 @@ namespace simploce {
          */
         CellPairListGenerator(param_ptr_t param, bc_ptr_t bc);
         
-        PairLists generate(const p_system_ptr_t& particleSystem) const override;
+        std::vector<PairList::p_pair_t>
+        generate(const p_system_ptr_t& particleSystem) const override;
         
     private:
                         

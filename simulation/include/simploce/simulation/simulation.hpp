@@ -24,10 +24,12 @@ namespace simploce {
          * @param param Simulation parameters.
          * @param particleSystem Particular system.
          * @param displacer displacer.
+         * @param bc Boundary condition.
          */
         Simulation(param_ptr_t param,
                    p_system_ptr_t particleSystem,
-                   displacer_ptr_t displacer);
+                   displacer_ptr_t displacer,
+                   bc_ptr_t bc);
         
         /**
          * Performs the simulation.
@@ -42,6 +44,7 @@ namespace simploce {
         param_ptr_t param_;
         p_system_ptr_t particleSystem_;
         displacer_ptr_t displacer_;
+        bc_ptr_t bc_;
 
     };
 

@@ -80,7 +80,7 @@ namespace simploce {
         
         // Displace.
         SimulationData data =
-                particleSystem->doWithDisplaceables<SimulationData>([] (const std::vector<p_ptr_t>& particles) {
+                particleSystem->doWithAll<SimulationData>([] (const std::vector<p_ptr_t>& particles) {
             auto data = displace_(dt, particles);
             data.totalMomentum = norm<real_t>(properties::linearMomentum(particles));
             return std::move(data);

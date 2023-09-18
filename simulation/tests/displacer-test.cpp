@@ -1,5 +1,5 @@
 /*
- * File:   leap-frog-test.cpp
+ * File:   leap-frog-Yiannourakou.cpp
  * Author: ajuffer
  *
  * Created on August 16, 2019, 1:00 PM
@@ -33,13 +33,13 @@ using namespace simploce::param;
  */
 
 void test1(const spec_catalog_ptr_t& catalog, const ff_ptr_t& forceField) {
-    std::cout << "displacer-test test 1" << std::endl;
+    std::cout << "displacer-test Yiannourakou 1" << std::endl;
 
     auto simulationParameters = factory::simulationParameters();
     std::cout << *simulationParameters << std::endl;
     
     box_ptr_t box = factory::box(length_t{5.0});
-    bc_ptr_t bc = factory::boundaryCondition(box);
+    bc_ptr_t bc = factory::pbc(box);
 
     auto factory = factory::particleSystemFactory(catalog);
     p_system_ptr_t particleSystem = factory->diatomic(0.12, catalog->O());

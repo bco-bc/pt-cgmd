@@ -16,17 +16,17 @@ namespace simploce {
      * by Groot and Warren, J. Chem. Phys., v. 107, p. 4423, 1997. It also employs a weight factor s
      * in (1-r/r_c)^s for calculating wR and wD. If not specified, s=1 (as in the original
      * DPD algorithm).
-     * The units employed are MVV_DPD units, that is dimensionless values are assumed.
+     * The units employed are MVV_DPD units, that is dimensionless (reduced) values are assumed.
      */
     class MVV_DPD : public displacer {
     public:
 
         /**
-         * Constructor. Moves parameters.
+         * Constructor.
          * @param param Simulation parameters.
          * @param interactor Interactor.
          * @param bc Boundary condition.
-         * @param dpdUnits MVV_DPD Units convertor.
+         * @param dpdUnits DPD units convertor.
          */
         MVV_DPD(param_ptr_t param,
                 interactor_ptr_t interactor,

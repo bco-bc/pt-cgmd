@@ -8,10 +8,10 @@
 
 int main() {
     simploce::id_t id = simploce::util::generateId();
-    std::cout << "ID: " << simploce::util::toString(id) << std::endl;
+    std::cout << "ID: " << simploce::util::to_string(id) << std::endl;
     id = simploce::util::generateId();
-    std::cout << "ID: " << simploce::util::toString(id) << std::endl;
+    std::cout << "ID: " << simploce::util::to_string(id) << std::endl;
     id = simploce::util::generateId();
-    std::cout << "ID: " << simploce::util::toString(id) << std::endl;
+    std::cout << "ID: " << simploce::util::to_string(id) << std::endl;
     return (EXIT_SUCCESS);
 }

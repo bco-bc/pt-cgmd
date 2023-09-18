@@ -81,7 +81,7 @@ namespace simploce {
     void
     PDBReader::parse(const cont_handler_ptr_t &handler,
                      const input_source_ptr_t &source) {
-        util::Logger logger("simploce::PDBReader::parse()");
+        util::Logger logger("simploce::PDBReader::parseIt()");
         PDBReaderHelper helper(logger);
 
         logger.trace(source->sourceId() + ": Parsing PDB content.");
@@ -139,7 +139,7 @@ namespace simploce {
         handler->endMolecule();
         handler->end();
 
-        logger.debug("Estimated number of lines parsed: " + util::toString(lineCounter));
+        logger.debug("Estimated number of lines parsed: " + std::to_string(lineCounter));
         logger.trace("Parsing PDB completed.");
     }
 
@@ -282,7 +282,7 @@ namespace simploce {
                                                                                           // index number.
                 if (serial < 0) {
                     logger_.debug(*(current + 1) + ": Not a suitable MODEL index number.");
-                    auto moleculeName = MODEL + util::toString(index);
+                    auto moleculeName = MODEL + util::to_string(index);
                     handler->startMolecule(moleculeName);
                     index += 1;
                 } else {
@@ -292,7 +292,7 @@ namespace simploce {
                 }
             } catch (boost::bad_lexical_cast& exception) {
                 logger_.debug(*(current + 1) + ": Not a suitable MODEL index number.");
-                auto moleculeName = MODEL + util::toString(index);
+                auto moleculeName = MODEL + util::to_string(index);
                 handler->startMolecule(moleculeName);
                 index += 1;
             }
@@ -349,7 +349,7 @@ namespace simploce {
         }
 
         logger_.debug(residueName+ ": Accepted Residue Name.");
-        logger_.debug(util::toString(residueIndex) + ": Accepted Residue Index.");
+        logger_.debug(util::to_string(residueIndex) + ": Accepted Residue Index.");
 
         if (!prevResidueName_.empty() > 0) {
             if (residueName != prevResidueName_ || residueIndex != prevResidueIndex_) {
@@ -431,7 +431,7 @@ namespace simploce {
         } while (!found && index < 8);
         if (!found)
             util::logAndThrow(logger_, "'" + *(current + index) + "': Cannot find x-coordinate in ATOM record");
-        logger_.debug(util::toString(x) + ": Identified x-coordinate");
+        logger_.debug(util::to_string(x) + ": Identified x-coordinate");
 
         // Determine y- and z-coordinate.
         index -= 1;

@@ -14,7 +14,7 @@
 namespace simploce {
 
     /**
-     * Lennard Jones interaction.
+     * Lennard Jones interaction, a non-bonded interaction type.
      */
     class LJ : public pair_potential {
     public:
@@ -29,17 +29,23 @@ namespace simploce {
 
         std::pair<energy_t, force_t> operator () (const p_ptr_t &p1, const p_ptr_t &p2) override;
 
-    private:
-
-        friend class LJ_RF;
-        friend class LJ_SF;
-        friend class Wall;
-
+        /**
+         * Returns forces and interaction energy. All arguments are required.
+         * @param rij Distance vector.
+         * @param Rij Distance.
+         * @param Rij2 Rij * Rij
+         * @param C12 C12 parameter.
+         * @param C6 C6 parameter.
+         * @return Energy and force, respectively.
+         */
         static std::pair<energy_t, force_t> forceAndEnergy(const dist_vect_t& rij,
                                                            real_t Rij,
                                                            real_t Rij2,
                                                            real_t C12,
                                                            real_t C6);
+
+
+    private:
 
         ff_ptr_t forceField_;
         bc_ptr_t bc_;

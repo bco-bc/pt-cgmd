@@ -18,7 +18,10 @@ namespace simploce {
 
         dist_vect_t apply(const position_t& ri, const position_t& rj) const override;
         
-        virtual position_t placeInside(const position_t& r_out) const override;
+        position_t placeInside(const position_t& r_out) const override;
+
+        velocity_t apply(const simploce::velocity_t &v,
+                         const position_t& r) const override;
 
     };
 }

@@ -9,7 +9,7 @@
 #include "simploce/potentials/force-field.hpp"
 #include "simploce/simulation/bc.hpp"
 #include "simploce/particle/particle.hpp"
-
+#include "simploce/util/logger.hpp"
 
 namespace simploce {
 
@@ -19,6 +19,9 @@ namespace simploce {
 
     std::pair<energy_t, force_t>
     HalveAttractiveQP::operator () (const p_ptr_t &p1, const p_ptr_t &p2) {
+        static util::Logger logger{"simploce::HalveAttractiveQP::operator () ()"};
+        logger.trace("Entering");
+
         // Get r0 and fc.
         auto params = forceField_->halveAttractiveQuartic(p1->spec(), p2->spec());
         auto r0 = params.first;
@@ -28,8 +31,8 @@ namespace simploce {
         const auto &r1 = p1->position();
         const auto &r2 = p2->position();
 
-        // Apply boundary condition.
-        dist_vect_t rij = bc_->apply(r1, r2);
+        auto rij = bc_->apply(r1, r2);
+        // auto rij = r1 - r2;
         auto Rij = norm<real_t>(rij);
         real_t dR = Rij - r0;
 
@@ -43,8 +46,10 @@ namespace simploce {
             for (std::size_t k = 0; k != 3; ++k) {
                 f[k] = -derQP * unitVector[k];
             }
-            return  std::move(std::make_pair(energy, f));
+            logger.trace("Leaving");
+            return std::move(std::make_pair(energy, f));
         } else {
+            logger.trace("Leaving.");
             return std::move(std::make_pair(energy_t{0.0}, force_t{0.0, 0.0, 0.0}));
         }
     }

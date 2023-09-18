@@ -43,12 +43,12 @@ namespace simploce {
         setupHelpers_(const stime_t &dt,
                       const temperature_t &temperature,
                       real_t gamma,
-                      bool isMesoscale,
+                      bool mesoscopic,
                       const std::vector<p_ptr_t> &particles) {
             static util::Logger logger("simploce::lvv::LangevinVelocityVerlet::setupHelpers_()");
             logger.trace("Entering.");
 
-            static real_t kT = isMesoscale ? temperature() : units::mu<real_t>::KB * temperature();
+            static real_t kT = mesoscopic ? temperature() : units::mu<real_t>::KB * temperature();
             std::size_t nParticles = particles.size();
 
             FC_ = std::vector<real_t>(nParticles, 0.0);
@@ -85,7 +85,7 @@ namespace simploce {
                 // Validate.
                 real_t f1 = fc * a1;
                 if (f1 > 1) {
-                    logger.warn("Factor = fc * dt / (2.0 * m) = " + util::toString(f1) +
+                    logger.warn("Factor = fc * dt / (2.0 * m) = " + util::to_string(f1) +
                                 " > 1 may represent an unphysical regime.");
                 }
             }
@@ -142,7 +142,7 @@ namespace simploce {
         }
 
         static SimulationData
-        displaceVelocity_(bool isMesoscale,
+        displaceVelocity_(bool mesoscopic,
                           const std::vector<p_ptr_t> &particles) {
             SimulationData data;
 
@@ -187,7 +187,7 @@ namespace simploce {
             }
 
             // Instantaneous temperature at t(n+1).
-            data.temperature = properties::kineticTemperature(particles, data.kinetic, isMesoscale);
+            data.temperature = properties::kineticTemperature(particles, data.kinetic, mesoscopic);
 
             // Done.
             return data;
@@ -210,7 +210,7 @@ namespace simploce {
         static stime_t dt = param_->get<real_t>("simulation.timestep");
         static temperature_t temperature = param_->get<real_t>("simulation.temperature");
         static auto gamma = param_->get<real_t>("simulation.displacer.lvv.gamma");
-        static auto isMesoscale = param_->get<bool>("simulation.mesoscale");
+        static auto mesoscopic = param_->get<bool>("simulation.mesoscale");
         static std::size_t counter = 0;
 
         counter += 1;
@@ -220,16 +220,16 @@ namespace simploce {
             logger.debug(std::to_string(dt()) + ": Time step.");
             logger.debug(std::to_string(temperature()) + ": Temperature.");
             logger.debug(std::to_string(gamma) + ": gamma");
-            logger.debug(std::to_string(isMesoscale) + ": Is mesoscale simulation?");
+            logger.debug(std::to_string(mesoscopic) + ": Is mesoscopic simulation?");
 
-            particleSystem->doWithDisplaceables<void>([] (const std::vector<p_ptr_t>& particles) {
-                lvv::setupHelpers_(dt, temperature, gamma, isMesoscale, particles);
+            particleSystem->doWithAll<void>([] (const std::vector<p_ptr_t>& particles) {
+                lvv::setupHelpers_(dt, temperature, gamma, mesoscopic, particles);
             });
             interactor_->interact(particleSystem);  // Initial forces.
         }
                 
         // Displace particle positions.
-        particleSystem->doWithDisplaceables<void>([] (const std::vector<p_ptr_t>& particles) {
+        particleSystem->doWithAll<void>([] (const std::vector<p_ptr_t>& particles) {
             lvv::displacePosition_(dt, particles);
         });
         
@@ -237,8 +237,8 @@ namespace simploce {
         auto result = interactor_->interact(particleSystem);
         
         // Displace particle velocities.
-        SimulationData data = particleSystem->doWithDisplaceables<SimulationData>([] (const std::vector<p_ptr_t>& particles) {
-            auto data = lvv::displaceVelocity_(isMesoscale, particles);
+        SimulationData data = particleSystem->doWithAll<SimulationData>([] (const std::vector<p_ptr_t>& particles) {
+            auto data = lvv::displaceVelocity_(mesoscopic, particles);
             data.totalMomentum = norm<real_t>(properties::linearMomentum(particles));
             return data;
         });

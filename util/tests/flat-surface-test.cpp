@@ -28,6 +28,8 @@ int main() {
     std::cout << "Distance r1 (" << r1 << " ) to surface 2: " << pair.first << ",  distance vector: " << pair.second << std::endl;
     std::cout << "Answer: distance = 6.0, distance vector: 0.0, -6.0, 0.0" << std::endl;
 
+    auto normal = flatSurface2.unitVectorPerpendicularTo();
+    std::cout << "Normal vector: " << normal << std::endl;
 
 
     return EXIT_SUCCESS;

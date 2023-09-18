@@ -25,7 +25,7 @@ int main() {
     auto forceField = factory::forceField(fileName, catalog);
     dist_t cutoff = 2.6;
     auto box = factory::box(2.0 * cutoff());
-    auto bc = factory::boundaryCondition(box);
+    auto bc = factory::pbc(box);
     RF pairPotential{cutoff, 0.0, forceField, box, bc};
 
     // Particles.

@@ -24,6 +24,7 @@ int main(int argc, char *argv[]) {
     std::string fnOutputParticleSystem{"out.ps"};
     std::string fnOutputPDB{"out.pdb"};
     bool isCoarseGrained{false};
+    bool isMesoscale{false};
     bool channel{false};
     real_t wallWidth{1.0};
 
@@ -43,6 +44,9 @@ int main(int argc, char *argv[]) {
     )(
         "coarse-grained,c",
         "Input is a coarse-grained description."
+    )(
+            "mesoscale,m",
+            "Input is a mesoscale desciption"
     )(
         "fn-output-pdb",
         po::value<std::string>(&fnOutputPDB),
@@ -72,16 +76,20 @@ int main(int argc, char *argv[]) {
         std::cout << usage << "\n";
         return 0;
     }
-    if (vm.count("fn-particle-spec-catalog")) {
+    if (vm.count("fn-particle-spec-catalog,s")) {
         fnParticleSpecCatalog = vm["fn-particle-spec-catalog"].as<std::string>();
     }
-    if (vm.count("fn-input-particle-system")) {
+    if (vm.count("fn-input-particle-system,i")) {
         fnInputParticleSystem = vm["fn-input-particle-system"].as<std::string>();
     }
-    if (vm.count("fn-output-particle-system")) {
+    if (vm.count("fn-output-particle-system,o")) {
         fnOutputParticleSystem = vm["fn-output-particle-system"].as<std::string>();
     }
-    if (vm.count("coarse-grained") ) {
+    if (vm.count("is-coarse-grained,c") ) {
+        isCoarseGrained = true;
+    }
+    if (vm.count("is-mesoscale,m") ) {
+        isMesoscale = true;
         isCoarseGrained = true;
     }
     if (vm.count("channel")) {
@@ -93,7 +101,7 @@ int main(int argc, char *argv[]) {
     if (vm.count("fn-output-pdb")) {
         fnOutputPDB = vm["fn-output-pdb"].as<std::string>();
     }
-    if (vm.count("verbose") ) {
+    if (vm.count("verbose,v") ) {
         util::Logger::changeLogLevel(util::Logger::LOGDEBUG);
     }
 
@@ -106,8 +114,13 @@ int main(int argc, char *argv[]) {
 
     // Add boundary particles.
     auto factory = simploce::factory::particleSystemFactory(catalog);
-    factory->addParticleBoundary(particleSystem, 0.6, Plane::YZ);
-    factory->addParticleBoundary(particleSystem, 0.6, Plane::ZX, true);
+
+    if (channel) {
+        factory->makeChannel(particleSystem, wallWidth, isMesoscale);
+    } else {
+        factory->addParticleBoundary(particleSystem, 0.6, Plane::YZ);
+        factory->addParticleBoundary(particleSystem, 0.6, Plane::ZX, true);
+    }
 
     // Write particle system.
     std::ofstream stream;

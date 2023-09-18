@@ -12,17 +12,16 @@
 namespace simploce {
 
     /**
-     * An external force applied to -all- particles in the same way.
+     * An external force, applied to -all- particles in the same way.
      */
     struct external_potential {
 
         virtual ~external_potential() = default;
 
         /**
-         * Returns the potential energy and force on the particle due to this external
-         * potential.
+         * Returns the potential energy and force on the particle due to this external potential.
          * @param particle Particle.
-         * @return Energy and force.
+         * @return Energy and force. Force is -not- assigned to particle/ particle is -not- updated.
          */
         virtual std::pair<energy_t, force_t> operator () (const p_ptr_t& particle) = 0;
     };

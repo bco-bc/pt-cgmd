@@ -63,7 +63,7 @@ namespace simploce {
             total += length;
         }
         auto average = total / real_t(edges.size());
-        logger.debug(util::toString(total) + ": Average side (edge) length.");
+        logger.debug(std::to_string(total()) + ": Average side (edge) length.");
         auto t1 = std::tan(3.0 * PI / 10.0);
         area_t area = 5.0 * average() * average() * std::tan(3.0 * PI / 10.0) / 4.0;
         logger.trace("Leaving.");

@@ -12,7 +12,7 @@
 namespace simploce {
 
     at_sys_ptr_t
-    Atomistic::obtainFrom(std::istream& stream, const spec_catalog_ptr_t& catalog) {
+    Atomistic::parseIt(std::istream& stream, const spec_catalog_ptr_t& catalog) {
         auto atomistic = factory::atomistic();
         atomistic->parse(stream, catalog);
         return atomistic;
@@ -35,10 +35,10 @@ namespace simploce {
     }
 
     p_ptr_t
-    Atomistic::createParticle_(const id_t& id,
-                               int index,
-                               const std::string& name,
-                               const spec_ptr_t& spec) {
+    Atomistic::createParticle(const id_t& id,
+                              int index,
+                              const std::string& name,
+                              const spec_ptr_t& spec) {
         return Atom::create(id, index, name, spec);
     }
 

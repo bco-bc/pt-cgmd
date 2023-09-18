@@ -15,18 +15,21 @@ namespace simploce {
    * Periodic boundary condition with the nearest image approximation.
    * @see <a href="https://en.wikipedia.org/wiki/Periodic_boundary_conditions">Wikipedia</a>
    */
-  class PeriodicBoundaryCondition : public boundary_condition {
+  class PBC : public boundary_condition {
   public:
       
     /**
      * Constructor.
      * @param box Orthogonal simulation box (container, unit findCell).
      */
-    PeriodicBoundaryCondition(box_ptr_t box);
+    explicit PBC(box_ptr_t box);
 
     dist_vect_t apply(const position_t& ri, const position_t& rj) const override;
     
     position_t placeInside(const position_t& r_out) const override;
+
+    velocity_t apply(const simploce::velocity_t &v,
+                     const position_t& r) const override;
     
   private:
 

@@ -59,7 +59,7 @@ int main() {
         if ( std::fabs(d - radius()) > 1.0e-05) {
             calculator->rightHandSide(positions, charges);
             calculator->solve();
-            std::vector<el_pot> potentials;
+            std::vector<el_pot_t> potentials;
             if (d < radius()) {
                 potentials = calculator->reactionPotentialSolute(positions);
             } else {

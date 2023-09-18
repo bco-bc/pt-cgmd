@@ -139,7 +139,7 @@ int main(int argc, char *argv[]) {
     logger.info("Read particle system from '" + fnInputParticleSystem + "'.");
 
     // Analyzer.
-    bc_ptr_t bc = factory::boundaryCondition(particleSystem->box());
+    bc_ptr_t bc = factory::pbc(particleSystem->box());
     gr_ptr_t gr = Gr::create(dr, cutoff, specName1, specName2, bc);
 
     // Perform the analysis.

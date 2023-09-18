@@ -13,8 +13,8 @@
 namespace simploce {
 
     /**
-     * Hard sphere potential, Shifted force Coulomb interaction. Should not be used when
-     * force calculations are required.
+     * Hard sphere potential, Shifted force Coulomb interaction. Should NOT be used when
+     * force calculations are required as well. Suitable for Monte Carlo.
      */
     class HS_SF: public pair_potential {
     public:

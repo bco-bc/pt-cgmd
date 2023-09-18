@@ -26,10 +26,10 @@ namespace simploce {
     void
     BaseContentHandler::end() {
         logger_.info("End of chemical content.");
-        logger_.info("Number of atoms: " + util::toString(this->numberOfAtoms()));
-        logger_.info("Number of atom groups: " + util::toString(this->numberOfAtomGroups()));
-        logger_.info("Number of molecules: " + util::toString(this->numberOfMolecules()));
-        logger_.info("Total charge: " + util::toString(this->totalCharge()));
+        logger_.info("Number of atoms: " + util::to_string(this->numberOfAtoms()));
+        logger_.info("Number of atom groups: " + util::to_string(this->numberOfAtomGroups()));
+        logger_.info("Number of molecules: " + util::to_string(this->numberOfMolecules()));
+        logger_.info("Total charge: " + util::to_string(this->totalCharge()));
     }
 
     void
@@ -62,12 +62,12 @@ namespace simploce {
 
     void
     BaseContentHandler::atomCoordinates(const position_t& r) {
-        logger_.info("Atom coordinates: " + util::toString(r));
+        logger_.info("Atom coordinates: " + util::to_string(r));
     }
 
     void
     BaseContentHandler::atomCharge(const charge_t& charge) {
-        logger_.info("Atom charge: " + util::toString(charge));
+        logger_.info("Atom charge: " + util::to_string(charge));
         totalCharge_ += charge;
     }
 
@@ -83,7 +83,7 @@ namespace simploce {
     
     void
     BaseContentHandler::index(int index) {
-        logger_.info("Index received: " + util::toString(index));
+        logger_.info("Index received: " + util::to_string(index));
     }
 
     std::size_t

@@ -20,7 +20,7 @@ namespace simploce {
                        std::string name,
                        spec_ptr_t spec) :
         id_{std::move(id)}, index_{index}, name_{std::move(name)}, spec_{std::move(spec)},
-        r_{}, v_{}, f_{} {
+        r_{}, v_{}, f_{}, frozen_{false} {
         if ( id_.empty() ) {
             throw std::domain_error("A particle identifier must be provided.");
         }
@@ -33,6 +33,29 @@ namespace simploce {
     }
     
     Particle::~Particle() = default;
+
+    Particle::Particle(simploce::Particle &&particle) noexcept :
+        id_{std::move(particle.id_)},
+        index_{particle.index_},
+        name_{std::move(particle.name_)},
+        spec_{std::move(particle.spec_)},
+        r_{particle.r_},
+        v_{particle.v_},
+        f_{particle.f_},
+        frozen_{particle.frozen_} {
+    }
+
+    Particle &Particle::operator=(simploce::Particle &&particle) noexcept {
+        id_ = std::move(particle.id_);
+        index_ = particle.index_;
+        name_ = std::move(particle.name_);
+        spec_ = std::move(particle.spec_);
+        r_ = particle.r_;
+        v_ = particle.v_;
+        f_ = particle.f_;
+        frozen_ = particle.frozen_;
+        return *this;
+    }
 
     bool
     Particle::operator == (const Particle& p) const {
@@ -76,7 +99,7 @@ namespace simploce {
     
     void 
     Particle::position(const position_t& r) {
-        r_ = r; 
+        r_ = frozen() ? r_ : r;
     }
     
     velocity_t
@@ -86,7 +109,7 @@ namespace simploce {
     
     void 
     Particle::velocity(const velocity_t& v) {
-        v_ = v;
+        v_ = frozen() ? v_ : v;
     }
     
     force_t
@@ -116,7 +139,7 @@ namespace simploce {
         stream << std::setw(conf::NAME_WIDTH) << this->name();
         stream << std::setw(conf::INTEGER_WIDTH) << this->index();
         stream << std::setw(conf::NAME_WIDTH) << this->spec()->name();
-        stream << std::setw(conf::ID_WIDTH) << util::toString(this->id());
+        stream << std::setw(conf::ID_WIDTH) << util::to_string(this->id());
         stream << space << this->position();
         stream << space << this->velocity();
     }
@@ -136,6 +159,11 @@ namespace simploce {
         this->velocity(v);
     }
 
+    bool
+    Particle::frozen() const {
+        return frozen_;
+    }
+
     void
     Particle::id(const id_t& id) {
         id_ = id;
@@ -147,6 +175,11 @@ namespace simploce {
             throw std::domain_error("A particle specification must be provided.");
         }
         spec_ = spec;
+    }
+
+    void Particle::freeze() {
+        frozen_ = true;
+        v_ = velocity_t{0.0, 0.0, 0.0};
     }
     
     std::ostream& 

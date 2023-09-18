@@ -48,7 +48,7 @@ namespace simploce {
           * @param id Unique bead identifier.
           * @param index Bead sequential index.
           * @param name Bead name.
-          * @param spec  Protonatable bead specification.
+          * @param spec Protonatable bead specification.
           */
          ProtonatableBead(const id_t& id,
                           std::size_t index,

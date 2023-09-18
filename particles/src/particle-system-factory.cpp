@@ -12,7 +12,6 @@
 #include "simploce/particle/atomistic.hpp"
 #include "simploce/particle/coarse-grained.hpp"
 #include "simploce/particle/particle-system.hpp"
-#include "simploce/particle/bead.hpp"
 #include "simploce/particle/p-factory.hpp"
 #include "simploce/particle/p-util.hpp"
 #include "simploce/particle/atomic-content-handler.hpp"
@@ -134,7 +133,7 @@ namespace simploce {
             ncgWaters = int(nLimit);
             logger.warn("Number of requested CG waters is higher than the maximum number of CG water allowed.");
         }
-        logger.info("Generating " + util::toString(ncgWaters) + " CG water.");
+        logger.info("Generating " + std::to_string(ncgWaters) + " CG water.");
         number_density_t cgNumberDensity = real_t(ncgWaters) / volume();
         std::size_t nOneDirection = int(std::pow(ncgWaters, 1.0/3.0));
         density_t cgDensity = cgNumberDensity * (cwSpec->mass() + dpSpec->mass());
@@ -159,7 +158,7 @@ namespace simploce {
         logger.debug("Number of coordinates in y-direction: " + boost::lexical_cast<std::string>(ny));
         logger.debug("Number of coordinates in z-direction: " + boost::lexical_cast<std::string>(nz));
         logger.debug("Number of coordinates in any direction: " + boost::lexical_cast<std::string>(nOneDirection));
-        logger.debug("Can create a maximum of " + util::toString(nx * ny * nz) + " CW beads.");
+        logger.debug("Can create a maximum of " + std::to_string(nx * ny * nz) + " CW beads.");
 
         // Start from an empty particle model.
         auto coarseGrained = factory::coarseGrained();
@@ -232,8 +231,8 @@ namespace simploce {
             j = 0;
             i += 1;
         }
-        logger.info("Created " + util::toString(coarseGrained->numberOfBeads()) + " beads.");
-        logger.info("Created " + util::toString(coarseGrained->numberOfParticleGroups()) + " water groups.");
+        logger.info("Created " + std::to_string(coarseGrained->numberOfBeads()) + " beads.");
+        logger.info("Created " + std::to_string(coarseGrained->numberOfParticleGroups()) + " water groups.");
         if ( coarseGrained->numberOfParticleGroups() < ncgWaters ) {
             logger.warn("The number of created water groups is less then the number of requested water groups.");
         }
@@ -242,6 +241,60 @@ namespace simploce {
         util::removeOverallLinearMomentum(coarseGrained);
 
         return std::move(coarseGrained);
+    }
+
+    p_system_ptr_t
+    ParticleSystemFactory::mesoscalePolarizableWater(const box_ptr_t &box,
+                                                     int numberOfWaterParticles,
+                                                     const temperature_t T) {
+        util::Logger logger{"simploce::ParticleSystemFactory::mesoscalePolarizableWater"};
+
+        logger.info(std::to_string(box->lengthX()) + ", " +
+                     std::to_string(box->lengthY()) + ", " +
+                     std::to_string(box->lengthZ()) + ": Box dimensions");
+        logger.info(std::to_string(numberOfWaterParticles) + ": Requested number of water particles.");
+        logger.info(std::to_string(T()) + ": Requested temperature.");
+
+        auto particleSystem = factory::coarseGrained();
+        auto CW = catalog_->lookup("CW");
+        auto DP = catalog_->lookup("DP");
+
+        // Position of DP drawn from normal distribution
+        std::random_device rd{};
+        std::mt19937 gen{rd()};
+        std::normal_distribution<real_t> d{0.0, 0.2};
+        for (auto i = 0; i != numberOfWaterParticles; ++i) {
+            // Single water group.
+            std::vector<p_ptr_t> beads{};
+            std::vector<id_pair_t> bonds{};
+
+            auto x = util::randomUniform(0.0, box->lengthX());
+            auto y = util::randomUniform(0.0, box->lengthY());
+            auto z = util::randomUniform(0.0, box->lengthZ());
+            auto name = "CW" + std::to_string(i);
+            auto cwBead = particleSystem->addBead(name, CW);
+            cwBead->position(position_t{x, y, z});
+            util::assignVelocity(cwBead, T, true);
+            beads.emplace_back(cwBead);
+
+            name = "DP" + std::to_string(i);
+            auto dpBead = particleSystem->addBead(name, DP);
+            x += d(gen);
+            y += d(gen);
+            z += d(gen);
+            dpBead->position(position_t{x, y, z});
+            util::assignVelocity(dpBead, T, true);
+            beads.emplace_back(dpBead);
+
+            id_pair_t pair = std::make_pair(cwBead->id(), dpBead->id());
+            bonds.emplace_back(pair);
+            particleSystem->addParticleGroup(beads, bonds);
+        }
+        particleSystem->box(box);
+
+        util::removeOverallLinearMomentum(particleSystem);
+
+        return std::move(particleSystem);
     }
 
     p_system_ptr_t
@@ -303,13 +356,13 @@ namespace simploce {
                     position_t r{x,y,z};
                     if ( counter % 2 == 0 ) {
                         // Na+
-                        std::string name = NA->name() + util::toString(counter + 1 );
+                        std::string name = NA->name() + std::to_string(counter + 1 );
                         auto ion = atomistic->addAtom(name, NA);
                         ion->position(r);
                         util::assignVelocity(ion, temperature);
                     } else {
                         // Cl-
-                        std::string name = CL->name() + util::toString(counter + 1);
+                        std::string name = CL->name() + std::to_string(counter + 1);
                         auto ion = atomistic->addAtom(name, CL);
                         ion->position(r);
                         util::assignVelocity(ion, temperature);
@@ -346,7 +399,7 @@ namespace simploce {
         util::Logger logger{"simploce::ParticleSystemFactory::argon"};
 
         logger.info("Creating atomistic particle model for argon.");
-        logger.info("Requested temperature: " + util::toString(temperature()));
+        logger.info("Requested temperature: " + std::to_string(temperature()));
 
         // Conversion of kg/m^3 to u/nm^3.
         density_t density = densitySI / (units::si<real_t>::MU * 1.0e+27);
@@ -357,36 +410,36 @@ namespace simploce {
         util::log(logger, *spec);
 
         number_density_t numberDensity = density / spec->mass();
-        logger.info("Requested density (kg/m^3): " + util::toString(densitySI));
-        logger.info("Requested density (u/nm^3): " + util::toString(density));
-        logger.info("Requested number density (1/nm^3):" + util::toString(numberDensity));
+        logger.info("Requested density (kg/m^3): " + std::to_string(densitySI()));
+        logger.info("Requested density (u/nm^3): " + std::to_string(density()));
+        logger.info("Requested number density (1/nm^3):" + std::to_string(numberDensity()));
 
         // Spacing between argon atoms.
         const length_t spacing{0.3};
-        logger.debug("Spacing between LJ atoms: " + util::toString(spacing));
+        logger.debug("Spacing between LJ atoms: " + std::to_string(spacing()));
 
         // Box dimensions.
         length_t Lx = box->lengthX();
         length_t Ly = box->lengthY();
         length_t Lz = box->lengthZ();
         volume_t volume = box->volume();
-        logger.info("Requested box size (nm): " + util::toString(box->size()));
-        logger.debug("Box volume (nm^3): " + util::toString(volume));
+        logger.info("Requested box size (nm): " + std::to_string(box->size()));
+        logger.debug("Box volume (nm^3): " + std::to_string(volume()));
 
         int nAtoms = int(numberDensity() * volume());
-        logger.info("Requested number of argon atoms: " + util::toString(nAtoms));
+        logger.info("Requested number of argon atoms: " + std::to_string(nAtoms));
         if (nAtoms > int(nLimit)) {
             logger.warn("Number of requested atoms is higher that maximum number of atoms allowed.");
             nAtoms = int(nLimit);
         }
-        logger.info("Generating " + util::toString(nAtoms) + " argon atoms.");
+        logger.info("Generating " + std::to_string(nAtoms) + " argon atoms.");
 
         int nx = util::nint(Lx / spacing);
         int ny = util::nint(Ly / spacing);
         int nz = util::nint(Lz / spacing);
-        logger.debug("Number of coordinates in x-direction: " + util::toString(nx));
-        logger.debug("Number of coordinates in y-direction: " + util::toString(ny));
-        logger.debug("Number of coordinates in z-direction: " + util::toString(nz));
+        logger.debug("Number of coordinates in x-direction: " + std::to_string(nx));
+        logger.debug("Number of coordinates in y-direction: " + std::to_string(ny));
+        logger.debug("Number of coordinates in z-direction: " + std::to_string(nz));
 
         // Start from an empty particle model.
         auto atomistic = factory::atomistic();
@@ -404,7 +457,7 @@ namespace simploce {
                 while ( k < nz && counter < nAtoms ) {
                     real_t z = z0 + (k + 0.5) * spacing();
                     position_t r{x,y,z};
-                    std::string name = spec->name() + util::toString(counter + 1);
+                    std::string name = spec->name() + std::to_string(counter + 1);
                     auto atom = atomistic->addAtom(name, spec);
                     atom->position(r);
                     util::assignVelocity(atom, temperature);
@@ -418,13 +471,13 @@ namespace simploce {
             i += 1;
         }
         atomistic->box(box);
-        logger.info("Number of Argon atoms generated: " + util::toString(atomistic->numberOfAtoms()));
+        logger.info("Number of Argon atoms generated: " + std::to_string(atomistic->numberOfAtoms()));
         numberDensity = real_t(atomistic->numberOfAtoms()) / volume();
-        logger.info("Number density (1/nm^3): " + util::toString(numberDensity));
+        logger.info("Number density (1/nm^3): " + std::to_string(numberDensity()));
         density = spec->mass()() * numberDensity();
-        logger.info("Density (u/nm3): " + util::toString(density));
+        logger.info("Density (u/nm3): " + std::to_string(density()));
         density_t densSI = density() * units::si<real_t>::MU * 1.0e+27;
-        logger.info("Density (kg/m^3): " + util::toString(densSI));
+        logger.info("Density (kg/m^3): " + std::to_string(densSI()));
 
         util::removeOverallLinearMomentum(atomistic);
 
@@ -445,7 +498,7 @@ namespace simploce {
         logger.trace("Entering.");
 
         logger.info("Creating coarse-grained particle system of a polymer solution.");
-        logger.info(util::toString(*box) + ": Requested box dimensions.");
+        logger.info(util::to_string(*box) + ": Requested box dimensions.");
         logger.info(std::to_string(chainLength) + ": Requested polymer chain length (number of monomeric units).");
         logger.info(monomericUnitBeadSpecName + ": Monomeric unit particle specification name.");
         logger.info(std::to_string(numberOfPolymers) + ": Requested number of polymers.");
@@ -500,7 +553,7 @@ namespace simploce {
                 position_t r{x, y, z};
                 for (auto j = 0; j != chainLength; ++j) {
                     r[2] = z + real_t(j) * spacing();
-                    auto name = spec->name() + util::toString(counter);
+                    auto name = spec->name() + std::to_string(counter);
                     auto particle = polymerSystem->addBead(name, spec);
                     particle->position(r);
                     util::assignVelocity(particle, temperature, true);
@@ -511,7 +564,7 @@ namespace simploce {
                 for (std::size_t j = 0; j != (chainLength - 1); ++j) {
                     auto id1 = particles[j]->id();
                     auto id2 = particles[j + 1]->id();
-                    bonds.emplace_back(id_pair_t{id1, id2});
+                    bonds.emplace_back(id1, id2);
                 }
                 polymerSystem->addParticleGroup(particles, bonds);
             }
@@ -522,7 +575,7 @@ namespace simploce {
                 auto y = dis(gen) * boxY;
                 auto z = dis(gen) * boxZ;
                 position_t r{x, y, z};
-                auto name = waterBeadSpecName + util::toString(counter);
+                auto name = waterBeadSpecName + std::to_string(counter);
                 auto particle = polymerSystem->addBead(name, waterSpec);
                 particle->position(r);
                 util::assignVelocity(particle, temperature, true);
@@ -557,7 +610,7 @@ namespace simploce {
                     auto y = counterY * spacing();
                     auto z = counterZ * spacing();
                     position_t r{x, y, z};
-                    auto name = spec->name() + util::toString(counter);
+                    auto name = spec->name() + std::to_string(counter);
                     auto particle = polymerSystem->addBead(name, spec);
                     counter += 1;
                     particle->position(r);
@@ -575,7 +628,7 @@ namespace simploce {
                 for (std::size_t j = 0; j != (chainLength - 1); ++j) {
                     auto id1 = particles[j]->id();
                     auto id2 = particles[j + 1]->id();
-                    bonds.emplace_back(id_pair_t{id1, id2});
+                    bonds.emplace_back(id1, id2);
                 }
                 polymerSystem->addParticleGroup(particles, bonds);
 
@@ -599,7 +652,7 @@ namespace simploce {
                 auto x = counterX * spacing();
                 auto y = counterY * spacing();
                 auto z = counterZ * spacing();
-                auto name = waterBeadSpecName + util::toString(counter);
+                auto name = waterBeadSpecName + std::to_string(counter);
                 position_t r{x, y, z};
                 auto particle = polymerSystem->addBead(name, waterSpec);
                 util::assignVelocity(particle, temperature, true);
@@ -651,7 +704,7 @@ namespace simploce {
         logger.trace("Entering.");
 
         logger.info("Creating droplet polymer solution.");
-        logger.info(util::toString(*box) + ": Requested box dimensions.");
+        logger.info(util::to_string(*box) + ": Requested box dimensions.");
         logger.info(std::to_string(chainLength) + ": Requested polymer chain length (number of monomeric units).");
         logger.info(monomericUnitBeadSpecName + ": Monomeric unit particle specification name.");
         logger.info(std::to_string(numberOfPolymers) + ": Requested number of polymers.");
@@ -690,7 +743,7 @@ namespace simploce {
             auto y = dis(gen) * boxY;
             auto z = dis(gen) * boxZ;
             position_t r{x, y, z};
-            auto name = dropletBeadSpecName + util::toString(counter);
+            auto name = dropletBeadSpecName + std::to_string(counter);
             auto particle = particleSystem->addParticle(name, dropletBeadSpec);
             particle->position(r);
             util::assignVelocity(particle, temperature, true);
@@ -714,7 +767,7 @@ namespace simploce {
         util::Logger logger("simploce::ParticleSystemFactory::identicalParticles()");
         logger.trace("Entering");
         logger.info("Creating physical system of identical particles.");
-        logger.info(util::toString(*box) + ": Requested box dimensions.");
+        logger.info(util::to_string(*box) + ": Requested box dimensions.");
         logger.info(specName + ": Requested particle specification name.");
         logger.info(std::to_string(rho()) + ": Requested number density.");
         logger.info(std::to_string(temperature()) + ": Requested temperature.");
@@ -753,7 +806,7 @@ namespace simploce {
                                                bool excludeCorner) {
         util::Logger logger{"simploce::ParticleSystemFactory::addParticleBoundary"};
         logger.info("Adding boundary particles.");
-        logger.info("Spacing (nm): " + util::toString(spacing()));
+        logger.info("Spacing (nm): " + std::to_string(spacing()));
         logger.info("Plane: " + plane.toString());
         auto box = particleSystem->box();
         /*auto size = box->size();
@@ -785,8 +838,8 @@ namespace simploce {
             limit1 = box->lengthZ();
             limit2 = box->lengthX();
         }
-        logger.info("Upper length limit #1" + util::toString(limit1));
-        logger.info("Upper length limit #2" + util::toString(limit2));
+        logger.info("Upper length limit #1" + std::to_string(limit1()));
+        logger.info("Upper length limit #2" + std::to_string(limit2()));
         std::vector<p_ptr_t> particles;
         std::vector<id_pair_t> bonds;  // No bonds.
 
@@ -798,7 +851,7 @@ namespace simploce {
         do {
             do {
                 counter += 1;
-                std::string name = "BP" + util::toString(counter);
+                std::string name = "BP" + std::to_string(counter);
                 auto p1 = particleSystem->addParticle(name,catalog_->staticBP());
                 if (plane == Plane::XY) {
                     position_t r{coord1, coord2, 0.0};
@@ -812,7 +865,7 @@ namespace simploce {
                 }
                 particles.emplace_back(p1);
                 counter += 1;
-                name = "BP" + util::toString(counter);
+                name = "BP" + std::to_string(counter);
                 auto p2 = particleSystem->addParticle(name, catalog_->staticBP());
                 if (plane == Plane::XY) {
                     position_t r{coord1, coord2, box->lengthZ()};
@@ -830,7 +883,7 @@ namespace simploce {
             coord2 = excludeCorner ? dis2() : 0.0;
             coord1 += dis1();
         } while (coord1 <= limit1());
-        logger.info("Added number of boundary particles: " + util::toString(counter));
+        logger.info("Added number of boundary particles: " + std::to_string(counter));
 
         particleSystem->addParticleGroup(particles, bonds);
     }
@@ -843,9 +896,10 @@ namespace simploce {
         logger.trace("Entering.");
         logger.info(std::to_string(wallWidth()) + ": Requested wall width.");
         auto box = particleSystem->box();
-        logger.info(util::toString(*box) + ": Box dimensions.");
-        auto spec = catalog_->staticBP();
+        logger.info(util::to_string(*box) + ": Box dimensions.");
+        logger.info(std::to_string(mesoscale) +  ": Mesoscale?");
 
+        auto spec = catalog_->staticBP();
         particleSystem->doWithAll<void>([&box, &wallWidth, &particleSystem, &spec] (
                 const std::vector<p_ptr_t>& all) {
             for (auto& p : all) {
@@ -857,16 +911,13 @@ namespace simploce {
                               box->lengthY() - y < wallWidth() ||
                               y < wallWidth();
                 if (inWall) {
-                    particleSystem->resetSpec_(p, spec);
+                    particleSystem->resetSpec(p, spec);
                     p->velocity(velocity_t{});
                 }
             }
         });
-        logger.debug(std::to_string(particleSystem->numberOfSpecifications(spec)) + ": Number of boundary particles.");
-        logger.debug("Making boundary particles non-displaceable...");
-        particleSystem->removeFromDisplaceables(spec);
-        logger.debug("Done.");
 
+        logger.info(std::to_string(particleSystem->numberOfSpecifications(spec)) + ": Number of boundary particles.");
         logger.trace("Leaving.");
     }
 

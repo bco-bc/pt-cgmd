@@ -9,6 +9,7 @@
 #include "simploce/simulation/sim-data.hpp"
 #include "simploce/simulation/displacer.hpp"
 #include "simploce/simulation/s-properties.hpp"
+#include "simploce/simulation/bc.hpp"
 #include "simploce/particle/particle-system.hpp"
 #include "simploce/simulation/s-util.hpp"
 
@@ -16,10 +17,12 @@ namespace simploce {
 
     Simulation::Simulation(param_ptr_t param,
                            p_system_ptr_t particleSystem,
-                           displacer_ptr_t displacer) :
+                           displacer_ptr_t displacer,
+                           bc_ptr_t bc) :
             param_{std::move(param)},
             particleSystem_{std::move(particleSystem)},
-            displacer_{std::move(displacer)} {
+            displacer_{std::move(displacer)},
+            bc_{std::move(bc)} {
     }
 
     void Simulation::perform(std::ofstream& trajectoryStream,
@@ -27,15 +30,13 @@ namespace simploce {
         static util::Logger logger("simploce::Simulation::perform()");
         logger.trace("Entering");
 
-        logger.info("Simulation ongoing.");
-
         // Set up.
         std::size_t numberAccepted = 0;
         auto box = particleSystem_->box();
         auto nSteps = param_->get<int>("simulation.nsteps");
         auto nWrite = param_->get<int>("simulation.nwrite");
         auto referenceTemperature = param_->get<real_t>("simulation.temperature");
-        auto isMesoscale = param_->get<bool>("simulation.mesoscale");
+        auto mesoscopic = param_->get<bool>("simulation.mesoscale");
         auto removeCenterOfMassMotion = param_->get<bool>("simulation.remove-com-motion", false);
         auto nRemoveCenterOfMassMotion =
                 param_->get<int>("simulation.nremove-com-motion", nSteps + 1);
@@ -62,16 +63,32 @@ namespace simploce {
                         ": Number of steps between removing center of mass motion.");
         }
 
+        // Perform simulation.
+        logger.info("Simulation ongoing.");
         for (int counter = 1; counter <= nSteps; ++counter) {
-            logger.debug("Step #: " + util::toString(counter));
+            //logger.debug("Step #: " + std::to_string(counter));
+
+            // Update positions and velocities.
             SimulationData data = displacer_->displace(particleSystem_);
             if ( data.accepted ) {
                 numberAccepted += 1;
             }
+
+            // Apply boundary conditions to velocities of displaceable particles (not frozen), if any.
+            particleSystem_->doWithAll<void>([this] (const std::vector<p_ptr_t>& particles) {
+                for (auto& p: particles) {
+                    if (!p->frozen()) {
+                        auto v = p->velocity();
+                        auto r = p->position();
+                        v = this->bc_->apply(v, r);
+                        p->velocity(v);
+                    }
+                }
+            });
+
             if ( counter % nWrite == 0) {
-                // Pressure is computed for displaceable particles, not for all particles.
                 data.pressure =
-                        particleSystem_->doWithDisplaceables<pressure_t>([box, data] (
+                        particleSystem_->doWithAll<pressure_t>([box, data] (
                                 const std::vector<p_ptr_t>& particles) {
                     return properties::pressure(particles, data.temperature, box);
                 });
@@ -93,7 +110,7 @@ namespace simploce {
                         std::fabs(referenceTemperature - data.temperature()) / referenceTemperature * 100.0;
                     if (difference > maxTemperatureDifference) {
                         logger.warn(std::to_string(counter) + ": Scaling velocities after displacement.");
-                        util::scaleVelocities(particleSystem_, referenceTemperature, isMesoscale);
+                        util::scaleVelocities(particleSystem_, referenceTemperature, mesoscopic);
                     }
                 }
             }

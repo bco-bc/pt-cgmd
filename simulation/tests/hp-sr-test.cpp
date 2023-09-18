@@ -4,7 +4,6 @@
  * Created on Jun 2, 2022
  */
 
-#include "simploce/conf/sp-conf.hpp"
 #include "simploce/potentials/hp-sr.hpp"
 #include "simploce/potentials/force-field.hpp"
 #include "simploce/simulation/s-factory.hpp"
@@ -18,7 +17,6 @@
 #include <limits>
 
 using namespace simploce;
-using int_spect_t = ForceField::int_spec_t;
 
 int main() {
     util::Logger::changeLogLevel(util::Logger::LOGTRACE);
@@ -34,8 +32,10 @@ int main() {
 
     dist_t cutoff = 1.0;
     auto box = factory::box(10.0, 10.0, 40.0);
-    auto bc = factory::boundaryCondition(box);
-    HarmonicSoftRepulsion pairPotential(forceField, bc, cutoff);
+    auto bc = factory::pbc(box);
+    auto harmonic = std::make_shared<HP>(forceField, bc);
+    auto softRepulsion = std::make_shared<SoftRepulsion>(forceField, bc, cutoff);
+    HarmonicSoftRepulsion pairPotential(forceField, bc, softRepulsion, harmonic);
 
     // Particles. Should form a bond.
     // These specs should exist in bonds.

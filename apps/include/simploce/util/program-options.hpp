@@ -69,6 +69,13 @@ namespace simploce {
          */
         ff_ptr_t getForceField(const po::variables_map& vm);
 
+        /**
+         * Mesoscale?
+         * @param vm Program options and values.
+         * @return Result.
+         */
+        bool isMesoscale(const po::variables_map& vm);
+
     }
 }
 

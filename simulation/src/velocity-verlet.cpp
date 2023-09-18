@@ -123,7 +123,7 @@ namespace simploce {
         static std::vector<force_t> fis{};
 
         if (counter == 0) {
-            logger.debug("Time step: " + util::toString(dt));
+            logger.debug("Time step: " + std::to_string(dt()));
         }
         
         counter += 1;
@@ -133,7 +133,7 @@ namespace simploce {
         }
         
         // Displace particle positions.
-        particleSystem->doWithDisplaceables<void>([] (const std::vector<p_ptr_t>& particles) {
+        particleSystem->doWithAll<void>([] (const std::vector<p_ptr_t>& particles) {
             fis = vv::displace_(dt, particles);
         });
         
@@ -141,7 +141,7 @@ namespace simploce {
         auto result = interactor_->interact(particleSystem);
         
         // Displace particle momenta.
-        SimulationData data = particleSystem->doWithDisplaceables<SimulationData>([] (const std::vector<p_ptr_t>& particles) {
+        SimulationData data = particleSystem->doWithAll<SimulationData>([] (const std::vector<p_ptr_t>& particles) {
             auto data = vv::displaceVelocity_(dt, fis, particles);
             data.totalMomentum = norm<real_t>(properties::linearMomentum(particles));
             return data;

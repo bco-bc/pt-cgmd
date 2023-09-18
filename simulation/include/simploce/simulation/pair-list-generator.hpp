@@ -8,24 +8,22 @@
 #define PAIR_LIST_GENERATOR_HPP
 
 #include "simploce/types/s-types.hpp"
-#include "pair-lists.hpp"
+#include "pair-list.hpp"
 #include <vector>
 
 namespace simploce {        
     
     /**
-     * Finds all particles pairs in molecular dynamics simulations.
+     * Finds non-bonded particles pairs in particle systems.
      */
-    struct pair_lists_generator {
+    struct pair_list_generator {
 
-        virtual ~pair_lists_generator() = default;
-        
         /**
-         * Generates pair lists.
+         * Finds non-bonded particle pairs.
          * @param particleSystem Particle system.
-         * @return Pair lists.
+         * @return Particle pairs.
          */
-        virtual PairLists
+        virtual std::vector<PairList::p_pair_t>
         generate(const p_system_ptr_t& particleSystem) const = 0;
 
     };

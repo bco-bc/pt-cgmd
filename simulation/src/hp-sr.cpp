@@ -17,22 +17,30 @@
 
 namespace simploce {
 
-    HarmonicSoftRepulsion::HarmonicSoftRepulsion(ff_ptr_t forceField, bc_ptr_t bc, dist_t cutoff)
-        : forceField_{std::move(forceField)}, bc_{std::move(bc)}, cutoff_{cutoff} {
+    HarmonicSoftRepulsion::HarmonicSoftRepulsion(ff_ptr_t forceField,
+                                                 bc_ptr_t bc,
+                                                 std::shared_ptr<SoftRepulsion> softRepulsion,
+                                                 std::shared_ptr<HP> harmonic)
+        : forceField_{std::move(forceField)}, bc_{std::move(bc)},
+          softRepulsion_{std::move(softRepulsion)}, harmonic_{std::move(harmonic)} {
+        util::Logger logger{"simploce::HarmonicSoftRepulsion::HarmonicSoftRepulsion()"};
         if (!forceField_) {
-            throw std::domain_error("HarmonicSoftRepulsion: Missing force field.");
+            util::logAndThrow(logger, "Missing force field.");
         }
         if (!bc_) {
-            throw std::domain_error("HarmonicSoftRepulsion: Missing boundary condition.");
+            util::logAndThrow(logger, "Missing boundary condition.");
         }
-        if (cutoff_ <= 0.0) {
-            throw std::domain_error("HarmonicSoftRepulsion: Cutoff distance must be > 0.0.");
+        if (!softRepulsion_) {
+            util::logAndThrow(logger, "Missing soft repulsion potential.");
+        }
+        if (!harmonic) {
+            util::logAndThrow(logger, "Missing harmonic potential.");
         }
     }
 
     std::pair<energy_t, force_t>
     HarmonicSoftRepulsion::operator()(const p_ptr_t &p1, const p_ptr_t &p2) {
-        static util::Logger logger("HarmonicSoftRepulsion::operator()()");
+        static util::Logger logger("simploce::HarmonicSoftRepulsion::operator()()");
         logger.trace("Entering.");
 
         logger.debug(p1->name() + ", " + p2->name() + ": Particle pair.");
@@ -44,7 +52,7 @@ namespace simploce {
         auto params = forceField_->harmonicSoftRepulsion(p1->spec(), p2->spec());
         auto r0 = std::get<0>(params);
         auto fc = std::get<1>(params);
-        auto a_ij = std::get<2>(params);
+        auto Aij = std::get<2>(params);
 
         // Current positions.
         const auto &ri = p1->position();
@@ -53,20 +61,20 @@ namespace simploce {
         // Distance.
         dist_vect_t rij = bc_->apply(ri, rj);
         auto Rij = norm<real_t>(rij);
-        dist_vect_t unitVector = (Rij > eps ? (rij / Rij) : util::randomUnit());
+        auto Rij2 = Rij * Rij;
 
         // Soft repulsion.
-        auto pairSR =
-                SoftRepulsion::forceAndEnergy(rij, unitVector, Rij, a_ij, cutoff_);
+        auto pairSR = softRepulsion_->forceAndEnergy(rij, Rij, Rij2, Aij);
 
         // Harmonic.
-        auto pairHP = HP::forceAndEnergy(rij, unitVector, Rij, r0, fc);
+        auto pairHP = harmonic_->forceAndEnergy(rij, Rij, r0, fc);
 
         // Total.
         auto energy{pairSR.first + pairHP.first};
         auto fi{pairSR.second + pairHP.second};
 
         // Done.
+        logger.trace("Leaving");
         return std::move(std::make_pair(energy, fi));
     }
 }

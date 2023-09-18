@@ -40,7 +40,7 @@ namespace simploce {
 
             particleSystem->doWithAll<void>([] (const std::vector<p_ptr_t>& all) {
                 auto P = properties::linearMomentum(all);
-                logger.debug(util::toString(P) + ": TOTAL linear momentum before:");
+                logger.debug(util::to_string(P) + ": TOTAL linear momentum before:");
                 P /= all.size();
                 for (auto& p : all) {
                     auto mass = p->mass();
@@ -51,7 +51,7 @@ namespace simploce {
                     p->velocity(v);
                 }
                 P = properties::linearMomentum(all);
-                logger.debug(util::toString(P) + ": TOTAL linear momentum afterwards:");
+                logger.debug(util::to_string(P) + ": TOTAL linear momentum afterwards:");
             });
 
             logger.trace("Leaving.");

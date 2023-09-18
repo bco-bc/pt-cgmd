@@ -9,6 +9,7 @@
 #include "simploce/simulation/s-factory.hpp"
 #include "simploce/particle/particle-system-factory.hpp"
 #include "simploce/particle/particle-system.hpp"
+#include "simploce/particle/particle-spec-catalog.hpp"
 #include "simploce/util/logger.hpp"
 #include "simploce/util/param.hpp"
 #include "simploce/util/file.hpp"
@@ -76,6 +77,7 @@ namespace simploce {
                 }
                 poHelper_.catalog = factory::particleSpecCatalog(fn);
                 poHelper_.logger.info(fn + ": Read particle specifications from this input file.");
+                std::cout << *poHelper_.catalog << std::endl;
             }
             return poHelper_.catalog;
         }
@@ -107,7 +109,7 @@ namespace simploce {
                 } else {
                     poHelper_.particleSystem = factory::particleSystem(fn, catalog, isCoarseGrained);
                 }
-                poHelper_.logger.info(fn + ": Read particle from this input file.");
+                poHelper_.logger.info(fn + ": Read particle system from this input file.");
             }
             return poHelper_.particleSystem;
         }
@@ -150,6 +152,10 @@ namespace simploce {
             auto forceField = factory::forceField(fn, catalog);
             poHelper_.logger.info(fn + ": Read force field from this input file.");
             return std::move(forceField);
+        }
+
+        bool isMesoscale(const po::variables_map& vm) {
+            return vm.count("is-mesoscale") != 0;
         }
 
     }

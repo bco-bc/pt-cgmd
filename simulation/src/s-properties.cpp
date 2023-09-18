@@ -5,14 +5,12 @@
  */
 
 #include "simploce/simulation/s-properties.hpp"
-#include "simploce/conf/s-conf.hpp"
-#include "simploce/particle/particle.hpp"
 #include "simploce/units/units-mu.hpp"
 #include "simploce/types/cvector_t.hpp"
 #include "simploce/util/logger.hpp"
 #include "simploce/util/util.hpp"
+#include "simploce/conf/s-conf.hpp"
 #include <cmath>
-#include <limits>
 
 namespace simploce {
     namespace properties {
@@ -23,33 +21,72 @@ namespace simploce {
 
         temperature_t kineticTemperature(const std::vector<p_ptr_t>& particles,
                                          const energy_t& eKin,
-                                         bool isMesoscale) {
-            auto nParticles = particles.size();
-            auto KB = isMesoscale ? 1 : units::mu<real_t>::KB;
+                                         bool mesoscopic) {
+
+            util::Logger logger("simploce::properties::kineticTemperature(...)");
+            static int counter = 0;
+
+            counter += 1;
+
+            // Determine number of degrees of freedom (dof).
+            std::size_t nParticles = 0;
+            for (const auto& p: particles) {
+                // Exclude frozen particles.
+                nParticles += (p->frozen() ? 0 : 1);
+            }
             real_t nDof = 3.0 * real_t(nParticles) - 3.0;  // Assuming total linear momentum is constant.
-            if (nDof > 3 ) {
-                return 2.0 * eKin() / (nDof * KB);
-            } else {
+            if ( nDof < 3) {
                 // No point in calculating the temperature for a low number of degrees of freedom.
                 return 0.0;
             }
-        }
+
+            // Subtract kinetic energy of center of mass (cm) motion.
+            auto cmLinearMomentum = linearMomentum(particles);
+            energy_t cmEKin, kineticEnergy = eKin;
+            if (norm<real_t>(cmLinearMomentum) > 0.0) {
+                mass_t totalMass = 0.0;
+                for (auto& p: particles)
+                    if ( !p->frozen() )
+                        totalMass += p->mass();
+                velocity_t cmVelocity{};
+                for (size_t k = 0; k != 3; ++k) {
+                    cmVelocity[k] = cmLinearMomentum[k] / totalMass();
+                }
+                cmEKin = 0.5 * totalMass() * inner<real_t>(cmVelocity, cmVelocity);
+                kineticEnergy -= cmEKin;
+            }
+
+            if (counter == 1) {
+                std::string s = "eKin: " + std::to_string(eKin()) +
+                                ", cmEKin: " + std::to_string(cmEKin()) +
+                                ", kineticEnergy: " + std::to_string(kineticEnergy());
+                logger.debug(s);
+                logger.debug(std::to_string(int(nDof)) + ": Number of degrees of freedom.");
+            }
+
+            // Ensure correct units.
+            auto KB = mesoscopic ? 1 : units::mu<real_t>::KB;
+            return 2.0 * kineticEnergy() / (nDof * KB);
+       }
 
         pressure_t pressure(const std::vector<p_ptr_t>& particles,
                             const temperature_t& temperature,
                             const box_ptr_t& box,
-                            bool isMesoscale)
+                            bool mesoscopic)
         {
             volume_t volume = box->volume();
             real_t virial1 = 0.0;
             pressure_t pressure{};
 
-            auto KB = isMesoscale ? 1 : units::mu<real_t>::KB;
-            std::size_t nParticles = particles.size();
+            auto KB = mesoscopic ? 1 : units::mu<real_t>::KB;
+            std::size_t nParticles = 0;
             for (const auto& particle : particles) {
-                position_t r = particle->position();
-                force_t f = particle->force();
-                virial1 += inner<real_t>(f,r);
+                if (!particle->frozen()) {
+                    position_t r = particle->position();
+                    force_t f = particle->force();
+                    virial1 += inner<real_t>(f, r);
+                    nParticles += 1;
+                }
             }
             if ( volume() > 0.0 ) {
                 virial1 /= ( 3.0 * volume() );
@@ -89,13 +126,13 @@ namespace simploce {
             auto Rij = std::get<2>(efl);
             if (Rij() < rMin() ) {
                 std::string message =
-                        "WARNING: Rij < " + util::toString(rMin()) +
-                        ", Rij = " + util::toString(Rij) +
-                        ", pi = " + pi->name() + ", index = " + util::toString(pi->index()) +
-                        ", id = " + util::toString(pi->id()) +
-                        ", pj = " + pj->name() + ", index = " + util::toString(pj->index()) +
-                        ", id = " + util::toString(pj->id()) +
-                        ", energy: " + util::toString(std::get<0>(efl));
+                        "WARNING: Rij < " + std::to_string(rMin()) +
+                        ", Rij = " + std::to_string(Rij()) +
+                        ", pi = " + pi->name() + ", index = " + std::to_string(pi->index()) +
+                        ", id = " + util::to_string(pi->id()) +
+                        ", pj = " + pj->name() + ", index = " + std::to_string(pj->index()) +
+                        ", id = " + util::to_string(pj->id()) +
+                        ", energy: " + util::to_string(std::get<0>(efl));
                 logger.warn(message);
             }
         }

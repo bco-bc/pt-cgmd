@@ -25,14 +25,17 @@ namespace simploce {
         Particle(const Particle&) = delete;
         Particle& operator = (const Particle&) = delete;
 
+        // Movable
+        Particle(Particle&& particle) noexcept;
+        Particle& operator = (Particle&& particle) noexcept;
+
         // Compares identifiers.
         bool operator == (const Particle& p) const;
         
         virtual ~Particle();
         
         /**
-         * Returns unique particle identifier. This uniquely identifies a given 
-         * particle in a given particle collection. Once assigned, the particle's ID will never
+         * Returns unique particle identifier. Once assigned, the particle's identifier will never
          * change.
          * @return Identifier.
          */
@@ -76,8 +79,9 @@ namespace simploce {
         position_t position() const;
         
         /**
-         * Sets position.
+         * Sets position. No effect if particle is frozen.
          * @param r New position.
+         * @see #frozen()
          */
         void position(const position_t& r);
         
@@ -88,7 +92,7 @@ namespace simploce {
         velocity_t velocity() const;
         
         /**
-         * Sets velocity.
+         * Sets velocity. Has no effect if this particle is frozen.
          * @param v Velocity.
          */
         void velocity(const velocity_t& v);
@@ -111,7 +115,7 @@ namespace simploce {
         void resetForce();
 
         /**
-         * Is this particle an ion?
+         * Whether this particle an ion?
          * @return Result.
          */
         bool isIon() const;
@@ -133,7 +137,14 @@ namespace simploce {
          * @param stream Input stream.
          */
         virtual void readState(std::istream& stream);
-        
+
+        /**
+         * Whether this particle is a frozen particle, that is whether it can be moved to
+         * another position.
+         * @return Result.
+         */
+        bool frozen() const;
+
     protected:
         
         /**
@@ -164,8 +175,14 @@ namespace simploce {
         // Sets particle id.
         void id(const id_t& id);
         
-        // Assigns particle specification.
+        // Reassigns particle specification.
         void resetSpec(const spec_ptr_t& spec);
+
+        /**
+         * Freezes this particle at the present location. Attempts to assign a new position
+         * have no effect.
+         */
+        void freeze();
 
         id_t id_;
         std::size_t index_;
@@ -174,7 +191,7 @@ namespace simploce {
         position_t r_;
         velocity_t v_;
         force_t f_;
-        
+        bool frozen_;
     };
     
     /**

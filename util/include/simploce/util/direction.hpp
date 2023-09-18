@@ -49,6 +49,12 @@ namespace simploce {
          */
         bool operator == (const Direction& direction) const;
 
+        /**
+         * Returns the direction as in integral value.
+         * @return Integer, one of {0,1,2}.
+         */
+        int value() const;
+
     private:
 
         explicit Direction(char value);

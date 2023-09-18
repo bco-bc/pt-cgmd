@@ -29,6 +29,7 @@ namespace simploce {
          *   <li>Electric potential: kJ/(mol e)</li>
          *   <li>Electric field: kJ/(mol e nm)</li>
          * </ul>
+         * A number of version methods are provided that accept a value in SI and return the value in MU.
          * @see Berendsen, H. J. C, Simulating the physical world. Cambridge University Press, 2007 (p. xv - xxvii).
         */
         template<typename V>
@@ -40,12 +41,12 @@ namespace simploce {
             static const V E;
 
             /**
-             * Electric constant. In (mol e^2)/(kJ nm)
+             * Electric constant (vacuum permittivity). In (mol e^2)/(kJ nm)
              */
             static const V E0;
 
             /**
-             * 4 * PI * E0. In (mol e^2)/kJ nm).
+             * 4 * PI * E0. In (mol e^2)/(kJ nm).
              */
             static const V FOUR_PI_E0;
 
@@ -90,27 +91,27 @@ namespace simploce {
             static const V WATER_VISCOSITY;
 
             /**
-             * l to nm^3 conversion factor.
+             * Conversion factor l (volume) to nm^3.
              */
             static const V l_to_nm3;
 
             /**
-             * Ångström to nm conversion factor.
+             * Conversion factor Ångström (length, distance) to nm conversion factor.
              */
             static const V Angstrom_to_nm;
 
             /**
-             * V to kJ/(mol e).
+             * Conversion factor V (electric potential) to kJ/(mol e).
              */
             static const V V_to_kJ_mol_e;
 
             /**
-             * e nm (dipole moment) to D (Debye)
+             * Conversion factor e nm (dipole moment) to D (Debye)
              */
             static const V e_nm_to_D;
 
             /**
-             * nm to m.
+             * Conversion factor m to nm.
              */
             static const V nm_to_m;
 
@@ -125,18 +126,67 @@ namespace simploce {
             static const V kcal_mol_A2_to_kJ_mol_nm2;
 
             /**
+             * Converts m to nm.
+             * @param length Length in m.
+             * @return
+             */
+            static V length_m_to_nm(V length);
+
+            /**
+             * Converts nm to m.
+             * @param length in nm.
+             * @return Length in m.
+             */
+            static V length_nm_to_m(V length);
+
+            /**
+             * Converts kg to u.
+             * @param mass Mass in kg.
+             * @return Mass in u.
+             */
+            static V mass_kg_to_u(V mass);
+
+            /**
+             * Converts mass in u to mass in kg.
+             * @param mass Mass in u.
+             * @return Mass in kg.
+             */
+            static V mass_u_to_kg(V mass);
+
+            /**
              * Converts energy in J to kJ/mol.
              * @param energy Energy in J.
              * @return energy in kJ/mol.
              */
-            static V energyJtoKJperMol(V energy);
+            static V energy_J_to_kJ_per_mol(V energy);
+
+            /**
+             * Converts energy in kJ/mol to J.
+             * @param energy Energy in kJ/mol.
+             * @return Energy in J.
+             */
+            static V energy_kJ_per_mol_to_J(V energy);
 
             /**
              * Converts time in s to time in ps.
              * @param time Time is s.
              * @return Time in ps.
              */
-            static V timeToPs(V time);
+            static V time_s_to_ps(V time);
+
+            /**
+             * Converts time in ps to time is s.
+             * @param time Time in ps.
+             * @return Time in s.
+             */
+            static V time_ps_to_s(V time);
+
+            /**
+             * Converts number density in nm^-3 to number density in m^-3.
+             * @param numberDensity Number density in nm^-3.
+             * @return Number density in m^-3.
+             */
+            static V number_density_nm3_m3(V numberDensity);
 
         };
 
@@ -196,16 +246,52 @@ namespace simploce {
         template <typename V>
         const V mu<V>::kcal_mol_A2_to_kJ_mol_nm2 = mu<V>::cal_to_J / (mu<V>::Angstrom_to_nm * mu<V>::Angstrom_to_nm);
 
+        template <typename V>
+        V mu<V>::length_m_to_nm(V length) {
+            return length / mu<V>::nm_to_m;
+        }
+
+        template <typename V>
+        V mu<V>::length_nm_to_m(V length) {
+            return length * mu<V>::nm_to_m;
+        }
+
+        template <typename V>
+        V mu<V>::mass_kg_to_u(V mass) {
+            return mass / units::si<V>::MU;
+        }
+
+        template <typename V>
+        V mu<V>::mass_u_to_kg(V mass) {
+            return mass * units::si<V>::MU;
+        }
+
         template<typename V>
-        V mu<V>::energyJtoKJperMol(V energy) {
+        V mu<V>::energy_J_to_kJ_per_mol(V energy) {
             return energy / 1000.0 * si<V>::NA;
         }
 
+        template <typename V>
+        V mu<V>::energy_kJ_per_mol_to_J(V energy) {
+           return energy * 1000.0 / si<V>::NA;
+        }
+
         template<typename V>
-        V mu<V>::timeToPs(V time) {
+        V mu<V>::time_s_to_ps(V time) {
             return time * 1.0e+12;
         }
 
+        template <typename V>
+        V mu<V>::time_ps_to_s(V time) {
+            return time / 1.0e+12;
+        }
+
+        template <typename V>
+        V mu<V>::number_density_nm3_m3(V numberDensity) {
+            auto f = mu<V>::nm_to_m;
+            auto f3 = f * f * f;
+            return numberDensity * f3;
+        }
     }
 }
 

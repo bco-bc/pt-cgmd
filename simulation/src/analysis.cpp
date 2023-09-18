@@ -21,7 +21,7 @@ namespace simploce {
     {
         util::Logger logger("simploce::Analysis::perform()");
         const auto nskip = analysisParameters_->get<std::size_t>("analysis.trajectory.nskip");
-        logger.info("Skipping first " + util::toString(nskip) + " states in trajectory.");
+        logger.info("Skipping first " + std::to_string(nskip) + " states in trajectory.");
         
         std::size_t counter = 0;
         particleSystem_->readState(trajectory);

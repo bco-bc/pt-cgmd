@@ -30,7 +30,7 @@ outputFreeParticle(std::ofstream& ostream,
                    const spec_catalog_ptr_t& catalog,
                    const p_ptr_t& particle,
                    int rsn,
-                   const PeriodicBoundaryCondition& pbc,
+                   const PBC& pbc,
                    bool inBox) {
     ostream << "ATOM  ";
     auto index = particle->index() + 1;
@@ -118,7 +118,7 @@ void toPDB(const p_system_ptr_t& particleSystem,
            const spec_catalog_ptr_t& catalog,
            bool inBox) {
     box_ptr_t box = particleSystem->box();
-    PeriodicBoundaryCondition pbc(box);
+    PBC pbc(box);
 
     std::ofstream ostream;
     util::open_output_file(ostream, fnOutputPDB);
@@ -261,9 +261,9 @@ int main(int argc, char *argv[]) {
     // Read particle system.
     auto particleSystem = factory::particleSystem(fnInputParticleSystem, catalog, isCoarseGrained);
     logger.info("Read particle system from '" + fnInputParticleSystem + "'.");
-    logger.info("Number of particles: " + util::toString(particleSystem->numberOfParticles()));
-    logger.info("Number of free particles: " + util::toString(particleSystem->numberOfFreeParticles()));
-    logger.info("Number of particle groups: " + util::toString(particleSystem->numberOfParticleGroups()));
+    logger.info("Number of particles: " + std::to_string(particleSystem->numberOfParticles()));
+    logger.info("Number of free particles: " + std::to_string(particleSystem->numberOfFreeParticles()));
+    logger.info("Number of particle groups: " + std::to_string(particleSystem->numberOfParticleGroups()));
 
     // Write PDB.
     toPDB(particleSystem, fnOutputPDB, catalog, inBox);

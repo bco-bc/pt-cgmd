@@ -43,14 +43,14 @@ namespace simploce {
          * @param points Points.
          * @return Reaction potentials.
          */
-        virtual std::vector<el_pot> reactionPotentialSolute(const std::vector<position_t> &points) = 0;
+        virtual std::vector<el_pot_t> reactionPotentialSolute(const std::vector<position_t> &points) = 0;
 
          /**
          * Returns reaction potential at specified points located in the solvent region.
          * @param points Points.
          * @return Reaction potentials.
          */
-       virtual std::vector<el_pot> reactionPotentialSolvent(const std::vector<position_t> &points) = 0;
+       virtual std::vector<el_pot_t> reactionPotentialSolvent(const std::vector<position_t> &points) = 0;
     };
 }
 

@@ -6,23 +6,44 @@
 
 #include "simploce/simulation/interactor.hpp"
 #include "simploce/potentials/force-field.hpp"
-#include "simploce/simulation/sim-data.hpp"
 #include "simploce/simulation/pair-list-generator.hpp"
 #include "simploce/potentials/forces.hpp"
 #include "simploce/particle/particle.hpp"
 #include "simploce/particle/particle-system.hpp"
+#include "simploce/particle/bond.hpp"
 #include "simploce/util/util.hpp"
 #include <memory>
 #include <utility>
+#include <vector>
 
 namespace simploce {
+    namespace interactor {
+
+        using p_pair_t = PairList::p_pair_t;
+
+        static std::vector<p_pair_t>
+        bondedParticlePairs(const p_system_ptr_t &particleSystem) {
+            auto particlePairs = particleSystem->doWithAllFreeGroups<std::vector<p_pair_t>>([](
+                std::vector<p_ptr_t> &all, std::vector<p_ptr_t> &free, std::vector<pg_ptr_t> &groups) {
+                std::vector<p_pair_t> particlePairs{};
+                for (const auto &g: groups) {
+                    auto bonds = g->bonds();
+                    for (auto &b: bonds) {
+                        p_pair_t pair = std::make_pair(b.getParticleOne(), b.getParticleTwo());
+                        particlePairs.emplace_back(pair);
+                    }
+                }
+                return std::move(particlePairs);
+            });
+            return std::move(particlePairs);
+        }
+    }
     
     Interactor::Interactor(param_ptr_t param,
                            pair_list_gen_ptr_t pairListGenerator,
                            forces_ptr_t forces) :
-            param_{std::move(param)},
-            pairListsGenerator_{std::move(pairListGenerator)}, forces_{std::move(forces)},
-            pairLists_{} {
+            param_{std::move(param)}, pairListGenerator_{std::move(pairListGenerator)},
+            forces_{std::move(forces)}, pairList_{std::make_shared<PairList>()} {
     }
 
     std::tuple<energy_t, energy_t, energy_t>
@@ -34,24 +55,34 @@ namespace simploce {
         static auto includeExternal = param_->get<bool>("simulation.forces.include-external");
         static std::size_t counter = 0;
 
+        // Set the bonded pair list. Only once.
+        if (counter == 0) {
+            logger.debug(std::to_string(nUpdatePairLists) +
+                         ": Number of steps between an update of the particle pair list.");
+            auto particlePairs = interactor::bondedParticlePairs(particleSystem);
+            pairList_->bondedParticlePairs(particlePairs);
+            logger.debug(std::to_string(pairList_->bondedParticlePairs().size()) +
+                         ": Number of bonded particle pairs.");
+        }
+
         // Update particle pair list, if needed.
         if (counter % nUpdatePairLists == 0 || counter == 0) {
-            logger.debug("Number of steps between update of particle pair list: " +
-                          util::toString(nUpdatePairLists));
-            pairLists_ = pairListsGenerator_->generate(particleSystem);
-            pairLists_.modified_(true);
-            pairLists_.numberOfParticles(particleSystem->numberOfParticles());
+            auto particlePairs = pairListGenerator_->generate(particleSystem);
+            pairList_->nonBoundedParticlePairs(particlePairs);
+            pairList_->modified(true);
+            pairList_->numberOfParticles(particleSystem->numberOfParticles());
         } else {
-            pairLists_.modified_(false);
+            pairList_->modified(false);
         }
 
         // Calculate all forces and associated energies.
         particleSystem->resetForces();
-        auto bonded = this->forces_->bonded(particleSystem);
-        auto nonBonded = this->forces_->nonBonded(particleSystem, pairLists_);
+        auto bonded = forces_->bonded(particleSystem);
+        auto nonBonded = forces_->nonBonded(particleSystem, pairList_);
         energy_t external{0};
         if (includeExternal) {
-            logger.warn("Including external potentials.");
+            if (counter == 0)
+                logger.warn("Including external potentials.");
             external = this->forces_->external(particleSystem);
         }
 
@@ -69,9 +100,9 @@ namespace simploce {
         return std::move(this->forces_->interaction(particle, particleSystem));
     }
 
-    const PairLists&
-    Interactor::pairLists() const {
-        return pairLists_;
+    pairlist_ptr_t
+    Interactor::pairList() const {
+        return pairList_;
     }
 
 }

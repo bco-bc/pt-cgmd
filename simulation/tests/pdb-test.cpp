@@ -1,5 +1,5 @@
 /*
- * File:   pdb-test.cpp
+ * File:   pdb-Yiannourakou.cpp
  * Author: ajuffer
  *
  * Created on October 18, 2019, 3:13 PM
@@ -18,11 +18,11 @@ using namespace simploce;
  */
 
 void test1() {
-    std::cout << "pdb-test test 1" << std::endl;
+    std::cout << "pdb-test Yiannourakou 1" << std::endl;
     
     box_ptr_t box = factory::box(2.0);
     std::cout << "Box size: " << box->size() << std::endl;
-    bc_ptr_t bc = factory::boundaryCondition(box);
+    bc_ptr_t bc = factory::pbc(box);
     
     position_t r1{0,0,0}; 
     real_t dz = 0.1;
@@ -40,11 +40,11 @@ void test1() {
 }
 
 void test2() {
-    std::cout << "pdb-test test 2" << std::endl;
+    std::cout << "pdb-test Yiannourakou 2" << std::endl;
     
     box_ptr_t box = factory::box(2.0);
     std::cout << "Box size: " << box->size() << std::endl;
-    bc_ptr_t bc = factory::boundaryCondition(box);
+    bc_ptr_t bc = factory::pbc(box);
     
     real_t z0 = -0.5;
     real_t dz = 0.1;

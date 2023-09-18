@@ -19,26 +19,33 @@
 #include <boost/program_options.hpp>
 #include <string>
 #include <iostream>
-#include <fstream>
 
 using namespace simploce;
 namespace po = boost::program_options;
 
 static void validate(const p_system_ptr_t& particleSystem, const param_ptr_t& param) {
+    std::cout << std::endl;
     std::cout.setf(std::ios::scientific);
     std::cout.precision(conf::PRECISION);
+
     std::cout << "Validating particle system:" << std::endl;
-    std::cout << "Number of particles: " << util::toString(particleSystem->numberOfParticles()) << std::endl;
+    std::cout << "Number of particles: " << std::to_string(particleSystem->numberOfParticles()) << std::endl;
+    std::cout << "Number of free particles: " << std::to_string(particleSystem->numberOfFreeParticles()) << std::endl;
+    std::cout << "Number of frozen particles: " << std::to_string(particleSystem->numberOfFrozenParticles()) << std::endl;
+    std::cout << "Number of particle groups: " << std::to_string(particleSystem->numberOfParticleGroups()) << std::endl;
     std::cout << "Box dimension(s)" << *(particleSystem->box()) << std::endl;
     std::cout << "Protonatable?: " << particleSystem->isProtonatable() << std::endl;
-    particleSystem->doWithAll<void>([param] (const std::vector<p_ptr_t>& all) {
+    auto isMesoscale = param->get<bool>("simulation.mesoscale");
+    std::cout << "Mesoscale?: " << std::to_string(isMesoscale) << std::endl;
+
+    particleSystem->doWithAll<void>([param, isMesoscale] (const std::vector<p_ptr_t>& all) {
         auto p = properties::linearMomentum(all);
         std::cout << "TOTAL linear momentum vector components: " << p << std::endl;
         std::cout << "TOTAL linear momentum vector length: " << norm<real_t>(p) << std::endl;
         energy_t ekin{0.0};
         mass_t total;
         position_t cm{0.0, 0.0, 0.0};
-        auto isMesoscale = param->get<bool>("simulation.mesoscale");
+
         for (const auto& particle: all) {
             auto v = particle->velocity();
             auto mass = particle->mass();
@@ -58,6 +65,7 @@ static void validate(const p_system_ptr_t& particleSystem, const param_ptr_t& pa
 }
 
 static void validate(const ff_ptr_t& forceField) {
+    std::cout << std::endl;
     std::cout << "Validating force field." << std::endl;
     std::cout.setf(std::ios::scientific);
     std::cout.precision(conf::PRECISION);
@@ -65,6 +73,7 @@ static void validate(const ff_ptr_t& forceField) {
 }
 
 static void validate(const param_ptr_t& param) {
+    std::cout << std::endl;
     std::cout << "Validating (simulation) parameters." << std::endl;
     param::write(std::cout, *param);
 }
@@ -82,7 +91,7 @@ int main(int argc, char *argv[]) {
 
         std::string fnParticleSpecCatalog{"particle-spec-catalog.dat"};
         std::string fnIn{"particle.system"};
-        util::Specification specification = PARTICLE;
+        std::string spec = PARTICLE.spec();
         std::string selectFrom = "Input specification. Select one from '" +
                 PARTICLE.spec() + "' (default), '" +
                 SIM_PARAMS.spec() + "', '" +
@@ -92,7 +101,7 @@ int main(int argc, char *argv[]) {
         util::addStandardOptions(usage);
         usage.add_options() (
                 "input-spec",
-                po::value<util::Specification>(&specification),
+                po::value<std::string>(&spec),
                 selectFrom.c_str()
         );
 
@@ -107,8 +116,14 @@ int main(int argc, char *argv[]) {
         }
         util::verbose(vm);
 
+        util::Specification specification(spec);
         logger.info("Input model specification: " + specification.spec());
         if (specification == PARTICLE ) {
+            if (util::isMesoscale(vm)) {
+                param->put("simulation.mesoscale", true);
+            } else {
+                param->put("simulation.mesoscale", false);
+            }
             auto particleSystem = util::getParticleSystem(vm, param);
             validate(particleSystem, param);
         } else if ( specification == SIM_PARAMS ) {

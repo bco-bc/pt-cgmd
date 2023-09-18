@@ -14,13 +14,13 @@
 
 namespace simploce {
 
-    PeriodicBoundaryCondition::PeriodicBoundaryCondition(box_ptr_t box) :
+    PBC::PBC(box_ptr_t box) :
             boundary_condition{}, box_{std::move(box)} {
     }
 
     dist_vect_t 
-    PeriodicBoundaryCondition::apply(const position_t& ri,
-                                     const position_t& rj) const
+    PBC::apply(const position_t& ri,
+               const position_t& rj) const
     {        
         const box_t& box = *box_;
     
@@ -36,9 +36,9 @@ namespace simploce {
     }
     
     position_t 
-    PeriodicBoundaryCondition::placeInside(const position_t& r_out) const
+    PBC::placeInside(const position_t& r_out) const
     {
-        static util::Logger logger("PeriodicBoundaryCondition::placeInside()");
+        static util::Logger logger("PBC::placeInside()");
         const box_t& box = *box_;
         
         position_t r_in{r_out};
@@ -53,12 +53,18 @@ namespace simploce {
                 util::log(logger, r_out, util::Logger::LOGERROR);
                 logger.error("r_in:");
                 util::log(logger, r_in, util::Logger::LOGERROR);
-                logger.error("n: " + util::toString(n));
+                logger.error("n: " + std::to_string(n));
                 util::logAndThrow(logger, "Position r_in is -not- inside the box.");
             }
             //assert(r_in[k] >= 0 && r_in[k] <= box_k);
         }
         return r_in;
+    }
+
+    velocity_t
+    PBC::apply(const velocity_t &v,
+               const position_t& r) const {
+        return v;
     }
 
 }

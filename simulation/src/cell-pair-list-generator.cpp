@@ -6,12 +6,14 @@
 
 #include "simploce/simulation/cell-pair-list-generator.hpp"
 #include "simploce/simulation/bc.hpp"
-#include "simploce/simulation/s-properties.hpp"
 #include "simploce/simulation/s-util.hpp"
 #include "simploce/simulation/grid.hpp"
 #include "simploce/simulation/cell.hpp"
 #include "simploce/particle/particle-group.hpp"
 #include "simploce/particle/particle-system.hpp"
+#include "simploce/particle/particle-spec.hpp"
+#include "simploce/particle/particle-spec-catalog.hpp"
+#include "simploce/particle/bond.hpp"
 #include "simploce/util/logger.hpp"
 #include <utility>
 
@@ -19,10 +21,7 @@ namespace simploce {
     namespace pairlist {
 
         /**
-         * Returns all particles that are involved in non-bonded interactions, that is
-         * can form particle pairs for non-bonded interactions.
-         * IMPORTANT: DOES NOT DISTINGUISH BETWEEN PARTICLE PAIRS INVOLVED IN A BONDED INTERACTION IN THE SAME
-         * PARTICLE GROUP FROM THOSE PAIRS LOCATED IN DIFFERENT GROUPS. MUST BE CORRECTED.
+         * Returns all particles that can form particle pairs for non-bonded interactions.
          * @param all All particles.
          * @param free Free particles.
          * @param groups Particle groups.
@@ -37,23 +36,25 @@ namespace simploce {
             // Non-bonded particles.
             std::set<p_ptr_t> particles{};
 
+            // Within particle groups.
             logger.debug(std::to_string(groups.size()) + ": Number of particle groups.");
             for (const auto &g: groups) {
+                // Only non-bonded particles.
                 auto pairs = g->nonBondedParticlePairs();
-                logger.debug(std::to_string(pairs.size()) +
-                                     ": Number of particle pairs in group #" + std::to_string(g->id()));
                 for (const auto &pair: pairs) {
                    particles.insert(pair.first);
                    particles.insert(pair.second);
                 }
             }
             auto sizeInGroups = particles.size();
-            logger.debug(std::to_string(sizeInGroups) + ": Number of non-bonded particles added from within groups.");
+            logger.debug(std::to_string(sizeInGroups) +
+                         ": Number of non-bonded particles added from within groups.");
 
             // Find all particle pairs for particles in different groups.
             if (!groups.empty()) {
                 for (auto iter_i = groups.begin(); iter_i != groups.end() - 1; ++iter_i) {
                     const auto &gi = *iter_i;
+                    std::clog << "Group: " << gi->id() << std::endl;
                     const auto particles_i = gi->particles();
                     for (const auto &pi: particles_i) {
                         particles.insert(pi);
@@ -68,7 +69,8 @@ namespace simploce {
                 }
             }
             auto sizeBetweenGroups = particles.size() - sizeInGroups;
-            logger.debug(std::to_string(sizeBetweenGroups) + ": Number of non-bonded particles added from between groups.");
+            logger.debug(std::to_string(sizeBetweenGroups) +
+                         ": Number of non-bonded particles added from between groups.");
 
             // Find all particle pairs for free particles and particles in groups.
             for (const auto& pi : free) {
@@ -98,50 +100,53 @@ namespace simploce {
             return std::move(particles);
         }
 
-        static PairLists
-        makePairListNonConcurrent(const box_ptr_t &box,
-                                  const dist_t & cutoff,
+        static std::string generatePairKey(const p_ptr_t& pi, const p_ptr_t& pj) {
+            auto index_i = pi->index();
+            auto index_j = pj->index();
+            return index_j > index_i ?
+                   std::to_string(index_i) + "-" + std::to_string(index_j) :
+                   std::to_string(index_j) + "-" + std::to_string(index_i);
+        }
+
+        static std::vector<PairList::p_pair_t>
+        makePairListNonConcurrent(const dist_t & cutoff,
                                   const bc_ptr_t &bc,
                                   const std::vector<p_ptr_t>& particles,
-                                  const Grid& grid) {
-            using pp_pair_cont_t = typename PairLists::pp_pair_cont_t;
-            using pp_pair_t = typename PairLists::pp_pair_t;
-
+                                  const std::vector<pg_ptr_t> &groups,
+                                  const Grid& grid,
+                                  bool excludeFrozen) {
             static util::Logger logger("simploce::pairlist::makePairListNonConcurrent()");
             logger.trace("Entering.");
 
             static real_t rc2 = cutoff() * cutoff();
             logger.debug(std::to_string(cutoff()) + ": Cutoff distance for cell-based particle pairs.");
 
-            // Find unique particle pairs.
-            std::map<std::string, pp_pair_t> pairs{};
-            auto insertParticlePair = [&pairs] (const p_ptr_t& pi, const p_ptr_t& pj) {
-                // Each particle pair should appear just once in the pair list.
-                auto index_i = pi->index();
-                auto index_j = pj->index();
-                auto key = index_j > index_i ?
-                       std::to_string(index_i) + "-" + std::to_string(index_j) :
-                       std::to_string(index_j) + "-" + std::to_string(index_i);
-                pp_pair_t ppPair = std::make_pair(pi, pj);
-                                    auto pair = std::make_pair(key, ppPair);
-                                    pairs.insert(pair);
-            };
+            // Insert unique particle pairs.
+            std::map<std::string, PairList::p_pair_t> pairs{};
+            auto insertParticlePair
+                = [&pairs] (const p_ptr_t& pi, const p_ptr_t& pj) {
+                    // Each particle pair should appear just once in the pair list.
+                    auto key = generatePairKey(pi, pj);
+                    PairList::p_pair_t ppPair = std::make_pair(pi, pj);
+                    auto pair = std::make_pair(key, ppPair);
+                    pairs.insert(pair);
+                };
 
             auto neighboring = grid.neighbors();
             for (auto& c : neighboring) {
                 // Get central cell.
                 auto location = c.first;
                 auto central = grid.findCell(location);
-                auto cParticles = central->particles();
+                auto centralParticles = central->particles();
 
-                if ( !cParticles.empty() ) {
-                    // Particle pairs in central cell.
-                    for (auto i = 0; i < (cParticles.size() - 1); ++i) {
-                        auto &pi = cParticles[i];
+                if ( !centralParticles.empty() ) {
+
+                    // Particle pairs in current central cell.
+                    for (auto i = 0; i < (centralParticles.size() - 1); ++i) {
+                        auto &pi = centralParticles[i];
                         auto ri = pi->position();
-                        auto index_i = pi->index();
-                        for (auto j = i + 1; j < cParticles.size(); ++j) {
-                            auto &pj = cParticles[j];
+                        for (auto j = i + 1; j < centralParticles.size(); ++j) {
+                            auto &pj = centralParticles[j];
                             auto rj = pj->position();
                             auto rij = bc->apply(ri, rj);
                             auto rij2 = norm_square<real_t>(rij);
@@ -150,11 +155,14 @@ namespace simploce {
                             }
                         }
                     }
+                    auto numberOfCentral = pairs.size();
+                    logger.debug(std::to_string(numberOfCentral) +
+                                 ": Number of pairs in current central cells.");
 
-                    // Particle pairs between particles in central cell and in neighboring cells.
+                    // Particle pairs between particles in current central cell and its
+                    // neighboring cells.
                     auto neighbors = c.second;
-                    for (const auto &pi: cParticles) {
-                        auto index_i = pi->index();
+                    for (const auto &pi: centralParticles) {
                         auto ri = pi->position();
                         for (const auto &ce: neighbors) {
                             for (const auto &pj: ce->particles()) {
@@ -167,94 +175,120 @@ namespace simploce {
                             }
                         }
                     }
+                    auto numberOfBetween = pairs.size() - numberOfCentral;
+                    logger.debug(std::to_string(numberOfBetween) +
+                                 ": Number of pairs between current central and neighboring cells.");
                 }
 
                 // Done.
             }
+            logger.debug(std::to_string(pairs.size()) +
+                         ": Initial number of particle pairs in non-bonded pair list.");
 
-            // Pair list.
-            pp_pair_cont_t particlePairs{};
+            // Remove bonded particle pairs.
+            int counter = 0;
+            for (const auto& g: groups) {
+                auto& bonds = g->bonds();
+                for (const auto& b: bonds) {
+                    auto pi = b.getParticleOne();
+                    auto pj = b.getParticleTwo();
+                    auto key = generatePairKey(pi, pj);
+                    pairs.erase(key);
+                    counter += 1;
+                }
+            }
+            logger.debug(std::to_string(counter) +
+                         ": Number of bonded pairs removed from non-bonded pair list.");
+
+            // Generate final, exclude frozen particle pairs if requested.
+            std::size_t nFrozenPairs = 0;
+            std::vector<PairList::p_pair_t> particlePairs{};
             for (auto& p: pairs) {
                 auto pair = p.second;
-                particlePairs.emplace_back(pair);
+                bool frozen = pair.first->frozen() && pair.second->frozen();
+                if (!(excludeFrozen && frozen)) {
+                    particlePairs.emplace_back(pair);
+                } else {
+                    nFrozenPairs += 1;
+                }
+            }
+            logger.debug(std::to_string(nFrozenPairs) +
+                         ": Number of frozen particle pairs removed from non-bonded pair list.");
+
+            logger.debug(std::to_string(particlePairs.size()) +
+            ": Final number of non-bonded particle pairs.");
+            auto total = particles.size() * (particles.size() - 1) / 2;
+            logger.debug(std::to_string(total) + ": Total number of non-bonded particle pairs.");
+            if (total > 0) {
+                auto percentage = real_t(particlePairs.size()) * 100.0 / real_t(total);
+                logger.debug(std::to_string(percentage) +
+                             ": Fraction (%) of total number of non-bonded particle pairs in pair list.");
+            } else {
+                logger.debug("0: Fraction (%) of total number of non-bonded particle pairs: 0");
             }
 
-            logger.debug(std::to_string(particlePairs.size()) + ": Number of particle pairs.");
-            auto total = particles.size() * (particles.size() - 1) / 2;
-            logger.debug("Total number of POSSIBLE particle pairs: " + util::toString(total));
-            logger.debug("Fraction (%) of total number of possible particle pairs: " +
-                         util::toString(real_t(particlePairs.size()) * 100.0 / real_t(total)));
-
+            // Done.
             logger.trace("Leaving.");
-            return std::move(PairLists{particles.size(), particlePairs});
+            return std::move(particlePairs);
         }
 
-        static PairLists
+        static std::vector<PairList::p_pair_t>
         makePairListConcurrent(const box_ptr_t &box,
-                                  const dist_t & cutoff,
-                                  const bc_ptr_t &bc,
-                                  const std::vector<p_ptr_t>& particles,
-                                  const Grid& grid) {
+                               const dist_t & cutoff,
+                               const bc_ptr_t &bc,
+                               const std::vector<p_ptr_t>& particles,
+                               const std::vector<pg_ptr_t>& groups,
+                               const Grid& grid,
+                               bool excludeFrozen) {
             static util::Logger logger("simploce::pairlist::makePairListConcurrent()");
             logger.trace("Entering.");
 
-            auto pairLists =
-                    std::move(pairlist::makePairListNonConcurrent(box, cutoff, bc, particles, grid));
+            auto particlePairs =
+                    std::move(pairlist::makePairListNonConcurrent(cutoff,
+                                                                  bc,
+                                                                  particles,
+                                                                  groups,
+                                                                  grid,
+                                                                  excludeFrozen));
 
             logger.trace("Leaving.");
-            return std::move(pairLists);
+            return std::move(particlePairs);
         }
 
     }
-
 
 
     CellPairListGenerator::CellPairListGenerator(param_ptr_t param, bc_ptr_t bc) :
-        param_{std::move(param)}, bc_{std::move(bc)} {
+            pair_list_generator{}, param_{std::move(param)}, bc_{std::move(bc)}{
     }
-    
-    PairLists
-    CellPairListGenerator::generate(const p_system_ptr_t& particleSystem) const
-    {
-        static util::Logger logger("simploce::CellPairListGenerator::generate()");
-        logger.trace(("Entering."));
 
-        static int counter = 1;
-        if (counter == 1) {
-            logger.info("Cell-based particle pair list generation.");
-        }
+    std::vector<PairList::p_pair_t>
+    CellPairListGenerator::generate(const p_system_ptr_t& particleSystem) const {
+         static util::Logger logger("simploce::CellPairListGenerator::generate()");
+         logger.trace(("Entering."));
 
-        // Setup.
-        static auto particles = particleSystem->doWithAllFreeGroups<std::vector<p_ptr_t>>([] (
-                const std::vector<p_ptr_t>& all,
-                const std::vector<p_ptr_t>& free,
-                const std::vector<pg_ptr_t>& groups) {
-            auto nbParticles = std::move(pairlist::nonBondedParticles(all, free, groups));
-            std::vector<p_ptr_t> particles{};
-            for (const auto& p : nbParticles) {
-                particles.emplace_back(p);
-            }
-            return std::move(particles);
-        });
-        static dist_t cutoff = util::computePairListCutoff(this->param_, particleSystem);
-        static Grid grid(particleSystem->box(), bc_, cutoff);
+         // Setup
+         static dist_t cutoff = util::computePairListCutoff(this->param_, particleSystem);
+         static Grid grid(particleSystem->box(), bc_, cutoff);
+         static bool excludeFrozen = param_->get<bool>("simulation.forces.exclude-frozen");
 
-        // Generate pair list.
-        grid.assignParticlesToCells(bc_, particles);
-        auto pairLists =
-                pairlist::makePairListConcurrent(particleSystem->box(),
-                                                 cutoff,
-                                                 bc_,
-                                                 particles,
-                                                 grid);
-        if (counter == 1) {
-            logger.info(std::to_string(pairLists.particlePairList().size()) +
-                                ": Number of particle pairs in step #" + std::to_string(counter));
-        }
-        counter += 1;
+         auto particlePairs =
+             particleSystem->doWithAllFreeGroups<std::vector<PairList::p_pair_t>>([this, particleSystem] (
+                 const std::vector<p_ptr_t>& all,
+                 const std::vector<p_ptr_t>& free,
+                 const std::vector<pg_ptr_t>& groups) {
+             grid.assignParticlesToCells(bc_, all);
+             return std::move(pairlist::makePairListConcurrent(particleSystem->box(),
+                                                               cutoff,
+                                                               bc_,
+                                                               all,
+                                                               groups,
+                                                               grid,
+                                                               excludeFrozen));
+         });
 
-        logger.trace("Leaving.");
-        return std::move(pairLists);
-    }
+         logger.trace("Leaving.");
+         return std::move(particlePairs);
+     }
 
 }

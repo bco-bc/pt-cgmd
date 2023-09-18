@@ -20,12 +20,15 @@ namespace simploce {
         virtual ~pair_potential() = default;
 
         /**
-         * Returns potential energy and the force due to an interaction between two particles.
+         * Returns interaction potential energy and the force due to an interaction between
+         * two particles.
          * @param pi Particle.
          * @param pj Particle.
-         * @return Potential energy and force on particle i. -Not- assigned.
+         * @return Interaction potential energy and force on particle i (first particle).
+         * Forces on particles are -not- updated.
          */
         virtual std::pair<energy_t, force_t> operator () (const p_ptr_t &pi, const p_ptr_t &pj) = 0;
+
     };
 }
 

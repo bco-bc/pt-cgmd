@@ -15,12 +15,15 @@ namespace simploce {
     /**
      * Shifted force Coulomb interaction. The Coulomb interaction is calculated according to the
      * shifted force (SF) method of Levitt, M. et al, Comput. Phys. Commun. 1995, 91, 215−231.
+     * @see Levitt et al, Comput. Phys. Commun., 91, 215−231, 1995., Fennel and Gezelter,
+     * J. Chem. Phys. 124, 234104, 2006.
      */
     class SF : public pair_potential {
     public:
 
         /**
          * Constructor. All argument are required.
+         * @param cutoff Cutoff distance.
          * @param forceField Force field.
          * @param box Simulation box.
          * @param bc Boundary condition.

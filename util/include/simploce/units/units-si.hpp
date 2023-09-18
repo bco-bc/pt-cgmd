@@ -27,7 +27,7 @@ namespace simploce {
             static const V E;
 
             /**
-             * Electric constant or vacuum permittivity or permittivity of free space. In F/m = C/(V m).
+             * Electric constant (vacuum permittivity). In F/m = C/(V m).
              */
             static const V E0;
 
@@ -58,7 +58,9 @@ namespace simploce {
 
             /**
              * Room temperature (25 degrees Celsius, 298.15 K), in K. Corresponds to the Standard Ambient Temperature
-             * (SAT) according International Union of Pure and Applied Chemistry (IUPAC).
+             * and Pressure (SATP) as specified by the International Union of Pure and Applied Chemistry (IUPAC).
+             * @see <a href="https://chemistrygod.com/standard-ambient-temperature-and-pressure">SATP</a>
+             * @see Table at <a href="https://en.wikipedia.org/wiki/Standard_temperature_and_pressure">Wikipedia</a>
              */
              static const V SAT;
              static const V ROOM_TEMPERATURE;
@@ -119,6 +121,13 @@ namespace simploce {
              * Viscosity of water at 298.15 K. In kg m^-1 s^−1.
              */
             static const V WATER_VISCOSITY;
+
+            /**
+             * Convert kJ/mol to J.
+             * @param energy in kJ/mol
+             * @return energy in J.
+             */
+            static V energy_kJ_per_mol_to_J(V energy);
 
         };
 
@@ -191,6 +200,11 @@ namespace simploce {
         // See https://en.wikipedia.org/wiki/Properties_of_water
         template<typename V>
         const V si<V>::WATER_VISCOSITY = 0.890 * 1.0e-03;
+
+        template<typename V>
+        V si<V>::energy_kJ_per_mol_to_J(V energy) {
+            return energy * 1.0e+03/ units::si<V>::NA;
+        }
 
     }
 }

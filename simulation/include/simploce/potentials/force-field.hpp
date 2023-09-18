@@ -7,7 +7,7 @@
 #ifndef FORCE_FIELD_HPP
 #define FORCE_FIELD_HPP
 
-#include "simploce/simulation/pair-lists.hpp"
+#include "simploce/simulation/pair-list.hpp"
 #include "simploce/types/s-types.hpp"
 #include "simploce/util/map2.hpp"
 #include <string>
@@ -33,14 +33,17 @@ namespace simploce {
             real_t C6;              // C6 Lennard-Jones interaction.
             real_t fc;              // Force constant.
             real_t r0;              // Equilibrium distance.
-            real_t eps_inside_rc;   // Relative permittivity inside cutoff distance.
-            real_t eps_outside_rc;  // Relative permittivity outside cutoff distance.
+            real_t eps_inside_rc;   // Relative permittivity inside cutoff distance for electrostatic interactions.
+            real_t eps_outside_rc;  // Relative permittivity outside cutoff distance for electrostatic interactions.
             real_t deltaV;          // Electric potential difference.
             real_t distance;        // Distance between two points.
             char direction;         // Direction (or axis) along which something is applied.
             std::string plane;      // Plane specification.
             real_t sigma;           // Surface charge density.
+            real_t sigma1;          // Width Gaussian charge density.
+            real_t sigma2;          // Width Gaussian charge density.
             real_t max_a;           // Maximum repulsion (MVV_DPD).
+            force_t fe;             // External force applied in a direction.
         };
 
         /**
@@ -114,8 +117,7 @@ namespace simploce {
          * particle specifications.
          * @param spec1 Particle specification #1.
          * @param spec2 Particle specification #2.
-         * @return eps_inside_rc, eps_outside_rc, respectively.
-         * (eps = relative permittivity, rc = cutoff distance.)
+         * @return eps_inside_rc, eps_outside_rc, respectively. (eps = relative permittivity, rc = cutoff distance.)
          */
         std::pair<real_t, real_t> reactionField(const spec_ptr_t &spec1,
                                                 const spec_ptr_t &spec2) const;
@@ -128,11 +130,12 @@ namespace simploce {
          * @param spec2 Particle specification #2.
          * @return eps_inside_rc, eps_outside_rc, respectively.
          * (eps = relative permittivity, rc = cutoff distance.)
+         * @see #reactionField(const spec_ptr_t &spec1, const spec_ptr_t &spec2)
          */
         std::pair<real_t, real_t> hardSphereReactionField(const spec_ptr_t &spec1,
                                                           const spec_ptr_t &spec2) const;
         /**
-         * Returns non-bonded screened Coulomb electrostatic interaction parameters for the given pair of
+         * Returns non-bonded screened Coulomb (1/(eps * r)) electrostatic interaction parameters for the given pair of
          * particle specifications.
          * @param spec1 Particle specification #1.
          * @param spec2 Particle specification #2.
@@ -147,6 +150,7 @@ namespace simploce {
          * @param spec1 Particle specification #1.
          * @param spec2 Particle specification #2.
          * @return eps_inside_rc (eps = relative permittivity, rc = cutoff distance.)
+         * @see #screenedCoulomb(const spec_ptr_t &spec1, const spec_ptr_t &spec2) const;
          */
         real_t hardSphereScreenedCoulomb(const spec_ptr_t &spec1,
                                          const spec_ptr_t &spec2) const;
@@ -166,15 +170,39 @@ namespace simploce {
          * particle specifications.
          * @param spec1 Particle specification #1.
          * @param spec2 Particle specification #2.
-         * @return eps_inside_rc (eps = relative permittivity, rc = cutoff distance.)
+         * @return eps_inside_rc (eps = relative permittivity)
+         * @see #shiftedForce(const spec_ptr_t &spec1, const spec_ptr_t &spec2) const
          */
         real_t hardSphereShiftedForce(const spec_ptr_t &spec1,
                                       const spec_ptr_t &spec2) const;
 
+        /**
+         * Returns interaction parameters for the electrostatic interaction between two overlapping charge densities.
+         * @param spec1 Particle specification #1.
+         * @param spec2 Particle specification #2.
+         * @return sigma1, sigma2, respectively. Sigma represents the "width" of each density.
+         */
+        std::pair<real_t, real_t>
+        gaussianChargeDensity(const spec_ptr_t &spec1,
+                              const spec_ptr_t &spec2) const;
 
         /**
-         * Returns non-bonded Lennard-Jones plus Reaction Field electrostatic interaction
-         * parameters.
+         * Returns interaction parameters for the combined interaction for
+         * overlapping Gaussian charge densities and the soft repulsion. This is for
+         * mesoscopic simulations.
+         * @param spec1 Particle specification #1.
+         * @param spec2 Particle specification #2.
+         * @return (sigma1, sigma2, max_a, respectively. Sigma represents the "width"
+         * of each density, and max_a is the maximum strength of the soft repulsion
+         * potential.
+         */
+        std::tuple<real_t, real_t, real_t>
+        gaussianChargeDensitySoftRepulsion(const spec_ptr_t &spec1,
+                                           const spec_ptr_t &spec2) const;
+
+
+        /**
+         * Returns non-bonded Lennard-Jones plus reaction field electrostatic interaction parameters.
          * @param spec1 Particle specification #1.
          * @param spec2 Particle specification #2.
          * @return C12, C6, eps_inside_rc, eps_outside_rc, respectively.
@@ -207,11 +235,21 @@ namespace simploce {
                                            const spec_ptr_t &spec2) const;
 
         /**
+         * Returns  bonded halve attractive harmonic potential interaction parameters for the given pair of
+         * particle specifications.
+         * @param spec1 Particle specification #1.
+         * @param spec2 Particle specification #2.
+         * @return Threshold distance (r0) and force constant (fc), respectively.
+         */
+        std::pair<real_t, real_t> halveAttractiveHarmonic(const spec_ptr_t &spec1,
+                                                          const spec_ptr_t &spec2) const;
+
+        /**
          * Returns bonded halve attractive quartic interaction parameters for the given pair of
          * particle specifications.
          * @param spec1 Particle specification #1.
          * @param spec2 Particle specification #2.
-         * @return Equilibrium distance (r0) and force constant (fc).
+         * @return Threshold distance (r0) and force constant (fc), respectively.
          */
         std::pair<real_t, real_t> halveAttractiveQuartic(const spec_ptr_t &spec1,
                                                          const spec_ptr_t &spec2) const;
@@ -242,7 +280,7 @@ namespace simploce {
          */
         std::pair<srf_charge_density_t, real_t> constSurfaceChargeDensity() const;
 
-        std::tuple<el_pot_diff, dist_t, real_t> electricPotentialDifference() const;
+        std::tuple<el_pot_diff_t, dist_t, real_t> electricPotentialDifference() const;
 
     private:
 

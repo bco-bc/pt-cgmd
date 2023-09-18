@@ -77,7 +77,7 @@ namespace simploce {
             logger.trace("Leaving.");
         }
 
-        static std::vector<el_pot>
+        static std::vector<el_pot_t>
         reactionPotential_(real_t factor,
                            const std::vector<position_t> &points,
                            const surface_ptr_t& surface) {
@@ -88,7 +88,7 @@ namespace simploce {
                          ": Number of points for electric potential calculation.");
 
             logger.trace("Leaving.");
-            return std::vector<el_pot>{1.0, 0.0};
+            return std::vector<el_pot_t>{1.0, 0.0};
         }
 
     }
@@ -157,7 +157,7 @@ namespace simploce {
         logger.trace("Leaving.");
     }
 
-    std::vector<el_pot>
+    std::vector<el_pot_t>
     CurvedTriNodesVerticesCalculator::reactionPotentialSolute(const std::vector<position_t> &points) {
         util::Logger logger("simploce::CurvedTriNodesVerticesCalculator::reactionPotentialSolute()");
         logger.trace("Entering.");
@@ -174,7 +174,7 @@ namespace simploce {
         return std::move(result);
     }
 
-    std::vector<el_pot>
+    std::vector<el_pot_t>
     CurvedTriNodesVerticesCalculator::reactionPotentialSolvent(const std::vector<position_t> &points) {
         util::Logger logger("simploce::FlatTriNodesVerticesCalculator::reactionPotentialSolvent()");
         logger.trace("Entering.");

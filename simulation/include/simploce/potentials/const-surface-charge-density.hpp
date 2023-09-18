@@ -25,29 +25,33 @@ namespace simploce {
          * @param eps_r Relative permittivity.
          * @param bc Boundary condition.
          * @param flatSurface Flat surface specification. Default is a surface parallel to xy-plane at z = 0.
+         * @param mesoscopic If true, this potential is for mesoscopic simulations (e.g., DPD).
          */
         ConstantSurfaceChargeDensity(srf_charge_density_t sigma,
                                      FlatSurface flatSurface,
                                      real_t eps_r,
-                                     bc_ptr_t bc);
+                                     bc_ptr_t bc,
+                                     bool mesoscopic);
 
         std::pair<energy_t, force_t> operator () (const p_ptr_t& particle) override;
 
+        /**
+         * Returns energy and force on particle.
+         * @param ro Position, possible outside simulation box.
+         * @param q Charge value.
+         * @param df Damping factor for electrostatic interactions when dealing with charge densities. The
+         * default value implies the charge is taken as an ideal point charge.
+         * @return
+         */
+        std::pair<energy_t, force_t> forceAndEnergy(const position_t& ro, const charge_t& q, real_t df = 0);
+
     private:
 
-        friend class ElectricPotentialDifference;
-
-        static std::pair<energy_t, force_t> forceAndEnergy(srf_charge_density_t sigma,
-                                                           const FlatSurface& flatSurface,
-                                                           real_t eps_r,
-                                                           const bc_ptr_t& bc,
-                                                           const position_t& r,
-                                                           const charge_t& q);
-
         srf_charge_density_t sigma_;
+        FlatSurface flatSurface_;
         real_t eps_r_;
         bc_ptr_t bc_;
-        FlatSurface flatSurface_;
+        bool mesoscopic_;
     };
 }
 

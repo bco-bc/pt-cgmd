@@ -43,6 +43,13 @@ namespace simploce {
          * @param param Parameters.
          */
         void write(std::ostream& stream, const param_t& p);
+
+        /**
+         * Write parameters to output stream.
+         * @param stream Output stream.
+         * @param param Parameters.
+         */
+        void write(std::ostream& stream, const param_ptr_t& p);
         
         /**
          * Reads parameters from input stream.

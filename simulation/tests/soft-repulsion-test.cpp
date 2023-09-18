@@ -21,33 +21,31 @@ using namespace simploce;
 int main() {
     util::Logger::changeLogLevel(util::Logger::LOGTRACE);
 
-    std::string fileName = "/localdisk/resources/particles-specs.dat";
-    auto catalog = factory::particleSpecCatalog(fileName);
+    auto catalog = factory::particleSpecCatalog("/wrk3/simulation/one_water_dpd/water-specs.dat");
     std::clog << "Particle specifications:" << std::endl;
     std::clog << *catalog << std::endl;
 
-    fileName = "/localdisk/resources/interaction-parameters-polymer-solution.dat";
-    auto forceField = factory::forceField(fileName, catalog);
-
+    auto forceField =
+        factory::forceField("/wrk3/simulation/one_water_dpd/water-interaction-parameters-DPD.dat", catalog);
     std::clog << "Force field: " << std::endl;
     std::clog << *forceField << std::endl;
 
     dist_t cutoff = 1.0;
     auto box = factory::box(10.0, 10.0, 40.0);
-    auto bc = factory::boundaryCondition(box);
+    auto bc = factory::pbc(box);
     SoftRepulsion pairPotential(forceField, bc, cutoff);
 
     // Particles.
-    auto spec_1 = catalog->lookup("PMU");
+    auto spec_1 = catalog->lookup("CW");
     p_ptr_t p1 = Bead::create("1", 0, "p1", spec_1);
     p1->position(position_t{0.0, 0.0, 0.0});
-    auto spec_2 = catalog->lookup("PMU");
+    auto spec_2 = catalog->lookup("CW");
     p_ptr_t p2 = Bead::create("2", 1, "p2", spec_2);
-    auto z0 = real_t(std::numeric_limits<float>::min());
+    auto z0 = 2.0 * real_t(std::numeric_limits<float>::min());
     p2->position(position_t{0.0, 0.0, z0});
 
     // Calculate potential.
-    fileName = "/wrk3/tests/sr-potential.dat";
+    std::string fileName = "/wrk3/tests/sr-potential.dat";
     std::ofstream ostream;
     util::open_output_file(ostream, fileName);
     real_t dz = 0.01;

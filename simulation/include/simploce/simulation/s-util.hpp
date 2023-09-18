@@ -16,23 +16,23 @@ namespace simploce {
 
         /**
          * Returns cutoff distance for pair list calculation.
-         * @param param Simulation parameters.
+         * @param param Simulation parameters. The cutoff for long-range interactions is assumed here.
          * @param particleSystem Particle system.
-         * @return Cutoff distance.
+         * @return Cutoff distance for pair lists.
          */
         dist_t computePairListCutoff(const param_ptr_t& param,
                                       const p_system_ptr_t & particleSystem);
 
         /**
          * Scales or adjust all velocities to a reference temperature. Use only for equilibration purposes.
-         * @param particleSystem Particle system.
+         * @param all Particle system.
          * @param referenceTemperature Reference referenceTemperature.
-         * @param isMesoscale If true, referenceTemperature is expressed as kT=n, where k is the
+         * @param mesoscopic If true, referenceTemperature is expressed as kT=n, where k is the
          * Boltzmann constant and n is a nonnegative integer.
          */
-        void scaleVelocities(const p_system_ptr_t& particleSystem,
+        void scaleVelocities(const p_system_ptr_t& all,
                              const temperature_t& referenceTemperature,
-                             bool isMesoscale = false);
+                             bool mesoscopic = false);
 
         /**
          * Removes overall center of mass motion (sets to zero).

@@ -7,15 +7,18 @@
 
 #include "simploce/potentials/pair-potential.hpp"
 
-#ifndef SIMULATION_NO_PAIR_POTENTIAL_HPP
-#define SIMULATION_NO_PAIR_POTENTIAL_HPP
+#ifndef SIMULATION_NON_INTERACTING_HPP
+#define SIMULATION_NON_INTERACTING_HPP
 
 namespace simploce {
 
-    class NoPairPotential: public pair_potential {
+    /**
+     * Non-interacting pair potential. That is, interaction energy and forces vector components are zero.
+     */
+    class NonInteracting: public pair_potential {
     public:
 
-        NoPairPotential();
+        NonInteracting();
 
         /**
          * @return Zero energy and zero force.
@@ -24,4 +27,4 @@ namespace simploce {
     };
 }
 
-#endif //SIMULATION_NO_PAIR_POTENTIAL_HPP
+#endif //SIMULATION_NON_INTERACTING_HPP

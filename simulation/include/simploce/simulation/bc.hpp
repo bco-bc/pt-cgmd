@@ -29,9 +29,18 @@ namespace simploce {
     /**
      * Moves given position inside simulation box.
      * @param r_out Position possibly outside simulation box.
-     * @return Position Inside simulation box.
+     * @return Position inside simulation box.
      */
     virtual position_t placeInside(const position_t& r_out) const = 0;
+
+    /**
+     * Apply this boundary to the velocity.
+     * @param v Current velocity.
+     * @param r Current position.
+     * @return Velocity.
+     */
+    virtual velocity_t apply(const velocity_t& v,
+                             const position_t& r) const = 0;
 
   };
   

@@ -16,7 +16,7 @@ using namespace simploce;
 int main() {
     auto catalog = factory::particleSpecCatalog("/localdisk/resources/particles-specs.dat");
     auto box = factory::box(6.0);
-    auto bc = factory::oneDimensionBoundaryCondition(box, Direction::Z);
+    auto bc = factory::pbc1dBB(box, Direction::Z);
     real_t C12 = 3.0e-08;
     real_t C6 = 0.00005;
     dist_t distanceToPlane{7.0};
@@ -28,7 +28,7 @@ int main() {
     //std::cout << "Flat surface2: " << flatSurface2.toString() << std::endl;
     Wall wall2(C12, C6, bc, flatSurface2);
 
-    auto particle = Atom::create("1345x", 0, "test", catalog->lookup("Na+"));
+    auto particle = Atom::create("1345x", 0, "Yiannourakou", catalog->lookup("Na+"));
     real_t dr = 0.01;
     int n = distanceToPlane() / dr;
     std::cout.setf(std::ios::scientific);

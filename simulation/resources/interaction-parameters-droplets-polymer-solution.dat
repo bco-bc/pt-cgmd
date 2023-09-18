@@ -1,15 +1,21 @@
 # Non-bonded
 # Type    Name #1    Name #2   Parameters                       Description
-5
+10
 sr        PMU        PMU       25.0                             # Maximum repulsion.
-sr        PMU        H2Om      60.0                             # Maximum repulsion.
-sr        H2Om       H2Om      25.0                             # Maximum repulsion.
+sr        PMU        H2Om      25.0                             # Maximum repulsion.
+sr        PMU        DROm      60.0                             # Maximum repulsion.
+sr        DROm       H2Om      60.0                             # Maximum repulsion.
 sr        DROm       DROm      25.0                             # Maximum repulsion
-sr        DROm       H2Om      60.0                             # Maximum repulsion
+sr        H2Om       H2Om      25.0                             # Maximum repulsion.
+sr        H2Om       SBP       25.0                             # Maximum repulsion.
+sr        PMU        SBP       25.0                             # Maximum repulsion.
+sr        DROm       SBP       60.0                             # Maximum repulsion.
+none      SBP        SBP                                        # No interaction.
 # Bonded
 # Type    Name #1    Name #2   Parameters                       Description
 1
 hp+sr     PMU        PMU       0.0  2.0  25.0                   # r0, fc, maximum repulsion.
 # External
 # Type    Parameters
-0
+1
+pres_grad 0.0 0.0 1.00  # Constant homogeneous external force in z-direction.

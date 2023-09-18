@@ -7,15 +7,14 @@
 #ifndef INTERACTOR_HPP
 #define INTERACTOR_HPP
 
-#include "pair-lists.hpp"
+#include "pair-list.hpp"
 #include "simploce/types/s-types.hpp"
 
 namespace simploce {
 
     /**
-     * "One that interacts". Its responsibility is ensure that the particle pair list
-     * is (re)evaluated on a regular basis. Its sits in between a simulation and the
-     * force calculation.
+     * "One that interacts". Sits between the displacer and the forces calculator. It
+     * ensures that the particle pair list is (re)evaluated on a regular basis.
      */
     class Interactor {
     public:
@@ -37,7 +36,8 @@ namespace simploce {
          * @param particleSystem Particle system.
          * @return Returns bonded, non-bonded, and external potential energy, respectively.
          */
-        std::tuple<energy_t, energy_t, energy_t> interact(const p_system_ptr_t &particleSystem);
+        std::tuple<energy_t, energy_t, energy_t>
+        interact(const p_system_ptr_t &particleSystem);
 
         /**
          * Returns the interaction energy of one particle with all other particles.
@@ -45,23 +45,24 @@ namespace simploce {
          * @param particleSystem Particle system.
          * @return Returns bonded, non-bonded, and external interaction (potential) energy, respectively.
          */
-        std::tuple<energy_t, energy_t, energy_t> interact(const p_ptr_t& particle,
-                                                          const p_system_ptr_t &particleSystem);
+        std::tuple<energy_t, energy_t, energy_t>
+        interact(const p_ptr_t& particle,
+                 const p_system_ptr_t &particleSystem);
 
         /**
-         * Returns the pair lists.
-         * @return Pair lists.
+         * Returns pair list.
+         * @return Pair list.
          */
-        const PairLists& pairLists() const;
+        pairlist_ptr_t
+        pairList() const;
 
     private:
 
         param_ptr_t param_;
-        pair_list_gen_ptr_t pairListsGenerator_;
+        pair_list_gen_ptr_t pairListGenerator_;
         forces_ptr_t forces_;
 
-        PairLists pairLists_;
-
+        pairlist_ptr_t pairList_;
     };
 
 

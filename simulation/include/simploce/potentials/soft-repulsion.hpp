@@ -14,8 +14,9 @@ namespace simploce {
 
     /**
      * Standard conservative soft repulsion potential commonly used in dissipative particle dynamics. The force is
-     * of the form a * (1.0 - r/r_c) * u where r <= r_c is the distance between two DPD particles and r_c is a cutoff
-     * distance. The factor a represents the maximal strength of the interaction and u is a unit vector.
+     * of the form A * (1.0 - r/r_c) * u where r <= r_c is the distance between two DPD particles and r_c is a cutoff
+     * distance. The factor A represents the maximal strength of the interaction
+     * and u is a unit vector.
      */
     class SoftRepulsion : public pair_potential {
     public:
@@ -24,32 +25,31 @@ namespace simploce {
          * Constructor.
          * @param forceField Force field.
          * @param bc Boundary conditions.
-         * @param cutoff Cutoff distance.
+         * @param cutoffSR Cutoff distance for short range interactions.
          */
-        SoftRepulsion(ff_ptr_t forceField, bc_ptr_t bc, dist_t cutoff);
+        SoftRepulsion(ff_ptr_t forceField, bc_ptr_t bc, dist_t cutoffSR);
 
         std::pair<energy_t, force_t> operator () (const p_ptr_t &p1, const p_ptr_t &p2) override;
 
         /**
          * Returns potential energy and force on particle i.
-         * @param r_ij Distance vector, r_ij = r_i - r_j, from j to i.
-         * @param uv_ij Unit vector from j to i.
-         * @param R_ij Distance.
-         * @param a_ij Maximum strength of interaction.
-         * @param cutoff Cutoff distance.
+         * @param rij Distance vector, r_ij = r_i - r_j, from j to i.
+         * @param Rij Distance.
+         * @param Rij2 Rij * Rij
+         * @param Aij Maximum strength of interaction.
+         * @param cutoffSR Cutoff distance for short ranged (SR) interactions.
          * @return Energy and force.
          */
-        static std::pair<energy_t, force_t> forceAndEnergy(const dist_vect_t& r_ij,
-                                                           const dist_vect_t& uv_ij,
-                                                           real_t R_ij,
-                                                           real_t a_ij,
-                                                           const dist_t& cutoff);
+        std::pair<energy_t, force_t> forceAndEnergy(const dist_vect_t& rij,
+                                                    real_t Rij,
+                                                    real_t Rij2,
+                                                    real_t Aij) const;
 
     private:
 
         ff_ptr_t forceField_;
         bc_ptr_t bc_;
-        dist_t cutoff_;
+        dist_t cutoffSR_;
     };
 }
 

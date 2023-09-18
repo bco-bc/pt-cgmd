@@ -18,6 +18,16 @@ namespace simploce {
         return value_ == direction.value_;
     }
 
+    int Direction::value() const {
+        if (value_ == 'x') {
+            return 0;
+        } else if (value_ == 'y') {
+            return 1;
+        } else {
+            return 2;
+        }
+    }
+
     Direction
     Direction::X{'x'};
 

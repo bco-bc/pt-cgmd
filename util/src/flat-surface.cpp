@@ -40,9 +40,9 @@ namespace simploce {
     std::string
     FlatSurface::toString() const {
         return "FlatSurface(" + plane_.toString() +
-        ", distanceToPlane=" + util::toString(distanceToPLane_()) +
-        ", unitVector=" + util::toString(unitVector_) +
-        ", coordinate=" + util::toString(coordinate_) +
+        ", distanceToPlane=" + util::to_string(distanceToPLane_()) +
+        ", unitVector=" + util::to_string(unitVector_) +
+        ", coordinate=" + util::to_string(coordinate_) +
         ")";
     }
 

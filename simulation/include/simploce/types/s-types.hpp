@@ -19,9 +19,9 @@ namespace simploce {
     class ProtonatableParticleSystemFactory;
     class Continuous;
     class Discrete;
-    class pair_lists_generator;
+    class pair_list_generator;
     class Interactor;
-    class PairLists;
+    class PairList;
     class pair_potential;
     class RF;
     class SF;
@@ -29,12 +29,13 @@ namespace simploce {
     class Forces;
     class displacer;
     class Cell;
+    class Cutoffs;
 
-    // S is protonation state type, e.g. Discrete or Continuous.
+    // S_ is protonation state type, e.g. Discrete or Continuous.
     template <typename S>
     class ProtonatableBead;
 
-    // S is protonation state type, e.g. Discrete or Continuous.
+    // S_ is protonation state type, e.g. Discrete or Continuous.
     template <typename S>
     class ProtonatableCoarseGrained;
 
@@ -92,7 +93,7 @@ namespace simploce {
     /**
      * Pair list generator typeName.
      */
-    using pair_list_gen_ptr_t = std::shared_ptr<pair_lists_generator>;
+    using pair_list_gen_ptr_t = std::shared_ptr<pair_list_generator>;
 
     /**
      * Force calculation pointer typeName.
@@ -108,6 +109,11 @@ namespace simploce {
      * Interactor pointer typeName.
      */
     using interactor_ptr_t = std::shared_ptr<Interactor>;
+
+    /**
+     * Pair list pointer types.
+     */
+    using pairlist_ptr_t = std::shared_ptr<PairList>;
 
     /**
      * displacer pointer typeName.
@@ -146,18 +152,18 @@ namespace simploce {
      */
     using cell_ptr_t = std::shared_ptr<Cell>;
 
+    /**
+     * Cutoffs pointer type.
+     */
+    using rc_ptr_t = std::shared_ptr<Cutoffs>;
+
 
 
     // OLD
 
-    class SimulationModelFactory;
+    //class SimulationModelFactory;
     class ProtonTransferPairListGenerator;
     class ProtonTransfer;
-
-
-    // P is particle typeName, e.g. Atom or Bead.
-    template <typename P>
-    class SimulationModel;
 
     /**
      * Coarse grained simulation model.

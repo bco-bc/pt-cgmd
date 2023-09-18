@@ -25,7 +25,7 @@ namespace simploce {
 
         /**
          * Obtains a force field from an input file.
-         * @param fileName File name.
+         * @param fileName Force field file name.
          * @param catalog Particle specification catalog.
          * @return Force field.
          */
@@ -45,11 +45,11 @@ namespace simploce {
 
         /**
          * Returns pair lists generator.
-         * @param SImulation parameters.
+         * @param Simulation parameters.
          * @param bc Boundary condition.
          * @return Pair lists generator.
          */
-        pair_list_gen_ptr_t pairListsGenerator(const param_ptr_t& param , const bc_ptr_t &bc);
+        pair_list_gen_ptr_t pairListGenerator(const param_ptr_t& param , const bc_ptr_t &bc);
 
         /**
          * Returns factory for creating protonatable particle systems.
@@ -101,17 +101,17 @@ namespace simploce {
          * @return Boundary condition.
          */
         bc_ptr_t 
-        boundaryCondition(const box_ptr_t& box);
-
+        pbc(const box_ptr_t& box);
 
         /**
-         * Returns 1 dimensional periodic boundary conditions.
+         * Returns 1 dimensional periodic boundary conditions plus bounce-back for velocities..
          * @param box Simulation box.
          * @param direction Apply PBC in this direction only.
          * @return Boundary condition.
          */
         bc_ptr_t
-        oneDimensionBoundaryCondition(const box_ptr_t& box, const Direction& direction);
+        pbc1dBB(const box_ptr_t& box,
+                const Direction& direction);
         
         /**
          * Returns generator of pairs of protonatable beads possibly involved in proton

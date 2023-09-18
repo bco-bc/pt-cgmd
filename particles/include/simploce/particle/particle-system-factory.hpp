@@ -60,6 +60,18 @@ namespace simploce {
                                         const temperature_t& temperature = 298.15);
 
         /**
+         * Returns a mesoscale polarizable water model for dissipative particle dynamics. Conceptually,
+         * the model is similar to the model of Riniker and van Gunsteren, J. Chem. Phys., 134, 084110, 2011.
+         * @return Polarizable water.
+         * @see #polarizableWater
+         *
+        */
+        p_system_ptr_t
+        mesoscalePolarizableWater(const box_ptr_t& box = factory::box(10.0, 8.33, 200.0),
+                                  int numberOfWaterParticles = 25000,
+                                  const temperature_t T = 1.0);
+
+        /**
          * Returns electrolyte solution of given molarity in a box. This model
          * is loosely based upon the Debye-Hückel theory of electrolytes.
          * Ions are represented by Na+ and Cl- particles, and water is

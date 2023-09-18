@@ -8,7 +8,8 @@
 #ifndef SIMULATION_HS_SC_HPP
 #define SIMULATION_HS_SC_HPP
 
-#include "simploce/potentials/pair-potential.hpp"
+#include "pair-potential.hpp"
+#include "sc.hpp"
 
 namespace simploce {
 
@@ -24,7 +25,7 @@ namespace simploce {
          * @param bc Boundary condition.
          * @param sc Screened Coulomb
          */
-        HS_SC(ff_ptr_t forceField, bc_ptr_t bc);
+        HS_SC(ff_ptr_t forceField, bc_ptr_t bc, std::shared_ptr<SC> screenedCoulomb);
 
         std::pair<energy_t, force_t> operator () (const p_ptr_t &p1, const p_ptr_t &p2) override;
 
@@ -33,7 +34,7 @@ namespace simploce {
         ff_ptr_t forceField_;
         bc_ptr_t bc_;
         sc_ptr_t sc_;
-
+        std::shared_ptr<SC> screenedCoulomb_;
     };
 }
 

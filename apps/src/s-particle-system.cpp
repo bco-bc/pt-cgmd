@@ -24,9 +24,13 @@ int main(int argc, char *argv[]) {
     util::Logger logger{"s-particle-system::main"};
 
     try {
+        int numberOfMesoscopicWaters = 25000;
+        real_t characteristicLengthMesoscopicWater = 6.0e-06;  // In m.
+
         const util::Specification DIATOMIC{"diatomic"};
         const util::Specification ARGON{"argon"};
-        const util::Specification POLARIZABLE_WATER{"polarizable-water"};
+        const util::Specification CG_POLARIZABLE_WATER{"cg-polarizable-water"};
+        const util::Specification MESOSCOPIC_POLARIZABLE_WATER{"meso-polarizable-water"};
         const util::Specification ELECTROLYTE{"electrolyte"};
         const util::Specification POLYMER_SOLUTION{"polymer-solution"};
         const util::Specification DROPLETS_POLYMER_SOLUTION{"channel-droplets-polymer-solution"};
@@ -37,15 +41,16 @@ int main(int argc, char *argv[]) {
 
         std::string fnParticleSpecCatalog{"particle-spec-catalog.dat"};
         std::string fnParticleSystem{"out.ps"};
-        util::Specification specification = DIATOMIC;
+        std::string spec = DIATOMIC.spec();
         std::string selectFrom =
-                "Particle system selection. Choose one from '" +
-                DIATOMIC.spec() + "' (molecular oxygen, atomistic), '" +
-                ARGON.spec() + "' (atomistic, default), '" +
-                ELECTROLYTE.spec() + "' (electrolyte), '" +
-                POLYMER_SOLUTION.spec() + "' (polymer solution), '" +
-                POLARIZABLE_WATER.spec() + "' (coarse grained),  '" +
-                DROPLETS_POLYMER_SOLUTION.spec() + "' (droplets in a polymer solution in a channel), '" +
+            "Particle system selection. Choose one from '" +
+            DIATOMIC.spec() + "' (molecular oxygen, atomistic), '" +
+            ARGON.spec() + "' (atomistic, default), '" +
+            ELECTROLYTE.spec() + "' (electrolyte), '" +
+            POLYMER_SOLUTION.spec() + "' (polymer solution), '" +
+            CG_POLARIZABLE_WATER.spec() + "' (coarse grained),  '" +
+            MESOSCOPIC_POLARIZABLE_WATER.spec() + "' (mesoscopic), '" +
+            DROPLETS_POLYMER_SOLUTION.spec() + "' (droplets in a polymer solution in a channel), '" +
                 WATER_IN_MICROCHANNEL.spec() + "' (water in a microchannel)'.";
 
         po::options_description usage("Usage");
@@ -55,7 +60,7 @@ int main(int argc, char *argv[]) {
                 "Input file name of particle specifications. Default 'particle-spec-catalog.dat'."
         )(
                 "particle-system-spec,p",
-                po::value<util::Specification>(&specification),
+                po::value<std::string>(&spec),
                 selectFrom.c_str()
         )(
                 "add-boundary-particles,b",
@@ -67,6 +72,9 @@ int main(int argc, char *argv[]) {
         )(
                 "temperature,T", po::value<real_t>(&temperature),
                 "Temperature. Default is 298.15. For mesoscale, select 1, 2, 3, and so forth."
+        )(
+                "n-meso-waters,n", po::value<int>(&numberOfMesoscopicWaters),
+                "Number of mesoscopic water particles."
         )(
                 "verbose,v",
                 "Verbose"
@@ -90,6 +98,7 @@ int main(int argc, char *argv[]) {
             util::Logger::changeLogLevel(util::Logger::LOGTRACE);
         }
 
+        util::Specification specification(spec);
         logger.info("Selected particle system: " + specification.spec());
         logger.info(std::to_string(temperature) + ": Temperature (arbitrary units).");
 
@@ -100,8 +109,15 @@ int main(int argc, char *argv[]) {
         if ( specification == DIATOMIC ) {
             auto diatomic = factory->diatomic(dist_t{0.12}, catalog->O());
             stream << *diatomic << std::endl;
-        } else if ( specification == POLARIZABLE_WATER ) {
+        } else if (specification == CG_POLARIZABLE_WATER ) {
             auto pWater = factory->polarizableWater();
+            stream << *pWater << std::endl;
+        } else if (specification == MESOSCOPIC_POLARIZABLE_WATER) {
+            logger.info(std::to_string(numberOfMesoscopicWaters) + ": Requested number of water particles.");
+            auto l = real_t(numberOfMesoscopicWaters) / 2.0833e+07;
+            l /= characteristicLengthMesoscopicWater;
+            auto box = factory::box(10.0, 8.33, l);
+            auto pWater = factory->mesoscalePolarizableWater(box, numberOfMesoscopicWaters, temperature);
             stream << *pWater << std::endl;
         } else if ( specification == ARGON) {
             auto argon = factory->argon();

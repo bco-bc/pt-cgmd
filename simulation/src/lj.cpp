@@ -7,8 +7,8 @@
 #include "simploce/potentials/lj.hpp"
 #include "simploce/potentials/force-field.hpp"
 #include "simploce/simulation/bc.hpp"
-#include "simploce/simulation/s-properties.hpp"
 #include "simploce/particle/particle.hpp"
+#include "simploce/util/logger.hpp"
 
 namespace simploce {
 
@@ -18,6 +18,9 @@ namespace simploce {
 
     std::pair<energy_t, force_t>
     LJ::operator () (const p_ptr_t &p1, const p_ptr_t &p2) {
+        static util::Logger logger{"simploce::LJ::operator () ()"};
+        logger.trace("Entering");
+
         // Get C12 and C6 parameters.
         auto params = forceField_->lennardJones(p1->spec(), p2->spec());
         auto C12 = params.first;
@@ -33,7 +36,10 @@ namespace simploce {
         real_t Rij2 = Rij * Rij;
 
         // Forces and energy.
-        return std::move(this->forceAndEnergy(rij, Rij, Rij2, C12, C6));
+        auto pair = this->forceAndEnergy(rij, Rij, Rij2, C12, C6);
+
+        logger.trace("Leaving");
+        return std::move(pair);
     }
 
     std::pair<energy_t, force_t>

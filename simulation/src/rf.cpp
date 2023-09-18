@@ -90,10 +90,10 @@ namespace simploce {
         real_t c2 = eps_inside_rc + 2.0 * eps_rf;
         real_t c3 = 1.0 + kappa_rc;
         real_t C_rf = (c1 * c3 - eps_rf * kappa_rc_2) / (c2 * c3 + eps_rf * kappa_rc_2);
-        logger.debug("eps_cs: " + util::toString(eps_inside_rc));
-        logger.debug("kappa: " + util::toString(kappa_));
-        logger.debug("eps_rf: " + util::toString(eps_rf));
-        logger.debug("C_rf: " + util::toString(C_rf));
+        logger.debug("eps_cs: " + std::to_string(eps_inside_rc));
+        logger.debug("kappa: " + std::to_string(kappa_));
+        logger.debug("eps_rf: " + std::to_string(eps_rf));
+        logger.debug("C_rf: " + std::to_string(C_rf));
         return C_rf;
     }
 

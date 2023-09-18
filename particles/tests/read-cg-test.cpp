@@ -32,7 +32,7 @@ void test() {
     std::cout << "Particle model:" << std::endl;
     util::open_input_file(stream,
                     "/wrk3/tests/droplets-polymer-solution.ps");
-    cg_sys_ptr_t cg = CoarseGrained::obtainFrom(stream, catalog);
+    cg_sys_ptr_t cg = CoarseGrained::parseIt(stream, catalog);
     stream.close();
     std::cout << *cg << std::endl;
 }

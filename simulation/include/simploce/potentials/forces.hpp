@@ -12,56 +12,66 @@
 namespace simploce {
 
     /**
-     * Force calculator. Computes forces on particles.
+     * Force calculator. Computes forces on particles and associated interaction energies.
      */
     class Forces {
     public:
 
         /**
          * Constructor.
-         * @param box Simulation box.
+         * @param param Parameters
          * @param bc Boundary conditions.
          * @param forceField Force field.
          */
-        Forces(const param_ptr_t& param, bc_ptr_t bc, ff_ptr_t forceField);
+        Forces(param_ptr_t param,
+               bc_ptr_t bc,
+               ff_ptr_t forceField);
 
         /**
          * Calculates forces on particles due to non-bonded interactions.
          * @param particleSystem Particle system.
-         * @param pairLists Particle pair lists.
+         * @param pairList Particle pair lists.
          * @return Potential energy.
          */
-        energy_t nonBonded(const p_system_ptr_t& particleSystem,
-                           const PairLists &pairLists);
+        energy_t
+        nonBonded(const p_system_ptr_t& particleSystem,
+                  const pairlist_ptr_t& pairList);
 
         /**
          * Calculates forces on particles to due external potentials.
          * @param particleSystem Particle system.
          * @return Potential energy.
          */
-        energy_t external(const p_system_ptr_t& particleSystem);
+        energy_t
+        external(const p_system_ptr_t& particleSystem);
 
         /**
          * Calculates forces on particles due to bonded interactions.
          * @param particleSystem Particle system.
          * @return Potential energy.
          */
-        energy_t bonded(const p_system_ptr_t& particleSystem);
+        energy_t
+        bonded(const p_system_ptr_t& particleSystem);
 
         /**
-         * Returns interaction energy of one given particle with all other particles.
+         * Returns the interaction energy of a single particle with all remaining particles in the particle
+         * system.
          * @param particle Particle.
          * @param particleSystem Particle system.
          * @return Bonded, non-bonded, and external interaction (potential) energy.
          */
-        std::tuple<energy_t, energy_t, energy_t> interaction(const p_ptr_t& particle,
-                                                   const p_system_ptr_t& particleSystem);
+        std::tuple<energy_t, energy_t, energy_t>
+        interaction(const p_ptr_t& particle,
+                    const p_system_ptr_t& particleSystem);
 
     private:
 
-        dist_t cutoff_;
+        param_ptr_t param_;
+        rc_ptr_t cutoffs_;
         bc_ptr_t bc_;
         ff_ptr_t forceField_;
+        bool mesoscopic_;
+        bool concurrent_;
 
     };
 

@@ -24,13 +24,11 @@ namespace simploce {
          * @param bc Boundary condition.
          * @return Particle pairs.
          */
-        static typename PairLists::pp_pair_cont_t
+        static std::vector<PairList::p_pair_t>
         forParticles_(const box_ptr_t &box,
                       const dist_t cutoff,
                       const bc_ptr_t &bc,
                       const std::vector<p_ptr_t> &particles) {
-            using pp_pair_cont_t = typename PairLists::pp_pair_cont_t;
-
             static util::Logger logger("simploce::pairlist::forParticles_()");
             logger.trace("Entering.");
 
@@ -39,11 +37,11 @@ namespace simploce {
             // Empty particle set?
             if (particles.empty()) {
                 // Return empty pair list.
-                return std::move(pp_pair_cont_t{});
+                return std::move(std::vector<PairList::p_pair_t>{});
             }
 
             // Pair list.
-            pp_pair_cont_t particlePairs{};
+            std::vector<PairList::p_pair_t> particlePairs{};
 
             // For all pairs in the set.
             for (auto iter_i = particles.begin(); iter_i != (particles.end() - 1); ++iter_i) {
@@ -76,20 +74,14 @@ namespace simploce {
          * @param particles2 Particle set #2. May be identical to particle set #1.
          * @return Particle pairs.
          */
-        static typename PairLists::pp_pair_cont_t
+        static std::vector<PairList::p_pair_t>
         forParticlesParticles_(const box_ptr_t &box,
                                const dist_t &cutoff,
                                const bc_ptr_t &bc,
                                const std::vector<p_ptr_t>& particles1,
                                const std::vector<p_ptr_t>& particles2) {
-            using pp_pair_cont_t = typename PairLists::pp_pair_cont_t;
-
             static util::Logger logger("simploce::pairlist::forParticlesParticles_()");
             logger.trace("Entering.");
-
-            static int counter = 1;
-            counter += 1;
-            std::cout << "COUNTER: " << counter << std::endl;
 
             logger.debug(std::to_string(particles1.size()) + ": Number of particles in particle set 1.");
             logger.debug(std::to_string(particles2.size()) + ": Number of particles in particle set 2.");
@@ -98,7 +90,7 @@ namespace simploce {
             // Empty particle set(s)?
             if (particles1.empty() || particles2.empty()) {
                 // Return an empty pair list.
-                return std::move(pp_pair_cont_t{});
+                return std::move(std::vector<PairList::p_pair_t>{});
             }
 
             // Same set of particles?
@@ -108,7 +100,7 @@ namespace simploce {
 
             static real_t rc2 = cutoff() * cutoff();
 
-            pp_pair_cont_t particlePairs{};
+            std::vector<PairList::p_pair_t> particlePairs{};
             for (auto& pi : particles1) {
                 auto ri = pi->position();
                 for (auto& pj : particles2) {
@@ -136,12 +128,12 @@ namespace simploce {
          * @param bc Boundary condition.
          * @return Particle pairs.
          */
-        static typename PairLists::pp_pair_cont_t
+        static std::vector<PairList::p_pair_t>
         forParticlesConcurrent_(const box_ptr_t &box,
                                 const dist_t &cutoff,
                                 const bc_ptr_t &bc,
                                 const std::vector<p_ptr_t> &particles) {
-            using result_t = PairLists::pp_pair_cont_t;
+            using result_t = std::vector<PairList::p_pair_t>;
 
             static util::Logger logger("simploce::pairlist::forParticlesConcurrent_()");
             logger.trace("Entering.");
@@ -151,7 +143,7 @@ namespace simploce {
             // Stores results of individual tasks.
             std::vector<result_t> results{};
 
-            // Can we use multiple threads.
+            // Can we use multiple threads?
             int numberOfTasks = int(std::thread::hardware_concurrency() - 4);
             numberOfTasks = numberOfTasks > 1 ? numberOfTasks : 1;
             if (numberOfTasks > 1) {
@@ -209,8 +201,8 @@ namespace simploce {
                 results.emplace_back(result);
             }
 
-            // Make the pair list.
-            PairLists::pp_pair_cont_t particlePairs{};
+            // Merge all results.
+            std::vector<PairList::p_pair_t> particlePairs{};
             for (auto& r : results) {
                 for (auto& pair : r) {
                     particlePairs.emplace_back(pair);
@@ -230,22 +222,19 @@ namespace simploce {
          * @param groups
          * @return Particle pairs.
          */
-        static typename PairLists::pp_pair_cont_t
+        static std::vector<PairList::p_pair_t>
         forParticlesBetweenGroups_(const box_ptr_t &box,
                                    const dist_t &cutoff,
                                    const bc_ptr_t &bc,
                                    const std::vector<pg_ptr_t> &groups) {
-            using pp_pair_cont_t = typename PairLists::pp_pair_cont_t;
-            using pp_pair_t = typename PairLists::pp_pair_t;
-
             static real_t rc2 = cutoff() * cutoff();
 
             if (groups.empty()) {
-                return std::move(pp_pair_cont_t{});  // Empty list.
+                return std::move(std::vector<PairList::p_pair_t>{});  // Empty list.
             }
 
             // Pair list.
-            pp_pair_cont_t particlePairs{};
+            std::vector<PairList::p_pair_t> particlePairs{};
 
             for (auto iter_i = groups.begin(); iter_i != groups.end() - 1; ++iter_i) {
                 const auto& gi = *iter_i;
@@ -260,7 +249,7 @@ namespace simploce {
                             auto rij = bc->apply(ri, rj);
                             auto R2 = norm_square<real_t>(rij);
                             if ( R2 <= rc2 ) {
-                                pp_pair_t pair = std::make_pair(pi, pj);
+                                PairList::p_pair_t pair = std::make_pair(pi, pj);
                                 particlePairs.push_back(pair);
                             }
                         }
@@ -281,23 +270,20 @@ namespace simploce {
          * @param groups Particle groups.
          * @return Particle pairs.
          */
-        static typename PairLists::pp_pair_cont_t
+        static std::vector<PairList::p_pair_t>
         forParticlesAndGroups_(const box_ptr_t &box,
                                const dist_t cutoff,
                                const bc_ptr_t &bc,
                                const std::vector<p_ptr_t> &particles,
                                const std::vector<pg_ptr_t> &groups) {
-            using pp_pair_cont_t = typename PairLists::pp_pair_cont_t;
-            using pp_pair_t = typename PairLists::pp_pair_t;
-
             static real_t rc2 = cutoff() * cutoff();
 
             if (particles.empty() || groups.empty()) {
-                return std::move(pp_pair_cont_t{});  // Empty list.
+                return std::move(std::vector<PairList::p_pair_t>{});  // Empty list.
             }
 
             // Pair list.
-            pp_pair_cont_t particlePairs{};
+            std::vector<PairList::p_pair_t> particlePairs{};
 
             for (const auto& pi : particles) {
                 position_t ri = pi->position();
@@ -309,7 +295,7 @@ namespace simploce {
                             auto rij = bc->apply(ri, rj);
                             auto R2 = norm_square<real_t>(rij);
                             if (R2 <= rc2) {
-                                pp_pair_t pair = std::make_pair(pi, pj);
+                                PairList::p_pair_t pair = std::make_pair(pi, pj);
                                 particlePairs.push_back(pair);
                             }
                         }
@@ -325,26 +311,23 @@ namespace simploce {
          * Returns particle pair list for non-bonded particle pairs for particles in the -same- group.
          * @return Particle pairs.
          */
-        static typename PairLists::pp_pair_cont_t
+        static std::vector<PairList::p_pair_t>
         forParticlesInGroups(const box_ptr_t &box,
                              const bc_ptr_t &bc,
                              const std::vector<pg_ptr_t> &groups) {
-            using pp_pair_cont_t = typename PairLists::pp_pair_cont_t;
-            using pp_pair_t = typename PairLists::pp_pair_t;
-
             if (groups.empty()) {
-                return std::move(pp_pair_cont_t{});  // Empty list.
+                return std::move(std::vector<PairList::p_pair_t>{});  // Empty list.
             }
 
             // Pair list.
-            pp_pair_cont_t particlePairs{};
+            std::vector<PairList::p_pair_t> particlePairs{};
 
             // Include all non-bonded pairs.
             for (const auto &g: groups) {
                 auto pairs = g->nonBondedParticlePairs();
-                for (const auto &pair: pairs) {
-                    pp_pair_t pp = std::make_pair(pair.first, pair.second);
-                    particlePairs.emplace_back(pp);
+                for (const auto &p: pairs) {
+                    PairList::p_pair_t pair = std::make_pair(p.first, p.second);
+                    particlePairs.emplace_back(pair);
                 }
             }
 
@@ -355,14 +338,15 @@ namespace simploce {
          * Generates pair lists concurrently. There must be at least 4 cores/threads available.
          * @return Particle pairs.
          */
-        static PairLists
-        makePairListsConcurrent_(const box_ptr_t &box,
+        static std::vector<PairList::p_pair_t>
+        makePairListsConcurrent_(const box_ptr_t& box,
                                  const dist_t& cutoff,
-                                 const bc_ptr_t &bc,
-                                 const std::vector<p_ptr_t> &all,
-                                 const std::vector<p_ptr_t> &free,
-                                 const std::vector<pg_ptr_t> &groups) {
-            using result_t = PairLists::pp_pair_cont_t;
+                                 const bc_ptr_t& bc,
+                                 const std::vector<p_ptr_t>& all,
+                                 const std::vector<p_ptr_t>& free,
+                                 const std::vector<pg_ptr_t>& groups,
+                                 bool excludeFrozen) {
+            using result_t = std::vector<PairList::p_pair_t>;
 
             static util::Logger logger("simploce::pairlist::makePairListsConcurrent_()");
             logger.trace("Entering");
@@ -371,54 +355,79 @@ namespace simploce {
             std::vector<std::future<result_t>> futures{};
 
             // Four tasks.
-            futures.emplace_back(std::async(
-                    std::launch::async,
-                    forParticlesConcurrent_,
-                    std::ref(box),
-                    std::ref(cutoff),
-                    std::ref(bc),
-                    std::ref(free)
-            ));
-            futures.emplace_back(std::async(
-                    std::launch::async,
-                    forParticlesAndGroups_,
-                    std::ref(box),
-                    std::ref(cutoff),
-                    std::ref(bc),
-                    std::ref(free),
-                    std::ref(groups)
-            ));
-            futures.emplace_back(std::async(
-                    std::launch::async,
-                    forParticlesBetweenGroups_,
-                    std::ref(box),
-                    std::ref(cutoff),
-                    std::ref(bc),
-                    std::ref(groups)
-            ));
+            if (!free.empty()) {
+                futures.emplace_back(std::async(
+                        std::launch::async,
+                        forParticlesConcurrent_,
+                        std::ref(box),
+                        std::ref(cutoff),
+                        std::ref(bc),
+                        std::ref(free)
+                ));
+            }
+            if (!free.empty() && !groups.empty()) {
+                futures.emplace_back(std::async(
+                        std::launch::async,
+                        forParticlesAndGroups_,
+                        std::ref(box),
+                        std::ref(cutoff),
+                        std::ref(bc),
+                        std::ref(free),
+                        std::ref(groups)
+                ));
+            }
+            if (!groups.empty()) {
+                futures.emplace_back(std::async(
+                        std::launch::async,
+                        forParticlesBetweenGroups_,
+                        std::ref(box),
+                        std::ref(cutoff),
+                        std::ref(bc),
+                        std::ref(groups)
+                ));
+            }
             // Wait for tasks to complete.
             results = util::waitForAll<result_t>(futures);
 
             // One remaining task to be completed in the current thread.
-            const auto result = forParticlesInGroups(box, bc, groups);
-            results.emplace_back(result);
+            if (!groups.empty()) {
+                const auto result = forParticlesInGroups(box, bc, groups);
+                results.emplace_back(result);
+            }
 
-            // Collect all results.
+            // Collect/merge all results.
             logger.debug("Particle pair lists (concurrent):");
-            result_t particlePairs{};
-            for (auto &r: results) {
-                logger.debug(std::to_string(r.size()) + ": Number of particle pairs.");
-                particlePairs.insert(particlePairs.end(), r.begin(), r.end());
+            result_t ppPairs{};
+            if (!results.empty()) {
+                for (auto &r: results) {
+                    logger.debug(std::to_string(r.size()) + ": Number of particle pairs.");
+                    ppPairs.insert(ppPairs.end(), r.begin(), r.end());
+                }
+            }
+
+            // Remove pairs of two frozen particles, if required.
+            std::vector<PairList::p_pair_t> particlePairs{};
+            std::size_t nFrozenPairs = 0;
+            if (!ppPairs.empty()) {
+                for (const auto &pair: ppPairs) {
+                    bool frozen = pair.first->frozen() && pair.second->frozen();
+                    if (!(excludeFrozen && frozen)) {
+                        particlePairs.emplace_back(pair);
+                    } else {
+                        nFrozenPairs += 1;
+                    }
+                }
             }
 
             logger.debug(std::to_string(particlePairs.size()) + ": Number of particle pairs.");
+            logger.debug("Number of frozen particle pairs excluded: " + std::to_string(nFrozenPairs));
             auto total = all.size() * (all.size() - 1) / 2;
-            logger.debug("Total number of POSSIBLE particle pairs: " + util::toString(total));
+            logger.debug("Total number of POSSIBLE particle pairs: " + std::to_string(total));
             logger.debug("Fraction (%) of total number of possible particle pairs: " +
-                         util::toString(real_t(particlePairs.size()) * 100.0 / real_t(total)));
+                         std::to_string(real_t(particlePairs.size()) * 100.0 / real_t(total)));
 
             logger.trace("Leaving.");
-            return std::move(PairLists(all.size(), particlePairs));
+            return std::move(particlePairs);
         }
 
         /**
@@ -431,82 +440,112 @@ namespace simploce {
          * @param groups Particle groups.
          * @return Particle pair lists.
          */
-        static PairLists
+        static std::vector<PairList::p_pair_t>
         makePairListsNonConcurrent_(const box_ptr_t &box,
                                     const dist_t & cutoff,
                                     const bc_ptr_t &bc,
                                     const std::vector<p_ptr_t> &all,
                                     const std::vector<p_ptr_t> &free,
-                                    const std::vector<pg_ptr_t> &groups) {
+                                    const std::vector<pg_ptr_t> &groups,
+                                    bool excludeFrozen) {
             static util::Logger logger("simploce::pairlist::makePairListsNonConcurrent_()");
             logger.trace("Entering.");
 
             // Prepare new particle pair list.
-            auto particlePairs = forParticles_(box, cutoff, bc, free);
-            auto ppSize = particlePairs.size();
+            auto ppPairs = forParticles_(box, cutoff, bc, free);
+            auto ppSize = ppPairs.size();
             auto fgParticlePairs = forParticlesAndGroups_(box, cutoff, bc, free, groups);
             auto fgSize = fgParticlePairs.size();
-            particlePairs.insert(particlePairs.end(), fgParticlePairs.begin(), fgParticlePairs.end());
+            ppPairs.insert(ppPairs.end(), fgParticlePairs.begin(), fgParticlePairs.end());
             auto ggParticlePairs = forParticlesBetweenGroups_(box, cutoff, bc, groups);
             auto ggSize = ggParticlePairs.size();
-            particlePairs.insert(particlePairs.end(), ggParticlePairs.begin(), ggParticlePairs.end());
+            ppPairs.insert(ppPairs.end(), ggParticlePairs.begin(), ggParticlePairs.end());
             auto inGroupsParticlePairs = forParticlesInGroups(box, bc, groups);
             auto ingSize = inGroupsParticlePairs.size();
-            particlePairs.insert(particlePairs.end(), inGroupsParticlePairs.begin(), inGroupsParticlePairs.end());
+            ppPairs.insert(ppPairs.end(), inGroupsParticlePairs.begin(), inGroupsParticlePairs.end());
+
+            // Remove frozen particles, if required.
+            std::size_t nFrozenPairs = 0;
+            std::vector<PairList::p_pair_t> particlePairs{};
+            for (auto& pair: ppPairs) {
+                bool frozen = pair.first->frozen() && pair.second->frozen();
+                if (!(excludeFrozen && frozen)) {
+                    particlePairs.emplace_back(pair);
+                } else {
+                    nFrozenPairs += 1;
+                }
+            }
 
             // Some debugging information.
             logger.debug("Particle pair lists (non-concurrent):");
-            logger.debug("Cutoff distance: " + util::toString(cutoff()));
-            logger.debug("Number of free-particle/free-particle pairs: " + util::toString(ppSize));
-            logger.debug("Number of free-particle/particle-in-group pairs: " + util::toString(fgSize));
-            logger.debug("Number of particle-in-group/particle-in-other-group pairs: " + util::toString(ggSize));
-            logger.debug("Number of particle-in-group/particle-in-same-group: " + util::toString(ingSize));
-            logger.debug("Total number of particle pairs: " + util::toString(particlePairs.size()));
+            logger.debug("Cutoff distance: " + std::to_string(cutoff()));
+            logger.debug("Number of free-particle/free-particle pairs: " + std::to_string(ppSize));
+            logger.debug("Number of free-particle/particle-in-group pairs: " + std::to_string(fgSize));
+            logger.debug("Number of particle-in-group/particle-in-other-group pairs: " + std::to_string(ggSize));
+            logger.debug("Number of particle-in-group/particle-in-same-group: " + std::to_string(ingSize));
+            logger.debug("Number of frozen particle pairs excluded: " + std::to_string(nFrozenPairs));
+            logger.debug("Total number of particle pairs: " + std::to_string(particlePairs.size()));
             auto total = all.size() * (all.size() - 1) / 2;
-            logger.debug("Total number of POSSIBLE particle pairs: " + util::toString(total));
+            logger.debug("Total number of POSSIBLE particle pairs: " + std::to_string(total));
             logger.debug("Fraction (%) of total number of possible particle pairs: " +
-                         util::toString(real_t(particlePairs.size()) * 100.0 / real_t(total)));
+                         std::to_string(real_t(particlePairs.size()) * 100.0 / real_t(total)));
 
             logger.trace("Leaving.");
-            return std::move(PairLists(all.size(), particlePairs));
+            return std::move(particlePairs);
         }
 
     }
 
     DistancePairListGenerator::DistancePairListGenerator(param_ptr_t param, bc_ptr_t bc) :
-        pair_lists_generator{}, param_{std::move(param)}, bc_{std::move(bc)} {
+        pair_list_generator{}, param_{std::move(param)}, bc_{std::move(bc)} {
     }
 
-    PairLists
+    std::vector<PairList::p_pair_t>
     DistancePairListGenerator::generate(const p_system_ptr_t& particleSystem) const {
         static util::Logger logger("simploce::DistancePairListGenerator::generate()");
         logger.trace("Entering.");
 
+        static bool excludeFrozen = param_->get<bool>("simulation.forces.exclude-frozen");
         static int counter = 1;
         if (counter == 1) {
             logger.info("Distance-based particle pair list generation.");
+            logger.info(std::to_string(excludeFrozen) + ": Exclude frozen particles pairs?");
         }
         auto box = particleSystem->box();
         static dist_t cutoff = util::computePairListCutoff(this->param_, particleSystem);
-        auto pairLists = particleSystem->doWithAllFreeGroups<PairLists>([this, box] (
+        auto particlePairs =
+                particleSystem->doWithAllFreeGroups<std::vector<PairList::p_pair_t>>([this, box] (
                 const std::vector<p_ptr_t>& all,
                 const std::vector<p_ptr_t>& free,
                 const std::vector<pg_ptr_t>& groups) {
-
+            std::vector<PairList::p_pair_t> particlePairs{};
             if (std::thread::hardware_concurrency() >= 4) {
-                return std::move(pairlist::makePairListsConcurrent_(box, cutoff, this->bc_, all, free, groups));
+                particlePairs = pairlist::makePairListsNonConcurrent_(box,
+                                                                   cutoff,
+                                                                   this->bc_,
+                                                                   all,
+                                                                   free,
+                                                                   groups,
+                                                                   excludeFrozen);
             } else {
-                return std::move(pairlist::makePairListsNonConcurrent_(box, cutoff, this->bc_, all, free, groups));
+                particlePairs = pairlist::makePairListsConcurrent_(box,
+                                                                   cutoff,
+                                                                   this->bc_,
+                                                                   all,
+                                                                   free,
+                                                                   groups,
+                                                                   excludeFrozen);
             }
+            return std::move(particlePairs);
         });
         if (counter == 1) {
-            logger.info(std::to_string(pairLists.particlePairList().size()) +
-                                ": Number of particle pairs in step #" + std::to_string(counter));
+            logger.info(std::to_string(particlePairs.size()) +
+                        ": Number of particle pairs in step #" + std::to_string(counter));
         }
         counter += 1;
 
         logger.trace("Leaving.");
-        return std::move(pairLists);
+        return std::move(particlePairs);
     }
 
 }
