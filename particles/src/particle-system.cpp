@@ -516,6 +516,17 @@ namespace simploce {
         return freeV_;
     }
 
+    std::vector<p_ptr_t>
+    ParticleSystem::ofSpec(spec_ptr_t& spec) const {
+        std::vector<p_ptr_t> particles;
+        for (auto &p : allV_) {
+            if (p->spec()->name() == spec->name()) {
+                particles.emplace_back(p);
+            }
+        }
+        return particles;
+    }
+
     void
     ParticleSystem::clear() {
         groups_.clear();
@@ -619,6 +630,22 @@ namespace simploce {
     ParticleSystem::resetSpec(const simploce::p_ptr_t &particle, const simploce::spec_ptr_t &spec) {
         particle->resetSpec(spec);
     }
+
+    void
+    ParticleSystem::resetName(const simploce::p_ptr_t &particle, const std::string &name) {
+        particle->resetName(name);
+    }
+
+    void
+    ParticleSystem::resetToFree(const simploce::p_ptr_t &particle) {
+        auto id = particle->id();
+        auto result = freeM_.find(particle->id());
+        if (result == freeM_.end()) {
+            auto pair = std::make_pair(particle->id(), particle);
+            freeM_.emplace(pair);
+            freeV_.emplace_back(particle);
+        }
+   }
 
     std::ostream&
     operator << (std::ostream& stream, const ParticleSystem& particleSystem) {

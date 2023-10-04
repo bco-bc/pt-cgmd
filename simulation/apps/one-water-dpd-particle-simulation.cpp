@@ -70,7 +70,7 @@ int main() {
     auto dpdUnits = factory::dpdUnits(1.0, 1.0, 1.0);
     auto displacer = factory::displacer(conf::DPD, param, interactor, bc, dpdUnits);
 
-    Simulation simulation{param, particleSystem, displacer, bc};
+    Simulation simulation{param, particleSystem, catalog, displacer, bc};
     simulation.perform(trajectory, data);
     trajectory.flush();
     data.flush();

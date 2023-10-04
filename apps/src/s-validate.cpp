@@ -10,6 +10,7 @@
 #include "simploce/simulation/s-properties.hpp"
 #include "simploce/types/s-types.hpp"
 #include "simploce/particle/protonatable-coarse-grained.hpp"
+#include "simploce/particle/particle-system.hpp"
 #include "simploce/potentials/force-field.hpp"
 #include "simploce/util/specification.hpp"
 #include "simploce/util/logger.hpp"
@@ -23,21 +24,30 @@
 using namespace simploce;
 namespace po = boost::program_options;
 
-static void validate(const p_system_ptr_t& particleSystem, const param_ptr_t& param) {
+static void validate(const p_system_ptr_t& particleSystem,
+                     const spec_catalog_ptr_t& catalog,
+                     const param_ptr_t& param,
+                     const bc_ptr_t& bc) {
     std::cout << std::endl;
     std::cout.setf(std::ios::scientific);
     std::cout.precision(conf::PRECISION);
 
+    auto SBP = catalog->staticBP();
     std::cout << "Validating particle system:" << std::endl;
     std::cout << "Number of particles: " << std::to_string(particleSystem->numberOfParticles()) << std::endl;
     std::cout << "Number of free particles: " << std::to_string(particleSystem->numberOfFreeParticles()) << std::endl;
     std::cout << "Number of frozen particles: " << std::to_string(particleSystem->numberOfFrozenParticles()) << std::endl;
     std::cout << "Number of particle groups: " << std::to_string(particleSystem->numberOfParticleGroups()) << std::endl;
+    auto numberSBP = particleSystem->numberOfSpecifications(SBP);
+    std::cout << "Number of boundary particles: " << numberSBP << std::endl;
     std::cout << "Box dimension(s)" << *(particleSystem->box()) << std::endl;
     std::cout << "Protonatable?: " << particleSystem->isProtonatable() << std::endl;
     auto isMesoscale = param->get<bool>("simulation.mesoscale");
     std::cout << "Mesoscale?: " << std::to_string(isMesoscale) << std::endl;
-
+    std::cout << "Total charge: " << particleSystem->charge() << std::endl;
+    auto M = properties::dipoleMoment(particleSystem, bc);
+    std::cout << "Total dipole moment: " <<  M  << std::endl;
+    std::cout << "Norm total dipole moment: " << norm<real_t>(M) << std::endl;
     particleSystem->doWithAll<void>([param, isMesoscale] (const std::vector<p_ptr_t>& all) {
         auto p = properties::linearMomentum(all);
         std::cout << "TOTAL linear momentum vector components: " << p << std::endl;
@@ -96,13 +106,19 @@ int main(int argc, char *argv[]) {
                 PARTICLE.spec() + "' (default), '" +
                 SIM_PARAMS.spec() + "', '" +
                 FORCE_FIELD.spec() + "'.";
+        bool pbc_1{false};                               // Apply 1D-PBC.
+        std::string direction{"z"};                      // Direction.
 
         po::options_description usage("Usage");
         util::addStandardOptions(usage);
         usage.add_options() (
-                "input-spec",
-                po::value<std::string>(&spec),
-                selectFrom.c_str()
+            "input-spec",
+            po::value<std::string>(&spec),
+            selectFrom.c_str()
+        )(
+            "pbc-1",
+            po::value<std::string>(&direction),
+            "Apply periodicity in the given direction only. Select one of 'x', y', and 'z'."
         );
 
         po::variables_map vm;
@@ -114,6 +130,10 @@ int main(int argc, char *argv[]) {
             std::cout << usage << "\n";
             return 0;
         }
+        if (vm.count("pbc-1")) {
+            pbc_1 = true;
+            direction = vm["pbc-1"].as<std::string>();
+        }
         util::verbose(vm);
 
         util::Specification specification(spec);
@@ -124,8 +144,16 @@ int main(int argc, char *argv[]) {
             } else {
                 param->put("simulation.mesoscale", false);
             }
+            auto catalog = util::getCatalog(vm);
             auto particleSystem = util::getParticleSystem(vm, param);
-            validate(particleSystem, param);
+            bc_ptr_t bc;
+            if (pbc_1) {
+                boost::trim(direction);
+                bc = factory::pbc1dBB(particleSystem->box(), Direction::valueOf(direction[0]));
+            } else {
+                 bc = factory::pbc(particleSystem->box());
+            }
+            validate(particleSystem, catalog, param, bc);
         } else if ( specification == SIM_PARAMS ) {
             util::getParameters(vm, param);
             validate(param);

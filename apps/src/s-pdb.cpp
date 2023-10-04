@@ -15,7 +15,6 @@
 #include "simploce/simulation/pbc.hpp"
 #include "simploce/util/logger.hpp"
 #include "simploce/util/file.hpp"
-#include "simploce/util/util.hpp"
 #include "simploce/util/hybrid_36_c.hpp"
 #include <boost/program_options.hpp>
 #include <cstdlib>
@@ -29,11 +28,11 @@ static void
 outputFreeParticle(std::ofstream& ostream,
                    const spec_catalog_ptr_t& catalog,
                    const p_ptr_t& particle,
-                   int rsn,
+                   std::size_t rsn,
                    const PBC& pbc,
                    bool inBox) {
     ostream << "ATOM  ";
-    auto index = particle->index() + 1;
+    int index = int(particle->index() + 1);
     auto stringIndex = std::to_string(index);
     if (index > 99999) {
         char result[5];
@@ -44,7 +43,6 @@ outputFreeParticle(std::ofstream& ostream,
         stringIndex = std::string(result);
     }
     ostream << std::setw(5) << stringIndex;
-    //ostream << std::setw(5) << index;  // Atom serial number.
 
     ostream << conf::SPACE;      // Space between atom serial number and atom name.
 
@@ -70,7 +68,7 @@ outputFreeParticle(std::ofstream& ostream,
     ostream << conf::SPACE;
 
     ostream << conf::SPACE;                     // Chain identifier.
-    int number = (rsn >= 10000 ? 9999 : rsn);
+    auto number = (rsn >= 10000 ? 9999 : rsn);
     ostream << std::setw(4) << number;  // Residue sequence number.
     ostream << conf::SPACE;             // Code for insertion of residues.
 
@@ -105,6 +103,55 @@ outputFreeParticle(std::ofstream& ostream,
     ostream << std::endl;
 }
 
+static void
+outputParticle(std::ofstream& ostream,
+               const spec_catalog_ptr_t& catalog,
+               const p_ptr_t& particle,
+               const PBC& pbc,
+               bool inBox,
+               size_t counter) {
+    std::string residueName = "GRP";
+    ostream << "ATOM  ";
+    int asn = int(particle->index() + 1);
+    ostream << std::setw(5) << asn;
+    ostream << "  ";
+    auto name = particle->spec()->name();
+    int l = int(name.length() > 3 ? 3 : name.length());
+    for (int k = 0; k < l; ++k) {
+        ostream << name[k];
+    }
+    for (int k = l; k < 3; ++k) {
+        ostream << " ";
+    }
+    ostream << " ";
+    ostream << residueName;                // Residue name.
+    ostream << " ";
+    ostream << "A";                      // Chain identifier.
+    auto rsn = counter + 1;        // Residue sequence number.
+    ostream << std::setw(4) << rsn;
+    ostream << "    ";
+    auto r_out = particle->position();
+    position_t r;
+    if (name == catalog->staticBP()->name()) {
+        r = r_out;
+    } else {
+        if (inBox) {
+            r = pbc.placeInside(r_out);
+        } else {
+            r = r_out;
+        }
+    }
+
+    //r *= 10.0;  // to Angstrom.
+    ostream.precision(3);
+    ostream << std::setw(8) << r[0] << std::setw(8) << r[1] << std::setw(8) << r[2];
+    ostream.precision(2);
+    ostream << conf::SPACE << std::setw(5) << 0.0 << conf::SPACE << std::setw(5) << 0.0;
+    ostream << "           " << particle->spec()->name()[0];
+    ostream << std::endl;
+
+}
+
 
 /**
  * Writes PDB.
@@ -116,7 +163,10 @@ static
 void toPDB(const p_system_ptr_t& particleSystem,
            const std::string& fnOutputPDB,
            const spec_catalog_ptr_t& catalog,
-           bool inBox) {
+           bool inBox,
+           const std::string& specName) {
+    util::Logger logger("simploce::toPDB()");
+    logger.trace("Entering.");
     box_ptr_t box = particleSystem->box();
     PBC pbc(box);
 
@@ -128,64 +178,39 @@ void toPDB(const p_system_ptr_t& particleSystem,
     ostream << "PARTICLE SYSTEM PDB                    ";
     ostream << "06-APR-22 ";
     ostream << "  1PDB" << std::endl;
-    particleSystem->doWithAllFreeGroups<void>([&ostream, &pbc, &catalog, inBox] (
+    particleSystem->doWithAllFreeGroups<void>([&ostream, &pbc, &catalog, inBox, specName] (
             const std::vector<p_ptr_t>& all,
             std::vector<p_ptr_t>& free,
             std::vector<pg_ptr_t>& groups) {
+        bool select = !specName.empty();
         for (std::size_t i = 0; i != groups.size(); ++i) {
             auto& group = groups[i];
             std::string residueName = "GRP";
             auto& particles = group->particles();
             for (auto& p: particles) {
-                ostream << "ATOM  ";
-                int asn = int(p->index() + 1);
-                ostream << std::setw(5) << asn;
-                ostream << "  ";
-                std::string name = p->spec()->name();
-                int l = int(name.length() > 3 ? 3 : name.length());
-                for (int k = 0; k < l; ++k) {
-                    ostream << name[k];
-                }
-                for (int k = l; k < 3; ++k) {
-                    ostream << " ";
-                }
-                ostream << " ";
-                ostream << residueName;                // Residue name.
-                ostream << " ";
-                ostream << "A";                      // Chain identifier.
-                auto rsn = i + 1;        // Residue sequence number.
-                ostream << std::setw(4) << rsn;
-                ostream << "    ";
-                auto r_out = p->position();
-                position_t r;
-                if (name == catalog->staticBP()->name()) {
-                    r = r_out;
+
+                if (!select) {
+                    outputParticle(ostream, catalog, p, pbc, inBox, i);
                 } else {
-                    if (inBox) {
-                        r = pbc.placeInside(r_out);
-                    } else {
-                        r = r_out;
+                    if (specName == p->spec()->name()) {
+                        outputParticle(ostream, catalog, p, pbc, inBox, i);
                     }
                 }
-
-                //r *= 10.0;  // to Angstrom.
-                ostream.precision(3);
-                ostream << std::setw(8) << r[0] << std::setw(8) << r[1] << std::setw(8) << r[2];
-                ostream.precision(2);
-                ostream << conf::SPACE << std::setw(5) << 0.0 << conf::SPACE << std::setw(5) << 0.0;
-                ostream << "           " << p->spec()->name()[0];
-                ostream << std::endl;
             }
         }
 
         // Write free particles.
-        int rsn = groups.size();
+        auto rsn = groups.size();
         for (auto& p : free) {
-            std::string residueName = p->spec()->name().substr(0,3);
-            rsn += 1;
-            //int rsn = int (p->index() + 1);
-            outputFreeParticle(ostream, catalog, p, rsn, pbc, inBox);
-            // oneLineToPDB(ostream, "HETATM", residueName, rsn, p, catalog, pbc, inBox);
+            if (!select) {
+                rsn +=1;
+                outputFreeParticle(ostream, catalog, p, rsn, pbc, inBox);
+            } else {
+                if (specName == p->spec()->name()) {
+                    rsn += 1;
+                    outputFreeParticle(ostream, catalog, p, rsn, pbc, inBox);
+                }
+            }
         }
     });
     ostream << "END" << std::endl;
@@ -199,6 +224,7 @@ int main(int argc, char *argv[]) {
     std::string fnOutputPDB{"out.pdb"};
     bool isCoarseGrained{false};
     bool inBox{true};
+    std::string specName;
 
     po::options_description usage("Usage");
     usage.add_options() (
@@ -219,6 +245,10 @@ int main(int argc, char *argv[]) {
     )(
             "do-not-place-inside-box",
             "Do not place particles back into the central box."
+    )(
+        "select-spec",
+        po::value<std::string>(&specName),
+        "Output only particles of this specification."
     )(
         "verbose,v",
         "Verbose"
@@ -266,7 +296,7 @@ int main(int argc, char *argv[]) {
     logger.info("Number of particle groups: " + std::to_string(particleSystem->numberOfParticleGroups()));
 
     // Write PDB.
-    toPDB(particleSystem, fnOutputPDB, catalog, inBox);
+    toPDB(particleSystem, fnOutputPDB, catalog, inBox, specName);
     logger.info("Wrote output PDB to: " + fnOutputPDB);
 
     return EXIT_SUCCESS;

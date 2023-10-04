@@ -28,7 +28,7 @@ namespace simploce {
         util::Logger logger("ProtonatableParticleSystemFactory::protonatablePolarizableWater");
 
         // Polarizable water.
-        auto pWater = this->polarizableWater(box, nLimit, densitySI, temperature);
+        auto pWater = this->cgmdPolarizableWater(box, nLimit, densitySI, temperature);
 
         // / Protonatable polarizable Water.
         prot_cg_sys_ptr_t ppWater = factory::protonatableCoarseGrained();

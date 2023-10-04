@@ -111,7 +111,7 @@ namespace simploce {
         /**
          * Identifies displaceable particles.
          */
-        void identifyDisplaceables();
+        // void identifyDisplaceables();
 
         /**
          * Returns number of frozen particles.
@@ -312,6 +312,13 @@ namespace simploce {
         const std::vector<p_ptr_t> &free() const;
 
         /**
+         * Returns all particles of given specification.
+         * @param spec Specification.
+         * @return Particles.
+         */
+        std::vector<p_ptr_t> ofSpec(spec_ptr_t& spec) const;
+
+        /**
          * Clears this particle system. That is, removes all particles and particle groups.
          */
         void clear();
@@ -345,10 +352,24 @@ namespace simploce {
         /**
          * Resets particle specification of given particle.
          * @param particle Particle.
-         * @param spec Specification.
+         * @param spec New specification.
          */
         static void resetSpec(const p_ptr_t& particle,
                               const spec_ptr_t& spec);
+
+        /**
+         * Resets particle's name.
+         * @param particle Particle.
+         * @param name New name.
+         */
+        static void resetName(const p_ptr_t& particle,
+                              const std::string& name);
+
+        /**
+         * Makes an existing particle a free particle.
+         * @param particle Already existing particle
+         */
+        void resetToFree(const p_ptr_t& particle);
 
         /**
          * Creates particle.

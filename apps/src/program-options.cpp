@@ -83,6 +83,7 @@ namespace simploce {
         }
 
         p_system_ptr_t getParticleSystem(const po::variables_map &vm, const param_ptr_t& param) {
+            auto& logger = poHelper_.logger;
             if (!poHelper_.particleSystem) {
                 bool isPDB{false};
                 bool isCoarseGrained{false};
@@ -109,7 +110,11 @@ namespace simploce {
                 } else {
                     poHelper_.particleSystem = factory::particleSystem(fn, catalog, isCoarseGrained);
                 }
-                poHelper_.logger.info(fn + ": Read particle system from this input file.");
+                logger.info(fn + ": Read particle system from this input file.");
+                auto& ps = poHelper_.particleSystem;
+                logger.info(std::to_string(ps->numberOfParticles()) + ": Number of particles.");
+                logger.info(std::to_string(ps->numberOfFreeParticles()) + ": Number of free particles.");
+                logger.info(std::to_string(ps->numberOfParticleGroups()) + ": Number of particle groups.");
             }
             return poHelper_.particleSystem;
         }

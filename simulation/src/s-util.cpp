@@ -7,6 +7,7 @@
 
 #include "simploce/simulation/s-util.hpp"
 #include "simploce/simulation/s-properties.hpp"
+#include "simploce/simulation/bc.hpp"
 #include "simploce/particle/particle-system.hpp"
 #include "simploce/util/logger.hpp"
 #include "simploce/units/units-mu.hpp"
@@ -90,6 +91,16 @@ namespace simploce {
 
         void removeCenterOfMassMotion(const p_system_ptr_t& particleSystem) {
             util::removeOverallLinearMomentum(particleSystem);
+        }
+
+        void placeInsideBox(const p_system_ptr_t& particleSystem, const bc_ptr_t& bc) {
+            particleSystem->doWithAll<void>([bc] (const std::vector<p_ptr_t>& all) {
+               for (const auto& p : all) {
+                   auto ro = p->position();
+                   auto ri = bc->placeInside(ro);
+                   p->position(ri);
+               }
+            });
         }
     }
 }

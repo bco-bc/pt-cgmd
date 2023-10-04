@@ -92,7 +92,7 @@ namespace simploce {
         velocity_t velocity() const;
         
         /**
-         * Sets velocity. Has no effect if this particle is frozen.
+         * Sets velocity.
          * @param v Velocity.
          */
         void velocity(const velocity_t& v);
@@ -177,6 +177,9 @@ namespace simploce {
         
         // Reassigns particle specification.
         void resetSpec(const spec_ptr_t& spec);
+
+        // Reassign particle name.
+        void resetName(const std::string& name);
 
         /**
          * Freezes this particle at the present location. Attempts to assign a new position

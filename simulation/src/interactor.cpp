@@ -52,7 +52,8 @@ namespace simploce {
         logger.trace("Entering.");
 
         static auto nUpdatePairLists = param_->get<std::size_t>("simulation.npairlists");
-        static auto includeExternal = param_->get<bool>("simulation.forces.include-external");
+        static auto includeExternal = param_->get<bool>("simulation.forces.include-external", false);
+        static auto conservativeForces = param_->get<bool>("simulation.forces.conservative", true);
         static std::size_t counter = 0;
 
         // Set the bonded pair list. Only once.
@@ -63,6 +64,12 @@ namespace simploce {
             pairList_->bondedParticlePairs(particlePairs);
             logger.debug(std::to_string(pairList_->bondedParticlePairs().size()) +
                          ": Number of bonded particle pairs.");
+            if (!conservativeForces) {
+                logger.warn("All conservative forces are excluded.");
+            }
+            if (includeExternal) {
+                logger.warn("External forces are included.");
+            }
         }
 
         // Update particle pair list, if needed.
@@ -77,12 +84,14 @@ namespace simploce {
 
         // Calculate all forces and associated energies.
         particleSystem->resetForces();
-        auto bonded = forces_->bonded(particleSystem);
-        auto nonBonded = forces_->nonBonded(particleSystem, pairList_);
-        energy_t external{0};
+        energy_t bonded{0.0};
+        energy_t nonBonded{0.0};
+        energy_t external{0.0};
+        if (conservativeForces) {
+            bonded = forces_->bonded(particleSystem);
+            nonBonded = forces_->nonBonded(particleSystem, pairList_);
+        }
         if (includeExternal) {
-            if (counter == 0)
-                logger.warn("Including external potentials.");
             external = this->forces_->external(particleSystem);
         }
 

@@ -30,7 +30,7 @@ add_library(simulation SHARED
         src/pressure-gradient.cpp
         src/cutoffs.cpp
         src/pair-list.cpp src/simulation.cpp src/sim-data.cpp
-        src/no-bc.cpp src/pbc.cpp src/pbc-1d-bb.cpp src/s-factory.cpp
+        src/no-bc.cpp src/pbc.cpp src/pbc-1d-bb.cpp src/pbc-1d-sr.cpp src/bc-util.cpp src/s-factory.cpp
         src/s-properties.cpp src/protonatable-particle-system-factory.cpp
         src/continuous.cpp src/discrete.cpp src/force-field.cpp
         src/distance-pair-list-generator.cpp src/cell.cpp src/grid.cpp

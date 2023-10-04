@@ -24,7 +24,7 @@ int main(int argc, char *argv[]) {
     util::Logger logger{"s-particle-system::main"};
 
     try {
-        int numberOfMesoscopicWaters = 25000;
+        int numberOfFluidElements = 6000;                      // Number of water fluid elements.
         real_t characteristicLengthMesoscopicWater = 6.0e-06;  // In m.
 
         const util::Specification DIATOMIC{"diatomic"};
@@ -64,17 +64,22 @@ int main(int argc, char *argv[]) {
                 selectFrom.c_str()
         )(
                 "add-boundary-particles,b",
-                "Add boundary particles"
+                "Add boundary particles (for \"electrolyte\" only.)"
         )(
                 "fn-particle-system,o",
                 po::value<std::string>(&fnParticleSystem),
                 "Output file name for newly created particle system. Default is 'out.ps'."
         )(
-                "temperature,T", po::value<real_t>(&temperature),
+                "temperature,T",
+                po::value<real_t>(&temperature),
                 "Temperature. Default is 298.15. For mesoscale, select 1, 2, 3, and so forth."
         )(
-                "n-meso-waters,n", po::value<int>(&numberOfMesoscopicWaters),
-                "Number of mesoscopic water particles."
+                "characteristic-length-water,d",
+                po::value<real_t>(&characteristicLengthMesoscopicWater),
+                "Characteristic length for \"mesoscopic polarizable water\" model. Default is 6.0e-06 m."
+        )(
+                "n-water-fluid-elements,M", po::value<int>(&numberOfFluidElements),
+                "Number of water fluid elements."
         )(
                 "verbose,v",
                 "Verbose"
@@ -110,14 +115,21 @@ int main(int argc, char *argv[]) {
             auto diatomic = factory->diatomic(dist_t{0.12}, catalog->O());
             stream << *diatomic << std::endl;
         } else if (specification == CG_POLARIZABLE_WATER ) {
-            auto pWater = factory->polarizableWater();
+            auto pWater = factory->cgmdPolarizableWater();
             stream << *pWater << std::endl;
         } else if (specification == MESOSCOPIC_POLARIZABLE_WATER) {
-            logger.info(std::to_string(numberOfMesoscopicWaters) + ": Requested number of water particles.");
-            auto l = real_t(numberOfMesoscopicWaters) / 2.0833e+07;
-            l /= characteristicLengthMesoscopicWater;
-            auto box = factory::box(10.0, 8.33, l);
-            auto pWater = factory->mesoscalePolarizableWater(box, numberOfMesoscopicWaters, temperature);
+            // Fixed box dimensions for x- and y-direction. From Serhatlioglu2020.
+            real_t lx = 6.0e-05 / characteristicLengthMesoscopicWater;  // In DPD units.
+            real_t ly = 5.0e-05 / characteristicLengthMesoscopicWater;
+            density_t rho = 3.0;  // Fixed total bead number density for DPD, rho = N / (lx * ly *lz), N=2M, and M is number
+                                  // fluid elements.
+            auto N = 2 * numberOfFluidElements;
+            auto lz = N / (lx * ly * rho());
+            auto box = factory::box(lx, ly, lz);
+            auto pWater =
+                    factory->mesoscalePolarizableWater(box,
+                                                       numberOfFluidElements,
+                                                       temperature);
             stream << *pWater << std::endl;
         } else if ( specification == ARGON) {
             auto argon = factory->argon();

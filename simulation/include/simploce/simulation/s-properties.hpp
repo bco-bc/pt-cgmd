@@ -31,11 +31,13 @@ namespace simploce {
          * identical to that of dissipative particle dynamics, such that kT=n where k is Boltzmann constant and T
          * is the temperature, and n is an non-negative number.
          * Otherwise molecular units are assumed.
+         * @param excludeFrozen Do not include contribution from frozen (static) particles.
          * @return Instantaneous temperature.
          */
         temperature_t kineticTemperature(const std::vector<p_ptr_t>& particles,
                                          const energy_t& eKin,
-                                         bool mesoscopic = false);
+                                         bool mesoscopic = false,
+                                         bool excludeFrozen = false);
         
         /**
          * Returns pressure. Calculated from Virial theorem. Only displaceable (not frozen)
@@ -43,12 +45,18 @@ namespace simploce {
          * @param particles All particles.
          * @param temperature Temperature.
          * @param box Simulation box.
+         * @param mesoscopic Particles represent a isMesoscale system. If true, than an unit system is assumed
+         * identical to that of dissipative particle dynamics, such that kT=n where k is Boltzmann constant and T
+         * is the temperature, and n is an non-negative number.
+         * Otherwise molecular units are assumed.
+         * @param excludeFrozen if true, do not include contribution from frozen (static) particles.
          * @return Pressure.
          */
         pressure_t pressure(const std::vector<p_ptr_t>& particles,
                             const temperature_t& temperature,
                             const box_ptr_t& box,
-                            bool mesoscopic = false);
+                            bool mesoscopic = false,
+                            bool excludeFrozen = false);
         
         /**
          * Returns dielectric constant according to Fröhlich.
@@ -68,11 +76,30 @@ namespace simploce {
          * @param pj Particle 2
          * @param efl Holds energy, forces, and distance between particles 1 and 2.
          */
-        static void 
+        void
         tooClose(const p_ptr_t& pi,
                  const p_ptr_t& pj,
                  const std::tuple<energy_t, force_t, length_t>& efl);
 
+        /**
+         * Returns total dipole moment of particle system.
+         * @param particleSystem Particle system.
+         * @param bc Boundary conditions.
+         * @return Dipole moment.
+         */
+        dipole_moment_t
+        dipoleMoment(const p_system_ptr_t& particleSystem,
+                     const bc_ptr_t& bc);
+
+        /**
+         * Returns total dipole of a collection of particles, relative to the origin.
+         * @param particles Particles.
+         * @param bc Boundary conditions.
+         * @return Total dipole moment
+         */
+        dipole_moment_t
+        dipoleMoment(const std::vector<p_ptr_t>& particles,
+                     const bc_ptr_t& bc);
     }
 }
 

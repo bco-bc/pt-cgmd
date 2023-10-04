@@ -104,13 +104,23 @@ namespace simploce {
         pbc(const box_ptr_t& box);
 
         /**
-         * Returns 1 dimensional periodic boundary conditions plus bounce-back for velocities..
+         * Returns 1 dimensional periodic boundary conditions plus bounce-back for velocities.
          * @param box Simulation box.
          * @param direction Apply PBC in this direction only.
          * @return Boundary condition.
          */
         bc_ptr_t
         pbc1dBB(const box_ptr_t& box,
+                const Direction& direction);
+
+        /**
+         * Returns 1 dimensional periodic boundary conditions plus spectral reflection for velocities..
+         * @param box Simulation box.
+         * @param direction Apply PBC in this direction only.
+         * @return Boundary condition.
+         */
+        bc_ptr_t
+        pbc1dSR(const box_ptr_t& box,
                 const Direction& direction);
         
         /**

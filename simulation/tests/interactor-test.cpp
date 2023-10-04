@@ -64,7 +64,7 @@ void test3 (const spec_catalog_ptr_t &catalog, const ff_ptr_t &forceField) {
     auto factory = factory::protonatableParticleSystemFactory(catalog);
     auto box = factory::box(7.27);
     auto bc = factory::pbc(box);
-    auto polarizableWater = factory->polarizableWater(box);
+    auto polarizableWater = factory->cgmdPolarizableWater(box);
     auto param = factory::simulationParameters();
     auto cutoff = param->get<real_t>("forces.nb.cutoff");
     auto pairListGenerator = factory::pairListGenerator(param, bc);

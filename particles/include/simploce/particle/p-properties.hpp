@@ -90,7 +90,7 @@ namespace simploce {
                     p[k] += mass() * v[k];
                 }
             }
-            return std::move(p);
+            return p;
         }
     }
 }

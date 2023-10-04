@@ -41,6 +41,10 @@ namespace simploce {
             auto nx = int(lengthX / spacing());
             auto ny = int(lengthY / spacing());
             auto nz = int(lengthZ / spacing());
+            if (nz == 0) {
+                nz = 1;
+                logger.warn("Changed number of number of cells in z-direction from 0 to 1.");
+            }
 
             // Adjusted spacing in each direction.
             auto spacingX = lengthX / real_t(nx);

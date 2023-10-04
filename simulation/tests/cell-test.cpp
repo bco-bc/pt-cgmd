@@ -21,7 +21,7 @@ int main() {
     auto catalog =
             factory::particleSpecCatalog("/localdisk/resources/particles-specs.dat");
     auto factory = simploce::factory::particleSystemFactory(catalog);
-    auto particleSystem = factory->polarizableWater();
+    auto particleSystem = factory->cgmdPolarizableWater();
 
     Cell::location_t location(0,0,0);
     position_t r(0.5, 0.5, 0.5);

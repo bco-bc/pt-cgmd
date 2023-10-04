@@ -6,7 +6,10 @@
  */
 
 #include "simploce/simulation/pbc-1d-bb.hpp"
+#include "simploce/simulation/bc-util.hpp"
 #include "simploce/simulation/pbc.hpp"
+#include "simploce/particle/particle.hpp"
+#include "simploce/particle/particle-group.hpp"
 #include "simploce/util/util.hpp"
 
 namespace simploce {
@@ -33,37 +36,28 @@ namespace simploce {
 
     position_t
     PBC_1D_BB::placeInside(const position_t& r_out) const {
-        PBC pbc(box_);
+        static PBC pbc(box_);
         return pbc.placeInside(r_out);
     }
 
     velocity_t
     PBC_1D_BB::apply(const velocity_t &v,
                      const position_t& r) const {
-
-        // Here, index refers to the direction -no- PDB is applied.
-        auto indices = [] (int index) {
-            if (index == 0) {
-                return std::vector<std::size_t>{1, 2};
-            } else if (index == 1) {
-                return std::vector<std::size_t>{0, 2};
-            } else {
-                return std::vector<std::size_t>{0, 1};
-            }
-        };
-
-        static int index = direction_.value();
-        static auto ks = indices(index);
-
-        const box_t& box = *box_;
-        bool crossed{false};
-        for (auto k: ks) {
-            auto box_k = box[k];
-            if (r[k] > box_k || r[k] < 0.0)
-                // Particle crossed the boundary in the k-direction.
-                crossed = true;
-        }
+        auto crossed = bc::crossed(r, box_, direction_);
         return crossed ? -1.0 * v : v;
+    }
+
+    void
+    PBC_1D_BB::applyToVelocities(const simploce::pg_ptr_t &particleGroup) const {
+        auto r = particleGroup->position();
+        auto crossed = bc::crossed(r, box_, direction_);
+        if (crossed) {
+            for (auto& p: particleGroup->particles()) {
+                auto v = p->velocity();
+                v *= -1.0;
+                p->velocity(v);
+            }
+        }
     }
 }
 

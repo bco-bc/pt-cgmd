@@ -5,6 +5,9 @@
  */
 
 #include "simploce/simulation/s-properties.hpp"
+#include "simploce/simulation/bc.hpp"
+#include "simploce/particle/particle-system.hpp"
+#include "simploce/particle/particle-group.hpp"
 #include "simploce/units/units-mu.hpp"
 #include "simploce/types/cvector_t.hpp"
 #include "simploce/util/logger.hpp"
@@ -21,7 +24,8 @@ namespace simploce {
 
         temperature_t kineticTemperature(const std::vector<p_ptr_t>& particles,
                                          const energy_t& eKin,
-                                         bool mesoscopic) {
+                                         bool mesoscopic,
+                                         bool excludeFrozen) {
 
             util::Logger logger("simploce::properties::kineticTemperature(...)");
             static int counter = 0;
@@ -31,9 +35,13 @@ namespace simploce {
             // Determine number of degrees of freedom (dof).
             std::size_t nParticles = 0;
             for (const auto& p: particles) {
-                // Exclude frozen particles.
-                nParticles += (p->frozen() ? 0 : 1);
+                if (excludeFrozen) {
+                    nParticles += (p->frozen() ? 0 : 1);
+                } else {
+                    nParticles += 1;
+                }
             }
+
             real_t nDof = 3.0 * real_t(nParticles) - 3.0;  // Assuming total linear momentum is constant.
             if ( nDof < 3) {
                 // No point in calculating the temperature for a low number of degrees of freedom.
@@ -45,9 +53,13 @@ namespace simploce {
             energy_t cmEKin, kineticEnergy = eKin;
             if (norm<real_t>(cmLinearMomentum) > 0.0) {
                 mass_t totalMass = 0.0;
-                for (auto& p: particles)
-                    if ( !p->frozen() )
+                for (auto& p: particles) {
+                    if (excludeFrozen) {
+                        totalMass += p->frozen() ? 0.0 : p->mass();
+                    } else {
                         totalMass += p->mass();
+                    }
+                }
                 velocity_t cmVelocity{};
                 for (size_t k = 0; k != 3; ++k) {
                     cmVelocity[k] = cmLinearMomentum[k] / totalMass();
@@ -72,7 +84,8 @@ namespace simploce {
         pressure_t pressure(const std::vector<p_ptr_t>& particles,
                             const temperature_t& temperature,
                             const box_ptr_t& box,
-                            bool mesoscopic)
+                            bool mesoscopic,
+                            bool excludeFrozen)
         {
             volume_t volume = box->volume();
             real_t virial1 = 0.0;
@@ -81,11 +94,18 @@ namespace simploce {
             auto KB = mesoscopic ? 1 : units::mu<real_t>::KB;
             std::size_t nParticles = 0;
             for (const auto& particle : particles) {
-                if (!particle->frozen()) {
-                    position_t r = particle->position();
-                    force_t f = particle->force();
-                    virial1 += inner<real_t>(f, r);
-                    nParticles += 1;
+                if (excludeFrozen) {
+                    if (!particle->frozen()) {
+                        position_t r = particle->position();
+                        force_t f = particle->force();
+                        virial1 += inner<real_t>(f, r);
+                        nParticles += 1;
+                    }
+                } else {
+                        position_t r = particle->position();
+                        force_t f = particle->force();
+                        virial1 += inner<real_t>(f, r);
+                        nParticles += 1;
                 }
             }
             if ( volume() > 0.0 ) {
@@ -115,7 +135,7 @@ namespace simploce {
             return (-b + std::sqrt(D)) / (2.0 * a);
         }
 
-        static void
+        void
         tooClose(const p_ptr_t& pi,
                  const p_ptr_t& pj,
                  const std::tuple<energy_t, force_t, length_t>& efl)
@@ -137,6 +157,32 @@ namespace simploce {
             }
         }
 
-                
+        dipole_moment_t
+        dipoleMoment(const p_system_ptr_t& particleSystem,
+                     const bc_ptr_t& bc) {
+            return particleSystem->doWithAllFreeGroups<dipole_moment_t>([bc] (
+                    std::vector<p_ptr_t>& all,
+                    std::vector<p_ptr_t>& free,
+                    std::vector<pg_ptr_t>& groups
+                    ) {
+               return properties::dipoleMoment(all, bc);
+            });
+        }
+
+        dipole_moment_t
+        dipoleMoment(const std::vector<p_ptr_t>& particles,
+                     const bc_ptr_t& bc) {
+            dipole_moment_t M{0.0, 0.0, 0.0};
+            position_t origin{0.0, 0.0, 0.0};
+            for (auto& p: particles) {
+                auto r = p->position();
+                auto Q = p->charge();
+                r = bc->apply(r, origin);
+                for (int k = 0; k != 3; ++k) {
+                    M[k] += Q() * r[k];
+                }
+            }
+            return M;
+        }
     }
 }

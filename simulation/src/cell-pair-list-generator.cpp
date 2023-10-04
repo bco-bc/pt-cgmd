@@ -268,9 +268,14 @@ namespace simploce {
          logger.trace(("Entering."));
 
          // Setup
+         static bool firstTime = true;
          static dist_t cutoff = util::computePairListCutoff(this->param_, particleSystem);
          static Grid grid(particleSystem->box(), bc_, cutoff);
          static bool excludeFrozen = param_->get<bool>("simulation.forces.exclude-frozen");
+         if (firstTime) {
+             logger.info(std::to_string(excludeFrozen) + ": Exclude boundary particle pairs from pair list?");
+             firstTime = false;
+         }
 
          auto particlePairs =
              particleSystem->doWithAllFreeGroups<std::vector<PairList::p_pair_t>>([this, particleSystem] (

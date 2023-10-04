@@ -109,7 +109,8 @@ namespace simploce {
     
     void 
     Particle::velocity(const velocity_t& v) {
-        v_ = frozen() ? v_ : v;
+        //v_ = frozen() ? v_ : v;
+        v_ = v;
     }
     
     force_t
@@ -175,6 +176,14 @@ namespace simploce {
             throw std::domain_error("A particle specification must be provided.");
         }
         spec_ = spec;
+    }
+
+    void
+    Particle::resetName(const std::string &name) {
+        if (name.empty()) {
+            throw std::domain_error("A particle name must be specified.");
+        }
+        name_ = name;
     }
 
     void Particle::freeze() {

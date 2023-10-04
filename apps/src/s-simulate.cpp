@@ -15,6 +15,7 @@
 #include "simploce/util/logger.hpp"
 #include "simploce/util/program-options.hpp"
 #include "boost/program_options.hpp"
+#include <boost/algorithm/string/trim.hpp>
 #include <cstdlib>
 #include <string>
 #include <iostream>
@@ -50,7 +51,7 @@ int main(int argc, char *argv[]) {
         auto cutoffLR = param->get<real_t>("simulation.forces.cutoffLR");         // Cutoff distance for short range interactions.
 
         bool pbc_1{false};                               // Apply 1D-PBC.
-        char direction{'z'};                             // Direction.
+        std::string direction{"z"};                             // Direction.
         real_t range{0.1};                               // Range for a random number sampled in MC.
         std::size_t nScaleVelocities{0};
 
@@ -105,11 +106,13 @@ int main(int argc, char *argv[]) {
                 "displacer,d",
                 po::value<std::string>(&displacerType),
                 "Displacer specification. Default is 'vv' (Velocity Verlet). "
-                "Other choices are 'mc' (Monte Carlo), 'lf' (leapFrog), "
+                "Other choices are "
+                "'mc' (Monte Carlo), "
+                "'lf' (leapFrog), "
                 "'lvv' (Langevin Velocity Verlet), "
                 "'pt-lvv' (Langevin Velocity Verlet with Proton Transfer, NOT TESTED), "
-                "'mvv-dpd' (Modified Velocity Verlet (DPD)), "
-                "'s1-dpd' Splitting (DPD)"
+                "'mvv-dpd' (Modified Velocity Verlet for DPD), "
+                "'s1-dpd' (Splitting for DPD)"
         )(
                 "range",
                 po::value<real_t>(&range),
@@ -119,8 +122,10 @@ int main(int argc, char *argv[]) {
                 "Include -external- potentials for force calculations."
         )(
                 "pbc-1",
-                po::value<char>(&direction),
-                "Apply periodicity in the given direction only. Select one of 'x', y', and 'z'."
+                po::value<std::string>(&direction),
+                "Apply periodicity in the given direction only. This will additionally apply bounce back or spectral "
+                "reflection boundary conditions to velocities. The first is assumed when external forces are included "
+                "otherwise the latter is applied. Select one of 'x', y', and 'z'."
         );
 
         po::variables_map vm;
@@ -194,7 +199,7 @@ int main(int argc, char *argv[]) {
         }
         if (vm.count("pbc-1")) {
             pbc_1 = true;
-            direction = vm["pbc-1"].as<char>();
+            direction = vm["pbc-1"].as<std::string>();
         }
 
         logger.info("Simulation parameters:");
@@ -209,13 +214,26 @@ int main(int argc, char *argv[]) {
         std::cout << *forceField << std::endl;
 
         // Interactor
-        bc_ptr_t bc =  factory::pbc(particleSystem->box());
+        bc_ptr_t bc;
         if (pbc_1) {
-            logger.info(std::to_string(direction) + ": Applying PBC in this direction only.");
-            bc = factory::pbc1dBB(particleSystem->box(),
-                                  Direction::valueOf(direction));
+            boost::trim(direction);
+            auto includeExternalForces = param->get<bool>("simulation.forces.include-external");
+            logger.info(direction + ": Applying PBC in this direction only.");
+            auto applyBCtoVelocities = param->get<bool>("simulation.bc.velocities.include", false);
+            if (includeExternalForces) {
+                bc = factory::pbc1dBB(particleSystem->box(), Direction::valueOf(direction[0]));
+                if (applyBCtoVelocities) {
+                    logger.info("With external forces: Bounce back reflections boundary conditions for velocities.");
+                }
+            } else {
+                bc = factory::pbc1dSR(particleSystem->box(), Direction::valueOf(direction[0]));
+                if (applyBCtoVelocities) {
+                    logger.info("No external forces: Spectral reflection boundary conditions for velocities.");
+                }
+            }
         } else {
             logger.info("Applying PBC in all directions.");
+            bc = factory::pbc(particleSystem->box());
         }
         auto interactor = factory::interactor(param, forceField, bc);
 
@@ -224,7 +242,8 @@ int main(int argc, char *argv[]) {
         auto displacer = factory::displacer(displacerType, param, interactor, bc, dpdUnits);
 
         // Simulate
-        Simulation simulation(param, particleSystem, displacer, bc);
+        auto catalog = util::getCatalog(vm);
+        Simulation simulation(param, particleSystem, catalog, displacer, bc);
         util::open_output_file(trajectory, fnTrajectory);
         util::open_output_file(data, fnSimulationData);
         simulation.perform(trajectory, data);

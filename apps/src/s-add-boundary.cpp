@@ -7,12 +7,18 @@
 
 #include "simploce/particle/particle-system.hpp"
 #include "simploce/particle/particle-system-factory.hpp"
+#include "simploce/particle/particle-spec-catalog.hpp"
+#include "simploce/particle/particle-spec.hpp"
 #include "simploce/simulation/s-factory.hpp"
+#include "simploce/simulation/s-util.hpp"
 #include "simploce/util/logger.hpp"
 #include "simploce/util/file.hpp"
+#include "simploce/util/box.hpp"
 #include <boost/program_options.hpp>
 #include <cstdlib>
 #include <iostream>
+
+
 
 namespace po = boost::program_options;
 using namespace simploce;
@@ -22,11 +28,13 @@ int main(int argc, char *argv[]) {
     std::string fnParticleSpecCatalog{"particle-spec-catalog.dat"};
     std::string fnInputParticleSystem{"in.ps"};
     std::string fnOutputParticleSystem{"out.ps"};
-    std::string fnOutputPDB{"out.pdb"};
     bool isCoarseGrained{false};
     bool isMesoscale{false};
     bool channel{false};
-    real_t wallWidth{1.0};
+    real_t boundaryWidth{1.0};
+    real_t spacing{1.0};
+    real_t temperature{298.15};
+    bool rough{false};
 
     po::options_description usage("Usage");
     usage.add_options() (
@@ -42,23 +50,34 @@ int main(int argc, char *argv[]) {
         po::value<std::string>(&fnOutputParticleSystem),
         "Output file name particle system. Default is 'out.ps'."
     )(
-        "coarse-grained,c",
-        "Input is a coarse-grained description."
+        "is-coarse-grained,c",
+        "Input is a coarse-grained particle system."
     )(
-            "mesoscale,m",
-            "Input is a mesoscale desciption"
-    )(
-        "fn-output-pdb",
-        po::value<std::string>(&fnOutputPDB),
-        "Output file name PDB."
+        "is-mesoscale,m",
+        "Input is a mesoscopic particle system."
     )(
         "channel",
         "Creates a channel in the z-direction by creating a wall of particles of given width. "
-        "Particles are taken from the given particle system. No additional particles are created."
+        "Boundary particles are taken from the given particle system. No additional particles are created."
     )(
-        "wall-width",
-        po::value<real_t>(&wallWidth),
+        "boundary-width",
+        po::value<real_t>(&boundaryWidth),
         "Width of channel boundary. Default is 1.0."
+    )(
+        "spacing",
+        po::value<real_t>(&spacing),
+        "Spacing between boundary particles, the latter are newly created particles added to "
+        "the particle system. This is option is not applicable when the channel option is selected. "
+        "Default width is 1.0."
+    )(
+        "temperature,T",
+        po::value<real_t>(&temperature),
+        "Temperature. Default is 298.15 K."
+    )(
+        "make-rough,r",
+        "Make the boundary \"rough\", that is boundary particles are not placed on the box boundary, "
+        "but displaced relative to it. Not applicable when the channel option is selected. Default is "
+        "to place boundary particle on the box boundaries."
     )(
         "verbose,v",
         "Verbose"
@@ -76,32 +95,38 @@ int main(int argc, char *argv[]) {
         std::cout << usage << "\n";
         return 0;
     }
-    if (vm.count("fn-particle-spec-catalog,s")) {
+    if (vm.count("fn-particle-spec-catalog")) {
         fnParticleSpecCatalog = vm["fn-particle-spec-catalog"].as<std::string>();
     }
-    if (vm.count("fn-input-particle-system,i")) {
+    if (vm.count("fn-input-particle-system")) {
         fnInputParticleSystem = vm["fn-input-particle-system"].as<std::string>();
     }
-    if (vm.count("fn-output-particle-system,o")) {
+    if (vm.count("fn-output-particle-system")) {
         fnOutputParticleSystem = vm["fn-output-particle-system"].as<std::string>();
     }
-    if (vm.count("is-coarse-grained,c") ) {
+    if (vm.count("is-coarse-grained") ) {
         isCoarseGrained = true;
     }
-    if (vm.count("is-mesoscale,m") ) {
+    if (vm.count("is-mesoscale") ) {
         isMesoscale = true;
         isCoarseGrained = true;
     }
     if (vm.count("channel")) {
         channel = true;
     }
-    if (vm.count("wall-width")) {
-        wallWidth = vm["wall-width"].as<real_t>();
+    if (vm.count("boundary-width")) {
+        boundaryWidth = vm["boundary-width"].as<real_t>();
     }
-    if (vm.count("fn-output-pdb")) {
-        fnOutputPDB = vm["fn-output-pdb"].as<std::string>();
+    if (vm.count("spacing")) {
+        spacing = vm["spacing"].as<real_t>();
     }
-    if (vm.count("verbose,v") ) {
+    if (vm.count("temperature")) {
+        temperature = vm["temperature"].as<real_t>();
+    }
+    if (vm.count("make-rough")) {
+        rough = true;
+    }
+    if (vm.count("verbose") ) {
         util::Logger::changeLogLevel(util::Logger::LOGDEBUG);
     }
 
@@ -114,12 +139,28 @@ int main(int argc, char *argv[]) {
 
     // Add boundary particles.
     auto factory = simploce::factory::particleSystemFactory(catalog);
-
+    auto bc = simploce::factory::pbc(particleSystem->box());
+    util::placeInsideBox(particleSystem, bc);
     if (channel) {
-        factory->makeChannel(particleSystem, wallWidth, isMesoscale);
+        factory->makeChannel(particleSystem, boundaryWidth, isMesoscale);
     } else {
-        factory->addParticleBoundary(particleSystem, 0.6, Plane::YZ);
-        factory->addParticleBoundary(particleSystem, 0.6, Plane::ZX, true);
+        // Z-direction remains free of boundary particles.
+        factory->addParticleBoundary(particleSystem,
+                                     spacing,
+                                     Plane::YZ,
+                                     false,
+                                     temperature,
+                                     isMesoscale,
+                                     rough,
+                                     boundaryWidth);
+        factory->addParticleBoundary(particleSystem,
+                                     spacing,
+                                     Plane::ZX,
+                                     rough,
+                                     temperature,
+                                     isMesoscale,
+                                     false,
+                                     boundaryWidth);
     }
 
     // Write particle system.

@@ -254,14 +254,14 @@ namespace simploce {
  * @param tspan Requested time a single must cover (in s).
  */
 std::tuple<real_t, real_t, real_t, real_t, real_t>
-polarizableWater(const dist_t& diameter,
-                 int numberOfWaterFluidElements = 6000,
-                 const temperature_t& temperature = 298.15,
-                 stime_t timeStep = 0.01,
-                 const density_t& rho = 0.99705e+03,
-                 const std::pair<real_t, real_t> xy = {6.00e-05, 5.0e-05},
-                 stime_t tspan = 15) {
-    util::Logger logger("simploce::polarizableWater()");
+mesoscopicPolarizableWater(const dist_t& diameter,
+                           int numberOfWaterFluidElements = 6000,
+                           const temperature_t& temperature = 298.15,
+                           stime_t timeStep = 0.01,
+                           const density_t& rho = 0.99705e+03,
+                           const std::pair<real_t, real_t> xy = {6.00e-05, 5.0e-05},
+                           stime_t tspan = 15) {
+    util::Logger logger("simploce::mesoscopicPolarizableWater()");
     logger.trace("Entering.");
 
     std::cout.setf(std::ios::scientific);
@@ -275,9 +275,9 @@ polarizableWater(const dist_t& diameter,
     std::cout << "(2) Lighter dipolar (DP) bead." << std::endl;
     std::cout << std::endl;
 
-    const mass_t massWaterMolecule{2.99063e-26};             // kg.
+    const mass_t massWaterMolecule{2.99063e-26};          // kg.
 
-    const number_density_t ndDPDStandard{3.0};               // Standard value for the TOTAL bead number
+    const number_density_t ndDPDStandard{3.0};            // Standard value for the TOTAL bead number
                                                              // density (Groot and Warren, 1997), in DPD units.
 
     const number_density_t ndDPD = 0.5 * ndDPDStandard();    // TOTAL number of beads (i.e. particles) / volume. The
@@ -334,8 +334,8 @@ polarizableWater(const dist_t& diameter,
     std::cout << lz << ": Box dimension (lz) in z-direction (in m)" << std::endl;
     std::cout << lz/1.0e-06 << ": Box dimension (lz) in z-direction (in micrometer)" << std::endl;
     std::cout << dist_t{lz() / dW()} << ": Box dimension (lz) in z-direction (in DPD units)" << std::endl;
-    std::cout << lx() / dW << ": Box dimension (lx) in the x-direction." << std::endl;
-    std::cout << ly() / dW << ": Box dimension (ly) in the y-direction." << std::endl;
+    std::cout << lx() / dW << ": Box dimension (lx) in the x-direction (in DPD units)." << std::endl;
+    std::cout << ly() / dW << ": Box dimension (ly) in the y-direction (in DPD units)." << std::endl;
     volume_t volumeDPD = lx() * ly() * lz() / (dW() * dW() * dW());        // Volume in DPD units.
     std::cout << volumeDPD << ": Volume (in DPD units)." << std::endl;
     number_density_t ndActual{N/volumeDPD()};
@@ -398,6 +398,25 @@ polarizableWater(const dist_t& diameter,
     std::cout << "------------------------------------------------" << std::endl;
     std::cout << std::endl;
 
+    // Force due to pressure gradient.
+    std::cout << "Pressure gradient force" << std::endl;
+    pressure_t dp = -30e+02;        // In m kg s^-2.
+    length_t h = 5.0e-05;          // In m.
+    length_t w = 6.0e-05;
+    length_t l = 5.0e-04;
+    volume_t V = h() * w() * l();  // Volume of microchannel.
+    auto numberOfWaterMolecules = V() * rho() / massWaterMolecule();
+    real_t f_p = -w() * h() * dp() / l();
+    real_t fW = f_p / numberOfWaterMolecules;
+    std::cout << std::setw(conf::REAL_WIDTH) << numberOfWaterMolecules << ": Number of water molecules in microchannel." << std::endl;
+    std::cout << std::setw(conf::REAL_WIDTH) << fW << ": Force per water molecule (in N)." << std::endl;
+    auto fB = Nm * fW;
+    std::cout << std::setw(conf::REAL_WIDTH) << fB << ": Force per bead (in N)." << std::endl;
+    fB *= tauW() * tauW() / (mW() * dW());
+    std::cout << std::setw(conf::REAL_WIDTH) << fB << ": Force per bead (in DPD units)." << std::endl;
+
+    std::cout << std::endl;
+
     // Display characteristic values in SI units.
     std::cout << std::endl;
     std::cout << "Characteristic values in SI:" << std::endl;
@@ -431,6 +450,10 @@ int main(int argc, char *argv[]) {
         po::value<std::string>(&fnParticleSpecCatalog),
         "Input file name of particle specifications. Default 'particle-spec-catalog.dat'."
     )(
+        "diameter,d",
+        po::value<real_t>(&diameter),
+        "Diameter of single composite water particle. Default is 6.0e-06 m."
+    )(
         "temperature,T",
         po::value<real_t>(&temperature),
         "Temperature (K). Default is 298.15 K."
@@ -463,6 +486,9 @@ int main(int argc, char *argv[]) {
     if (vm.count("fn-particle-spec-catalog,s")) {
         fnParticleSpecCatalog = vm["fn-particle-spec-catalog"].as<std::string>();
     }
+    if (vm.count("diameter")) {
+        diameter = vm["diameter"].as<real_t>();
+    }
     if (vm.count("temperature")) {
         temperature = vm["temperature"].as<real_t>();
     }
@@ -483,5 +509,5 @@ int main(int argc, char *argv[]) {
     //auto Nm = water(dpd, catalog);
     //waterInMicrochannel(dpd, Nm);
 
-    polarizableWater(diameter, numberOfWaterFluidElements, temperature, timeStep);
+    mesoscopicPolarizableWater(diameter, numberOfWaterFluidElements, temperature, timeStep);
 }

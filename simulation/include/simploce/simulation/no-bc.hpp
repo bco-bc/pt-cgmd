@@ -20,8 +20,16 @@ namespace simploce {
         
         position_t placeInside(const position_t& r_out) const override;
 
+        /**
+         * No effect.
+         */
         velocity_t apply(const simploce::velocity_t &v,
                          const position_t& r) const override;
+
+        /**
+         * No effect.
+         */
+        void applyToVelocities(const pg_ptr_t& particleGroup) const override;
 
     };
 }

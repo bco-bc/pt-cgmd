@@ -23,26 +23,29 @@ namespace simploce {
          * Constructor. All arguments are required.
          * @param param Simulation parameters.
          * @param particleSystem Particular system.
+         * @param catalog Particle specifications catalog.
          * @param displacer displacer.
          * @param bc Boundary condition.
          */
         Simulation(param_ptr_t param,
                    p_system_ptr_t particleSystem,
+                   spec_catalog_ptr_t catalog,
                    displacer_ptr_t displacer,
                    bc_ptr_t bc);
         
         /**
          * Performs the simulation.
-         * @param particles Output trajectory stream.
+         * @param all Output trajectory stream.
          * @param dataStream Output simulation data stream for monitoring the simulation.
          */
-        void perform(std::ofstream& particles,
+        void perform(std::ofstream& all,
                      std::ofstream& dataStream);
         
     private:
         
         param_ptr_t param_;
         p_system_ptr_t particleSystem_;
+        spec_catalog_ptr_t catalog_;
         displacer_ptr_t displacer_;
         bc_ptr_t bc_;
 

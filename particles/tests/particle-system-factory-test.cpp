@@ -42,7 +42,7 @@ void diatomic(const spec_catalog_ptr_t& catalog) {
 p_system_ptr_t coarseGrainedPolarizableWater(const spec_catalog_ptr_t& catalog) {
     std::cout << "Creating coarse grained polarizable water model:" << std::endl;
     auto factory = factory::particleSystemFactory(catalog);
-    auto coarseGrained = factory->polarizableWater();
+    auto coarseGrained = factory->cgmdPolarizableWater();
     //std::cout << *coarseGrained << std::endl;
     std::cout << std::endl;
     return coarseGrained;

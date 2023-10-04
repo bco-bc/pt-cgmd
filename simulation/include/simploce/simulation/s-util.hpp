@@ -39,6 +39,13 @@ namespace simploce {
          * @param particleSystem Particle system.
          */
         void removeCenterOfMassMotion(const p_system_ptr_t& particleSystem);
+
+        /**
+         * Place particles inside the simulation box.
+         * @param particleSystem Particle system.
+         * @param bc Boundary conditions.
+         */
+        void placeInsideBox(const p_system_ptr_t& particleSystem, const bc_ptr_t& bc);
     }
 }
 

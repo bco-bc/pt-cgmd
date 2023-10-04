@@ -299,8 +299,8 @@ int main() {
 
     //test1(catalog, forceField);
 
-    testHAQP("CW", "DP", catalog, forceField);
-    testHAHP("C-W", "D-P", catalog, forceField);
+    //testHAQP("CW", "DP", catalog, forceField);
+    //testHAHP("C-W", "D-P", catalog, forceField);
 
     // testSolidSphere_DSF(catalog, forceField);
 
@@ -311,7 +311,7 @@ int main() {
     testGaussianSF("DP", "DP", catalog, forceField);
     testGaussianSF("CW", "DP", catalog, forceField);
     testGaussianSF_SoftRepulsion("CW", "CW", catalog, forceField);
-    testSoftRepulsion("C-W", "C-W", catalog, forceField);
+    //testSoftRepulsion("C-W", "C-W", catalog, forceField);
 
     return EXIT_SUCCESS;
 }

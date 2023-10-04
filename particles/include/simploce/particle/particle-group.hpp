@@ -92,7 +92,7 @@ namespace simploce {
         virtual mass_t mass() const;
         
         /**
-         * Returns this group's position.
+         * Returns this group's center of mass.
          */
         position_t position() const;
         

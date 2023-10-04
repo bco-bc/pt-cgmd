@@ -26,4 +26,8 @@ namespace simploce {
         return v;
     }
 
+    void
+    NoBoundaryCondition::applyToVelocities(const simploce::pg_ptr_t &particleGroup) const {
+    }
+
 }

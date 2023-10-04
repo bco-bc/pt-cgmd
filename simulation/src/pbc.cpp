@@ -9,7 +9,6 @@
 #include "simploce/util/util.hpp"
 #include "simploce/util/logger.hpp"
 #include <cmath>
-#include <cassert>
 #include <iostream>
 
 namespace simploce {
@@ -65,6 +64,10 @@ namespace simploce {
     PBC::apply(const velocity_t &v,
                const position_t& r) const {
         return v;
+    }
+
+    void
+    PBC::applyToVelocities(const simploce::pg_ptr_t &particleGroup) const {
     }
 
 }

@@ -42,6 +42,12 @@ namespace simploce {
     virtual velocity_t apply(const velocity_t& v,
                              const position_t& r) const = 0;
 
+    /**
+     * Apply this boundary conditions to all particle group's particles' velocities.
+     * @param particleGroup Particle group.
+     */
+    virtual void applyToVelocities(const pg_ptr_t& particleGroup) const = 0;
+
   };
   
 }

@@ -1,7 +1,7 @@
 # pt-cgmd
-Charge fluctuations in coarse-grained molecular dynamics.
-
-Source code (C++) for developing and testing concepts related to proton "hopping" in coarse grained molecular dynamics.
+C++ code for performing various partice-oriented computer simulations,
+MD (molecular dynamics, CGMD (coarse-grained molecular dynamics), MC (Monte Carlo), DPD (Dissipative particle dynamics),
+PT-CGMD (CGMD with "proton hopping").
 
 The code is maintained with CLion from jetbrains.com. Each folder represents a single CLion project.
 

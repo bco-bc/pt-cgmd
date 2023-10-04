@@ -26,7 +26,7 @@ namespace simploce {
         static std::vector<velocity_t> vis_{};   // Velocities at time t(n).
 
         /**
-         * Displaces position and velocities, the latter requires "correction" afterwards.
+         * Displaces positions and velocities, the latter require "correction" afterwards.
          * @param dt Time step.
          * @param lambda Value of lambda.
          * @param particles Particles.
@@ -123,7 +123,7 @@ namespace simploce {
             std::mt19937_64 generator(rd());
             std::normal_distribution<real_t> normalDistribution{0.0, 1.0}; // Standard Wiener/Brownian
 
-            // Unit of temperature such that kB*T = n, where n is an integer. See units-mvv_dpd.hpp.
+            // Unit of temperature such that kB*T = n, where n is an integer.
             static real_t KB = 1.0;
             static std::size_t counter{0};
             static real_t sigma = std::sqrt(2.0 * gamma * KB * temperature());
@@ -166,14 +166,14 @@ namespace simploce {
                     }
 
                     // Update the forces acting on particles 1 and 2.
-                    auto f1 = particle1.force();
+                    auto f1 = particle1.force();  // Current forces
                     auto f2 = particle2.force();
                     for (auto k = 0; k != 3; ++k) {
                         auto total_1 = randomF_1[k] + dissipativeF_1[k];
                         f1[k] += total_1;
                         f2[k] -= total_1;
                     }
-                    particle1.force(f1);
+                    particle1.force(f1);          // New forces.
                     particle2.force(f2);
                 }
             }
@@ -218,7 +218,6 @@ namespace simploce {
         static auto lambda = param_->get<real_t>("simulation.displacer.dpd.lambda");
         static dist_t cutoff = param_->get<real_t>("simulation.forces.cutoffSR");
         static auto weightFactor = param_->get<real_t>("simulation.displacer.dpd.weight-factor");
-        static auto conservativeForces = param_->get<bool>("simulation.forces.conservative", true);
         static auto mesoscopic = param_->get<bool>("simulation.mesoscale");
         if (!mesoscopic) {
             logger.warn("Simulation parameters may not be suitable for a DPD simulation.");
@@ -238,7 +237,6 @@ namespace simploce {
             logger.debug(std::to_string(cutoff()) + ": Cutoff distance for short-ranged interactions.");
             logger.debug(std::to_string(weightFactor) + ": Weight factor (s) in (1-r/rc)^s.");
             logger.debug(std::to_string(mesoscopic) + ": Mesoscale units?");
-            logger.debug(std::to_string(conservativeForces) + ": Include conservative forces?");
 
             particleSystem->doWithAll<void>([] (
                     const std::vector<p_ptr_t>& particles) {
@@ -249,11 +247,6 @@ namespace simploce {
 
             // Initial conservative forces.
             interactor_->interact(particleSystem);
-
-            if (!conservativeForces) {
-                logger.warn("Conservative forces are ignored. Only thermostat is employed.");
-                particleSystem->resetForces();
-            }
 
             // Add initial random and dissipative forces for all particle pairs.
             const auto pairList = interactor_->pairList();
@@ -280,14 +273,11 @@ namespace simploce {
         // Displace position and velocities, the latter are the "uncorrected" velocities.
         particleSystem->doWithAll<void>([](
                 const std::vector<p_ptr_t>& particles) {
-            mvv_dpd::displace_(dt, lambda, particles);
+                mvv_dpd::displace_(dt, lambda, particles);
         });
 
         // Compute conservative forces and potential energy at t(n+1) using positions at t(n+1).
         auto result = interactor_->interact(particleSystem);
-        if ( !conservativeForces ) {
-            particleSystem->resetForces();
-        }
 
         // Add random and dissipative forces using positions and "uncorrected" velocities at time t(n+1).
         const auto& pairList = interactor_->pairList();
