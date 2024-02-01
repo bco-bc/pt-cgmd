@@ -93,8 +93,8 @@ namespace simploce {
     ParticleSpecCatalog::staticBP() const {
         return this->lookup("SBP");
     }
-    
-    spec_catalog_ptr_t 
+
+    spec_catalog_ptr_t
     ParticleSpecCatalog::obtainFrom(std::istream& stream)
     {
         util::Logger logger("simploce::ParticleSpecCatalog::parseIt()");

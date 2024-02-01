@@ -22,16 +22,16 @@ namespace simploce {
         /**
          * Constructor.
          * @param sigma Surface charge density (e/nm^2)
-         * @param eps_r Relative permittivity.
+         * @param eps_r Relative permittivity, screens the electric field.
          * @param bc Boundary condition.
-         * @param flatSurface Flat surface specification. Default is a surface parallel to xy-plane at z = 0.
+         * @param flatSurface Flat surface specification.
          * @param mesoscopic If true, this potential is for mesoscopic simulations (e.g., DPD).
          */
         ConstantSurfaceChargeDensity(srf_charge_density_t sigma,
                                      FlatSurface flatSurface,
                                      real_t eps_r,
                                      bc_ptr_t bc,
-                                     bool mesoscopic);
+                                     bool mesoscopic = false);
 
         std::pair<energy_t, force_t> operator () (const p_ptr_t& particle) override;
 

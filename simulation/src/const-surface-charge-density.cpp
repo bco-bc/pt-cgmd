@@ -20,8 +20,14 @@ namespace simploce {
                                                                real_t eps_r,
                                                                bc_ptr_t bc,
                                                                bool mesoscopic) :
-        sigma_{sigma}, flatSurface_{std::move(flatSurface)}, eps_r_{eps_r}, bc_{std::move(bc)},
-        mesoscopic_{mesoscopic} {
+            sigma_{sigma}, flatSurface_{std::move(flatSurface)}, eps_r_{eps_r}, bc_{std::move(bc)},
+            mesoscopic_{mesoscopic} {
+        util::Logger logger{"simploce::ConstantSurfaceChargeDensity::ConstantSurfaceChargeDensity()"};
+        logger.trace("Entering");
+        logger.debug(std::to_string(sigma_()) + ": Surface charge density.");
+        logger.debug(std::to_string(eps_r_) + ": Relative permittivitty.");
+        logger.debug(std::to_string(mesoscopic_) + ": For mesoscale?");
+        logger.trace("Leaving.");
     }
 
     std::pair<energy_t, force_t>
@@ -42,8 +48,9 @@ namespace simploce {
         auto r = bc_->placeInside(ro);
         auto pair = flatSurface_.distanceTo(r);
         auto R = pair.first;
-        energy_t energy{-sigma_() * R() * q()/ (2.0 * units::mu<real_t>::E0 * eps_r_)};
-        real_t dUrdR =  -sigma_() / (2.0 * units::mu<real_t>::E0 * eps_r_);
+        auto E0 = mesoscopic_ ? 1.0 : units::mu<real_t>::E0;
+        energy_t energy{-sigma_() * R() * q()/ (2.0 * E0 * eps_r_)};
+        real_t dUrdR =  -sigma_() / (2.0 * E0 * eps_r_);
         dist_vect_t unitVector = flatSurface_.unitVectorPerpendicularTo();
         force_t f{};
         for (int k = 0; k != 3; ++k) {
@@ -51,4 +58,5 @@ namespace simploce {
         }
         return std::move(std::make_pair(energy, f));
     }
+
 }

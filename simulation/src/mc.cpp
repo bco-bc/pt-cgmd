@@ -125,6 +125,12 @@ namespace simploce {
             std::uniform_int_distribution<std::size_t> dis(0, particles.size() - 1);
             auto index = dis(gen);
             auto particle = particles[index];
+
+            // Do not select a frozen particle.
+            while (particle->frozen()) {
+                index = dis(gen);
+                particle = particles[index];
+            }
             logger.debug(util::to_string(particle->id()) + ": Identifier selected particle.");
 
             // Displace selected particle.

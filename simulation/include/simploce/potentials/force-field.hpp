@@ -35,8 +35,10 @@ namespace simploce {
             real_t r0;              // Equilibrium distance.
             real_t eps_inside_rc;   // Relative permittivity inside cutoff distance for electrostatic interactions.
             real_t eps_outside_rc;  // Relative permittivity outside cutoff distance for electrostatic interactions.
+            real_t eps_r;           // Relative permittivity.
             real_t deltaV;          // Electric potential difference.
             real_t distance;        // Distance between two points.
+            el_field_t e0;          // External electric field applied in a direction.
             char direction;         // Direction (or axis) along which something is applied.
             std::string plane;      // Plane specification.
             real_t sigma;           // Surface charge density.

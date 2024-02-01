@@ -167,10 +167,9 @@ namespace simploce {
             int_spec_t spec;
             if (typeName == conf::VOLTAGE) {
                 spec.typeName = conf::VOLTAGE;
-                std::string s;
-                stream >> spec.deltaV >> spec.distance >> spec.eps_inside_rc >> s;
-                boost::trim(s);
-                spec.direction = s[0];
+                real_t ex, ey, ez;
+                stream >> ex >> ey >> ez >> spec.eps_r;
+                spec.e0 = el_field_t{ex, ey, ez};
             } else if (typeName == conf::WALL) {
                 spec.typeName = conf::WALL;
                 std::string s;
@@ -573,6 +572,12 @@ namespace simploce {
                 stream << std::setw(conf::REAL_WIDTH) << spec.max_a;
                 stream << conf::SPACE << "# Widths of charge densities, maximum repulsion).";
                 stream << std::endl;
+            } else if (spec.typeName == conf::HS_SF) {
+                stream << std::setw(conf::NAME_WIDTH) << spec.typeName;
+                stream << std::setw(conf::NAME_WIDTH) << spec.spec1->name();
+                stream << std::setw(conf::NAME_WIDTH) << spec.spec2->name();
+                stream << std::setw(conf::REAL_WIDTH) << spec.eps_inside_rc;
+                stream << conf::SPACE << "# eps_inside_rc";
             } else if (spec.typeName == conf::NONE_INTERACTING) {
                 stream << std::setw(conf::NAME_WIDTH) << spec.typeName;
                 stream << std::setw(conf::NAME_WIDTH) << spec.spec1->name();
@@ -619,11 +624,8 @@ namespace simploce {
         for (auto& spec: exSpecs) {
             if (spec.typeName == conf::VOLTAGE) {
                 stream << std::setw(conf::NAME_WIDTH) << spec.typeName;
-                stream << std::setw(conf::REAL_WIDTH) << spec.deltaV;
-                stream << std::setw(conf::REAL_WIDTH) << spec.distance;
-                stream << conf::SPACE << spec.eps_inside_rc;
-                stream << conf::SPACE << spec.direction;
-                stream << conf::SPACE << "# deltaV distance eps_r direction";
+                stream << std::setw(conf::REAL_WIDTH) << spec.e0;
+                stream << conf::SPACE << "# z-component of external static electric homogeneous electric field.";
                 stream << std::endl;
             } else if (spec.typeName == conf::WALL) {
                 stream << std::setw(conf::NAME_WIDTH) << spec.typeName;
@@ -636,7 +638,7 @@ namespace simploce {
                 stream << std::endl;
             } else if (spec.typeName == conf::PRESSURE_GRADIENT) {
                 stream << std::setw(conf::NAME_WIDTH) << spec.typeName;
-                stream << spec.fe << "# x, y, z components of external force (constant, homogeneous).";
+                stream << spec.fe << "# Component of external force  (constant, homogeneous).";
                 stream << std::endl;
             }
         }

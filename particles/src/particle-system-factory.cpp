@@ -315,6 +315,7 @@ namespace simploce {
                                              const temperature_t& temperature)
     {
         util::Logger logger{"ParticleSystemFactory::simpleElectrolyte"};
+        logger.trace("Entering");
 
         logger.info("Creating atomistic particle model for a simple electrolyte solution:");
 
@@ -400,6 +401,57 @@ namespace simploce {
         util::removeOverallLinearMomentum(atomistic);
 
         return std::move(atomistic);
+    }
+
+    p_system_ptr_t
+    ParticleSystemFactory::largeObjectInElectrolyte(const box_ptr_t& box,
+                                                    const molarity_t& molarity,
+                                                    const temperature_t& temperature,
+                                                    const std::string &specName) {
+        util::Logger logger{"simploce::ParticleSystemFactory::largeObjectInElectrolyte"};
+        logger.trace("Entering");
+
+        logger.info("Creating atomistic particle model for a simple electrolyte solution "
+                    "with a large object at the center.");
+
+        logger.info("Molarity (mol/l): " + boost::lexical_cast<std::string>(molarity()));
+        logger.info("Temperature (K) : " + boost::lexical_cast<std::string>(temperature()));
+        logger.info(specName + ": Specification name of large object.");
+
+        // Create electrolyte solution.
+        auto particleSystem = this->simpleElectrolyte(box, molarity, temperature);
+
+        // Place large object at the center of the box.
+        auto center = particleSystem->box()->center();
+        auto spec = catalog_->lookup(specName);
+        auto particle = particleSystem->addParticle(specName, spec);
+        particle->position(center);
+
+        // Neutralize.
+        auto totalCharge = particleSystem->charge();
+        if (totalCharge() > 0.0) {
+            int nAdd = totalCharge();
+            auto CL = catalog_->lookup("Cl-");
+            for (int n = 0; n != nAdd; ++n) {
+                auto p = particleSystem->addParticle("Cl-", CL);
+                p->position(position_t{n*0.1, n * 0.1, n * 0.1});
+            }
+            logger.info(std::to_string(nAdd) + ": Number of extra Cl- ions added.");
+        } else if (totalCharge() < 0.0) {
+            int nAdd = totalCharge();
+            auto CL = catalog_->lookup("Na+");
+            for (int n = 0; n != nAdd; ++n) {
+                auto p = particleSystem->addParticle("Cl-", CL);
+                p->position(position_t{n * 0.1, n * 0.1, n* 0.1});
+            }
+            logger.info(std::to_string(nAdd) + ": Number of extra Na+ ions added.");
+        }
+        logger.info(std::to_string(particleSystem->charge()()) + ": Total charge.");
+        logger.info(std::to_string(particleSystem->numberOfParticles()) + ": Total number of particles.");
+
+        // Done
+        logger.trace("Leaving");
+        return particleSystem;
     }
 
     p_system_ptr_t

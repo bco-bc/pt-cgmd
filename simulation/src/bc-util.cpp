@@ -36,7 +36,7 @@ namespace simploce {
             return crossed;
         }
 
-        inline bool
+        bool
         crossed(real_t rc, size_t index, const box_ptr_t &box) {
             static box_t& b = *box;
             auto box_k = b[index];

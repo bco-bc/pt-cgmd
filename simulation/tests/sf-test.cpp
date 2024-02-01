@@ -20,18 +20,20 @@ int main() {
     util::Logger::changeLogLevel(util::Logger::LOGTRACE);
 
     // Pair potential.
-    std::string fileName = "/localdisk/resources/particles-specs.dat";
+    //std::string fileName = "/localdisk/resources/particles-specs.dat";
+    std::string fileName = "/wrk3/simulation/largeObjectInElectrolyteShiftedForce/e0_voltage_1000/particles-specs.dat";
     auto catalog = factory::particleSpecCatalog(fileName);
-    fileName = "/localdisk/resources/interaction-parameters.dat";
+    //fileName = "/localdisk/resources/interaction-parameters.dat";
+    fileName = "/wrk3/simulation/largeObjectInElectrolyteShiftedForce/e0_voltage_1000/NaCl-interaction-parameters.dat";
     auto forceField = factory::forceField(fileName, catalog);
-    dist_t cutoff = 2.6;
+    dist_t cutoff = 5.0;
     auto box = factory::box(2.0 * cutoff());
     auto bc = factory::pbc(box);
     SF pairPotential{cutoff, forceField, box, bc};
 
     // Particles.
-    auto T1 = catalog->lookup("T1");
-    auto T2 = catalog->lookup("T2");
+    auto T1 = catalog->lookup("Na+");
+    auto T2 = catalog->lookup("SLO");
     p_ptr_t p1 = Atom::create("1", 0, "p1", T1);
     p1->position(position_t{0.0, 0.0, 0.0});
     p_ptr_t p2 = Atom::create("2", 1, "p2", T2);

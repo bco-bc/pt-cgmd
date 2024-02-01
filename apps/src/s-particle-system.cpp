@@ -26,6 +26,7 @@ int main(int argc, char *argv[]) {
     try {
         int numberOfFluidElements = 6000;                      // Number of water fluid elements.
         real_t characteristicLengthMesoscopicWater = 6.0e-06;  // In m.
+        real_t boxSize(6.30);                                  // nm.
 
         const util::Specification DIATOMIC{"diatomic"};
         const util::Specification ARGON{"argon"};
@@ -35,6 +36,7 @@ int main(int argc, char *argv[]) {
         const util::Specification POLYMER_SOLUTION{"polymer-solution"};
         const util::Specification DROPLETS_POLYMER_SOLUTION{"channel-droplets-polymer-solution"};
         const util::Specification WATER_IN_MICROCHANNEL("water-in-microchannel");
+        const util::Specification LARGE_OBJECT_IN_ELECTROLYTE("large-object-in-electrolyte");
         bool addBoundaryParticles{false};
 
         real_t temperature{units::si<real_t>::ROOM_TEMPERATURE};
@@ -47,6 +49,7 @@ int main(int argc, char *argv[]) {
             DIATOMIC.spec() + "' (molecular oxygen, atomistic), '" +
             ARGON.spec() + "' (atomistic, default), '" +
             ELECTROLYTE.spec() + "' (electrolyte), '" +
+            LARGE_OBJECT_IN_ELECTROLYTE.spec() + "' (large object in an electrolyte), '" +
             POLYMER_SOLUTION.spec() + "' (polymer solution), '" +
             CG_POLARIZABLE_WATER.spec() + "' (coarse grained),  '" +
             MESOSCOPIC_POLARIZABLE_WATER.spec() + "' (mesoscopic), '" +
@@ -73,6 +76,11 @@ int main(int argc, char *argv[]) {
                 "temperature,T",
                 po::value<real_t>(&temperature),
                 "Temperature. Default is 298.15. For mesoscale, select 1, 2, 3, and so forth."
+        )(
+                "box-size",
+                po::value<real_t>(&boxSize),
+                "Boz size in one dimension, to be applied in all dimensions. "
+                "Default is 6.3 nm for an electrolyte and a large object in electrolyte."
         )(
                 "characteristic-length-water,d",
                 po::value<real_t>(&characteristicLengthMesoscopicWater),
@@ -135,12 +143,22 @@ int main(int argc, char *argv[]) {
             auto argon = factory->argon();
             stream << *argon << std::endl;
         } else if ( specification == ELECTROLYTE) {
-            auto electrolyte = factory->simpleElectrolyte();
-             if (addBoundaryParticles) {
-                 factory->addParticleBoundary(electrolyte, 0.6, Plane::YZ);
-                 factory->addParticleBoundary(electrolyte, 0.6, Plane::ZX);
-             }
+            if (vm.count("box-size")) {
+                boxSize = vm["box-size"].as<real_t>();
+            }
+            auto electrolyte = factory->simpleElectrolyte(factory::box(boxSize, boxSize, boxSize));
+            if (addBoundaryParticles) {
+                factory->addParticleBoundary(electrolyte, 0.6, Plane::YZ);
+                factory->addParticleBoundary(electrolyte, 0.6, Plane::ZX);
+            }
             stream << *electrolyte << std::endl;
+        } else if (specification == LARGE_OBJECT_IN_ELECTROLYTE) {
+            if (vm.count("box-size")) {
+                boxSize = vm["box-size"].as<real_t>();
+            }
+            auto box = factory::box(boxSize, boxSize, boxSize);
+            auto loInElectrolyte = factory->largeObjectInElectrolyte(box);
+            stream << *loInElectrolyte << std::endl;
         } else if ( specification == POLYMER_SOLUTION ) {
             auto box = factory::box(10, 10, 40);
             auto polymerSolution =

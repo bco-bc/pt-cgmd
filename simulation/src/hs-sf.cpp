@@ -38,7 +38,7 @@ namespace simploce {
         dist_vect_t rij = bc_->apply(r1, r2);
         auto Rij = norm<real_t>(rij);
         if ( Rij <= minimumDistance() ) {
-            // Hard sphere.
+            // Hard sphere. Overlap.
             return std::move(std::make_pair<energy_t, force_t>(LARGE, force_t{LARGE, LARGE, LARGE}));
         } else {
             // Shifted force electrostatics.

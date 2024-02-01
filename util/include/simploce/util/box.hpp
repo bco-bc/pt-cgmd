@@ -90,6 +90,12 @@ namespace simploce {
          * @return Volume.
          */
         virtual V volume() const { return lengths_[0] * lengths_[1] * lengths_[2]; }
+
+        /**
+         * Returns position at the center of the box.
+         * @return Center.
+         */
+        position_t center() const;
     
     protected:
     
@@ -116,6 +122,12 @@ namespace simploce {
     {
         V maxLength = std::max(lengths_[0], lengths_[1]);
         return std::max(maxLength, lengths_[2]);
+    }
+
+    template <typename V>
+    position_t
+    Box<V>::center() const {
+        return position_t{0.5 * lengthX(), 0.5 * lengthY(), 0.5 * lengthZ()};
     }
 
     /**

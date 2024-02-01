@@ -95,6 +95,20 @@ namespace simploce {
                                          const temperature_t& temperature = units::si<real_t>::ROOM_TEMPERATURE);
 
         /**
+         * Places a single large object object at the center of a box filled with an electrolyte solution (NaCl)
+         * @param box Particle box.
+         * @param molarity Molarity in mol/l (M). Default is 0.1 M. The average
+         * physiological salt concentration is 0.15 mM.
+         * @param temperature Requested temperature in K. Default is room temperature.
+         * @param spec Large object specification name.
+         * @return
+         */
+        p_system_ptr_t largeObjectInElectrolyte(const box_ptr_t& box = factory::box(6.30),
+                                                const molarity_t& molarity = 0.1,
+                                                const temperature_t& temperature = units::si<real_t>::ROOM_TEMPERATURE,
+                                                const std::string &spec = "SLO");
+
+        /**
          * Returns argon at given density and temperature. The defaults values are
          * compatible with liquid argon as employed by Rahman in 1964.
          * @param box Simulation box.

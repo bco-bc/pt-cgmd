@@ -47,18 +47,21 @@ namespace simploce {
         auto scaleVelocities = param_->get<bool>("simulation.scale-velocities", false);
         auto nScaleVelocities =
                 param_->get<int>("simulation.nscale-velocities", nSteps + 1);
-        auto applyBCToVelocities = param_->get<bool>("simulation.bc.velocities.include", true);
+        auto applyBCToVelocities = param_->get<bool>("simulation.bc.velocities.include", false);
         auto applyBcForVelocitiesToParticleGroups =
                 param_->get<bool>("simulation.bc.velocities.particle-groups", false);
         auto maxTemperatureDifference =
                 param_->get<real_t>("simulation.relative-temperature-difference", 10.0);  // in %.
         auto freezeBoundaryParticles = param_->get<bool>("simulation.freeze-boundary");
+        auto freeze = param_->get<std::string>("simulation.freeze", std::string{});
 
         logger.info(std::to_string(nSteps) + ": Requested number of simulation steps.");
         logger.info(std::to_string(nWrite) + ": Number of steps between writing simulation data.");
         logger.info(std::to_string(removeCenterOfMassMotion) + ": Remove center of mass motion?");
         logger.info(std::to_string(scaleVelocities) + ": Scale velocities?");
         logger.info(std::to_string(freezeBoundaryParticles) + ": Freeze boundary particles?");
+        if (!freeze.empty())
+            logger.info(freeze + ": Freeze particles of this specification.");
         logger.info(std::to_string(applyBCToVelocities) + ": Apply boundary conditions to velocities?");
 
         if ( scaleVelocities ) {
@@ -76,6 +79,12 @@ namespace simploce {
             auto spec = catalog_->staticBP();
             particleSystem_->freeze(spec);
             logger.debug(spec->name() + ": Particles of this specification are frozen.");
+            logger.info(std::to_string(particleSystem_->numberOfFrozenParticles()) + ": Number of frozen particles.");
+        }
+        if (!freeze.empty()) {
+            auto spec = catalog_->lookup(freeze);
+            particleSystem_->freeze(spec);
+            logger.info(spec->name() + ": Particles of this specification are frozen.");
             logger.info(std::to_string(particleSystem_->numberOfFrozenParticles()) + ": Number of frozen particles.");
         }
         if (applyBCToVelocities) {

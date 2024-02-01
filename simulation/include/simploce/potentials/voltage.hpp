@@ -14,33 +14,52 @@
 namespace simploce {
 
     /**
-     * An electric potential difference over a given distance in a given direction resulting in a constant electric
-     * field in the given direction.
+     * An electric potential difference v(z) (voltage) over a distance z relative to a given reference point
+     * at z=0 resulting in a constant homogeneous electric field E(z) = E0 in the z-direction. The
+     * reference point is where the electric potential is zero, such that v(z) may be interpreted as the
+     * electric potential at z.
+     * For a positive voltage (that is, the electric potential is increasing in the positive z-direction relative to
+     * the reference point), a constant electric field is pointing towards the negative z-axis. The force
+     * on a positively (negatively) charged particle is in the same (opposite) direction. The electric
+     * field E(r) = -grad(v(r)) = E0.  Since E0 is constant, one must have v(z)=-E0.z.
      */
     class Voltage : public external_potential {
     public:
 
         /**
          * Constructor. All arguments are required.
-         * @param voltage Electric potential difference. If positive and in the x/y/z-direction, a constant
-         * electric field is pointing towards the negative x/y/z-axis. The force on a positively (negatively) charged particle is in
-         * the same (opposite) direction. The electric field E0(r) = -grad(ep(r)) where ep(r) is the electric
-         * potential at r and r is a position. Given that E0 being constant, p(r)=-E0.r (inner product)
+         * @param voltage Voltage in the z-direction.
          * @param distance Distance for "voltage drop".
-         * @param eps_r Relative permittivity.
          * @param bc Boundary condition.
-         * @param direction Direction.
+         * @param eps_r Relative permittivity, screens external field.
          * @param mesoscopic If true, this potential is for mesoscopic simulations (e.g., DPD).
          */
         Voltage(voltage_t voltage,
                 dist_t distance,
-                real_t eps_r,
-                const bc_ptr_t& bc,
-                const Direction& direction,
+                bc_ptr_t bc,
+                real_t eps_r = 1.0,
+                bool mesoscopic = false);
+
+        /**
+         * Constructor
+         * @param E0 Component of the electric field.
+         * @param eps_r Relative permittivity for screening.
+         * @param bc Boundary condition.
+         * @param mesoscopic mesoscopic If true, this potential is for mesoscopic simulations (e.g., DPD).
+         */
+        Voltage(el_field_t e0,
+                bc_ptr_t bc,
+                real_t eps_r = 1.0,
                 bool mesoscopic = false);
 
         std::pair<energy_t, force_t> operator () (const p_ptr_t& particle) override;
 
+    private:
+
+        el_field_t e0_;
+        bc_ptr_t bc_;
+        real_t eps_r_;
+        bool mesoscopic_;
     };
 }
 

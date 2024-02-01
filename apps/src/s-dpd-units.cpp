@@ -398,6 +398,20 @@ mesoscopicPolarizableWater(const dist_t& diameter,
     std::cout << "------------------------------------------------" << std::endl;
     std::cout << std::endl;
 
+    // External homogeneous field.
+    std::cout << "External homogeneous electric field" << std::endl;
+    real_t muW = qW() * dW();
+    std::cout << std::setw(conf::REAL_WIDTH) << muW << ": Characteristic value for dipole moment." << std::endl;
+    real_t ef = 1.0; // Electric field in V/m.
+    real_t ef_DPD = ef * dW() * dW() * dW() * units::si<real_t>::E0/ muW;
+    std::cout << std::setw(conf::REAL_WIDTH) << ef << ": Electric field in V/m." << std::endl;
+    std::cout << std::setw(conf::REAL_WIDTH) << ef_DPD << ": Electric field in DPD units." << std::endl;
+    el_pot_t ep = 50.0e-03;   // 50 mV = 0.050 V
+    std::cout << std::setw(conf::REAL_WIDTH) << ep << ": Electric potential in V." << std::endl;
+    el_pot_t ep_DPD = ep() * (dW() * units::si<real_t>::E0 / qW());
+    std::cout << std::setw(conf::REAL_WIDTH) << ep_DPD << ": Electric potential in DPD units." << std::endl;
+    std::cout << std::endl;
+
     // Force due to pressure gradient.
     std::cout << "Pressure gradient force" << std::endl;
     pressure_t dp = -30e+02;        // In m kg s^-2.

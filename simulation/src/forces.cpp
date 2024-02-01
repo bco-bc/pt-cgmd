@@ -37,7 +37,6 @@
 #include "simploce/particle/particle-spec.hpp"
 #include "simploce/particle/bond.hpp"
 #include "simploce/util/util.hpp"
-#include "simploce/util/direction.hpp"
 #include "simploce/util/flat-surface.hpp"
 #include <utility>
 #include <memory>
@@ -287,7 +286,8 @@ namespace simploce {
 
         static void
         associateExternalPotentials(const ff_ptr_t &forceField,
-                                    const bc_ptr_t &bc) {
+                                    const bc_ptr_t &bc,
+                                    bool mesoscopic) {
             util::Logger logger("simploce::forces::associateExternalPotentials()");
             logger.trace("Entering.");
 
@@ -295,13 +295,7 @@ namespace simploce {
             for (const auto &spec: external) {
                 std::string typeName = spec.typeName;
                 if (typeName == conf::VOLTAGE) {
-                    auto direction = Direction::valueOf(spec.direction);
-                    auto potential =
-                            std::make_shared<Voltage>(spec.deltaV,
-                                                      spec.distance,
-                                                      spec.eps_inside_rc,
-                                                      bc,
-                                                      direction);
+                    auto potential = std::make_shared<Voltage>(spec.e0, bc, spec.eps_r, mesoscopic);
                     externalPotentials_.emplace_back(potential);
                 } else if (typeName == conf::WALL) {
                     auto plane = Plane::valueOf(spec.plane);
@@ -623,12 +617,11 @@ namespace simploce {
                             const box_ptr_t &box,
                             const bc_ptr_t &bc) {
             static bool ASSOCIATED{false};
-            if (ASSOCIATED) {
-                return;
+            if (!ASSOCIATED) {
+                associatePairPotentials(cutoffs, all, forceField, mesoscopic, box, bc);
+                associateExternalPotentials(forceField, bc, mesoscopic);
+                ASSOCIATED = true;
             }
-            associatePairPotentials(cutoffs, all, forceField, mesoscopic, box, bc);
-            associateExternalPotentials(forceField, bc);
-            ASSOCIATED = true;
         }
     }
 

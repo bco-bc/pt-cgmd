@@ -37,58 +37,28 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="dd141dda-25b4-4481-b9ee-4ed613dd7b51" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/../simulation/include/simploce/simulation/bc-util.hpp" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../simulation/include/simploce/simulation/pbc-1d-sr.hpp" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../simulation/src/bc-util.cpp" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../simulation/src/pbc-1d-sr.cpp" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../simulation/tests/bc-util-test.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../README.md" beforeDir="false" afterPath="$PROJECT_DIR$/../README.md" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../apps/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../apps/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../apps/src/program-options.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/../apps/src/program-options.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../apps/src/s-add-boundary.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/../apps/src/s-add-boundary.cpp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../apps/src/s-dpd-units.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/../apps/src/s-dpd-units.cpp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../apps/src/s-particle-system.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/../apps/src/s-particle-system.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../apps/src/s-pdb.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/../apps/src/s-pdb.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../apps/src/s-simulate.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/../apps/src/s-simulate.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../apps/src/s-validate.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/../apps/src/s-validate.cpp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/include/simploce/particle/p-properties.hpp" beforeDir="false" afterPath="$PROJECT_DIR$/include/simploce/particle/p-properties.hpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/include/simploce/particle/particle-group.hpp" beforeDir="false" afterPath="$PROJECT_DIR$/include/simploce/particle/particle-group.hpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/include/simploce/particle/particle-spec-catalog.hpp" beforeDir="false" afterPath="$PROJECT_DIR$/include/simploce/particle/particle-spec-catalog.hpp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/include/simploce/particle/particle-system-factory.hpp" beforeDir="false" afterPath="$PROJECT_DIR$/include/simploce/particle/particle-system-factory.hpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/include/simploce/particle/particle-system.hpp" beforeDir="false" afterPath="$PROJECT_DIR$/include/simploce/particle/particle-system.hpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/include/simploce/particle/particle.hpp" beforeDir="false" afterPath="$PROJECT_DIR$/include/simploce/particle/particle.hpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/particle-spec-catalog.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/src/particle-spec-catalog.cpp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/particle-system-factory.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/src/particle-system-factory.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/particle-system.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/src/particle-system.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/particle.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/src/particle.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/particle-system-factory-test.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/tests/particle-system-factory-test.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../simulation/CMakeLists.txt" beforeDir="false" afterPath="$PROJECT_DIR$/../simulation/CMakeLists.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../simulation/apps/one-water-dpd-particle-simulation.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/../simulation/apps/one-water-dpd-particle-simulation.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../simulation/include/simploce/simulation/bc.hpp" beforeDir="false" afterPath="$PROJECT_DIR$/../simulation/include/simploce/simulation/bc.hpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../simulation/include/simploce/simulation/no-bc.hpp" beforeDir="false" afterPath="$PROJECT_DIR$/../simulation/include/simploce/simulation/no-bc.hpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../simulation/include/simploce/simulation/pbc-1d-bb.hpp" beforeDir="false" afterPath="$PROJECT_DIR$/../simulation/include/simploce/simulation/pbc-1d-bb.hpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../simulation/include/simploce/simulation/pbc.hpp" beforeDir="false" afterPath="$PROJECT_DIR$/../simulation/include/simploce/simulation/pbc.hpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../simulation/include/simploce/simulation/s-factory.hpp" beforeDir="false" afterPath="$PROJECT_DIR$/../simulation/include/simploce/simulation/s-factory.hpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../simulation/include/simploce/simulation/s-properties.hpp" beforeDir="false" afterPath="$PROJECT_DIR$/../simulation/include/simploce/simulation/s-properties.hpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../simulation/include/simploce/simulation/s-util.hpp" beforeDir="false" afterPath="$PROJECT_DIR$/../simulation/include/simploce/simulation/s-util.hpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../simulation/include/simploce/simulation/simulation.hpp" beforeDir="false" afterPath="$PROJECT_DIR$/../simulation/include/simploce/simulation/simulation.hpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../simulation/src/cell-pair-list-generator.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/../simulation/src/cell-pair-list-generator.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../simulation/src/grid.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/../simulation/src/grid.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../simulation/src/interactor.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/../simulation/src/interactor.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../simulation/src/mvv-dpd.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/../simulation/src/mvv-dpd.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../simulation/src/no-bc.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/../simulation/src/no-bc.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../simulation/src/pbc-1d-bb.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/../simulation/src/pbc-1d-bb.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../simulation/src/pbc.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/../simulation/src/pbc.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../simulation/src/protonatable-particle-system-factory.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/../simulation/src/protonatable-particle-system-factory.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../simulation/src/s-factory.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/../simulation/src/s-factory.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../simulation/src/s-properties.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/../simulation/src/s-properties.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../simulation/src/s-util.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/../simulation/src/s-util.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../simulation/include/simploce/conf/sp-conf.hpp" beforeDir="false" afterPath="$PROJECT_DIR$/../simulation/include/simploce/conf/sp-conf.hpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../simulation/include/simploce/potentials/const-surface-charge-density.hpp" beforeDir="false" afterPath="$PROJECT_DIR$/../simulation/include/simploce/potentials/const-surface-charge-density.hpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../simulation/include/simploce/potentials/force-field.hpp" beforeDir="false" afterPath="$PROJECT_DIR$/../simulation/include/simploce/potentials/force-field.hpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../simulation/include/simploce/potentials/voltage.hpp" beforeDir="false" afterPath="$PROJECT_DIR$/../simulation/include/simploce/potentials/voltage.hpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../simulation/src/bc-util.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/../simulation/src/bc-util.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../simulation/src/const-surface-charge-density.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/../simulation/src/const-surface-charge-density.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../simulation/src/force-field.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/../simulation/src/force-field.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../simulation/src/forces.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/../simulation/src/forces.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../simulation/src/mc.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/../simulation/src/mc.cpp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../simulation/src/simulation.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/../simulation/src/simulation.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../simulation/tests/CMakeLists.txt" beforeDir="false" afterPath="$PROJECT_DIR$/../simulation/tests/CMakeLists.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../simulation/tests/cell-test.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/../simulation/tests/cell-test.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../simulation/tests/dpd-test.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/../simulation/tests/dpd-test.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../simulation/tests/interactor-test.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/../simulation/tests/interactor-test.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../simulation/tests/pair-potential-test.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/../simulation/tests/pair-potential-test.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../simulation/tests/simulation-test.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/../simulation/tests/simulation-test.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../simulation/src/voltage.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/../simulation/src/voltage.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../simulation/tests/voltage-test.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/../simulation/tests/voltage-test.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../util/include/simploce/types/u-types.hpp" beforeDir="false" afterPath="$PROJECT_DIR$/../util/include/simploce/types/u-types.hpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../util/include/simploce/util/box.hpp" beforeDir="false" afterPath="$PROJECT_DIR$/../util/include/simploce/util/box.hpp" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -141,7 +111,9 @@
   </component>
   <component name="PropertiesComponent">{
   &quot;keyToString&quot;: {
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.cidr.known.project.marker&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.readMode.enableVisualFormatting&quot;: &quot;true&quot;,
     &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
     &quot;cf.first.check.clang-format&quot;: &quot;false&quot;,
     &quot;cidr.known.project.marker&quot;: &quot;true&quot;,
@@ -169,11 +141,6 @@
     <configuration default="true" type="GradleAppRunConfiguration" factoryName="Application" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" PASS_PARENT_ENVS_2="true">
       <method v="2">
         <option name="com.jetbrains.cidr.cpp.gradle.execution.GradleNativeBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
-      </method>
-    </configuration>
-    <configuration default="true" type="CMakeRunConfiguration" factoryName="Application" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" EMULATE_TERMINAL="false" PASS_PARENT_ENVS_2="true">
-      <method v="2">
-        <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
       </method>
     </configuration>
     <configuration name="atomic-content-handler-test" type="CMakeRunConfiguration" factoryName="Application" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" EMULATE_TERMINAL="false" PASS_PARENT_ENVS_2="true" PROJECT_NAME="particles" TARGET_NAME="atomic-content-handler-test" CONFIG_NAME="Debug" RUN_TARGET_PROJECT_NAME="particles" RUN_TARGET_NAME="atomic-content-handler-test">
@@ -694,6 +661,10 @@
       <workItem from="1696275842114" duration="1068000" />
       <workItem from="1696333444045" duration="33000" />
       <workItem from="1696336698455" duration="5456000" />
+      <workItem from="1696425556874" duration="10000" />
+      <workItem from="1705931472877" duration="38000" />
+      <workItem from="1706007243547" duration="33000" />
+      <workItem from="1706009992748" duration="3685000" />
     </task>
     <servers />
   </component>
@@ -701,10 +672,9 @@
     <option name="version" value="3" />
   </component>
   <component name="VCPKGProject">
-    <isAutomaticEditVcpkgJson value="false" />
     <isAutomaticCheckingOnLaunch value="false" />
     <isAutomaticFoundErrors value="true" />
-    <isAutomaticFoundErrors value="true" />
+    <isAutomaticReloadCMake value="true" />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
     <option name="TAB_STATES">

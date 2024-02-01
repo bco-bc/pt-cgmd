@@ -161,6 +161,11 @@ namespace simploce {
     using dipole_moment_t = cvector_t<real_t, 5>;
 
     /**
+     * Electric field.
+     */
+    using el_field_t = cvector_t<real_t, 6>;
+
+    /**
      * Normal vector.
      */
     using normal_t = dist_vect_t;

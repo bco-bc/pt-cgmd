@@ -214,26 +214,26 @@ int main(int argc, char *argv[]) {
         std::cout << *forceField << std::endl;
 
         // Interactor
+        auto includeExternalForces = param->get<bool>("simulation.forces.include-external");
         bc_ptr_t bc;
         if (pbc_1) {
             boost::trim(direction);
-            auto includeExternalForces = param->get<bool>("simulation.forces.include-external");
             logger.info(direction + ": Applying PBC in this direction only.");
             auto applyBCtoVelocities = param->get<bool>("simulation.bc.velocities.include", false);
-            if (includeExternalForces) {
-                bc = factory::pbc1dBB(particleSystem->box(), Direction::valueOf(direction[0]));
-                if (applyBCtoVelocities) {
-                    logger.info("With external forces: Bounce back reflections boundary conditions for velocities.");
-                }
+            bc = factory::pbc1dBB(particleSystem->box(), Direction::valueOf(direction[0]));
+            if (applyBCtoVelocities) {
+                 logger.info("Bounce back reflections boundary conditions for velocities.");
             } else {
-                bc = factory::pbc1dSR(particleSystem->box(), Direction::valueOf(direction[0]));
-                if (applyBCtoVelocities) {
-                    logger.info("No external forces: Spectral reflection boundary conditions for velocities.");
-                }
+                logger.info("No bounce back reflections boundary conditions for velocities.");
             }
         } else {
             logger.info("Applying PBC in all directions.");
             bc = factory::pbc(particleSystem->box());
+        }
+        if (includeExternalForces) {
+            logger.info("External forces included.");
+        } else {
+            logger.info("External forces -not- included.");
         }
         auto interactor = factory::interactor(param, forceField, bc);
 

@@ -48,8 +48,9 @@ namespace simploce {
         const std::string NONE_INTERACTING = "none";                     // None-interacting potential.
 
         // External potential types.
-        // const std::string C_SRF_CG_DENSITY = "c-srf-cg-dens";            // Constant surface charge density.
-        const std::string VOLTAGE = "epd";                               // Voltage, electric potential difference.
+        // const std::string C_SRF_CG_DENSITY = "c-srf-cg-dens";         // Constant surface charge density.
+        const std::string VOLTAGE = "voltage";                           // Static uniform external electric field
+                                                                         // in z-direction
         const std::string WALL = "wall";                                 // Impenetrable flat wall.
         const std::string PRESSURE_GRADIENT = "pres_grad";               // Pressure gradient in z-direction.
     }
