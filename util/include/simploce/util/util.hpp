@@ -114,50 +114,54 @@ namespace simploce {
         // std::string toString(const simploce::id_t& id);
         
         /**
-         * Returns sublists of a list of items. The number of sublists is decided by
+         * Returns subsets of a list of items. The number of subsets is decided by
          * the number of available hardware threads.
          * @param items Items
-         * @return Sub lists of items.
+         * @return Subsets of items.
          */
         template <typename T, template <typename, typename... Args> class CONT>
         std::vector<std::vector<T>> 
         makeSubLists(const CONT<T>& items) {
             using sublists_t = std::vector<std::vector<T>>;
-            
+
             static util::Logger logger{"util::makeSubLists"};
-           if ( items.empty() ) {
-               util::logAndThrow(logger, "Empty list of items. Cannot create sublists.");
+            logger.trace("Entering.");
+
+            if ( items.empty() ) {
+               util::logAndThrow(logger, "Empty list of items. Cannot create subsets.");
             }            
             
-            // Sublists.
-            sublists_t subLists{};
+            // Subsets.
+            sublists_t subSets{};
             
             std::size_t counter = 0;      
-            static const std::size_t nsublists = std::thread::hardware_concurrency();
-            logger.debug("Number of available threads: " + std::to_string(nsublists));
-            std::size_t numberOfItemsPerSubList = items.size() / nsublists;                                                              
-            for (std::size_t k = 0; k != nsublists; ++k) {
-                std::vector<T> single{};  // A single sublist of items.
+            static const std::size_t numberOfSubSets = std::thread::hardware_concurrency();
+            logger.debug("Number of available threads: " + std::to_string(numberOfSubSets));
+            std::size_t numberOfItemsPerSubList = items.size() / numberOfSubSets;
+            for (std::size_t k = 0; k != numberOfSubSets; ++k) {
+                std::vector<T> single{};  // A single subset of items.
                 std::size_t n = 0;
                 while (counter != items.size() && n != numberOfItemsPerSubList) {                    
                     single.push_back(items[counter]);
                     counter += 1;
                     n += 1;
                 }
-                subLists.push_back(single); // Store the sublist.               
+                subSets.push_back(single); // Store the subset.
             }
     
-            // Add remaining items, if any, to the last sublist.
+            // Add remaining items, if any, to the last subset.
             if ( counter < items.size() ) {
-                auto& last = *(subLists.end() - 1);
+                auto& last = *(subSets.end() - 1);
                 while ( counter != items.size() ) {
                     last.push_back(items[counter]);
                     counter += 1;
                 }
             }
+            logger.debug(std::to_string(subSets.size()) + ": Number of subsets.");
             
             // Done.
-            return subLists;
+            logger.trace("Leaving.");
+            return subSets;
         }
 
         /**
@@ -165,6 +169,32 @@ namespace simploce {
          * @return Unit vector.
          */
         dist_vect_t randomUnit();
+
+        /**
+         * Integrates real-valued function from a to b using a simple numerical procedure.
+         * @param FUNCTION A real-valued function with a real-valued argument. May be a lambda expression.
+         * @param a Lower bound.
+         * @param b Upper bound.
+         * @return Result.
+         *
+        real_t
+        integrate(real_t FUNCTION(real_t),
+                  real_t a,
+                  real_t b);
+                  */
+
+        /**
+         * Integrates real-valued function from a to b using a simple numerical procedure.
+         * @param FUNCTION A real-valued function with a real-valued argument. May be a lambda expression.
+         * @param a Lower bound.
+         * @param b Upper bound.
+         * @return Result.
+         */
+        real_t
+        integrate(const std::function<real_t (real_t x)>& function,
+            real_t a,
+            real_t b);
+
     }
 }
 

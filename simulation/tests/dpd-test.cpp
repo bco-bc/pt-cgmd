@@ -93,7 +93,7 @@ int main() {
     //auto displacer = factory::displacer(conf::S1_DPD, param, interactor, bc, dpdUnits);
     //auto displacer = factory::displacer(conf::VELOCITY_VERLET, param, interactor, bc, dpdUnits);
     //auto displacer = factory::displacer(conf::LANGEVIN_VELOCITY_VERLET, param, interactor, bc, dpdUnits);
-    Simulation simulation{param, particleSystem, catalog, displacer, bc};
+    Simulation simulation{param, particleSystem, catalog, displacer, bc, interactor};
 
     //util::Logger::changeLogLevel(util::Logger::LOGTRACE);
     std::ofstream trajectoryStream, dataStream;

@@ -50,82 +50,93 @@ int main(int argc, char *argv[]) {
         auto cutoffSR = param->get<real_t>("simulation.forces.cutoffSR");         // Cutoff distance for short range interactions.
         auto cutoffLR = param->get<real_t>("simulation.forces.cutoffLR");         // Cutoff distance for short range interactions.
 
-        bool pbc_1{false};                               // Apply 1D-PBC.
-        std::string direction{"z"};                             // Direction.
+        bool pbc_1{false};                               // Apply 1D PBC.
+        bool pbc_2{false};                               // Apply 2D PBC.
+        std::string direction{"z"};                      // Direction associated with 1D PBC.
         real_t range{0.1};                               // Range for a random number sampled in MC.
+
         std::size_t nScaleVelocities{0};
 
         po::options_description usage("Usage");
         util::addStandardOptions(usage);
         usage.add_options() (
-                "fn-trajectory", po::value<std::string>(&fnTrajectory),
-                "Output file name trajectory. Default is 'trajectory.dat'."
+            "fn-trajectory", po::value<std::string>(&fnTrajectory),
+            "Output file name trajectory. Default is 'trajectory.dat'."
         )(
-                "fn-sim-data", po::value<std::string>(&fnSimulationData),
-                "Output file name of simulation data. Default is 'simulation.dat'."
+            "fn-sim-data", po::value<std::string>(&fnSimulationData),
+            "Output file name of simulation data. Default is 'simulation.dat'."
         )(
-                "cutoff-distance-sr",
-                po::value<real_t>(&cutoffSR),
-                "Cutoff distance for short-ranged forces."
+            "cutoff-distance-sr",
+            po::value<real_t>(&cutoffSR),
+            "Cutoff distance for short-ranged forces."
         )(
-                "cutoff-distance-lr",
-                po::value<real_t>(&cutoffLR),
-                "Cutoff distance for long-ranged forces."
+            "cutoff-distance-lr",
+            po::value<real_t>(&cutoffLR),
+            "Cutoff distance for long-ranged forces."
         )(
-                "temperature,T",
-                po::value<real_t>(&temperature),
-                "Temperature (K). Default is 298.15 K."
+            "temperature,T",
+            po::value<real_t>(&temperature),
+            "Temperature (K). Default is 298.15 K."
         )(
-                "scale-velocities",
-                "Scale velocities during a warmup or initialization phase."
+            "scale-velocities",
+            "Scale velocities during a warmup or initialization phase."
         )(
-                "number-of-steps-between-scaling-velocities",
-                po::value<std::size_t>(&nScaleVelocities),
-                "Number of steps between scaling velocities"
+            "number-of-steps-between-scaling-velocities",
+            po::value<std::size_t>(&nScaleVelocities),
+            "Number of steps between scaling velocities"
         )(
-                "damping-rate,g",
-                po::value<real_t>(&gamma),
-                "Damping rate (ps^-1) for Langevin/DPD heat bath."
+            "damping-rate,g",
+            po::value<real_t>(&gamma),
+            "Damping rate (ps^-1) for Langevin/DPD heat bath."
         )(
-                "number-of-steps,n",
-                po::value<std::size_t>(&nSteps),
-                "Number of steps. Default is 1000."
+            "number-of-steps,n",
+            po::value<std::size_t>(&nSteps),
+            "Number of steps. Default is 1000."
         )(
-                "number-of-steps-between-save",
-                po::value<std::size_t>(&nWrite),
-                "Number of steps between writing to simulation data file and trajectory."
+            "number-of-steps-between-save",
+            po::value<std::size_t>(&nWrite),
+            "Number of steps between writing to simulation data file and trajectory."
         )(
-                "number-of-steps-between-pair-list-update",
-                po::value<std::size_t>(&nPairLists),
-                "Number of steps between updating pair list."
+            "number-of-steps-between-pair-list-update",
+            po::value<std::size_t>(&nPairLists),
+            "Number of steps between updating pair list."
         )(
-                "time-step,t",
-                po::value<real_t>(&timestep),
-                "Time step (ps). Default is 0.020 ps or 20 fs."
+            "time-step,t",
+            po::value<real_t>(&timestep),
+            "Time step (ps). Default is 0.020 ps or 20 fs."
         )(
-                "displacer,d",
-                po::value<std::string>(&displacerType),
-                "Displacer specification. Default is 'vv' (Velocity Verlet). "
-                "Other choices are "
-                "'mc' (Monte Carlo), "
-                "'lf' (leapFrog), "
-                "'lvv' (Langevin Velocity Verlet), "
-                "'pt-lvv' (Langevin Velocity Verlet with Proton Transfer, NOT TESTED), "
-                "'mvv-dpd' (Modified Velocity Verlet for DPD), "
-                "'s1-dpd' (Splitting for DPD)"
+            "displacer,d",
+            po::value<std::string>(&displacerType),
+            "Displacer specification. Default is 'vv' (Velocity Verlet). "
+            "Other choices are "
+            "'mc' (Monte Carlo), "
+            "'lf' (leapFrog), "
+            "'lvv' (Langevin Velocity Verlet), "
+            "'pt-lvv' (Langevin Velocity Verlet with Proton Transfer, NOT TESTED, IN DEVELOPMENT), "
+            "'mvv-dpd' (Modified Velocity Verlet for DPD), "
+            "'s1-dpd' (Splitting for DPD)"
         )(
-                "range",
-                po::value<real_t>(&range),
-                "Length of interval from which random number is selected in MC."
+            "range",
+            po::value<real_t>(&range),
+            "Virtual box size around current position from which next position is selected in Monte Carlo simulations."
         )(
-                "include-external-potentials,e",
-                "Include -external- potentials for force calculations."
+            "in-box",
+            "Particles are always randomly placed somewhere in the box (ignores 'range')."
         )(
-                "pbc-1",
-                po::value<std::string>(&direction),
-                "Apply periodicity in the given direction only. This will additionally apply bounce back or spectral "
-                "reflection boundary conditions to velocities. The first is assumed when external forces are included "
-                "otherwise the latter is applied. Select one of 'x', y', and 'z'."
+            "include-external-potentials,e",
+            "Include -external- potentials for force calculations."
+        )(
+            "pbc-1",
+            po::value<std::string>(&direction),
+            "Apply periodicity to the given direction. This will additionally apply bounce back or spectral "
+            "reflection boundary conditions to velocities. The first is assumed when external forces are included "
+            "otherwise the latter is applied. Select one of 'x', y', and 'z'."
+        )(
+            "pbc-2",
+            "Apply periodicity in x- and y-direction, but -not- in the z-direction."
+        )(
+            "z-non-negative",
+            "z-coordinates must be always non-negative numbers, for 'pbc-2'. Only for Monte Carlo simulations."
         );
 
         po::variables_map vm;
@@ -133,7 +144,7 @@ int main(int argc, char *argv[]) {
         po::notify(vm);
 
         if (vm.count("help") || argc == 1) {
-            std::cout << "Perform a simulation" << std::endl;
+            std::cout << "Perform a simulation." << std::endl;
             std::cout << usage << "\n";
             return 0;
         }
@@ -194,12 +205,21 @@ int main(int argc, char *argv[]) {
             range = vm["range"].as<real_t>();
             param->put<real_t>("simulation.displacer.mc.range", range);
         }
+        if (vm.count("in-box")) {
+            param->put<bool>("simulation.displacer.mc.in-box", true);
+        }
         if (vm.count("include-external-potentials")) {
             param->put<bool>("simulation.forces.include-external", true);
         }
         if (vm.count("pbc-1")) {
             pbc_1 = true;
             direction = vm["pbc-1"].as<std::string>();
+        }
+        if (vm.count("pbc-2")) {
+            pbc_2 = true;
+        }
+        if (vm.count("z-non-negative")) {
+            param->put<bool>("simulation.displacer.mc.z-non-negative", true);
         }
 
         logger.info("Simulation parameters:");
@@ -226,6 +246,9 @@ int main(int argc, char *argv[]) {
             } else {
                 logger.info("No bounce back reflections boundary conditions for velocities.");
             }
+        } else if (pbc_2) {
+            logger.info("Applying PBC in x and y direction, but not in the z direction.");
+            bc = factory::pbc_2d(particleSystem->box(), Direction::X, Direction::Y);
         } else {
             logger.info("Applying PBC in all directions.");
             bc = factory::pbc(particleSystem->box());
@@ -243,7 +266,7 @@ int main(int argc, char *argv[]) {
 
         // Simulate
         auto catalog = util::getCatalog(vm);
-        Simulation simulation(param, particleSystem, catalog, displacer, bc);
+        Simulation simulation(param, particleSystem, catalog, displacer, bc, interactor);
         util::open_output_file(trajectory, fnTrajectory);
         util::open_output_file(data, fnSimulationData);
         simulation.perform(trajectory, data);

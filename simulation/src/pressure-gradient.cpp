@@ -15,7 +15,7 @@ namespace simploce {
     }
 
     std::pair<energy_t, force_t>
-    PressureGradient::operator()(const simploce::p_ptr_t &particle) {
+    PressureGradient::operator()(const simploce::p_ptr_t &particle) const {
         static util::Logger logger("simploce::PressureGradient::operator()");
         static int counter = 0;
         if (counter == 0)
@@ -24,4 +24,5 @@ namespace simploce {
         counter += 1;
         return std::make_pair(energy_t{-1.0 * inner<real_t>(f_, r)}, f_);
     }
+
 }

@@ -7,7 +7,7 @@
 #ifndef SIMULATION_PRESSURE_GRADIENT_HPP
 #define SIMULATION_PRESSURE_GRADIENT_HPP
 
-#include "external-potential.hpp"
+#include "external-potential-impl.hpp"
 #include "simploce/util/direction.hpp"
 
 namespace simploce {
@@ -15,7 +15,7 @@ namespace simploce {
     /**
      * Pressure gradient is enforced by a constant force applied to each particle in a system.
      */
-    class PressureGradient : public external_potential {
+    class PressureGradient : public external_potential_impl {
     public:
 
         /**
@@ -24,7 +24,7 @@ namespace simploce {
          */
         explicit PressureGradient(force_t f);
 
-        std::pair<energy_t, force_t> operator () (const p_ptr_t& particle) override;
+        std::pair<energy_t, force_t> operator () (const p_ptr_t& particle) const override;
 
     private:
 

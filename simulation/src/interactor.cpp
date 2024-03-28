@@ -59,7 +59,7 @@ namespace simploce {
         // Set the bonded pair list. Only once.
         if (counter == 0) {
             logger.debug(std::to_string(nUpdatePairLists) +
-                         ": Number of steps between an update of the particle pair list.");
+                         ": Number of steps between an updateStateAndAccumulated of the particle pair list.");
             auto particlePairs = interactor::bondedParticlePairs(particleSystem);
             pairList_->bondedParticlePairs(particlePairs);
             logger.debug(std::to_string(pairList_->bondedParticlePairs().size()) +
@@ -112,6 +112,30 @@ namespace simploce {
     pairlist_ptr_t
     Interactor::pairList() const {
         return pairList_;
+    }
+
+    void Interactor::initiate(const simploce::p_system_ptr_t &particleSystem) {
+        forces_->initiate(particleSystem);
+    }
+
+    void
+    Interactor::update(const p_system_ptr_t &particleSystem) {
+        forces_->update(particleSystem);
+    }
+
+    void
+    Interactor::update(const simploce::p_ptr_t &particle) {
+        forces_->update(particle);
+    }
+
+    void
+    Interactor::fallback() {
+        Forces::fallback();
+    }
+
+    void
+    Interactor::complete() {
+        Forces::complete();
     }
 
 }

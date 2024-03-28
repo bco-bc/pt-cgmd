@@ -26,11 +26,15 @@
 #include "simploce/potentials/hp-sr.hpp"
 #include "simploce/potentials/gauss-sf.hpp"
 #include "simploce/potentials/gauss-sf-sr.hpp"
+#include "simploce/potentials/lekner.hpp"
+#include "simploce/potentials/hs-lekner.hpp"
 #include "simploce/potentials/wall.hpp"
 #include "simploce/potentials/non-interacting.hpp"
 #include "simploce/potentials/external-potential.hpp"
 #include "simploce/potentials/voltage.hpp"
 #include "simploce/potentials/pressure-gradient.hpp"
+#include "simploce/potentials/uniform-surface-charge-density.hpp"
+#include "simploce/potentials/vplanes.hpp"
 #include "simploce/simulation/bc.hpp"
 #include "simploce/simulation/s-properties.hpp"
 #include "simploce/particle/particle-system.hpp"
@@ -168,6 +172,17 @@ namespace simploce {
                         auto pair2 = std::make_pair(key2, hs_sc);
                         nonBondedPairPotentials_.emplace(pair2);
                     }
+                } else if (typeName == conf::HS_LEKNER) {
+                    std::string key1 = ip.spec1->name() + "-" + ip.spec2->name();
+                    auto lekner = std::make_shared<Lekner>(box, bc);
+                    auto hsLekner = std::make_shared<HardSphereLekner>(forceField, bc, lekner);
+                    auto pair1 = std::make_pair(key1, hsLekner);
+                    nonBondedPairPotentials_.emplace(pair1);
+                    if (ip.spec1 != ip.spec2) {
+                        std::string key2 = ip.spec2->name() + "-" + ip.spec1->name();
+                        auto pair2 = std::make_pair(key2, hsLekner);
+                        nonBondedPairPotentials_.emplace(pair2);
+                    }
                 } else if (typeName == conf::SR) {
                     std::string key1 = ip.spec1->name() + "-" + ip.spec2->name();
                     auto sr = std::make_shared<SoftRepulsion>(forceField, bc, cutoffSR);
@@ -286,6 +301,7 @@ namespace simploce {
 
         static void
         associateExternalPotentials(const ff_ptr_t &forceField,
+                                    const box_ptr_t &box,
                                     const bc_ptr_t &bc,
                                     bool mesoscopic) {
             util::Logger logger("simploce::forces::associateExternalPotentials()");
@@ -306,6 +322,21 @@ namespace simploce {
                     externalPotentials_.emplace_back(potential);
                 } else if (typeName == conf::PRESSURE_GRADIENT) {
                     auto potential = std::make_shared<PressureGradient>(spec.fe);
+                    externalPotentials_.emplace_back(potential);
+                } else if (typeName == conf::U_SRF_CG) {
+                    Plane plane = Plane::valueOf(spec.plane);
+                    FlatSurface flatSurface{plane};
+                    auto potential = std::make_shared<UniformSurfaceChargeDensity>(spec.sigma,
+                                                                                   flatSurface,
+                                                                                   spec.eps_r,
+                                                                                   bc,
+                                                                                   spec.delta);
+                    externalPotentials_.emplace_back(potential);
+                } else if (typeName == conf::VIRTUAL_PLANES) {
+                    auto potential = std::make_shared<VirtualPlanes>(box,
+                                                                     bc,
+                                                                     spec.spacing,
+                                                                     spec.eps_r);
                     externalPotentials_.emplace_back(potential);
                 } else {
                     util::logAndThrow(logger, "External potential of type'" + typeName + "' is not available.");
@@ -520,10 +551,102 @@ namespace simploce {
             return external;
         }
 
+        static void
+        initiateExternalPotentials(const p_system_ptr_t& particleSystem,
+                                   const ep_cont_t &externalPotentials) {
+            static util::Logger logger("simploce::forces::initiateExternalPotentials");
+            logger.trace("Entering");
+
+            for (auto& ep: externalPotentials) {
+                ep->initialize(particleSystem);
+            }
+
+            logger.trace("Leaving");
+        }
+
         /**
-         * Returns interaction energy of a given particle with all other particles (except with itself)
-         * within the cutoff distance. The cutoff distance is taken to the cutoff distance for long-ranged
-         * interactions.
+         * Update external potentials, whatever is required for a proper
+         * functioning of these potentials.
+         * @param particleSystem Particle system
+         * @param externalPotentials External potentials.
+         */
+        static void
+        updateExternalPotentials(const p_system_ptr_t& particleSystem,
+                                 const ep_cont_t &externalPotentials) {
+            static util::Logger logger("simploce::forces::updateExternalPotentials");
+            logger.trace("Entering");
+
+            for (auto& ep: externalPotentials) {
+                ep->update(particleSystem);
+            }
+
+            logger.trace("Leaving");
+        }
+
+        /**
+         * Update external potentials, whatever is required for a proper
+         * functioning of these potentials.
+         * @param particle Particle
+         * @param externalPotentials External potentials.
+         */
+        static void
+        updateExternalPotentials(const p_ptr_t& particle,
+                                 const ep_cont_t &externalPotentials) {
+            for (auto& ep: externalPotentials) {
+                ep->update(particle);
+            }
+        }
+
+        /**
+         * Computer interaction energy of given particle with other particles.
+         * @param particle Given particle.
+         * @param other Other particles. Given particle should not be in this collection.
+         * @param nonBondedPairPotentials Non-bonded potential.
+         * @param cutoffs Cutoff distances.
+         * @param bc Boundary condition.
+         * @return Non-bonded interaction energy.
+         */
+        static energy_t
+        computeNonBoundedInteractionEnergyOfOneParticle(const p_ptr_t &particle,
+                                                        const std::vector<p_ptr_t> &other,
+                                                        const pp_map_t &nonBondedPairPotentials,
+                                                        const rc_ptr_t &cutoffs,
+                                                        const bc_ptr_t &bc) {
+            static util::Logger logger{"simploce::forces::computeNonBoundedInteractionEnergyOfOneParticle()"};
+            logger.trace("Entering.");
+
+            static auto cutoff = cutoffs->longRanged();
+            static auto rc2 = cutoff() * cutoff();
+
+            energy_t nonBonded{0.0};
+            auto name = particle->spec()->name();
+            auto id = particle->id();
+            auto pr = particle->position();
+
+            // Non-bonded interaction with free particles.
+            for (const auto &p: other) {
+                if (p->id() != id) {  // No self interaction.
+                    auto r = p->position();
+                    dist_vect_t R = bc->apply(pr, r);
+                    auto R2 = norm_square<real_t>(R);
+                    if (R2 <= rc2) {
+                        std::string key = name + "-" + p->spec()->name();
+                        auto &pairPotential = *nonBondedPairPotentials.at(key);
+
+                        // Force is ignored.
+                        std::pair<energy_t, force_t> ef = pairPotential(particle, p);
+                        nonBonded += std::get<0>(ef);
+                    }
+                }
+            }
+            logger.trace("Leaving");
+            return nonBonded;
+        }
+
+        /**
+         * Returns interaction energy of a given particle with all other particles
+         * (except with itself) within the cutoff distance. The cutoff distance corresponds
+         * to the cutoff distance for long-ranged interactions.
          * @param particle Particle.
          * @param all -All- particles.
          * @param nonBondedPairPotentials Pair potentials.
@@ -541,15 +664,70 @@ namespace simploce {
             static util::Logger logger{"simploce::forces::interactionEnergyOfOneParticle()"};
             logger.trace("Entering.");
 
-            auto cutoff = cutoffs->longRanged();
+            static auto cutoff = cutoffs->longRanged();
             static auto rc2 = cutoff() * cutoff();
+            static bool firstTime{true};
+            static std::vector<std::vector<p_ptr_t>> particleSets;
+            static size_t numberOfTasks = 0;
 
-            energy_t nonBonded{0.0}, bonded{0.0}, external{0.0};
+            energy_t nonBonded{0.0}, bonded{0.0};
             auto name = particle->spec()->name();
             auto id = particle->id();
             auto pr = particle->position();
 
             // Non-bonded interaction with free particles.
+            logger.trace("Calculating non-bonded interaction energy.");
+            std::vector<energy_t> results{};
+            if (free.size() > simploce::conf::MIN_NUMBER_OF_PARTICLES) {
+                if (firstTime) {
+                    logger.info("Non-bonded interaction energy is computed concurrently.");
+                    particleSets = util::makeSubLists(free);
+                    numberOfTasks = particleSets.size() - 1;
+                }
+                std::vector<std::future<energy_t>> futures{};
+                if (numberOfTasks > 1) {
+                    for (auto k = 0; k != numberOfTasks; ++k) {
+                        const auto& particleSet = particleSets[k];
+                        futures.push_back(std::async(
+                            std::launch::async,
+                            computeNonBoundedInteractionEnergyOfOneParticle,
+                            std::ref(particle),
+                            std::ref(particleSet),
+                            std::ref(nonBondedPairPotentials),
+                            std::ref(cutoffs),
+                            std::ref(bc)
+                        ));
+                    }
+                    // Wait for each task to complete.
+                    results = util::waitForAll(futures);
+                }
+                // One remaining set of particleSet is handled by the current thread.
+                const auto& particleSet = particleSets[particleSets.size() - 1];
+                if (!particleSet.empty()) {
+                    auto energy = computeNonBoundedInteractionEnergyOfOneParticle(particle,
+                                                                                  particleSet,
+                                                                                  nonBondedPairPotentials,
+                                                                                  cutoffs,
+                                                                                  bc);
+                    results.emplace_back(energy);
+                }
+            } else {
+                if (firstTime) {
+                    logger.info("Non-bonded interaction energy is computed sequentially.");
+                }
+                auto energy = computeNonBoundedInteractionEnergyOfOneParticle(particle,
+                                                                              free,
+                                                                              nonBondedPairPotentials,
+                                                                              cutoffs,
+                                                                              bc);
+                results.emplace_back(energy);
+            }
+            // Collect the results.
+            for (auto& r: results) {
+                nonBonded += r;
+            }
+
+            /*
             for (const auto &p: free) {
                 if (p->id() != id) {
                     auto r = p->position();
@@ -564,8 +742,9 @@ namespace simploce {
                     }
                 }
             }
+            */
 
-            // Interaction with and within groups.
+            // Interaction with other and within groups.
             for (const auto &g: groups) {
                 if (!g->contains(particle)) {
                     auto particles = g->particles();
@@ -598,6 +777,8 @@ namespace simploce {
             }
 
             // Interaction with external potentials.
+            logger.trace("Calculating energy due to external potentials.");
+            energy_t external{0.0};
             for (auto &ep: externalPotentials) {
                 auto &potential = *ep;
                 std::pair<energy_t, force_t> ef = potential(particle);
@@ -606,6 +787,7 @@ namespace simploce {
             }
 
             logger.trace("Leaving.");
+            firstTime = false;
             return std::move(std::make_tuple(bonded, nonBonded, external));
         }
 
@@ -619,8 +801,33 @@ namespace simploce {
             static bool ASSOCIATED{false};
             if (!ASSOCIATED) {
                 associatePairPotentials(cutoffs, all, forceField, mesoscopic, box, bc);
-                associateExternalPotentials(forceField, bc, mesoscopic);
+                associateExternalPotentials(forceField, box, bc, mesoscopic);
                 ASSOCIATED = true;
+            }
+        }
+
+        static void
+        associatePotentials(const p_system_ptr_t& particleSystem,
+                            const rc_ptr_t& cutoffs,
+                            const bc_ptr_t& bc,
+                            const ff_ptr_t& forceField,
+                            bool mesoscopic) {
+            static bool ASSOCIATED{false};
+            if ( !ASSOCIATED ) {
+                auto box = particleSystem->box();
+                particleSystem->doWithAll<void>([cutoffs,
+                                                      box,
+                                                      bc,
+                                                      forceField,
+                                                      mesoscopic] (const std::vector<p_ptr_t>& all) {
+                    forces::associatePotentials(cutoffs,
+                                                all,
+                                                forceField,
+                                                mesoscopic,
+                                                box,
+                                                bc);
+                    ASSOCIATED = true;
+                });
             }
         }
     }
@@ -631,12 +838,20 @@ namespace simploce {
             param_{std::move(param)}, cutoffs_{}, bc_{std::move(bc)},
             forceField_{std::move(forceField)} {
         util::Logger logger{"simploce::Forces::Forces()"};
+        logger.trace("Entering.");
+
         if (!param_) {
             logAndThrow(logger, "Missing parameters.");
         }
-        dist_t sr = param_->get<real_t>("simulation.forces.cutoffSR");
-        dist_t lr = param_->get<real_t>("simulation.forces.cutoffLR");
-        cutoffs_ = std::make_shared<Cutoffs>(sr, lr);
+        auto ignore = param_->get<bool>("simulation.forces.ignore_cutoff", false);
+        if (!ignore) {
+            dist_t sr = param_->get<real_t>("simulation.forces.cutoffSR");
+            dist_t lr = param_->get<real_t>("simulation.forces.cutoffLR");
+            cutoffs_ = std::make_shared<Cutoffs>(sr, lr);
+        } else {
+            cutoffs_ = std::make_shared<Cutoffs>(conf::LARGE, conf::LARGE);
+            logger.warn("Cutoff distances are ignored (all set to a large value).");
+        }
         concurrent_ = param_->get<bool>("simulation.forces.concurrent", true);
         mesoscopic_ = param_->get<bool>("simulation.mesoscale");
         if (!cutoffs_) {
@@ -648,6 +863,8 @@ namespace simploce {
         if (!forceField_) {
             logAndThrow(logger, "Missing force field.");
         }
+
+        logger.trace("Leaving.");
     }
 
     energy_t
@@ -655,6 +872,13 @@ namespace simploce {
                       const pairlist_ptr_t& pairList) {
         static util::Logger logger("simploce::Forces::nonBonded()");
         logger.trace("Entering.");
+
+        // Must be done first, if not done already.
+        forces::associatePotentials(particleSystem,
+                                    this->cutoffs_,
+                                    bc_,
+                                    forceField_,
+                                    mesoscopic_);
 
         static bool firstTime = true;
         if (firstTime) {
@@ -664,6 +888,7 @@ namespace simploce {
             ": Cutoff distance for long ranged interactions.");
             firstTime = false;
         }
+
         auto box = particleSystem->box();
         auto energy =
             particleSystem->doWithAll<energy_t>([this, pairList, box] (std::vector<p_ptr_t>& all) {
@@ -680,18 +905,38 @@ namespace simploce {
 
     energy_t
     Forces::external(const p_system_ptr_t& particleSystem) {
+        static util::Logger logger{"simploce::Forces::external()"};
+        logger.trace("Entering.");
+
+        // Must be done first, if not done already.
+        forces::associatePotentials(particleSystem,
+                                    this->cutoffs_,
+                                    bc_,
+                                    forceField_,
+                                    mesoscopic_);
+
         auto box = particleSystem->box();
-        return particleSystem->doWithAll<energy_t>([this, box] (const std::vector<p_ptr_t>& all) {
+        auto energy = particleSystem->doWithAll<energy_t>([this, box] (const std::vector<p_ptr_t>& all) {
             forces::associatePotentials(this->cutoffs_,
                                         all, this->forceField_,
                                         this->mesoscopic_, box,
                                         this->bc_);
             return forces::computeExternalForces(all, forces::externalPotentials_);
         });
+
+        logger.trace("Leaving");
+        return energy;
     }
 
     energy_t
     Forces::bonded(const p_system_ptr_t& particleSystem) {
+        // Must be done first, if not done already.
+        forces::associatePotentials(particleSystem,
+                                    this->cutoffs_,
+                                    bc_,
+                                    forceField_,
+                                    mesoscopic_);
+
         auto box = particleSystem->box();
         return particleSystem->doWithAllFreeGroups<energy_t>([this, box] (
                 const std::vector<p_ptr_t>& all,
@@ -712,17 +957,24 @@ namespace simploce {
     std::tuple<energy_t, energy_t, energy_t>
     Forces::interaction(const p_ptr_t& particle,
                         const p_system_ptr_t& particleSystem) {
+        static util::Logger logger("simploce::Forces::interaction()");
+        logger.trace("Entering");
+
+        // Must be done first, if not done already.
+        forces::associatePotentials(particleSystem,
+                                    this->cutoffs_,
+                                    bc_,
+                                    forceField_,
+                                    mesoscopic_);
+
+        // Calculate interaction energy.
         auto box = particleSystem->box();
-        return particleSystem->doWithAllFreeGroups<std::tuple<energy_t, energy_t, energy_t>>([this, particle, box] (
-                const std::vector<p_ptr_t>& all,
-                const std::vector<p_ptr_t>& free,
-                const std::vector<pg_ptr_t>& groups) {
-            forces::associatePotentials(cutoffs_,
-                                        all,
-                                        this->forceField_,
-                                        this->mesoscopic_,
-                                        box,
-                                        this->bc_);
+        auto result =
+                particleSystem->doWithAllFreeGroups<std::tuple<energy_t, energy_t, energy_t>>(
+                [this, particle, box] (
+                    const std::vector<p_ptr_t>& all,
+                    const std::vector<p_ptr_t>& free,
+                    const std::vector<pg_ptr_t>& groups) {
             return forces::interactionEnergyOfOneParticle(particle,
                                                           free,
                                                           groups,
@@ -732,6 +984,47 @@ namespace simploce {
                                                           this->cutoffs_,
                                                           this->bc_);
         });
+
+        logger.trace("Leaving");
+        return std::move(result);
+    }
+
+    void
+    Forces::initiate(const simploce::p_system_ptr_t &particleSystem) {
+        // Must be done first, if not done already.
+        forces::associatePotentials(particleSystem,
+                                    cutoffs_,
+                                    bc_,
+                                    forceField_,
+                                    mesoscopic_);
+        forces::initiateExternalPotentials(particleSystem,
+                                           forces::externalPotentials_);
+    }
+
+    void
+    Forces::update(const simploce::p_system_ptr_t &particleSystem) {
+        forces::updateExternalPotentials(particleSystem,
+                                         forces::externalPotentials_);
+    }
+
+    void
+    Forces::update(const simploce::p_ptr_t &particle) {
+         forces::updateExternalPotentials(particle,
+                                         forces::externalPotentials_);
+    }
+
+    void
+    Forces::fallback() {
+        for (auto& ep: forces::externalPotentials_) {
+            ep->fallback();
+        }
+    }
+
+    void
+    Forces::complete() {
+        for (auto& ep: forces::externalPotentials_) {
+            ep->complete();
+        }
     }
 
 }

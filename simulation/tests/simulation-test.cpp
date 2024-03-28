@@ -28,7 +28,7 @@ using namespace simploce::param;
  * Simple C++ Test Suite
  */
 
-void test1(const spec_catalog_ptr_t& catalog, const ff_ptr_t& forceField) {
+void mc(const spec_catalog_ptr_t& catalog, const ff_ptr_t& forceField) {
     std::cout << "simulation-test Yiannourakou 1" << std::endl;
     
     std::ofstream trajectoryStream, dataStream;
@@ -47,7 +47,7 @@ void test1(const spec_catalog_ptr_t& catalog, const ff_ptr_t& forceField) {
     auto interactor = factory::interactor(simulationParameters, forceField, bc);
     //auto displacer = factory::displacer(conf::MONTE_CARLO, simulationParameters, interactor);
     auto displacer = factory::displacer(conf::LEAP_FROG, simulationParameters, interactor, bc);
-    Simulation simulation{simulationParameters, particleSystem, catalog, displacer, bc};
+    Simulation simulation{simulationParameters, particleSystem, catalog, displacer, bc, interactor};
 
     std::cout << "Simulating..." << std::endl;
     simulation.perform(trajectoryStream, dataStream);
@@ -69,7 +69,7 @@ int main() {
     auto catalog = factory::particleSpecCatalog(fileName);
     fileName = "/localdisk/resources/interaction-parameters.dat";
     auto forceField = factory::forceField(fileName, catalog);
-    test1(catalog, forceField);
+    mc(catalog, forceField);
 
     return (EXIT_SUCCESS);
 }

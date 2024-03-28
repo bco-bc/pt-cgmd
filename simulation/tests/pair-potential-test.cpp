@@ -28,7 +28,7 @@
 
 using namespace simploce;
 
-void test1(const spec_catalog_ptr_t &catalog, const ff_ptr_t &forceField) {
+void mc(const spec_catalog_ptr_t &catalog, const ff_ptr_t &forceField) {
     box_ptr_t box = factory::box(conf::LARGE);
     bc_ptr_t bc = factory::pbc(box);
     LJ lj{forceField, bc};

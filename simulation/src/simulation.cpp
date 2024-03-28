@@ -10,6 +10,7 @@
 #include "simploce/simulation/displacer.hpp"
 #include "simploce/simulation/s-properties.hpp"
 #include "simploce/simulation/bc.hpp"
+#include "simploce/simulation/interactor.hpp"
 #include "simploce/particle/particle-system.hpp"
 #include "simploce/particle/particle-spec-catalog.hpp"
 #include "simploce/particle/particle-spec.hpp"
@@ -21,12 +22,14 @@ namespace simploce {
                            p_system_ptr_t particleSystem,
                            spec_catalog_ptr_t catalog,
                            displacer_ptr_t displacer,
-                           bc_ptr_t bc) :
+                           bc_ptr_t bc,
+                           interactor_ptr_t interactor) :
             param_{std::move(param)},
             particleSystem_{std::move(particleSystem)},
             catalog_{std::move(catalog)},
             displacer_{std::move(displacer)},
-            bc_{std::move(bc)} {
+            bc_{std::move(bc)},
+            interactor_{std::move(interactor)} {
     }
 
     void Simulation::perform(std::ofstream& trajectoryStream,
@@ -54,6 +57,7 @@ namespace simploce {
                 param_->get<real_t>("simulation.relative-temperature-difference", 10.0);  // in %.
         auto freezeBoundaryParticles = param_->get<bool>("simulation.freeze-boundary");
         auto freeze = param_->get<std::string>("simulation.freeze", std::string{});
+        auto applyBCToPositions =  param_->get<bool>("simulation.bc.positions.include", false);
 
         logger.info(std::to_string(nSteps) + ": Requested number of simulation steps.");
         logger.info(std::to_string(nWrite) + ": Number of steps between writing simulation data.");
@@ -62,7 +66,8 @@ namespace simploce {
         logger.info(std::to_string(freezeBoundaryParticles) + ": Freeze boundary particles?");
         if (!freeze.empty())
             logger.info(freeze + ": Freeze particles of this specification.");
-        logger.info(std::to_string(applyBCToVelocities) + ": Apply boundary conditions to velocities?");
+        logger.info(std::to_string(applyBCToVelocities) + ": Apply boundary condition to velocities?");
+        logger.info(std::to_string(applyBCToPositions) + ": Apply boundary condition to positions?");
 
         if ( scaleVelocities ) {
             logger.info(std::to_string(referenceTemperature) +
@@ -96,6 +101,7 @@ namespace simploce {
 
         // Perform simulation.
         logger.info("Simulation ongoing.");
+        interactor_->initiate(particleSystem_);
         for (int counter = 1; counter <= nSteps; ++counter) {
 
             // Update positions and velocities.
@@ -104,8 +110,10 @@ namespace simploce {
                 numberAccepted += 1;
             }
 
-            // Apply boundary conditions to velocities of displaceable particles (not frozen), if any.
+            // Apply boundary conditions to velocities and/or positions of displaceable particles
+            // (not frozen), if any.
             if (applyBCToVelocities) {
+                // Apply to velocities.
                 particleSystem_->doWithAllFreeGroups<void>([this, counter, applyBcForVelocitiesToParticleGroups](
                     const std::vector<p_ptr_t> &all,
                     const std::vector<p_ptr_t> &free,
@@ -128,7 +136,7 @@ namespace simploce {
                         }
                     } else {
                         if (counter == 1) {
-                            logger.debug("Applying to BC for velocities to all velocities.");
+                            logger.debug("Applying boundary condition to particle velocities.");
                         }
                         for (auto &p: all) {
                             // Exclude frozen particles.
@@ -143,7 +151,28 @@ namespace simploce {
                 });
             }
 
+            if (applyBCToPositions) {
+                // Apply to positions.
+                particleSystem_->doWithAllFreeGroups<void>([this, counter](
+                    const std::vector<p_ptr_t> &all,
+                    const std::vector<p_ptr_t> &free,
+                    const std::vector<pg_ptr_t> &groups) {
+                    if (counter == 1) {
+                        logger.debug("Applying boundary condition to particle positions.");
+                    }
+                    for (auto& p: all) {
+                        if (!p->frozen()) {
+                            // Exclude frozen particles.
+                            auto r = p->position();
+                            r = this->bc_->apply(r);
+                            p->position(r);
+                        }
+                    }
+                });
+            }
+
             if ( counter % nWrite == 0) {
+                // Log some simulation data.
                 data.pressure =
                         particleSystem_->doWithAll<pressure_t>([box, data] (
                                 const std::vector<p_ptr_t>& particles) {
@@ -155,12 +184,14 @@ namespace simploce {
                 trajectoryStream.flush();
                 dataStream.flush();
             }
+
             if (removeCenterOfMassMotion) {
                 if (counter % removeCenterOfMassMotionAfter == 0) {
                     logger.debug(std::to_string(counter) + ": Removing center of mass motion.");
                     util::removeCenterOfMassMotion(particleSystem_);
                 }
             }
+
             if (scaleVelocities) {
                 if (counter % nScaleVelocities == 0) {
                     auto difference =
@@ -172,6 +203,7 @@ namespace simploce {
                 }
             }
         }
+        interactor_->complete();
         logger.info("Simulation completed.");
 
         logger.trace("Leaving.");

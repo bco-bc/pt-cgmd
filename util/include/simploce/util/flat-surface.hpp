@@ -24,7 +24,7 @@ namespace simploce {
         /**
          * Constructor. The default values places the surface parallel to the xy-plane at z = 0.
          * @param plane Plane
-         * @param distanceToPlane Distance to plane.
+         * @param distanceToPlane Distance to given plane.
          */
         explicit FlatSurface(Plane plane = Plane::XY, const dist_t& distanceToPlane = dist_t{0.0});
 

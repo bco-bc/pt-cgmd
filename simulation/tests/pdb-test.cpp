@@ -18,7 +18,7 @@ using namespace simploce;
  */
 
 void test1() {
-    std::cout << "pdb-test Yiannourakou 1" << std::endl;
+    std::cout << "pdb-test" << std::endl;
     
     box_ptr_t box = factory::box(2.0);
     std::cout << "Box size: " << box->size() << std::endl;
@@ -30,7 +30,7 @@ void test1() {
     
     std::cout.setf(std::ios::scientific);
     for (std::size_t k = 1; k != N; ++k) {
-        real_t z = k * dz;
+        real_t z = real_t(k) * dz;
         position_t r2{0, 0, z};
         length_t R = norm<real_t>(r1-r2);
         auto r12 = bc->apply(r1, r2);
@@ -40,7 +40,7 @@ void test1() {
 }
 
 void test2() {
-    std::cout << "pdb-test Yiannourakou 2" << std::endl;
+    std::cout << "pdb-test" << std::endl;
     
     box_ptr_t box = factory::box(2.0);
     std::cout << "Box size: " << box->size() << std::endl;

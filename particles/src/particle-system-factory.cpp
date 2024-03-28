@@ -15,6 +15,7 @@
 #include "simploce/particle/p-factory.hpp"
 #include "simploce/particle/p-util.hpp"
 #include "simploce/particle/atomic-content-handler.hpp"
+#include "simploce/conf/p-conf.hpp"
 #include "simploce/chem/input-source.hpp"
 #include "simploce/chem/pdb-reader.hpp"
 #include "simploce/util/util.hpp"
@@ -30,9 +31,55 @@
 namespace simploce {
     namespace particle_factory {
 
+        /**
+         * Attempts to neutralize given particle system by adding positive or negative ions.
+         * @param particleSystem Particle system.
+         * @param catalog Particle specification catalog.
+         * @return True if successful, otherwise false.
+         */
+        static
+        bool neutralize(const p_system_ptr_t& particleSystem,
+                        const spec_catalog_ptr_t& catalog) {
+            util::Logger logger("simploce::particle_factory::neutralize()");
+            logger.trace("Entering.");
 
+            auto box = particleSystem->box();
+            bool success{true};
+            auto totalCharge = particleSystem->charge();
+            if (totalCharge() > 0.0) {
+                int nAdd = int(totalCharge());
+                auto Cl = catalog->lookup("Cl-");
+                logger.debug(Cl->name() + ": Adding this specification.");
+                for (int n = 0; n != nAdd; ++n) {
+                    auto p = particleSystem->addParticle("Cl-", Cl);
+                    auto x = util::randomUniform() * box->lengthX();
+                    auto y = util::randomUniform() * box->lengthY();
+                    auto z = util::randomUniform() * box->lengthZ();
+                    p->position(position_t{x, y, z});
+                }
+                logger.info(std::to_string(nAdd) + ": Number of extra Cl- ions added.");
+            } else if (totalCharge() < 0.0) {
+                int nAdd = int(std::fabs(totalCharge()));
+                auto Na = catalog->lookup("Na+");
+                logger.debug(Na->name() + ": Adding this specification.");
+                for (int n = 0; n != nAdd; ++n) {
+                    auto p = particleSystem->addParticle("Na+", Na);
+                    auto x = util::randomUniform() * box->lengthX();
+                    auto y = util::randomUniform() * box->lengthY();
+                    auto z = util::randomUniform() * box->lengthZ();
+                    p->position(position_t{x, y, z});
+                }
+                logger.info(std::to_string(nAdd) + ": Number of extra Na+ ions added.");
+            }
 
-
+            totalCharge = particleSystem->charge();
+            if (std::fabs(totalCharge()) > 0.0) {
+                logger.warn(util::to_string(totalCharge) + ": Still non-zero total charge.");
+                success = false;
+            }
+            logger.trace("Leaving.");
+            return success;
+        }
 
     }
 
@@ -52,7 +99,7 @@ namespace simploce {
                                     const temperature_t& temperature) {
         util::Logger logger{"simploce::ParticleSystemFactory::diatomic"};
 
-        // Atomistic model.
+        // Atomistic model
         auto atomistic = factory::atomistic();
         std::vector<p_ptr_t> atoms{};
 
@@ -312,12 +359,13 @@ namespace simploce {
     p_system_ptr_t
     ParticleSystemFactory::simpleElectrolyte(const box_ptr_t& box,
                                              const molarity_t& molarity,
-                                             const temperature_t& temperature)
+                                             const temperature_t& temperature,
+                                             bool randomPositions)
     {
         util::Logger logger{"ParticleSystemFactory::simpleElectrolyte"};
         logger.trace("Entering");
 
-        logger.info("Creating atomistic particle model for a simple electrolyte solution:");
+        logger.info("Creating electrolyte particle model for a simple electrolyte solution:");
 
         logger.info("Molarity (mol/l): " + boost::lexical_cast<std::string>(molarity()));
         logger.info("Temperature (K) : " + boost::lexical_cast<std::string>(temperature()));
@@ -346,13 +394,15 @@ namespace simploce {
         std::size_t nx = util::nint(Lx / spacing);
         std::size_t ny = util::nint(Ly / spacing);
         std::size_t nz = util::nint(Lz / spacing);
-        logger.debug("Distance spacing between ion particles: " + boost::lexical_cast<std::string>(spacing));
-        logger.debug("Number of coordinates in x-direction: " +  boost::lexical_cast<std::string>(nx));
-        logger.debug("Number of coordinates in y-direction: " +  boost::lexical_cast<std::string>(ny));
-        logger.debug("Number of coordinates in z-direction: " +  boost::lexical_cast<std::string>(nz));
+        if (!randomPositions) {
+            logger.debug("Distance spacing between ion particles: " + boost::lexical_cast<std::string>(spacing));
+            logger.debug("Number of coordinates in x-direction: " + boost::lexical_cast<std::string>(nx));
+            logger.debug("Number of coordinates in y-direction: " + boost::lexical_cast<std::string>(ny));
+            logger.debug("Number of coordinates in z-direction: " + boost::lexical_cast<std::string>(nz));
+        }
 
         // Start from an empty particle model.
-       auto atomistic = factory::atomistic();
+       auto electrolyte = factory::atomistic();
 
         // Create ions.
         std::size_t counter = 0;
@@ -363,20 +413,27 @@ namespace simploce {
                 while ( k < nz && counter < nIons ) {
 
                     // Position.
-                    real_t x = (i + 0.5) * spacing() + util::random() * 0.1;
-                    real_t y = (j + 0.5) * spacing() - util::random() * 0.1;
-                    real_t z = (k + 0.5) * spacing() + util::random() * 0.1;
+                    real_t x, y, z;
+                    if (randomPositions) {
+                        x = util::randomUniform() * Lx();
+                        y = util::randomUniform() * Ly();
+                        z = util::randomUniform() * Lz();
+                    } else {
+                        x = (i + 0.5) * spacing() + util::random() * 0.1;
+                        y = (j + 0.5) * spacing() - util::random() * 0.1;
+                        z = (k + 0.5) * spacing() + util::random() * 0.1;
+                    }
                     position_t r{x,y,z};
                     if ( counter % 2 == 0 ) {
                         // Na+
                         std::string name = NA->name() + std::to_string(counter + 1 );
-                        auto ion = atomistic->addAtom(name, NA);
+                        auto ion = electrolyte->addAtom(name, NA);
                         ion->position(r);
                         util::assignVelocity(ion, temperature);
                     } else {
                         // Cl-
                         std::string name = CL->name() + std::to_string(counter + 1);
-                        auto ion = atomistic->addAtom(name, CL);
+                        auto ion = electrolyte->addAtom(name, CL);
                         ion->position(r);
                         util::assignVelocity(ion, temperature);
                     }
@@ -390,17 +447,18 @@ namespace simploce {
             j = 0;
             i += 1;
         }
-        atomistic->box(box);
+        electrolyte->box(box);
+        particle_factory::neutralize(electrolyte, catalog_);
 
         logger.info("Number of ion particles generated: " + boost::lexical_cast<std::string>(counter));
         if (counter < nIons) {
             logger.warn("Number of generated ions is smaller than requested.");
         }
-        logger.info("Ion number density (1/nm^3): " + boost::lexical_cast<std::string>(real_t(counter)/volume()));
+        logger.info("TOTAL ion number density (1/nm^3): " + boost::lexical_cast<std::string>(real_t(counter)/volume()));
 
-        util::removeOverallLinearMomentum(atomistic);
+        util::removeOverallLinearMomentum(electrolyte);
 
-        return std::move(atomistic);
+        return std::move(electrolyte);
     }
 
     p_system_ptr_t
@@ -428,25 +486,9 @@ namespace simploce {
         particle->position(center);
 
         // Neutralize.
-        auto totalCharge = particleSystem->charge();
-        if (totalCharge() > 0.0) {
-            int nAdd = totalCharge();
-            auto CL = catalog_->lookup("Cl-");
-            for (int n = 0; n != nAdd; ++n) {
-                auto p = particleSystem->addParticle("Cl-", CL);
-                p->position(position_t{n*0.1, n * 0.1, n * 0.1});
-            }
-            logger.info(std::to_string(nAdd) + ": Number of extra Cl- ions added.");
-        } else if (totalCharge() < 0.0) {
-            int nAdd = totalCharge();
-            auto CL = catalog_->lookup("Na+");
-            for (int n = 0; n != nAdd; ++n) {
-                auto p = particleSystem->addParticle("Cl-", CL);
-                p->position(position_t{n * 0.1, n * 0.1, n* 0.1});
-            }
-            logger.info(std::to_string(nAdd) + ": Number of extra Na+ ions added.");
-        }
+        particle_factory::neutralize(particleSystem, catalog_);
         logger.info(std::to_string(particleSystem->charge()()) + ": Total charge.");
+
         logger.info(std::to_string(particleSystem->numberOfParticles()) + ": Total number of particles.");
 
         // Done
@@ -865,57 +907,83 @@ namespace simploce {
     }
 
     void
-    ParticleSystemFactory::addParticleBoundary(const p_system_ptr_t& particleSystem,
-                                               dist_t spacing,
-                                               Plane plane,
-                                               bool excludeCorner,
-                                               temperature_t temperature,
-                                               bool mesoscale,
-                                               bool rough,
-                                               length_t boundaryWidth) {
-        util::Logger logger{"simploce::ParticleSystemFactory::addParticleBoundary"};
-        logger.info("Adding boundary particles.");
+    ParticleSystemFactory::addBoundaryParticles(const p_system_ptr_t& particleSystem,
+                                                dist_t spacing,
+                                                const spec_ptr_t& specBP,
+                                                srf_charge_density_t sigma,
+                                                Plane plane,
+                                                bool bothSides,
+                                                bool excludeCorner,
+                                                temperature_t temperature,
+                                                bool mesoscale,
+                                                bool rough,
+                                                length_t boundaryWidth) {
+        util::Logger logger{"simploce::ParticleSystemFactory::addBoundaryParticles"};
         logger.info("Spacing: " + std::to_string(spacing()));
+        logger.info(util::to_string(sigma) + ": Requested surface charge density.");
         logger.info("Plane: " + plane.toString());
-        auto box = particleSystem->box();
+        logger.info(std::to_string(bothSides) + ": Both sides of box?");
+        logger.info(std::to_string(excludeCorner) + ": Exclude corner?");
+        logger.info(util::to_string(temperature) + ": Temperature.");
+        logger.info(std::to_string(mesoscale) + ": Mesoscale system?");
+        logger.info(std::to_string(rough) + ": Rough surface.");
+        logger.info(util::to_string(boundaryWidth) + ": Boundary width.");
+        logger.info(specBP->name() + ": Boundary particle specification name.");
 
+        auto box = particleSystem->box();
         length_t limit1, limit2, dis1, dis2;
         length_t displacement = std::sqrt(boundaryWidth() * boundaryWidth() / 3.0);
-        logger.debug(std::to_string(displacement()) + ": Upper limit for displacement of boundary particles.");
+        logger.debug(std::to_string(displacement()) + ": Range for displacement of boundary particles.");
 
+        int n1, n2; // Number of points in each direction.
+        area_t area;
         if (plane == Plane::XY) {
-            int n = int(box->lengthX() / spacing());
-            dis1 = box->lengthX() / n;
-            n = int(box->lengthY() / spacing());
-            dis2 = box->lengthY() / n;
+            n1 = int(box->lengthX() / spacing());
+            dis1 = box->lengthX() / n1;
+            n2 = int(box->lengthY() / spacing());
+            dis2 = box->lengthY() / n2;
             limit1 = box->lengthX();
             limit2 = box->lengthY();
+            area = box->lengthX() * box->lengthY();
         } else if (plane == Plane::YZ) {
-            int n = int(box->lengthY() / spacing());
-            dis1 = box->lengthY() / n;
-            n = int(box->lengthZ() / spacing());
-            dis2 = box->lengthZ() / n;
+            n1 = int(box->lengthY() / spacing());
+            dis1 = box->lengthY() / n1;
+            n2 = int(box->lengthZ() / spacing());
+            dis2 = box->lengthZ() / n2;
             limit1 = box->lengthY();
             limit2 = box->lengthZ();
+            area = box->lengthY() * box->lengthZ();
         } else {
-            int n = int(box->lengthZ() / spacing());
-            dis1 = box->lengthZ() / n;
-            n = int(box->lengthX() / spacing());
-            dis2 = box->lengthX() / n;
+            n1 = int(box->lengthZ() / spacing());
+            dis1 = box->lengthZ() / n1;
+            n2 = int(box->lengthX() / spacing());
+            dis2 = box->lengthX() / n2;
             limit1 = box->lengthZ();
             limit2 = box->lengthX();
+            area = box->lengthZ() * box->lengthX();
         }
+        logger.debug(std::to_string(n1) + ": Value of n1.");
+        logger.debug(std::to_string(n2) + ": Value of n2.");
+        logger.debug(util::to_string(area) + ": Surface area.");
 
-        real_t coord1 = 0.0;
-        real_t coord2 = excludeCorner ? dis2() : 0.0;
-        limit2 = excludeCorner ? limit2 -= dis2 : limit2;
+        real_t coord1 = excludeCorner ? spacing() : 0.0;
+        limit1 = excludeCorner ? limit1 - dis1 : limit1;
+        real_t coord2 = excludeCorner ? spacing() : 0.0;
+        limit2 = excludeCorner ? limit2 - dis2 : limit2;
+        logger.debug(std::to_string(coord1) + ": Lower limit of coord1.");
+        logger.debug(std::to_string(limit1()) + ": Upper limit for coord1.");
+        logger.debug(std::to_string(coord2) + ": Lower limit of coord2.");
+        logger.debug(std::to_string(limit2()) + ": Upper limit for coord2.");
+
         std::vector<p_ptr_t> particles;
-        auto specBP = catalog_->staticBP();
+        std::string nameBP = specBP->name();
         int counter = 0;
         do {
             do {
                 counter += 1;
-                std::string name = "BP" + std::to_string(counter);
+
+                // One side of box.
+                std::string name = nameBP + std::to_string(counter);
                 auto p1 = particleSystem->addParticle(name, specBP);
                 if (plane == Plane::XY) {
                     position_t r1{coord1, coord2, 0.0};
@@ -927,69 +995,122 @@ namespace simploce {
                     position_t r1{coord2, 0.0, coord1};
                     p1->position(r1);
                 }
-                // Displace boundary particle.
-                auto x = util::randomUniform(-displacement(), displacement());
-                auto y = util::randomUniform(-displacement(), displacement());
-                auto z = util::randomUniform(-displacement(), displacement());
-                auto r1Rough = p1->position() + position_t{x,y,z};
-                p1->position(r1Rough);
+
+                // Displace boundary particle?
+                if (rough) {
+                    auto x = util::randomUniform(-displacement(), displacement());
+                    auto y = util::randomUniform(-displacement(), displacement());
+                    auto z = util::randomUniform(-displacement(), displacement());
+                    auto r = p1->position() + position_t{x, y, z};
+                    p1->position(r);
+                }
+
+                // Velocity.
                 util::assignVelocity(p1, temperature, mesoscale);
                 particles.emplace_back(p1);
+
+                // Update counter.
                 counter += 1;
 
-                name = "BP" + std::to_string(counter);
-                auto p2 = particleSystem->addParticle(name, specBP);
-                if (plane == Plane::XY) {
-                    position_t r2{coord1, coord2, box->lengthZ()};
-                    p2->position(r2);
-                } else if (plane == Plane::YZ) {
-                    position_t r2{box->lengthX(), coord1, coord2};
-                    p2->position(r2);
-                } else {
-                    position_t r2{coord2, box->lengthY(), coord1};
-                    p2->position(r2);
+                // Other side of box.
+                if (bothSides) {
+                    name = "BP" + std::to_string(counter);
+                    auto p2 = particleSystem->addParticle(name, specBP);
+                    if (plane == Plane::XY) {
+                        position_t r2{coord1, coord2, box->lengthZ()};
+                        p2->position(r2);
+                    } else if (plane == Plane::YZ) {
+                        position_t r2{box->lengthX(), coord1, coord2};
+                        p2->position(r2);
+                    } else {
+                        position_t r2{coord2, box->lengthY(), coord1};
+                        p2->position(r2);
+                    }
+
+                    // Displace boundary particle?
+                    if (rough) {
+                        auto x = util::randomUniform(-displacement(), displacement());
+                        auto y = util::randomUniform(-displacement(), displacement());
+                        auto z = util::randomUniform(-displacement(), displacement());
+                        auto r = p2->position() + position_t{x, y, z};
+                        p2->position(r);
+                    }
+
+                    // Velocity.
+                    util::assignVelocity(p2, temperature, mesoscale);
+                    particles.emplace_back(p2);
+
+                     // Update counter.
+                    counter += 1;
                 }
-                // Displace boundary.
-                x = util::randomUniform(-displacement(), displacement());
-                y = util::randomUniform(-displacement(), displacement());
-                z = util::randomUniform(-displacement(), displacement());
-                auto r2Rough = p2->position() + position_t{x,y,z};
-                p2->position(r2Rough);
-                util::assignVelocity(p2, temperature, mesoscale);
-                particles.emplace_back(p2);
                 coord2 += dis2();
             } while (coord2 <= limit2());
-            coord2 = excludeCorner ? dis2() : 0.0;
+            coord2 = excludeCorner ? spacing() : 0.0;
             coord1 += dis1();
         } while (coord1 <= limit1());
 
-        // Check for overlap.
-        std::vector<p_ptr_t> remove;
-        for (auto i = 0 ; i < particles.size() - 1; ++i) {
-            auto pi = particles[i];
-            auto ri = pi->position();
-            for (auto j = i + 1; j < particles.size(); ++j) {
-                auto pj = particles[j];
-                auto rj = pj->position();
-                auto R = norm<real_t>(ri - rj);
-                if ( R < 0.5 * spacing()) {
-                    remove.emplace_back(pj);
-                }
-            }
-        }
-        logger.debug("Removing " + std::to_string(remove.size()) + " boundary from current list.");
-        for (auto& p: remove) {
-            particleSystem->remove(p);
-        }
         auto boundaryParticles = particleSystem->ofSpec(specBP);
+        auto numberOfBP = boundaryParticles.size();
         for (auto &p: boundaryParticles) {
             particleSystem->resetToFree(p);
         }
-        logger.info("Number of boundary particles added: " + std::to_string(counter));
+        logger.info(std::to_string(numberOfBP) + ": Number of boundary particles generated.");
+        charge_t chargeBP = area() * sigma() / real_t(numberOfBP);
+        logger.debug(util::to_string(chargeBP) + ": Charge per boundary particle.");
 
+        // Replace boundary particle specification to reflected requested surface density.
+        auto spec = ParticleSpec::create(specBP->name(),
+                                         chargeBP,
+                                         specBP->mass(),
+                                         specBP->radius(),
+                                         specBP->isFree(),
+                                         specBP->description());
+        logger.debug(util::to_string(*spec) + ": Specification newly created surface boundary particle.");
+        logger.trace("Resetting specification of boundary particle...");
+        for (auto& p: boundaryParticles) {
+            particleSystem->resetSpec(p, spec);
+        }
+        logger.trace("Done");
+
+        // Neutralize.
+        auto success = particle_factory::neutralize(particleSystem, catalog_);
+        if (!success) {
+            ParticleSystemFactory::adjustBoundaryParticleToNeutralize(particleSystem, spec);
+        }
+
+        // Adjust momenta.
         util::removeOverallLinearMomentum(particleSystem);
 
+        // Done.
         logger.trace("Leaving");
+    }
+
+    srf_charge_density_t
+    ParticleSystemFactory::addChargedSurface(const p_system_ptr_t& particleSystem,
+                                             srf_charge_density_t sigma,
+                                             temperature_t temperature) {
+        util::Logger logger("simploce::ParticleSystemFactory::addChargedSurface()");
+        logger.trace("Entering");
+
+        logger.debug(util::to_string(sigma) + ": Requested surface density.");
+        logger.debug(util::to_string(temperature) + ": Requested temperature.");
+
+        auto box = particleSystem->box();
+        auto area = box->lengthX() * box->lengthY();
+        auto charge = util::nint(area * sigma());
+        logger.debug(util::to_string(charge) + ": Charge 'fake' surface particle.");
+        auto spec = ParticleSpec::create("SBP", charge, 1.0, 1.0, true, "SBP");
+        auto sbp = particleSystem->addParticle("SBP", spec);
+        auto success = particle_factory::neutralize(particleSystem, catalog_);
+        if (!success) {
+            util::logAndThrow(logger, "Cannot neutralize given particle system.");
+        }
+        particleSystem->remove(sbp);  // No need to keep.
+        srf_charge_density_t adjustedSigma = real_t(charge) / area;
+        logger.debug(util::to_string(adjustedSigma) + ": Adjusted surface charge density.");
+
+        logger.trace("Leaving");
+        return adjustedSigma;
     }
 
     void
@@ -1184,5 +1305,50 @@ namespace simploce {
 
         logger.trace("Leaving");
     }
+
+    /**
+     * Adjust properties of the boundary particles to neutralize particle system.
+     * @param particleSystem Particle system.
+     * @param specBP Boundary particle specification
+     */
+    void
+    ParticleSystemFactory::adjustBoundaryParticleToNeutralize(const p_system_ptr_t& particleSystem,
+                                                              const spec_ptr_t& specBP) {
+        util::Logger logger("simploce::particle_factory::adjustBoundaryParticleToNeutralize()");
+        logger.trace("Entering.");
+
+        auto charge = particleSystem->charge();
+        logger.debug(util::to_string(charge) + ": Total charge -before- adjustment.");
+        if ( std::fabs(charge()) > 0.0) {
+            auto specs = particleSystem->specsInUse();
+            auto iter = specs.find(specBP->name());
+            if (iter == specs.end()) {
+                logger.warn(specBP->name() + ": No such particle specification in particle system.");
+                logger.warn("Cannot adjust boundary particles. Particle system may not be neutral.");
+                return;
+            }
+            auto n = particleSystem->numberOfSpecifications(specBP);
+            logger.debug(std::to_string(n) + ": Number of particles of specification '" + specBP->name() + "'.");
+            logger.debug(util::to_string(*specBP) + ": CURRENT surface boundary particle specification.");
+            charge_t chargePerBP = std::fabs(charge() / real_t(n));
+            auto adjustment = charge() > 0.0 ? -chargePerBP() : chargePerBP;
+            auto newCharge = specBP->charge() + adjustment;
+            auto spec = ParticleSpec::create(specBP->name(),
+                                             newCharge,
+                                             specBP->mass(),
+                                             specBP->radius(),
+                                             specBP->isFree(),
+                                             specBP->description());
+            logger.debug(util::to_string(adjustment) + ": Charge adjustment per surface boundary particle.");
+            logger.debug(util::to_string(*spec) + ": ADJUSTED surface boundary particle specification.");
+            auto particles = particleSystem->ofSpec(specBP);
+            for (auto& p: particles) {
+                particleSystem->resetSpec(p, spec);
+            }
+        }
+        charge = particleSystem->charge();
+        logger.debug(util::to_string(charge) + ": Total charge -after- adjustment.");
+    }
+
 
 }

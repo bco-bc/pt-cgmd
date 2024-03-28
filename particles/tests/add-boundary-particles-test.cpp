@@ -5,6 +5,7 @@
  */
 
 #include "simploce/particle/particle-system-factory.hpp"
+#include "simploce/particle/particle-spec.hpp"
 #include "simploce/particle/particle-spec-catalog.hpp"
 #include "simploce/particle/particle-system.hpp"
 #include "simploce/util/file.hpp"
@@ -24,7 +25,8 @@ spec_catalog_ptr_t getCatalog() {
 
 p_system_ptr_t getElectrolyte(const spec_catalog_ptr_t& catalog) {
     auto factory = factory::particleSystemFactory(catalog);
-    return factory->simpleElectrolyte();
+    auto box = factory::box(20.0, 20.0, 40.0);
+    return factory->simpleElectrolyte(box);
 }
 
 p_system_ptr_t getWaterInChannel(const spec_catalog_ptr_t& catalog) {
@@ -36,22 +38,45 @@ p_system_ptr_t getWaterInChannel(const spec_catalog_ptr_t& catalog) {
 }
 
 int main() {
+    util::Logger logger("main");
+    util::Logger::changeLogLevel(util::Logger::LOGDEBUG);
+
     auto catalog = getCatalog();
     std::cout << *catalog << std::endl;
     std::cout << std::endl;
-    /*
-    auto electrolyte = getElectrolyte(catalog);
-    electrolyte->write(std::cout);
-    std::cout << std::endl;
-
     auto factory = factory::particleSystemFactory(catalog);
-    factory->addParticleBoundary(electrolyte, 0.3, Plane::XY);
-    electrolyte->write(std::cout);
-    std::cout << std::endl;
-    */
 
+    // Electrolyte
+    auto electrolyte = getElectrolyte(catalog);
+    spec_ptr_t spec = ParticleSpec::create("SBP", 0.1, 1.0, 0.1, true, "# Surface boundary particle");
+    factory->addBoundaryParticles(electrolyte, 0.3, spec);
+    std::string fileName = "/wrk3/tests/electrolyte-bp.ps";
+    std::ofstream ostream;
+    util::open_output_file(ostream, fileName);
+    electrolyte->write(ostream);
+    ostream.close();
 
-    util::Logger::changeLogLevel(util::Logger::LOGDEBUG);
+    auto charge = electrolyte->charge();
+    auto box = electrolyte->box();
+    std::cout << charge << ": Total charge." << std::endl;
+
+    std::cout << "Particle specifications in use:" << std::endl;
+    auto specs = electrolyte->specsInUse();
+    catalog = ParticleSpecCatalog::create(specs);
+    std::cout << *catalog << std::endl;
+    spec = catalog->lookup("SBP");
+    auto n = electrolyte->numberOfSpecifications(spec);
+    auto sigma = n * spec->charge() / (box->lengthX() * box->lengthY());
+    std::cout << sigma << ": Surface charge density." << std::endl;
+    std::cout << electrolyte->numberOfSpecifications(spec) << ": Number of boundary particles." << std::endl;
+
+    fileName = "/wrk3/tests/catalog.dat";
+    util::open_output_file(ostream, fileName);
+    ostream << *catalog << std::endl;
+    ostream.close();
+    std::cout << "New particle specification catalog written to '" + fileName + "'." << std::endl;
+
+    /*
     auto particleSystem = getWaterInChannel(catalog);
     auto factory = simploce::factory::particleSystemFactory(catalog);
     factory->makeChannel(particleSystem, length_t{0.1}, true);
@@ -66,5 +91,7 @@ int main() {
     particleSystem->freeze(spec);
     std::clog << numberOfBoundaryParticles << ": Number of boundary particles." << std::endl;
     std::clog << particleSystem->numberOfParticles() << ": Total number of particles." << std::endl;
+     */
+
     return (EXIT_SUCCESS);
 }

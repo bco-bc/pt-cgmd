@@ -19,13 +19,13 @@ namespace simploce {
     namespace util {
 
         /**
-         * Adds the standard and/or commonly options for an app.
+         * Adds the standard and/or commonly options for an application.
          * @param usage Usage description.
          */
         void addStandardOptions(po::options_description& usage);
 
         /**
-         * Returns particle specifications catalog.
+         * Returns particle specifications catalog, read from an input file.
          * @param vm Programs options and values.
          * @param fileName Default file name, if not available from program options and values,
          * @return Particle specifications catalog.
@@ -33,7 +33,7 @@ namespace simploce {
         spec_catalog_ptr_t getCatalog(const po::variables_map& vm);
 
         /**
-         * Reads an input particle system.
+         * Returns particle system, read from an input file.
          * @param vm Program options and values.
          * @param Parameters.
          * @return Particle system.
@@ -41,15 +41,15 @@ namespace simploce {
         p_system_ptr_t getParticleSystem(const po::variables_map& vm, const param_ptr_t& param);
 
         /**
-         * Writes particle system to output file.
+         * Writes particle system.
          * @param vm Program options and values.
          * @param particleSystem Particle system.
          */
         void writeParticleSystem(const po::variables_map& vm, const p_system_ptr_t& particleSystem);
 
         /**
-         * Sets the debugging logging level, if verbose output is requested. This may result in a large output
-         * log file.
+         * Sets the debugging logging level. This may result in a large output log file, if a verbose log
+         * level is requested.
          * @param vm Program options and values.
          */
         void verbose(const po::variables_map& vm);
@@ -57,13 +57,13 @@ namespace simploce {
         /**
          * Returns parameters.
          * @param vm Program options and values.
-         * @param param Existing parameters. Is lost if new parameters were supplied.
-         * @return Parameters.
+         * @param param Existing parameters, may not contain anything, but must not be a nullptr. On return, its
+         * elements may be overwritten.
          */
         void getParameters(const po::variables_map& vm, const param_ptr_t& param);
 
         /**
-         * Returns force field.
+         * Returns force field, read from an input file.
          * @param vm Program options and values.
          * @return Force field.
          */

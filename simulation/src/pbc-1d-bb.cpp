@@ -16,11 +16,12 @@ namespace simploce {
 
     PBC_1D_BB::PBC_1D_BB(box_ptr_t box,
                          Direction direction) :
-        box_{std::move(box)}, direction_{direction} {
+        boundary_condition_impl{}, box_{std::move(box)}, direction_{direction} {
     }
 
     dist_vect_t
-    PBC_1D_BB::apply(const position_t& ri, const position_t& rj) const {
+    PBC_1D_BB::apply(const position_t& ri,
+                     const position_t& rj) const {
         static int index = direction_.value();
         const box_t& box = *box_;
 
@@ -38,6 +39,11 @@ namespace simploce {
     PBC_1D_BB::placeInside(const position_t& r_out) const {
         static PBC pbc(box_);
         return pbc.placeInside(r_out);
+    }
+
+    position_t
+    PBC_1D_BB::apply(const position_t &r) const {
+        return boundary_condition_impl::apply(r);
     }
 
     velocity_t

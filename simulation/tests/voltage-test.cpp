@@ -31,7 +31,7 @@ int main() {
     dist_t distance{20.0};                        // Box length in the z-direction.
     Voltage potential{el_field_t{0.0, 0.0, 1000.0}, bc, 78.5, mesoscale};
     auto particle = Atom::create("Na+", 0, "12345-98765", catalog->lookup("Na+"));
-    std::cout << "Particle charge: " << particle->charge() << std::endl;
+    std::cout << "Particle reset: " << particle->charge() << std::endl;
     real_t dr = distance() / 100.0;
     int n = int(distance() / dr);
     std:: cout << "n = " << n << std::endl;

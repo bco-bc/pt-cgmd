@@ -56,6 +56,38 @@ namespace simploce {
         pairlist_ptr_t
         pairList() const;
 
+        /**
+         * Initiate something.
+         * @param particleSystem Particle system.
+         */
+        void
+        initiate(const p_system_ptr_t &particleSystem);
+
+        /**
+         * Updates something.
+         * @param particleSystem Particle system.
+         */
+        void
+        update(const p_system_ptr_t &particleSystem);
+
+        /**
+         * Updates something.
+         * @param particle Particle.
+         */
+        void
+        update(const p_ptr_t& particle);
+
+        /**
+         * Falls back or restores something after some update.
+         */
+        static void
+        fallback();
+
+        /**
+         * Signals end of calculations.
+         */
+        static void complete();
+
     private:
 
         param_ptr_t param_;

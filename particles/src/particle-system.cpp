@@ -67,7 +67,8 @@ namespace simploce {
             freeM_{std::move(particleSystem.freeM_)},
             groups_{std::move(particleSystem.groups_)},
             ids_{std::move(particleSystem.ids_)},
-            box_{std::move(particleSystem.box_)} {
+            box_{std::move(particleSystem.box_)},
+            changed_{particleSystem.changed_}{
     }
 
     ParticleSystem&
@@ -79,6 +80,7 @@ namespace simploce {
         groups_ = std::move(particleSystem.groups_);
         ids_ = std::move(particleSystem.ids_);
         box_ = std::move(particleSystem.box_);
+        changed_= particleSystem.changed_;
         return *this;
     }
 
@@ -281,8 +283,23 @@ namespace simploce {
         }
     }
 
+    std::map<std::string, spec_ptr_t>
+    ParticleSystem::specsInUse() const {
+        std::map<std::string, spec_ptr_t> specs;
+        for (auto& p: allV_) {
+            auto pair = std::make_pair<std::string, spec_ptr_t>(p->spec()->name(), p->spec());
+            specs.emplace(pair);
+        }
+        return std::move(specs);
+    }
+
+    bool
+    ParticleSystem::changed() const {
+        return changed_;
+    }
+
     ParticleSystem::ParticleSystem() :
-            allV_{}, allM_{}, freeV_{}, groups_{}, ids_{}, box_{} {
+            allV_{}, allM_{}, freeV_{}, groups_{}, ids_{}, box_{}, changed_{false} {
     }
 
     void
@@ -517,7 +534,7 @@ namespace simploce {
     }
 
     std::vector<p_ptr_t>
-    ParticleSystem::ofSpec(spec_ptr_t& spec) const {
+    ParticleSystem::ofSpec(const spec_ptr_t& spec) const {
         std::vector<p_ptr_t> particles;
         for (auto &p : allV_) {
             if (p->spec()->name() == spec->name()) {

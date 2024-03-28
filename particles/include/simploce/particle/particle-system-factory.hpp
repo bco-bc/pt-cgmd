@@ -92,7 +92,8 @@ namespace simploce {
          */
         p_system_ptr_t simpleElectrolyte(const box_ptr_t& box = factory::box(6.30),
                                          const molarity_t& molarity = 0.1,
-                                         const temperature_t& temperature = units::si<real_t>::ROOM_TEMPERATURE);
+                                         const temperature_t& temperature = units::si<real_t>::ROOM_TEMPERATURE,
+                                         bool randomPositions = true);
 
         /**
          * Places a single large object object at the center of a box filled with an electrolyte solution (NaCl)
@@ -197,25 +198,44 @@ namespace simploce {
 
 
         /**
-         * Adds a layer of surface/boundary particles. These become free particles.
+         * Adds a layer of surface boundary particles to an existing particle system.
          * @param particleSystem Particle system to which boundary particles are added.
-         * @param spacing Spacing between boundary particles.
-         * @param plane Plane identifying surface. Both sides of the particle box will be covered with
-         * boundary particles.
-         * @param temperature Temperature.
-         * @param mesoscale Particle system is a mesoscale system.
+         * @param spacing Spacing between boundary particles. Not necessarily equal to the diameter of a boundary
+         * particle.
+         * @param specBP Boundary particle specification.
+         * @param plane Plane identifying the surface where boundary particles are placed.
+         * @param bothSides Both sides of the particle box will be covered with boundary particles.
+         * @param temperature Temperature. Used for assigning a velocity of a new boundary particle.
+         * @param mesoscale If true, particle system is a mesoscale system.
          * @param rough If true, the boundary will be made rough, that is boundary
-         * particles are not placed at the box boundary, but displacements compatible
-         * the requested boundary width.
+         * particles are not placed precisely at the box boundary, but are displaced relative to the boundary
+         * creating a layer of a certain width.
+         * @param boundaryWidth Width of boundary layer. Employed only if rough is true.
          */
-        void addParticleBoundary(const p_system_ptr_t& particleSystem,
-                                 dist_t spacing,
-                                 Plane plane,
-                                 bool excludeCorner = false,
-                                 temperature_t temperature = 1.0,
-                                 bool mesoscale = true,
-                                 bool rough = true,
-                                 length_t boundaryWidth = 0.1);
+        void addBoundaryParticles(const p_system_ptr_t& particleSystem,
+                                  dist_t spacing,
+                                  const spec_ptr_t& specBP,
+                                  srf_charge_density_t sigma = 1.0,
+                                  Plane plane = Plane::XY,
+                                  bool bothSides = false,
+                                  bool excludeCorner = false,
+                                  temperature_t temperature = units::si<real_t>::ROOM_TEMPERATURE,
+                                  bool mesoscale = false,
+                                  bool rough = false,
+                                  length_t boundaryWidth = 0.0);
+
+        /**
+         * This adds ions to an existing particle system to neutralize a charge surface located parallel
+         * to the xy-plane at z=0 of given surface charge density. This may adjust the surface charge
+         * to ensure neutrality is ensured.
+         * @param particleSystem Particle system.
+         * @param sigma Requested surface charge density.
+         * @param temperature Temperature.
+         */
+        srf_charge_density_t
+        addChargedSurface(const p_system_ptr_t& particleSystem,
+                          srf_charge_density_t sigma = 1.0,
+                          temperature_t temperature = units::si<real_t>::ROOM_TEMPERATURE);
 
         /**
          * Creates a channel in the z-direction by selecting particles with d < wallWidth, where d is the distance
@@ -261,11 +281,20 @@ namespace simploce {
         /**
          * Remove particle groups until requested number density is obtained.
          * @param particleSystem Particle system.
-         * @param rho Requested number density for particles other than boundary particles.
+         * @param rho Requested number density for particles other than surface boundary particles.
          */
         void
         adjustNumberDensityByRemovingParticleGroups(const p_system_ptr_t& particleSystem,
                                                     const number_density_t& rho);
+
+        /**
+         * Adjust properties of the boundary particles to neutralize particle system.
+         * @param particleSystem Particle system.
+         * @param specBP Surface boundary particle specification
+         */
+        static void
+        adjustBoundaryParticleToNeutralize(const p_system_ptr_t& particleSystem,
+                                           const spec_ptr_t& specBP);
         
         spec_catalog_ptr_t catalog_;
     };

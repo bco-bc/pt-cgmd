@@ -1,0 +1,521 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AnalysisUIOptions">
+    <option name="SCOPE_TYPE" value="3" />
+  </component>
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="CMakePresetLoader">{
+  &quot;useNewFormat&quot;: true
+}</component>
+  <component name="CMakeReloadState">
+    <option name="reloaded" value="true" />
+  </component>
+  <component name="CMakeRunConfigurationManager">
+    <generated>
+      <config projectName="util" targetName="telegraph_process_test" />
+      <config projectName="util" targetName="value_cvector_test" />
+      <config projectName="util" targetName="cvector_test" />
+      <config projectName="util" targetName="mu_units_test" />
+      <config projectName="util" targetName="id-test" />
+      <config projectName="util" targetName="random-test" />
+      <config projectName="util" targetName="bessel-test" />
+      <config projectName="util" targetName="matrix_map_test" />
+      <config projectName="util" targetName="nint_test" />
+      <config projectName="util" targetName="sgn-test" />
+      <config projectName="util" targetName="box-cube-test" />
+      <config projectName="util" targetName="param-test" />
+      <config projectName="util" targetName="seed_value_test" />
+      <config projectName="util" targetName="value_type_test" />
+      <config projectName="util" targetName="util" />
+      <config projectName="util" targetName="flat-surface-test" />
+    </generated>
+  </component>
+  <component name="CMakeSettings" AUTO_RELOAD="true">
+    <configurations>
+      <configuration PROFILE_NAME="Debug" ENABLED="true" CONFIG_NAME="Debug" />
+      <configuration PROFILE_NAME="Release" ENABLED="true" CONFIG_NAME="Release" GENERATION_OPTIONS="-DCMAKE_CXX_FLAGS=&quot;-O3&quot;" />
+    </configurations>
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="14574ec0-7039-4957-b1ac-54fdc38fd1e2" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/../simulation/include/simploce/potentials/lekner.hpp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../simulation/include/simploce/simulation/pbc-2d.hpp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../simulation/src/lekner.cpp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../simulation/src/pbc-2d.cpp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../simulation/tests/lekner-test.cpp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../simulation/tests/pbc-2d-test.cpp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../simulation/tests/uniform-surface-charge-density-test.cpp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/include/simploce/util/bessel.hpp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/bessel.cpp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/tests/bessel-test.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../apps/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../apps/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../apps/src/s-particle-system.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/../apps/src/s-particle-system.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../apps/src/s-simulate.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/../apps/src/s-simulate.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../simulation/CMakeLists.txt" beforeDir="false" afterPath="$PROJECT_DIR$/../simulation/CMakeLists.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../simulation/include/simploce/conf/sp-conf.hpp" beforeDir="false" afterPath="$PROJECT_DIR$/../simulation/include/simploce/conf/sp-conf.hpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../simulation/include/simploce/potentials/const-surface-charge-density.hpp" beforeDir="false" afterPath="$PROJECT_DIR$/../simulation/include/simploce/potentials/uniform-surface-charge-density.hpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../simulation/include/simploce/potentials/force-field.hpp" beforeDir="false" afterPath="$PROJECT_DIR$/../simulation/include/simploce/potentials/force-field.hpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../simulation/include/simploce/potentials/wall.hpp" beforeDir="false" afterPath="$PROJECT_DIR$/../simulation/include/simploce/potentials/wall.hpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../simulation/include/simploce/simulation/mc.hpp" beforeDir="false" afterPath="$PROJECT_DIR$/../simulation/include/simploce/simulation/mc.hpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../simulation/include/simploce/simulation/s-factory.hpp" beforeDir="false" afterPath="$PROJECT_DIR$/../simulation/include/simploce/simulation/s-factory.hpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../simulation/src/const-surface-charge-density.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/../simulation/src/uniform-surface-charge-density.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../simulation/src/force-field.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/../simulation/src/force-field.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../simulation/src/forces.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/../simulation/src/forces.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../simulation/src/mc.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/../simulation/src/mc.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../simulation/src/pbc.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/../simulation/src/pbc.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../simulation/src/s-factory.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/../simulation/src/s-factory.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../simulation/src/voltage.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/../simulation/src/voltage.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../simulation/src/wall.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/../simulation/src/wall.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../simulation/tests/CMakeLists.txt" beforeDir="false" afterPath="$PROJECT_DIR$/../simulation/tests/CMakeLists.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../simulation/tests/forcefield-test.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/../simulation/tests/forcefield-test.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../simulation/tests/pdb-test.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/../simulation/tests/pdb-test.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../simulation/tests/wall-test.cpp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/CMakeLists.txt" beforeDir="false" afterPath="$PROJECT_DIR$/CMakeLists.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/include/simploce/util/flat-surface.hpp" beforeDir="false" afterPath="$PROJECT_DIR$/include/simploce/util/flat-surface.hpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/CMakeLists.txt" beforeDir="false" afterPath="$PROJECT_DIR$/tests/CMakeLists.txt" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="ClangdSettings">
+    <option name="formatViaClangd" value="false" />
+  </component>
+  <component name="ExecutionTargetManager" SELECTED_TARGET="CMakeBuildProfile:Debug" />
+  <component name="ExportToHTMLSettings">
+    <option name="OUTPUT_DIRECTORY" value="$PROJECT_DIR$/exportToHTML" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="CMakeLists.txt" />
+      </list>
+    </option>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
+  </component>
+  <component name="MarkdownSettingsMigration">
+    <option name="stateVersion" value="1" />
+  </component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 6
+}</component>
+  <component name="ProjectId" id="1vG5hMYYr7vksjtHAhECJgYglki" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true">
+    <ConfirmationsSetting value="2" id="Add" />
+  </component>
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "CMake Application.bessel-test.executor": "Run",
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.cidr.known.project.marker": "true",
+    "RunOnceActivity.readMode.enableVisualFormatting": "true",
+    "WebServerToolWindowFactoryState": "false",
+    "cf.first.check.clang-format": "false",
+    "cidr.known.project.marker": "true",
+    "cmake.loaded.for.project": "true",
+    "git-widget-placeholder": "development",
+    "last_opened_file_path": "/wrk3/simploce/pt-cgmd/util",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "settings.editor.selected.configurable": "preferences.customizations",
+    "vue.rearranger.settings.migration": "true"
+  }
+}]]></component>
+  <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/include/simploce/conf" />
+      <recent name="$PROJECT_DIR$/include/simploce/units" />
+      <recent name="$PROJECT_DIR$/include/simploce/types" />
+    </key>
+  </component>
+  <component name="RunManager" selected="CMake Application.bessel-test">
+    <configuration default="true" type="CLionExternalRunConfiguration" factoryName="Application" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" EMULATE_TERMINAL="false" PASS_PARENT_ENVS_2="true">
+      <method v="2">
+        <option name="CLION.EXTERNAL.BUILD" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="bessel-test" type="CMakeRunConfiguration" factoryName="Application" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" EMULATE_TERMINAL="false" PASS_PARENT_ENVS_2="true" PROJECT_NAME="util" TARGET_NAME="bessel-test" CONFIG_NAME="Debug" RUN_TARGET_PROJECT_NAME="util" RUN_TARGET_NAME="bessel-test">
+      <method v="2">
+        <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="box-cube-test" type="CMakeRunConfiguration" factoryName="Application" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" EMULATE_TERMINAL="false" PASS_PARENT_ENVS_2="true" PROJECT_NAME="util" TARGET_NAME="box-cube-test" CONFIG_NAME="Debug" RUN_TARGET_PROJECT_NAME="util" RUN_TARGET_NAME="box-cube-test">
+      <method v="2">
+        <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="cvector_test" type="CMakeRunConfiguration" factoryName="Application" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" EMULATE_TERMINAL="false" PASS_PARENT_ENVS_2="true" PROJECT_NAME="util" TARGET_NAME="cvector_test" CONFIG_NAME="Debug" RUN_TARGET_PROJECT_NAME="util" RUN_TARGET_NAME="cvector_test">
+      <method v="2">
+        <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="flat-surface-test" type="CMakeRunConfiguration" factoryName="Application" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" EMULATE_TERMINAL="false" PASS_PARENT_ENVS_2="true" PROJECT_NAME="util" TARGET_NAME="flat-surface-test" CONFIG_NAME="Debug" RUN_TARGET_PROJECT_NAME="util" RUN_TARGET_NAME="flat-surface-test">
+      <method v="2">
+        <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="id-test" type="CMakeRunConfiguration" factoryName="Application" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" EMULATE_TERMINAL="false" PASS_PARENT_ENVS_2="true" PROJECT_NAME="util" TARGET_NAME="id-test" CONFIG_NAME="Debug" RUN_TARGET_PROJECT_NAME="util" RUN_TARGET_NAME="id-test">
+      <method v="2">
+        <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="matrix_map_test" type="CMakeRunConfiguration" factoryName="Application" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" EMULATE_TERMINAL="false" PASS_PARENT_ENVS_2="true" PROJECT_NAME="util" TARGET_NAME="matrix_map_test" CONFIG_NAME="Debug" RUN_TARGET_PROJECT_NAME="util" RUN_TARGET_NAME="matrix_map_test">
+      <method v="2">
+        <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="mu_units_test" type="CMakeRunConfiguration" factoryName="Application" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" EMULATE_TERMINAL="false" PASS_PARENT_ENVS_2="true" PROJECT_NAME="util" TARGET_NAME="mu_units_test" CONFIG_NAME="Debug" RUN_TARGET_PROJECT_NAME="util" RUN_TARGET_NAME="mu_units_test">
+      <method v="2">
+        <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="nint_test" type="CMakeRunConfiguration" factoryName="Application" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" EMULATE_TERMINAL="false" PASS_PARENT_ENVS_2="true" PROJECT_NAME="util" TARGET_NAME="nint_test" CONFIG_NAME="Debug" RUN_TARGET_PROJECT_NAME="util" RUN_TARGET_NAME="nint_test">
+      <method v="2">
+        <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="param-test" type="CMakeRunConfiguration" factoryName="Application" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" EMULATE_TERMINAL="false" PASS_PARENT_ENVS_2="true" PROJECT_NAME="util" TARGET_NAME="param-test" CONFIG_NAME="Debug" RUN_TARGET_PROJECT_NAME="util" RUN_TARGET_NAME="param-test">
+      <method v="2">
+        <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="random-test" type="CMakeRunConfiguration" factoryName="Application" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" EMULATE_TERMINAL="false" PASS_PARENT_ENVS_2="true" PROJECT_NAME="util" TARGET_NAME="random-test" CONFIG_NAME="Debug" RUN_TARGET_PROJECT_NAME="util" RUN_TARGET_NAME="random-test">
+      <method v="2">
+        <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="seed_value_test" type="CMakeRunConfiguration" factoryName="Application" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" EMULATE_TERMINAL="false" PASS_PARENT_ENVS_2="true" PROJECT_NAME="util" TARGET_NAME="seed_value_test" CONFIG_NAME="Debug" RUN_TARGET_PROJECT_NAME="util" RUN_TARGET_NAME="seed_value_test">
+      <method v="2">
+        <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="sgn-test" type="CMakeRunConfiguration" factoryName="Application" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" EMULATE_TERMINAL="false" PASS_PARENT_ENVS_2="true" PROJECT_NAME="util" TARGET_NAME="sgn-test" CONFIG_NAME="Debug" RUN_TARGET_PROJECT_NAME="util" RUN_TARGET_NAME="sgn-test">
+      <method v="2">
+        <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="telegraph_process_test" type="CMakeRunConfiguration" factoryName="Application" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" EMULATE_TERMINAL="false" PASS_PARENT_ENVS_2="true" PROJECT_NAME="util" TARGET_NAME="telegraph_process_test" CONFIG_NAME="Debug" RUN_TARGET_PROJECT_NAME="util" RUN_TARGET_NAME="telegraph_process_test">
+      <method v="2">
+        <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="util" type="CMakeRunConfiguration" factoryName="Application" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" EMULATE_TERMINAL="false" PASS_PARENT_ENVS_2="true" PROJECT_NAME="util" TARGET_NAME="util" CONFIG_NAME="Debug" RUN_TARGET_PROJECT_NAME="util" RUN_TARGET_NAME="value_type_test">
+      <method v="2">
+        <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="value_cvector_test" type="CMakeRunConfiguration" factoryName="Application" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" EMULATE_TERMINAL="false" PASS_PARENT_ENVS_2="true" PROJECT_NAME="util" TARGET_NAME="value_cvector_test" CONFIG_NAME="Debug" RUN_TARGET_PROJECT_NAME="util" RUN_TARGET_NAME="value_cvector_test">
+      <method v="2">
+        <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="value_type_test" type="CMakeRunConfiguration" factoryName="Application" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" EMULATE_TERMINAL="false" PASS_PARENT_ENVS_2="true" PROJECT_NAME="util" TARGET_NAME="value_type_test" CONFIG_NAME="Debug" RUN_TARGET_PROJECT_NAME="util" RUN_TARGET_NAME="value_type_test">
+      <method v="2">
+        <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
+      </method>
+    </configuration>
+    <list>
+      <item itemvalue="CMake Application.box-cube-test" />
+      <item itemvalue="CMake Application.cvector_test" />
+      <item itemvalue="CMake Application.flat-surface-test" />
+      <item itemvalue="CMake Application.id-test" />
+      <item itemvalue="CMake Application.matrix_map_test" />
+      <item itemvalue="CMake Application.mu_units_test" />
+      <item itemvalue="CMake Application.nint_test" />
+      <item itemvalue="CMake Application.param-test" />
+      <item itemvalue="CMake Application.random-test" />
+      <item itemvalue="CMake Application.seed_value_test" />
+      <item itemvalue="CMake Application.sgn-test" />
+      <item itemvalue="CMake Application.telegraph_process_test" />
+      <item itemvalue="CMake Application.util" />
+      <item itemvalue="CMake Application.bessel-test" />
+      <item itemvalue="CMake Application.value_cvector_test" />
+      <item itemvalue="CMake Application.value_type_test" />
+    </list>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="14574ec0-7039-4957-b1ac-54fdc38fd1e2" name="Default Changelist" comment="" />
+      <created>1626175704334</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1626175704334</updated>
+      <workItem from="1626175707579" duration="4402000" />
+      <workItem from="1626186171222" duration="974000" />
+      <workItem from="1626188373274" duration="1057000" />
+      <workItem from="1626256046525" duration="616000" />
+      <workItem from="1634301378195" duration="156000" />
+      <workItem from="1634301806596" duration="52000" />
+      <workItem from="1634301896792" duration="7538000" />
+      <workItem from="1634376869146" duration="2123000" />
+      <workItem from="1634379301391" duration="2148000" />
+      <workItem from="1634553725330" duration="186000" />
+      <workItem from="1634554952221" duration="310000" />
+      <workItem from="1634556393055" duration="1276000" />
+      <workItem from="1634557897273" duration="1270000" />
+      <workItem from="1634565642366" duration="882000" />
+      <workItem from="1634566735871" duration="697000" />
+      <workItem from="1634713847518" duration="79000" />
+      <workItem from="1634741774610" duration="68000" />
+      <workItem from="1634742610368" duration="3000" />
+      <workItem from="1634742916372" duration="706000" />
+      <workItem from="1634808441578" duration="47000" />
+      <workItem from="1634810356419" duration="4031000" />
+      <workItem from="1634841174217" duration="23000" />
+      <workItem from="1634986697579" duration="201000" />
+      <workItem from="1634989171063" duration="730000" />
+      <workItem from="1635158876706" duration="33000" />
+      <workItem from="1635185685975" duration="29000" />
+      <workItem from="1635235838847" duration="257000" />
+      <workItem from="1635236571795" duration="191000" />
+      <workItem from="1635237912222" duration="1384000" />
+      <workItem from="1635255652263" duration="23000" />
+      <workItem from="1635334946291" duration="18000" />
+      <workItem from="1635336651279" duration="624000" />
+      <workItem from="1635338499915" duration="1730000" />
+      <workItem from="1635342184003" duration="664000" />
+      <workItem from="1635412333329" duration="46000" />
+      <workItem from="1635413237790" duration="51000" />
+      <workItem from="1635413389728" duration="20000" />
+      <workItem from="1635413722227" duration="1379000" />
+      <workItem from="1635429887976" duration="48000" />
+      <workItem from="1635430681400" duration="52000" />
+      <workItem from="1635442416744" duration="25000" />
+      <workItem from="1635510685734" duration="14000" />
+      <workItem from="1635601806288" duration="248000" />
+      <workItem from="1635762853509" duration="40000" />
+      <workItem from="1635767571935" duration="19000" />
+      <workItem from="1635855759464" duration="484000" />
+      <workItem from="1635857071734" duration="235000" />
+      <workItem from="1635857875706" duration="512000" />
+      <workItem from="1635860901184" duration="866000" />
+      <workItem from="1635867563981" duration="47000" />
+      <workItem from="1635867615848" duration="26000" />
+      <workItem from="1635869557240" duration="1163000" />
+      <workItem from="1635871054370" duration="1534000" />
+      <workItem from="1635948704930" duration="801000" />
+      <workItem from="1635950937685" duration="607000" />
+      <workItem from="1635951652455" duration="629000" />
+      <workItem from="1635953193052" duration="20000" />
+      <workItem from="1635956962587" duration="318000" />
+      <workItem from="1635957674807" duration="500000" />
+      <workItem from="1635969673602" duration="750000" />
+      <workItem from="1636023374756" duration="61000" />
+      <workItem from="1636054444011" duration="74000" />
+      <workItem from="1636054521825" duration="33000" />
+      <workItem from="1636122629094" duration="121000" />
+      <workItem from="1636368930087" duration="35000" />
+      <workItem from="1636551549405" duration="29000" />
+      <workItem from="1636566618150" duration="1633000" />
+      <workItem from="1636626363435" duration="79000" />
+      <workItem from="1636654006801" duration="25000" />
+      <workItem from="1636654072039" duration="505000" />
+      <workItem from="1636706822280" duration="1113000" />
+      <workItem from="1636714189306" duration="38000" />
+      <workItem from="1636799447983" duration="37000" />
+      <workItem from="1636799544236" duration="32000" />
+      <workItem from="1636811409847" duration="947000" />
+      <workItem from="1636977572249" duration="47000" />
+      <workItem from="1637223309720" duration="247000" />
+      <workItem from="1637922919487" duration="11000" />
+      <workItem from="1638105845984" duration="625000" />
+      <workItem from="1638184988255" duration="70000" />
+      <workItem from="1638267030997" duration="49000" />
+      <workItem from="1638267329604" duration="56000" />
+      <workItem from="1638276227559" duration="1310000" />
+      <workItem from="1638359200770" duration="15000" />
+      <workItem from="1638457852251" duration="53000" />
+      <workItem from="1638472760509" duration="27000" />
+      <workItem from="1638872508522" duration="56000" />
+      <workItem from="1639045927798" duration="10000" />
+      <workItem from="1639046230896" duration="277000" />
+      <workItem from="1639050144935" duration="74000" />
+      <workItem from="1639081452140" duration="9000" />
+      <workItem from="1639390547258" duration="33000" />
+      <workItem from="1640086075772" duration="5263000" />
+      <workItem from="1640093116296" duration="1317000" />
+      <workItem from="1640164879233" duration="607000" />
+      <workItem from="1640166624205" duration="2568000" />
+      <workItem from="1640190283462" duration="2276000" />
+      <workItem from="1640256932890" duration="78000" />
+      <workItem from="1640257259266" duration="23000" />
+      <workItem from="1640340210547" duration="35000" />
+      <workItem from="1640340384855" duration="2954000" />
+      <workItem from="1650375298452" duration="625000" />
+      <workItem from="1650446633137" duration="316000" />
+      <workItem from="1650449723764" duration="15000" />
+      <workItem from="1650451553425" duration="27000" />
+      <workItem from="1650457368203" duration="11000" />
+      <workItem from="1651485083764" duration="552000" />
+      <workItem from="1652363531888" duration="156000" />
+      <workItem from="1652443705815" duration="2659000" />
+      <workItem from="1652607888300" duration="1332000" />
+      <workItem from="1652614334565" duration="692000" />
+      <workItem from="1652692433702" duration="1232000" />
+      <workItem from="1652724370452" duration="23000" />
+      <workItem from="1652783947656" duration="661000" />
+      <workItem from="1652798450871" duration="52000" />
+      <workItem from="1652802401365" duration="626000" />
+      <workItem from="1652865196722" duration="1564000" />
+      <workItem from="1652867152958" duration="724000" />
+      <workItem from="1652879076909" duration="655000" />
+      <workItem from="1652888577021" duration="22000" />
+      <workItem from="1652961863781" duration="76000" />
+      <workItem from="1652970724696" duration="37000" />
+      <workItem from="1653040340858" duration="2919000" />
+      <workItem from="1653317522293" duration="602000" />
+      <workItem from="1653329836010" duration="425000" />
+      <workItem from="1653333578576" duration="259000" />
+      <workItem from="1653379716592" duration="6218000" />
+      <workItem from="1653425227045" duration="204000" />
+      <workItem from="1653471847595" duration="3076000" />
+      <workItem from="1653504144947" duration="2997000" />
+      <workItem from="1653554237053" duration="25000" />
+      <workItem from="1653567270144" duration="25000" />
+      <workItem from="1653567762317" duration="22000" />
+      <workItem from="1653568368827" duration="635000" />
+      <workItem from="1653650257534" duration="19000" />
+      <workItem from="1653651330788" duration="1269000" />
+      <workItem from="1653994684722" duration="626000" />
+      <workItem from="1653995472429" duration="269000" />
+      <workItem from="1654090507814" duration="34000" />
+      <workItem from="1654113420443" duration="933000" />
+      <workItem from="1654190797251" duration="13000" />
+      <workItem from="1654193020506" duration="680000" />
+      <workItem from="1654516153119" duration="60000" />
+      <workItem from="1654516909017" duration="727000" />
+      <workItem from="1654520382504" duration="40000" />
+      <workItem from="1654539868465" duration="45000" />
+      <workItem from="1654545417913" duration="638000" />
+      <workItem from="1654591933850" duration="1959000" />
+      <workItem from="1654632272709" duration="19000" />
+      <workItem from="1654686089219" duration="30000" />
+      <workItem from="1654774231835" duration="15000" />
+      <workItem from="1654774932579" duration="15000" />
+      <workItem from="1654776948252" duration="2349000" />
+      <workItem from="1654785136884" duration="236000" />
+      <workItem from="1654785418848" duration="115000" />
+      <workItem from="1654852128593" duration="62000" />
+      <workItem from="1655143944933" duration="34000" />
+      <workItem from="1655205360399" duration="619000" />
+      <workItem from="1655279319174" duration="39000" />
+      <workItem from="1655290474517" duration="86000" />
+      <workItem from="1655309198837" duration="3227000" />
+      <workItem from="1655371754127" duration="91000" />
+      <workItem from="1655372539548" duration="1081000" />
+      <workItem from="1655633191223" duration="612000" />
+      <workItem from="1655804040857" duration="3105000" />
+      <workItem from="1655809076398" duration="3064000" />
+      <workItem from="1655902050344" duration="25000" />
+      <workItem from="1655903271444" duration="902000" />
+      <workItem from="1656062576658" duration="720000" />
+      <workItem from="1656323663160" duration="26000" />
+      <workItem from="1656583606328" duration="13000" />
+      <workItem from="1656600427054" duration="925000" />
+      <workItem from="1656612678583" duration="2854000" />
+      <workItem from="1656940504015" duration="13000" />
+      <workItem from="1657302125968" duration="17000" />
+      <workItem from="1661795980453" duration="120000" />
+      <workItem from="1661936237723" duration="26000" />
+      <workItem from="1662639330465" duration="1239000" />
+      <workItem from="1663598759903" duration="50000" />
+      <workItem from="1663599535203" duration="155000" />
+      <workItem from="1663660200285" duration="2180000" />
+      <workItem from="1663929981529" duration="91000" />
+      <workItem from="1664390467575" duration="173000" />
+      <workItem from="1664804375928" duration="30000" />
+      <workItem from="1664804435625" duration="10000" />
+      <workItem from="1664879217665" duration="853000" />
+      <workItem from="1664995438296" duration="127000" />
+      <workItem from="1665081173093" duration="467000" />
+      <workItem from="1665082103807" duration="34000" />
+      <workItem from="1667224905919" duration="1652000" />
+      <workItem from="1667822957604" duration="374000" />
+      <workItem from="1667823405220" duration="632000" />
+      <workItem from="1667993426000" duration="59000" />
+      <workItem from="1668692808076" duration="1752000" />
+      <workItem from="1669034079494" duration="383000" />
+      <workItem from="1669034867379" duration="3012000" />
+      <workItem from="1669208482602" duration="689000" />
+      <workItem from="1669626511943" duration="65000" />
+      <workItem from="1669626785015" duration="599000" />
+      <workItem from="1669808873849" duration="599000" />
+      <workItem from="1669888925634" duration="2130000" />
+      <workItem from="1674479412612" duration="47000" />
+      <workItem from="1674480178711" duration="605000" />
+      <workItem from="1680252655348" duration="5000" />
+      <workItem from="1680270631702" duration="18000" />
+      <workItem from="1680782441578" duration="94000" />
+      <workItem from="1680782620764" duration="1704000" />
+      <workItem from="1680791562508" duration="31000" />
+      <workItem from="1681808776364" duration="670000" />
+      <workItem from="1682515768449" duration="1272000" />
+      <workItem from="1682517064599" duration="300000" />
+      <workItem from="1682517372408" duration="555000" />
+      <workItem from="1684154691636" duration="13000" />
+      <workItem from="1689332575613" duration="32000" />
+      <workItem from="1689332694371" duration="606000" />
+      <workItem from="1689335507237" duration="1045000" />
+      <workItem from="1690179448356" duration="268000" />
+      <workItem from="1690366841358" duration="62000" />
+      <workItem from="1690894086340" duration="1999000" />
+      <workItem from="1690972733587" duration="47000" />
+      <workItem from="1692642385470" duration="70000" />
+      <workItem from="1693311278322" duration="1208000" />
+      <workItem from="1693378876138" duration="3424000" />
+      <workItem from="1693505574960" duration="176000" />
+      <workItem from="1693577487450" duration="64000" />
+      <workItem from="1693738600650" duration="39000" />
+      <workItem from="1694510324262" duration="2570000" />
+      <workItem from="1694692901002" duration="14000" />
+      <workItem from="1696582737175" duration="18000" />
+      <workItem from="1696596239659" duration="701000" />
+      <workItem from="1705931035221" duration="436000" />
+      <workItem from="1706007204881" duration="37000" />
+      <workItem from="1706015530737" duration="785000" />
+      <workItem from="1706196362598" duration="149000" />
+      <workItem from="1706795311013" duration="1298000" />
+      <workItem from="1706858473781" duration="1275000" />
+      <workItem from="1706871305122" duration="607000" />
+      <workItem from="1706877293361" duration="14000" />
+      <workItem from="1706877321308" duration="674000" />
+      <workItem from="1707128614455" duration="9053000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+  <component name="VCPKGProject">
+    <isAutomaticCheckingOnLaunch value="false" />
+    <isAutomaticFoundErrors value="true" />
+    <isAutomaticReloadCMake value="true" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+  <component name="VcsManagerConfiguration">
+    <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
+  </component>
+</project>

@@ -8,7 +8,7 @@
 #ifndef SIMULATION_VOLTAGE_HPP
 #define SIMULATION_VOLTAGE_HPP
 
-#include "external-potential.hpp"
+#include "external-potential-impl.hpp"
 #include "simploce/util/direction.hpp"
 
 namespace simploce {
@@ -23,7 +23,7 @@ namespace simploce {
      * on a positively (negatively) charged particle is in the same (opposite) direction. The electric
      * field E(r) = -grad(v(r)) = E0.  Since E0 is constant, one must have v(z)=-E0.z.
      */
-    class Voltage : public external_potential {
+    class Voltage : public external_potential_impl {
     public:
 
         /**
@@ -52,7 +52,7 @@ namespace simploce {
                 real_t eps_r = 1.0,
                 bool mesoscopic = false);
 
-        std::pair<energy_t, force_t> operator () (const p_ptr_t& particle) override;
+        std::pair<energy_t, force_t> operator () (const p_ptr_t& particle) const override;
 
     private:
 

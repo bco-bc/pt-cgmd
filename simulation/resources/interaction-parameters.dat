@@ -21,5 +21,4 @@ ha-qp     CW         DP        0.2         2.0e+06              # r0, fc
 ha-qp     pCW        DP        0.2         2.0e+06              # r0, fc
 # External
 # Type    Parameters
-1
-epd       0.050      0.27      78.5        x     # External potential difference.
+0

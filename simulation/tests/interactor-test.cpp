@@ -17,7 +17,7 @@
 
 using namespace simploce;
 
-void test1(const spec_catalog_ptr_t &catalog, const ff_ptr_t &forceField) {
+void mc(const spec_catalog_ptr_t &catalog, const ff_ptr_t &forceField) {
     std::cout << "Argon:" << std::endl;
     auto factory = factory::protonatableParticleSystemFactory(catalog);
     box_ptr_t box = factory::box(length_t{3.47786});

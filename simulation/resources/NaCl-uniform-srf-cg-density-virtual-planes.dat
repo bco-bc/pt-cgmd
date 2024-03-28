@@ -1,0 +1,15 @@
+# Non-bonded
+# Type    Name #1    Name #2   Parameters     Description
+3
+hs+sf     Na+        Cl-       78.5           # eps_r_inside_rc
+hs+sf     Na+        Na+       78.5           # eps_r_inside_rc
+hs+sf     Cl-        Cl-       78.5           # eps_r_inside_rc
+# Bonded
+# Type    Name #1    Name #2   Parameters     Description
+0
+# External
+# Type    Parameters
+2
+u-srf-cg  0.15 0.3 78.5 xy  # Uniform surface charge density (sigma, Stern layer, relative permittivity, plane)
+v_planes  78.5 2.0          # Virtual planes (relative permittivity, spacing)
+

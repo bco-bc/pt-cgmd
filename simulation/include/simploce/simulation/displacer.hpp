@@ -14,7 +14,7 @@
 namespace simploce {
     
     /**
-     * Displaces or changes the state of simulation model.
+     * Displaces or determineStateChanges the state of simulation model.
      */
     struct displacer {
         

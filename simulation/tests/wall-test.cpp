@@ -22,21 +22,19 @@ int main() {
     dist_t distanceToPlane{7.0};
     int coordinate = 1;
     FlatSurface flatSurface1{Plane::ZX, distanceToPlane};
-    //std::cout << "Flat surface1: " << flatSurface1.toString() << std::endl;
+    std::cout << "Flat surface1: " << flatSurface1.toString() << std::endl;
     Wall wall1(C12, C6, bc, flatSurface1);
     FlatSurface flatSurface2{Plane::ZX, dist_t {0.0}};
-    //std::cout << "Flat surface2: " << flatSurface2.toString() << std::endl;
+    std::cout << "Flat surface2: " << flatSurface2.toString() << std::endl;
     Wall wall2(C12, C6, bc, flatSurface2);
 
-    auto particle = Atom::create("1345x", 0, "Yiannourakou", catalog->lookup("Na+"));
+    auto particle = Atom::create("1345x", 0, "Na+", catalog->lookup("Na+"));
     real_t dr = 0.01;
-    int n = distanceToPlane() / dr;
+    int n = int(distanceToPlane() / dr);
     std::cout.setf(std::ios::scientific);
 
     position_t r{1.0, dr, 1.0};
     particle->position(r);
-    //auto result = wall1.operator()(particle);
-    // std::cout << r << ' ' << result.first << result.second << std::endl;
 
     for (int i = 1; i != n; ++i) {
         r[coordinate] = i * dr;

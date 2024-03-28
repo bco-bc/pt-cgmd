@@ -7,7 +7,7 @@
 #ifndef PBC_HPP
 #define PBC_HPP
 
-#include "bc.hpp"
+#include "bc-impl.hpp"
 
 namespace simploce {
 
@@ -15,7 +15,7 @@ namespace simploce {
    * Periodic boundary condition with the nearest image approximation.
    * @see <a href="https://en.wikipedia.org/wiki/Periodic_boundary_conditions">Wikipedia</a>
    */
-  class PBC : public boundary_condition {
+  class PBC : public boundary_condition_impl {
   public:
       
     /**
@@ -24,15 +24,27 @@ namespace simploce {
      */
     explicit PBC(box_ptr_t box);
 
-    dist_vect_t apply(const position_t& ri, const position_t& rj) const override;
+    dist_vect_t
+    apply(const position_t& ri,
+          const position_t& rj) const override;
     
-    position_t placeInside(const position_t& r_out) const override;
+    position_t
+    placeInside(const position_t& r_out) const override;
 
     /**
      * No effect.
+     * @return r
      */
-    velocity_t apply(const simploce::velocity_t &v,
-                     const position_t& r) const override;
+    position_t
+    apply(const position_t& r) const override;
+
+    /**
+     * No effect.
+     * @return v
+     */
+    velocity_t
+    apply(const simploce::velocity_t &v,
+          const position_t& r) const override;
 
     /**
      * No effect.

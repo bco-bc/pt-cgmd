@@ -17,6 +17,11 @@
 
 namespace simploce {
 
+    spec_catalog_ptr_t
+    ParticleSpecCatalog::create(std::map<std::string, spec_ptr_t> &specs) {
+        return spec_catalog_ptr_t(new ParticleSpecCatalog(specs));
+    }
+
     ParticleSpecCatalog::ParticleSpecCatalog(map_specs_t specs) :
        specs_{std::move(specs)} {
     }

@@ -50,7 +50,7 @@ namespace simploce {
             logger.debug(std::to_string(cutoff) + ": Cutoff distance for long-ranged forces.");
             logger.debug(std::to_string(v) + ": Average velocity.");
             logger.debug(std::to_string(displacement()) + ": Typical displacement in single step.");
-            logger.debug(std::to_string(nPairLists) + ": Number of steps between update pair lists.");
+            logger.debug(std::to_string(nPairLists) + ": Number of steps between updateStateAndAccumulated pair lists.");
             logger.info(std::to_string(pairListCutoff()) + ": Cutoff distance for pair lists generation.");
 
             logger.trace("Leaving.");

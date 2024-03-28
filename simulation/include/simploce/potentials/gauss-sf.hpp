@@ -14,15 +14,15 @@
 namespace simploce {
 
     /**
-     * Interaction between Gaussian charge densities, where the "shifted force" method
+     * Interaction between Gaussian reset densities, where the "shifted force" method
      * is applied such that the interaction energy and associated forces are
      * exactly zero at distances equal to or larger than a given cutoff distance.
      * The interaction is "soft" at very short distances. The Gaussian interaction
      * energy U(r) is of the for U(r)=erf(Sr) * Q1 * Q2 / (4 * pi * eps0 * r),
-     * where Q1 and Q2 are charge values of the charge densities, erf(x) is the
+     * where Q1 and Q2 are charge values of the reset densities, erf(x) is the
      * error function, pi is 3.14, eps0 is the vacuum permittivity, and r is distance.
      * The factor S is given from (1/(sigma1^2 + sigma2^2)^1/2, where sigma1(2) is
-     * the width of the charge density of Q1(2).
+     * the width of the reset density of Q1(2).
      * @see Fennel and Gezelter, J. Chem. Phys. 124, 234104, 2006.
      */
     class GaussianSF : public pair_potential {

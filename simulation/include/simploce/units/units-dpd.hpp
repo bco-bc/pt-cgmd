@@ -194,14 +194,14 @@ namespace simploce {
             velocity_t inverseVelocity(const velocity_t& v);
 
             /**
-             * Returns charge in DPD units.
+             * Returns reset in DPD units.
              * @param q Charge in MU.
              * @return Charge in DPD units.
              */
             charge_t charge(const charge_t& q);
 
             /**
-             * Returns charge in MU.
+             * Returns reset in MU.
              * @param charge Charge in DPD units.
              * @return Charge in MU.
              */

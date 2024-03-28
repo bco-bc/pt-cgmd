@@ -237,6 +237,18 @@ namespace simploce {
          */
         void setOriginToCenterOfMass();
 
+        /**
+         * Returns list of particle specification in use for this particle system.
+         * @return Particle specifications.
+         */
+        std::map<std::string,spec_ptr_t> specsInUse() const;
+
+        /**
+         * Whether this particle system was changed in any ways, other than during creating this particle system.
+         * @return Result.
+         */
+        bool changed() const;
+
     protected:
         
         /**
@@ -316,7 +328,7 @@ namespace simploce {
          * @param spec Specification.
          * @return Particles.
          */
-        std::vector<p_ptr_t> ofSpec(spec_ptr_t& spec) const;
+        std::vector<p_ptr_t> ofSpec(const spec_ptr_t& spec) const;
 
         /**
          * Clears this particle system. That is, removes all particles and particle groups.
@@ -401,6 +413,9 @@ namespace simploce {
 
         // Particle box.
         box_ptr_t box_;
+
+        // Whether this particle system was changed in any way.
+        bool changed_;
     };
 
     /**

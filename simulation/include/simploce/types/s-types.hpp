@@ -30,6 +30,8 @@ namespace simploce {
     class displacer;
     class Cell;
     class Cutoffs;
+    class Lekner;
+    class VirtualPlane;
 
     // S_ is protonation state type, e.g. Discrete or Continuous.
     template <typename S>
@@ -134,6 +136,16 @@ namespace simploce {
      * Screened Coulomb electrostatic interaction pointer typeName.
      */
     using sc_ptr_t = std::shared_ptr<SC>;
+
+    /**
+     * Pointer type for 2D Lekner summation.
+     */
+    using lekner_ptr_t = std::shared_ptr<Lekner>;
+
+    /**
+     * Pointer type for a virtual plane.
+     */
+    using vplane_ptr_t = std::shared_ptr<VirtualPlane>;
 
     namespace units {
 

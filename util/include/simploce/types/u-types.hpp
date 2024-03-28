@@ -52,11 +52,6 @@ namespace simploce {
     using pKa_t = value_t<real_t, -5>;
 
     /**
-     * Radius.
-     */
-    using radius_t = value_t<real_t, -6>;
-
-    /**
      * Mass.
      */
     using mass_t = value_t<real_t, -7>;
@@ -77,6 +72,11 @@ namespace simploce {
     using length_t = value_t<real_t, -10>;
     using dist_t = length_t;
 
+    /*
+     * Radius and diameter.
+     */
+    using radius_t = length_t;
+    using diameter_t = length_t;
     /**
      * Volume.
      */

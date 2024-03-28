@@ -8,14 +8,18 @@
     "mesoscale" : 0,
     "forces" : {
       "include-external" : 0,
-      "cutoff" : 2.6
+      "cutoffSR" : 1.6,
+      "cutoffLR" : 2.6
     },
     "displacer" : {
       "lvv" : {
         "gamma" : 1.0
       },
       "mc" : {
-        "range" : 0.1
+        "range" : 0.1,
+        "keep-in-box": "x,y",
+        "in-box": "false",
+        "z-non-negative": "true"
       }
     }
   }

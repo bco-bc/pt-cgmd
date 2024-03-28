@@ -73,17 +73,35 @@ namespace simploce {
         virtual mass_t mass() const;
         
         /**
-         * Returns current position.
+         * Returns the current position.
          * @return Position.
          */
         position_t position() const;
+
+        /**
+         * Returns a previous position, e.g., the position before some displacement or some other change
+         * occurred.
+         * @return Previous position.
+         */
+        position_t previousPosition() const;
         
         /**
-         * Sets position. No effect if particle is frozen.
+         * Sets the current position. No effect if particle is frozen.
          * @param r New position.
          * @see #frozen()
+         * @return Previous (old) position.
          */
-        void position(const position_t& r);
+        void
+        position(const position_t& r);
+
+        /**
+         * Set the previous position, e.g., the position before a displacement or some other change occurs.
+         * No effect if particle is frozen.
+         * @param r Position.
+         * @see #frozen()
+         */
+        void
+        previousPosition(const position_t& r);
         
         /**
          * Returns current velocity.
@@ -173,13 +191,16 @@ namespace simploce {
         friend class ProtonationSite;
 
         // Sets particle id.
-        void id(const id_t& id);
+        void
+        id(const id_t& id);
         
         // Reassigns particle specification.
-        void resetSpec(const spec_ptr_t& spec);
+        void
+        resetSpec(const spec_ptr_t& spec);
 
         // Reassign particle name.
-        void resetName(const std::string& name);
+        void
+        resetName(const std::string& name);
 
         /**
          * Freezes this particle at the present location. Attempts to assign a new position
@@ -191,7 +212,8 @@ namespace simploce {
         std::size_t index_;
         std::string name_;
         spec_ptr_t spec_;
-        position_t r_;
+        position_t r_;      // Current position.
+        position_t pr_;     // Previous position.
         velocity_t v_;
         force_t f_;
         bool frozen_;

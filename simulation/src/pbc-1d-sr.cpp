@@ -15,11 +15,12 @@
 namespace simploce {
 
     PBC_1D_SR::PBC_1D_SR(simploce::box_ptr_t box, simploce::Direction direction) :
-        box_{std::move(box)}, direction_{direction} {
+        boundary_condition_impl{}, box_{std::move(box)}, direction_{direction} {
     }
 
     dist_vect_t
-    PBC_1D_SR::apply(const simploce::position_t &ri, const simploce::position_t &rj) const {
+    PBC_1D_SR::apply(const simploce::position_t &ri,
+                     const simploce::position_t &rj) const {
         static int index = direction_.value();
         const box_t& box = *box_;
 
@@ -33,13 +34,15 @@ namespace simploce {
         return rij;
     }
 
-    position_t PBC_1D_SR::placeInside(const simploce::position_t &r_out) const {
+    position_t
+    PBC_1D_SR::placeInside(const simploce::position_t &r_out) const {
         static PBC pbc(box_);
         return pbc.placeInside(r_out);
     }
 
     velocity_t
-    PBC_1D_SR::apply(const simploce::velocity_t &v, const simploce::position_t &r) const {
+    PBC_1D_SR::apply(const simploce::velocity_t &v,
+                     const simploce::position_t &r) const {
         static auto nc = bc::normalComponents(direction_);
 
         auto vel = v;
@@ -49,7 +52,13 @@ namespace simploce {
         return vel;
     }
 
-    void PBC_1D_SR::applyToVelocities(const simploce::pg_ptr_t &particleGroup) const {
+    position_t
+    PBC_1D_SR::apply(const simploce::position_t &r) const {
+        return boundary_condition_impl::apply(r);
+    }
+
+    void
+    PBC_1D_SR::applyToVelocities(const simploce::pg_ptr_t &particleGroup) const {
         static auto box = *box_;
         static auto nc = bc::normalComponents(direction_);
 

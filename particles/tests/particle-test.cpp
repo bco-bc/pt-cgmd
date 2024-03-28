@@ -99,6 +99,16 @@ void test5() {
     std::cout << "Bead empty: " << (bead.get() == nullptr) << std::endl;
 
     particles.emplace_back(atom);
+
+    atom = particles[0];
+    position_t r{0,1,2};
+    atom->position(r);
+    std::cout << "Current position: " << atom->position() << std::endl;
+    std::cout << "Previous position: " << atom->previousPosition() << std::endl;
+    r[1] = 1199.0;
+    atom->position(r);
+    std::cout << "Current position: " << atom->position() << std::endl;
+    std::cout << "Previous position: " << atom->previousPosition() << std::endl;
 }
 
 int main() {

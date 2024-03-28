@@ -26,11 +26,12 @@ add_library(simulation SHARED
         src/sf.cpp src/hs-sf.cpp src/sc.cpp src/hs-sc.cpp src/non-interacting.cpp
         src/halve-attractive-qp.cpp src/halve-attractive-hp.cpp
         src/lj-sf.cpp src/soft-repulsion.cpp src/hp-sr.cpp
-        src/solid-sphere-dsf.cpp src/gauss-sf.cpp src/gauss-sf-sr.cpp
-        src/pressure-gradient.cpp
+        src/solid-sphere-dsf.cpp src/gauss-sf.cpp src/gauss-sf-sr.cpp src/lekner.cpp src/hs-lekner.cpp
+        src/pressure-gradient.cpp src/vplane.cpp src/vplanes.cpp src/external-potential-impl.cpp
         src/cutoffs.cpp
         src/pair-list.cpp src/simulation.cpp src/sim-data.cpp
-        src/no-bc.cpp src/pbc.cpp src/pbc-1d-bb.cpp src/pbc-1d-sr.cpp src/bc-util.cpp src/s-factory.cpp
+        src/bc-impl.cpp src/no-bc.cpp src/pbc.cpp src/pbc-1d-bb.cpp src/pbc-1d-sr.cpp src/pbc-2d.cpp src/bc-util.cpp
+        src/s-factory.cpp
         src/s-properties.cpp src/protonatable-particle-system-factory.cpp
         src/continuous.cpp src/discrete.cpp src/force-field.cpp
         src/distance-pair-list-generator.cpp src/cell.cpp src/grid.cpp
@@ -39,7 +40,7 @@ add_library(simulation SHARED
         src/langevin-leap-frog.cpp src/langevin-velocity-verlet.cpp src/mvv-dpd.cpp
         src/s1-dpd.cpp
         src/mc.cpp src/analysis.cpp src/gr.cpp
-        src/const-surface-charge-density.cpp src/voltage.cpp src/wall.cpp
+        src/uniform-surface-charge-density.cpp src/voltage.cpp src/wall.cpp
         src/s-util.cpp)
 
 

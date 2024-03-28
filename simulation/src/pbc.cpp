@@ -14,7 +14,7 @@
 namespace simploce {
 
     PBC::PBC(box_ptr_t box) :
-            boundary_condition{}, box_{std::move(box)} {
+        boundary_condition_impl{}, box_{std::move(box)} {
     }
 
     dist_vect_t 
@@ -47,6 +47,7 @@ namespace simploce {
             real_t ratio = rk / box_k;
             real_t n = util::nint(std::floor(ratio));
             r_in[k] -= n * box_k;
+            /*
             if (r_in[k] < 0 || r_in[k] > box_k) {
                 logger.error("r_out:");
                 util::log(logger, r_out, util::Logger::LOGERROR);
@@ -55,19 +56,25 @@ namespace simploce {
                 logger.error("n: " + std::to_string(n));
                 util::logAndThrow(logger, "Position r_in is -not- inside the box.");
             }
-            //assert(r_in[k] >= 0 && r_in[k] <= box_k);
+            */
         }
         return r_in;
+    }
+
+    position_t
+    PBC::apply(const position_t &r) const {
+       return boundary_condition_impl::apply(r);
     }
 
     velocity_t
     PBC::apply(const velocity_t &v,
                const position_t& r) const {
-        return v;
+        return boundary_condition_impl::apply(v, r);
     }
 
     void
     PBC::applyToVelocities(const simploce::pg_ptr_t &particleGroup) const {
+        boundary_condition_impl::applyToVelocities(particleGroup);
     }
 
 }

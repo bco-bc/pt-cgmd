@@ -23,7 +23,8 @@ namespace simploce {
     public:
 
         /**
-         * Holds parameters for an interaction.
+         * Holds parameters for a single interaction.
+         *
          */
         using int_spec_t = struct {
             std::string typeName;   // Type name.
@@ -41,11 +42,13 @@ namespace simploce {
             el_field_t e0;          // External electric field applied in a direction.
             char direction;         // Direction (or axis) along which something is applied.
             std::string plane;      // Plane specification.
-            real_t sigma;           // Surface charge density.
+            real_t sigma;           // Uniform surface charge density.
+            real_t delta;           // Stern layer for uniform surface density.
             real_t sigma1;          // Width Gaussian charge density.
             real_t sigma2;          // Width Gaussian charge density.
             real_t max_a;           // Maximum repulsion (MVV_DPD).
             force_t fe;             // External force applied in a direction.
+            real_t spacing;         // Spacing between things.
         };
 
         /**
@@ -179,7 +182,7 @@ namespace simploce {
                                       const spec_ptr_t &spec2) const;
 
         /**
-         * Returns interaction parameters for the electrostatic interaction between two overlapping charge densities.
+         * Returns interaction parameters for the electrostatic interaction between two overlapping reset densities.
          * @param spec1 Particle specification #1.
          * @param spec2 Particle specification #2.
          * @return sigma1, sigma2, respectively. Sigma represents the "width" of each density.
@@ -189,8 +192,17 @@ namespace simploce {
                               const spec_ptr_t &spec2) const;
 
         /**
+         * Returns relative permittivity or dielectric constant for the hard-sphere 2D Lekner summation.
+         * @param spec1 Particle specification #1.
+         * @param spec2 Particle specification #2.
+         */
+        real_t
+        hardSphereLekner(const spec_ptr_t &spec1,
+                         const spec_ptr_t &spec2) const;
+
+        /**
          * Returns interaction parameters for the combined interaction for
-         * overlapping Gaussian charge densities and the soft repulsion. This is for
+         * overlapping Gaussian reset densities and the soft repulsion. This is for
          * mesoscopic simulations.
          * @param spec1 Particle specification #1.
          * @param spec2 Particle specification #2.
@@ -272,17 +284,17 @@ namespace simploce {
          * @param spec2 Particle specification #2.
          * @return Equilibrium distance (r0), force constant (fc), Maximum repulsion (a).
          */
-        std::tuple<real_t, real_t, real_t> harmonicSoftRepulsion(const spec_ptr_t &spec1,
-                                                                 const spec_ptr_t &spec2) const;
+        std::tuple<real_t, real_t, real_t>
+        harmonicSoftRepulsion(const spec_ptr_t &spec1,
+                              const spec_ptr_t &spec2) const;
 
         /**
-         * Returns const surface charge density external potential parameters.
-         * @param spec Particle specification.
-         * @return Surface charge density, eps_inside_rc (eps = relative permittivity, rc = cutoff distance).
+         * Returns external potential parameters for a uniform surface reset density.
+         * @return Surface reset density, delta, eps_inside_rc (delta = Width Stern layer,
+         * eps = relative permittivity, rc = cutoff distance), plane.
          */
-        std::pair<srf_charge_density_t, real_t> constSurfaceChargeDensity() const;
-
-        std::tuple<el_pot_diff_t, dist_t, real_t> electricPotentialDifference() const;
+        std::tuple<srf_charge_density_t, dist_t, real_t, std::string>
+        uniformSurfaceChargeDensity() const;
 
     private:
 

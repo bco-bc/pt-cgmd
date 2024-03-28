@@ -16,7 +16,7 @@
 namespace simploce {
 
     /**
-     * Interaction between overlapping Gaussian charge densities plus soft-repulsion.
+     * Interaction between overlapping Gaussian reset densities plus soft-repulsion.
      * This potential is for mesoscopic simulations.
      */
     class GaussianSF_SoftRepulsion : public pair_potential {
@@ -27,7 +27,7 @@ namespace simploce {
          * @param forceField Force field.
          * @param bc Boundary conditions.
          * @param cutoffs Cutoff distances.
-         * @param gaussianSF Pair potential for overlapping Gaussian charge densities.
+         * @param gaussianSF Pair potential for overlapping Gaussian reset densities.
          * @param softRepulsion Pair potential for the soft repulsive interaction.
          *
          */

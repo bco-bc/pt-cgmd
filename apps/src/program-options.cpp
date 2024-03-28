@@ -10,6 +10,7 @@
 #include "simploce/particle/particle-system-factory.hpp"
 #include "simploce/particle/particle-system.hpp"
 #include "simploce/particle/particle-spec-catalog.hpp"
+#include "simploce/util/util.hpp"
 #include "simploce/util/logger.hpp"
 #include "simploce/util/param.hpp"
 #include "simploce/util/file.hpp"
@@ -43,7 +44,7 @@ namespace simploce {
             )(
                     "fn-input-parameters,p",
                     po::value<std::string>(&poHelper_.fnParameters),
-                    "Input file name parameters."
+                    "Input file name (simulation) parameters."
             )(
                     "fn-input-force-field,f",
                     po::value<std::string>(&poHelper_.fnForceField),
@@ -87,18 +88,18 @@ namespace simploce {
             if (!poHelper_.particleSystem) {
                 bool isPDB{false};
                 bool isCoarseGrained{false};
+                bool isMesoscale{false};
                 if (vm.count("pdb")) {
                     isPDB = true;
                 }
                 if (vm.count("coarse-grained")) {
                     isCoarseGrained = true;
-                    param->put("simulation.mesoscale", isCoarseGrained);
                 }
                 if (vm.count("is-mesoscale")) {
                     isCoarseGrained = true;
-                    bool isMesoscale = true;
-                    param->put<bool>("simulation.mesoscale", isMesoscale);
+                    isMesoscale = true;
                 }
+                param->put<bool>("simulation.mesoscale", isMesoscale);
                 auto fn = poHelper_.fnInputParticleSystem;
                 if (vm.count("fn-input-particle-system")) {
                     fn = vm["fn-input-particle-system"].as<std::string>();
@@ -115,6 +116,11 @@ namespace simploce {
                 logger.info(std::to_string(ps->numberOfParticles()) + ": Number of particles.");
                 logger.info(std::to_string(ps->numberOfFreeParticles()) + ": Number of free particles.");
                 logger.info(std::to_string(ps->numberOfParticleGroups()) + ": Number of particle groups.");
+                logger.info(std::to_string(ps->numberOfFrozenParticles()) + ": Number of frozen particles.");
+                logger.info(std::to_string(isCoarseGrained) + ": Coarse-grained?");
+                logger.info(std::to_string(isMesoscale) + ": Mesoscale?");
+                logger.info(std::to_string(ps->isProtonatable()) + ": Protonatable?");
+                logger.info(util::to_string(*ps->box()) + ": Box dimensions.");
             }
             return poHelper_.particleSystem;
         }

@@ -32,33 +32,28 @@ using namespace simploce::param;
  * Simple C++ Test Suite
  */
 
-void test1(const spec_catalog_ptr_t& catalog, const ff_ptr_t& forceField) {
-    std::cout << "displacer-test Yiannourakou 1" << std::endl;
+void mc(const spec_catalog_ptr_t& catalog, const ff_ptr_t& forceField) {
+    std::cout << "displacer-test Monte Carlo" << std::endl;
 
-    auto simulationParameters = factory::simulationParameters();
-    std::cout << *simulationParameters << std::endl;
-    
-    box_ptr_t box = factory::box(length_t{5.0});
-    bc_ptr_t bc = factory::pbc(box);
+    auto param = factory::simulationParameters();
+    param->put<std::string>("simulation.displacer.mc.keep-in-box", "x,y");
+    param->put<bool>("simulation.displacer.mc.in-box", false);
+    param->put<bool>("simulation.mesoscale", false);
+    param->put<real_t>("simulation.displacer.mc.range", 1.5);
+    param->put<bool>("simulation.displacer.mc.z-non-negative", true);
+    std::cout << *param << std::endl;
 
     auto factory = factory::particleSystemFactory(catalog);
     p_system_ptr_t particleSystem = factory->diatomic(0.12, catalog->O());
+    bc_ptr_t bc = factory::pbc(particleSystem->box());
     auto interactor =
-            factory::interactor(simulationParameters, forceField, bc);
-    auto displacer = factory::displacer(conf::MONTE_CARLO, simulationParameters, interactor, bc);
-    auto result = interactor->interact(particleSystem);
-    std::cout << "BEFORE: Non-bonded: " << std::get<1>(result);
-    std::cout << ", bonded: " << std::get<0>(result) << std::endl;
-    std::cout << "; external: " << std::get<2>(result) << std::endl;
-    std::cout << "Displacing particle system..." << std::endl;
-    for (int k = 0; k != 100; ++k) {
-        displacer->displace(particleSystem);
-    }
-    std::cout << "Done." << std::endl;
-    result = interactor->interact(particleSystem);
-    std::cout << "AFTER: Non-bonded: " << std::get<1>(result);
-    std::cout << ", bonded: " << std::get<0>(result) << std::endl;
-    std::cout << "; external: " << std::get<2>(result) << std::endl;
+            factory::interactor(param, forceField, bc);
+    auto displacer = factory::displacer(conf::MONTE_CARLO,
+                                        param,
+                                        interactor,
+                                        bc);
+    displacer->displace(particleSystem);
+    displacer->displace(particleSystem);
 }
 
 int main() {
@@ -76,7 +71,7 @@ int main() {
     auto forceField = factory::forceField(stream, catalog);
     stream.close();
 
-    test1(catalog, forceField);
+    mc(catalog, forceField);
 
     return (EXIT_SUCCESS);
 }

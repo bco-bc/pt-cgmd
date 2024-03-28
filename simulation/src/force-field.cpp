@@ -17,10 +17,16 @@
 namespace simploce {
 
     static void notFound(util::Logger& logger,
-                         const spec_ptr_t& spec1, const spec_ptr_t& spec2) {
+                         const spec_ptr_t& spec1,
+                         const spec_ptr_t& spec2) {
         util::logAndThrow(logger,
                           "(" + spec1->name() + ", " + spec2->name() +
                           "): No interaction parameters for this particle specifications pair.");
+    }
+
+    static void
+    externalNotFound(util::Logger& logger, const std::string& typeName) {
+            util::logAndThrow(logger, typeName + ": No parameters for this external potential.");
     }
 
     ff_ptr_t
@@ -80,6 +86,9 @@ namespace simploce {
                        typeName == conf::HS_SC || typeName == conf::SC) {
                 spec.typeName = typeName;
                 stream >> spec.eps_inside_rc;
+            } else if (typeName == conf::HS_LEKNER) {
+                spec.typeName = conf::HS_LEKNER;
+                stream >> spec.eps_r;
             } else if (typeName == conf::LJ_SF) {
                 spec.typeName = conf::LJ_SF;
                 stream >> spec.C12 >> spec.C6 >> spec.eps_inside_rc;
@@ -181,8 +190,17 @@ namespace simploce {
                 real_t fx, fy, fz;
                 stream >> fx >> fy >> fz;
                 spec.fe = force_t(fx, fy, fz);
+            } else if (typeName == conf::U_SRF_CG) {
+                spec.typeName = conf::U_SRF_CG;
+                std::string s;
+                stream >> spec.sigma >> spec.delta >> spec.eps_r >> s;
+                boost::trim(s);
+                spec.plane = s;
+            } else if (typeName == conf::VIRTUAL_PLANES) {
+                spec.typeName = conf::VIRTUAL_PLANES;
+                stream >> spec.eps_r >> spec.spacing;
             } else {
-                util::logAndThrow(logger, "'" + typeName + "': No such external potential.");
+                util::logAndThrow(logger, "'" + typeName + "': No such external potential specified.");
             }
 
             forceField->addExternalSpecification(spec);
@@ -336,7 +354,8 @@ namespace simploce {
     }
 
     std::pair<real_t, real_t>
-    ForceField::gaussianChargeDensity(const simploce::spec_ptr_t &spec1, const simploce::spec_ptr_t &spec2) const {
+    ForceField::gaussianChargeDensity(const simploce::spec_ptr_t &spec1,
+                                      const simploce::spec_ptr_t &spec2) const {
         util::Logger logger("simploce::ForceField::gaussianChargeDensity()");
         for (auto& spec : this->nonBondedSpecs_) {
             if (spec.typeName == conf::GAUSS_SF) {
@@ -349,6 +368,24 @@ namespace simploce {
         // Not found.
         notFound(logger, spec1, spec2);
         return std::make_pair(0.0, 0.0);
+    }
+
+    real_t
+    ForceField::hardSphereLekner(const spec_ptr_t &spec1,
+                                 const spec_ptr_t &spec2) const {
+        util::Logger logger("simploce::ForceField::hardSphereLekner()");
+        for (auto& spec : this->nonBondedSpecs_) {
+            if (spec.typeName == conf::HS_LEKNER) {
+                if ((spec.spec1 == spec1 && spec.spec2 == spec2) ||
+                    (spec.spec1 == spec2 && spec.spec2 == spec1)) {
+                    return spec.eps_r;
+                }
+            }
+        }
+
+        // Not found.
+        notFound(logger, spec1, spec2);
+        return 0.0;
     }
 
     std::tuple<real_t, real_t, real_t>
@@ -487,14 +524,16 @@ namespace simploce {
         return std::make_tuple(0.0, 0.0, 0.0);
     }
 
-    std::pair<srf_charge_density_t, real_t>
-    ForceField::constSurfaceChargeDensity() const {
-        return std::pair<srf_charge_density_t, real_t>{0.0, 0.0};
-    }
-
-    std::tuple<el_pot_diff_t, dist_t, real_t>
-    ForceField::electricPotentialDifference() const {
-        return std::tuple<el_pot_diff_t, dist_t, real_t>{0.0, 0.0, 0.0};
+    std::tuple<srf_charge_density_t, dist_t, real_t, std::string>
+    ForceField::uniformSurfaceChargeDensity() const {
+        static util::Logger logger("simploce::ForceField::uniformSurfaceChargeDensity()");
+        for (auto& spec : this->externalSpecifications()) {
+            if (spec.typeName == conf::U_SRF_CG) {
+                return std::make_tuple(spec.sigma, spec.delta, spec.eps_r, spec.plane);
+            }
+        }
+        externalNotFound(logger, conf::U_SRF_CG);
+        return std::make_tuple(0, 0, 0, "");
     }
 
     std::ostream&
@@ -503,7 +542,7 @@ namespace simploce {
         stream.precision(conf::PRECISION);
         const auto& nbSpecs = forceField.nonBondedSpecifications();
         stream << "# Non-bonded" << std::endl;
-        stream << "#     Type   Name #1   Name #2" << std::endl;
+        stream << "#     Type   Name #1   Name #2    description" << std::endl;
         stream << nbSpecs.size() << std::endl;
         for (auto& spec : nbSpecs) {
             if (spec.typeName == conf::LJ ) {
@@ -540,6 +579,13 @@ namespace simploce {
                 stream << std::setw(conf::REAL_WIDTH) << spec.eps_inside_rc;
                 stream << conf::SPACE << "# eps_inside_rc";
                 stream << std::endl;
+            } else if (spec.typeName == conf::HS_LEKNER) {
+                stream << std::setw(conf::NAME_WIDTH) << spec.typeName;
+                stream << std::setw(conf::NAME_WIDTH) << spec.spec1->name();
+                stream << std::setw(conf::NAME_WIDTH) << spec.spec2->name();
+                stream << std::setw(conf::REAL_WIDTH) << spec.eps_r;
+                stream << conf::SPACE << "# eps (relative permittivity or dielectric constant)";
+                stream << std::endl;
             } else if (spec.typeName == conf::RF || spec.typeName == conf::HS_RF) {
                 stream << std::setw(conf::NAME_WIDTH) << spec.typeName;
                 stream << std::setw(conf::NAME_WIDTH) << spec.spec1->name();
@@ -561,7 +607,7 @@ namespace simploce {
                 stream << std::setw(conf::NAME_WIDTH) << spec.spec2->name();
                 stream << std::setw(conf::REAL_WIDTH) << spec.sigma1;
                 stream << std::setw(conf::REAL_WIDTH) << spec.sigma2;
-                stream << conf::SPACE << "# Widths of charge densities";
+                stream << conf::SPACE << "# Widths of reset densities";
                 stream << std::endl;
             } else if (spec.typeName == conf::GAUSS_SF_SR) {
                 stream << std::setw(conf::NAME_WIDTH) << spec.typeName;
@@ -570,7 +616,7 @@ namespace simploce {
                 stream << std::setw(conf::REAL_WIDTH) << spec.sigma1;
                 stream << std::setw(conf::REAL_WIDTH) << spec.sigma2;
                 stream << std::setw(conf::REAL_WIDTH) << spec.max_a;
-                stream << conf::SPACE << "# Widths of charge densities, maximum repulsion).";
+                stream << conf::SPACE << "# Widths of reset densities, maximum repulsion).";
                 stream << std::endl;
             } else if (spec.typeName == conf::HS_SF) {
                 stream << std::setw(conf::NAME_WIDTH) << spec.typeName;
@@ -578,6 +624,7 @@ namespace simploce {
                 stream << std::setw(conf::NAME_WIDTH) << spec.spec2->name();
                 stream << std::setw(conf::REAL_WIDTH) << spec.eps_inside_rc;
                 stream << conf::SPACE << "# eps_inside_rc";
+                stream << std::endl;
             } else if (spec.typeName == conf::NONE_INTERACTING) {
                 stream << std::setw(conf::NAME_WIDTH) << spec.typeName;
                 stream << std::setw(conf::NAME_WIDTH) << spec.spec1->name();
@@ -588,7 +635,7 @@ namespace simploce {
         }
         const auto& bSpecs = forceField.bondedSpecifications();
         stream << "# Bonded" << std::endl;
-        stream << "#     Type   Name #1   Name #2" << std::endl;
+        stream << "#     Type   Name #1   Name #2    description" << std::endl;
         stream << bSpecs.size() << std::endl;
         for (auto& spec : bSpecs) {
             if (spec.typeName == conf::HP || spec.typeName == conf::HA_QP || spec.typeName == conf::HA_HP ) {
@@ -619,13 +666,14 @@ namespace simploce {
         }
         const auto& exSpecs = forceField.externalSpecifications();
         stream << "# External" << std::endl;
-        stream << "#     Type    Parameters" << std::endl;
+        stream << "#     Type    Parameters    description" << std::endl;
         stream << exSpecs.size() << std::endl;
         for (auto& spec: exSpecs) {
             if (spec.typeName == conf::VOLTAGE) {
                 stream << std::setw(conf::NAME_WIDTH) << spec.typeName;
                 stream << std::setw(conf::REAL_WIDTH) << spec.e0;
-                stream << conf::SPACE << "# z-component of external static electric homogeneous electric field.";
+                stream << std::setw(conf::REAL_WIDTH) << spec.eps_r;
+                stream << conf::SPACE << "# External static electric homogeneous electric field, relative permitivvitty.";
                 stream << std::endl;
             } else if (spec.typeName == conf::WALL) {
                 stream << std::setw(conf::NAME_WIDTH) << spec.typeName;
@@ -639,6 +687,20 @@ namespace simploce {
             } else if (spec.typeName == conf::PRESSURE_GRADIENT) {
                 stream << std::setw(conf::NAME_WIDTH) << spec.typeName;
                 stream << spec.fe << "# Component of external force  (constant, homogeneous).";
+                stream << std::endl;
+            } else if (spec.typeName == conf::U_SRF_CG) {
+                stream << std::setw(conf::NAME_WIDTH) << spec.typeName;
+                stream << conf::SPACE << spec.sigma;
+                stream << conf::SPACE << spec.delta;
+                stream << conf::SPACE << spec.eps_r;
+                stream << conf::SPACE << spec.plane;
+                stream << conf::SPACE << "# Uniform surface charge density (reset density, Stern layer, eps_r, plane)";
+                stream << std::endl;
+            } else if (spec.typeName == conf::VIRTUAL_PLANES) {
+                stream << std::setw(conf::NAME_WIDTH) << spec.typeName;
+                stream << conf::SPACE << spec.eps_r;
+                stream << conf::SPACE << spec.spacing;
+                stream << conf::SPACE << "# Virtual planes (relative permittivity, spacing between planes).";
                 stream << std::endl;
             }
         }

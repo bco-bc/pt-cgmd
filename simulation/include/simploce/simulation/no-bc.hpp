@@ -7,24 +7,44 @@
 #ifndef NO_BC_HPP
 #define NO_BC_HPP
 
-#include "bc.hpp"
+#include "bc-impl.hpp"
 
 namespace simploce {
 
     /**
      * No boundary conditions are applied.
      */
-    struct NoBoundaryCondition : public boundary_condition {
+    struct NoBoundaryCondition : public boundary_condition_impl {
 
-        dist_vect_t apply(const position_t& ri, const position_t& rj) const override;
-        
-        position_t placeInside(const position_t& r_out) const override;
+        /**
+         * @return ri - rj
+         */
+        dist_vect_t
+        apply(const position_t& ri,
+              const position_t& rj) const override;
+
 
         /**
          * No effect.
+         * @return r_out
          */
-        velocity_t apply(const simploce::velocity_t &v,
-                         const position_t& r) const override;
+        position_t
+        placeInside(const position_t& r_out) const override;
+
+        /**
+         * No effect.
+         * @return r
+         */
+        position_t
+        apply(const position_t &r) const override;
+
+        /**
+         * No effect.
+         * @return v
+         */
+        velocity_t
+        apply(const simploce::velocity_t &v,
+              const position_t& r) const override;
 
         /**
          * No effect.

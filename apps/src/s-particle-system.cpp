@@ -15,10 +15,34 @@
 #include "simploce/util/file.hpp"
 #include "simploce/util/specification.hpp"
 #include <boost/program_options.hpp>
+#include <boost/algorithm/string.hpp>
+#include <boost/algorithm/string/trim.hpp>
+#include <boost/lexical_cast.hpp>
 #include <iostream>
 
 namespace po = boost::program_options;
 using namespace simploce;
+
+/**
+ * Creates a box.
+ * @param boxSizes
+ * @return Box
+ */
+static box_ptr_t
+makeBox(const std::string& boxSizes) {
+    std::vector<std::string> result;
+    boost::split(result, boxSizes, boost::is_any_of(","));
+    if (result.size() != 3) {
+        throw std::domain_error(boxSizes + ": No box sizes. No three box sizes were specified.");
+    }
+    real_t sizes[3];
+    for (int k = 0; k != 3; ++k) {
+        auto size = result[k];
+        boost::trim(size);
+        sizes[k] = boost::lexical_cast<real_t>(size);
+    }
+    return factory::box(sizes[0], sizes[1], sizes[2]);
+}
 
 int main(int argc, char *argv[]) {
     util::Logger logger{"s-particle-system::main"};
@@ -27,6 +51,8 @@ int main(int argc, char *argv[]) {
         int numberOfFluidElements = 6000;                      // Number of water fluid elements.
         real_t characteristicLengthMesoscopicWater = 6.0e-06;  // In m.
         real_t boxSize(6.30);                                  // nm.
+        std::string boxSizes{"20.0,20.0,40.0"};                // Box sizes.
+        real_t molarity{0.1};                                  // Electrolyte molarity (mol/l)
 
         const util::Specification DIATOMIC{"diatomic"};
         const util::Specification ARGON{"argon"};
@@ -42,6 +68,7 @@ int main(int argc, char *argv[]) {
         real_t temperature{units::si<real_t>::ROOM_TEMPERATURE};
 
         std::string fnParticleSpecCatalog{"particle-spec-catalog.dat"};
+        std::string fnUpdatedParticleSpecCatalog{"particle-specs-catalog.dat"};
         std::string fnParticleSystem{"out.ps"};
         std::string spec = DIATOMIC.spec();
         std::string selectFrom =
@@ -58,41 +85,53 @@ int main(int argc, char *argv[]) {
 
         po::options_description usage("Usage");
         usage.add_options() (
-                "fn-particle-spec-catalog,s",
-                po::value<std::string>(&fnParticleSpecCatalog),
-                "Input file name of particle specifications. Default 'particle-spec-catalog.dat'."
+            "fn-particle-spec-catalog,s",
+            po::value<std::string>(&fnParticleSpecCatalog),
+            "Input file name of particle specifications. Default 'particle-spec-catalog.dat'."
         )(
-                "particle-system-spec,p",
-                po::value<std::string>(&spec),
-                selectFrom.c_str()
+            "particle-system-spec,p",
+            po::value<std::string>(&spec),
+            selectFrom.c_str()
         )(
-                "add-boundary-particles,b",
-                "Add boundary particles (for \"electrolyte\" only.)"
+            "fn-updated-particle-spec-catalog,u",
+            po::value<std::string>(&fnUpdatedParticleSpecCatalog),
+            "Output file name of updated particle specifications. Default 'updated-particle-spec-catalog.dat'."
         )(
-                "fn-particle-system,o",
-                po::value<std::string>(&fnParticleSystem),
-                "Output file name for newly created particle system. Default is 'out.ps'."
+            "add-boundary-particles,b",
+            "Add boundary particles (for \"electrolyte\" only. DEPRECATED: Use 's-add-boundary' instead.)"
         )(
-                "temperature,T",
-                po::value<real_t>(&temperature),
-                "Temperature. Default is 298.15. For mesoscale, select 1, 2, 3, and so forth."
+            "fn-particle-system,o",
+            po::value<std::string>(&fnParticleSystem),
+            "Output file name for newly created particle system. Default is 'out.ps'."
         )(
-                "box-size",
-                po::value<real_t>(&boxSize),
-                "Boz size in one dimension, to be applied in all dimensions. "
-                "Default is 6.3 nm for an electrolyte and a large object in electrolyte."
+            "temperature,T",
+            po::value<real_t>(&temperature),
+            "Temperature. Default is 298.15. For mesoscale, select 1, 2, 3, and so forth."
         )(
-                "characteristic-length-water,d",
-                po::value<real_t>(&characteristicLengthMesoscopicWater),
-                "Characteristic length for \"mesoscopic polarizable water\" model. Default is 6.0e-06 m."
+            "box-size",
+            po::value<real_t>(&boxSize),
+            "Boz size in one dimension, to be applied in all dimensions. "
+            "Default is 6.3 nm for an electrolyte and a large object in electrolyte."
         )(
-                "n-water-fluid-elements,M", po::value<int>(&numberOfFluidElements),
-                "Number of water fluid elements."
+            "box-sizes",
+            po::value<std::string>(&boxSizes),
+            "Comma-separated box sizes for three dimensions."
         )(
-                "verbose,v",
-                "Verbose"
+            "characteristic-length-water,d",
+            po::value<real_t>(&characteristicLengthMesoscopicWater),
+            "Characteristic length for \"mesoscopic polarizable water\" model. Default is 6.0e-06 m."
         )(
-                "help,h", "This help message"
+            "n-water-fluid-elements,M", po::value<int>(&numberOfFluidElements),
+            "Number of water fluid elements."
+        )(
+            "molarity,m",
+            po::value<real_t>(&molarity),
+            "Molarity in mol/l. For electrolyte only."
+        )(
+            "verbose,v",
+            "Verbose"
+        )(
+            "help,h", "This help message"
         );
 
         po::variables_map vm;
@@ -106,6 +145,7 @@ int main(int argc, char *argv[]) {
         }
         if (vm.count("add-boundary-particles")) {
             addBoundaryParticles = true;
+            logger.warn("Adding boundary particles: DEPRECATED. Use 's-add-boundary' instead.");
         }
         if (vm.count("verbose") ) {
             util::Logger::changeLogLevel(util::Logger::LOGTRACE);
@@ -119,12 +159,17 @@ int main(int argc, char *argv[]) {
         auto factory = factory::protonatableParticleSystemFactory(catalog);
         std::ofstream stream;
         util::open_output_file(stream, fnParticleSystem);
+
+        p_system_ptr_t particleSystem{};
+
         if ( specification == DIATOMIC ) {
             auto diatomic = factory->diatomic(dist_t{0.12}, catalog->O());
             stream << *diatomic << std::endl;
+            particleSystem = diatomic;
         } else if (specification == CG_POLARIZABLE_WATER ) {
             auto pWater = factory->cgmdPolarizableWater();
             stream << *pWater << std::endl;
+            particleSystem = pWater;
         } else if (specification == MESOSCOPIC_POLARIZABLE_WATER) {
             // Fixed box dimensions for x- and y-direction. From Serhatlioglu2020.
             real_t lx = 6.0e-05 / characteristicLengthMesoscopicWater;  // In DPD units.
@@ -139,19 +184,30 @@ int main(int argc, char *argv[]) {
                                                        numberOfFluidElements,
                                                        temperature);
             stream << *pWater << std::endl;
-        } else if ( specification == ARGON) {
+            particleSystem = pWater;
+        } else if (specification == ARGON) {
             auto argon = factory->argon();
             stream << *argon << std::endl;
-        } else if ( specification == ELECTROLYTE) {
+            particleSystem = argon;
+        } else if (specification == ELECTROLYTE) {
+            box_ptr_t box;
+            if (vm.count("molarity")) {
+                molarity = vm["molarity"].as<real_t>();
+            }
             if (vm.count("box-size")) {
                 boxSize = vm["box-size"].as<real_t>();
+                box = factory::box(boxSize, boxSize, boxSize);
+            } else if (vm.count("box-sizes")) {
+                box = makeBox(vm["box-sizes"].as<std::string>());
+            } else {
+                box = factory::box(boxSize, boxSize, boxSize);
             }
-            auto electrolyte = factory->simpleElectrolyte(factory::box(boxSize, boxSize, boxSize));
-            if (addBoundaryParticles) {
-                factory->addParticleBoundary(electrolyte, 0.6, Plane::YZ);
-                factory->addParticleBoundary(electrolyte, 0.6, Plane::ZX);
-            }
+            auto electrolyte = factory->simpleElectrolyte(box, molarity, temperature, true);
             stream << *electrolyte << std::endl;
+            particleSystem = electrolyte;
+            if (addBoundaryParticles) {
+                logger.warn("Adding boundary particles is ignored. Use 's-add-boundary' instead.");
+            }
         } else if (specification == LARGE_OBJECT_IN_ELECTROLYTE) {
             if (vm.count("box-size")) {
                 boxSize = vm["box-size"].as<real_t>();
@@ -159,6 +215,7 @@ int main(int argc, char *argv[]) {
             auto box = factory::box(boxSize, boxSize, boxSize);
             auto loInElectrolyte = factory->largeObjectInElectrolyte(box);
             stream << *loInElectrolyte << std::endl;
+            particleSystem = loInElectrolyte;
         } else if ( specification == POLYMER_SOLUTION ) {
             auto box = factory::box(10, 10, 40);
             auto polymerSolution =
@@ -172,6 +229,7 @@ int main(int argc, char *argv[]) {
                                              temperature,
                                              true);
             stream << *polymerSolution << std::endl;
+            particleSystem = polymerSolution;
         } else if ( specification == DROPLETS_POLYMER_SOLUTION) {
             auto box = factory::box(15, 15, 30);
             auto dropletsPolymerSolution =
@@ -186,23 +244,33 @@ int main(int argc, char *argv[]) {
                                             "DROm",
                                             1.0);
             stream << *dropletsPolymerSolution << std::endl;
+            particleSystem = dropletsPolymerSolution;
         } else if (specification == WATER_IN_MICROCHANNEL) {
             auto box = factory::box(40, 42, 80);
-            auto particleSystem =
+            auto identical =
                 factory->identicalParticles(box,
                                             "H2Om",
                                             number_density_t{3.0},
                                             temperature_t{1.0},
                                             true);
             logger.info("Writing particle system...");
-            stream << *particleSystem << std::endl;
+            stream << *identical << std::endl;
             logger.info("Done.");
+            particleSystem = identical;
         } else {
             util::logAndThrow(logger, specification.spec() + ": No such particle model available.");
         }
 
         stream.close();
         logger.info("Created particle model stored in '" + fnParticleSystem + "'");
+
+        auto specs = particleSystem->specsInUse();
+        auto cat = ParticleSpecCatalog::create(specs);
+        util::open_output_file(stream, fnUpdatedParticleSpecCatalog);
+        stream << *cat << std::endl;
+        stream.close();
+        logger.info(fnUpdatedParticleSpecCatalog +
+                    ": Particle specification catalog for newly created particle system.");
     } catch (std::exception& exception) {
         logger.error(exception.what());
     }

@@ -21,6 +21,7 @@
 #include "simploce/simulation/s1-dpd.hpp"
 #include "simploce/simulation/protonatable-particle-system-factory.hpp"
 #include "simploce/simulation/pbc.hpp"
+#include "simploce/simulation/pbc-2d.hpp"
 #include "simploce/simulation/pbc-1d-bb.hpp"
 #include "simploce/simulation/pbc-1d-sr.hpp"
 #include "simploce/conf/s-conf.hpp"
@@ -166,6 +167,16 @@ namespace simploce {
         {
             if ( !bc_ ) {
                 bc_ = std::make_shared<PBC>(box);
+            }
+            return bc_;
+        }
+
+        bc_ptr_t
+        pbc_2d(const box_ptr_t& box,
+               const Direction& d1,
+               const Direction& d2) {
+            if ( !bc_ ) {
+                bc_ = std::make_shared<PBC_2D>(box, d1, d2);
             }
             return bc_;
         }

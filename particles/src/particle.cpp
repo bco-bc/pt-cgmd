@@ -20,7 +20,7 @@ namespace simploce {
                        std::string name,
                        spec_ptr_t spec) :
         id_{std::move(id)}, index_{index}, name_{std::move(name)}, spec_{std::move(spec)},
-        r_{}, v_{}, f_{}, frozen_{false} {
+        r_{}, pr_{}, v_{}, f_{}, frozen_{false} {
         if ( id_.empty() ) {
             throw std::domain_error("A particle identifier must be provided.");
         }
@@ -40,6 +40,7 @@ namespace simploce {
         name_{std::move(particle.name_)},
         spec_{std::move(particle.spec_)},
         r_{particle.r_},
+        pr_{particle.pr_},
         v_{particle.v_},
         f_{particle.f_},
         frozen_{particle.frozen_} {
@@ -51,6 +52,7 @@ namespace simploce {
         name_ = std::move(particle.name_);
         spec_ = std::move(particle.spec_);
         r_ = particle.r_;
+        pr_ = particle.pr_;
         v_ = particle.v_;
         f_ = particle.f_;
         frozen_ = particle.frozen_;
@@ -96,12 +98,28 @@ namespace simploce {
     Particle::position() const {
         return r_;
     }
-    
-    void 
-    Particle::position(const position_t& r) {
-        r_ = frozen() ? r_ : r;
+
+    position_t
+    Particle::previousPosition() const {
+        return pr_;
     }
     
+    void
+    Particle::position(const position_t& r) {
+        if ( !frozen() ) {
+            r_ = r;
+        }
+    }
+
+    void
+    Particle::previousPosition(const simploce::position_t &r) {
+        if ( !frozen() ) {
+            pr_ = r;
+        }
+    }
+
+
+
     velocity_t
     Particle::velocity() const {
         return v_;
@@ -157,6 +175,7 @@ namespace simploce {
         position_t r{x, y, z};
         velocity_t v{vx, vy, vz};
         this->position(r);
+        this->previousPosition(r);
         this->velocity(v);
     }
 
@@ -169,8 +188,8 @@ namespace simploce {
     Particle::id(const id_t& id) {
         id_ = id;
     }
-    
-    void 
+
+    void
     Particle::resetSpec(const spec_ptr_t &spec) {
         if ( !spec ) {
             throw std::domain_error("A particle specification must be provided.");

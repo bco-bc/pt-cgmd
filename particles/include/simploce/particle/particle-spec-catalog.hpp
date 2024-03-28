@@ -13,12 +13,20 @@
 #include <map>
 
 namespace simploce {
-    
+
     /**
      * Holds particle specifications.
      */
     class ParticleSpecCatalog {
     public:
+
+        /**
+         * Creates a particle specification catalog from given particle specifications.
+         * @param specs Particle specifications.
+         * @return Catalog
+         */
+        static spec_catalog_ptr_t
+        create(std::map<std::string, spec_ptr_t>& specs);
 
         /**
          * Inquires whether the catalog has a particle specification of given name.

@@ -12,7 +12,8 @@
 namespace simploce {
 
     /**
-     * An external force, applied to -all- particles in the same way.
+     * An external force, applied to -all- particles in the same way. External potentials may change due to
+     * changes in the particle system and would require updates.
      */
     struct external_potential {
 
@@ -21,9 +22,43 @@ namespace simploce {
         /**
          * Returns the potential energy and force on the particle due to this external potential.
          * @param particle Particle.
-         * @return Energy and force. Force is -not- assigned to particle/ particle is -not- updated.
+         * @return Energy and force. Note that the force is -not- assigned to particle, that is the
+         * particle is -not- updated.
          */
-        virtual std::pair<energy_t, force_t> operator () (const p_ptr_t& particle) = 0;
+        virtual std::pair<energy_t, force_t> operator () (const p_ptr_t& particle) const = 0;
+
+        /**
+         * Initialize this potential, if required.
+         * @param particleSystem Particle system.
+         */
+        virtual void
+        initialize(const p_system_ptr_t& particleSystem) = 0;
+
+        /**
+         * Updates this potential, if required.
+         * @param particleSystem Particle system.
+         */
+        virtual void
+        update(const p_system_ptr_t& particleSystem) = 0;
+
+        /**
+         * Updates this potential, if required.
+         * @param particle Particle.
+         */
+        virtual void
+        update(const p_ptr_t& particle) = 0;
+
+        /**
+         * Falls back after an update.
+         */
+        virtual void
+        fallback() = 0;
+
+        /**
+         * Completes this potential, e.g., after a simulation is completed.
+         */
+        virtual void
+        complete() const = 0;
     };
 }
 

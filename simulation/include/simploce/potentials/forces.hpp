@@ -64,6 +64,39 @@ namespace simploce {
         interaction(const p_ptr_t& particle,
                     const p_system_ptr_t& particleSystem);
 
+        /**
+         * Initiate. Always call this method first before updates.
+         * @param particleSystem Particle system.
+         */
+        void
+        initiate(const p_system_ptr_t& particleSystem);
+
+        /**
+         * Performs any update possibly required for calculating forces.
+         * @param particleSystem Particle system
+         */
+        static void
+        update(const p_system_ptr_t& particleSystem);
+
+        /**
+         * Performs any update possibly required for calculating forces.
+         * @param particle Particle
+         */
+        static void
+        update(const p_ptr_t& particle);
+
+        /**
+         * Fallback after updateStateAndAccumulated.
+         */
+        static void
+        fallback();
+
+        /**
+         * Signals completion.
+         */
+        static void
+        complete();
+
     private:
 
         param_ptr_t param_;

@@ -30,6 +30,8 @@ namespace simploce {
                                                                          // electrostatics.
                                                                          // Must only be used in combination with
                                                                          // Monte Carlo.
+        const std::string HS_LEKNER = "hs+lknr";                         // Hard sphere potential and 2D Lekner summation
+                                                                         // for the (screened) Coulomb interaction.
         const std::string SC = "sc";                                     // Screened Coulomb electrostatics.
         const std::string SF = "sf";                                     // Shifted force electrostatics.
         const std::string LJ_SF = "lj+sf";                               // Lennard-Jones plus shifted force
@@ -48,11 +50,12 @@ namespace simploce {
         const std::string NONE_INTERACTING = "none";                     // None-interacting potential.
 
         // External potential types.
-        // const std::string C_SRF_CG_DENSITY = "c-srf-cg-dens";         // Constant surface charge density.
+        const std::string U_SRF_CG = "u-srf-cg";                         // Uniform surface charge density.
         const std::string VOLTAGE = "voltage";                           // Static uniform external electric field
                                                                          // in z-direction
         const std::string WALL = "wall";                                 // Impenetrable flat wall.
         const std::string PRESSURE_GRADIENT = "pres_grad";               // Pressure gradient in z-direction.
+        const std::string VIRTUAL_PLANES = "v_planes";                   // Virtual planes.
     }
 }
 

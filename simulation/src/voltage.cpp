@@ -6,7 +6,7 @@
  */
 
 #include "simploce/potentials/voltage.hpp"
-#include "simploce/potentials/const-surface-charge-density.hpp"
+#include "simploce/potentials/uniform-surface-charge-density.hpp"
 #include "simploce/potentials/force-field.hpp"
 #include "simploce/simulation/bc.hpp"
 #include "simploce/particle/particle.hpp"
@@ -24,7 +24,7 @@ namespace simploce {
      * at z=0. The reference point for the electric potential is at z=0 (and not at infinity).
      */
 
-    static std::shared_ptr<ConstantSurfaceChargeDensity> chargedSurface_{};
+    static std::shared_ptr<UniformSurfaceChargeDensity> chargedSurface_{};
 
     FlatSurface
     create_(const Direction& direction) {
@@ -37,7 +37,7 @@ namespace simploce {
         }
     }
 
-    static std::shared_ptr<ConstantSurfaceChargeDensity>
+    static std::shared_ptr<UniformSurfaceChargeDensity>
     createChargedSurface(const Direction& direction,
                          voltage_t voltage,
                          dist_t distance,
@@ -49,7 +49,7 @@ namespace simploce {
         auto V_to_kJ_mol_e = mesoscopic ? 1.0 : units::mu<real_t>::V_to_kJ_mol_e;
         real_t epd = V_to_kJ_mol_e * voltage();
         srf_charge_density_t sigma = -epd * 2.0 * e0 * eps_r / distance();
-        return std::make_shared<ConstantSurfaceChargeDensity>(sigma, flatSurface, eps_r, bc, mesoscopic);
+        return std::make_shared<UniformSurfaceChargeDensity>(sigma, flatSurface, eps_r, bc, mesoscopic);
     }
 
     Voltage::Voltage(voltage_t voltage,
@@ -62,19 +62,29 @@ namespace simploce {
 
     Voltage::Voltage(simploce::el_field_t e0, simploce::bc_ptr_t bc, real_t eps_r, bool mesoscopic) :
         e0_{e0}, bc_{std::move(bc)}, eps_r_{eps_r}, mesoscopic_{mesoscopic} {
+        util::Logger logger{"simploce::Voltage::Voltage()"};
+        logger.trace("Entering.");
+
+        if ( !bc_ ) {
+             throw std::domain_error("Boundary conditions must be provided.");
+        }
+        if (eps_r_ <= 0) {
+            throw std::domain_error("Relative permittivity must be a positive number.");
+        }
+
+        logger.info(util::to_string(e0_) + ": External static homogeneous electric field.");
+        logger.info(util::to_string(eps_r_) + ": Relative permittivity.");
+        logger.info(std::to_string(mesoscopic_) + ": Mesoscopic simulation?");
+
+        logger.trace("Leaving.");
     }
 
     std::pair<energy_t, force_t>
-    Voltage::operator () (const p_ptr_t& particle) {
+    Voltage::operator () (const p_ptr_t& particle) const {
         static util::Logger logger{"simploce::Voltage::operator()"};
-        static int counter = 0;
-
         logger.trace("Entering.");
-        if (counter == 0) {
-             logger.info(util::to_string(e0_) + ": External static homogeneous electric field.");
-             logger.info(util::to_string(eps_r_) + ": Relative permittivity.");
-             counter += 1;
-        }
+
+        logger.debug("This external potential is included.");
         auto r = bc_->placeInside(particle->position());
         r = particle->position();
         auto Q = particle->charge();
@@ -83,6 +93,7 @@ namespace simploce {
         for (int k = 0; k != 3; ++k) {
             f[k] = Q() * e0_[k] / eps_r_;
         }
+
         logger.trace("Leaving.");
         return std::move(std::make_pair(energy, f));
     }

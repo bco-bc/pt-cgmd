@@ -7,7 +7,6 @@
 
 #include "simploce/potentials/hs-sf.hpp"
 #include "simploce/simulation/bc.hpp"
-#include "simploce/simulation/s-properties.hpp"
 #include "simploce/potentials/sf.hpp"
 #include "simploce/potentials/force-field.hpp"
 #include "simploce/conf/s-conf.hpp"
